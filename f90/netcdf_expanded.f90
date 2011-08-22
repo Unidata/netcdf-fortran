@@ -1,9 +1,4 @@
 
-
-
-
-
-
    function nf90_put_var_OneByteInt(ncid, varid, values, start)
      integer,                         intent( in) :: ncid, varid
      integer (kind = OneByteInt), intent( in) :: values
@@ -731,7 +726,6 @@
         nf90_put_var_2D_FourByteInt = &
              nf_put_vars_int(ncid, varid, localStart, localCount, localStride, int(values))
      else
-        print *, values(1, 1), values(1, 2), values(1, 3), values(1, 4)
         nf90_put_var_2D_FourByteInt = &
              nf_put_vara_int(ncid, varid, localStart, localCount, values)
      end if
