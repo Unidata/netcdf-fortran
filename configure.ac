@@ -9,7 +9,7 @@
 AC_PREREQ([2.59])
 
 # Initialize with name, version, and support email address. 
-AC_INIT([netCDF-Fortran], [4.2-beta2], [support-netcdf@unidata.ucar.edu])
+AC_INIT([netCDF-Fortran], [4.2-beta3], [support-netcdf@unidata.ucar.edu])
 
 # Create the VERSION file, which contains the package version from
 # AC_INIT.
@@ -313,14 +313,31 @@ fi
 
 AC_MSG_NOTICE([checking types, headers, and functions])
 
+# Find the netCDF header and library.
 AC_CHECK_HEADERS([netcdf.h], [], [AC_MSG_ERROR([netcdf.h could not be found. Please set CPPFLAGS.])])
 AC_SEARCH_LIBS([nc_open], [netcdf])
+
+# Check for these functions.
 AC_CHECK_FUNCS([nc_def_opaque nccreate nc_set_log_level nc_use_parallel_enabled])
-AM_CONDITIONAL([USE_NETCDF4], [test -n "$HAVE_NC_DEF_OPAQUE"])
-AM_CONDITIONAL([BUILD_V2], [test -n "$HAVE_NCCREATE"])
-AM_CONDITIONAL([USE_LOGGING], [test -n "$HAVE_NC_SET_LOG_LEVEL"])
-AM_CONDITIONAL([BUILD_DAP], [test -n "$HAVE_NC_SET_LOG_LEVEL"])
-AM_CONDITIONAL([BUILD_PARALLEL], [test -n "$HAVE_NC_USE_PARALLEL_ENABLED"])
+
+# Whether we build/test some functionality depends on what we found in
+# the C library.
+nc_build_v2=$ac_cv_func_nccreate
+nc_build_v4=$ac_cv_func_nc_def_opaque
+if test "x$nc_build_v4" = xyes; then
+   AC_DEFINE([USE_NETCDF4], [1], [if true, build netCDF-4])
+fi
+
+AC_MSG_CHECKING([netCDF v2 API present])
+AC_MSG_RESULT([$nc_build_v2])
+AC_MSG_CHECKING([netCDF-4 present])
+AC_MSG_RESULT([$nc_build_v4])
+
+AM_CONDITIONAL([USE_NETCDF4], [test "x$ac_cv_func_nc_def_opaque" = xyes])
+AM_CONDITIONAL([BUILD_V2], [test "x$ac_cv_func_nccreate" = xyes])
+AM_CONDITIONAL([USE_LOGGING], [test "x$ac_cv_func_nc_set_log_level" = xyes])
+AM_CONDITIONAL([BUILD_DAP], [test "x$ac_cv_func_nc_set_log_level" = xyes])
+AM_CONDITIONAL([BUILD_PARALLEL], [test "x$ac_cv_func_nc_use_parallel_enabled" = xyes])
 AC_CHECK_HEADER(stdlib.h, ,AC_DEFINE([NO_STDLIB_H], [], [no stdlib.h]))
 AC_CHECK_HEADER(sys/types.h, ,AC_DEFINE([NO_SYS_TYPES_H], [], [no sys_types.h]))
 AC_CHECK_HEADERS([sys/param.h])
@@ -361,7 +378,7 @@ AC_CHECK_SIZEOF(size_t)
 AM_CONDITIONAL(TEST_PARALLEL, [test "x$enable_parallel" = xyes -a "x$enable_parallel_tests" = xyes])
 AM_CONDITIONAL(USE_VALGRIND_TESTS, [test "x$enable_valgrind_tests" = xyes])
 
-# Flags for nc-config script; by design $prefix, $includir, $libdir,
+# Flags for nf-config script; by design $prefix, $includir, $libdir,
 # etc.  are left as shell variables in the script so as to facilitate
 # relocation
 if test "x$with_netcdf_c_lib" = x ; then 
@@ -394,6 +411,9 @@ NC_FLIBS="-lnetcdff $NC_LIBS"
 AC_SUBST(NC_LIBS,[$NC_LIBS])
 AC_SUBST(NC_FLIBS,[$NC_FLIBS])
 AC_SUBST(HAS_F90,[$nc_build_f90])
+AC_SUBST(HAS_F90,[$nc_build_f90])
+AC_SUBST(HAS_NC2,[$nc_build_v2])
+AC_SUBST(HAS_NC4,[$nc_build_v4])
 
 AC_MSG_NOTICE([generating header files and makefiles])
 AC_CONFIG_FILES([Makefile
@@ -405,8 +425,8 @@ AC_CONFIG_FILES([Makefile
                  f90/Makefile
                  examples/Makefile
                  examples/F90/Makefile
-                 examples/F77/Makefile])
-#AC_CONFIG_FILES([test -f  nf-config && chmod 755 nf-config ])
+                 examples/F77/Makefile],
+		 [test -f  nf-config && chmod 755 nf-config ])
 
 AC_OUTPUT()
 

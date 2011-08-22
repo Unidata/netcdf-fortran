@@ -5,8 +5,6 @@ This file handles the the conversion of vecors from fortran to C.
 
 Copyright 2006, University Corporation for Atmospheric Research. See
 the COPYRIGHT file for copying and redistribution conditions.
-
-$Id: fort-lib.c,v 1.15 2009/02/13 15:58:00 ed Exp $
 */
 
 #include <config.h>
@@ -16,7 +14,6 @@ $Id: fort-lib.c,v 1.15 2009/02/13 15:58:00 ed Exp $
 #include "netcdf.h"
 #include "ncfortran.h"
 #include "fort-lib.h"
-
 
 /*
  * Convert a C dimension-ID vector into a FORTRAN dimension-ID vector.
@@ -35,7 +32,6 @@ c2f_dimids(int ncid, int varid, const int* cdimids, NF_INTEGER* fdimids)
 
     return fdimids;
 }
-
 
 /*
  * Convert a FORTRAN dimension-ID vector into a C dimension-ID vector.
@@ -185,6 +181,7 @@ nc_inq_varids_f(int ncid, int *nvars, int *fvarids)
    free(varids);
    return ret;
 }
+
 /* Get the dimids for a fortran function (i.e. add 1 to each
  * dimid.) */
 EXTERNL int
