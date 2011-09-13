@@ -318,7 +318,8 @@ AC_CHECK_HEADERS([netcdf.h], [], [AC_MSG_ERROR([netcdf.h could not be found. Ple
 AC_SEARCH_LIBS([nc_open], [netcdf])
 
 # Check for these functions.
-AC_CHECK_FUNCS([nc_def_opaque nccreate nc_set_log_level nc_use_parallel_enabled])
+AC_CHECK_FUNCS([nc_def_opaque nccreate nc_set_log_level oc_open nc_use_parallel_enabled])
+test "x$ac_cv_func_oc_open" = xyes && nc_has_dap=yes || nc_has_dap=no
 
 # Whether we build/test some functionality depends on what we found in
 # the C library.
@@ -336,7 +337,7 @@ AC_MSG_RESULT([$nc_build_v4])
 AM_CONDITIONAL([USE_NETCDF4], [test "x$ac_cv_func_nc_def_opaque" = xyes])
 AM_CONDITIONAL([BUILD_V2], [test "x$ac_cv_func_nccreate" = xyes])
 AM_CONDITIONAL([USE_LOGGING], [test "x$ac_cv_func_nc_set_log_level" = xyes])
-AM_CONDITIONAL([BUILD_DAP], [test "x$ac_cv_func_nc_set_log_level" = xyes])
+AM_CONDITIONAL([BUILD_DAP], [test "x$ac_cv_func_oc_open" = xyes])
 AM_CONDITIONAL([BUILD_PARALLEL], [test "x$ac_cv_func_nc_use_parallel_enabled" = xyes])
 AC_CHECK_HEADER(stdlib.h, ,AC_DEFINE([NO_STDLIB_H], [], [no stdlib.h]))
 AC_CHECK_HEADER(sys/types.h, ,AC_DEFINE([NO_SYS_TYPES_H], [], [no sys_types.h]))
@@ -405,6 +406,7 @@ NC_FLIBS="-lnetcdff $NC_LIBS"
 AC_SUBST(NC_LIBS,[$NC_LIBS])
 AC_SUBST(NC_FLIBS,[$NC_FLIBS])
 AC_SUBST(HAS_F90,[$nc_build_f90])
+AC_SUBST(HAS_DAP,[$nc_has_dap])
 AC_SUBST(HAS_NC2,[$nc_build_v2])
 AC_SUBST(HAS_NC4,[$nc_build_v4])
 

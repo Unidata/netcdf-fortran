@@ -120,6 +120,10 @@ while test $# -gt 0; do
        	echo $flibs
        	;;
 
+    --has-dap)
+       	echo $has_dap
+       	;;
+
     --has-nc2)
        	echo $has_nc2
        	;;
