@@ -9,7 +9,7 @@
 AC_PREREQ([2.59])
 
 # Initialize with name, version, and support email address. 
-AC_INIT([netCDF-Fortran], [4.2-beta3], [support-netcdf@unidata.ucar.edu])
+AC_INIT([netCDF-Fortran], [4.2-beta4], [support-netcdf@unidata.ucar.edu])
 
 # Create the VERSION file, which contains the package version from
 # AC_INIT.
@@ -381,14 +381,8 @@ AM_CONDITIONAL(USE_VALGRIND_TESTS, [test "x$enable_valgrind_tests" = xyes])
 # Flags for nf-config script; by design $prefix, $includir, $libdir,
 # etc.  are left as shell variables in the script so as to facilitate
 # relocation
-if test "x$with_netcdf_c_lib" = x ; then 
-   NC_LIBS="-lnetcdf"
-else
-   NC_LIBS="$with_netcdf_c_lib"
-fi
-if test "x$enable_shared" != xyes; then
-   NC_LIBS="$LDFLAGS $NC_LIBS $LIBS"
-fi	 
+NC_LIBS="-lnetcdf"
+NC_LIBS="$LDFLAGS $NC_LIBS $LIBS"
 
 case "x$target_os" in
 xsolaris*) 
@@ -410,7 +404,6 @@ NC_FLIBS="-lnetcdff $NC_LIBS"
 
 AC_SUBST(NC_LIBS,[$NC_LIBS])
 AC_SUBST(NC_FLIBS,[$NC_FLIBS])
-AC_SUBST(HAS_F90,[$nc_build_f90])
 AC_SUBST(HAS_F90,[$nc_build_f90])
 AC_SUBST(HAS_NC2,[$nc_build_v2])
 AC_SUBST(HAS_NC4,[$nc_build_v4])
