@@ -4,7 +4,7 @@
 # This file controls the building of the fortran convenience library.
 # The library we are building.
 lib_LTLIBRARIES = libnetcdff.la
-libnetcdff_la_LDFLAGS = $(AM_LDFLAGS) -version-number 5:1:0 
+libnetcdff_la_LDFLAGS = $(AM_LDFLAGS) -version-number 5:2:0 
 
 # Turn on some special flags for building DLL.
 AM_CPPFLAGS = -DDLL_EXPORT
