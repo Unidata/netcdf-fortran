@@ -36,8 +36,8 @@ C     Some data about and for the vlen.
       parameter (vlen_len = 5)
       integer data1(vlen_len), data1_in(vlen_len)
 
-C     These must be big enough to hold the stuct nc_vlen in netcdf.h.
-      integer vlen(10), vlen_in(10)
+C     These must be big enough to hold the struct nc_vlen in netcdf.h.
+      integer*8 vlen(10), vlen_in(10)
 
 C     Loop indexes, and error handling.
       integer x, retval, index(1)
