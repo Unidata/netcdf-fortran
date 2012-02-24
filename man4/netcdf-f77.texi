@@ -2432,13 +2432,18 @@ or any of its parents.
 @heading Usage 
 
 @example
-INTEGER FUNCTION NF_INQ_DIMIDS(INTEGER NCID, INTEGER DIMIDS, INTEGER INCLUDE_PARENTS)
+INTEGER FUNCTION NF_INQ_DIMIDS(INTEGER NCID, INTEGER NDIMS, INTEGER DIMIDS, INTEGER INCLUDE_PARENTS)
 @end example
 
 @table @code
 
 @item NCID
 The group id for this operation.
+
+@item NDIMS
+Returned number of dimensions for this location.  If INCLUDE_PARENTS
+is non-zero, number of dimensions visible from this group, which
+includes dimensions in parent groups.
 
 @item DIMIDS
 An array of ints when the dimids of the visible dimensions will be
