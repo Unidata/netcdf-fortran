@@ -18,7 +18,8 @@
  * LEB = Lee E Brotzman
  * MR  = Martin Reinecke
  * WDP = William D Pence
- * -- Kevin McCarty, for Debian (19 Dec. 2005) */
+ * -- Kevin McCarty, for Debian (19 Dec. 2005)
+ * RKR = Russ Rew (24 Feb 2012) */
 
 /*******
    Modifications:
@@ -54,6 +55,7 @@
       Aug 2008: If __GNUC__ is defined and no FORTRAN compiler is specified
 		via a #define or -D, default to gfortran behavior rather than
 		g77 behavior. (KMCCARTY)
+      Feb 2012: Integrate AbsoftProFortran11 changes for versions 10.2 and later (RKR)
  *******/
 
 /* 
@@ -148,6 +150,7 @@ only C calling FORTRAN subroutines will work using K&R style.*/
 #define f2cFortran
 #endif
 
+/* RKR: add AbsoftProFortran11 */
 /* VAX/VMS does not let us \-split long #if lines. */ 
 /* Split #if into 2 because some HP-UX can't handle long #if */
 #if !(defined(NAGf90Fortran)||defined(f2cFortran)||defined(hpuxFortran)||defined(apolloFortran)||defined(sunFortran)||defined(IBMR2Fortran)||defined(CRAYFortran))
@@ -220,6 +223,7 @@ only C calling FORTRAN subroutines will work using K&R style.*/
 #endif /* ...Fortran */
 #endif /* ...Fortran */
 
+/* RKR: add AbsoftProFortran11 */
 /* Split #if into 2 because some HP-UX can't handle long #if */
 #if !(defined(NAGf90Fortran)||defined(f2cFortran)||defined(hpuxFortran)||defined(apolloFortran)||defined(sunFortran)||defined(IBMR2Fortran)||defined(CRAYFortran))
 #if !(defined(mipsFortran)||defined(DECFortran)||defined(vmsFortran)||defined(CONVEXFortran)||defined(PowerStationFortran)||defined(AbsoftUNIXFortran)||defined(AbsoftProFortran)||defined(AbsoftProFortran11)||defined(SXFortran))
@@ -263,6 +267,7 @@ only C calling FORTRAN subroutines will work using K&R style.*/
 
 /* Throughout cfortran.h we use: UN = Uppercase Name.  LN = Lowercase Name.   */
 
+/* RKR: add AbsoftProFortran11 */
 /* "extname" changed to "appendus" below (CFITSIO) */
 #if defined(f2cFortran) || defined(NAGf90Fortran) || defined(DECFortran) || defined(mipsFortran) || defined(apolloFortran) || defined(sunFortran) || defined(CONVEXFortran) || defined(SXFortran) || defined(appendus) || defined(AbsoftProFortran11)
 #define CFC_(UN,LN)            _(LN,_)      /* Lowercase FORTRAN symbols.     */
@@ -303,7 +308,7 @@ only C calling FORTRAN subroutines will work using K&R style.*/
 #define COMMON_BLOCK(UN,LN)          CFC_(UN,LN)
 #else
 #define COMMON_BLOCK(UN,LN)          _(_C,LN)
-#endif  /* AbsoftUNIXFortran or AbsoftProFortran */
+#endif  /* AbsoftUNIXFortran or AbsoftProFortran or AbsoftProFortran11 */
 #else
 #define COMMON_BLOCK(UN,LN)          _(LN,__)
 #endif  /* CLIPPERFortran */
