@@ -79,5 +79,19 @@
 #   undef NCSHORT_T
 #endif
 
-
+#if 0
+  Set configuration flags for Fortran 2003 processing
 #endif
+
+#if 0
+  Set NO_NETCDF_2 to undefined - include netCDF2
+#endif
+#undef NO_NETCDF_2
+
+#if 0
+  Set USE_NETCDF4 to defined - include netCDF4 code
+#endif
+#undef USE_NETCDF4
+
+#endif /*UD_NETCDF_CPP_INC*/
+
