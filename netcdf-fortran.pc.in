@@ -10,7 +10,7 @@ flibs=-lnetcdff -lnetcdf
 
 Name: netcdf
 Description: NetCDF Client Library
-Version: 4.2
+Version: 4.4
 Libs: -L${libdir} -lnetcdf
 Cflags: -I${includedir}
 

@@ -9,6 +9,8 @@
 # The "install" target installs the documentation in a directory
 # called $(prefix)/doc/$(PACKAGE)-$(VERSION).
 
+man_MANS = netcdf_f77.3 netcdf_f90.3 netcdf_f03.3
+
 # These are the source files for all the netcdf manuals.
 info_TEXINFOS = netcdf-f77.texi netcdf-f90.texi 
 
@@ -26,7 +28,7 @@ html_mans = netcdf_f77-man.html	netcdf_f90-man.html
 
 # These files will be included with the dist.
 EXTRA_DIST = netcdf.m4 $(pdf_docs) $(html_mans) $(txt_docs)	\
-$(dvi_docs) $(ps_docs) $(info_docs) $(html_docs) netcdf_f77.3
+$(dvi_docs) $(ps_docs) $(info_docs) $(html_docs) $(man_MANS)
 
 # All the documents depend on defines.texi for some common
 # definitions.
@@ -98,6 +100,6 @@ web-tarball: $(pdf_docs) $(html_mans) $(txt_docs) $(dvi_docs) $(ps_docs) $(info_
 
 # Clean up all the junk we created!
 MAINTAINERCLEANFILES = $(ps_docs) $(pdf_docs) $(txt_docs) $(info_docs)	\
-$(html_docs) $(man_MANS) ${f77_examples} ${f90_examples} *.1 *.3	\
+$(html_docs) ${f77_examples} ${f90_examples}	\
 netcdf_f77-man.html netcdf_f90-man.html stamp-* version* netcdf_f77.3
 

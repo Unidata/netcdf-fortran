@@ -14,14 +14,19 @@ EXTRA_DIST = README COPYRIGHT nf-config.in
 pkgconfigdir=$(libdir)/pkgconfig
 pkgconfig_DATA = netcdf-fortran.pc
 
-# Does the user want F90 API?
-if BUILD_F90
-F90_DIR = f90
+# All the fortran source
+FTN_DIR = fortran
+
+if BUILD_F03
+F03_TESTS = nf03_test
+else
+# All the C/H source
+LIBSRC_DIR = libsrc
 endif
 
 # This is the list of subdirs for which Makefiles will be constructed
 # and run. 
-SUBDIRS = $(F90_DIR) fortran nf_test man4 examples
+SUBDIRS = $(LIBSRC_DIR) $(FTN_DIR) nf_test $(F03_TESTS) man4 examples
 
 # Remove these generated files, for a distclean.
 DISTCLEANFILES = VERSION comps.txt test_prog
@@ -30,10 +35,18 @@ DISTCLEANFILES = VERSION comps.txt test_prog
 bin_SCRIPTS = nf-config
 
 check_nc_config:
+if BUILD_F77
 	$(F77) `./nf-config --fflags` test_prog.F -o test_prog `./nf-config --libs`
 	./test_prog
-	$(FC) `./nf-config --fflags` test_prog.f90 -o test_prog `./nf-config --libs`
+endif
+if BUILD_F90
+	$(F90) `./nf-config --fflags` test_prog.f90 -o test_prog `./nf-config --libs`
 	./test_prog
+endif
+if BUILD_F03
+	$(F03) `./nf-config --fflags` test_prog.f03 -o test_prog `./nf-config --libs`
+	./test_prog
+endif
 
 install-data-hook:
 	@echo ''
