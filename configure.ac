@@ -65,8 +65,63 @@ if test "x$enable_extra_tests" = xyes; then
 fi
 AM_CONDITIONAL(EXTRA_TESTS, [test x$enable_extra_tests = xyes])
 
-# Do we want to build the fortran 77 API (default off)
+# Set the default fortran builds
 nc_build_f77=no
+# !f03 => build_f90
+nc_build_f90=yes
+
+# Does the user want to test for Fortran 2003 compiler.
+# Added to get around NAG evaluation compiler error turning off F03
+AC_MSG_CHECKING([whether Fortran compiler is checked for ISO_C_BINDING support])
+AC_ARG_ENABLE([f03-compiler-check],
+              [AS_HELP_STRING([--disable-f03-compiler-check],
+                              [disable check of ISO_C_BINDING support in Fortran compiler])])
+test "x$enable_f03_compiler_check" = xno || enable_f03_compiler_check=yes
+AC_MSG_RESULT($enable_f03_compiler_check)
+
+# next check to see if the Fortran compiler will support
+# ISO_C_BINDING
+nc_iso_c_binding=yes
+
+# Some f90 compilers change the case of the mod file names. Others
+# require special flags to be set to deal with .f90 files. Find out
+# about this compiler.
+AC_LANG_PUSH(Fortran)
+AC_FC_SRCEXT(f90)
+AC_LANG_POP(Fortran)
+AX_F90_MODULE_FLAG
+AC_SUBST(MOD_FLAG, ${ax_cv_f90_modflag})
+if test "x$enable_f03_compiler_check" = xyes; then
+  AC_MSG_CHECKING([if Fortran compiler supports Fortran 2003 ISO_C_BINDING])
+  cat <<EOF >conftest.f90
+module conftest_module
+USE ISO_C_BINDING
+end module conftest_module
+EOF
+  doit='$FC -c ${FCFLAGS} ${FCFLAGS_f90} conftest.f90'
+  if AC_TRY_EVAL(doit); then
+     nc_iso_c_binding=yes
+  else
+     nc_iso_c_binding=no
+  fi
+  AC_MSG_RESULT([$nc_iso_c_binding])
+
+  if test "x$nc_iso_c_binding" = xno; then
+    if test "x$enable_compiler_recover" = xyes; then
+      nc_build_f90=yes
+      AC_MSG_WARN([ISO_C_BINDING not supported - defaulting to F90 interfaces])
+    else
+      AC_MSG_ERROR([Can't use build F03 interfaces recovery
+      unset FC
+      unset F90
+      unset F77
+      nc_build_f77=no
+      nc_build_f90=no
+    fi
+  fi
+fi
+
+# Do we want to build the fortran 77 API (default off)
 AC_MSG_CHECKING([whether F77 API is desired])
 AC_ARG_ENABLE([f77],
               [AS_HELP_STRING([--enable-f77],
@@ -74,37 +129,38 @@ AC_ARG_ENABLE([f77],
 test "x$enable_f77" = xyes && nc_build_f77=yes
 AC_MSG_RESULT([$nc_build_f77])
 
-# Do we want to build the fortran 90 API (default on)?
-nc_build_f90=yes
-AC_MSG_CHECKING([whether F90 API is desired])
-AC_ARG_ENABLE([f90],
-              [AS_HELP_STRING([--disable-f90],
-                              [don't try to build the netCDF Fortran 90 API])])
-test "x$enable_f90" = xno && nc_build_f90=no
-AC_MSG_RESULT([$nc_build_f90])
+## Do we want to build the fortran 90 API (default on)?
+#AC_MSG_CHECKING([whether F90 API is desired])
+#AC_ARG_ENABLE([f90],
+#              [AS_HELP_STRING([--disable-f90],
+#                              [don't try to build the netCDF Fortran 90 API])])
+#test "x$enable_f90" = xno && nc_build_f90=no
+#AC_MSG_RESULT([$nc_build_f90])
 
 # Do we want to build the fortran 03 API?; this disables the old F90; default off
-nc_build_f03=no
 AC_MSG_CHECKING([whether F03 API is desired])
 AC_ARG_ENABLE([f03],
               [AS_HELP_STRING([--enable-f03],
                               [try to build the netCDF Fortran 03 API])])
-test "x$enable_f03" = xyes && nc_build_f03=yes
-AC_MSG_RESULT([$nc_build_f03])
-if test $nc_build_f03 = yes ; then
-AC_MSG_NOTICE([Enabling fortran 2003 replaces old fortran 90 interfaces])
-nc_build_f90=no
+test "x$enable_f03" = xyes || enable_f03=no
+AC_MSG_RESULT([$enable_f03])
+
+# Decide in f90 versus 2003
+if test "x$nc_iso_c_binding" = xno; then
+  #Cannot build f03
+  AC_MSG_NOTICE([Fortran 2003 not supported; Using fortran 90 interfaces])
+  nc_build_f90 = yes  
+elif test "x$enable_f03" = xyes ; then
+  AC_MSG_NOTICE([Enabling fortran 2003 replaces fortran 90 interfaces])
+  nc_build_f90=no
 fi
 
-# Does the user want to test for Fortran 2003 compiler.
-# Added to get around NAG evaluation compiler error turning off F03
-
-AC_MSG_CHECKING([whether Fortran compiler is checked for ISO_C_BINDING support])
-AC_ARG_ENABLE([f03-compiler-check],
-              [AS_HELP_STRING([--disable-f03-compiler-check],
-                              [disable check of ISO_C_BINDING support in Fortran compiler])])
-test "x$enable_f03_compiler_check" = xno || enable_f03_compiler_check=yes
-AC_MSG_RESULT($enable_f03_compiler_check)
+# Guarantee build state
+it test "x$nc_build_f90" = xyes ; then
+  nc_build_f03 = no
+else
+  nc_build_f03=yes
+fi
 
 # Does the user want to check into fortran type information?
 AC_MSG_CHECKING([whether fortran type sizes should be checked])
@@ -169,17 +225,17 @@ if test "x${FC+set}" = xset -a "x${F77+set}" != xset; then
    F77=${FC}
 fi
 
-# If F03 is set, and FC isn't, then set FC to whatever F03 was set to.
-if test "${F03+set}" = set -a "${FC+set}" != set; then
+# If F03 is set, FC isn't, then set FC to whatever F03 was set
+test "${F03+set}" = set -a "${FC+set}" != set; then
    FC=$F03
 fi
 
-# If F90 is set, and FC isn't, then set FC to whatever F90 was set to.
-if test "${F90+set}" = set -a "${FC+set}" != set; then
+# If F90 is set, FC isn't, then set FC to whatever F90 was set
+test "${F90+set}" = set -a "${FC+set}" != set; then
    FC=$F90
 fi
 
-# If F77 is set, and FC isn't, then set FC to whatever F77 was set to.
+# If F77 is set, FC isn't, then set FC to whatever F77 was set 
 if test "${F77+set}" = set -a "${FC+set}" != set; then
    FC=$F77
 fi
@@ -206,50 +262,6 @@ if test "${F77+set}" = set && test "x$F77" = x; then
    AC_MSG_ERROR([Can't find F77 compiler.])
 fi
 
-# next check to see if the Fortran compiler will support
-# ISO_C_BINDING
-
-nc_iso_c_binding=yes
-if test "x$nc_build_f03" = xyes; then
-   # Some f90 compilers change the case of the mod file names. Others
-   # require special flags to be set to deal with .f90 files. Find out
-   # about this compiler.
-   AC_LANG_PUSH(Fortran)
-   AC_FC_SRCEXT(f90)
-   AC_LANG_POP(Fortran)
-   AX_F90_MODULE_FLAG
-   AC_SUBST(MOD_FLAG, ${ax_cv_f90_modflag})
-
-   if test "x$enable_f03_compiler_check" = xyes; then
-     AC_MSG_CHECKING([if Fortran compiler supports Fortran 2003 ISO_C_BINDING])
-                cat <<EOF >conftest.f90
-                 module conftest_module
-                  USE ISO_C_BINDING
-                 end module conftest_module
-EOF
-      doit='$FC -c ${FCFLAGS} ${FCFLAGS_f90} conftest.f90'
-if AC_TRY_EVAL(doit); then
-   nc_iso_c_binding=yes
-else
-   nc_iso_c_binding=no
-fi
-AC_MSG_RESULT([$nc_iso_c_binding])
-     if test "x$nc_iso_c_binding" = xno; then
-       if test "x$enable_compiler_recover" = xyes; then
-         nc_build_f03=no
-         nc_build_f77=yes
-         AC_MSG_WARN([ISO_C_BINDING not supported - defaulting to F77 interfaces])       else
-         AC_MSG_ERROR([Can't use build F03 interfaces and recovery disabled.])
-         unset FC
-         unset F90
-         unset F77
-         nc_build_f03=no
-         nc_build_f77=no
-         nc_build_f90=no
-         fi
-     fi
-  fi
-fi
 
 # Turn off building old F77 interfaces if nc_build_f03 is still yes
 

@@ -1,0 +1,101 @@
+#!/bin/bash
+#X="-x"
+
+F03=1
+HDF5=1
+DAP=1
+
+#M32=1
+#M64=1
+
+cmds=""
+#cmds="all"
+#cmds="all check"
+#cmds="all dist"
+#cmds="all distcheck"
+
+# Default cases
+PREFIX="/tmp/install/${HOST}"
+stddir="/share/ed/local/${HOST}"
+
+# Assume that netcdf is in $PREFIX
+CFLAGS="-g -O0 $CFLAGS"
+CPPFLAGS="-I$PREFIX/include"
+LDFLAGS="-L$PREFIX/lib -lnetcdf"
+
+
+if test x$M32 = x1 ; then
+  PREFIX="/tmp/install32/${HOST}"
+  stddir="/share/ed/local/${HOST}_32"
+  CPPFLAGS="-m32 $CPPFLAGS"
+elif test x$M64 = x1 ; then
+  PREFIX="/tmp/install64/${HOST}"
+  stddir="/share/ed/local/${HOST}_64"
+  CPPFLAGS="-m64 $CPPFLAGS"
+fi
+
+case "$HOST" in
+  mort) CFLAGS="-std=c99 $CFLAGS" ;;
+  spock) CFLAGS="-Wdeclaration-after-statement -Wall $CFLAGS" ;;
+  spike) CFLAGS="-Wall $CFLAGS"	;;
+  *) ;;
+esac
+
+MAKE=make
+IGNORE="test 0 = 1"
+
+if test "x$HDF5" != "x" ; then
+CPPFLAGS="-I${stddir}/include -I${stddir}/include $CPPFLAGS"
+LDFLAGS="$LDFLAGS -L${stddir}/lib -lhdf5_hl -lhdf5 -L${stddir}/lib -lz"
+LD_LIBRARY_PATH="${stddir}/lib:$LD_LIBRARY_PATH"
+fi
+
+if test "x$DAP" != "x" ; then
+if curl-config --version >/dev/null ; then
+  TMP=`curl-config --cflags`
+  CPPFLAGS="$TMP $CPPFLAGS"
+  TMP=`curl-config --libs`
+  LDFLAGS="$TMP $LDFLAGS"
+  TMP=`curl-config --prefix`
+  LD_LIBRARY_PATH="$TMP/lib:$LD_LIBRARY_PATH"
+else
+  echo "Cannot find curl-config"
+  exit 1
+fi
+fi
+
+export CPPFLAGS
+export CFLAGS
+export LDFLAGS
+export LD_LIBRARY_PATH
+
+FLAGS="--prefix ${PREFIX}"
+#FLAGS="$FLAGS --enable-f77"
+#FLAGS="$FLAGS --disable-f03-compiler-check"
+#FLAGS="$FLAGS --enable-valgrind-tests"
+#FLAGS="$FLAGS --enable-parallel-tests"
+#FLAGS="$FLAGS --enable-extra-tests"
+#FLAGS="$FLAGS --enable-large-file-tests"
+#FLAGS="$FLAGS --disable-largefile"
+#FLAGS="$FLAGS --enable-extra-example-tests"
+#FLAGS="$FLAGS --enable-dll"
+
+#FLAGS="$FLAGS --disable-shared"
+#FLAGS="$FLAGS --enable-shared"
+
+if test "x$F03" != "x" ; then
+  FLAGS="$FLAGS --enable-f03"
+fi
+
+DISTCHECK_CONFIGURE_FLAGS="$FLAGS"
+export DISTCHECK_CONFIGURE_FLAGS
+
+if test -f Makefile ; then ${MAKE} distclean >/dev/null 2>&1 ; fi
+sh $X ./configure ${FLAGS}
+for c in $cmds; do
+  ${MAKE} $c
+done
+exit 0
+
+
+
