@@ -99,7 +99,6 @@ endif BUILD_V2
 
 endif BUILD_F03
 
-BUILT_SOURCES += $(UCHEADERS) $(LCHEADERS)
 
 # Must be consistent with previous list of uppercase headers
 # Always construct the upper case modules (may be unused)
@@ -129,18 +128,17 @@ endif BUILD_F03
 
 $(UCHEADERS): $(LCHEADERS)
 	for lc in $(LCHEADERS) ; do \
-	uc=`echo $$lc | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'` ; \
-	rm -f $$uc ; cp $$lc $$uc ; \
+	uc="$${lc%%.mod}" ; \
+	uc=`echo $$uc | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`; \
+        uc="$${uc}.mod" ; rm -f $$uc ; cp $$lc $$uc ; \
 	done
 
 # These are always used
 if UPPER_CASE_MOD
-BUILT_SOURCES += TYPESIZES.mod NETCDF.mod
 UCCOMMON = TYPESIZES.mod NETCDF.mod
 NETCDF.mod: $(NETCDF_O)
 TYPESIZES.mod: typeSizes.o
 else !UPPER_CASE_MOD
-BUILT_SOURCES += typesizes.mod netcdf.mod
 LCCOMMON = typesizes.mod netcdf.mod
 typesizes.mod: typeSizes.o
 netcdf.mod: netcdf.o
@@ -154,6 +152,8 @@ endif !UPPER_CASE_MOD
 
 nodist_include_HEADERS = $(COMMONHEADERS)
 libnetcdff_la_DEPENDENCIES += $(COMMONHEADERS)
+
+BUILT_SOURCES += $(UCHEADERS) $(UCCOMMON) $(LCHEADERS) $(LCCOMMON)
 
 # This is what we are building: a convenience library of Fortran 2003 functions.
 lib_LTLIBRARIES = libnetcdff.la
@@ -190,15 +190,12 @@ EXTRA_DIST += netcdf.inc netcdf2.inc netcdf3.inc netcdf4.inc
 
 CLEANFILES += nfconfig1.inc nfconfig.inc netcdf.inc
 
-DISTCLEANFILES += nfconfig.inc
-DISTCLEANFILES += $(UCHEADERS)
-
 CLEANFILES += netcdf_nc_data.mod netcdf_nc_interfaces.mod netcdf_nf_data.mod \
               netcdf_nf_interfaces.mod netcdf_fortv2_c_interfaces.mod \
               netcdf_f03.mod netcdf4_nc_interfaces.mod \
               netcdf4_nf_interfaces.mod netcdf4_f03.mod
 
-CLEANFILES += $(COMMONHEADERS)
+CLEANFILES += $(UCHEADERS) $(UCCOMMON) $(LCHEADERS) $(LCCOMMON)
 
 # Turn of parallel builds in this directory.
 .NOTPARALLEL:

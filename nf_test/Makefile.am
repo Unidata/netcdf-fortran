@@ -174,4 +174,5 @@ run_f90_par_test.sh run_f77_par_test.sh ref_fills.nc
 # Cleaning up files created during the process.
 CLEANFILES = scratch.nc test.nc copy.nc fills.nc tst_*.nc ftst_*.nc	\
 f90tst_*.nc
+
 MAINTAINERCLEANFILES = test_get.F test_put.F
