@@ -23,8 +23,8 @@ fi
 cmds=""
 cmds="all"
 #cmds="all check"
-cmds="all dist"
-#cmds="all distcheck"
+#cmds="all dist"
+cmds="all distcheck"
 
 # Default cases
 PREFIX="/tmp/install/${HOST}"
@@ -100,8 +100,8 @@ FLAGS="--prefix ${PREFIX}"
 #FLAGS="$FLAGS --disable-shared"
 #FLAGS="$FLAGS --enable-shared"
 
-if test "x$F03" != "x" ; then
-  FLAGS="$FLAGS --enable-f03"
+if test "x$F03" == "x" ; then
+  FLAGS="$FLAGS --disable-f03"
 fi
 
 DISTCHECK_CONFIGURE_FLAGS="$FLAGS"

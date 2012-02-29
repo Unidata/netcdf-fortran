@@ -97,14 +97,12 @@ AC_PROG_F77($FC)
 
 # If we couldn't find an F90 compiler, deal with it.
 if test "${FC+set}" = set && test "x$FC" = x; then
-   AC_MSG_ERROR([Can't find F90 compiler.])
-   nc_build_f90=no
+   AC_MSG_FAILURE([Can't find F90 compiler.])
 fi
 
-# Set the default fortran builds
-nc_build_f77=no
-# remember f03 => !f90
-nc_build_f90=yes
+# Set the default fortran builds; default is to build f03
+nc_build_f90=no
+nc_build_f03=yes
 
 # Does the user want to test for Fortran 2003 compiler.
 # Added to get around NAG evaluation compiler error turning off F03
@@ -147,49 +145,24 @@ EOF
       nc_build_f90=yes
       AC_MSG_WARN([ISO_C_BINDING not supported - defaulting to F90 interfaces])
     else
-      AC_MSG_ERROR([Can't use build F03 interfaces compiler recovery])
-      unset FC
-      unset F90
-      unset F03
-      nc_build_f77=no
-      nc_build_f90=no
-      nc_build_f03=no
+      AC_MSG_FAILURE([Can't use build F03 interfaces and cannot do compiler recovery])
     fi
   fi
 fi
 
-# Do we want to build the fortran 77 API (default off)
-AC_MSG_CHECKING([whether F77 API is desired])
-AC_ARG_ENABLE([f77],
-              [AS_HELP_STRING([--enable-f77],
-                              [try to build the netCDF Fortran 77 API])])
-test "x$enable_f77" = xyes && nc_build_f77=yes
-AC_MSG_RESULT([$nc_build_f77])
-
-## Do we want to build the fortran 90 API (default on)?
-#AC_MSG_CHECKING([whether F90 API is desired])
-#AC_ARG_ENABLE([f90],
-#              [AS_HELP_STRING([--disable-f90],
-#                              [don't try to build the netCDF Fortran 90 API])])
-#test "x$enable_f90" = xno && nc_build_f90=no
-#AC_MSG_RESULT([$nc_build_f90])
-
-# Do we want to build the fortran 03 API?; this disables the old F90; default off
-AC_MSG_CHECKING([whether F03 API is desired])
+## Do we want to use the fortran 90 wrappers instead of 2003 native code?
+AC_MSG_CHECKING([whether F03 native code is desired])
 AC_ARG_ENABLE([f03],
-              [AS_HELP_STRING([--enable-f03],
-                              [try to build the netCDF Fortran 03 API])])
-test "x$enable_f03" = xyes || enable_f03=no
+              [AS_HELP_STRING([--disable-f03],
+                              [don't try to use the netCDF Fortran 2003 native code])])
+test "x$enable_f03" = xno && nc_build_f90=yes
 AC_MSG_RESULT([$enable_f03])
 
-# Decide in f90 versus 2003
+# Decide on f90 versus 2003
 if test "x$nc_iso_c_binding" = xno; then
-  #Cannot build f03
-  AC_MSG_NOTICE([Fortran 2003 not supported; Using fortran 90 interfaces])
+  #Cannot build f03 native code
+  AC_MSG_NOTICE([Fortran 2003 interface not supported; Using fortran 90 interface])
   nc_build_f90 = yes  
-elif test "x$enable_f03" = xyes ; then
-  AC_MSG_NOTICE([Enabling fortran 2003 replaces fortran 90 interfaces])
-  nc_build_f90=no
 fi
 
 # Guarantee build state
@@ -294,7 +267,8 @@ LT_INIT
 # weirdness.
 if test "x$enable_shared" = xyes; then
    if test $enable_valgrind_tests = yes; then
-      AC_MSG_ERROR([No valgrind tests with shared libraries])
+      AC_MSG_WARN([No valgrind tests with shared libraries])
+      enable_valgrind_tests = no
    fi
 fi
 

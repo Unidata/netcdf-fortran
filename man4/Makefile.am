@@ -53,9 +53,9 @@ M4=m4
 netcdf_fortran-man.html: $(top_srcdir)/man4/netcdf_fortran.3
 	groff -man -Thtml $? > $@
 
-netcdf-fortran.html:
-	$(MAKEINFO) --html $(AM_MAKEINFOHTMLFLAGS) $(MAKEINFOFLAGS) -I$(srcdir) netcdf-fortran.texi
-	$(MAKEINFO) --no-split --html $(AM_MAKEINFOHTMLFLAGS) $(MAKEINFOFLAGS) -I$(srcdir) netcdf-fortran.texi
+#netcdf-fortran.html:
+#	$(MAKEINFO) --html $(AM_MAKEINFOHTMLFLAGS) $(MAKEINFOFLAGS) -I$(srcdir) netcdf-fortran.texi
+#	$(MAKEINFO) --no-split --html $(AM_MAKEINFOHTMLFLAGS) $(MAKEINFOFLAGS) -I$(srcdir) netcdf-fortran.texi
 
 # This builds the docs from source, if necessary, and tars up
 # everything needed for the website. Run this and copy the resulting

@@ -72,6 +72,15 @@ endif !BUILD_F03
 # netcdf.inc has changed.
 libnetcdff_la_DEPENDENCIES += $(top_srcdir)/libsrc/nfconfig.inc netcdf.inc
 
+# All of the _DEPENDENCIES must also be in EXTRA_DIST
+EXTRA_DIST += netcdf_attributes.f90 netcdf_constants.f90 netcdf_dims.f90 \
+netcdf_expanded.f90 netcdf_externals.f90 netcdf_file.f90 \
+netcdf_overloads.f90 netcdf_text_variables.f90 netcdf_variables.f90 \
+netcdf_visibility.f90 netcdf_eightbyte.f90 \
+netcdf4_func.f90 netcdf4_externals.f90 netcdf4_visibility.f90 \
+netcdf4_constants.f90 netcdf4.f90 netcdf4_eightbyte.f90 \
+netcdf4_variables.f90 netcdf4_file.f90 netcdf.inc
+
 # Some fortran compilers change the file names of .mod files to all
 # uppercase. Just to be special.
 
@@ -185,8 +194,11 @@ DISTCLEANFILES += nfconfig.inc
 DISTCLEANFILES += $(UCHEADERS)
 
 CLEANFILES += netcdf_nc_data.mod netcdf_nc_interfaces.mod netcdf_nf_data.mod \
-              netcdf_nf_interfaces.mod netcdf_fortv2_c_interfaces.mod netcdf_f03.mod
-CLEANFILES += netcdf4_nc_interfaces.mod netcdf4_nf_interfaces.mod netcdf4_f03.mod
+              netcdf_nf_interfaces.mod netcdf_fortv2_c_interfaces.mod \
+              netcdf_f03.mod netcdf4_nc_interfaces.mod \
+              netcdf4_nf_interfaces.mod netcdf4_f03.mod
+
+CLEANFILES += $(COMMONHEADERS)
 
 # Turn of parallel builds in this directory.
 .NOTPARALLEL:
