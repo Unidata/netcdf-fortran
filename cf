@@ -4,14 +4,26 @@
 F03=1
 HDF5=1
 DAP=1
+#PGI=1
+
+FC=gfortran
+CC=gcc
+
+# Test pgi compiler
+if test "x$PGI" = x1 ; then
+PATH="/opt/pgi/linux86/11.1/bin:$PATH"
+FC=pgf95
+M32=1
+CC=pgcc
+fi
 
 #M32=1
 #M64=1
 
 cmds=""
-#cmds="all"
+cmds="all"
 #cmds="all check"
-#cmds="all dist"
+cmds="all dist"
 #cmds="all distcheck"
 
 # Default cases
@@ -22,7 +34,7 @@ stddir="/share/ed/local/${HOST}"
 CFLAGS="-g -O0 $CFLAGS"
 CPPFLAGS="-I$PREFIX/include"
 LDFLAGS="-L$PREFIX/lib -lnetcdf"
-
+LD_LIBRARY_PATH="$PREFIX/lib:$LD_LIBRARY_PATH"
 
 if test x$M32 = x1 ; then
   PREFIX="/tmp/install32/${HOST}"
@@ -47,7 +59,7 @@ IGNORE="test 0 = 1"
 if test "x$HDF5" != "x" ; then
 CPPFLAGS="-I${stddir}/include -I${stddir}/include $CPPFLAGS"
 LDFLAGS="$LDFLAGS -L${stddir}/lib -lhdf5_hl -lhdf5 -L${stddir}/lib -lz"
-LD_LIBRARY_PATH="${stddir}/lib:$LD_LIBRARY_PATH"
+LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${stddir}/lib"
 fi
 
 if test "x$DAP" != "x" ; then
@@ -55,9 +67,9 @@ if curl-config --version >/dev/null ; then
   TMP=`curl-config --cflags`
   CPPFLAGS="$TMP $CPPFLAGS"
   TMP=`curl-config --libs`
-  LDFLAGS="$TMP $LDFLAGS"
+  LDFLAGS="$LDFLAGS $TMP"
   TMP=`curl-config --prefix`
-  LD_LIBRARY_PATH="$TMP/lib:$LD_LIBRARY_PATH"
+  LD_LIBRARY_PATH="$LD_LIBRARY_PATH:$TMP/lib"
 else
   echo "Cannot find curl-config"
   exit 1
@@ -67,7 +79,12 @@ fi
 export CPPFLAGS
 export CFLAGS
 export LDFLAGS
+export FC
+export CC
+
 export LD_LIBRARY_PATH
+#LD_RUN_PATH="$LD_LIBRARY_PATH"
+#export LD_RUN_PATH
 
 FLAGS="--prefix ${PREFIX}"
 #FLAGS="$FLAGS --enable-f77"
@@ -96,6 +113,3 @@ for c in $cmds; do
   ${MAKE} $c
 done
 exit 0
-
-
-

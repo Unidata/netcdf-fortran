@@ -95,13 +95,6 @@ TESTS += f03tst_v2
 CLEANFILES += ftst_v2.nc
 endif # BUILD_V2
 
-# This is an f90 benchmark.
-if BUILD_BENCHMARKS
-check_PROGRAMS += tst_io
-tst_io_SOURCES = tst_io.f90
-TESTS += tst_io
-endif #BUILD_BENCHMARKS
-
 # Test parallel I/O
 if TEST_PARALLEL
 check_PROGRAMS += f03tst_parallel
@@ -128,8 +121,8 @@ CLEANFILES += tests.mod
 endif
 
 # test03_get.F and test03_put.f need to be distributed, so that the user
-# need not have m4. fills.nc is used by test program ftest.
+# need not have m4.
 EXTRA_DIST = test03_get.F test03_put.F fills.cdl create_fills.sh	\
-run_f77_par_test.sh fills.nc
+run_f77_par_test.sh
 
 test: check

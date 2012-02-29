@@ -9,7 +9,7 @@
 AC_PREREQ([2.59])
 
 # Initialize with name, version, and support email address. 
-AC_INIT([netCDF-Fortran], [4.4], [support-netcdf@unidata.ucar.edu])
+AC_INIT([netCDF-Fortran], [4.4-beta1], [support-netcdf@unidata.ucar.edu])
 
 # Create the VERSION file, which contains the package version from
 # AC_INIT.
@@ -65,9 +65,45 @@ if test "x$enable_extra_tests" = xyes; then
 fi
 AM_CONDITIONAL(EXTRA_TESTS, [test x$enable_extra_tests = xyes])
 
+# According to the autoconf mailing list gurus, we must test for
+# compilers unconditionally. That is, we can't skip looking for the
+# fortran compilers, just because the user doesn't want fortran. This
+# is due to a limitation in autoconf.
+
+# Find the C compiler.
+AC_MSG_NOTICE([finding C compiler])
+
+AC_PROG_CC
+AM_PROG_CC_C_O
+AC_C_CONST
+
+# If F03 is set, FC isn't, then set FC to whatever F03 was set
+if test "${F03+set}" = set -a "${FC+set}" != set; then
+   FC=$F03
+fi
+
+# If F90 is set, FC isn't, then set FC to whatever F90 was set
+if test "${F90+set}" = set -a "${FC+set}" != set; then
+   FC=$F90
+fi
+
+# Find fortran compiler. If FC isn't set after AC_PROG_FC, we couldn't
+# find a fortran compiler. If the user requested the fortran API, and
+# has told us not to recover from a missing compiler, then bail out
+# right here.
+AC_MSG_NOTICE([finding Fortran compiler])
+AC_PROG_FC
+AC_PROG_F77($FC)
+
+# If we couldn't find an F90 compiler, deal with it.
+if test "${FC+set}" = set && test "x$FC" = x; then
+   AC_MSG_ERROR([Can't find F90 compiler.])
+   nc_build_f90=no
+fi
+
 # Set the default fortran builds
 nc_build_f77=no
-# !f03 => build_f90
+# remember f03 => !f90
 nc_build_f90=yes
 
 # Does the user want to test for Fortran 2003 compiler.
@@ -111,12 +147,13 @@ EOF
       nc_build_f90=yes
       AC_MSG_WARN([ISO_C_BINDING not supported - defaulting to F90 interfaces])
     else
-      AC_MSG_ERROR([Can't use build F03 interfaces recovery
+      AC_MSG_ERROR([Can't use build F03 interfaces compiler recovery])
       unset FC
       unset F90
-      unset F77
+      unset F03
       nc_build_f77=no
       nc_build_f90=no
+      nc_build_f03=no
     fi
   fi
 fi
@@ -156,7 +193,7 @@ elif test "x$enable_f03" = xyes ; then
 fi
 
 # Guarantee build state
-it test "x$nc_build_f90" = xyes ; then
+if test "x$nc_build_f90" = xyes ; then
   nc_build_f03 = no
 else
   nc_build_f03=yes
@@ -207,60 +244,6 @@ TEMP_LARGE=${TEMP_LARGE-.}
 AC_MSG_RESULT($TEMP_LARGE)
 #AC_SUBST(TEMP_LARGE)
 AC_DEFINE_UNQUOTED([TEMP_LARGE], ["$TEMP_LARGE"], [Place to put very large netCDF test files.])
-
-# According to the autoconf mailing list gurus, we must test for
-# compilers unconditionally. That is, we can't skip looking for the
-# fortran compilers, just because the user doesn't want fortran. This
-# is due to a limitation in autoconf.
-
-# Find the C compiler.
-AC_MSG_NOTICE([finding C compiler])
-
-AC_PROG_CC
-AM_PROG_CC_C_O
-AC_C_CONST
-
-# If the user set environment var FC, but not F77, then set F77=FC
-if test "x${FC+set}" = xset -a "x${F77+set}" != xset; then
-   F77=${FC}
-fi
-
-# If F03 is set, FC isn't, then set FC to whatever F03 was set
-test "${F03+set}" = set -a "${FC+set}" != set; then
-   FC=$F03
-fi
-
-# If F90 is set, FC isn't, then set FC to whatever F90 was set
-test "${F90+set}" = set -a "${FC+set}" != set; then
-   FC=$F90
-fi
-
-# If F77 is set, FC isn't, then set FC to whatever F77 was set 
-if test "${F77+set}" = set -a "${FC+set}" != set; then
-   FC=$F77
-fi
-
-# Find fortran compiler. If FC isn't set after AC_PROG_FC, we couldn't
-# find a fortran compiler. If the user requested the fortran API, and
-# has told us not to recover from a missing compiler, then bail out
-# right here.
-AC_MSG_NOTICE([finding Fortran compiler])
-AC_PROG_FC
-
-# If we couldn't find an F90 compiler, deal with it.
-if test "${FC+set}" = set && test "x$FC" = x; then
-   if test "x$nc_build_f90" = xyes; then
-      AC_MSG_ERROR([Can't find F90 compiler.])
-   fi
-   nc_build_f90=no
-fi
-
-AC_PROG_F77($FC)
-
-# Handle missing f77 compiler.
-if test "${F77+set}" = set && test "x$F77" = x; then
-   AC_MSG_ERROR([Can't find F77 compiler.])
-fi
 
 
 # Turn off building old F77 interfaces if nc_build_f03 is still yes

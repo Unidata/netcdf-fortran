@@ -30,7 +30,7 @@ endif
 
 if BUILD_F03
 libnetcdff_la_SOURCES += module_netcdf_nc_data.F90 module_netcdf_nc_interfaces.f90 \
-                         module_netcdf_nf_data.f90 module_netcdf_nf_interfaces.F90 \
+                         module_netcdf_nf_data.F90 module_netcdf_nf_interfaces.F90 \
                          module_netcdf_f03.f90 \
 			 nf_attio.F90 nf_control.f90 nf_dim.f90 nf_misc.f90 \
                          nf_genatt.f90 nf_geninq.f90 nf_genvar.f90 \
@@ -74,66 +74,82 @@ libnetcdff_la_DEPENDENCIES += $(top_srcdir)/libsrc/nfconfig.inc netcdf.inc
 
 # Some fortran compilers change the file names of .mod files to all
 # uppercase. Just to be special.
+
+LCHEADERS = 
+UCHEADERS = 
+
 if BUILD_F03
-LCHEADERS = netcdf_nc_data.mod netcdf_nc_interfaces.mod netcdf_nf_data.mod \
+LCHEADERS += netcdf_nc_data.mod netcdf_nc_interfaces.mod netcdf_nf_data.mod \
                    netcdf_nf_interfaces.mod netcdf_f03.mod
-UCHEADERS = NETCDF_NC_DATA.mod NETCDF_NC_INTERFACES.mod NETCDF_NF_DATA.mod \
+UCHEADERS += NETCDF_NC_DATA.mod NETCDF_NC_INTERFACES.mod NETCDF_NF_DATA.mod \
                    NETCDF_NF_INTERFACES.mod NETCDF_F03.mod
-else !BUILD_F03
-LCHEADERS = typesizes.mod netcdf.mod 
-UCHEADERS = TYPESIZES.mod NETCDF.mod 
-typesizes.mod: typeSizes.o
-netcdf.mod: $(NETCDF_O)
-BUILT_SOURCES += typesizes.mod
-endif !BUILD_F03
-
-if UPPER_CASE_MOD
-include_HEADERS = $(UCHEADERS)
-else !UPPER_CASE_MOD
-include_HEADERS = $(LCHEADERS)
-endif !UPPER_CASE_MOD
-
-#if UPPER_CASE_MOD
-#include_HEADERS += NETCDF_NC_DATA.mod \
-#NETCDF_NC_INTERFACES.mod \
-#NETCDF_NF_DATA.mod \
-#NETCDF_NF_INTERFACES.mod \
-#NETCDF_F03.mod
-#else !UPPER_CASE_MOD
-#include_HEADERS += netcdf_nc_data.mod \
-#netcdf_nc_interfaces.mod \
-#netcdf_nf_data.mod \
-#netcdf_nf_interfaces.mod \
-#netcdf_f03.mod
-#endif !UPPER_CASE_MOD
-#else !BUILD_F03
-#if UPPER_CASE_MOD
-#include_HEADERS += TYPESIZES.mod NETCDF.mod
-#TYPESIZES.mod: typeSizes.o
-#NETCDF.mod: $(NETCDF_O)
-#BUILT_SOURCES += TYPESIZES.mod
-#else !UPPER_CASE_MOD
-#include_HEADERS += typesizes.mod netcdf.mod 
-#typesizes.mod: typeSizes.o
-#netcdf.mod: $(NETCDF_O)
-#BUILT_SOURCES += typesizes.mod
-#endif !UPPER_CASE_MOD
-#
-#endif !BUILD_F03
-
 if BUILD_V2
-if UPPER_CASE_MOD
-include_HEADERS += NETCDF_FORTV2_C_INTERFACES.mod
-else !UPPER_CASE_MOD
-include_HEADERS += netcdf_fortv2_c_interfaces.mod
-endif !UPPER_CASE_MOD
+LCHEADERS += netcdf_fortv2_c_interfaces.mod
+UCHEADERS += NETCDF_FORTV2_C_INTERFACES.mod
 endif BUILD_V2
+
+endif BUILD_F03
+
+BUILT_SOURCES += $(UCHEADERS) $(LCHEADERS)
+
+# Must be consistent with previous list of uppercase headers
+# Always construct the upper case modules (may be unused)
+if BUILD_F03
+
+#if UPPER_CASE_MOD
+#NETCDF_NC_DATA.mod: module_netcdf_nc_data.o
+#NETCDF_NC_INTERFACES.mod: module_netcdf_nc_interfaces.o
+#NETCDF_NF_DATA.mod: module_netcdf_nf_data.o
+#NETCDF_NF_INTERFACES.mod: module_netcdf_nf_interfaces.o
+#NETCDF_F03.mod: module_netcdf_f03.o
+#if BUILD_V2
+#NETCDF_FORTV2_C_INTERFACES.mod: module_netcdf_fortv2_c_interfaces.o
+#endif BUILD_V2
+#else !UPPER_CASE_MOD
+netcdf_nc_data.mod: module_netcdf_nc_data.o
+netcdf_nc_interfaces.mod: module_netcdf_nc_interfaces.o
+netcdf_nf_data.mod: module_netcdf_nf_data.o
+netcdf_nf_interfaces.mod: module_netcdf_nf_interfaces.o
+netcdf_f03.mod: module_netcdf_f03.o
+if BUILD_V2
+netcdf_fortv2_c_interfaces.mod: module_netcdf_fortv2_c_interfaces.o
+endif BUILD_V2
+#endif !UPPER_CASE_MOD
+
+endif BUILD_F03
+
+$(UCHEADERS): $(LCHEADERS)
+	for lc in $(LCHEADERS) ; do \
+	uc=`echo $$lc | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'` ; \
+	rm -f $$uc ; cp $$lc $$uc ; \
+	done
+
+# These are always used
+if UPPER_CASE_MOD
+BUILT_SOURCES += TYPESIZES.mod NETCDF.mod
+UCCOMMON = TYPESIZES.mod NETCDF.mod
+NETCDF.mod: $(NETCDF_O)
+TYPESIZES.mod: typeSizes.o
+else !UPPER_CASE_MOD
+BUILT_SOURCES += typesizes.mod netcdf.mod
+LCCOMMON = typesizes.mod netcdf.mod
+typesizes.mod: typeSizes.o
+netcdf.mod: netcdf.o
+endif !UPPER_CASE_MOD
+
+if UPPER_CASE_MOD
+COMMONHEADERS = $(UCHEADERS) $(UCCOMMON)
+else !UPPER_CASE_MOD
+COMMONHEADERS = $(LCHEADERS) $(LCCOMMON)
+endif !UPPER_CASE_MOD
+
+nodist_include_HEADERS = $(COMMONHEADERS)
+libnetcdff_la_DEPENDENCIES += $(COMMONHEADERS)
 
 # This is what we are building: a convenience library of Fortran 2003 functions.
 lib_LTLIBRARIES = libnetcdff.la
 
-# Tell make to install this as a header file.
-include_HEADERS += netcdf.inc
+nodist_include_HEADERS += netcdf.inc
 
 BUILT_SOURCES += netcdf.inc
 
@@ -174,4 +190,3 @@ CLEANFILES += netcdf4_nc_interfaces.mod netcdf4_nf_interfaces.mod netcdf4_f03.mo
 
 # Turn of parallel builds in this directory.
 .NOTPARALLEL:
-
