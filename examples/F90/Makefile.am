@@ -3,22 +3,11 @@
 
 # This file builds F90 examples.
 
-# Some fortran compilers think your files should not have an .f90
-# extension! The value of FCFLAGS_f90 is set in the configure script,
-# based on the fortran compiler.
-AM_FCFLAGS = $(FCFLAGS_f90)
-AM_F90FLAGS = $(FCFLAGS_f90)
-AM_FFLAGS = $(FCFLAGS_f90)
-AM_LDFLAGS = 
-
-# Tell the compiler where to find the .mod files. The .mod file is
-# built, and therefore found in the build directory, not the source
-# directory.
-AM_FCFLAGS += -I$(top_srcdir) -I$(top_srcdir)/fortran	\
--I$(top_builddir)/f90 @MOD_FLAG@$(top_builddir)/f90
-AM_FFLAGS += ${AM_FCFLAGS}
-
-AM_LDFLAGS += ${top_builddir}/fortran/libnetcdff.la -lnetcdf
+AM_FCFLAGS = -I$(top_srcdir)/fortran ${AM_CPPFLAGS}
+AM_FCFLAGS += $(FCFLAGS_f90)
+AM_FCFLAGS += @MOD_FLAG@$(top_builddir)/fortran
+AM_FFLAGS = ${AM_FCFLAGS}
+AM_LDFLAGS = ${top_builddir}/fortran/libnetcdff.la -lnetcdf
 
 # These are the example programs.
 TESTPROGRAMS = simple_xy_wr simple_xy_rd sfc_pres_temp_wr	\

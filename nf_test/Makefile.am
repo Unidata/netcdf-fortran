@@ -3,18 +3,14 @@
 
 # This file builds and runs the f77 and f90 tests.
 
-AM_FFLAGS = -I$(top_srcdir)/fortran ${AM_CPPFLAGS}
+AM_FCFLAGS = -I$(top_srcdir)/fortran ${AM_CPPFLAGS}
 
 # Some fortran compilers think your files should not have an .f90
 # extension! The value of FCFLAGS_f90 is set in the configure script,
 # based on the fortran compiler.
-AM_FCFLAGS = $(FCFLAGS_f90) -I$(top_srcdir)/fortran
+AM_FCFLAGS += $(FCFLAGS_f90) @MOD_FLAG@$(top_builddir)/fortran
 
-# This is the netCDF-3 F90 test.
-#AM_FFLAGS += @MOD_FLAG@../f90
-#AM_FCFLAGS += @MOD_FLAG@../f90
-
-AM_FCFLAGS +=  ${AM_CPPFLAGS}
+AM_FFLAGS = ${AM_FCFLAGS}
 
 # All tests need to link to fortran and C libraries.
 LDADD = ${top_builddir}/fortran/libnetcdff.la 

@@ -28,7 +28,7 @@ AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
 
 # This call is required by automake.
-AM_INIT_AUTOMAKE([foreign dist-tarZ subdir-objects])
+AM_INIT_AUTOMAKE([foreign dist-zip subdir-objects])
 
 # Check for the existance of this file before proceeding.
 AC_CONFIG_SRCDIR([libsrc/fort-attio.c])

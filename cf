@@ -14,9 +14,9 @@ DAP=1
 
 cmds=""
 #cmds="all"
-cmds="all check"
+#cmds="all check"
 #cmds="all dist"
-#cmds="all distcheck"
+cmds="all distcheck"
 
 if test "x$ISSOURCE" != "x" ; then
 export CFLAGS=""
