@@ -4,7 +4,7 @@ The NetCDF Copyright.
 \page copyright Copyright
 
 Copyright 1993, 1994, 1995, 1996, 1997, 1998, 1999, 2000, 2001, 2002,
-2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011 University
+2003, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012 University
 Corporation for Atmospheric Research/Unidata.
 
 Portions of this software were developed by the Unidata Program at the 
@@ -36,6 +36,18 @@ INDIRECT OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING
 FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT,
 NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION
 WITH THE ACCESS, USE OR PERFORMANCE OF THIS SOFTWARE.
+
+Richard Weed's Fortran 2003 code is released under this license agreement.
+
+! This software is released under the Apache 2.0 Open Source License. The
+! full text of the License can be viewed at :
+!
+!   http:www.apache.org/licenses/LICENSE-2.0.html
+!
+! The author grants to UCAR the right to revise and extend the software
+! without restriction. However, the author retains all copyrights and
+! intellectual property rights explicit or implied by the Apache license
+
 */
 
 

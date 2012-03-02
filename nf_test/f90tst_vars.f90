@@ -25,7 +25,8 @@ program f90tst_vars
   integer :: mode_flag
   integer :: nvars, ngatts, ndims, unlimdimid, file_format
   integer :: x, y
-  integer, parameter :: CACHE_SIZE = 1000000
+  integer :: CACHE_SIZE = 1000000;
+  ! integer, parameter :: CACHE_SIZE = 1000000
 
   print *, ''
   print *,'*** Testing definition of netCDF-4 vars from Fortran 90.'
@@ -39,7 +40,8 @@ program f90tst_vars
 
   ! Create the netCDF file. 
   mode_flag = IOR(nf90_netcdf4, nf90_classic_model) 
-  call handle_err(nf90_create(FILE_NAME, mode_flag, ncid, cache_size = CACHE_SIZE))
+  ! call handle_err(nf90_create(FILE_NAME, mode_flag, ncid, cache_size = CACHE_SIZE))
+  call handle_err(nf90_create(FILE_NAME, mode_flag, ncid, 0, CACHE_SIZE))
 
   ! Define the dimensions.
   call handle_err(nf90_def_dim(ncid, "x", NX, x_dimid))

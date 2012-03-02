@@ -33,6 +33,10 @@ AM_FCFLAGS += @MOD_FLAG@../fortran
 AM_FFLAGS += -I$(top_builddir)/fortran
 AM_FCFLAGS += -I$(top_builddir)/fortran
 
+# Need some stuff from ../nf_test
+AM_FFLAGS += -I$(top_srcdir)/nf_test
+AM_FCFLAGS += -I$(top_srcdir)/nf_test
+
 TESTS =
 
 # All tests need to link to fortran and C libraries.
@@ -50,22 +54,8 @@ TESTS += nf03_test
 nf03_test_SOURCES = module_tests.F90 f03lib_f_interfaces.f90 test03_get.F test03_put.F nf03_error.F nf03_test.F	\
 test03_read.F test03_write.F util03.F f03lib.c
 
-if UPPER_CASE_MOD
-TESTS.mod: module_tests.o
-else
-tests.mod: module_tests.o
-endif
-
 # Cleaning up files created during the process.
 CLEANFILES = scratch.nc test.nc copy.nc fills.nc
-
-# Did the user build the V2 F77 API? If so, run this test.
-if BUILD_V2
-check_PROGRAMS += tst03_f77_v2
-TESTS += tst03_f77_v2
-CLEANFILES += tst_f77_v2.nc
-tst03_f77_v2_SOURCES = tst03_f77_v2.F
-endif # BUILD_V2
 
 # Is the user building netCDF-4?
 if USE_NETCDF4
@@ -116,11 +106,7 @@ CLEANFILES += test.nc
 f03test_SOURCES = module_tests.F90 f03test.F f03lib.c
 endif # BUILD_V2
 
-if UPPER_CASE_MOD
-CLEANFILES += TESTS.mod
-else
 CLEANFILES += tests.mod
-endif
 
 # test03_get.F and test03_put.f need to be distributed, so that the user
 # need not have m4.
@@ -128,3 +114,14 @@ EXTRA_DIST = test03_get.F test03_put.F fills.cdl create_fills.sh	\
 run_f77_par_test.sh
 
 test: check
+
+# Did the user build the V2 F77 API? If so, run this test.
+# This fails with pgifortran, but works with gfortran. 
+if !USING_PGI
+if BUILD_V2
+check_PROGRAMS += tst03_f77_v2
+TESTS += tst03_f77_v2
+CLEANFILES += tst_f77_v2.nc
+tst03_f77_v2_SOURCES = tst03_f77_v2.F
+endif # BUILD_V2
+endif !USING_PGI

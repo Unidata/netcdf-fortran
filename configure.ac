@@ -154,7 +154,7 @@ fi
 AC_MSG_CHECKING([whether F03 native code is desired])
 AC_ARG_ENABLE([f03],
               [AS_HELP_STRING([--disable-f03],
-                              [don't try to use the netCDF Fortran 2003 native code])])
+                              [suppress netCDF Fortran 2003 native code])])
 test "x$enable_f03" = xno && nc_build_f90=yes
 AC_MSG_RESULT([$enable_f03])
 
@@ -162,12 +162,12 @@ AC_MSG_RESULT([$enable_f03])
 if test "x$nc_iso_c_binding" = xno; then
   #Cannot build f03 native code
   AC_MSG_NOTICE([Fortran 2003 interface not supported; Using fortran 90 interface])
-  nc_build_f90 = yes  
+  nc_build_f90=yes  
 fi
 
 # Guarantee build state
 if test "x$nc_build_f90" = xyes ; then
-  nc_build_f03 = no
+  nc_build_f03=no
 else
   nc_build_f03=yes
 fi
@@ -254,8 +254,6 @@ if test "x$nc_build_f90" = xyes; then
 #   AC_F77_LIBRARY_LDFLAGS      
 fi
 
-AM_CONDITIONAL(BUILD_F77, [test "x$nc_build_f77" = xyes])
-AM_CONDITIONAL(BUILD_F90, [test "x$nc_build_f90" = xyes])
 AM_CONDITIONAL(BUILD_F03, [test "x$nc_build_f03" = xyes])
 
 # Set up libtool.
@@ -268,7 +266,7 @@ LT_INIT
 if test "x$enable_shared" = xyes; then
    if test $enable_valgrind_tests = yes; then
       AC_MSG_WARN([No valgrind tests with shared libraries])
-      enable_valgrind_tests = no
+      enable_valgrind_tests=no
    fi
 fi
 
@@ -308,6 +306,13 @@ case "$CPPFLAGS" in
       esac
 esac
 
+case "$FC" in
+pgf95|pgf90|pgf77|ifort*|lf90|lf95) using_pgi=yes ;;
+*) ;;
+esac
+
+AM_CONDITIONAL(USING_PGI, [test "x$using_pgi" = "xyes"])
+
 # Check to see if any macros must be set to enable large (>2GB) files.
 AC_SYS_LARGEFILE
 
@@ -343,6 +348,9 @@ fi
 # Test whether F90 module names get capitalized.
 if test "x$nc_build_f90" = xyes; then
    AC_PROG_FC_UPPERCASE_MOD
+fi
+if test "x$ac_cv_prog_f90_uppercase_mod" = xyes ; then
+AC_MSG_FAILURE([Upper Case Modules names not supported])
 fi
 AM_CONDITIONAL(UPPER_CASE_MOD, [test "x$ac_cv_prog_f90_uppercase_mod" = xyes])
 

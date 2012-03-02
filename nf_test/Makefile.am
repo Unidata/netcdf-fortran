@@ -25,10 +25,10 @@ TESTS = nf_test
 
 if BUILD_F03
 nf_test_SOURCES = f03lib_f_interfaces.f90 test_get.m4 test_put.m4 nf_error.F nf_test.F	\
-test_read.F test_write.F util.F f03lib.c tests.inc
+                  test_read.F test_write.F util.F f03lib.c tests.inc
 else
 nf_test_SOURCES = test_get.m4 test_put.m4 nf_error.F nf_test.F	\
-test_read.F test_write.F util.F fortlib.c tests.inc
+                  test_read.F test_write.F util.F fortlib.c tests.inc
 endif
 
 # The create_fills shell creates the file fills.nc, needed by later
@@ -47,9 +47,11 @@ endif # BUILD_V2
 # Is the user building netCDF-4?
 if USE_NETCDF4
 
-# Add these netCDF-4 f77 test programs.
+# Add these netCDF-4 test programs.
 check_PROGRAMS += ftst_vars ftst_vars2 ftst_vars3 ftst_vars4 ftst_vars5	\
-ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_groups
+                  ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_groups
+TESTS += ftst_vars ftst_vars2 ftst_vars3 ftst_vars4 ftst_vars5	\
+         ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_groups
 
 if BUILD_F03
 ftst_types_SOURCES = ftst_types.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
@@ -62,7 +64,7 @@ ftst_vars4_SOURCES = ftst_vars4.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 ftst_vars5_SOURCES = ftst_vars5.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 ftst_vars6_SOURCES = ftst_vars6.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 ftst_groups_SOURCES = ftst_groups.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
-else
+else !BUILD_F03
 ftst_types_SOURCES = ftst_types.F fortlib.c handle_err.F
 ftst_types2_SOURCES = ftst_types2.F fortlib.c handle_err.F
 ftst_types3_SOURCES = ftst_types3.F fortlib.c handle_err.F
@@ -73,19 +75,21 @@ ftst_vars4_SOURCES = ftst_vars4.F fortlib.c handle_err.F
 ftst_vars5_SOURCES = ftst_vars5.F fortlib.c handle_err.F
 ftst_vars6_SOURCES = ftst_vars6.F fortlib.c handle_err.F
 ftst_groups_SOURCES = ftst_groups.F fortlib.c handle_err.F
-TESTS += ftst_vars ftst_vars2 ftst_vars3 ftst_vars4 ftst_vars5	\
-ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_groups
-endif
+endif !BUILD_F03
 
 # Add these netCDF-4 f90 test programs.
-if BUILD_F90
 check_PROGRAMS += f90tst_vars tst_types tst_types2 f90tst_vars_vlen	\
-tst_f90_nc4 f90tst_grps f90tst_fill f90tst_fill2 f90tst_vars3		\
-f90tst_vars4 f90tst_vars2
-tst_f90_nc4_SOURCES = tst_f90_nc4.f90
+                  tst_f90_nc4 f90tst_grps f90tst_fill f90tst_fill2 f90tst_vars3		\
+                  f90tst_vars4 f90tst_vars2
+
+TESTS += f90tst_vars tst_types tst_types2 f90tst_vars_vlen tst_f90_nc4	\
+         f90tst_grps f90tst_fill f90tst_fill2 f90tst_vars3 f90tst_vars4		\
+         f90tst_vars2
+
 f90tst_vars_SOURCES = f90tst_vars.f90
 tst_types_SOURCES = tst_types.f90
 tst_types2_SOURCES = tst_types2.f90
+tst_f90_nc4_SOURCES = tst_f90_nc4.f90
 f90tst_vars_vlen_SOURCES = f90tst_vars_vlen.f90
 f90tst_grps_SOURCES = f90tst_grps.f90
 f90tst_fill_SOURCES = f90tst_fill.f90
@@ -93,35 +97,32 @@ f90tst_fill2_SOURCES = f90tst_fill2.f90
 f90tst_vars2_SOURCES = f90tst_vars2.f90
 f90tst_vars3_SOURCES = f90tst_vars3.f90
 f90tst_vars4_SOURCES = f90tst_vars4.f90
-TESTS += f90tst_vars tst_types tst_types2 f90tst_vars_vlen tst_f90_nc4	\
-f90tst_grps f90tst_fill f90tst_fill2 f90tst_vars3 f90tst_vars4		\
-f90tst_vars2
 
 # This is a netCDF-4 V2 test program.
 if BUILD_V2
 check_PROGRAMS += ftst_v2
-ftst_v2_SOURCES = ftst_v2.F 
 TESTS += ftst_v2
+ftst_v2_SOURCES = ftst_v2.F 
 endif # BUILD_V2
 
 # This is the netCDF-4 F90 large file test.
 if LARGE_FILE_TESTS
 check_PROGRAMS += tst_flarge
-tst_flarge_SOURCES = tst_flarge.f90
 TESTS += tst_flarge
+tst_flarge_SOURCES = tst_flarge.f90
 endif # LARGE_FILE_TESTS
 
 # This is an f90 benchmark.
 if BUILD_BENCHMARKS
 check_PROGRAMS += tst_io
-tst_io_SOURCES = tst_io.f90
 TESTS += tst_io
+tst_io_SOURCES = tst_io.f90
 endif #BUILD_BENCHMARKS
 
 # Test parallel I/O.
 if TEST_PARALLEL
 check_PROGRAMS += f90tst_parallel f90tst_parallel2 f90tst_parallel3	\
-f90tst_nc4_par
+                  f90tst_nc4_par
 #f90tst_parallel_fill
 TESTS += run_f90_par_test.sh
 
@@ -132,14 +133,12 @@ f90tst_nc4_par_SOURCES = f90tst_nc4_par.f90
 #f90tst_parallel_fill_SOURCES = f90tst_parallel_fill.f90
 endif # TEST_PARALLEL
 
-endif #BUILD_F90
-
 # Test parallel I/O for F77.
 if TEST_PARALLEL
 check_PROGRAMS += ftst_parallel ftst_parallel_nasa
+TESTS += run_f77_par_test.sh
 ftst_parallel_SOURCES = ftst_parallel.F
 ftst_parallel_nasa_SOURCES = ftst_parallel_nasa.F
-TESTS += run_f77_par_test.sh
 endif # TEST_PARALLEL
 
 endif #USE_NETCDF4
@@ -156,11 +155,9 @@ ftest_SOURCES = ftest.F fortlib.c
 endif
 endif # BUILD_V2
 
-if BUILD_F90
 check_PROGRAMS += tst_f90
-tst_f90_SOURCES = tst_f90.f90
 TESTS += tst_f90
-endif
+tst_f90_SOURCES = tst_f90.f90
 
 # Tell make how to turn .m4 files into .F files.
 .m4.F:
@@ -169,10 +166,10 @@ endif
 # test_get.F and test_put.f need to be distributed, so that the user
 # need not have m4. fills.nc is used by test program ftest.
 EXTRA_DIST = test_get.F test_put.F fills.cdl create_fills.sh	\
-run_f90_par_test.sh run_f77_par_test.sh ref_fills.nc 
+             run_f90_par_test.sh run_f77_par_test.sh ref_fills.nc 
 
 # Cleaning up files created during the process.
-CLEANFILES = scratch.nc test.nc copy.nc fills.nc tst_*.nc ftst_*.nc	\
-f90tst_*.nc
+CLEANFILES = scratch.nc test.nc copy.nc fills.nc tst_*.nc ftst_*.nc f90tst_*.nc
 
 MAINTAINERCLEANFILES = test_get.F test_put.F
+

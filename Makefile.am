@@ -35,14 +35,8 @@ DISTCLEANFILES = VERSION comps.txt test_prog
 bin_SCRIPTS = nf-config
 
 check_nc_config:
-if BUILD_F77
-	$(F77) `./nf-config --fflags` test_prog.F -o test_prog `./nf-config --libs`
-	./test_prog
-endif
-if BUILD_F90
 	$(F90) `./nf-config --fflags` test_prog.f90 -o test_prog `./nf-config --libs`
 	./test_prog
-endif
 if BUILD_F03
 	$(F03) `./nf-config --fflags` test_prog.f03 -o test_prog `./nf-config --libs`
 	./test_prog

@@ -1,10 +1,33 @@
 #!/bin/bash
+
 #X="-x"
+
+ISSOURCE="$1"
 
 F03=1
 HDF5=1
 DAP=1
 #PGI=1
+
+#M32=1
+#M64=1
+
+cmds=""
+#cmds="all"
+cmds="all check"
+#cmds="all dist"
+#cmds="all distcheck"
+
+if test "x$ISSOURCE" != "x" ; then
+export CFLAGS=""
+export CPPFLAGS=""
+export LDFLAGS=""
+export LD_LIBRARY_PATH=""
+export FCFLAGS=""
+export FFLAGS=""
+else
+set -x
+fi
 
 FC=gfortran
 CC=gcc
@@ -13,28 +36,31 @@ CC=gcc
 if test "x$PGI" = x1 ; then
 PATH="/opt/pgi/linux86/11.1/bin:$PATH"
 FC=pgf95
-M32=1
 CC=pgcc
 fi
-
-#M32=1
-#M64=1
-
-cmds=""
-cmds="all"
-#cmds="all check"
-#cmds="all dist"
-cmds="all distcheck"
 
 # Default cases
 PREFIX="/tmp/install/${HOST}"
 stddir="/share/ed/local/${HOST}"
+
+#if test "x$PGI" = "x1" ; then
+#PREFIX=/tmp/install/pgi
+#fi
+
 
 # Assume that netcdf is in $PREFIX
 CFLAGS="-g -O0 $CFLAGS"
 CPPFLAGS="-I$PREFIX/include"
 LDFLAGS="-L$PREFIX/lib -lnetcdf"
 LD_LIBRARY_PATH="$PREFIX/lib:$LD_LIBRARY_PATH"
+FCFLAGS="-g -O0 $FCFLAGS"
+
+if test "x$PGI" = "x1" ; then
+CFLAGS="-Msignextend -V -m64 $CFLAGS"
+FCFLAGS="-w -V -m64 $FCFLAGS"
+CPPFLAGS="$CPPFLAGS -DNDEBUG -DpgiFortran"
+LD_LIBRARY_PATH="/usr/local/pgi/linux86-64/11.1/lib:$LD_LIBRARY_PATH"
+fi
 
 if test x$M32 = x1 ; then
   PREFIX="/tmp/install32/${HOST}"
@@ -48,7 +74,10 @@ fi
 
 case "$HOST" in
   mort) CFLAGS="-std=c99 $CFLAGS" ;;
-  spock) CFLAGS="-Wdeclaration-after-statement -Wall $CFLAGS" ;;
+  spock)
+    if test "x$PGI" = "x"; then
+      CFLAGS="-Wdeclaration-after-statement -Wall $CFLAGS"
+    fi ;;
   spike) CFLAGS="-Wall $CFLAGS"	;;
   *) ;;
 esac
@@ -76,8 +105,12 @@ else
 fi
 fi
 
+FFLAGS="$FCFLAGS"
+
 export CPPFLAGS
 export CFLAGS
+export FCFLAGS
+export FFLAGS
 export LDFLAGS
 export FC
 export CC
@@ -91,13 +124,13 @@ FLAGS="--prefix ${PREFIX}"
 #FLAGS="$FLAGS --disable-f03-compiler-check"
 #FLAGS="$FLAGS --enable-valgrind-tests"
 #FLAGS="$FLAGS --enable-parallel-tests"
-#FLAGS="$FLAGS --enable-extra-tests"
+FLAGS="$FLAGS --enable-extra-tests"
 #FLAGS="$FLAGS --enable-large-file-tests"
 #FLAGS="$FLAGS --disable-largefile"
 #FLAGS="$FLAGS --enable-extra-example-tests"
 #FLAGS="$FLAGS --enable-dll"
 
-#FLAGS="$FLAGS --disable-shared"
+FLAGS="$FLAGS --disable-shared"
 #FLAGS="$FLAGS --enable-shared"
 
 if test "x$F03" == "x" ; then
@@ -107,9 +140,12 @@ fi
 DISTCHECK_CONFIGURE_FLAGS="$FLAGS"
 export DISTCHECK_CONFIGURE_FLAGS
 
+if test "x$ISSOURCE" = "x" ; then
+
 if test -f Makefile ; then ${MAKE} distclean >/dev/null 2>&1 ; fi
 sh $X ./configure ${FLAGS}
 for c in $cmds; do
   ${MAKE} $c
 done
-exit 0
+
+fi
