@@ -519,6 +519,7 @@ status value.
 @section Compiling and Linking with the NetCDF Library
 @cindex linking to netCDF library
 @cindex compiling with netCDF library
+@cindex nf-config
 
 Details of how to compile and link a program that uses the netCDF C or
 FORTRAN interfaces differ, depending on the operating system, the
@@ -542,26 +543,60 @@ invoking the compiler, to specify a directory where netcdf.inc is
 installed, for example:
 
 @example
-f77 -c -I/usr/local/netcdf/include myprogram.f
+f77 -c -I/usr/local/include myprogram.f
 @end example
-
-Alternatively, you could specify an absolute path name in the INCLUDE
-statement, but then your program would not compile on another platform
-where netCDF is installed in a different location.
 
 Unless the netCDF library is installed in a standard directory where
 the linker always looks, you must use the -L and -l options to link an
-object file that uses the netCDF library. For example:
+object file that uses the netCDF library. Since version 4.1.3, the
+netCDF Fortran library (named `libnetcdff') is distinct from the
+netCDF C library (named `libnetcdf'), but depends on it.  If it is
+installed as a shared library, you need only use `-lnetcdff' to
+specify the Fortran library for linking.
+
+For example, if installed as a shared library, use something like:
 
 @example
-f77 -o myprogram myprogram.o -L/usr/local/netcdf/lib -lnetcdf
+f77 -o myprogram myprogram.o -L/usr/local/lib -lnetcdff
 @end example
 
-Alternatively, you could specify an absolute path name for the library:
+If installed as a static library, you will at least need to mention
+the netCDF C library and perhaps other libraries, such as hdf5 or
+curl, depending on how the C library was built.  For example:
 
 @example
-f77 -o myprogram myprogram.o -l/usr/local/netcdf/lib/libnetcdf.
+f77 -o myprogram myprogram.o -L/usr/local/lib -lnetcdff -lnetcdf
 @end example
+
+Use of the nf-config utility program, installed as part of the
+netcdf-fortran software, provides an easier way to compile and link,
+without needing to know the details of where the library has been
+installed, or whether it is installed as a shared or static library.
+
+To see all the options for `nf-config', invoke it with the `--help'
+argument. 
+
+Here's an example of how you could use `nf-config' to compile and link
+a Fortran program in one step:
+
+@example
+f77 myprogram.f -o myprogram `nf-config --fflags --flibs`
+@end example
+
+If it is installed on your system, you could also use the `pkg-config'
+utility to compile and link Fortran programs with the netCDF
+libraries.  This is especially useful in Makefiles, to insulate them
+from changes to library versions and dependencies.  Here is an example
+of how you could compile and link a Fortran program with netCDF
+libraries using pkg-config:
+
+@example
+export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+f77 myprogram.f -o myprogram `pkg-config --cflags --libs netcdf-fortran`
+@end example
+
+where here `--cflags' means compiler flags and `libs' requests that
+the approriate libraries be linked in.
 
 @node Datasets, Groups, Use of the NetCDF Library, Top
 @chapter Datasets
