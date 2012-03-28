@@ -556,11 +556,15 @@ status value.
 @section Compiling and Linking with the NetCDF Library
 @cindex linking to netCDF library
 @cindex compiling with netCDF library
+@cindex nf-config
 
 Details of how to compile and link a program that uses the netCDF C or
 Fortran interfaces differ, depending on the operating system, the
 available compilers, and where the netCDF library and include files
-are installed. 
+are installed. Nevertheless, we provide here examples of how to
+compile and link a program that uses the netCDF library on a Unix
+platform, so that you can adjust these examples to fit your
+installation.
 
 Every Fortran 90 procedure or module which references netCDF constants
 or procedures must have access to the module information created when
@@ -568,33 +572,69 @@ the netCDF module was compiled. The suffix for this file is ``MOD''
 (or sometimes ``mod''). 
 
 Most F90 compilers allow the user to specify the location of .MOD
-files, usually with the -I flag. (Some compilers, like absoft, use -p
-instead).
+files, usually with the -I flag.
 
 @example
 f90 -c -I/usr/local/include mymodule.f90
 @end example
 
-
 Starting with version 3.6.2, another method of building the netCDF
-fortran libraries becomes available. With the
---enable-separate-fortran option to configure, the user can specify
-that the C library should not contain the fortran functions. In these
-cases an additional library, libnetcdff.a (not the extra ``f'') will
-be built. This library contains the fortran functions.
+fortran libraries became available. With the --enable-separate-fortran
+option to configure, the user can specify that the C library should
+not contain the fortran functions. In these cases an additional
+library, libnetcdff.a (note the extra ``f'') will be built. This
+library contains the Fortran functions.  Since verion 4.1.3, the
+netCDF Fortran software and library is always distinct from the netCDF
+C library, but depends on it.  If it is installed as a shared library,
+you need only use `-lnetcdff' to specify the Fortran library for
+linking.
 
 For more information about configure options, @xref{Specifying the
 Environment for Building,,, netcdf-install, @value{i-man}}.
 
-Building separate fortran libraries is required for shared library
-builds, but is not done, by default, for static library builds.
-
-When linking fortran programs without a separate fortran library,
-programs must link to the netCDF library like this:
+If installed as a shared library, link, using something like:
 
 @example
-f90 -o myprogram myprogram.o -L/usr/local/netcdf/lib -lnetcdf
+f90 -o myprogram myprogram.o -L/usr/local/lib -lnetcdff
 @end example
+
+If installed as a static library, you will at least need to mention
+the netCDF C library and perhaps other libraries, such as hdf5 or
+curl, depending on how the C library was built.  For example:
+
+@example
+f90 -o myprogram myprogram.o -L/usr/local/lib -lnetcdff -lnetcdf
+@end example
+
+Use of the nf-config utility program, installed as part of the
+netcdf-fortran software, provides an easier way to compile and link,
+without needing to know the details of where the library has been
+installed, or whether it is installed as a shared or static library.
+
+To see all the options for `nf-config', invoke it with the `--help'
+argument. 
+
+Here's an example of how you could use `nf-config' to compile and link
+a Fortran program in one step:
+
+@example
+f90 myprogram.f90 -o myprogram `nf-config --fflags --flibs`
+@end example
+
+If it is installed on your system, you could also use the `pkg-config'
+utility to compile and link Fortran programs with the netCDF
+libraries.  This is especially useful in Makefiles, to insulate them
+from changes to library versions and dependencies.  Here is an example
+of how you could compile and link a Fortran program with netCDF
+libraries using pkg-config:
+
+@example
+export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+f90 myprogram.f90 -o myprogram `pkg-config --cflags --libs netcdf-fortran`
+@end example
+
+where here `--cflags' means compiler flags and `libs' requests that
+the approriate libraries be linked in.
 
 @node Datasets, Groups, Use of the NetCDF Library, Top
 @chapter Datasets
@@ -3210,7 +3250,7 @@ Group ID part of ncid was invalid.
 This example is from nf90_test/ftst_vars4.F.
 
 @example
-C     Set up the vlen with this helper function, since F77 can't deal
+C     Set up the vlen with this helper function, since F90 can't deal
 C     with pointers.
       retval = nf90_put_vlen_element(ncid, vlen_typeid, vlen, 
      &     vlen_len, data1)
