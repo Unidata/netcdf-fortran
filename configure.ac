@@ -155,8 +155,10 @@ AC_MSG_CHECKING([whether F03 native code is desired])
 AC_ARG_ENABLE([f03],
               [AS_HELP_STRING([--disable-f03],
                               [suppress netCDF Fortran 2003 native code])])
-test "x$enable_f03" = xno && nc_build_f90=yes
+test "x$enable_f03" = xno || enable_f03=yes
 AC_MSG_RESULT([$enable_f03])
+
+if test "x$enable_f03" = xyes ; then nc_build_f03=yes; fi
 
 # Decide on f90 versus 2003
 if test "x$nc_iso_c_binding" = xno; then
@@ -165,7 +167,7 @@ if test "x$nc_iso_c_binding" = xno; then
   nc_build_f90=yes  
 fi
 
-# Guarantee build state
+# Guarantee build state; f90 currently overrides f03
 if test "x$nc_build_f90" = xyes ; then
   nc_build_f03=no
 else
