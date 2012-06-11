@@ -157,6 +157,10 @@ integer, parameter, public :: &
      nf90_hdf5 = 4096, & ! deprecated
      nf90_classic_model = 256
 
+! Flags for parallel I/O.
+integer, parameter, public :: nf90_mpiio = 8192, nf90_mpiposix = 16384, &
+     nf90_pnetcdf = 32768
+
 ! Flags for parallel access.
 integer, parameter, public :: nf90_independent = 0, nf90_collective = 1
   
