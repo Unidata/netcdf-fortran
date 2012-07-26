@@ -49,6 +49,8 @@
     nf90_64bit_offset    = 512,       &
     nf90_lock      = 1024,      &
     nf90_share     = 2048 
+    nf90_diskless  = 8
+    nf90_mmap      = 16
   
   integer, parameter, public ::  &
     nf90_sizehint_default = 0,   & 
