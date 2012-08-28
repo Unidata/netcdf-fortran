@@ -254,15 +254,14 @@
          offset, field_typeid, ndims, dim_sizes)
   end function nf90_insert_array_compound
   ! -----------
-  function nf90_inq_type(ncid, xtype, name, size, nfields)
+  function nf90_inq_type(ncid, xtype, name, size)
     integer, intent(in) :: ncid
     integer, intent(in) :: xtype
     character (len = *), intent(out) :: name
     integer, intent(out) :: size
-    integer, intent(out) :: nfields
     integer :: nf90_inq_type
   
-    nf90_inq_type = nf_inq_type(ncid, xtype, name, size, nfields)
+    nf90_inq_type = nf_inq_type(ncid, xtype, name, size)
   end function nf90_inq_type
   ! -----------
   function nf90_inq_compound(ncid, xtype, name, size, nfields)

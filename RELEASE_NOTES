@@ -1,0 +1,23 @@
+This file contains a high-level description of this package's
+evolution.  Releases are in reverse chronological order (most recent
+first).	 Recent releases include references to Jira issue identifiers
+for more information, where '[NCFORTRAN-XXX]' refers to
+https://www.unidata.ucar.edu/jira/browse/NCFORTRAN-XXX .
+
+VERSION		COMMENTS
+-------		--------
+4.2.1		Released 2012-09-01
+		
+		Fix nf90_inq_type() function, too many arguments. 
+		[NCFORTRAN-20]
+
+4.2		Released 2011-10-03
+
+		First release as a separate distribution, not included
+		with the netCDF C distribution.  Includes Fortran F77
+		and F90 interfaces.  This separation will allow us to
+		better serve the needs of the Fortran community by
+		eliminating unnecessary Fortran library updates and
+		reducing our maintenance costs by making our build
+		systems simpler.
+
