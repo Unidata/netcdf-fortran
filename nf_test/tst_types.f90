@@ -63,6 +63,11 @@ program tst_types
   if (name_in(1:len(OPAQUE_TYPE_NAME)) .ne. OPAQUE_TYPE_NAME .or. &
        size_in .ne. OPAQUE_SIZE) stop 2
 
+  ! Check it again with the inq_type call
+  call check(nf90_inq_type(ncid, opaque_typeid, name_in, size_in))
+  if (name_in(1:len(OPAQUE_TYPE_NAME)) .ne. OPAQUE_TYPE_NAME .or. &
+       size_in .ne. OPAQUE_SIZE) stop 2
+
   ! Read in the large number.
   call check(nf90_get_var(ncid, varid, num_in))
   if (num_in .ne. BIG_NUMBER) stop 2

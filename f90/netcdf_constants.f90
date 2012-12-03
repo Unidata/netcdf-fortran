@@ -46,9 +46,11 @@
     nf90_noclobber = 4,         &
     nf90_fill      = 0,         &
     nf90_nofill    = 256,       &
-    nf90_64bit_offset    = 512,       &
+    nf90_64bit_offset    = 512, &
     nf90_lock      = 1024,      &
-    nf90_share     = 2048 
+    nf90_share     = 2048,      & 
+    nf90_diskless  = 8,         &
+    nf90_mmap      = 16
   
   integer, parameter, public ::  &
     nf90_sizehint_default = 0,   & 

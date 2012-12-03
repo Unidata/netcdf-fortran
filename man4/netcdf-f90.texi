@@ -3052,12 +3052,11 @@ For even more information about a user defined type @ref{NF90_INQ_USER_TYPE}.
 @heading Usage 
 
 @example
-  function nf90_inq_type(ncid, xtype, name, size, nfields)
+  function nf90_inq_type(ncid, xtype, name, size)
     integer, intent(in) :: ncid
     integer, intent(in) :: xtype
     character (len = *), intent(out) :: name
     integer, intent(out) :: size
-    integer, intent(out) :: nfields
     integer :: nf90_inq_type
 @end example
 
