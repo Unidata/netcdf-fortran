@@ -65,11 +65,6 @@ if test "x$enable_extra_tests" = xyes; then
 fi
 AM_CONDITIONAL(EXTRA_TESTS, [test x$enable_extra_tests = xyes])
 
-# According to the autoconf mailing list gurus, we must test for
-# compilers unconditionally. That is, we can't skip looking for the
-# fortran compilers, just because the user doesn't want fortran. This
-# is due to a limitation in autoconf.
-
 # Find the C compiler.
 AC_MSG_NOTICE([finding C compiler])
 
@@ -82,7 +77,7 @@ if test "${F03+set}" = set -a "${FC+set}" != set; then
    FC=$F03
 fi
 
-# If F90 is set, FC isn't, then set FC to whatever F90 was set
+# If F90 is set, FC isn't, then set FC to whatever F90 was set to.
 if test "${F90+set}" = set -a "${FC+set}" != set; then
    FC=$F90
 fi
@@ -242,7 +237,7 @@ if test "x$nc_build_f90" = xyes; then
 
    if test "x$nc_build_f03" = xno; then
      # Some f90 compilers change the case of the mod file names. Others
-     # require special flags to be set to dea with .f90 files. Find out
+     # require special flags to be set to deal with .f90 files. Find out
      # about this compiler.
      AC_LANG_PUSH(Fortran)
      AC_FC_SRCEXT(f90)
@@ -502,8 +497,8 @@ AC_MSG_NOTICE([generating header files and makefiles])
 
 # We will output a fortran inc file, nfconfig.inc.
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_HEADERS([libsrc/nfconfig.inc:libsrc/nfconfig.in], 
-   [sed '1d;s%^/\* \(.*\) \*/%\1%' libsrc/nfconfig.inc >conftest.tmp && mv conftest.tmp libsrc/nfconfig.inc])
+AC_CONFIG_HEADERS([libsrc/nfconfig1.inc:libsrc/nfconfig.in], 
+   [sed '1d;s%^/\* \(.*\) \*/%\1%' libsrc/nfconfig1.inc >conftest.tmp && mv conftest.tmp libsrc/nfconfig.inc])
 
 AC_CONFIG_FILES([Makefile
                  nf-config
