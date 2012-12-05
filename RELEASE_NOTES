@@ -5,6 +5,9 @@ VERSION         COMMENTS
 -------         --------
 4.4-beta3	Released 2012-12-05
 
+		Fixed bug that "make -j check" fails, but "make check"
+		works fine.
+
 		Fixed build problems resulting from syncing with
 		separate C distribution.
 

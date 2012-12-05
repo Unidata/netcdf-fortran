@@ -45,6 +45,10 @@ TESTS += nf03_test
 nf03_test_SOURCES = module_tests.F90 f03lib_f_interfaces.f90 test03_get.F test03_put.F nf03_error.F nf03_test.F	\
 test03_read.F test03_write.F util03.F f03lib.c
 
+# programs that "use tests" from the tests.mod module depend on it being built first, needed for make -j
+nf03_error.o nf03_test.o test03_get.o test03_put.o test03_read.o test03_write.o tst03_f77_v2.o util03.o: \
+module_tests.o
+
 # Cleaning up files created during the process.
 CLEANFILES = scratch.nc test.nc copy.nc fills.nc
 
