@@ -46,9 +46,11 @@
     nf90_noclobber = 4,         &
     nf90_fill      = 0,         &
     nf90_nofill    = 256,       &
-    nf90_64bit_offset    = 512,       &
+    nf90_64bit_offset    = 512, &
     nf90_lock      = 1024,      &
-    nf90_share     = 2048 
+    nf90_share     = 2048,      & 
+    nf90_diskless  = 8,         &
+    nf90_mmap      = 16
   
   integer, parameter, public ::  &
     nf90_sizehint_default = 0,   & 
@@ -157,12 +159,12 @@ integer, parameter, public :: &
      nf90_hdf5 = 4096, & ! deprecated
      nf90_classic_model = 256
 
+! Flags for parallel access.
+integer, parameter, public :: nf90_independent = 0, nf90_collective = 1
+
 ! Flags for parallel I/O.
 integer, parameter, public :: nf90_mpiio = 8192, nf90_mpiposix = 16384, &
      nf90_pnetcdf = 32768
-
-! Flags for parallel access.
-integer, parameter, public :: nf90_independent = 0, nf90_collective = 1
   
 ! Extra variable flags.
 integer, parameter, public :: &

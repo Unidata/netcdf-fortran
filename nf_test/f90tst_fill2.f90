@@ -16,6 +16,7 @@ program f90tst_fill
   integer, parameter :: MAX_DIMS = 2
   integer, parameter :: NX = 16, NY = 16
   integer, parameter :: HALF_NX = NX / 2, HALF_NY = NY / 2
+  integer, parameter :: ZERO_COUNT = 0
   integer, parameter :: NUM_VARS = 8
   character (len = *), parameter :: var_name(NUM_VARS) = &
        (/ 'byte  ', 'short ', 'int   ', 'float ', 'double', 'ubyte ', &
@@ -78,6 +79,11 @@ program f90tst_fill
   call handle_err(nf90_put_var(ncid, varid(6), ubyte_out, start = start_out, count = count_out))
   call handle_err(nf90_put_var(ncid, varid(7), ushort_out, start = start_out, count = count_out))
   call handle_err(nf90_put_var(ncid, varid(8), uint_out, start = start_out, count = count_out))
+
+  ! Test when one dimension of count is 0
+  count_out = (/ HALF_NX, ZERO_COUNT /)
+  call handle_err(nf90_put_var(ncid, varid(3), int_out, start = start_out, count = count_out))
+  count_out = (/ HALF_NX, HALF_NY /)
 
   ! Close the file. 
   call handle_err(nf90_close(ncid))

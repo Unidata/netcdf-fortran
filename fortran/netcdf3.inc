@@ -46,7 +46,7 @@
       parameter (nf_fill_int = -2147483647)
       parameter (nf_fill_float = 9.9692099683868690e+36)
       parameter (nf_fill_real = nf_fill_float)
-      parameter (nf_fill_double = 9.9692099683868690e+36)
+      parameter (nf_fill_double = 9.9692099683868690d+36)
 
 !
 ! mode flags for opening and creating a netcdf dataset:
@@ -64,6 +64,8 @@
       integer nf_align_chunk
       integer nf_format_classic
       integer nf_format_64bit
+      integer nf_diskless
+      integer nf_mmap
 
       parameter (nf_nowrite = 0)
       parameter (nf_write = 1)
@@ -78,6 +80,8 @@
       parameter (nf_align_chunk = -1)
       parameter (nf_format_classic = 1)
       parameter (nf_format_64bit = 2)
+      parameter (nf_diskless = 8)
+      parameter (nf_mmap = 16)
 
 !
 ! size argument for defining an unlimited dimension:
