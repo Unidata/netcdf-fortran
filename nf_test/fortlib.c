@@ -11,7 +11,7 @@
 #include <limits.h>
 #include <float.h>
 
-#include "../fortran/ncfortran.h"
+#include "ncfortran.h"
 
 
 #if defined(f2cFortran) && !defined(pgiFortran) && !defined(gFortran)
