@@ -17,7 +17,6 @@ has_nc2="@HAS_NC2@"
 has_nc4="@HAS_NC4@"
 has_f90="@HAS_F90@"
 has_f03="@HAS_F03@"
-libs="-L${libdir} @NC_LIBS@"
 flibs="-L${libdir} @NC_FLIBS@"
 version="@PACKAGE_NAME@ @PACKAGE_VERSION@"
 
@@ -39,7 +38,6 @@ Available values for OPTION include:
   --has-nc4     whether NetCDF-4/HDF-5 is enabled in this build
   --has-f90     whether Fortran 90 API is enabled in this build
   --has-f03     whether Fortran 2003 API is enabled in this build
-  --libs        library linking information for netcdf
   --flibs       libraries needed to link a Fortran program
   --prefix      Install prefix
   --includedir  Include directory
@@ -57,7 +55,6 @@ all()
         echo
         echo "  --cc        -> $cc"
         echo "  --cflags    -> $cflags"
-        echo "  --libs      -> $libs"
         echo
         echo "  --fc        -> $fc"
         echo "  --fflags    -> $fflags"
@@ -131,10 +128,6 @@ while test $# -gt 0; do
 
     --has-f03)
        	echo $has_f03
-       	;;
-
-     --libs)
-       	echo $libs
        	;;
 
     --flibs)
