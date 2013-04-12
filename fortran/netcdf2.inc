@@ -221,4 +221,4 @@
       parameter (filshort = -32767)
       parameter (fillong = -2147483647)
       parameter (filfloat = 9.9692099683868690e+36)
-      parameter (fildoub = 9.9692099683868690d+36)
+      parameter (fildoub = 9.9692099683868690e+36)

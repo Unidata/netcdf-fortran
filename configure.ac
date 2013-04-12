@@ -9,7 +9,7 @@
 AC_PREREQ([2.59])
 
 # Initialize with name, version, and support email address. 
-AC_INIT([netCDF-Fortran], [4.2], [support-netcdf@unidata.ucar.edu])
+AC_INIT([netCDF-Fortran], [4.4-beta3], [support-netcdf@unidata.ucar.edu])
 
 # Create the VERSION file, which contains the package version from
 # AC_INIT.
@@ -27,16 +27,11 @@ AC_CANONICAL_HOST
 # Find out about the target we're building for.
 AC_CANONICAL_TARGET
 
-# We will output a fortran inc file, nfconfig.inc.
-AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_HEADERS([fortran/nfconfig1.inc:fortran/nfconfig.in], 
-   [sed '1d;s%^/\* \(.*\) \*/%\1%' fortran/nfconfig1.inc >conftest.tmp && mv conftest.tmp fortran/nfconfig.inc])
-
 # This call is required by automake.
-AM_INIT_AUTOMAKE([foreign dist-tarZ subdir-objects])
+AM_INIT_AUTOMAKE([foreign dist-zip subdir-objects])
 
 # Check for the existance of this file before proceeding.
-AC_CONFIG_SRCDIR([fortran/fort-attio.c])
+AC_CONFIG_SRCDIR([libsrc/fort-attio.c])
 
 AC_MSG_NOTICE([checking user options])
 
@@ -70,15 +65,109 @@ if test "x$enable_extra_tests" = xyes; then
 fi
 AM_CONDITIONAL(EXTRA_TESTS, [test x$enable_extra_tests = xyes])
 
-nc_build_f90=yes
+# Find the C compiler.
+AC_MSG_NOTICE([finding C compiler])
 
-# Do we want to build the fortran 90 API?
-AC_MSG_CHECKING([whether F90 API is desired])
-AC_ARG_ENABLE([f90],
-              [AS_HELP_STRING([--disable-f90],
-                              [don't try to build the netCDF Fortran 90 API])])
-test "x$enable_f90" = xno && nc_build_f90=no
-AC_MSG_RESULT([$nc_build_f90])
+AC_PROG_CC
+AM_PROG_CC_C_O
+AC_C_CONST
+
+# If F03 is set, FC isn't, then set FC to whatever F03 was set
+if test "${F03+set}" = set -a "${FC+set}" != set; then
+   FC=$F03
+fi
+
+# If F90 is set, FC isn't, then set FC to whatever F90 was set to.
+if test "${F90+set}" = set -a "${FC+set}" != set; then
+   FC=$F90
+fi
+
+# Find fortran compiler. If FC isn't set after AC_PROG_FC, we couldn't
+# find a fortran compiler. If the user requested the fortran API, and
+# has told us not to recover from a missing compiler, then bail out
+# right here.
+AC_MSG_NOTICE([finding Fortran compiler])
+AC_PROG_FC
+AC_PROG_F77($FC)
+
+# If we couldn't find an F90 compiler, deal with it.
+if test "${FC+set}" = set && test "x$FC" = x; then
+   AC_MSG_FAILURE([Can't find F90 compiler.])
+fi
+
+# Set the default fortran builds; default is to build f03
+nc_build_f90=no
+nc_build_f03=yes
+
+# Does the user want to test for Fortran 2003 compiler.
+# Added to get around NAG evaluation compiler error turning off F03
+AC_MSG_CHECKING([whether Fortran compiler is checked for ISO_C_BINDING support])
+AC_ARG_ENABLE([f03-compiler-check],
+              [AS_HELP_STRING([--disable-f03-compiler-check],
+                              [disable check of ISO_C_BINDING support in Fortran compiler])])
+test "x$enable_f03_compiler_check" = xno || enable_f03_compiler_check=yes
+AC_MSG_RESULT($enable_f03_compiler_check)
+
+# next check to see if the Fortran compiler will support
+# ISO_C_BINDING
+nc_iso_c_binding=yes
+
+# Some f90 compilers change the case of the mod file names. Others
+# require special flags to be set to deal with .f90 files. Find out
+# about this compiler.
+AC_LANG_PUSH(Fortran)
+AC_FC_SRCEXT(f90)
+AC_LANG_POP(Fortran)
+AX_F90_MODULE_FLAG
+AC_SUBST(MOD_FLAG, ${ax_cv_f90_modflag})
+if test "x$enable_f03_compiler_check" = xyes; then
+  AC_MSG_CHECKING([if Fortran compiler supports Fortran 2003 ISO_C_BINDING])
+  cat <<EOF >conftest.f90
+module conftest_module
+USE ISO_C_BINDING
+end module conftest_module
+EOF
+  doit='$FC -c ${FCFLAGS} ${FCFLAGS_f90} conftest.f90'
+  if AC_TRY_EVAL(doit); then
+     nc_iso_c_binding=yes
+  else
+     nc_iso_c_binding=no
+  fi
+  AC_MSG_RESULT([$nc_iso_c_binding])
+
+  if test "x$nc_iso_c_binding" = xno; then
+    if test "x$enable_compiler_recover" = xyes; then
+      nc_build_f90=yes
+      AC_MSG_WARN([ISO_C_BINDING not supported - defaulting to F90 interfaces])
+    else
+      AC_MSG_FAILURE([Can't use build F03 interfaces and cannot do compiler recovery])
+    fi
+  fi
+fi
+
+## Do we want to use the fortran 90 wrappers instead of 2003 native code?
+AC_MSG_CHECKING([whether F03 native code is desired])
+AC_ARG_ENABLE([f03],
+              [AS_HELP_STRING([--disable-f03],
+                              [suppress netCDF Fortran 2003 native code])])
+test "x$enable_f03" = xno || enable_f03=yes
+AC_MSG_RESULT([$enable_f03])
+
+if test "x$enable_f03" = xyes ; then nc_build_f03=yes; fi
+
+# Decide on f90 versus 2003
+if test "x$nc_iso_c_binding" = xno; then
+  #Cannot build f03 native code
+  AC_MSG_NOTICE([Fortran 2003 interface not supported; Using fortran 90 interface])
+  nc_build_f90=yes  
+fi
+
+# Guarantee build state; f90 currently overrides f03
+if test "x$nc_build_f90" = xyes ; then
+  nc_build_f03=no
+else
+  nc_build_f03=yes
+fi
 
 # Does the user want to check into fortran type information?
 AC_MSG_CHECKING([whether fortran type sizes should be checked])
@@ -126,54 +215,15 @@ AC_MSG_RESULT($TEMP_LARGE)
 #AC_SUBST(TEMP_LARGE)
 AC_DEFINE_UNQUOTED([TEMP_LARGE], ["$TEMP_LARGE"], [Place to put very large netCDF test files.])
 
-# According to the autoconf mailing list gurus, we must test for
-# compilers unconditionally. That is, we can't skip looking for the
-# fortran compilers, just because the user doesn't want fortran. This
-# is due to a limitation in autoconf.
 
-# Find the C compiler.
-AC_MSG_NOTICE([finding C compiler])
+# Turn off building old F77 interfaces if nc_build_f03 is still yes
 
-AC_PROG_CC
-AM_PROG_CC_C_O
-AC_C_CONST
+test "x$nc_build_f03" = xyes && nc_build_f77=no
 
-# If the user set environment var FC, but not F77, then set F77=FC
-if test "x${FC+set}" = xset -a "x${F77+set}" != xset; then
-   F77=${FC}
-fi
-
-# If F90 is set, and FC isn't, then set FC to whatever F90 was set to.
-if test "${F90+set}" = set -a "${FC+set}" != set; then
-   FC=$F90
-fi
-
-# If F77 is set, and FC (still) isn't, then set FC to whatever F77 was
-# set to.
-if test "${F77+set}" = set -a "${FC+set}" != set; then
+if test "x$nc_build_f90" = xno; then
+   F90=
+   # If F77 is set, and FC isn't, then set FC to whatever F77 was set to.
    FC=$F77
-fi
-
-# Find fortran compiler. If FC isn't set after AC_PROG_FC, we couldn't
-# find a fortran compiler. If the user requested the fortran API, and
-# has told us not to recover from a missing compiler, then bail out
-# right here.
-AC_MSG_NOTICE([finding Fortran compiler (will not be used if Fortran API is not desired)])
-AC_PROG_FC
-
-# If we couldn't find an F90 compiler, deal with it.
-if test "${FC+set}" = set && test "x$FC" = x; then
-   if test "x$nc_build_f90" = xyes; then
-      AC_MSG_ERROR([Can't find F90 compiler.])
-   fi
-   nc_build_f90=no
-fi
-
-AC_PROG_F77($FC)
-
-# Handle missing f77 compiler.
-if test "${F77+set}" = set && test "x$F77" = x; then
-   AC_MSG_ERROR([Can't find F77 compiler.])
 fi
 
 # See if the fortran 90 build is desired. If so, set some stuff
@@ -185,21 +235,23 @@ if test "x$nc_build_f90" = xyes; then
    AC_MSG_CHECKING([what FC is set to])
    AC_MSG_RESULT([$FC])   
 
-   # Some f90 compilers change the case of the mod file names. Others
-   # require special flags to be set to dea with .f90 files. Find out
-   # about this compiler.
-   AC_LANG_PUSH(Fortran)
-   AC_FC_SRCEXT(f90)
-   AC_LANG_POP(Fortran)
-   AX_F90_MODULE_FLAG
-   AC_SUBST(MOD_FLAG, ${ax_cv_f90_modflag})
+   if test "x$nc_build_f03" = xno; then
+     # Some f90 compilers change the case of the mod file names. Others
+     # require special flags to be set to deal with .f90 files. Find out
+     # about this compiler.
+     AC_LANG_PUSH(Fortran)
+     AC_FC_SRCEXT(f90)
+     AC_LANG_POP(Fortran)
+     AX_F90_MODULE_FLAG
+     AC_SUBST(MOD_FLAG, ${ax_cv_f90_modflag})
+   fi
 
    # Set the FCLIBS flag to help with shared libraries.
 #   AC_FC_LIBRARY_LDFLAGS
 #   AC_F77_LIBRARY_LDFLAGS      
 fi
 
-AM_CONDITIONAL(BUILD_F90, [test "x$nc_build_f90" = xyes])
+AM_CONDITIONAL(BUILD_F03, [test "x$nc_build_f03" = xyes])
 
 # Set up libtool.
 AC_MSG_NOTICE([setting up libtool])
@@ -210,7 +262,8 @@ LT_INIT
 # weirdness.
 if test "x$enable_shared" = xyes; then
    if test $enable_valgrind_tests = yes; then
-      AC_MSG_ERROR([No valgrind tests with shared libraries])
+      AC_MSG_WARN([No valgrind tests with shared libraries])
+      enable_valgrind_tests=no
    fi
 fi
 
@@ -250,10 +303,17 @@ case "$CPPFLAGS" in
       esac
 esac
 
+case "$FC" in
+pgf95|pgf90|pgf77|ifort*|lf90|lf95) using_pgi=yes ;;
+*) ;;
+esac
+
+AM_CONDITIONAL(USING_PGI, [test "x$using_pgi" = "xyes"])
+
 # Check to see if any macros must be set to enable large (>2GB) files.
 AC_SYS_LARGEFILE
 
-AC_MSG_NOTICE([displaying some results])
+#AC_MSG_NOTICE([displaying some results])
 
 ## This next macro just prints some results for debugging
 ## support issues.
@@ -286,6 +346,9 @@ fi
 if test "x$nc_build_f90" = xyes; then
    AC_PROG_FC_UPPERCASE_MOD
 fi
+if test "x$ac_cv_prog_f90_uppercase_mod" = xyes ; then
+AC_MSG_FAILURE([Upper Case Modules names not supported])
+fi
 AM_CONDITIONAL(UPPER_CASE_MOD, [test "x$ac_cv_prog_f90_uppercase_mod" = xyes])
 
 # Does the user want to run extra example tests
@@ -317,14 +380,32 @@ AC_MSG_NOTICE([checking types, headers, and functions])
 AC_CHECK_HEADERS([netcdf.h], [], [AC_MSG_ERROR([netcdf.h could not be found. Please set CPPFLAGS.])])
 AC_SEARCH_LIBS([nc_open], [netcdf])
 
-# Check for these functions.
+# See if various libraries are available
 AC_CHECK_FUNCS([nc_def_opaque nccreate nc_set_log_level oc_open nc_use_parallel_enabled])
-test "x$ac_cv_func_oc_open" = xyes && nc_has_dap=yes || nc_has_dap=no
-
+#test "x$ac_cv_func_oc_open" = xyes && nc_has_dap=yes || nc_has_dap=no
 # Whether we build/test some functionality depends on what we found in
 # the C library.
-nc_build_v2=$ac_cv_func_nccreate
-nc_build_v4=$ac_cv_func_nc_def_opaque
+#nc_build_v2=$ac_cv_func_nccreate
+#nc_build_v4=$ac_cv_func_nc_def_opaque
+
+nc_build_v2=no
+nc_build_v4=no
+nc_has_logging=no
+nc_has_dap=no
+nc_has_parallel=no
+
+test "x$ac_cv_func_nc_def_opaque" = xyes && nc_build_v4=yes
+test "x$ac_cv_func_nccreate" = xyes && nc_build_v2=yes
+test "x$ac_cv_func_nc_set_log_level" = xyes && nc_has_logging=yes
+test "x$ac_cv_func_oc_open" = xyes && nc_has_dap=yes
+test "x$ac_cv_func_nc_use_parallel_enabled" = xyes && nc_has_parallel=yes
+
+#AC_CHECK_FUNC([nc_def_opaque],[nc_build_v4=yes])
+#AC_CHECK_FUNC([nccreate],[nc_build_v2=yes])
+#AC_CHECK_FUNC([nc_set_log_level],[nc_has_logging=yes])
+#AC_CHECK_FUNC([oc_open],[nc_has_dap=yes])
+#AC_CHECK_FUNC([nc_use_parallel_enabled],[nc_has_parallel=yes])
+
 if test "x$nc_build_v4" = xyes; then
    AC_DEFINE([USE_NETCDF4], [1], [if true, build netCDF-4])
 fi
@@ -334,21 +415,22 @@ AC_MSG_RESULT([$nc_build_v2])
 AC_MSG_CHECKING([netCDF-4 present])
 AC_MSG_RESULT([$nc_build_v4])
 
-AM_CONDITIONAL([USE_NETCDF4], [test "x$ac_cv_func_nc_def_opaque" = xyes])
-AM_CONDITIONAL([BUILD_V2], [test "x$ac_cv_func_nccreate" = xyes])
-AM_CONDITIONAL([USE_LOGGING], [test "x$ac_cv_func_nc_set_log_level" = xyes])
-AM_CONDITIONAL([BUILD_DAP], [test "x$ac_cv_func_oc_open" = xyes])
-AM_CONDITIONAL([BUILD_PARALLEL], [test "x$ac_cv_func_nc_use_parallel_enabled" = xyes])
+AM_CONDITIONAL([USE_NETCDF4], [test "x$nc_build_v4" = xyes])
+AM_CONDITIONAL([BUILD_V2], [test "x$nc_build_v2" = xyes])
+AM_CONDITIONAL([USE_LOGGING], [test "x$nc_has_logging" = xyes])
+AM_CONDITIONAL([BUILD_DAP], [test "x$nc_has_dap" = xyes])
+AM_CONDITIONAL([BUILD_PARALLEL], [test "x$nc_has_parallel" = xyes])
 AC_CHECK_HEADER(stdlib.h, ,AC_DEFINE([NO_STDLIB_H], [], [no stdlib.h]))
 AC_CHECK_HEADER(sys/types.h, ,AC_DEFINE([NO_SYS_TYPES_H], [], [no sys_types.h]))
 AC_CHECK_HEADERS([sys/param.h])
 #AC_CHECK_HEADERS([locale.h])
+AC_CHECK_HEADERS([locale.h stdio.h stdarg.h errno.h ctype.h fcntl.h malloc.h stdlib.h string.h \
+			   strings.h unistd.h sys/stat.h getopt.h sys/time.h sys/resource.h])
 AC_HEADER_DIRENT
 AC_HEADER_STDC
 AC_HEADER_SYS_WAIT
 AC_HEADER_TIME
-AC_CHECK_HEADERS([locale.h stdio.h stdarg.h errno.h ctype.h fcntl.h malloc.h stdlib.h string.h \
-			   strings.h unistd.h sys/stat.h getopt.h sys/time.h sys/resource.h])
+
 AC_FUNC_VPRINTF
 
 # Check for <stdbool.h> that conforms to C99 requirements
@@ -406,18 +488,26 @@ NC_FLIBS="-lnetcdff $NC_LIBS"
 AC_SUBST(NC_LIBS,[$NC_LIBS])
 AC_SUBST(NC_FLIBS,[$NC_FLIBS])
 AC_SUBST(HAS_F90,[$nc_build_f90])
+AC_SUBST(HAS_F03,[$nc_build_f03])
 AC_SUBST(HAS_DAP,[$nc_has_dap])
 AC_SUBST(HAS_NC2,[$nc_build_v2])
 AC_SUBST(HAS_NC4,[$nc_build_v4])
 
 AC_MSG_NOTICE([generating header files and makefiles])
+
+# We will output a fortran inc file, nfconfig.inc.
+AC_CONFIG_HEADERS([config.h])
+AC_CONFIG_HEADERS([libsrc/nfconfig1.inc:libsrc/nfconfig.in], 
+   [sed '1d;s%^/\* \(.*\) \*/%\1%' libsrc/nfconfig1.inc >conftest.tmp && mv conftest.tmp libsrc/nfconfig.inc])
+
 AC_CONFIG_FILES([Makefile
                  nf-config
                  netcdf-fortran.pc
                  man4/Makefile
+                 libsrc/Makefile
                  fortran/Makefile
                  nf_test/Makefile
-                 f90/Makefile
+                 nf03_test/Makefile
                  examples/Makefile
                  examples/F90/Makefile
                  examples/F77/Makefile],
