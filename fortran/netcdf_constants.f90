@@ -151,7 +151,7 @@ integer (kind =  FourByteInt),  parameter, public :: &
      nf90_fill_ushort = 65535,                      &
      nf90_fill_uint2  = nf90_fill_ushort
 integer (kind = EightByteInt),  parameter, public :: &
-     nf90_fill_uint   = 4294967295_8
+     nf90_fill_uint   = 4294967295_EightByteInt
 
 ! Extra file create mode flags.
 integer, parameter, public :: &
