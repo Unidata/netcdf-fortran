@@ -24,6 +24,7 @@
 ! Version 2.: May 2006   - Updated to support g95
 ! Version 3.: April 2009 - Updated to Netcdf 4.0.1 
 ! Version 4.: April 2010 - Updated to Netcdf 4.1.1 
+! Version 5.: Feb.  2013 - bug fixes for fortran 4.4
           
 !--------------------------------- nf_put_att_text ---------------------------
  Function nf_put_att_text(ncid, varid, name, nlen, text) RESULT(status)
@@ -135,8 +136,8 @@
  cstatus = nc_put_att_int(cncid, cvarid, cname(1:ie+1), &
                             cxtype, cnlen, i1vals)
 #elif NF_INT1_IS_C_LONG
- cstatus = nc_put_att_int(cncid, cvarid, cname(1:ie+1), &
-                            cxtype, cnlen, i1vals)
+ cstatus = nc_put_att_long(cncid, cvarid, cname(1:ie+1), &
+                           cxtype, cnlen, i1vals)
 #endif
  status = cstatus
 
@@ -182,7 +183,7 @@
  cstatus = nc_put_att_int(cncid, cvarid, cname(1:ie+1), &
                            cxtype, cnlen, i2vals)
 #elif NF_INT2_IS_C_LONG 
- cstatus = nc_put_att_int(cncid, cvarid, cname(1:ie+1), &
+ cstatus = nc_put_att_long(cncid, cvarid, cname(1:ie+1), &
                            cxtype, cnlen, i2vals)
 #endif 
  status = cstatus

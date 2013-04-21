@@ -26,6 +26,7 @@ Module netcdf_nc_interfaces
 ! Version 3.:  June  2006 - Updated to include netCDF 4 functions
 ! Version 4.:  April 2009 - Updated to match netCDF 4.0.1 release
 ! Version 5.:  April 2010 - Updated to match netCDF 4.1.1 release
+! Version 6.:  April 2013 - Added nc_inq_path support for fortran 4.4 beta
          
  USE netcdf_nc_data
 
@@ -169,6 +170,20 @@ Interface
  Integer(KIND=C_INT)                 :: nc__open_mp
 
  End Function nc__open_mp
+End Interface
+!---------------------------------- nc_inq_path -----------------------------
+Interface
+ Function nc_inq_path(ncid, pathlen, path) BIND(C)
+
+ USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_CHAR
+
+ Integer(KIND=C_INT),    VALUE         :: ncid
+ Integer(KIND=C_SIZE_T), Intent(INOUT) :: pathlen
+ Character(KIND=C_CHAR), Intent(INOUT) :: path(*)
+
+ Integer(KIND=C_INT)                   :: nc_inq_path
+
+ End Function nc_inq_path
 End Interface
 !---------------------------------- nc_set_fill -------------------------------
 Interface

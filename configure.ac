@@ -9,7 +9,7 @@
 AC_PREREQ([2.59])
 
 # Initialize with name, version, and support email address. 
-AC_INIT([netCDF-Fortran], [4.4-beta3], [support-netcdf@unidata.ucar.edu])
+AC_INIT([netCDF-Fortran], [4.4-beta4], [support-netcdf@unidata.ucar.edu])
 
 # Create the VERSION file, which contains the package version from
 # AC_INIT.
@@ -30,7 +30,7 @@ AC_CANONICAL_TARGET
 # This call is required by automake.
 AM_INIT_AUTOMAKE([foreign dist-zip subdir-objects])
 
-# Check for the existance of this file before proceeding.
+# Check for the existence of this file before proceeding.
 AC_CONFIG_SRCDIR([libsrc/fort-attio.c])
 
 AC_MSG_NOTICE([checking user options])
@@ -135,6 +135,36 @@ EOF
   fi
   AC_MSG_RESULT([$nc_iso_c_binding])
 
+  AC_MSG_CHECKING([if Fortran compiler supports Fortran 2008 ISO_FORTRAN_ENV additions])
+  cat <<EOF >conftest.f90
+Program test
+USE ISO_FORTRAN_ENV, ONLY: REAL32, REAL64, INT8, INT16, INT32, INT64
+End Program
+EOF
+  doit='$FC -c ${FCFLAGS} ${FCFLAGS_f90} conftest.f90'
+  if AC_TRY_EVAL(doit); then
+     nc_f2008_is0_env_additions=yes
+     AC_DEFINE([HAVE_F2008], 1, [if true, use Fortran 2008 ISO_FORTRAN_ENV additions])
+  else
+     nc_f2008_is0_env_additions=no
+  fi
+  AC_MSG_RESULT([$nc_f2008_is0_env_additions])
+
+  AC_MSG_CHECKING([if Fortran compiler supports TS29113 standard extension])
+  cat <<EOF >conftest.f90
+Program test
+USE ISO_C_BINDING, ONLY: C_PTRDIFF_T
+End Program
+EOF
+  doit='$FC -c ${FCFLAGS} ${FCFLAGS_f90} conftest.f90'
+  if AC_TRY_EVAL(doit); then
+     nc_ts29113_support=yes
+     AC_DEFINE([HAVE_TS29113_SUPPORT], 1, [if true, Fortran compiler supports TS29113 extension])
+  else
+     nc_ts29113_support=no
+  fi
+  AC_MSG_RESULT([$nc_ts29113_support])
+
   if test "x$nc_iso_c_binding" = xno; then
     if test "x$enable_compiler_recover" = xyes; then
       nc_build_f90=yes
@@ -144,6 +174,7 @@ EOF
     fi
   fi
 fi
+
 
 ## Do we want to use the fortran 90 wrappers instead of 2003 native code?
 AC_MSG_CHECKING([whether F03 native code is desired])

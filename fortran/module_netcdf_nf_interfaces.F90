@@ -31,6 +31,7 @@ Module netcdf_nf_interfaces
 ! Version 2. May, 2006  - Updated to support g95
 ! Version 3. April 2009 - Updated for netCDF 4.0.1
 ! Version 4. April 2010 - Updated for netCDF 4.1.1
+! Version 5. Feb.  2013 - Added nf_inq_path support for fortran 4.4
          
 ! Most legacy programs don't need to use this module. However, I've created
 ! it to support FORTRAN programmers who like to provide explicit interfaces
@@ -199,6 +200,18 @@ Interface
  Integer                         :: status
 
  End Function nf__open_mp
+End Interface
+!-------------------------------- nf_inq_path ---------------------------------
+Interface
+ Function nf_inq_path(ncid, pathlen, path) RESULT (status)
+
+ Integer,          Intent(IN)    :: ncid
+ Integer,          Intent(INOUT) :: pathlen
+ Character(LEN=*), Intent(INOUT) :: path
+
+ Integer                         :: status
+
+ End Function nf_inq_path
 End Interface
 !-------------------------------- nf_set_fill ---------------------------------
 Interface

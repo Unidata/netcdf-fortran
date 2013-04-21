@@ -25,6 +25,7 @@ Module netcdf_nf_data
 ! Version 2. Apr.  2005 - updated to be consistent with netcdf 3.6.1
 ! Version 3. Apr.  2009 - updated for netCDF 4.0.1
 ! Version 4. Apr.  2010 - updated for netCDF 4.1.1
+! Version 5. Feb.  2013 - Updated for netCDF 4.4
 
 ! This module is provided as a replacement for parts of the netcdf2.inc,
 ! netcdf3.inc and netcdf4.inc include file2. It does not include the 
@@ -57,16 +58,16 @@ Module netcdf_nf_data
 
 ! Default fill values
 
- Integer, Parameter :: NF_FILL_CHAR    = 0 
- Integer, Parameter :: NF_FILL_BYTE    = -127
- Integer, Parameter :: NF_FILL_SHORT   = -32767
- Integer, Parameter :: NF_FILL_INT     = -2147483647
+ Integer, Parameter :: NF_FILL_CHAR  = 0 
+ Integer, Parameter :: NF_FILL_BYTE  = -127
+ Integer, Parameter :: NF_FILL_SHORT = -32767
+ Integer, Parameter :: NF_FILL_INT   = -2147483647
 
- Real(RK4), Parameter :: NF_FILL_FLOAT   = 9.9692099683868690E+36
- Real(RK4), Parameter :: NF_FILL_REAL    = NF_FILL_FLOAT
- Real(RK4), Parameter :: NF_FILL_REAL4   = NF_FILL_FLOAT 
- Real(RK8), Parameter :: NF_FILL_DOUBLE  = 9.9692099683868690D+36
- Real(RK8), Parameter :: NF_FILL_REAL8   = NF_FILL_DOUBLE 
+ Real(RK4), Parameter :: NF_FILL_FLOAT  = 9.9692099683868690E+36
+ Real(RK4), Parameter :: NF_FILL_REAL   = NF_FILL_FLOAT
+ Real(RK4), Parameter :: NF_FILL_REAL4  = NF_FILL_FLOAT 
+ Real(RK8), Parameter :: NF_FILL_DOUBLE = 9.9692099683868690D+36
+ Real(RK8), Parameter :: NF_FILL_REAL8  = NF_FILL_DOUBLE 
 
 ! Mode flags for opening and creating datasets
 
@@ -84,6 +85,8 @@ Module netcdf_nf_data
  Integer, Parameter :: NF_ALIGN_CHUNK      = -1
  Integer, Parameter :: NF_FORMAT_CLASSIC   = 1
  Integer, Parameter :: NF_FORMAT_64BIT     = 2
+ Integer, Parameter :: NF_DISKLESS         = 8
+ Integer, Parameter :: NF_MMAP             = 16
 
 ! Unlimited dimension size argument and global attibute ID
 
@@ -143,6 +146,7 @@ Module netcdf_nf_data
  Integer, Parameter :: NF_VERBOSE = 2
 
 #if USE_NETCDF4
+
 ! NETCDF4 parameters 
 
 ! data types
@@ -160,18 +164,21 @@ Module netcdf_nf_data
  Integer, Parameter :: NF_COMPOUND = 16
 
 ! Netcdf4 fill flags - for some reason the F90 values are different
+
  Integer, Parameter :: NF_FILL_UBYTE   = 255
  Integer, Parameter :: NF_FILL_UINT1   = NF_FILL_UBYTE 
  Integer, Parameter :: NF_FILL_USHORT  = 65535
  Integer, Parameter :: NF_FILL_UINT2   = NF_FILL_USHORT
 
+ Integer(IK8), Parameter :: NF_FILL_UINT = 4294967295_IK8
+
 ! new format types
- Integer, Parameter :: NF_FORMAT_NETCDF4   = 3
+ Integer, Parameter :: NF_FORMAT_NETCDF4         = 3
  Integer, Parameter :: NF_FORMAT_NETCDF4_CLASSIC = 4
 ! Netcdf4 create mode flags
- Integer, Parameter :: NF_NETCDF4          = 4096
- Integer, Parameter :: NF_HDF5             = 4096 ! deprecated
- Integer, Parameter :: NF_CLASSIC_MODEL    = 256
+ Integer, Parameter :: NF_NETCDF4        = 4096
+ Integer, Parameter :: NF_HDF5           = 4096 ! deprecated
+ Integer, Parameter :: NF_CLASSIC_MODEL  = 256
 ! Netcdf4 variable flags
  Integer, Parameter :: NF_CHUNK_SEQ      = 0 
  Integer, Parameter :: NF_CHUNK_SUB      = 1 
@@ -189,10 +196,19 @@ Module netcdf_nf_data
  Integer, Parameter :: NF_INDEPENDENT    = 0
  Integer, Parameter :: NF_COLLECTIVE     = 1
 
+! Flags for parallel I/O
+
+ Integer, Parameter :: NF_MPIIO          = 8192
+ Integer, Parameter :: NF_MPIPOSIX       = 16384 
+ Integer, Parameter :: NF_PNETCDF        = 32768
+
+! SZIP flags
+ 
  Integer, Parameter :: NF_SZIP_EC_OPTION_MASK = 4
  Integer, Parameter :: NF_SZIP_NN_OPTION_MASK = 32
 
 ! Netcdf4 error flags
+
  Integer, Parameter :: NF_EHDFERR        = -101
  Integer, Parameter :: NF_ECANTREAD      = -102
  Integer, Parameter :: NF_ECANTWRITE     = -103
@@ -289,8 +305,8 @@ Module netcdf_nf_data
  Integer, Parameter :: FILSHORT   = -32767
  Integer, Parameter :: FILLONG    = -2147483647
 
- Real(RK4), Parameter :: FILFLOAT   = 9.9692099683868690E+36
- Real(RK8), Parameter :: FILDOUB    = 9.9692099683868690D+36
+ Real(RK4), Parameter :: FILFLOAT = 9.9692099683868690E+36
+ Real(RK8), Parameter :: FILDOUB  = 9.9692099683868690D+36
 #endif
 
 !------------------------------------------------------------------------------

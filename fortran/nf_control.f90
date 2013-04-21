@@ -23,6 +23,7 @@
 ! Version 2.: May,   2006 - Updated to support g95
 ! Version 3.: April, 2009 - Updated for netcdf 4.0.1
 ! Version 4.: April, 2010 - Updated for netcdf 4.1.1
+! Version 5.: Feb.   2013 - Added nf_inq_path support for fortran 4.4
           
 !-------------------------------- nf_create --------------------------------
  Function nf_create(path, cmode, ncid) RESULT (status)
@@ -264,6 +265,38 @@
  status = cstatus
 
  End Function nf__open_mp
+!-------------------------------- nf_inq_path ------------------------------
+ Function nf_inq_path(ncid, pathlen, path) RESULT(status)
+
+! Inquire about file pathname and name length
+
+ USE netcdf_nc_interfaces
+
+ Implicit NONE
+
+ Integer,          Intent(IN)    :: ncid
+ Integer,          Intent(INOUT) :: pathlen
+ Character(LEN=*), Intent(INOUT) :: path
+
+ Integer                         :: status
+
+ Integer(C_INT)             :: cncid, cstatus
+ Integer(C_SIZE_T)          :: cpathlen
+ Character(LEN=LEN(path)+1) :: tmppath
+
+ cncid   = ncid
+ path    = REPEAT(" ", LEN(path))
+ tmppath = REPEAT(" ", LEN(tmppath))
+
+ cstatus = nc_inq_path(cncid, cpathlen, tmppath)
+
+ pathlen = cpathlen
+ If (pathlen > LEN(path)) pathlen = LEN(path)
+ path = stripCNullchar(tmppath, pathlen)
+
+ status = cstatus
+
+ End Function nf_inq_path
 !-------------------------------- nf_set_fill ------------------------------
  Function nf_set_fill(ncid, fillmode, old_mode) RESULT(status)
  
