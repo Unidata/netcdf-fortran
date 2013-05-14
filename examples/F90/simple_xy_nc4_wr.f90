@@ -44,7 +44,7 @@ program simple_xy_wr
 
   ! Create the netCDF file. The nf90_clobber parameter tells netCDF to
   ! overwrite this file, if it already exists.
-  call check( nf90_create(FILE_NAME, nf90_hdf5, ncid) )
+  call check( nf90_create(FILE_NAME, nf90_netcdf4, ncid) )
 
   ! Define the dimensions. NetCDF will hand back an ID for each. 
   call check( nf90_def_dim(ncid, "x", NX, x_dimid) )

@@ -54,7 +54,7 @@ program nc4_simple_xy_wr
   ! makes sure that any return which is not equal to nf90_noerr (0)
   ! will print a netCDF error message and exit.
 
-  ! Create the netCDF file. The nf90_hdf5 parameter tells netCDF to
+  ! Create the netCDF file. The NF90_NETCDF4 parameter tells netCDF to
   ! overwrite this file, if it already exists.
   call check( nf90_create(FILE_NAME, NF90_CLOBBER, ncid) )
 

@@ -82,7 +82,7 @@ program nc4_sfc_pres_temp_wr
   end do
 
   ! Create the file. 
-  call check( nf90_create(FILE_NAME, nf90_hdf5, ncid) )
+  call check( nf90_create(FILE_NAME, nf90_netcdf4, ncid) )
 
   ! Define the dimensions.
   call check( nf90_def_dim(ncid, LAT_NAME, NLATS, lat_dimid) )

@@ -72,17 +72,17 @@ endif #USE_NETCDF4
 # This target tells how to build one of the netCDF-4 examples.
 # Note old version used sed -i, but -i is not universally recognized
 nc4_simple_xy_wr.f90:
-	sed -e 's/nf90_clobber/nf90_hdf5/' simple_xy_wr.f90 \
+	sed -e 's/nf90_clobber/nf90_netcdf4/' simple_xy_wr.f90 \
 	| sed -e 's/simple_xy/nc4_simple_xy/' > nc4_simple_xy_wr.f90
 
 # This target tells how to build one of the netCDF-4 examples.
 nc4_sfc_pres_temp_wr.f90:
-	sed -e 's/nf90_clobber/nf90_hdf5/' sfc_pres_temp_wr.f90 \
+	sed -e 's/nf90_clobber/nf90_netcdf4/' sfc_pres_temp_wr.f90 \
 	| sed -e 's/sfc_pres_temp/nc4_sfc_pres_temp/' > nc4_sfc_pres_temp_wr.f90
 
 # This target tells how to build one of the netCDF-4 examples.
 nc4_pres_temp_4D_wr.f90:
-	sed -e 's/nf90_clobber/nf90_hdf5/' pres_temp_4D_wr.f90 \
+	sed -e 's/nf90_clobber/nf90_netcdf4/' pres_temp_4D_wr.f90 \
 	| sed -e 's/pres_temp_4D/nc4_pres_temp_4D/' > nc4_pres_temp_4D_wr.f90
 
 # Build these test programs.
