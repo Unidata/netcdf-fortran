@@ -864,7 +864,7 @@ The file name of the new netCDF dataset.
  
 @item cmode
 The creation mode flag. The following flags are available:
-NF90_NOCLOBBER, NF90_SHARE, NF90_64BIT_OFFSET, NF90_HDF5, and
+NF90_NOCLOBBER, NF90_SHARE, NF90_64BIT_OFFSET, NF90_NETCDF4, and
 NF90_CLASSIC_MODEL.
 
 A zero value (defined for convenience as NF90_CLOBBER) specifies the
@@ -890,10 +890,10 @@ file, instead of a netCDF classic format file. The 64-bit offset
 format imposes far fewer restrictions on very large (i.e. over 2 GB)
 data files. @xref{Large File Support,,, netcdf, NetCDF Users' Guide}.
 
-Setting the NF90_HDF5 flag causes netCDF to create a netCDF-4/HDF5
+Setting the NF90_NETCDF4 flag causes netCDF to create a netCDF-4/HDF5
 format output file.
 
-Oring the NF90_CLASSIC_MODEL flag with the NF90_HDF5 flag causes the
+Oring the NF90_CLASSIC_MODEL flag with the NF90_NETCDF4 flag causes the
 resulting netCDF-4/HDF5 file to restrict itself to the classic model -
 none of the new netCDF-4 data model features, such as groups or
 user-defined types, are allowed in such a file.

@@ -23,7 +23,7 @@ program tst_flarge
   print *,'*** Testing netCDF-4 large files from Fortran 90 API.'
 
   ! Create the file with 2 NF_DOUBLE vars, each with one really long dimension.
-  call check(nf90_create(trim(fileName), nf90_hdf5, ncFileID))
+  call check(nf90_create(trim(fileName), nf90_netcdf4, ncFileID))
   call check(nf90_def_dim(ncFileID, dimName, BIG_DIMENSION, dimID))
   call check(nf90_def_var(ncFileID, var1Name, nf90_double, (/ dimID /), varID1) )
   call check(nf90_def_var(ncFileID, var2Name, nf90_double, (/ dimID /), varID2) )
