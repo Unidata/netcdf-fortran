@@ -12,6 +12,21 @@ SET(USE_LOGGING "OFF")
 
 # Default to shared libs on
 OPTION(BUILD_SHARED_LIBS "Configure netcdff as a shared library." ON)
+OPTION(LARGE_FILE_TESTS "Run large file tests, which are slow and take lots of disk." OFF)
+OPTION(BUILD_BENCHMARKS "Run F90 I/O Benchmarks" OFF)
+OPTION(TEST_PARALLEL "Run parallel I/O tests for F90 and F77" OFF)
+
+# A basic script used to convert m4 files
+MACRO(GEN_m4 filename)
+	IF(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${filename}.F)
+	ADD_CUSTOM_COMMAND(
+		OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/${filename}.F
+		COMMAND m4 
+		ARGS ${CMAKE_CURRENT_SOURCE_DIR}/${filename}.m4 > ${CMAKE_CURRENT_SOURCE_DIR}/${filename}.F
+		VERBATIM
+	)
+	ENDIF()
+ENDMACRO(GEN_m4)
 
 # A script to print out information at the end of the configuration step.
 MACRO(print_conf_summary)
@@ -56,21 +71,21 @@ IF(ENABLE_LOGGING)
 ENDIF()
 
 # Set the default fortran builds; default is to build f03
-SET(NC_BUILD_F90 "OFF")
-SET(NC_BUILD_V2 "ON")
-SET(NC_BUILD_F03 "ON")
+SET(BUILD_F90 "OFF")
+SET(BUILD_V2 "ON")
+SET(BUILD_F03 "ON")
 
 # Recurse into other subdirectories.
 # Only use nfconfig.inc, built by configure from nfconfig.in
-# ADD_SUBDIRECTORY(libsrc)
 ADD_SUBDIRECTORY(fortran)
 TARGET_LINK_LIBRARIES(netcdff)
+ADD_SUBDIRECTORY(libsrc)
+ADD_SUBDIRECTORY(nf_test)
 # Build the Fortran examples
 # ADD_SUBDIRECTORY(examples)
 # Build the old f77 API
 # ADD_SUBDIRECTORY(F77)
 # ADD_SUBDIRECTORY(F90)
-# ADD_SUBDIRECTORY(nf_test)
 # ADD_SUBDIRECTORY(nf03_test)
 # ADD_SUBDIRECTORY(man4)
 print_conf_summary()
