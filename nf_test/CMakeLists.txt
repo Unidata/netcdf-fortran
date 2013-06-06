@@ -153,12 +153,12 @@ ENDIF()
 # Need a copy of ref_fills.nc for ftest
 execute_process(COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/ref_fills.nc ${CMAKE_CURRENT_BINARY_DIR}/fills.nc)
 
-include_directories(${CMAKE_SOURCE_DIR}/fortran ${CMAKE_SOURCE_DIR}/libsrc ${CMAKE_SOURCE_DIR}
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/fortran ${CMAKE_SOURCE_DIR}/libsrc ${CMAKE_SOURCE_DIR}
   ${CMAKE_CPP_FLAGS} ${CMAKE_Fortran_FLAGS} ${NETCDF_C_INCLUDE_DIR})
-link_directories(${CMAKE_SOURCE_DIR}/fortran ${CMAKE_SOURCE_DIR}/libsrc)
+LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/fortran ${CMAKE_SOURCE_DIR}/libsrc)
 FOREACH(t ${TESTS})
-  add_executable(${t} ${${t}_SOURCES})
-  target_link_libraries(${t} ncfortran netcdff ${NETCDF_C_LIBRARY})
+  ADD_EXECUTABLE(${t} ${${t}_SOURCES})
+  TARGET_LINK_LIBRARIES(${t} ncfortran netcdff ${NETCDF_C_LIBRARY})
   ADD_TEST(${t} ${t})
 ENDFOREACH()
 
