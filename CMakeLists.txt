@@ -75,6 +75,9 @@ SET(BUILD_F90 "OFF")
 SET(BUILD_V2 "ON")
 SET(BUILD_F03 "ON")
 
+ENABLE_TESTING()
+INCLUDE(CTest)
+
 # Recurse into other subdirectories.
 # Only use nfconfig.inc, built by configure from nfconfig.in
 ADD_SUBDIRECTORY(fortran)

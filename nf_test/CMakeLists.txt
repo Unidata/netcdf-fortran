@@ -23,13 +23,11 @@ ELSE()
     )
 ENDIF()
 
-# Need a copy of ref_fills.nc for test
-execute_process(COMMAND cp "${CMAKE_SOURCE_DIR}/nf_test/ref_fills.nc" "fills.nc")
-
+SET(TESTS nf_test)
 IF (BUILD_V2)
   SET(check_PROGRAMS tst_f77_v2)
   SET(tst_f77_v2_SOURCES tst_f77_v2.F)
-  SET(TESTS tst_f77_v2)
+  SET(TESTS ${TESTS} tst_f77_v2)
 ENDIF(BUILD_V2)
 
 # Is the user building netCDF-4?
@@ -52,7 +50,7 @@ if (USE_NETCDF4)
     SET(ftst_vars5_SOURCES ftst_vars5.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
     SET(ftst_vars6_SOURCES ftst_vars6.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
     SET(ftst_groups_SOURCES ftst_groups.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
-  else(BUILD_F03)
+  else()
     SET(ftst_types_SOURCES ftst_types.F fortlib.c handle_err.F)
     SET(ftst_types2_SOURCES ftst_types2.F fortlib.c handle_err.F)
     SET(ftst_types3_SOURCES ftst_types3.F fortlib.c handle_err.F)
@@ -137,7 +135,7 @@ IF (BUILD_V2)
   SET(TESTS ${TESTS} ftest)
   IF (BUILD_F03)
     SET(ftest_SOURCES ftest.F f03lib.c)
-  ELSE(BUILD_F03) 
+  ELSE() 
     SET(ftest_SOURCES ftest.F fortlib.c)
   ENDIF(BUILD_F03)
 ENDIF(BUILD_V2)
@@ -152,11 +150,17 @@ IF(NOT NETCDF_C_LIBRARY)
   MESSAGE(FATAL_ERROR "Cannot find netCDF C library, needed for netCDF Fortran tests.")
 ENDIF()
 
+# Need a copy of ref_fills.nc for ftest
+execute_process(COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/ref_fills.nc ${CMAKE_CURRENT_BINARY_DIR}/fills.nc)
+
 include_directories(${CMAKE_SOURCE_DIR}/fortran ${CMAKE_SOURCE_DIR}/libsrc ${CMAKE_SOURCE_DIR}
   ${CMAKE_CPP_FLAGS} ${CMAKE_Fortran_FLAGS} ${NETCDF_C_INCLUDE_DIR})
-link_directories(${CMAKE_SOURCE_DIR}/fortran)
-add_executable(nf_test ${nf_test_SOURCES})
-target_link_libraries(nf_test ncfortran ${NETCDF_C_LIBRARY})
+link_directories(${CMAKE_SOURCE_DIR}/fortran ${CMAKE_SOURCE_DIR}/libsrc)
+FOREACH(t ${TESTS})
+  add_executable(${t} ${${t}_SOURCES})
+  target_link_libraries(${t} ncfortran netcdff ${NETCDF_C_LIBRARY})
+  ADD_TEST(${t} ${t})
+ENDFOREACH()
 
 # test_get.F and test_put.f need to be distributed, so that the user
 # need not have m4. fills.nc is used by test program ftest.

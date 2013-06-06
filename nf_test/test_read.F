@@ -110,6 +110,14 @@ C On exit, any open netCDF files are closed.
         integer err
         integer ncid
         integer ncid2
+        character TEMPFILE*8
+        integer unit51
+C       /* Create a non-netCDF file named 'temp.tmp' */
+        unit51 = 51
+        TEMPFILE = 'temp.tmp'
+        OPEN(unit51, FILE=TEMPFILE)
+        WRITE(51,*) 'text'
+        CLOSE(51)
         
 C       /* Try to open a nonexistent file */
         err = nf_open('tooth-fairy.nc', NF_NOWRITE, ncid)!/* should fail */
@@ -120,7 +128,7 @@ C       /* Try to open a nonexistent file */
      +  'nf_open of nonexistent file should have returned system error')
 
 C       /* Open a file that is not a netCDF file. */
-        err = nf_open('test_read.o', NF_NOWRITE, ncid)!/* should fail */
+        err = nf_open(TEMPFILE, NF_NOWRITE, ncid)!/* should fail */
         if (err .ne. NF_ENOTNC)
      +      call errore('nf_open of non-netCDF file: ', err)
 

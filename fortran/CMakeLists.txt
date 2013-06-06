@@ -40,7 +40,7 @@ IF (USE_NETCDF4)
   #   netcdf4.f90 netcdf4_eightbyte.f90
   #   netcdf4_variables.f90 netcdf4_file.f90
   #   )
-ELSE (USE_NETCDF4)
+ELSE ()
   SET(netcdff_SOURCES ${netcdff_SOURCES} 
     netcdf.f90 netcdf3_file.f90
     )
