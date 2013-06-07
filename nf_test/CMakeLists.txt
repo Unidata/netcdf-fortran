@@ -6,7 +6,7 @@ SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 IF(NOT MSVC)
     # Process these files with m4.
-    SET(m4_SOURCES test_get.m4 test_put.m4)
+    SET(m4_SOURCES test_get test_put)
     foreach (f ${m4_SOURCES})      
     	       GEN_m4(${f})
     endforeach(f)
