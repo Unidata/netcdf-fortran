@@ -32,8 +32,8 @@
     If your FORTRAN system does not have the respective supplementary
     datatype, then do not define the corresponding macro.
 #endif
-#cmakedefine NF_INT1_T
-#cmakedefine NF_INT2_T
+#cmakedefine NF_INT1_T byte
+#cmakedefine NF_INT2_T integer*2
 
 
 #if 0
@@ -75,8 +75,8 @@
     data types (e.g. INTEGER*1, INTEGER*2).  See file "ftest.F" for usage.
 #endif
 #if !defined(NO_NETCDF_2)
-#cmakedefine NCBYTE_T
-#cmakedefine NCSHORT_T
+#cmakedefine NCBYTE_T byte
+#cmakedefine NCSHORT_T integer*2
 #endif
 
 #if 0

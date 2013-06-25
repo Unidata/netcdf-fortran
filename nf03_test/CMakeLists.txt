@@ -6,7 +6,8 @@ SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 SET(TESTS)
 
 # Need some stuff from ../nf_test
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/nf_test)
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/nf_test ${netcdf-fortran_BINARY_DIR}/libsrc
+   ${netcdf-fortran_BINARY_DIR}/fortran)
 # All tests need to link to fortran and C libraries.
 LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/fortran)
 FIND_LIBRARY(NETCDF_C_LIBRARY NAMES netcdf libnetcdf)
