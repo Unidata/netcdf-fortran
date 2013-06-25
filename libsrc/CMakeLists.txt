@@ -34,8 +34,7 @@ ENDIF(BUILD_PARALLEL)
 # netcdf_f77.3: $(top_srcdir)/man4/netcdf.m4
 #	m4 $(M4FLAGS) $(ARGS_MANPAGE) $? >$@ || rm $@
 
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} ${CMAKE_CPP_FLAGS} ${CMAKE_Fortran_FLAGS} 
-  ${netcdf-fortran_BINARY_DIR})
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} ${CMAKE_CPP_FLAGS} ${CMAKE_Fortran_FLAGS})
 
 ADD_LIBRARY(ncfortran ${ncfortran_LIBRARY_SOURCES})
 
