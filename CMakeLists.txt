@@ -102,7 +102,7 @@ configure_file("${netcdf-fortran_SOURCE_DIR}/config.h.in.cmake"
 # Create nf-config file
 FILE(MAKE_DIRECTORY ${netcdf-fortran_BINARY_DIR}/tmp)
 configure_file("${netcdf-fortran_SOURCE_DIR}/nf-config.in.cmake"
-  "${netcdf-fortran_BINARY_DIR}/tmp/nf-config")
+  "${netcdf-fortran_BINARY_DIR}/tmp/nf-config" @ONLY)
 FILE(COPY "${netcdf-fortran_BINARY_DIR}/tmp/nf-config"
   DESTINATION ${netcdf-fortran_BINARY_DIR}/
   FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
@@ -141,7 +141,6 @@ INCLUDE_DIRECTORIES(${netcdf-fortran_BINARY_DIR})
 # End autotools-style checs for config.h
 
 # Recurse into other subdirectories.
-# Only use nfconfig.inc, built by configure from nf-config.in
 ADD_SUBDIRECTORY(fortran)
 TARGET_LINK_LIBRARIES(netcdff)
 ADD_SUBDIRECTORY(libsrc)
