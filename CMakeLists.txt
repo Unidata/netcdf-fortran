@@ -75,11 +75,40 @@ SET(BUILD_F90 "OFF")
 SET(BUILD_V2 "ON")
 SET(BUILD_F03 "ON")
 
+# Set Fortran types to default.  The configure file got these by testing an F77 program,
+# invoking UD_FORTRAN_TYPES defined in acinclude.m4.  TODO: check the types from the test
+# program instead of assuming these defaults.
+SET(NCBYTE_T "byte")
+SET(NCBYTE_T "byte")
+SET(NCSHORT_T "integer*2")
+SET(NF_INT1_T "byte")
+SET(NF_INT2_T "integer*2")
+# Default is for following to be true.  TODO: test instead
+SET(NF_INT1_IS_C_SIGNED_CHAR "1")
+SET(NF_INT2_IS_C_SHORT "1")
+SET(NF_INT_IS_C_INT "1")
+SET(NF_REAL_IS_C_FLOAT "1")
+SET(NF_DOUBLEPRECISION_IS_C_DOUBLE "1")
+
 ENABLE_TESTING()
 INCLUDE(CTest)
 
+# Create libsrc/nfconfig.inc (don't need nfconfig1.inc temporary file used with autoconf)
+configure_file("${netcdf-fortran_SOURCE_DIR}/libsrc/nfconfig.in.cmake" 
+  "${netcdf-fortran_BINARY_DIR}/libsrc/nfconfig.inc")
+# Create config.h file
+configure_file("${netcdf-fortran_SOURCE_DIR}/config.h.in.cmake"
+	"${netcdf-fortran_BINARY_DIR}/config.h")
+# Create nf-config file
+FILE(MAKE_DIRECTORY ${netcdf-fortran_BINARY_DIR}/tmp)
+configure_file("${netcdf-fortran_SOURCE_DIR}/nf-config.in.cmake"
+  "${netcdf-fortran_BINARY_DIR}/tmp/nf-config")
+FILE(COPY "${netcdf-fortran_BINARY_DIR}/tmp/nf-config"
+  DESTINATION ${netcdf-fortran_BINARY_DIR}/
+  FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+
 # Recurse into other subdirectories.
-# Only use nfconfig.inc, built by configure from nfconfig.in
+# Only use nfconfig.inc, built by configure from nf-config.in
 ADD_SUBDIRECTORY(fortran)
 TARGET_LINK_LIBRARIES(netcdff)
 ADD_SUBDIRECTORY(libsrc)
