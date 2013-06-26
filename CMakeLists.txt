@@ -10,11 +10,24 @@ SET(CMAKE_BUILD_TYPE Debug)
 SET(CMAKE_Fortran_COMPILER gfortran)
 SET(USE_LOGGING "OFF")
 
-# Default to shared libs on
 OPTION(BUILD_SHARED_LIBS "Configure netcdff as a shared library." ON)
 OPTION(LARGE_FILE_TESTS "Run large file tests, which are slow and take lots of disk." OFF)
 OPTION(BUILD_BENCHMARKS "Run F90 I/O Benchmarks" OFF)
+OPTION(TEST_WITH_VALGRIND "Run extra tests with valgrind" OFF)
 OPTION(TEST_PARALLEL "Run parallel I/O tests for F90 and F77" OFF)
+OPTION (ENABLE_NETCDF_4 "Enable netCDF-4" ON)
+IF(ENABLE_NETCDF_4)  # TODO: Seems like we should just use one of these
+	SET(USE_NETCDF4 ON CACHE BOOL "")
+	SET(ENABLE_NETCDF_4 ON CACHE BOOL "")
+	SET(ENABLE_NETCDF4 ON CACHE BOOL "")
+ENDIF()
+OPTION (ENABLE_NETCDF_V2 "Support old netCDF version-2 Fortran API" ON)
+IF(ENABLE_NETCDF_V2) # TODO: Can we just use one of these?
+	SET(BUILD_V2 ON CACHE BOOL "")
+ENDIF()
+# Turn this on by default when it's working
+OPTION(ENABLE_FORTRAN_TYPE_CHECKS 
+  "Determine Fortran types corresponding to netCDF types" OFF)
 
 # A basic script used to convert m4 files
 MACRO(GEN_m4 filename)
@@ -49,21 +62,6 @@ MACRO(print_conf_summary)
 
 ENDMACRO()
 
-# Build netCDF4
-OPTION (ENABLE_NETCDF_4 "Enable netCDF-4" ON)
-IF(ENABLE_NETCDF_4)
-	SET(USE_NETCDF4 ON CACHE BOOL "")
-	SET(ENABLE_NETCDF_4 ON CACHE BOOL "")
-	SET(ENABLE_NETCDF4 ON CACHE BOOL "")
-ENDIF()
-
-# Support old version-2 API for backward compatibility
-# OPTION (ENABLE_NETCDF_V2 "Support old netCDF version-2 Fortran API" OFF)
-OPTION (ENABLE_NETCDF_V2 "Support old netCDF version-2 Fortran API" ON)
-IF(ENABLE_NETCDF_V2)
-	SET(BUILD_V2 ON CACHE BOOL "")
-ENDIF()
-
 # Support old version-2 API for backward compatibility
 SET (ENABLE_LOGGING "OFF")
 IF(ENABLE_LOGGING)
@@ -75,20 +73,25 @@ SET(BUILD_F90 "OFF")
 SET(BUILD_V2 "ON")
 SET(BUILD_F03 "ON")
 
-# Set Fortran types to default.  The configure file got these by testing an F77 program,
-# invoking UD_FORTRAN_TYPES defined in acinclude.m4.  TODO: check the types from the test
-# program instead of assuming these defaults.
-SET(NCBYTE_T "byte")
-SET(NCBYTE_T "byte")
-SET(NCSHORT_T "integer*2")
-SET(NF_INT1_T "byte")
-SET(NF_INT2_T "integer*2")
-# Default is for following to be true.  TODO: test instead
-SET(NF_INT1_IS_C_SIGNED_CHAR "1")
-SET(NF_INT2_IS_C_SHORT "1")
-SET(NF_INT_IS_C_INT "1")
-SET(NF_REAL_IS_C_FLOAT "1")
-SET(NF_DOUBLEPRECISION_IS_C_DOUBLE "1")
+IF(ENABLE_FORTRAN_TYPE_CHECKS)
+  # Do tests to determine which Fortran types correspond to NCBYTE, NCSHORT, ...
+  # The configure file got these by testing an F77 program, invoking
+  # UD_FORTRAN_TYPES defined in acinclude.m4.  TODO: check the types
+  # from the test program instead of assuming these defaults.
+ELSE()
+  # Set Fortran types to default.  
+  SET(NCBYTE_T "byte")
+  SET(NCBYTE_T "byte")
+  SET(NCSHORT_T "integer*2")
+  SET(NF_INT1_T "byte")
+  SET(NF_INT2_T "integer*2")
+  # Default is for following to be true.  TODO: test instead
+  SET(NF_INT1_IS_C_SIGNED_CHAR "1")
+  SET(NF_INT2_IS_C_SHORT "1")
+  SET(NF_INT_IS_C_INT "1")
+  SET(NF_REAL_IS_C_FLOAT "1")
+  SET(NF_DOUBLEPRECISION_IS_C_DOUBLE "1")
+ENDIF(ENABLE_FORTRAN_TYPE_CHECKS)
 
 ENABLE_TESTING()
 INCLUDE(CTest)
