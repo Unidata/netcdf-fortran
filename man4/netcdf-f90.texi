@@ -2127,7 +2127,6 @@ The group id for this operation.
 The name of the
 group will be copied to this character array. The name will be less
 than NF90_MAX_NAME in length.
-@item
 
 @end table
 
@@ -7023,7 +7022,7 @@ Units for a variable rh in an existing netCDF dataset named foo.nc:
 @node FORTRAN 77 to Fortran 90 Transition Guide, Combined Index, Summary of Fortran 90 Interface, Top
 @appendix Appendix B - FORTRAN 77 to Fortran 90 Transition Guide
 
-@unnumberedsubsec The new Fortran 90 interface 
+@unnumberedsec The new Fortran 90 interface 
 
 The Fortran 90 interface to the netCDF library closely follows the
 FORTRAN 77 interface. In most cases, function and constant names and
@@ -7045,7 +7044,7 @@ around the base FORTRAN subroutines in the netCDF distribution. Future
 versions may be implemented entirely in Fortran 90, adding additional
 error checking possibilities.
 
-@unnumberedsubsec Changes to Inquiry functions 
+@unnumberedsec Changes to Inquiry functions 
 
 In the Fortran 90 interface there are two inquiry functions each for
 dimensions, variables, and attributes, and a single inquiry function
@@ -7079,7 +7078,7 @@ with those in the FORTRAN interface
  INTEGER FUNCTION  NF_INQ_ATTNAME    (NCID, VARID, ATTNUM, name)
 @end example
 
-@unnumberedsubsec Changes to put and get function 
+@unnumberedsec Changes to put and get function 
 
 The biggest simplification in the Fortran 90 is in the nf90_put_var
 and nf90_get_var functions. Both functions are overloaded: the values

@@ -55,8 +55,9 @@ endif #EXTRA_EXAMPLE_TESTS
 
 # Optionally add parallel i/o examples.
 if TEST_PARALLEL
-TESTPROGRAMS += simple_xy_par_wr simple_xy_par_rd
+TESTPROGRAMS += simple_xy_par_wr simple_xy_par_rd simple_xy_par_wr2
 simple_xy_par_wr_SOURCES = simple_xy_par_wr.f90
+simple_xy_par_wr2_SOURCES = simple_xy_par_wr2.f90
 simple_xy_par_rd_SOURCES = simple_xy_par_rd.f90
 TESTSCRIPTS += run_f90_par_examples.sh
 CLEANFILES += simple_xy_par.nc

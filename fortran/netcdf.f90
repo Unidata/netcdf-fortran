@@ -40,6 +40,9 @@
   private
   ! as of version 4.4, the following are merged:
   ! - netcdf_constants.f90 and netcdf4_constants.f90
+  !
+  ! Update the dependencies in the Makefile.am when modifying the list of
+  !     included files.
   include "netcdf_constants.f90"
   include "netcdf_externals.f90"
   include "netcdf_overloads.f90"
