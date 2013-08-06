@@ -5,6 +5,11 @@ VERSION         COMMENTS
 -------         --------
 4.4-beta4       ?
 
+
+		Moved to GitHub from Subversion, the location of the
+		new GitHub repository is at:
+		http://github.com/Unidata/netCDF-Fortran
+
 		Parallel-build portability fixes, particularly for
 		OpenMPI and gcc/gfortran-4.8.x on the Mac.  Also added
 		test from Reto Stöckli for NCF-250 bug, demonstrating
@@ -50,6 +55,7 @@ VERSION         COMMENTS
 		distribution in later beta release.
 
 4.4-beta1	Released 2012-03-02
+	        
 	        Version 4.4 is the first release to support
                 fortran 2003 and to use the ISO C Bindings available
                 in fortran 2003 to replace the older C code wrappers.
