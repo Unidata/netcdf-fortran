@@ -4,13 +4,13 @@ SET(CMAKE_VERBOSE_MAKEFILE ON)
 SET(CMAKE_BUILD_TYPE "RelWithDebInfo")
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-IF(NOT MSVC)
-    # Process these files with m4.
-    SET(m4_SOURCES test_get test_put)
-    foreach (f ${m4_SOURCES})      
-    	       GEN_m4(${f})
-    endforeach(f)
-ENDIF()
+
+# Process these files with m4.
+SET(m4_SOURCES test_get test_put)
+foreach (f ${m4_SOURCES})      
+		   GEN_m4(${f})
+endforeach(f)
+
 
 IF (BUILD_F03)
   SET(nf_test_SOURCES
