@@ -9,7 +9,7 @@
 AC_PREREQ([2.59])
 
 # Initialize with name, version, and support email address. 
-AC_INIT([netCDF-Fortran], [4.4-beta4], [support-netcdf@unidata.ucar.edu])
+AC_INIT([netCDF-Fortran], [4.4b3], [support-netcdf@unidata.ucar.edu])
 
 # Create the VERSION file, which contains the package version from
 # AC_INIT.
@@ -29,7 +29,7 @@ AC_CANONICAL_TARGET
 
 # This call is required by automake.
 AM_INIT_AUTOMAKE([foreign dist-zip subdir-objects])
-
+AM_MAINTAINER_MODE()
 # Check for the existence of this file before proceeding.
 AC_CONFIG_SRCDIR([libsrc/fort-attio.c])
 
