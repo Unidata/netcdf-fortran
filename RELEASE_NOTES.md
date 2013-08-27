@@ -3,34 +3,35 @@ Entries are in reverse chronological order (most recent first).
 
 VERSION         COMMENTS
 -------         --------
-4.4-beta4       ?
+### 4.4-beta5 	Released 2013-08-27
 
+* Added configuration files to github distribution.
 
-		Moved to GitHub from Subversion, the location of the
-		new GitHub repository is at:
-		http://github.com/Unidata/netCDF-Fortran
+### 4.4-beta4      
 
-		Parallel-build portability fixes, particularly for
+* Moved to GitHub from Subversion, the location of the new GitHub repository is at: http://github.com/Unidata/netCDF-Fortran
+
+* Parallel-build portability fixes, particularly for
 		OpenMPI and gcc/gfortran-4.8.x on the Mac.  Also added
 		test from Reto Stöckli for NCF-250 bug, demonstrating
 		it was fixed in previous commit.
 		
-		Add support for NF_MPIIO, NF_MPIPOSIX, NF_PNETCDF, and
-		NF_FILL_UINT in the data files.
+* Add support for NF\_MPIIO, NF\_MPIPOSIX, NF\_PNETCDF, and
+		NF\_FILL\_UINT in the data files.
 
-		Add support for nf_inq_path.
+* Add support for nf\_inq\_path.
 
-		Add a pre-processor macro that can be used to bypass
+* Add a pre-processor macro that can be used to bypass
 		the home-brew C_PTRDIFF_T definition and use the
 		standard one for compilers that support it.
 
-		Fix a potential bug in nf_attio to call the _long
-		version of some puts/gets instead of the _int
-		version. These were inside INT1_IS_C_LONG and
-		INT2_IS_C_LONG ifdef blocks so they would have only
+* Fix a potential bug in nf\_attio to call the \_long
+		version of some puts/gets instead of the \_int
+		version. These were inside INT1\_IS\_C\_LONG and
+		INT2\_IS\_C\_LONG ifdef blocks so they would have only
 		showed up when those macros were true.
 
-4.4-beta3	Released 2012-12-07
+### 4.4-beta3	Released 2012-12-07
 
 		Fixed bug that "make -j check" fails, but "make check"
 		works fine.
@@ -41,7 +42,7 @@ VERSION         COMMENTS
 		Synchronize with all changes made to version 4.2 since
 		its release.
 
-4.4-beta2	Released 2012-06-29
+### 4.4-beta2	Released 2012-06-29
 
 		Made handling of --disable-f03 more transparent.
 
@@ -54,7 +55,7 @@ VERSION         COMMENTS
 		Inadvertently broke the build until syncing with C
 		distribution in later beta release.
 
-4.4-beta1	Released 2012-03-02
+### 4.4-beta1	Released 2012-03-02
 	        
 	        Version 4.4 is the first release to support
                 fortran 2003 and to use the ISO C Bindings available
