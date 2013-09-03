@@ -12,7 +12,7 @@
 man_MANS = netcdf_fortran.3
 
 # These are the source files for all the netcdf manuals.
-info_TEXINFOS = netcdf-fortran.texi
+info_TEXINFOS = netcdf-f90.texi netcdf-f77.texi
 
 # Get lists of the coresponding ps, info, and pdf files.
 html_docs = ${info_TEXINFOS:.texi=.html} 
