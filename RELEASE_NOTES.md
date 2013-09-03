@@ -3,6 +3,9 @@ Entries are in reverse chronological order (most recent first).
 
 VERSION         COMMENTS
 -------         --------
+* Fixed some documentation for F77 API, added make rule for creating
+		netcdf-f77 HTML files.
+
 ### 4.4-beta5 	Released 2013-08-27
 
 * Added configuration files to github distribution.
