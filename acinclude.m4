@@ -626,9 +626,10 @@ AC_MSG_CHECKING([if Fortran 90 compiler capitalizes .mod filenames])
 		      module conftest
 		      end module conftest
 EOF
-ac_try='$F90 ${F90FLAGS} conftest.f90 ${F90LIBS}>&AS_MESSAGE_LOG_FD'
+ac_try='$F90 ${F90FLAGS} conftest.f90 -c ${F90LIBS}>&AS_MESSAGE_LOG_FD'
 AC_TRY_EVAL(ac_try)
-if test -f CONFTEST.mod ; then
+# Following changed from "test -f" to adapt to OSX case-insensitive filesystems
+if test `ls *.mod` CONFTEST.mod ; then
    ac_cv_prog_f90_uppercase_mod=yes
    rm -f CONFTEST.mod
 else
