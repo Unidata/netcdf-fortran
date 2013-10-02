@@ -225,9 +225,5 @@ ADD_SUBDIRECTORY(nf_test)
 ADD_SUBDIRECTORY(nf03_test)
 # Build the Fortran examples
 ADD_SUBDIRECTORY(examples)
-# Build the old f77 API
-# ADD_SUBDIRECTORY(F77)
-# ADD_SUBDIRECTORY(F90)
-# ADD_SUBDIRECTORY(man4)
+ADD_SUBDIRECTORY(man4)
 print_conf_summary()
-
