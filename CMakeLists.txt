@@ -10,6 +10,80 @@ SET(CMAKE_BUILD_TYPE Debug)
 SET(CMAKE_Fortran_COMPILER gfortran)
 SET(USE_LOGGING "OFF")
 
+#####
+# Some utility macros/scripts.
+#####
+# Macro to append files to the EXTRA_DIST files.
+#####
+SET(EXTRA_DIST "")
+MACRO(ADD_EXTRA_DIST files)
+  FOREACH(F ${files})
+    SET(EXTRA_DIST ${EXTRA_DIST} ${CMAKE_CURRENT_SOURCE_DIR}/${F})
+    SET(EXTRA_DIST ${EXTRA_DIST} PARENT_SCOPE)
+  ENDFOREACH()
+ENDMACRO()
+
+# Tests which are binary, but depend on a particular environmental variable.
+MACRO(add_bin_env_test prefix F)
+	ADD_EXECUTABLE(${prefix}_${F} ${F}.c)
+	TARGET_LINK_LIBRARIES(${prefix}_${F} netcdf)
+	IF(MSVC)
+		SET_TARGET_PROPERTIES(${prefix}_${F} 
+			PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"
+			)
+	ENDIF()
+
+
+	ADD_TEST(${prefix}_${F} bash "-c" "TOPSRCDIR=${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
+	IF(MSVC)
+		SET_PROPERTY(TARGET ${prefix}_${F} PROPERTY FOLDER "tests")
+	ENDIF()
+ENDMACRO()
+
+# Build a binary used by a script, but don't make a test out of it.
+MACRO(build_bin_test F) 
+	ADD_EXECUTABLE(${F} ${F}.c)
+	TARGET_LINK_LIBRARIES(${F} netcdf)
+	IF(MSVC)
+		SET_TARGET_PROPERTIES(${F} 
+			PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"
+		)
+	ENDIF()
+ENDMACRO()
+
+# Binary tests which are used by a script looking for a specific name.
+MACRO(add_bin_test_no_prefix F)
+	build_bin_test(${F})
+	ADD_TEST(${F} ${EXECUTABLE_OUTPUT_PATH}/${F})
+	IF(MSVC)
+		SET_PROPERTY(TEST ${F} PROPERTY FOLDER "tests/")
+	ENDIF()	
+ENDMACRO()
+
+# Binary tests which are used by a script looking for a specific name.
+MACRO(build_bin_test_no_prefix F)
+	build_bin_test(${F})
+	ADD_TEST(${F} ${EXECUTABLE_OUTPUT_PATH}/${F})
+	IF(MSVC)
+		SET_PROPERTY(TEST ${F} PROPERTY FOLDER "tests/")
+	ENDIF()	
+ENDMACRO()
+
+
+#MACRO(add_bin_test prefix F)
+#	ADD_EXECUTABLE(${prefix}_${F} ${F}.f)
+#	TARGET_LINK_LIBRARIES(${prefix}_${F} netcdff netcdf)
+#	IF(MSVC)
+#		SET_TARGET_PROPERTIES(${prefix}_${F} 
+#			PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"
+#			)
+#	ENDIF()
+#	ADD_TEST(${prefix}_${F} ${EXECUTABLE_OUTPUT_PATH}/${prefix}_${F})
+#	IF(MSVC)
+#		SET_PROPERTY(TEST ${prefix}_${F} PROPERTY FOLDER "tests/")
+#	ENDIF()	
+#ENDMACRO()
+
 OPTION(BUILD_SHARED_LIBS "Configure netcdff as a shared library." ON)
 OPTION(LARGE_FILE_TESTS "Run large file tests, which are slow and take lots of disk." OFF)
 OPTION(BUILD_BENCHMARKS "Run F90 I/O Benchmarks" OFF)
@@ -141,7 +215,7 @@ ENDIF()
 
 INSTALL(PROGRAMS ${netCDF_BINARY_DIR}/nf-config DESTINATION bin COMPONENT utilities)
 INCLUDE_DIRECTORIES(${netcdf-fortran_BINARY_DIR})
-# End autotools-style checs for config.h
+# End autotools-style checks for config.h
 
 # Recurse into other subdirectories.
 ADD_SUBDIRECTORY(fortran)
@@ -150,7 +224,7 @@ ADD_SUBDIRECTORY(libsrc)
 ADD_SUBDIRECTORY(nf_test)
 ADD_SUBDIRECTORY(nf03_test)
 # Build the Fortran examples
-# ADD_SUBDIRECTORY(examples)
+ADD_SUBDIRECTORY(examples)
 # Build the old f77 API
 # ADD_SUBDIRECTORY(F77)
 # ADD_SUBDIRECTORY(F90)
