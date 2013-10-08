@@ -114,6 +114,55 @@
     nf90_etrunc       = -64
 
   !
+  ! more error codes for DAP and netCDF-4:
+  !
+  integer, parameter, public :: &
+    nf90_edap         = -66,    &
+    nf90_ecurl        = -67,    &
+    nf90_eio          = -68,    &
+    nf90_enodata      = -69,    &
+    nf90_edapsvc      = -70,    &
+    nf90_edas         = -71,    &
+    nf90_edds         = -72,    &
+    nf90_edatadds     = -73,    &
+    nf90_edapurl      = -74,    &
+    nf90_edapconstraint = -75,  &
+    nf90_etranslation = -76,    &
+    nf904_first_error = -100,    &
+    nf90_ehdferr      = -101,    &
+    nf90_ecantread    = -102,    &
+    nf90_ecantwrite   = -103,    &
+    nf90_ecantcreate  = -104,    &
+    nf90_efilemeta    = -105,    &
+    nf90_edimmeta     = -106,    &
+    nf90_eattmeta     = -107,    &
+    nf90_evarmeta     = -108,    &
+    nf90_enocompound  = -109,    &
+    nf90_eattexists   = -110,    &
+    nf90_enotnc4      = -111,    &
+    nf90_estrictnc3   = -112,    &
+    nf90_enotnc3      = -113,    &
+    nf90_enopar       = -114,    &
+    nf90_eparinit     = -115,    &
+    nf90_ebadgrpid    = -116,    &
+    nf90_ebadtypid    = -117,    &
+    nf90_etypdefined  = -118,    &
+    nf90_ebadfield    = -119,    &
+    nf90_ebadclass    = -120,    &
+    nf90_emaptype     = -121,    &
+    nf90_elatefill    = -122,    &
+    nf90_elatedef     = -123,    &
+    nf90_edimscale    = -124,    &
+    nf90_enogrp       = -125,    &
+    nf90_estorage     = -126,    &
+    nf90_ebadchunk    = -127,    &
+    nf90_enotbuilt    = -128,    &
+    nf90_ediskless    = -129,    &
+    nf90_ecantextend  = -130,    &
+    nf90_empi         = -131,    &
+    nf904_last_error  = -131
+
+  !
   ! error handling modes:
   !
   integer, parameter, public :: &
