@@ -181,13 +181,19 @@ configure_file("${netcdf-fortran_SOURCE_DIR}/libsrc/nfconfig.in.cmake"
 # Create config.h file
 configure_file("${netcdf-fortran_SOURCE_DIR}/config.h.in.cmake"
 	"${netcdf-fortran_BINARY_DIR}/config.h")
-# Create nf-config file
-FILE(MAKE_DIRECTORY ${netcdf-fortran_BINARY_DIR}/tmp)
-configure_file("${netcdf-fortran_SOURCE_DIR}/nf-config.in.cmake"
-  "${netcdf-fortran_BINARY_DIR}/tmp/nf-config" @ONLY)
-FILE(COPY "${netcdf-fortran_BINARY_DIR}/tmp/nf-config"
-  DESTINATION ${netcdf-fortran_BINARY_DIR}/
-  FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+
+# Create nf-config file: TODO
+# FILE(MAKE_DIRECTORY ${netcdf-fortran_BINARY_DIR}/tmp)
+# configure_file("${netcdf-fortran_SOURCE_DIR}/nf-config.in.cmake"
+#   "${netcdf-fortran_BINARY_DIR}/tmp/nf-config" @ONLY)
+# FILE(COPY "${netcdf-fortran_BINARY_DIR}/tmp/nf-config"
+#    DESTINATION ${netcdf-fortran_BINARY_DIR}/
+#    FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+# For now, just copy a stub file
+FILE(COPY "${netcdf-fortran_SOURCE_DIR}/nf-config.in.cmake"
+   DESTINATION "${netcdf-fortran_BINARY_DIR}"
+   FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+FILE(RENAME "${netcdf-fortran_BINARY_DIR}/nf-config.in.cmake" "${netcdf-fortran_BINARY_DIR}/nf-config")
 
 ##
 # Configuration for post-install RPath
@@ -218,7 +224,8 @@ ENDIF()
 # End configuration for post-install RPath
 ##
 
-INSTALL(PROGRAMS ${netCDF_BINARY_DIR}/nf-config DESTINATION bin COMPONENT utilities)
+INSTALL(PROGRAMS ${netcdf-fortran_BINARY_DIR}/nf-config DESTINATION bin COMPONENT utilities)
+
 INCLUDE_DIRECTORIES(${netcdf-fortran_BINARY_DIR})
 # End autotools-style checks for config.h
 
