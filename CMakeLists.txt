@@ -6,6 +6,11 @@ PROJECT (netcdf-fortran Fortran C)
 SET(netcdf-fortran_VERSION_MAJOR 4)
 SET(netcdf-fortran_VERSION_MINOR 4)
 
+SET(netcdf-fortran_VERSION_PATCH 0)
+SET(netcdf-fortran_VERSION_NOTE "-rc1")
+SET(netcdf-fortran_VERSION ${netcdf-fortran_VERSION_MAJOR}.${netcdf-fortran_VERSION_MINOR}.${netcdf-fortran_VERSION_PATCH}${netcdf-fortran_VERSION_NOTE})
+SET(VERSION ${netcdf-fortran_VERSION})
+
 SET(CMAKE_BUILD_TYPE Debug)
 SET(CMAKE_Fortran_COMPILER gfortran)
 SET(USE_LOGGING "OFF")

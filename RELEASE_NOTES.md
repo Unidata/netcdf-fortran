@@ -3,6 +3,12 @@ Entries are in reverse chronological order (most recent first).
 
 VERSION         COMMENTS
 -------         --------
+
+
+### 4.4-rc1 	Released 2013-10-06
+
+* Added missing error codes for DAP and some netCDF-4 errors
+
 * Fixed some documentation for F77 API, added make rule for creating
 		netcdf-f77 HTML files.
 
