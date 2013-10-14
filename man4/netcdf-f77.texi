@@ -1131,7 +1131,7 @@ File name for netCDF dataset to be opened.
 This may be an OPeNDAP URL if DAP support is enabled.
  
 @item OMODE
-A zero value (or NF_NOWRITE) specifies the default behavior: open the
+A zero value (or NF_NOWRITE) specifies: open the
 dataset with read-only access, buffering and caching accesses for
 efficiency.
 
@@ -1197,7 +1197,7 @@ BUFRSIZEHINT, INTEGER ncid)
 File name for netCDF dataset to be opened.
  
 @item OMODE
-A zero value (or NF_NOWRITE) specifies the default behavior: open the
+A zero value (or NF_NOWRITE) specifies: open the
 dataset with read-only access, buffering and caching accesses for
 efficiency
 
@@ -1306,7 +1306,7 @@ INTEGER FUNCTION NF_OPEN_PAR(CHARACTER*(*) PATH, INTEGER OMODE,
 File name for netCDF dataset to be opened.
  
 @item OMODE
-A zero value (or NF_NOWRITE) specifies the default behavior: open the
+A zero value (or NF_NOWRITE) specifies: open the
 dataset with read-only access.
 
 Otherwise, the mode may be NF_WRITE. Setting the NF_WRITE flag opens

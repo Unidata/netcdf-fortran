@@ -864,12 +864,11 @@ The file name of the new netCDF dataset.
  
 @item cmode
 The creation mode flag. The following flags are available:
-NF90_NOCLOBBER, NF90_SHARE, NF90_64BIT_OFFSET, NF90_NETCDF4, and
-NF90_CLASSIC_MODEL.
+NF90_CLOBBER, NF90_NOCLOBBER, NF90_SHARE, NF90_64BIT_OFFSET, NF90_NETCDF4, and
+NF90_CLASSIC_MODEL.  (NF90_HDF5 is deprecated, use NF90_NETCDF4 instead).
 
-A zero value (defined for convenience as NF90_CLOBBER) specifies the
-default behavior: overwrite any existing dataset with the same file
-name and buffer and cache accesses for efficiency. The dataset will be
+A zero value (defined for convenience as NF90_CLOBBER) specifies: overwrite any existing dataset with the same file
+name, and buffer and cache accesses for efficiency. The dataset will be
 in netCDF classic format. @xref{NetCDF Classic Format Limitations,,,
 netcdf, NetCDF Users' Guide}.
 
@@ -1020,7 +1019,7 @@ File name for netCDF dataset to be opened.
 This may be an OPeNDAP URL if DAP support is enabled.
  
 @item mode
-A zero value (or NF90_NOWRITE) specifies the default behavior: open the
+A zero value (or NF90_NOWRITE) specifies: open the
 dataset with read-only access, buffering and caching accesses for
 efficiency
 
@@ -4718,7 +4717,7 @@ is in a netCDF-4/HDF5 file.
    integer, intent(in) :: ncid
    character (len = *), intent(in) :: name
    integer, intent( in) :: xtype
-   integer, dimension(:), intent(in) :: dimids
+   integer, scalar or dimension(:), intent(in), optional :: dimids
    integer, intent(out) :: varid
    logical, optional, intent(in) :: contiguous
    integer, optional, dimension(:), intent(in) :: chunksizes
@@ -4746,7 +4745,7 @@ NF90_UINT64, and NF90_STRING may be used, as well as a user defined type
 ID.
  
 @item dimids
-Vector of dimension IDs corresponding to the variable dimensions. For
+Scalar or vector of dimension IDs corresponding to the variable dimensions. For
 example, a vector of 2 dimension IDs specifies a 2-dimensional matrix.
 
 If an integer is passed for this parameter, a 1-D variable is created.
@@ -5119,8 +5118,7 @@ variable name is given by the predefined constant NF90_MAX_NAME.
  
 @item xtype
 Returned variable type, one of the set of predefined netCDF external
-data types. The type of this parameter, NF90_TYPE, is defined in the
-netCDF header file. The valid netCDF external data types are NF90_BYTE,
+data types. The valid netCDF external data types are NF90_BYTE,
 NF90_CHAR, NF90_SHORT, NF90_INT, NF90_FLOAT, AND NF90_DOUBLE.
  
 @item ndims
@@ -6277,7 +6275,7 @@ double attributes are adequate for most purposes.
  function nf90_put_att(ncid, varid, name, values)
    integer,            intent( in) :: ncid, varid
    character(len = *), intent( in) :: name
-   any valid type, scalar or array of rank 1, &
+   scalar character string or any numeric type, scalar, or array of rank 1, &
                        intent( in) :: values
    integer                         :: nf90_put_att
 @end example
@@ -6297,8 +6295,7 @@ attribute that gives the units for a netCDF variable. @xref{Attribute
 Conventions,,,netcdf, @value{n-man}}.
  
 @item values
-An array of attribute values. Values may be supplied as scalars or as
-arrays of rank one (one dimensional vectors). The external data type
+A numeric rank 1 array of attribute values or a scalar.  The external data type
 of the attribute is set to match the internal representation of the
 argument, that is if values is a two byte integer array, the attribute
 will be of type NF90_INT2. Fortran 90 intrinsic functions can be used
@@ -6995,7 +6992,7 @@ Units for a variable rh in an existing netCDF dataset named foo.nc:
  function nf90_put_att(ncid, varid, name, values)
    integer,            intent( in) :: ncid, varid
    character(len = *), intent( in) :: name
-   any valid type, scalar or array of rank 1, &
+   scalar character string or any numeric type, scalar, or array of rank 1, &
                        intent( in) :: values
    integer                         :: nf90_put_att
  function nf90_get_att(ncid, varid, name, values)
