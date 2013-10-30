@@ -5557,7 +5557,7 @@ C     Is everything set that is supposed to be?
 
 @node NF_SET_VAR_CHUNK_CACHE, NF_GET_VAR_CHUNK_CACHE, NF_INQ_VAR_CHUNKING, Variables
 @section Set HDF5 Chunk Cache for a Variable: NF_SET_VAR_CHUNK_CACHE
-@findex nc_set_var_chunk_cache
+@findex NF_SET_VAR_CHUNK_CACHE
 @cindex HDF5 chunk cache, per-variable
 
 This function changes the chunk cache settings for a variable. The
@@ -5571,36 +5571,37 @@ function in the HDF5 library at the HDF5 website:
 @heading Usage 
 
 @example
-nc_set_var_chunk_cache(int ncid, int varid, size_t size, size_t nelems, 
-		       float preemption);
+NF_SET_VAR_CHUNK_CACHE(INTEGER NCID, INTEGER VARID, INTEGER SIZE, INTEGER NELEMS, 
+		       INTEGER PREEMPTION);
 @end example
 
 @table @code
 
-@item ncid
+@item NCID
 NetCDF ID, from a previous call to nc_open or nc_create.
  
-@item varid
+@item VARID
 Variable ID.
 
-@item size
+@item SIZE
 The total size of the raw data chunk cache, in megabytes. This should be
 big enough to hold multiple chunks of data. (Note that the C API uses
 bytes, but the Fortran APIs uses megabytes to avoid numbers that can't
 fit in 4-byte integers.)
 
-@item nelems
+@item NELEMS
 The number of chunk slots in the raw data chunk cache hash table. This
 should be a prime number larger than the number of chunks that will be
 in the cache.
 
-@item preemption
-The preemtion value must be between 0 and 100 inclusive and indicates
-how much chunks that have been fully read are favored for
-preemption. A value of zero means fully read chunks are treated no
-differently than other chunks (the preemption is strictly LRU) while a
-value of 100 means fully read chunks are always preempted before other
-chunks. (The C API uses a float between 0 and 1 for this value).
+@item PREEMPTION
+The preemption value must be between 0 and 100 inclusive and indicates
+the degreee to which chunks that have been fully read are favored for
+kicking out of the chunk cache, when needed. A value of zero means
+fully read chunks are treated no differently than other chunks (the
+preemption is strictly Least Recently Used) while a value of 100 means
+fully read chunks are always preempted before other chunks. (The C API
+uses a float between 0 and 1 for this value).
 
 @end table
 
