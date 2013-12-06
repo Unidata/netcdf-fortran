@@ -4,7 +4,7 @@ SET(CMAKE_VERBOSE_MAKEFILE ON)
 SET(CMAKE_BUILD_TYPE "RelWithDebInfo")
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-INCLUDE_DIRECTORIES("." "${netcdf-fortran_BINARY_DIR}/libsrc")
+INCLUDE_DIRECTORIES("." "${NC4F_BINARY_DIR}/libsrc")
 
 SET(netcdff_SOURCES 
   typeSizes.f90 module_netcdf_nc_data.F90 module_netcdf_nc_interfaces.f90

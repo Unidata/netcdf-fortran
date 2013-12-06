@@ -156,10 +156,10 @@ execute_process(COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/ref_fills.nc
 
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/fortran ${CMAKE_SOURCE_DIR}/libsrc 
   ${CMAKE_SOURCE_DIR} ${CMAKE_CPP_FLAGS} ${CMAKE_Fortran_FLAGS} 
-  ${NETCDF_C_INCLUDE_DIR} ${netcdf-fortran_BINARY_DIR}/fortran
-  ${netcdf-fortran_BINARY_DIR}/libsrc)
+  ${NETCDF_C_INCLUDE_DIR} ${NC4F_BINARY_DIR}/fortran
+  ${NC4F_BINARY_DIR}/libsrc)
 LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/fortran ${CMAKE_SOURCE_DIR}/libsrc 
-  ${netcdf-fortran_BINARY_DIR}/fortran)
+  ${NC4F_BINARY_DIR}/fortran)
 FOREACH(t ${TESTS})
   ADD_EXECUTABLE(${t} ${${t}_SOURCES})
   TARGET_LINK_LIBRARIES(${t} ncfortran netcdff ${NETCDF_C_LIBRARY})

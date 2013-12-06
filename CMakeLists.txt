@@ -1,19 +1,19 @@
 cmake_minimum_required(VERSION 2.8)
 
 # CMake project file for netcdf-fortran
-PROJECT (netcdf-fortran Fortran C)
+PROJECT (NC4F Fortran C)
 
-SET(netcdf-fortran_VERSION_MAJOR 4)
-SET(netcdf-fortran_VERSION_MINOR 4)
+SET(NC4F_VERSION_MAJOR 4)
+SET(NC4F_VERSION_MINOR 4)
 
-SET(netcdf-fortran_VERSION_PATCH 0)
-SET(netcdf-fortran_VERSION_NOTE "-rc1")
-SET(netcdf-fortran_VERSION ${netcdf-fortran_VERSION_MAJOR}.${netcdf-fortran_VERSION_MINOR}.${netcdf-fortran_VERSION_PATCH}${netcdf-fortran_VERSION_NOTE})
-SET(VERSION ${netcdf-fortran_VERSION})
+SET(NC4F_VERSION_PATCH 0)
+SET(NC4F_VERSION_NOTE "-rc1")
+SET(NC4F_VERSION ${NC4F_VERSION_MAJOR}.${NC4F_VERSION_MINOR}.${NC4F_VERSION_PATCH}${NC4F_VERSION_NOTE})
+SET(VERSION ${NC4F_VERSION})
 
 SET(CMAKE_BUILD_TYPE Debug)
 SET(CMAKE_Fortran_COMPILER gfortran)
-SET(USE_LOGGING "OFF")
+SET(USE_LOGGING "ON")
 
 #####
 # Some utility macros/scripts.
@@ -55,39 +55,6 @@ MACRO(build_bin_test F)
 		)
 	ENDIF()
 ENDMACRO()
-
-# Binary tests which are used by a script looking for a specific name.
-MACRO(add_bin_test_no_prefix F)
-	build_bin_test(${F})
-	ADD_TEST(${F} ${EXECUTABLE_OUTPUT_PATH}/${F})
-	IF(MSVC)
-		SET_PROPERTY(TEST ${F} PROPERTY FOLDER "tests/")
-	ENDIF()	
-ENDMACRO()
-
-# Binary tests which are used by a script looking for a specific name.
-MACRO(build_bin_test_no_prefix F)
-	build_bin_test(${F})
-	ADD_TEST(${F} ${EXECUTABLE_OUTPUT_PATH}/${F})
-	IF(MSVC)
-		SET_PROPERTY(TEST ${F} PROPERTY FOLDER "tests/")
-	ENDIF()	
-ENDMACRO()
-
-
-#MACRO(add_bin_test prefix F)
-#	ADD_EXECUTABLE(${prefix}_${F} ${F}.f)
-#	TARGET_LINK_LIBRARIES(${prefix}_${F} netcdff netcdf)
-#	IF(MSVC)
-#		SET_TARGET_PROPERTIES(${prefix}_${F} 
-#			PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"
-#			)
-#	ENDIF()
-#	ADD_TEST(${prefix}_${F} ${EXECUTABLE_OUTPUT_PATH}/${prefix}_${F})
-#	IF(MSVC)
-#		SET_PROPERTY(TEST ${prefix}_${F} PROPERTY FOLDER "tests/")
-#	ENDIF()	
-#ENDMACRO()
 
 OPTION(BUILD_SHARED_LIBS "Configure netcdff as a shared library." ON)
 OPTION(LARGE_FILE_TESTS "Run large file tests, which are slow and take lots of disk." OFF)
@@ -142,7 +109,7 @@ MACRO(print_conf_summary)
 ENDMACRO()
 
 # Support old version-2 API for backward compatibility
-SET (ENABLE_LOGGING "OFF")
+SET (ENABLE_LOGGING "ON")
 IF(ENABLE_LOGGING)
 	SET(USE_LOGGING ON CACHE BOOL "")
 ENDIF()
@@ -176,24 +143,24 @@ ENABLE_TESTING()
 INCLUDE(CTest)
 
 # Create libsrc/nfconfig.inc (don't need nfconfig1.inc temporary file used with autoconf)
-configure_file("${netcdf-fortran_SOURCE_DIR}/libsrc/nfconfig.in.cmake" 
-  "${netcdf-fortran_BINARY_DIR}/libsrc/nfconfig.inc")
+configure_file("${NC4F_SOURCE_DIR}/libsrc/nfconfig.in.cmake" 
+  "${NC4F_BINARY_DIR}/libsrc/nfconfig.inc")
 # Create config.h file
-configure_file("${netcdf-fortran_SOURCE_DIR}/config.h.in.cmake"
-	"${netcdf-fortran_BINARY_DIR}/config.h")
+configure_file("${NC4F_SOURCE_DIR}/config.h.in.cmake"
+	"${NC4F_BINARY_DIR}/config.h")
 
 # Create nf-config file: TODO
-# FILE(MAKE_DIRECTORY ${netcdf-fortran_BINARY_DIR}/tmp)
-# configure_file("${netcdf-fortran_SOURCE_DIR}/nf-config.in.cmake"
-#   "${netcdf-fortran_BINARY_DIR}/tmp/nf-config" @ONLY)
-# FILE(COPY "${netcdf-fortran_BINARY_DIR}/tmp/nf-config"
-#    DESTINATION ${netcdf-fortran_BINARY_DIR}/
+# FILE(MAKE_DIRECTORY ${NC4F_BINARY_DIR}/tmp)
+# configure_file("${NC4F_SOURCE_DIR}/nf-config.in.cmake"
+#   "${NC4F_BINARY_DIR}/tmp/nf-config" @ONLY)
+# FILE(COPY "${NC4F_BINARY_DIR}/tmp/nf-config"
+#    DESTINATION ${NC4F_BINARY_DIR}/
 #    FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 # For now, just copy a stub file
-FILE(COPY "${netcdf-fortran_SOURCE_DIR}/nf-config.in.cmake"
-   DESTINATION "${netcdf-fortran_BINARY_DIR}"
+FILE(COPY "${NC4F_SOURCE_DIR}/nf-config.in.cmake"
+   DESTINATION "${NC4F_BINARY_DIR}"
    FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-FILE(RENAME "${netcdf-fortran_BINARY_DIR}/nf-config.in.cmake" "${netcdf-fortran_BINARY_DIR}/nf-config")
+FILE(RENAME "${NC4F_BINARY_DIR}/nf-config.in.cmake" "${NC4F_BINARY_DIR}/nf-config")
 
 ##
 # Configuration for post-install RPath
@@ -224,9 +191,9 @@ ENDIF()
 # End configuration for post-install RPath
 ##
 
-INSTALL(PROGRAMS ${netcdf-fortran_BINARY_DIR}/nf-config DESTINATION bin COMPONENT utilities)
+INSTALL(PROGRAMS ${NC4F_BINARY_DIR}/nf-config DESTINATION bin COMPONENT utilities)
 
-INCLUDE_DIRECTORIES(${netcdf-fortran_BINARY_DIR})
+INCLUDE_DIRECTORIES(${NC4F_BINARY_DIR})
 # End autotools-style checks for config.h
 
 # Recurse into other subdirectories.
