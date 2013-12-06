@@ -1,25 +1,147 @@
+## This is a CMake file, part of Unidata's netCDF Fortran package.
+# Copyright 2012-2014, see the COPYRIGHT file for more information.
+
+##################################
+# Set Project Properties
+##################################
+
+#Minimum required CMake Version
 cmake_minimum_required(VERSION 2.8)
 
-# CMake project file for netcdf-fortran
+#Project Name for netCDF-Fortran
 PROJECT (NC4F Fortran C)
-
+set(PACKAGE "netcdf-fortran" CACHE STRING "")
+#Project Version
 SET(NC4F_VERSION_MAJOR 4)
 SET(NC4F_VERSION_MINOR 4)
-
 SET(NC4F_VERSION_PATCH 0)
 SET(NC4F_VERSION_NOTE "-rc1")
 SET(NC4F_VERSION ${NC4F_VERSION_MAJOR}.${NC4F_VERSION_MINOR}.${NC4F_VERSION_PATCH}${NC4F_VERSION_NOTE})
 SET(VERSION ${NC4F_VERSION})
+SET(NC4F_SO_VERSION 0.0.0)
 
-SET(CMAKE_BUILD_TYPE Debug)
-SET(CMAKE_Fortran_COMPILER gfortran)
-SET(USE_LOGGING "ON")
+# Get system configuration,
+# Use it to determine osname,
+# os release, cpu. These will be used
+# when committing to CDash.
+find_program(UNAME NAMES uname)
+IF(UNAME)
+macro(getuname name flag)
+        exec_program("${UNAME}" ARGS "${flag}" OUTPUT_VARIABLE "${name}")
+endmacro(getuname)
+getuname(osname -s)
+getuname(osrel  -r)
+getuname(cpu    -m)
+set(BUILDNAME        "${osname}-${osrel}-${cpu}" CACHE STRING "Build name variable for CDash")
+ENDIF()
 
-#####
-# Some utility macros/scripts.
-#####
+# For CMAKE_INSTALL_LIBDIR
+INCLUDE(GNUInstallDirs)
+
+IF(MSVC)
+  SET(GLOBAL PROPERTY USE_FOLDERS ON)
+ENDIF()
+
+# auto-configure style checks, other CMake modules.
+INCLUDE (${CMAKE_ROOT}/Modules/CheckLibraryExists.cmake)
+INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
+INCLUDE (${CMAKE_ROOT}/Modules/CheckTypeSize.cmake)
+INCLUDE (${CMAKE_ROOT}/Modules/CheckFunctionExists.cmake)
+INCLUDE (${CMAKE_ROOT}/Modules/CheckCXXSourceCompiles.cmake)
+INCLUDE (${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
+INCLUDE (${CMAKE_ROOT}/Modules/CheckSymbolExists.cmake)
+INCLUDE (${CMAKE_ROOT}/Modules/GetPrerequisites.cmake)
+FIND_PACKAGE(PkgConfig QUIET)
+
+# Enable 'dist and distcheck'.
+# File adapted from http://ensc.de/cmake/FindMakeDist.cmake
+# TODO: this can't currently be found, need
+# FIND_PACKAGE(MakeDist)
+# End 'enable dist and distcheck'
+
+# Set the build type.
+IF (NOT CMAKE_BUILD_TYPE)
+	SET (CMAKE_BUILD_TYPE DEBUG CACHE STRING "Choose the type of build, options are: None, Debug, Release."
+		FORCE)
+ENDIF()
+
+################################
+# End Project Properties
+################################
+
+
+################################
+# Set CTest Properties
+################################
+
+ENABLE_TESTING()
+INCLUDE(CTest)
+
+# Copy the CTest customization file into binary directory, as required.
+# TODO: need to provide suitable CTestCustom.cmake
+# FILE(COPY ${CMAKE_SOURCE_DIR}/CTestCustom.cmake DESTINATION ${CMAKE_BINARY_DIR})
+
+# Set Memory test program for non-MSVC based builds.
+# Assume valgrind for now.
+IF(NOT MSVC)
+	SET (CTEST_MEMORYCHECK_COMMAND valgrind CACHE STRING "")
+ENDIF()
+
+# Set variable to define the build type.
+INCLUDE(GenerateExportHeader)
+
+################################
+# End CTest Properties
+################################
+
+
+################################
+# Compiler Configuration
+################################
+
+
+# Default to shared libs on.
+OPTION(BUILD_SHARED_LIBS "Configure netCDF as a shared library." ON)
+SET (LIB_TYPE STATIC)
+IF (BUILD_SHARED_LIBS)
+	SET(LIB_TYPE SHARED)
+	IF(CMAKE_COMPILER_IS_GNUCC OR APPLE)
+		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+	ENDIF()
+ENDIF()
+
+# Supress unused variable and parameter warnings, for the time being,
+# on GCC.
+#
+# Also, set some other default compiler flags.
+IF(CMAKE_COMPILER_IS_GNUCC OR APPLE)
+  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -Wno-unused-variable -Wno-unused-parameter")
+ENDIF()
+
+IF(NOT ENABLE_COVERAGE_TESTS)
+  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2")
+ENDIF()
+
+
+ADD_DEFINITIONS()
+
+# Supress CRT Warnings.
+# Only necessary for Windows
+IF(MSVC)
+	ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
+ENDIF()
+
+
+################################
+# End Compiler Configuration
+################################
+
+
+################################
+# Define Utility Macros
+################################
+
 # Macro to append files to the EXTRA_DIST files.
-#####
 SET(EXTRA_DIST "")
 MACRO(ADD_EXTRA_DIST files)
   FOREACH(F ${files})
@@ -27,6 +149,177 @@ MACRO(ADD_EXTRA_DIST files)
     SET(EXTRA_DIST ${EXTRA_DIST} PARENT_SCOPE)
   ENDFOREACH()
 ENDMACRO()
+
+# A basic script used to convert m4 files
+FIND_PROGRAM(NC4F_M4 NAMES m4)
+MACRO(GEN_m4 filename)
+	IF(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${filename}.c)
+	ADD_CUSTOM_COMMAND(
+		OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/${filename}.c
+		COMMAND ${NC4F_M4} 
+		ARGS ${CMAKE_CURRENT_SOURCE_DIR}/${filename}.m4 > ${CMAKE_CURRENT_SOURCE_DIR}/${filename}.c
+		VERBATIM
+	)
+	ENDIF()
+ENDMACRO(GEN_m4)
+
+# [LEFT OFF HERE] replacing macros with ones from netcdf-c macros using NC4F_prefix
+
+# Binary tests, but ones which depend on value of 'TEMP_LARGE' being defined.
+MACRO(add_bin_env_temp_large_test prefix F)
+	ADD_EXECUTABLE(${prefix}_${F} ${F}.c)
+	TARGET_LINK_LIBRARIES(${prefix}_${F} netcdf)
+	IF(MSVC)
+		SET_TARGET_PROPERTIES(${prefix}_${F} 
+			PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"
+			)
+	ENDIF()
+
+
+	ADD_TEST(${prefix}_${F} bash "-c" "TEMP_LARGE=${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
+	IF(MSVC)
+		SET_PROPERTY(TARGET ${prefix}_${F} PROPERTY FOLDER "tests")
+	ENDIF()
+ENDMACRO()
+
+
+# Tests which are binary, but depend on a particular environmental variable.
+MACRO(add_bin_env_test prefix F)
+	ADD_EXECUTABLE(${prefix}_${F} ${F}.c)
+	TARGET_LINK_LIBRARIES(${prefix}_${F} netcdf)
+	IF(MSVC)
+		SET_TARGET_PROPERTIES(${prefix}_${F} 
+			PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"
+			)
+	ENDIF()
+
+
+	ADD_TEST(${prefix}_${F} bash "-c" "TOPSRCDIR=${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
+	IF(MSVC)
+		SET_PROPERTY(TARGET ${prefix}_${F} PROPERTY FOLDER "tests")
+	ENDIF()
+ENDMACRO()
+
+# Build a binary used by a script, but don't make a test out of it.
+MACRO(build_bin_test F) 
+	ADD_EXECUTABLE(${F} ${F}.c)
+	TARGET_LINK_LIBRARIES(${F} netcdf)
+	IF(MSVC)
+		SET_TARGET_PROPERTIES(${F} 
+			PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"
+		)
+	ENDIF()
+ENDMACRO()
+
+# Binary tests which are used by a script looking for a specific name.
+MACRO(add_bin_test_no_prefix F)
+	build_bin_test(${F})
+	ADD_TEST(${F} ${EXECUTABLE_OUTPUT_PATH}/${F})
+	IF(MSVC)
+		SET_PROPERTY(TEST ${F} PROPERTY FOLDER "tests/")
+	ENDIF()	
+ENDMACRO()
+
+# Binary tests which are used by a script looking for a specific name.
+MACRO(build_bin_test_no_prefix F)
+	build_bin_test(${F})
+	ADD_TEST(${F} ${EXECUTABLE_OUTPUT_PATH}/${F})
+	IF(MSVC)
+		SET_PROPERTY(TEST ${F} PROPERTY FOLDER "tests/")
+	ENDIF()	
+ENDMACRO()
+
+
+MACRO(add_bin_test prefix F)
+	ADD_EXECUTABLE(${prefix}_${F} ${F}.c)
+	TARGET_LINK_LIBRARIES(${prefix}_${F} netcdf)
+	IF(MSVC)
+		SET_TARGET_PROPERTIES(${prefix}_${F} 
+			PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"
+			)
+	ENDIF()
+	ADD_TEST(${prefix}_${F} ${EXECUTABLE_OUTPUT_PATH}/${prefix}_${F})
+	IF(MSVC)
+		SET_PROPERTY(TEST ${prefix}_${F} PROPERTY FOLDER "tests/")
+	ENDIF()	
+ENDMACRO()
+
+# A script to print out information at the end of the configuration step.
+MACRO(print_conf_summary)
+	MESSAGE("")
+	MESSAGE("")
+	MESSAGE(STATUS "CMake Summary:")
+	MESSAGE("")
+	MESSAGE(STATUS "\tBuild Type:\t\t\t" ${CMAKE_BUILD_TYPE})
+	MESSAGE(STATUS "\tBuilding Shared Libraries:\t" ${BUILD_SHARED_LIBS})
+	MESSAGE(STATUS "\tBuilding netCDF-4:\t\t" ${ENABLE_NETCDF_4})
+	MESSAGE(STATUS "\tBuilding DAP Support:\t\t" ${ENABLE_DAP})
+	MESSAGE(STATUS "\tBuilding Utilities:\t\t" ${BUILD_UTILITIES})
+	IF(CMAKE_PREFIX_PATH)
+		MESSAGE(STATUS "\tCMake Prefix Path:\t\t" "${CMAKE_PREFIX_PATH}")
+	ENDIF()
+	MESSAGE(STATUS "\tUsing pnetcdf:\t\t\t" ${STATUS_PNETCDF})
+	MESSAGE(STATUS "\tUsing Parallel IO:\t\t" ${STATUS_PARALLEL})
+	MESSAGE(STATUS "\tLinking against:\t\t" "${ALL_TLL_LIBS}") 
+
+	MESSAGE("")
+
+ENDMACRO()
+# Shell script Macro
+MACRO(add_sh_test prefix F)
+	IF(NOT MSVC)
+		ADD_TEST(${prefix}_${F} bash "-c" "export srcdir=${CMAKE_CURRENT_SOURCE_DIR};export TOPSRCDIR=${CMAKE_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR}/${F}.sh")
+	ENDIF()
+
+ENDMACRO()
+
+
+# Macro for replacing '/MD' with '/MT'.
+# Used only on Windows, /MD tells VS to use the shared
+# CRT libs, MT tells VS to use the static CRT libs.
+#
+# Taken From:
+# 	http://www.cmake.org/Wiki/CMake_FAQ#How_can_I_build_my_MSVC_application_with_a_static_runtime.3F
+#
+MACRO(specify_static_crt_flag) 
+
+  SET(vars 
+    CMAKE_C_FLAGS
+    CMAKE_C_FLAGS_DEBUG
+    CMAKE_C_FLAGS_MINSIZEREL
+    CMAKE_C_FLAGS_RELWITHDEBINFO
+    CMAKE_CXX_FLAGS CMAKE_CXX_FLAGS_DEBUG
+    CMAKE_CXX_FLAGS_RELEASE CMAKE_CXX_FLAGS_MINSIZEREL
+    CMAKE_CXX_FLAGS_RELWITHDEBINFO)
+  
+  FOREACH(flag_var ${vars})
+    IF(${flag_var} MATCHES "/MD")
+      STRING(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
+    ENDIF()
+  ENDFOREACH()			    
+  
+  FOREACH(flag_var ${vars})
+    MESSAGE(STATUS " '${flag_var}': ${${flag_var}}")
+  ENDFOREACH()
+  MESSAGE(STATUS "")
+
+ENDMACRO()
+
+################################
+# End Macro Definitions
+################################
+
+
+#Add custom CMake Module
+SET (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules/"
+    CACHE INTERNAL "Location of our custom CMake modules.")
+
+SET(CMAKE_BUILD_TYPE Debug)
+SET(CMAKE_Fortran_COMPILER gfortran)
+SET(USE_LOGGING "ON")
+
+#####
+# Some utility macros/scripts.
 
 # Tests which are binary, but depend on a particular environmental variable.
 MACRO(add_bin_env_test prefix F)
@@ -74,18 +367,6 @@ ENDIF()
 # Turn this on by default when it's working
 OPTION(ENABLE_FORTRAN_TYPE_CHECKS 
   "Determine Fortran types corresponding to netCDF types" OFF)
-
-# A basic script used to convert m4 files
-MACRO(GEN_m4 filename)
-	IF(NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${filename}.F)
-	ADD_CUSTOM_COMMAND(
-		OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/${filename}.F
-		COMMAND m4 
-		ARGS ${CMAKE_CURRENT_SOURCE_DIR}/${filename}.m4 > ${CMAKE_CURRENT_SOURCE_DIR}/${filename}.F
-		VERBATIM
-	)
-	ENDIF()
-ENDMACRO(GEN_m4)
 
 # A script to print out information at the end of the configuration step.
 MACRO(print_conf_summary)
