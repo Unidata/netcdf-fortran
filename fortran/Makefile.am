@@ -137,12 +137,14 @@ endif BUILD_V2
 
 endif BUILD_F03
 
+if UPPER_CASE_MOD
 $(UCHEADERS): $(LCHEADERS)
 	for lc in $(LCHEADERS) ; do \
 	uc="$${lc%%.mod}" ; \
 	uc=`echo $$uc | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`; \
         uc="$${uc}.mod" ; rm -f $$uc ; cp $$lc $$uc ; \
 	done
+endif UPPER_CASE_MOD
 
 # These are always used
 if UPPER_CASE_MOD
@@ -157,14 +159,14 @@ endif !UPPER_CASE_MOD
 
 if UPPER_CASE_MOD
 COMMONHEADERS = $(UCHEADERS) $(UCCOMMON)
+BUILT_SOURCES += $(UCHEADERS) $(UCCOMMON) $(LCHEADERS) $(LCCOMMON)
 else !UPPER_CASE_MOD
 COMMONHEADERS = $(LCHEADERS) $(LCCOMMON)
+BUILT_SOURCES += $(LCHEADERS) $(LCCOMMON)
 endif !UPPER_CASE_MOD
 
 nodist_include_HEADERS = $(COMMONHEADERS)
 libnetcdff_la_DEPENDENCIES += $(COMMONHEADERS)
-
-BUILT_SOURCES += $(UCHEADERS) $(UCCOMMON) $(LCHEADERS) $(LCCOMMON)
 
 # This is what we are building: a convenience library of Fortran 2003 functions.
 lib_LTLIBRARIES = libnetcdff.la
@@ -208,5 +210,5 @@ CLEANFILES += netcdf_nc_data.mod netcdf_nc_interfaces.mod netcdf_nf_data.mod \
 
 CLEANFILES += $(UCHEADERS) $(UCCOMMON) $(LCHEADERS) $(LCCOMMON)
 
-# Turn of parallel builds in this directory.
+# Turn off parallel builds in this directory.
 .NOTPARALLEL:
