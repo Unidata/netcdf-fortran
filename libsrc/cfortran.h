@@ -72,20 +72,20 @@
 
 #ifndef LONGLONG_TYPE   /* this may have been previously defined */
 #if defined(_MSC_VER)   /* Microsoft Visual C++ */
-
 #if (_MSC_VER < 1300)   /* versions earlier than V7.0 do not have 'long long' */
     typedef __int64 LONGLONG;
 #else                   /* newer versions do support 'long long' */
     typedef long long LONGLONG; 
-#endif
-
+#endif /* (_MSC_VER...) */
+#else
+#ifdef LONGLONG_IS_LONG
+    typedef long LONGLONG;
 #else
     typedef long long LONGLONG; 
-#endif
-
+#endif /* ifdef LONGLONG_IS_LONG */
+#endif /* if defined(_MSC_VER)... */
 #define LONGLONG_TYPE
-#endif  
-
+#endif  /* ifndef LONGLONG_TYPE */
 
 /* First prepare for the C compiler. */
 

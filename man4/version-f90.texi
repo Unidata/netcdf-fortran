@@ -1,0 +1,4 @@
+@set UPDATED 23 January 2014
+@set UPDATED-MONTH January 2014
+@set EDITION 4.4-rc1
+@set VERSION 4.4-rc1
