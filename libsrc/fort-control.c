@@ -18,7 +18,7 @@ FCALLSCFUN3(NF_INT, nc_create, NF_CREATE, nf_create,
  * Create a netCDF dataset with I/O attributes.
  */
 FCALLSCFUN5(NF_INT, nc__create, NF__CREATE, nf__create,
-	    STRING, FINT2CINT, FINT2CSIZET, PCHUNKSIZEHINT, PNCID)
+	    STRING, FINT2CINT, FINT2CSIZET, PVOID, PNCID)
 
 
 /*
@@ -32,7 +32,7 @@ FCALLSCFUN3(NF_INT, nc_open, NF_OPEN, nf_open,
  * Open a netCDF dataset with I/O attributes.
  */
 FCALLSCFUN4(NF_INT, nc__open, NF__OPEN, nf__open,
-	    STRING, FINT2CINT, PCHUNKSIZEHINT, PNCID)
+	    STRING, FINT2CINT, PVOID, PNCID)
 
 
 /*
@@ -103,13 +103,13 @@ FCALLSCFUN1(NF_INT, nc_delete, NF_DELETE, nf_delete,
  * Create a netCDF dataset with I/O attributes and specific base pe.
  */
 FCALLSCFUN6(NF_INT, nc__create_mp, NF__CREATE_MP, nf__create_mp,
-	    STRING, FINT2CINT, FINT2CSIZET, FINT2CINT, PCHUNKSIZEHINT, PNCID)
+	    STRING, FINT2CINT, FINT2CSIZET, FINT2CINT, PVOID, PNCID)
 
 /*
  * Open a netCDF dataset with I/O attributes and specific base pe.
  */
 FCALLSCFUN5(NF_INT, nc__open_mp, NF__OPEN_MP, nf__open_mp,
-	    STRING, FINT2CINT, FINT2CINT, PCHUNKSIZEHINT, PNCID)
+	    STRING, FINT2CINT, FINT2CINT, PVOID, PNCID)
 
 /*
  * Delete a netCDF dataset by name using a specific base pe.
