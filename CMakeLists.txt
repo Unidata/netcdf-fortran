@@ -364,7 +364,11 @@ IF(ENABLE_NETCDF_4)  # TODO: Seems like we should just use one of these
 	SET(ENABLE_NETCDF4 ON CACHE BOOL "")
 ENDIF()
 IF (UNIX AND ${CMAKE_SIZEOF_VOID_P} MATCHES "8")
-	SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DLONGLONG_IS_LONG -fmacro-backtrace-limit=0")
+SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DLONGLONG_IS_LONG")
+  # for easier debugging of cfortran.h
+  IF (APPLE)
+    SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fmacro-backtrace-limit=0")
+  endif ()
 ENDIF()
 # assume gfortran. Intel and nag don't seem to be supported in cfortran.h
 if (Fortran_COMPILER_NAME MATCHES "^gfortran*" OR Fortran_COMPILER_NAME MATCHES "^f95")
