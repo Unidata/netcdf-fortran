@@ -16,13 +16,13 @@ SET(netcdff_SOURCES
   nf_varmio.F90 nf_varsio.F90
 )
 
-IF (USE_NETCDF4)
+IF (${USE_NETCDF4})
   SET(netcdff_SOURCES ${netcdff_SOURCES} 
     module_netcdf4_nc_interfaces.f90
     module_netcdf4_nf_interfaces.F90 module_netcdf4_f03.f90
     nf_lib.c nf_nc4.f90
     )
-ENDIF(USE_NETCDF4)
+ENDIF(${USE_NETCDF4})
 
 # SET(netcdff_DEPENDENCIES 
 #   netcdf_attributes.f90 netcdf_constants.f90 netcdf_dims.f90
@@ -31,7 +31,7 @@ ENDIF(USE_NETCDF4)
 #   netcdf_visibility.f90 netcdf_eightbyte.f90
 #   )
 
-IF (USE_NETCDF4)
+IF (${USE_NETCDF4})
   SET(netcdff_SOURCES ${netcdff_SOURCES} 
     netcdf4.f90
     )
@@ -44,25 +44,25 @@ ELSE ()
   SET(netcdff_SOURCES ${netcdff_SOURCES} 
     netcdf.f90 netcdf3_file.f90
     )
-ENDIF(USE_NETCDF4)
+ENDIF(${USE_NETCDF4})
 
-if (BUILD_V2)
+if (${BUILD_V2})
   SET(netcdff_SOURCES ${netcdff_SOURCES}
     nf_v2compat.c module_netcdf_fortv2_c_interfaces.f90 nf_fortv2.f90
     )
-endif (BUILD_V2)
+endif (${BUILD_V2})
 
-if (BUILD_F03)
+if (${BUILD_F03})
   SET(LCHEADERS 
     netcdf_nc_data.mod netcdf_nc_interfaces.mod netcdf_nf_data.mod
     netcdf_nf_interfaces.mod netcdf_f03.mod
     )
-  if (BUILD_V2)
+  if (${BUILD_V2})
     SET(LCHEADERS ${LCHEADERS} 
       netcdf_fortv2_c_interfaces.mod
       )
-  endif (BUILD_V2)
-endif (BUILD_F03)
+  endif (${BUILD_V2})
+endif (${BUILD_F03})
 
 # These are always used
 SET(LCCOMMON typesizes.mod netcdf.mod)
@@ -71,49 +71,40 @@ SET(COMMONHEADERS ${LCHEADERS} ${LCCOMMON})
 # SET(netcdff_DEPENDENCIES ${netcdff_DEPENDENCIES} ${COMMONHEADERS} )
 SET(BUILT_SOURCES ${LCHEADERS} ${LCCOMMON})
 
-SET(NETCDF_INC ${CMAKE_CURRENT_BINARY_DIR}/netcdf.inc)
-
 # A macro for appending file2 to file1
 MACRO(APPENDFILE file1 file2)
   file(READ ${file2} file2_bytes)
   file(APPEND ${file1} ${file2_bytes})
 ENDMACRO(APPENDFILE file1 file2)
 
-# Build netcdf.inc file from netcdf2, netcdf3 and netcdf4 files 
-# netcdf.inc: $(top_srcdir)/fortran/netcdf2.inc $(top_srcdir)/fortran/netcdf3.inc $(top_srcdir)/fortran/netcdf4.inc $(top_srcdir)/libsrc/nfconfig.inc
-# 	echo '!     NetCDF-3.' > netcdf.inc
+SET(NETCDF_INC ${CMAKE_CURRENT_BINARY_DIR}/netcdf.inc)
+SET_DIRECTORY_PROPERTIES (PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES ${NETCDF_INC})
+if (EXISTS ${NETCDF_INC})
+	FILE (REMOVE ${NETCDF_INC})
+endif ()
+
+# Build netcdf.inc file from selected netcdf2, netcdf3 and netcdf4 apis 
 file(APPEND ${NETCDF_INC} "!     NetCDF-3.")
-# 	cat $(top_srcdir)/fortran/netcdf3.inc >> netcdf.inc
 APPENDFILE(${NETCDF_INC} "netcdf3.inc")
 
-if (USE_NETCDF4)
-  # 	echo >> netcdf.inc
+if (${USE_NETCDF4})
   file(APPEND ${NETCDF_INC} "\n")
-  # 	echo '!     NetCDF-4.' >> netcdf.inc
   file(APPEND ${NETCDF_INC} "!     NetCDF-4.")
-  # 	cat $(top_srcdir)/fortran/netcdf4.inc >> netcdf.inc
   APPENDFILE(${NETCDF_INC} "netcdf4.inc")
-endif (USE_NETCDF4)
+endif (${USE_NETCDF4})
 
-if (BUILD_V2)
-  # 	echo >> netcdf.inc
+if (${BUILD_V2})
   file(APPEND ${NETCDF_INC} "\n")
-  # 	echo '!     NetCDF-2.' >> netcdf.inc
   file(APPEND ${NETCDF_INC} "!     NetCDF-2.")
-  # 	cat $(top_srcdir)/fortran/netcdf2.inc >> netcdf.inc
   APPENDFILE(${NETCDF_INC} "netcdf2.inc")
-endif (BUILD_V2)
+endif (${BUILD_V2})
 
-if (USE_LOGGING)
-  # 	echo >> netcdf.inc
+if (${USE_LOGGING})
   file(APPEND ${NETCDF_INC} "\n")
-  # 	echo '!     This is to turn on netCDF internal logging.' >> netcdf.inc
   file(APPEND ${NETCDF_INC} "!     This is to turn on netCDF internal logging.")
-  # 	echo '      integer nf_set_log_level' >> netcdf.inc
   file(APPEND ${NETCDF_INC} "      integer nf_set_log_level")
-  # 	echo '      external nf_set_log_level' >> netcdf.inc
   file(APPEND ${NETCDF_INC} "      external nf_set_log_level")
-endif (USE_LOGGING)
+endif (${USE_LOGGING})
 
 SET(BUILT_SOURCES ${BUILT_SOURCES} netcdf.inc)
 
@@ -134,6 +125,7 @@ ENDIF()
 # ADD_LIBRARY(netcdff STATIC SHARED ${netcdff_SOURCES})
 # Builds only static, not shared
 ADD_LIBRARY(netcdff ${netcdff_SOURCES})
+TARGET_LINK_LIBRARIES(netcdff netcdf)
 
 ##
 # Configuration for post-install RPath
@@ -160,9 +152,12 @@ IF(NOT MSVC)
 	ENDIF("${isSystemDir}" STREQUAL "-1")
 ENDIF()
 
-SET(CLEANFILES nfconfig1.inc nfconfig.inc netcdf.inc)
-SET(CLEANFILES ${CLEANFILES} netcdf_nc_data.mod netcdf_nc_interfaces.mod netcdf_nf_data.mod
-  netcdf_nf_interfaces.mod netcdf_fortv2_c_interfaces.mod
-  netcdf_f03.mod netcdf4_nc_interfaces.mod
-  netcdf4_nf_interfaces.mod netcdf4_f03.mod)
-SET(CLEANFILES ${CLEANFILES} ${LCHEADERS} ${LCCOMMON})
+INSTALL (TARGETS netcdff LIBRARY DESTINATION lib)
+INSTALL (DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ 
+         DESTINATION include
+         PATTERN "*.mod" PATTERN "netcdf.inc"
+         PATTERN "*.cmake" EXCLUDE
+         PATTERN "CMakeFiles" EXCLUDE
+         PATTERN "*.dylib" EXCLUDE
+         PATTERN "*.a" EXCLUDE
+         PATTERN "Makefile" EXCLUDE)
