@@ -65,6 +65,8 @@ IF (NOT CMAKE_BUILD_TYPE)
 		FORCE)
 ENDIF()
 
+get_filename_component (Fortran_COMPILER_NAME ${CMAKE_Fortran_COMPILER} NAME)
+
 ################################
 # End Project Properties
 ################################
@@ -357,10 +359,55 @@ OPTION(TEST_PARALLEL "Run parallel I/O tests for F90 and F77" OFF)
 OPTION (ENABLE_NETCDF_4 "Enable netCDF-4" ON)
 IF(ENABLE_NETCDF_4)  # TODO: Seems like we should just use one of these
 	SET(USE_NETCDF4 ON CACHE BOOL "")
+	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DUSE_NETCDF4")
 	SET(ENABLE_NETCDF_4 ON CACHE BOOL "")
 	SET(ENABLE_NETCDF4 ON CACHE BOOL "")
 ENDIF()
-OPTION (ENABLE_NETCDF_V2 "Support old netCDF version-2 Fortran API" ON)
+IF (UNIX AND ${CMAKE_SIZEOF_VOID_P} MATCHES "8")
+SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DLONGLONG_IS_LONG")
+  # for easier debugging of cfortran.h
+  IF (APPLE)
+    SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fmacro-backtrace-limit=0")
+  endif ()
+ENDIF()
+# assume gfortran. Intel and nag don't seem to be supported in cfortran.h
+if (Fortran_COMPILER_NAME MATCHES "^gfortran*" OR Fortran_COMPILER_NAME MATCHES "^f95")
+#  gFortran is used in cfortran.h
+   SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DgFortran ")
+   
+   SET(TEST_C_PTRDIFF_T_F90 
+     "${CMAKE_CURRENT_SOURCE_DIR}/CMakeExtras/test_c_ptrdiff_t.f90")
+   SET(TEST_C_PTRDIFF_T_OBJ 
+     "${CMAKE_CURRENT_BINARY_DIR}/test_c_ptrdiff_t")
+   EXECUTE_PROCESS (
+	COMMAND ${CMAKE_Fortran_COMPILER} -o ${TEST_C_PTRDIFF_T_OBJ} ${TEST_C_PTRDIFF_T_F90}
+    RESULT_VARIABLE COMPILE_FAILED ERROR_QUIET)
+    FILE (REMOVE ${TEST_C_PTRDIFF_T_OBJ})    
+    IF (COMPILE_FAILED)
+        # if the compile returns 1 - the compile failed => C_PTRDIFF_T is not defined
+    	# get sizeof of ptrdiff_t
+    	SET (SIZEOF_PTRDIFF_T_C 
+    	  "${CMAKE_CURRENT_SOURCE_DIR}/CMakeExtras/sizeof_ptrdiff_t.c")
+    	SET (SIZEOF_PTRDIFF_T_OBJ 
+    	  "${CMAKE_CURRENT_BINARY_DIR}/sizeof_ptrdiff_t")
+	   EXECUTE_PROCESS (
+		COMMAND ${CMAKE_C_COMPILER} -o ${SIZEOF_PTRDIFF_T_OBJ} ${SIZEOF_PTRDIFF_T_C})
+	   EXECUTE_PROCESS (COMMAND ${SIZEOF_PTRDIFF_T_OBJ} 
+	     OUTPUT_VARIABLE SIZEOF_PTRDIFF_T 
+	     RESULT_VARIABLE SIZEOF_RESULT)
+		IF (SIZEOF_RESULT)
+			MESSAGE (ERROR "UNABLE TO DETERMINE SIZEOF PTRDIFF_T")	
+		ELSE (SIZEOF_RESULT)
+			SET (CMAKE_Fortran_FLAGS 
+				"-DSIZEOF_PTRDIFF_T=${SIZEOF_PTRDIFF_T} ${CMAKE_Fortran_FLAGS}")
+		ENDIF (SIZEOF_RESULT)
+		FILE (REMOVE ${SIZEOF_PTRDIFF_T_OBJ})
+	else (COMPILE_FAILED)
+		SET (CMAKE_Fortran_FLAGS "-DHAVE_TS29113_SUPPORT ${CMAKE_Fortran_FLAGS}")
+    endif(COMPILE_FAILED)
+endif ()
+
+OPTION (ENABLE_NETCDF_V2 "Support old netCDF version-2 Fortran API" OFF)
 IF(ENABLE_NETCDF_V2) # TODO: Can we just use one of these?
 	SET(BUILD_V2 ON CACHE BOOL "")
 ENDIF()
@@ -396,9 +443,9 @@ IF(ENABLE_LOGGING)
 ENDIF()
 
 # Set the default fortran builds; default is to build f03
-SET(BUILD_F90 "OFF")
+SET(BUILD_F90 "ON")
 SET(BUILD_V2 "ON")
-SET(BUILD_F03 "ON")
+SET(BUILD_F03 "OFF")
 
 IF(ENABLE_FORTRAN_TYPE_CHECKS)
   # Do tests to determine which Fortran types correspond to NCBYTE, NCSHORT, ...
@@ -443,6 +490,9 @@ FILE(COPY "${NC4F_SOURCE_DIR}/nf-config.in.cmake"
    FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 FILE(RENAME "${NC4F_BINARY_DIR}/nf-config.in.cmake" "${NC4F_BINARY_DIR}/nf-config")
 
+# make sure previous two files get cleaned up...
+SET_DIRECTORY_PROPERTIES (DIRECTORY PROPERTY ADDITIONAL_MAKE_CLEAN_FILES ${netcdf-fortran_BINARY_DIR}/config.h ${netcdf-fortran_BINARY_DIR}/nf-config)
+
 ##
 # Configuration for post-install RPath
 # Adapted from http://www.cmake.org/Wiki/CMake_RPATH_handling
@@ -479,7 +529,7 @@ INCLUDE_DIRECTORIES(${NC4F_BINARY_DIR})
 
 # Recurse into other subdirectories.
 ADD_SUBDIRECTORY(fortran)
-TARGET_LINK_LIBRARIES(netcdff)
+#TARGET_LINK_LIBRARIES(netcdff netcdf)
 ADD_SUBDIRECTORY(libsrc)
 ADD_SUBDIRECTORY(nf_test)
 ADD_SUBDIRECTORY(nf03_test)
