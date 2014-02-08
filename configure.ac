@@ -482,14 +482,13 @@ AC_C_CHAR_UNSIGNED
 AC_CHECK_SIZEOF(short)
 AC_CHECK_SIZEOF(int)
 AC_CHECK_SIZEOF(long)
-AC_CHECK_SIZEOF(long long)
 AC_CHECK_SIZEOF(float)
 AC_CHECK_SIZEOF(double)
 AC_CHECK_SIZEOF(off_t)
 AC_CHECK_SIZEOF(size_t)
 AC_CHECK_SIZEOF(ptrdiff_t)
-AC_COMPUTE_INT (longlong_is_long,[sizeof (long long) == sizeof (long)],[longlong_is_long=0])
-if test $longlong_is_long = 0; then
+AC_COMPUTE_INT([longlong_is_long],[sizeof(long long) == sizeof(long)],[],[longlong_is_long=0])
+if test $longlong_is_long = 1; then
    CFLAGS="$CFLAGS -DLONGLONG_IS_LONG"
 fi
 
