@@ -262,7 +262,7 @@ MACRO(print_conf_summary)
 	ENDIF()
 	MESSAGE(STATUS "\tUsing pnetcdf:\t\t\t" ${STATUS_PNETCDF})
 	MESSAGE(STATUS "\tUsing Parallel IO:\t\t" ${STATUS_PARALLEL})
-	MESSAGE(STATUS "\tLinking against:\t\t" "${ALL_TLL_LIBS}") 
+	MESSAGE(STATUS "\tLinking against:\t\t" ${NETCDF_C_LIBRARY}) 
 
 	MESSAGE("")
 
@@ -521,6 +521,30 @@ ENDIF()
 ##
 # End configuration for post-install RPath
 ##
+
+###
+# Seek out dependent libraries.
+###
+FIND_LIBRARY(NETCDF_C_LIBRARY NAMES netcdf libnetcdf)
+IF(NOT NETCDF_C_LIBRARY)
+  MESSAGE(FATAL_ERROR "libnetcdf not found. Please reinstall and try again.")
+ELSE()
+  MESSAGE(STATUS "Found netcdf: ${NETCDF_C_LIBRARY}")
+  FIND_PATH(NC_H_INCLUDE_DIR "netcdf.h")
+  IF(NOT NC_H_INCLUDE_DIR)
+    MESSAGE(FATAL_ERROR "Directory containing netcdf.h cannot be found. Please reinstall and try again.")
+  ELSE()
+    INCLUDE_DIRECTORIES(${NC_H_INCLUDE_DIR})
+  ENDIF()
+
+ENDIF()
+
+###
+# End 'seek out dependent libraries'
+### 
+
+
+
 
 INSTALL(PROGRAMS ${NC4F_BINARY_DIR}/nf-config DESTINATION bin COMPONENT utilities)
 

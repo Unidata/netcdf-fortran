@@ -37,8 +37,7 @@ ENDIF(BUILD_PARALLEL)
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} ${CMAKE_CPP_FLAGS})
 
 ADD_LIBRARY(ncfortran ${ncfortran_LIBRARY_SOURCES})
-TARGET_LINK_LIBRARIES(ncfortran netcdf)
-
+TARGET_LINK_LIBRARIES(ncfortran ${NETCDF_C_LIBRARY})
 # The nfconfig.in file is turned into nfconfig.inc by the configure
 # script. The man page is generated on the developers machine for the
 # dist.
