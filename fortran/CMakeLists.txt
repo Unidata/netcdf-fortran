@@ -125,7 +125,8 @@ ENDIF()
 # ADD_LIBRARY(netcdff STATIC SHARED ${netcdff_SOURCES})
 # Builds only static, not shared
 ADD_LIBRARY(netcdff ${netcdff_SOURCES})
-TARGET_LINK_LIBRARIES(netcdff netcdf)
+TARGET_LINK_LIBRARIES(netcdff ${NETCDF_C_LIBRARY})
+
 
 ##
 # Configuration for post-install RPath

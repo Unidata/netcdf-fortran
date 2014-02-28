@@ -486,6 +486,11 @@ AC_CHECK_SIZEOF(float)
 AC_CHECK_SIZEOF(double)
 AC_CHECK_SIZEOF(off_t)
 AC_CHECK_SIZEOF(size_t)
+AC_CHECK_SIZEOF(ptrdiff_t)
+AC_COMPUTE_INT([longlong_is_long],[sizeof(long long) == sizeof(long)],[],[longlong_is_long=0])
+if test $longlong_is_long = 1; then
+   CFLAGS="$CFLAGS -DLONGLONG_IS_LONG"
+fi
 
 # Automake conditionals need to be called, whether the answer is yes
 # or no.
