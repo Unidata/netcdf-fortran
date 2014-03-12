@@ -368,7 +368,11 @@ IF (UNIX AND ${CMAKE_SIZEOF_VOID_P} MATCHES "8")
   endif ()
 ENDIF()
 # assume gfortran. Intel and nag don't seem to be supported in cfortran.h
-if (Fortran_COMPILER_NAME MATCHES "^gfortran*" OR Fortran_COMPILER_NAME MATCHES "^f95")
+# TODO rather maintain an exclude list
+if (Fortran_COMPILER_NAME MATCHES "^gfortran*" OR
+    Fortran_COMPILER_NAME MATCHES "^f95" OR
+    Fortran_COMPILER_NAME MATCHES "^mpif90"
+    )
   #  gFortran is used in cfortran.h
   SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DgFortran ")
 
