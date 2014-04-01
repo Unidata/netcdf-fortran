@@ -6,7 +6,7 @@ SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 INCLUDE_DIRECTORIES("." "${NC4F_BINARY_DIR}/libsrc")
 
-SET(netcdff_SOURCES 
+SET(netcdff_SOURCES
   typeSizes.f90 module_netcdf_nc_data.F90 module_netcdf_nc_interfaces.f90
   module_netcdf_nf_data.F90 module_netcdf_nf_interfaces.F90
   module_netcdf_f03.f90
@@ -17,14 +17,14 @@ SET(netcdff_SOURCES
 )
 
 IF (${USE_NETCDF4})
-  SET(netcdff_SOURCES ${netcdff_SOURCES} 
+  SET(netcdff_SOURCES ${netcdff_SOURCES}
     module_netcdf4_nc_interfaces.f90
     module_netcdf4_nf_interfaces.F90 module_netcdf4_f03.f90
     nf_lib.c nf_nc4.f90
     )
 ENDIF(${USE_NETCDF4})
 
-# SET(netcdff_DEPENDENCIES 
+# SET(netcdff_DEPENDENCIES
 #   netcdf_attributes.f90 netcdf_constants.f90 netcdf_dims.f90
 #   netcdf_expanded.f90 netcdf_externals.f90 netcdf_file.f90
 #   netcdf_overloads.f90 netcdf_text_variables.f90 netcdf_variables.f90
@@ -32,7 +32,7 @@ ENDIF(${USE_NETCDF4})
 #   )
 
 IF (${USE_NETCDF4})
-  SET(netcdff_SOURCES ${netcdff_SOURCES} 
+  SET(netcdff_SOURCES ${netcdff_SOURCES}
     netcdf4.f90
     )
   # SET(netcdff_DEPENDENCIES ${netcdff_DEPENDENCIES}
@@ -41,7 +41,7 @@ IF (${USE_NETCDF4})
   #   netcdf4_variables.f90 netcdf4_file.f90
   #   )
 ELSE ()
-  SET(netcdff_SOURCES ${netcdff_SOURCES} 
+  SET(netcdff_SOURCES ${netcdff_SOURCES}
     netcdf.f90 netcdf3_file.f90
     )
 ENDIF(${USE_NETCDF4})
@@ -53,12 +53,12 @@ if (${BUILD_V2})
 endif (${BUILD_V2})
 
 if (${BUILD_F03})
-  SET(LCHEADERS 
+  SET(LCHEADERS
     netcdf_nc_data.mod netcdf_nc_interfaces.mod netcdf_nf_data.mod
     netcdf_nf_interfaces.mod netcdf_f03.mod
     )
   if (${BUILD_V2})
-    SET(LCHEADERS ${LCHEADERS} 
+    SET(LCHEADERS ${LCHEADERS}
       netcdf_fortv2_c_interfaces.mod
       )
   endif (${BUILD_V2})
@@ -83,7 +83,7 @@ if (EXISTS ${NETCDF_INC})
 	FILE (REMOVE ${NETCDF_INC})
 endif ()
 
-# Build netcdf.inc file from selected netcdf2, netcdf3 and netcdf4 apis 
+# Build netcdf.inc file from selected netcdf2, netcdf3 and netcdf4 apis
 file(APPEND ${NETCDF_INC} "!     NetCDF-3.")
 APPENDFILE(${NETCDF_INC} "netcdf3.inc")
 
@@ -126,7 +126,10 @@ ENDIF()
 # Builds only static, not shared
 ADD_LIBRARY(netcdff ${netcdff_SOURCES})
 TARGET_LINK_LIBRARIES(netcdff ${NETCDF_C_LIBRARY})
-
+SET_TARGET_PROPERTIES(netcdff PROPERTIES
+                      VERSION 4.2
+                      SOVERSION 4
+                      )
 
 ##
 # Configuration for post-install RPath
@@ -138,7 +141,7 @@ IF(NOT MSVC)
 
 	# when building, don't use the install RPATH already
 	# (but later on when installing)
-	SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE) 
+	SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 
 	SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 
@@ -153,12 +156,13 @@ IF(NOT MSVC)
 	ENDIF("${isSystemDir}" STREQUAL "-1")
 ENDIF()
 
-INSTALL (TARGETS netcdff LIBRARY DESTINATION lib)
-INSTALL (DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/ 
-         DESTINATION include
-         PATTERN "*.mod" PATTERN "netcdf.inc"
-         PATTERN "*.cmake" EXCLUDE
-         PATTERN "CMakeFiles" EXCLUDE
-         PATTERN "*.dylib" EXCLUDE
-         PATTERN "*.a" EXCLUDE
-         PATTERN "Makefile" EXCLUDE)
+# Installation of the program
+INSTALL(TARGETS netcdff
+    RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" COMPONENT bin
+    LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" COMPONENT shlib
+    ARCHIVE DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" COMPONENT shlib
+    )
+INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/
+        DESTINATION "${CMAKE_INSTALL_PREFIX}/include"
+        FILES_MATCHING PATTERN "*.mod" PATTERN "netcdf.inc"
+        )
