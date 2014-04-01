@@ -11,9 +11,9 @@ SET(ncfortran_LIBRARY_SOURCES
   fort-v2compat.c fort-vario.c fort-var1io.c fort-varaio.c fort-varmio.c
   fort-varsio.c cfortran.h fort-lib.h ncfortran.h)
 # Is the user building netCDF-4?
-IF(USE_NETCDF4)
-  SET(ncfortran_LIBRARY_SOURCES ${ncfortran_LIBRARY_SOURCES} fort-nc4.c)
-ENDIF(USE_NETCDF4)
+#IF(USE_NETCDF4)
+#  SET(ncfortran_LIBRARY_SOURCES ${ncfortran_LIBRARY_SOURCES} fort-nc4.c)
+#ENDIF(USE_NETCDF4)
 
 # The F77 API man page.
 SET(man_MANS netcdf_f77.3)
@@ -34,10 +34,10 @@ ENDIF(BUILD_PARALLEL)
 # netcdf_f77.3: $(top_srcdir)/man4/netcdf.m4
 #	m4 $(M4FLAGS) $(ARGS_MANPAGE) $? >$@ || rm $@
 
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} ${CMAKE_CPP_FLAGS} ${CMAKE_Fortran_FLAGS})
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} ${CMAKE_CPP_FLAGS})
 
 ADD_LIBRARY(ncfortran ${ncfortran_LIBRARY_SOURCES})
-
+TARGET_LINK_LIBRARIES(ncfortran ${NETCDF_C_LIBRARY})
 # The nfconfig.in file is turned into nfconfig.inc by the configure
 # script. The man page is generated on the developers machine for the
 # dist.

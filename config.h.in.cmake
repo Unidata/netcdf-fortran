@@ -155,33 +155,6 @@
    */
 #cmakedefine LT_OBJDIR
 
-/* type definition */
-#cmakedefine NCBYTE_T
-
-/* type definition */
-#cmakedefine NCSHORT_T
-
-/* default */
-#cmakedefine NF_DOUBLEPRECISION_IS_C_DOUBLE
-
-/* default */
-#cmakedefine NF_INT1_IS_C_SIGNED_CHAR
-
-/* type thing */
-#cmakedefine NF_INT1_T
-
-/* default */
-#cmakedefine NF_INT2_IS_C_SHORT
-
-/* type thing */
-#cmakedefine NF_INT2_T
-
-/* default */
-#cmakedefine NF_INT_IS_C_INT
-
-/* default */
-#cmakedefine NF_REAL_IS_C_FLOAT
-
 /* Define to 1 if your C compiler doesn't accept -c and -o together. */
 #cmakedefine NO_MINUS_C_MINUS_O
 
@@ -249,9 +222,6 @@
 
 /* Define to 1 if you can safely include both <sys/time.h> and <time.h>. */
 #cmakedefine TIME_WITH_SYS_TIME
-
-/* if true, build netCDF-4 */
-#cmakedefine USE_NETCDF4
 
 /* Version number of package */
 #cmakedefine VERSION

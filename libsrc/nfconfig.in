@@ -97,6 +97,7 @@
   Set HAVE_TS29113_SUPPORT to defined - TS29113 types (like CPTRDIFF_T) defined
 #endif
 #undef HAVE_TS29113_SUPPORT
+#undef SIZEOF_PTRDIFF_T
 
 #endif /*UD_NETCDF_CPP_INC*/
 

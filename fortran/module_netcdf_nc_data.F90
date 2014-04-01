@@ -79,8 +79,11 @@ Module netcdf_nc_data
 ! (like gfortran 4.8). 
 
 #ifndef HAVE_TS29113_SUPPORT
-! Integer, Parameter :: C_PTRDIFF_T = C_SIZE_T
- Integer, Parameter :: C_PTRDIFF_T = C_INTPTR_T
+#if (SIZEOF_PTRDIFF_T == 4)
+ Integer, Parameter :: C_PTRDIFF_T = C_INT32_T
+#elif (SIZEOF_PTRDIFF_T == 8)
+ Integer, Parameter :: C_PTRDIFF_T = C_INT64_T
+#endif
 #endif
 
 ! Set KIND parameters for 1 and 2 byte integers if the system 
