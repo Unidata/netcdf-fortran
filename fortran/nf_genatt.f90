@@ -23,6 +23,7 @@
 ! Version 2.: May   2006 - Updated to support g95
 ! Version 3.: April 2009 - Updated for netCDF 4.0.1
 ! Version 4.: April 2010 - Updated for netCDF 4.1.1
+! Version 5.: May   2014 - Ensure return error status checked from C API calls          
          
 !-------------------------------- nf_inq_att ---------------------------------
  Function nf_inq_att(ncid, varid, name, xtype, nlen) RESULT(status)
@@ -54,8 +55,10 @@
 
  cstatus = nc_inq_att(cncid, cvarid, cname(1:ie+1), cxtype, cnlen)
 
- xtype = cxtype
- nlen  = cnlen
+ If (cstatus == NC_NOERR) Then
+    xtype = cxtype
+    nlen  = cnlen
+ Endif
 
  status = cstatus
 
@@ -89,7 +92,9 @@
 
  cstatus = nc_inq_atttype(cncid, cvarid, cname(1:ie+1), cxtype)
 
- xtype = cxtype
+ If (cstatus == NC_NOERR) Then
+    xtype = cxtype
+ Endif
 
  status = cstatus
 
@@ -123,7 +128,9 @@
 
  cstatus = nc_inq_attlen(cncid, cvarid, cname(1:ie+1), cnlen)
 
- nlen = cnlen
+ If (cstatus == NC_NOERR) Then
+    nlen = cnlen
+ Endif
 
  status = cstatus
 
@@ -156,7 +163,9 @@
 
  cstatus = nc_inq_attid(cncid, cvarid, cname(1:ie+1), cattnum)
  
- attnum = cattnum + 1 ! add 1 to get FORTRAN att id
+ If (cstatus == NC_NOERR) Then
+    attnum = cattnum + 1 ! add 1 to get FORTRAN att id
+ Endif
 
  status = cstatus
 
@@ -188,10 +197,12 @@
 
  cstatus = nc_inq_attname(cncid, cvarid, cattnum, tmpname)
 
-! Strip of any C null characters and load only the part
-! of tmpname that will fit in name
+ If (cstatus == NC_NOERR) Then
+    ! Strip of any C null characters and load only the part
+    ! of tmpname that will fit in name
 
- name = stripCNullChar(tmpname, nlen)
+    name = stripCNullChar(tmpname, nlen)
+ Endif
 
  status = cstatus
 

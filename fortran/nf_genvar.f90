@@ -23,6 +23,7 @@
 ! Version 2.: May   2006 - Updated to support g95
 ! Version 3.: April 2009 - Updated for netCDF 4.0.1
 ! Version 4.: April 2010 - Updated for netCDF 4.1.1
+! Version 5.: May   2014 - Ensure return error status checked from C API calls          
           
 !-------------------------------- nf_def_var -------------------------------
  Function nf_def_var(ncid, name, xtype, nvdims, vdims, varid) RESULT (status)
@@ -65,9 +66,10 @@
  cstatus = nc_def_var(cncid, cname(1:ie+1), cxtype, &
                      cnvdims, cvdims, cvarid)
 
-! Add one to returned C varid to yield FORTRAN id
-
- varid = cvarid + 1
+ If (cstatus == NC_NOERR) Then
+    ! Add one to returned C varid to yield FORTRAN id
+    varid = cvarid + 1
+ Endif
 
  status = cstatus
 
@@ -93,7 +95,9 @@
 
  cstatus = nc_inq_varndims(cncid, cvarid, cvndims)
 
- vndims = cvndims
+ If (cstatus == NC_NOERR) Then
+    vndims = cvndims
+ Endif
 
  status = cstatus
 
@@ -137,20 +141,22 @@
 
  cstatus = nc_inq_var(cncid, cvarid, tmpname, cxtype, cndims, cdimids, cnatts)
 
- xtype = cxtype
- natts = cnatts
- ndims = cndims
+ If (cstatus == NC_NOERR) Then
+    xtype = cxtype
+    natts = cnatts
+    ndims = cndims
 
-! Check tmpname for a C null character and strip it and trailing blanks
+    ! Check tmpname for a C null character and strip it and trailing blanks
 
- name = stripCNullChar(tmpname, nlen)
+    name = stripCNullChar(tmpname, nlen)
 
-! Reverse order of cdimids and add one to yield FORTRAN id numbers
-! Replaces c2f_dimids C utility
+    ! Reverse order of cdimids and add one to yield FORTRAN id numbers
+    ! Replaces c2f_dimids C utility
  
- If (ndims > 0) Then
-   dimids(1:ndims) = cdimids(ndims:1:-1)+1
- EndIf
+    If (ndims > 0) Then
+       dimids(1:ndims) = cdimids(ndims:1:-1)+1
+    EndIf
+ Endif
 
  status = cstatus
 
@@ -186,7 +192,7 @@
 ! Reverse order of cdimids and add 1 to yield FORTRAN id numbers
 ! Replaces c2f_dimids C utility
  
- If (cstat2 == 0 .AND. cstatus==0) Then
+ If (cstat2 == NC_NOERR .AND. cstatus == NC_NOERR) Then
    ndims = cndims
    If (ndims > 0) Then    
      dimids(1:ndims) = cvdimids(ndims:1:-1)+1
@@ -225,7 +231,9 @@
 
  cstatus = nc_inq_varid(cncid, cname(1:ie+1), cvarid)
 
- varid  = cvarid + 1  ! add one to get Fortran id number
+ If (cstatus == NC_NOERR) Then
+    varid  = cvarid + 1  ! add one to get Fortran id number
+ Endif
 
  status = cstatus
 
@@ -259,9 +267,10 @@
 
  cstatus = nc_inq_varname(cncid, cvarid, tmpname)
 
-! Find first C null character in tmpname if present and set end of string
-
- name = stripCNullChar(tmpname, nlen)
+ If (cstatus == NC_NOERR) Then
+    ! Find first C null character in tmpname if present and set end of string
+    name = stripCNullChar(tmpname, nlen)
+ Endif
 
  status = cstatus
 
@@ -288,7 +297,9 @@
 
  cstatus = nc_inq_vartype(cncid, cvarid, cxtype)
 
- xtype  = cxtype
+ If (cstatus == NC_NOERR) Then
+    xtype  = cxtype
+ Endif
  status = cstatus
 
  End Function nf_inq_vartype
@@ -313,7 +324,9 @@
 
  cstatus = nc_inq_varnatts(cncid, cvarid, cnvatts)
 
- nvatts = cnvatts
+ If (cstatus == NC_NOERR) Then
+    nvatts = cnvatts
+ Endif
 
  status = cstatus
 

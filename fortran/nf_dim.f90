@@ -23,6 +23,7 @@
 ! Version 2.: May   2006 - Updated to support g95
 ! Version 3.: April 2009 - Updated for netCDF 4.0.1
 ! Version 4.: April 2010 - Updated for netCDF 4.1.1
+! Version 5.: May   2014 - Ensure return error status checked from C API calls          
           
 !-------------------------------- nf_def_dim -------------------------------
  Function nf_def_dim(ncid, name, dlen, dimid) RESULT (status)
@@ -57,11 +58,13 @@
  
  cstatus = nc_def_dim(cncid, cname(1:ie+1), cdlen, cdimid)
 
- If (cdimid == -1) Then  ! Return dimid=-1
-   dimid = -1
- Else                    ! Add 1 to get FORTRAN dimid
-   dimid = cdimid+1
- EndIf
+ If (cstatus == NC_NOERR) Then
+    If (cdimid == -1) Then  ! Return dimid=-1
+       dimid = -1
+    Else                    ! Add 1 to get FORTRAN dimid
+       dimid = cdimid+1
+    EndIf
+ Endif
 
  status = cstatus
 
@@ -96,11 +99,12 @@
 
  cstatus = nc_inq_dim(cncid, cdimid, tmpname, cdlen)
 
-! Strip C null char from tmpname if present and set end of string
+ If (cstatus == NC_NOERR) Then
+    ! Strip C null char from tmpname if present and set end of string
+    name = stripCNullChar(tmpname, nlen)
+    dlen   = cdlen
+ Endif
 
- name = stripCNullChar(tmpname, nlen)
-
- dlen   = cdlen
  status = cstatus
 
  End Function nf_inq_dim
@@ -131,13 +135,14 @@
  
  cstatus = nc_inq_dimid(cncid, cname(1:ie+1), cdimid)
 
-! add one to get FORTRAN dimid if not = -1
-
- If (cdimid == -1 ) Then
-   dimid = -1
- Else
-   dimid = cdimid + 1
- EndIf
+ If (cstatus == NC_NOERR) Then
+    ! add one to get FORTRAN dimid if not = -1
+    If (cdimid == -1 ) Then
+       dimid = -1
+    Else
+       dimid = cdimid + 1
+    EndIf
+ Endif
 
  status = cstatus
 
@@ -162,9 +167,11 @@
  cncid   = ncid
  cdimid  = dimid - 1 ! Subtract 1 to get C dimid
 
- cstatus = nc_inq_dimlen(cncid, cdimid, cdlen)
+ If (cstatus == NC_NOERR) Then
+    cstatus = nc_inq_dimlen(cncid, cdimid, cdlen)
+    dlen   = cdlen
+ Endif
 
- dlen   = cdlen
  status = cstatus
 
  End Function nf_inq_dimlen
@@ -196,9 +203,10 @@
 
  cstatus = nc_inq_dimname(cncid, cdimid, tmpname)
 
-! Strip C null character in tmpname if present and set end of string
-
- name = stripCNullChar(tmpname, nlen)
+ If (cstatus == NC_NOERR) Then
+    ! Strip C null character in tmpname if present and set end of string
+    name = stripCNullChar(tmpname, nlen)
+ Endif
 
  status = cstatus
 

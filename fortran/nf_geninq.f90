@@ -24,6 +24,7 @@
 ! Version 2.: May   2006  - Updated to support g95
 ! Version 3.: April 2009  - Updated to Netcdf 4.0.1 
 ! Version 4.: April 2010  - Updated to Netcdf 4.1.1 
+! Version 5.: May   2014  - Ensure return error status checked from C API calls          
 
 !          
 !-------------------------------- nf_inq ----------------------------------
@@ -48,17 +49,19 @@
 
  cstatus = nc_inq(cncid, cndims, cnvars, cngatts, cunlimdimid)
 
- ndims  = cndims
- nvars  = cnvars
- ngatts = cngatts
-
+ If (cstatus == NC_NOERR) Then
+    ndims  = cndims
+    nvars  = cnvars
+    ngatts = cngatts
+    
 ! Shift C id by plus one to Fortran id if unlimdimid is not -1
 
- If (cunlimdimid == - 1) Then
-   unlimdimid  = -1
- Else
-   unlimdimid = cunlimdimid + 1
- EndIf
+    If (cunlimdimid == - 1) Then
+       unlimdimid  = -1
+    Else
+       unlimdimid = cunlimdimid + 1
+    EndIf
+ Endif
 
  status = cstatus
 
@@ -83,8 +86,10 @@
 
  cstatus = nc_inq_ndims(cncid, cndims)
 
- ndims  = cndims
-
+ If (cstatus == NC_NOERR) Then
+    ndims  = cndims
+ Endif
+    
  status = cstatus
 
  End Function nf_inq_ndims
@@ -108,8 +113,10 @@
 
  cstatus = nc_inq_nvars(cncid, cnvars)
 
- nvars  = cnvars
-
+ If (cstatus == NC_NOERR) Then
+    nvars  = cnvars
+ Endif
+    
  status = cstatus
 
  End Function nf_inq_nvars
@@ -133,7 +140,9 @@
 
  cstatus = nc_inq_natts(cncid, cngatts)
 
- ngatts = cngatts
+ If (cstatus == NC_NOERR) Then
+    ngatts = cngatts
+ Endif
 
  status = cstatus
 
@@ -160,11 +169,13 @@
 
 ! Shift C id by plus one to Fortran id if unlimdimid is not -1
 
- If (cunlimdimid == -1) Then
-   unlimdimid = -1
- Else
-   unlimdimid = cunlimdimid + 1
- EndIf
+ If (cstatus == NC_NOERR) Then
+    If (cunlimdimid == -1) Then
+       unlimdimid = -1
+    Else
+       unlimdimid = cunlimdimid + 1
+    EndIf
+ Endif
 
  status = cstatus
 
@@ -189,9 +200,11 @@
 
  cstatus = nc_inq_format(cncid, cformatp)
 
+ If (cstatus == NC_NOERR) Then
 ! Return format_type 
-
- format_type = cformatp
+    
+    format_type = cformatp
+ Endif
 
  status = cstatus
 
