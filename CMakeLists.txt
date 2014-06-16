@@ -498,21 +498,21 @@ INCLUDE(CTest)
 configure_file("${NC4F_SOURCE_DIR}/libsrc/nfconfig.in.cmake"
   "${NC4F_BINARY_DIR}/libsrc/nfconfig.inc")
 # Create config.h file
-configure_file("${NC4F_SOURCE_DIR}/config.h.in.cmake"
+configure_file("${NC4F_SOURCE_DIR}/config.h.cmake.in"
   "${NC4F_BINARY_DIR}/config.h")
 
 # Create nf-config file: TODO
 # FILE(MAKE_DIRECTORY ${NC4F_BINARY_DIR}/tmp)
-# configure_file("${NC4F_SOURCE_DIR}/nf-config.in.cmake"
+# configure_file("${NC4F_SOURCE_DIR}/nf-config.cmake.in"
 #   "${NC4F_BINARY_DIR}/tmp/nf-config" @ONLY)
 # FILE(COPY "${NC4F_BINARY_DIR}/tmp/nf-config"
 #    DESTINATION ${NC4F_BINARY_DIR}/
 #    FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 # For now, just copy a stub file
-FILE(COPY "${NC4F_SOURCE_DIR}/nf-config.in.cmake"
+FILE(COPY "${NC4F_SOURCE_DIR}/nf-config.cmake.in"
   DESTINATION "${NC4F_BINARY_DIR}"
   FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
-FILE(RENAME "${NC4F_BINARY_DIR}/nf-config.in.cmake" "${NC4F_BINARY_DIR}/nf-config")
+FILE(RENAME "${NC4F_BINARY_DIR}/nf-config.cmake.in" "${NC4F_BINARY_DIR}/nf-config")
 
 # make sure previous two files get cleaned up...
 SET_DIRECTORY_PROPERTIES (DIRECTORY PROPERTY ADDITIONAL_MAKE_CLEAN_FILES ${netcdf-fortran_BINARY_DIR}/config.h ${netcdf-fortran_BINARY_DIR}/nf-config)
