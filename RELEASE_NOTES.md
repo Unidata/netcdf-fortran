@@ -1,9 +1,11 @@
+Release Notes {#release_notes_fortran}
+
+\brief Release notes file for the netcdf-fortran package.
+
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
-VERSION         COMMENTS
--------         --------
-
+## 4.4 Released TBD
 
 ### 4.4-rc1 	Released 2013-10-06
 
@@ -42,48 +44,32 @@ VERSION         COMMENTS
 
 ### 4.4-beta3	Released 2012-12-07
 
-		Fixed bug that "make -j check" fails, but "make check"
-		works fine.
+* Fixed bug that "make -j check" fails, but "make check" works fine.
 
-		Fixed build problems resulting from syncing with
-		separate C distribution.
+* Fixed build problems resulting from syncing with separate C distribution.
 
-		Synchronize with all changes made to version 4.2 since
-		its release.
+* Synchronize with all changes made to version 4.2 since ts release.
 
 ### 4.4-beta2	Released 2012-06-29
 
-		Made handling of --disable-f03 more transparent.
+* Made handling of --disable-f03 more transparent.
 
-		Fixed adding flags for parallel I/O for MPI from David
-		Warren.
+* Fixed adding flags for parallel I/O for MPI from David Warren.
 
-		Removed all the old C code that's not needed for this
-		separate distribution.
+* Removed all the old C code that's not needed for this separate distribution.
 
-		Inadvertently broke the build until syncing with C
-		distribution in later beta release.
+* Inadvertently broke the build until syncing with C distribution in later beta release.
 
 ### 4.4-beta1	Released 2012-03-02
+
+* `Fortran 2003 Support`
+       
+    Version 4.4 is the first release to support fortran 2003 and to use the ISO C Bindings available in fortran 2003 to replace the older C code wrappers.
+
+    Congratulations and thanks to Richard Weed at Mississippi State University, who is the author of new code.
 	        
-	        Version 4.4 is the first release to support
-                fortran 2003 and to use the ISO C Bindings available
-                in fortran 2003 to replace the older C code wrappers.
-	        Congratulations and thanks to Richard Weed at 
-                Mississippi State University, who is the author of
-                new code.
-	        See the file README_F03_MODS for a more complete
-                description of the changes. Many changes to the build
-                structure have been made at the same time as the new
-                2003 code has been inserted.
-	        
-                As part of the fortran 2003 refactor, the directory
-                structure has been significantly modified.  All the previous
-                F90 C wrapper code has been moved to the "libsrc" directory.
-                All of the fortran code has been moved to the "fortran"
-                directory. The directories names F77 and F90 have been
-                removed. The most important consequence of this refactor is
-                that pure Fortran77 compilers are no longer supported. It is
-                assumed that the compiler supports at least Fortran 90 and
-                also Fortran 77.  If it also supports the ISO C Bindings,
-                then the new 2003 code is used instead of the older C wrappers.
+    See the file `README_F03_MODS` for a more complete description of the changes. Many changes to the build structure have been made at the same time as the new 2003 code has been inserted.
+
+    As part of the fortran 2003 refactor, the directory structure has been significantly modified.  All the previous F90 C wrapper code has been moved to the "libsrc" directory. 
+
+    All of the fortran code has been moved to the "fortran" directory. The directories names F77 and F90 have been removed. The most important consequence of this refactor is that pure Fortran77 compilers are no longer supported. It is assumed that the compiler supports at least Fortran 90 and also Fortran 77.  If it also supports the ISO C Bindings, then the new 2003 code is used instead of the older C wrappers.
