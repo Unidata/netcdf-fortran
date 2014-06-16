@@ -6,7 +6,7 @@
 ##################################
 
 #Minimum required CMake Version
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 2.8.9)
 
 #Project Name for netCDF-Fortran
 PROJECT (NC4F Fortran C)
@@ -81,7 +81,7 @@ INCLUDE(CTest)
 
 # Copy the CTest customization file into binary directory, as required.
 # TODO: need to provide suitable CTestCustom.cmake
-# FILE(COPY ${CMAKE_SOURCE_DIR}/CTestCustom.cmake DESTINATION ${CMAKE_BINARY_DIR})
+
 
 # Set Memory test program for non-MSVC based builds.
 # Assume valgrind for now.
@@ -547,6 +547,20 @@ ENDIF()
 ##
 
 ###
+# Test-related options
+###
+
+# Set CDash-related options.
+SET(NC_CTEST_PROJECT_NAME "netcdf-fortran" CACHE STRING "Project Name for CTest-based testing purposes.")
+SET(NC_CTEST_DROP_SITE "my.cdash.org" CACHE STRING "Dashboard location for CTest-based testing purposes.")
+SET(NC_CTEST_DROP_LOC_PREFIX "" CACHE STRING "Prefix for Dashboard location on remote server when using CTest-based testing.")
+
+# Generate CTestConfig file from template.
+CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/CTestConfig.cmake.in"
+  "${CMAKE_SOURCE_DIR}/CTestConfig.cmake"
+  @ONLY)
+
+###
 # Seek out dependent libraries.
 ###
 FIND_LIBRARY(NETCDF_C_LIBRARY NAMES netcdf libnetcdf)
@@ -577,7 +591,7 @@ INCLUDE_DIRECTORIES(${NC4F_BINARY_DIR})
 
 # Recurse into other subdirectories.
 ADD_SUBDIRECTORY(fortran)
-#TARGET_LINK_LIBRARIES(netcdff netcdf)
+
 ADD_SUBDIRECTORY(libsrc)
 ADD_SUBDIRECTORY(nf_test)
 ADD_SUBDIRECTORY(nf03_test)
