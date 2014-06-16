@@ -597,5 +597,5 @@ ADD_SUBDIRECTORY(nf_test)
 ADD_SUBDIRECTORY(nf03_test)
 # Build the Fortran examples
 ADD_SUBDIRECTORY(examples)
-ADD_SUBDIRECTORY(man4)
+ADD_SUBDIRECTORY(docs)
 print_conf_summary()

@@ -539,7 +539,7 @@ AC_CONFIG_HEADERS([libsrc/nfconfig1.inc:libsrc/nfconfig.in],
 AC_CONFIG_FILES([Makefile
                  nf-config
                  netcdf-fortran.pc
-                 man4/Makefile
+                 docs/Makefile
                  libsrc/Makefile
                  fortran/Makefile
                  nf_test/Makefile
