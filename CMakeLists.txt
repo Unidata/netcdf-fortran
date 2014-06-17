@@ -578,9 +578,6 @@ ENDIF()
 # End 'seek out dependent libraries'
 ###
 
-
-
-
 INSTALL(PROGRAMS ${NC4F_BINARY_DIR}/nf-config DESTINATION bin COMPONENT utilities)
 
 INCLUDE_DIRECTORIES(${NC4F_BINARY_DIR})
