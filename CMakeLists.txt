@@ -491,9 +491,6 @@ ELSE()
   SET(NF_DOUBLEPRECISION_IS_C_DOUBLE "1")
 ENDIF(ENABLE_FORTRAN_TYPE_CHECKS)
 
-ENABLE_TESTING()
-INCLUDE(CTest)
-
 # Create libsrc/nfconfig.inc (don't need nfconfig1.inc temporary file used with autoconf)
 configure_file("${NC4F_SOURCE_DIR}/libsrc/nfconfig.in.cmake"
   "${NC4F_BINARY_DIR}/libsrc/nfconfig.inc")
