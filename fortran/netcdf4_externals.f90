@@ -27,6 +27,6 @@
        nf_get_vara_int64, nf_get_vars_int64, nf_get_varm_int64, &
        nf_get_var_int64, nf_get_chunk_cache, nf_set_chunk_cache, &
        nf_inq_var_szip, nf_free_vlens, nf_free_string, &
-       nf_set_var_chunk_cache, nf_get_var_chunk_cache
+       nf_set_var_chunk_cache, nf_get_var_chunk_cache, nf_rename_grp
 
   

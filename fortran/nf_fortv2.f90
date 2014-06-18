@@ -18,9 +18,11 @@
 !
 !   http:www.apache.org/licenses/LICENSE-2.0.html
 !
-! The author grants to UCAR the right to revise and extend the software
+! The author grants to the University Corporation for Atmospheric Research
+! (UCAR), Boulder, CO, USA the right to revise and extend the software
 ! without restriction. However, the author retains all copyrights and
-! intellectual property rights explicit or implied by the Apache license
+! intellectual property rights explicitly stated in or implied by the
+! Apache license
 
 ! Version 1: May   2006 - Initial version 2 interfaces
 ! Version 2: April 2009 - Refactored to pass value data using C_CHAR and C_PTR
@@ -680,7 +682,7 @@
 
  If (cstatus == NC_NOERR) Then ! mimic f2c_coords, etc. in C code
    If (ndims > 0) Then
-     cstart(1:ndims) = start(ndims:1:-1) - 1
+     cstart(1:ndims)  = start(ndims:1:-1) - 1
      ccounts(1:ndims) = counts(ndims:1:-1)
    Endif
    cstartptr  = C_LOC(cstart)
@@ -731,7 +733,7 @@
  
  If (cstatus == NC_NOERR) Then ! mimic f2c_coords, etc. in C code
    If (ndims > 0) Then
-     cstart(1:ndims) = start(ndims:1:-1) - 1
+     cstart(1:ndims)  = start(ndims:1:-1) - 1
      ccounts(1:ndims) = counts(ndims:1:-1)
    Endif
    cstartptr  = C_LOC(cstart)
@@ -785,7 +787,7 @@
  cstartptr   = C_NULL_PTR
  ccountsptr  = C_NULL_PTR
  cstridesptr = C_NULL_PTR
- cimapptr    =  C_LOC(cimap)
+ cimapptr    = C_LOC(cimap)
  If (inullp /= 0) cimapptr = C_NULL_PTR
  
  If (cstatus == NC_NOERR) Then ! mimic f2c_coords, etc. in C code
@@ -1412,12 +1414,13 @@
  Implicit NONE
 
  Character(LEN=*), Intent(INOUT) :: attnam
- Integer, Intent(IN) :: ncid, varid, attnum
- Integer, Intent(OUT) :: rcode
+ Integer,          Intent(IN)    :: ncid, varid, attnum
+ Integer,          Intent(OUT)   :: rcode
 
- Integer :: ilen
- Integer(KIND=C_INT) :: cncid, cvarid, cattnum, crcode
+ Integer                      :: ilen
+ Integer(KIND=C_INT)          :: cncid, cvarid, cattnum, crcode
  Character(LEN=NC_MAX_NAME+1) :: cattnam
+
  cncid = ncid
  cvarid = varid - 1
  cattnum = attnum - 1

@@ -17,9 +17,11 @@ Module netcdf_fortv2_c_interfaces
 !
 !   http:www.apache.org/licenses/LICENSE-2.0.html
 !
-! The author grants to UCAR the right to revise and extend the software
+! The author grants to the University Corporation for Atmospheric Research
+! (UCAR), Boulder, CO, USA the right to revise and extend the software
 ! without restriction. However, the author retains all copyrights and
-! intellectual property rights explicit or implied by the Apache license
+! intellectual property rights explicitly stated in or implied by the
+! Apache license
 
 ! Version 1.: May,   2006 - Initial version 2 interfaces
 ! Version 2.; April, 2009 - Redone to reflect passing void data types
@@ -27,10 +29,11 @@ Module netcdf_fortv2_c_interfaces
 !                           NetCDF 4.0.1
 ! Version 3.; April, 2010 - Updated to NetCDF 4.1.1
 
- USE ISO_C_BINDING
+! USE ISO_C_BINDING
 
- USE NETCDF_NC_DATA, ONLY: C_PTRDIFF_T
- USE NETCDF_NC_INTERFACES, ONLY: addCNullChar, stripCNullChar
+! USE NETCDF_NC_DATA,       ONLY: C_PTRDIFF_T
+! USE NETCDF_NC_INTERFACES, ONLY: addCNullChar, stripCNullChar
+ USE NETCDF_NC_INTERFACES
 
  Implicit NONE
 
@@ -52,6 +55,7 @@ Interface
  Subroutine c_ncpopt(val) BIND(C)
 
  USE ISO_C_BINDING, ONLY: C_INT
+
  Integer(KIND=C_INT), VALUE :: val
 
  End Subroutine c_ncpopt
@@ -75,7 +79,7 @@ Interface
  Character(KIND=C_CHAR), Intent(IN)  :: pathname(*)
  Integer(KIND=C_INT),    VALUE       :: clobmode 
  Integer(KIND=C_INT),    Intent(OUT) :: rcode 
-
+ 
  Integer(KIND=C_INT)                 :: c_nccre
 
  End Function c_nccre
@@ -118,7 +122,7 @@ Interface
  Character(KIND=C_CHAR), Intent(IN)  :: dimname(*)
  Integer(KIND=C_INT),    Intent(OUT) :: rcode
  
- Integer(KIND=C_INT) :: c_ncdid
+ Integer(KIND=C_INT)                 :: c_ncdid
 
  End Function c_ncdid
 End Interface
@@ -586,7 +590,6 @@ Interface
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T
 
  Integer(KIND=C_INT),   VALUE :: datatype
-
  Integer(KIND=C_SIZE_T)       :: v2data_size
 
  End Function v2data_size  
@@ -605,9 +608,9 @@ Subroutine convert_v2_imap(cncid, cvarid, fmap, cmap, inullp)
 !   USE netcdf_nc_interfaces, ONLY: NC_CHAR, NC_SHORT, NC_INT, NC_FLOAT, &
 !                                   NC_BYTE, NC_DOUBLE, NC_MAX_VAR_DIMS, &
 
- USE netcdf_nc_interfaces, ONLY: nc_inq_vartype, nc_inq_varndims,     &
-                                 nc_inq_vardimid, nc_inq_dimlen,      &
-                                 NC_NOERR , NC_MAX_VAR_DIMS
+! USE netcdf_nc_interfaces, ONLY: nc_inq_vartype, nc_inq_varndims,     &
+!                                 nc_inq_vardimid, nc_inq_dimlen,      &
+!                                 NC_NOERR , NC_MAX_VAR_DIMS
    
  Implicit NONE
 
@@ -685,4 +688,3 @@ End Subroutine convert_v2_imap
 
 !-------------------- End module_netcdf_fortv2_c_interfaces -------------------
 End Module netcdf_fortv2_c_interfaces
-

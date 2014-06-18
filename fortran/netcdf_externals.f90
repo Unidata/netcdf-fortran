@@ -9,6 +9,10 @@
                                     nf_inq_format
   ! File level inquiry 
   integer,              external :: nf_inq
+ 
+  ! File path inquiry
+
+  integer,              external :: nf_inq_path
   
   ! Dimension routines   nf_inq_dim
   integer,              external :: nf_def_dim, nf_inq_dimid, nf_rename_dim, nf_inq_dim

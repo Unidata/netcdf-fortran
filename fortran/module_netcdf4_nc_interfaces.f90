@@ -19,13 +19,16 @@ Module netcdf4_nc_interfaces
 !
 !   http:www.apache.org/licenses/LICENSE-2.0.html
 !
-! The author grants to UCAR the right to revise and extend the software
+! The author grants to the University Corporation for Atmospheric Research
+! (UCAR), Boulder, CO, USA the right to revise and extend the software
 ! without restriction. However, the author retains all copyrights and
-! intellectual property rights explicit or implied by the Apache license
+! intellectual property rights explicitly stated in or implied by the
+! Apache license
 
 ! Version 1.: June.  2007 - Initial version - split from ntecdf_nc_interfaces 
 ! Version 2.: April, 2009 - Interfaces based on netcdf-4.0.1 source         
 ! Version 3.: April, 2010 - Interfaces based on netcdf-4.1.1 source         
+! Version 4.: Aug,   2013 - Added nc_rename_grp interfaces for netcdf-C 4.3.1
 
  USE netcdf_nc_interfaces
 
@@ -58,7 +61,7 @@ Interface
  Integer(KIND=C_INT),    VALUE       :: cmode, comm, info
  Integer(KIND=C_INT),    Intent(OUT) :: ncidp
 
- Integer(KIND=C_INT)                 :: nc_create_par
+ Integer(KIND=C_INT)                 :: nc_create_par_fortran
 
  End Function nc_create_par_fortran
 End Interface
@@ -72,7 +75,7 @@ Interface
  Integer(KIND=C_INT),    VALUE       :: mode, comm, info
  Integer(KIND=C_INT),    Intent(OUT) :: ncidp
 
- Integer(KIND=C_INT) :: nc_open_par
+ Integer(KIND=C_INT)                 :: nc_open_par_fortran
 
  End Function nc_open_par_fortran
 End Interface
@@ -266,6 +269,19 @@ Interface
  Integer(KIND=C_INT)                   :: nc_def_grp
 
  End Function nc_def_grp
+End Interface
+!------------------------------- nc_rename_grp --------------------------------
+Interface
+ Function nc_rename_grp(grpid, name) BIND(C)
+
+ USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
+
+ Integer(KIND=C_INT),    VALUE         :: grpid
+ Character(KIND=C_CHAR), Intent(IN)    :: name(*)
+
+ Integer(KIND=C_INT)                   :: nc_rename_grp
+
+ End Function nc_rename_grp
 End Interface
 !------------------------------- nc_def_compound ------------------------------
 Interface
@@ -648,14 +664,14 @@ Interface
 End Interface
 !------------------------------- nc_def_var_fill ------------------------------
 Interface
- Function nc_def_var_fill(ncid, varid, no_fill, fill_value) BIND(C)
+ Function nc_def_var_fill(ncid, varid, no_fill, cfill_value_p) BIND(C)
 
- USE ISO_C_BINDING, ONLY: C_INT
+ USE ISO_C_BINDING, ONLY: C_INT, C_PTR
 
- Integer(KIND=C_INT), VALUE         :: ncid, varid, no_fill
- Integer(KIND=C_INT), Intent(IN)    :: fill_value
+ Integer(KIND=C_INT), VALUE :: ncid, varid, no_fill
+ Type(C_PTR),         VALUE :: cfill_value_p
 
- Integer(KIND=C_INT)                :: nc_def_var_fill
+ Integer(KIND=C_INT)        :: nc_def_var_fill
 
  End Function nc_def_var_fill
 End Interface
@@ -663,12 +679,13 @@ End Interface
 Interface
  Function nc_inq_var_fill(ncid, varid, no_fill, fill_value) BIND(C)
 
- USE ISO_C_BINDING, ONLY: C_INT
+ USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT), VALUE         :: ncid, varid
- Integer(KIND=C_INT), Intent(INOUT) :: no_fill, fill_value
+ Integer(KIND=C_INT),    VALUE         :: ncid, varid
+ Integer(KIND=C_INT),    Intent(INOUT) :: no_fill
+ Character(KIND=C_CHAR), Intent(INOUT) :: fill_value(*)
 
- Integer(KIND=C_INT)                :: nc_inq_var_fill
+ Integer(KIND=C_INT)                   :: nc_inq_var_fill
 
  End Function nc_inq_var_fill
 End Interface
@@ -892,9 +909,9 @@ Interface
  USE ISO_C_BINDING, ONLY: C_PTR, C_INT, C_SIZE_T
   
  Integer(C_SIZE_T), Intent(IN) :: len
- Type(C_PTR), VALUE  :: vl
+ Type(C_PTR),       VALUE      :: vl
 
- Integer(KIND=C_INT) :: nc_free_vlens
+ Integer(KIND=C_INT)           :: nc_free_vlens
 
  End Function nc_free_vlens
 End Interface
@@ -905,9 +922,9 @@ Interface
  USE ISO_C_BINDING, ONLY: C_PTR, C_INT, C_SIZE_T
   
  Integer(C_SIZE_T), Intent(IN) :: len
- Type(C_PTR), VALUE  :: vl
+ Type(C_PTR),       VALUE      :: vl
 
- Integer(KIND=C_INT) :: nc_free_string
+ Integer(KIND=C_INT)           :: nc_free_string
 
  End Function nc_free_string
 End Interface

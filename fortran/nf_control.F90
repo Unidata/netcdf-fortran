@@ -15,16 +15,20 @@
 !
 !   http:www.apache.org/licenses/LICENSE-2.0.html
 !
-! The author grants to UCAR the right to revise and extend the software
+! The author grants to the University Corporation for Atmospheric Research
+! (UCAR), Boulder, CO, USA the right to revise and extend the software
 ! without restriction. However, the author retains all copyrights and
-! intellectual property rights explicit or implied by the Apache license
+! intellectual property rights explicitly stated in or implied by the
+! Apache license
 
 ! Version 1.: Sept.  2005 - Initial Cray X1 version
 ! Version 2.: May,   2006 - Updated to support g95
 ! Version 3.: April, 2009 - Updated for netcdf 4.0.1
 ! Version 4.: April, 2010 - Updated for netcdf 4.1.1
 ! Version 5.: Feb.   2013 - Added nf_inq_path support for fortran 4.4
-! Version 6.: May,   2014 - Ensure return error status checked from C API calls          
+! Vertion 6.: Nov.   2013 - Added nf_set_log_level support
+! Version 7.: May,   2014 - Ensure return error status checked from C API calls
+!
 !-------------------------------- nf_create --------------------------------
  Function nf_create(path, cmode, ncid) RESULT (status)
 
@@ -59,8 +63,7 @@
  
  If (cstatus == NC_NOERR) Then
     ncid   = cncid 
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_create
@@ -103,7 +106,7 @@
  
  If (cstatus == NC_NOERR) Then
     ncid   = cncid 
- Endif
+ EndIf
  status = cstatus
 
  End Function nf__create
@@ -151,7 +154,7 @@
  
  If (cstatus == NC_NOERR) Then
     ncid   = cncid 
- Endif
+ EndIf
  status = cstatus
 
  End Function nf__create_mp
@@ -188,7 +191,7 @@
  
  If (cstatus == NC_NOERR) Then
     ncid   = cncid
- Endif
+ EndIf
  status = cstatus
 
  End Function nf_open
@@ -228,7 +231,7 @@
  
  If (cstatus == NC_NOERR) Then
     ncid   = cncid
- Endif
+ EndIf
  status = cstatus
 
  End Function nf__open
@@ -274,7 +277,7 @@
  
  If (cstatus == NC_NOERR) Then
     ncid   = cncid
- Endif
+ EndIf
  status = cstatus
 
  End Function nf__open_mp
@@ -307,8 +310,7 @@
     pathlen = cpathlen
     If (pathlen > LEN(path)) pathlen = LEN(path)
     path = stripCNullchar(tmppath, pathlen)
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_path
@@ -336,7 +338,7 @@
 
  If (cstatus == NC_NOERR) Then
     old_mode = coldmode
- Endif
+ EndIf
  status   = cstatus
 
  End Function nf_set_fill
@@ -363,7 +365,7 @@
 
  If (cstatus == NC_NOERR) Then
     old_format = cold
- Endif
+ EndIf
  status     = cstatus
 
  End Function nf_set_default_format
@@ -499,11 +501,11 @@
 
  Integer(KIND=C_INT) :: cncid, cstatus
 
- cncid = ncid
+ cncid   = ncid
 
  cstatus = nc_close(cncid)
 
- status = cstatus
+ status  = cstatus
 
  End Function nf_close
 !-------------------------------- nf_delete --------------------------------
@@ -603,7 +605,6 @@
 
  If (cstatus == NC_NOERR) Then
     pe     = cpe
- Endif
+ EndIf
  status = cstatus
-
- End Function nf_inq_base_pe
+End Function nf_inq_base_pe

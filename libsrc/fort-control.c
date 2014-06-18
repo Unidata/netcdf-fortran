@@ -128,3 +128,10 @@ FCALLSCFUN2(NF_INT, nc_set_base_pe, NF_SET_BASE_PE, nf_set_base_pe,
  */
 FCALLSCFUN2(NF_INT, nc_inq_base_pe, NF_INQ_BASE_PE, nf_inq_base_pe,
 	    NCID, PCINT2FINT)
+
+/*
+ * Inquire netCDF current path
+ */
+
+FCALLSCFUN3(NF_INT, nc_inq_path, NF_INQ_PATH, nf_inq_path,
+            NCID, PSIZET, PSTRING)

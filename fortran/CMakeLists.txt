@@ -10,7 +10,7 @@ SET(netcdff_SOURCES
   typeSizes.f90 module_netcdf_nc_data.F90 module_netcdf_nc_interfaces.f90
   module_netcdf_nf_data.F90 module_netcdf_nf_interfaces.F90
   module_netcdf_f03.f90
-  nf_attio.F90 nf_control.f90 nf_dim.f90 nf_misc.f90
+  nf_attio.F90 nf_control.F90 nf_dim.f90 nf_misc.f90
   nf_genatt.f90 nf_geninq.f90 nf_genvar.f90
   nf_vario.F90 nf_var1io.F90 nf_varaio.F90
   nf_varmio.F90 nf_varsio.F90
@@ -23,6 +23,12 @@ IF (${USE_NETCDF4})
     nf_lib.c nf_nc4.f90
     )
 ENDIF(${USE_NETCDF4})
+
+IF (${USE_LOGGING})
+  SET(netcdff_SOURCES ${netcdff_SOURCES}
+    nf_logging.F90
+    )
+ENDIF(${USE_LOGGING})
 
 # SET(netcdff_DEPENDENCIES
 #   netcdf_attributes.f90 netcdf_constants.f90 netcdf_dims.f90
@@ -62,6 +68,11 @@ if (${BUILD_F03})
       netcdf_fortv2_c_interfaces.mod
       )
   endif (${BUILD_V2})
+  if (${USE_NETCDF4})
+    SET(LCHEADERS ${LCHEADERS}
+      netcdf4_nc_interfaces.mod netcdf4_nf_interfaces.mod netcdf4_f03.mod
+      )
+  endif (${USE_NETCDF4})
 endif (${BUILD_F03})
 
 # These are always used

@@ -313,6 +313,11 @@
 !                          integer             unlimdimid)
       external        nf_inq
 
+! new inquire path
+
+      integer nf_inq_path
+      external nf_inq_path
+
       integer         nf_inq_ndims
 !                         (integer             ncid,
 !                          integer             ndims)

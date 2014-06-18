@@ -16,9 +16,11 @@
 !
 !   http:www.apache.org/licenses/LICENSE-2.0.html
 !
-! The author grants to UCAR the right to revise and extend the software
+! The author grants to the University Corporation for Atmospheric Research
+! (UCAR), Boulder, CO, USA the right to revise and extend the software
 ! without restriction. However, the author retains all copyrights and
-! intellectual property rights explicit or implied by the Apache license
+! intellectual property rights explicitly stated in or implied by the
+! Apache license
 
 ! Version 1.: Sept. 2005 - Initial Cray X1 version
 ! Version 2.: May   2006 - Updated to support g95
@@ -49,7 +51,7 @@
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract one to get C varid
- cndex = 0
+ cndex  = 0
  
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -77,11 +79,11 @@
 
  Implicit NONE
 
- Integer,             Intent(IN) :: ncid, varid
- Integer,             Intent(IN) :: ndex(*)
+ Integer,              Intent(IN) :: ncid, varid
+ Integer,              Intent(IN) :: ndex(*)
  Integer(KIND=NFINT1), Intent(IN) :: ival
 
- Integer                         :: status
+ Integer                          :: status
 
  Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
  Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
@@ -133,11 +135,11 @@
 
  Implicit NONE
 
- Integer,             Intent(IN) :: ncid, varid
- Integer,             Intent(IN) :: ndex(*)
+ Integer,              Intent(IN) :: ncid, varid
+ Integer,              Intent(IN) :: ndex(*)
  Integer(KIND=NFINT2), Intent(IN) :: ival
 
- Integer                         :: status
+ Integer                          :: status
 
  Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
  Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
@@ -187,11 +189,11 @@
 
  Implicit NONE
 
- Integer, Intent(IN) :: ncid, varid
- Integer, Intent(IN) :: ndex(*)
+ Integer,        Intent(IN) :: ncid, varid
+ Integer,        Intent(IN) :: ndex(*)
  Integer(NFINT), Intent(IN) :: ival
 
- Integer             :: status
+ Integer                    :: status
 
  Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
  Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
@@ -234,11 +236,11 @@
 
  Implicit NONE
 
- Integer,   Intent(IN) :: ncid, varid
- Integer,   Intent(IN) :: ndex(*)
+ Integer,      Intent(IN) :: ncid, varid
+ Integer,      Intent(IN) :: ndex(*)
  Real(NFREAL), Intent(IN) :: rval
 
- Integer               :: status
+ Integer                  :: status
 
  Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
  Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
@@ -325,14 +327,14 @@
 
  Integer,                Intent(IN)         :: ncid, varid
  Integer,                Intent(IN)         :: ndex(*)
- Character(KIND=C_CHAR), Intent(IN), TARGET :: values(*)
-
+* Character(KIND=C_CHAR), Intent(IN), TARGET :: values(*)
+ Type(C_PTR),            VALUE              :: values
  Integer                                    :: status
 
  Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
  Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
  Type(C_PTR)                    :: cndexptr
- Type(C_PTR)                    :: cvaluesptr
+! Type(C_PTR)                    :: cvaluesptr
  Integer                        :: ndims
 
  cncid  = ncid
@@ -351,9 +353,10 @@
    cndexptr = C_LOC(cndex)
  EndIf
 
- cvaluesptr = C_LOC(values)
+! cvaluesptr = C_LOC(values)
 
- cstatus = nc_put_var1(cncid, cvarid, cndexptr, cvaluesptr)
+! cstatus = nc_put_var1(cncid, cvarid, cndexptr, cvaluesptr)
+ cstatus = nc_put_var1(cncid, cvarid, cndexptr, values)
 
  status = cstatus
 
@@ -409,11 +412,11 @@
 
  Implicit NONE
 
- Integer,             Intent(IN)  :: ncid, varid
- Integer,             Intent(IN)  :: ndex(*)
+ Integer,              Intent(IN)  :: ncid, varid
+ Integer,              Intent(IN)  :: ndex(*)
  Integer(KIND=NFINT1), Intent(OUT) :: ival
 
- Integer                          :: status
+ Integer                           :: status
 
  Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
  Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
@@ -452,8 +455,7 @@
  cstatus = nc_get_var1_long(cncid, cvarid, cndexptr, cival)
 #endif
  
- ival = cival
-
+ ival   = cival
  status = cstatus
 
  End Function nf_get_var1_int1
@@ -470,7 +472,7 @@
  Integer,              Intent(IN)  :: ndex(*)
  Integer(KIND=NFINT2), Intent(OUT) :: ival
 
- Integer                          :: status
+ Integer                           :: status
 
  Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
  Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
@@ -507,8 +509,7 @@
  cstatus = nc_get_var1_long(cncid, cvarid, cndexptr, cival)
 #endif
  
- ival = cival
-
+ ival   = cival
  status = cstatus
 
  End Function nf_get_var1_int2
@@ -555,8 +556,7 @@
  cstatus = nc_get_var1_long(cncid, cvarid, cndexptr, cival)
 #endif
 
- ival = cival
-
+ ival   = cival
  status = cstatus
 
  End Function nf_get_var1_int
@@ -573,7 +573,7 @@
  Integer,      Intent(IN)  :: ndex(*)
  Real(NFREAL), Intent(OUT) :: rval
 
- Integer                :: status
+ Integer                   :: status
 
  Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
  Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
@@ -660,7 +660,8 @@
 
  Integer,                Intent(IN)          :: ncid, varid
  Integer,                Intent(IN)          :: ndex(*)
- Character(KIND=C_CHAR), Intent(OUT), TARGET :: values(*)
+! Character(KIND=C_CHAR), Intent(OUT), TARGET :: values(*)
+ Type(C_PTR),            VALUE               :: values
 
  Integer                                     :: status
 

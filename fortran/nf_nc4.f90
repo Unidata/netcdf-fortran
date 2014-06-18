@@ -15,15 +15,19 @@
 !
 !   http:www.apache.org/licenses/LICENSE-2.0.html
 !
-! The author grants to UCAR the right to revise and extend the software
+! The author grants to the University Corporation for Atmospheric Research
+! (UCAR), Boulder, CO, USA the right to revise and extend the software
 ! without restriction. However, the author retains all copyrights and
-! intellectual property rights explicit or implied by the Apache license
+! intellectual property rights explicitly stated in or implied by the
+! Apache license
 
 ! Version 1.- June  2006 - Based on netCDF 3.6.2 beta code and 4.0 alpha code
 ! Version 2.- July  2007 - Based on netCDF 3.6.2 snapshot and 4.0 beta code
 ! Version 3.- April 2009 - Based on NetCDF 4.0.1 release
 ! Version 4.- April 2010 - Based on NetCDF 4.1.1 release
-! Version 5.- May   2014 - Ensure return error status checked from C API calls          
+! Version 5.- Aug.  2013 - Added nf_rename_grp to align with netCDF-C 4.3.1
+! Version 6.- Sep.  2013 - Changed fill routines to support different types
+! Version 7.- May   2014 - Ensure return error status checked from C API calls          
  
 !-------------------------------- nf_create_par -------------------------------
  Function nf_create_par (path, cmode, comm, info, ncid) RESULT(status)
@@ -48,16 +52,13 @@
  ccomm  = comm
  cinfo  = info
  cncid  = 0
- 
-! Test for C Null character in path and strip trailing blanks
- 
- cpath = addCNullChar(path, ie)
+ cpath  = addCNullChar(path, ie) ! add a C Null char and strip trailing blanks
 
  cstatus = nc_create_par_fortran(cpath(1:ie+1), ccmode, ccomm, cinfo, cncid)
 
  If (cstatus == NC_NOERR) Then
     ncid = cncid
- Endif
+ EndIf
  status = cstatus
 
  End Function nf_create_par
@@ -84,17 +85,13 @@
  ccomm = comm
  cinfo = info
  cncid = 0
- 
-! Test for C Null character in path and strip trailing blanks
-
  cpath = addCNullChar(path, ie)
 
+ cstatus = nc_open_par_fortran(cpath(1:ie+1), cmode, ccomm, cinfo, cncid)
+
  If (cstatus == NC_NOERR) Then
-    cstatus = nc_open_par_fortran(cpath(1:ie+1), cmode, ccomm, cinfo, cncid)
- Endif
-
- ncid = cncid
-
+   ncid = cncid
+ EndIf
  status = cstatus
 
  End Function nf_open_par
@@ -143,18 +140,15 @@
 
  cncid    = ncid
  cgroupid = 0
- 
-! Strip trailing blanks from cname and strip off NULL character
-
- cname = addCNullChar(name, ie)
+ cname    = REPEAT(" ",LEN(cname))
+ cname    = addCNullChar(name, ie)
 
  cstatus = nc_inq_ncid(cncid, cname(1:ie+1), cgroupid)
 
  If (cstatus == NC_NOERR) Then
     groupid = cgroupid
- Endif
-
- status = cstatus
+ EndIf
+ status  = cstatus
 
  End Function nf_inq_ncid
 !-------------------------------- nf_inq_grps ---------------------------------
@@ -172,7 +166,7 @@
  Integer                :: status
 
  Integer(KIND=C_INT)    :: cncid, cnumgrps, cstatus
- Integer(KIND=C_INT)     :: cncids(NC_MAX_DIMS)
+ Integer(KIND=C_INT)    :: cncids(NC_MAX_DIMS)
 
  cncid    = ncid
  cnumgrps = 0
@@ -183,9 +177,8 @@
  If (cstatus == NC_NOERR) Then
     numgrps = cnumgrps
     ncids(1:numgrps) = cncids(1:numgrps)
- Endif
-
- status = cstatus
+ EndIf
+ status  = cstatus
 
  End Function nf_inq_grps
 !-------------------------------- nf_inq_grpname ------------------------------
@@ -208,15 +201,14 @@
 
  cncid = ncid
  nlen  = LEN(name)
+ name  = REPEAT(" ",LEN(name))
  cname = REPEAT(" ",LEN(cname))
  
  cstatus = nc_inq_grpname(cncid, cname)
 
  If (cstatus == NC_NOERR) Then
-    ! Strip trailing blanks from cname and strip off NULL character
-    name = stripCNullChar(cname,nlen) 
- Endif
-
+    name = stripCNullChar(cname,nlen) ! Strip null char and trailing blanks 
+ EndIf
  status = cstatus
 
  End Function nf_inq_grpname
@@ -242,17 +234,15 @@
 
  cncid  = ncid
  nl     = LEN(name)
- name   = REPEAT(" ",nl)
+ name   = REPEAT(" ",LEN(name))
  cname  = REPEAT(" ",LEN(cname))
  
  cstatus = nc_inq_grpname_full(cncid, clen, cname)
 
  If (cstatus == NC_NOERR) Then
-    ! Strip trailing blanks from cname and strip off NULL character
     nlen = clen  
     name = stripCNullChar(cname, nl)
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_grpname_full
@@ -280,8 +270,7 @@
  If (cstatus == NC_NOERR) Then
     ! Return name length 
      nlen = clen
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_grpname_len
@@ -307,9 +296,8 @@
 
  If (cstatus == NC_NOERR) Then
     parent_ncid = cparent_ncid
- Endif
-
- status = cstatus
+ EndIf
+ status  = cstatus
 
  End Function nf_inq_grp_parent
 !-------------------------------- nf_inq_grp_ncid -----------------------------
@@ -331,19 +319,16 @@
  Character(LEN=(LEN(grp_name)+1)) :: cgrp_name
  Integer                          :: ie
 
-! Test for C Null character in path and strip trailing blanks
-
+ cgrp_name = REPEAT(" ",LEN(cgrp_name))
  cgrp_name = addCNullChar(grp_name, ie)
-
  cncid     = ncid
 
  cstatus = nc_inq_grp_ncid(cncid, cgrp_name(1:ie+1), cparent_ncid)
 
  If (cstatus == NC_NOERR) Then
     parent_ncid = cparent_ncid
- Endif
-
- status = cstatus
+ EndIf
+ status  = cstatus
 
  End Function nf_inq_grp_ncid
 !-------------------------------- nf_inq_grp_full_ncid ------------------------
@@ -367,17 +352,16 @@
 
 ! Test for C Null character in path and strip trailing blanks
 
- cncid = ncid
-
+ cncid     = ncid
+ cgrp_name = REPEAT(" ",LEN(cgrp_name))
  cgrp_name = addCNullChar(name, ie)
 
  cstatus = nc_inq_grp_full_ncid(cncid, cgrp_name(1:ie+1), cgrp_ncid)
 
  If (cstatus == NC_NOERR) Then
     grp_ncid = cgrp_ncid
- Endif
-
- status = cstatus
+ EndIf
+ status  = cstatus
 
  End Function nf_inq_grp_full_ncid
 !-------------------------------- nf_inq_varids -------------------------------
@@ -404,8 +388,7 @@
 
  If (cstatus == NC_NOERR) Then
     nvars  = cnvars 
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_varids
@@ -433,8 +416,7 @@
 
  If (cstatus == NC_NOERR) Then
     ndims  = cndims
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_dimids
@@ -463,11 +445,10 @@
  cstatus = nc_inq_typeids(cncid, cntypes, ctypeids)
 
  If (cstatus == NC_NOERR) Then
-    ntypes = cntypes
+    ntypes            = cntypes
     typeids(1:ntypes) = ctypeids(1:ntypes)
- Endif
-
- status = cstatus
+ EndIf
+ status  = cstatus
 
  End Function nf_inq_typeids
 !-------------------------------- nf_inq_typeid -------------------------------
@@ -491,17 +472,14 @@
 
  cncid    = ncid
  ctypeid  = 0
- 
-! Strip trailing blanks from cname and strip off NULL character
-
- cname = addCNullChar(name, ie)
+ cname    = REPEAT(" ",LEN(cname))
+ cname    = addCNullChar(name, ie)
 
  cstatus = nc_inq_typeid(cncid, cname(1:ie+1), ctypeid)
 
  If (cstatus == NC_NOERR) Then
     typeid = ctypeid
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_typeid
@@ -524,21 +502,45 @@
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
- cncid  = parent_ncid
- 
-! Test for C Null character in path and strip trailing blanks
-
+ cncid = parent_ncid
+ cname = REPEAT(" ",LEN(cname))
  cname = addCNullChar(name, ie)
 
  cstatus = nc_def_grp(cncid, cname(1:ie+1), cnew_ncid)
 
  If (cstatus == NC_NOERR) Then
     new_ncid = cnew_ncid 
- Endif
-
+ EndIf
  status   = cstatus
 
  End Function nf_def_grp
+!-------------------------------- nf_rename_grp -------------------------------
+ Function nf_rename_grp( grpid, name) RESULT (status)
+
+! rename previously defined group
+
+ USE netcdf4_nc_interfaces
+
+ Implicit NONE
+
+ Integer,          Intent(IN)  :: grpid
+ Character(LEN=*), Intent(IN)  :: name
+
+ Integer                       :: status
+
+ Integer(KIND=C_INT)          :: cgrpid, cstatus
+ Character(LEN=(LEN(name)+1)) :: cname
+ Integer                      :: ie
+
+ cgrpid = grpid
+ cname  = REPEAT(" ",LEN(cname))
+ cname  = addCNullChar(name, ie)
+
+ cstatus = nc_rename_grp(cgrpid, cname(1:ie+1))
+
+ status   = cstatus
+
+ End Function nf_rename_grp
 !-------------------------------- nf_def_compound -----------------------------
  Function nf_def_compound( ncid, isize, name, typeid) RESULT (status)
 
@@ -559,19 +561,16 @@
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
- cncid  = ncid
- csize  = isize
- 
-! Test for C Null character in path and strip trailing blanks
-
+ cncid = ncid
+ csize = isize
+ cname = REPEAT(" ",LEN(cname))
  cname = addCNullChar(name, ie)
 
  cstatus = nc_def_compound(cncid, csize, cname(1:ie+1), ctypeid)
 
  If (cstatus == NC_NOERR) Then
     typeid = ctypeid
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_def_compound
@@ -599,14 +598,11 @@
  cxtype  = xtype
  ctypeid = field_typeid
  coffset = offset
- 
-! Test for C Null character in path and strip trailing blanks
-
- cname = addCNullChar(name, ie)
+ cname   = REPEAT(" ",LEN(cname))
+ cname   = addCNullChar(name, ie)
 
  cstatus = nc_insert_compound(cncid, cxtype, cname(1:ie+1), &
                               coffset, ctypeid)
-
 
  status = cstatus
 
@@ -637,10 +633,8 @@
  ctypeid = field_typeid
  coffset = offset
  cndims  = ndims
- 
-! Test for C Null character in path and strip trailing blanks
-
- cname = addCNullChar(name, ie)
+ cname   = REPEAT(" ",LEN(cname))
+ cname   = addCNullChar(name, ie)
 
  cstatus = nc_insert_array_compound_f(cncid, cxtype, cname(1:ie+1), &
                                       coffset, ctypeid, cndims, dim_sizes)
@@ -670,17 +664,14 @@
 
  cncid  = ncid
  cxtype = xtype
-
-! Test for C Null character in path and strip trailing blanks
-
- cname = addCNullChar(name, ie)
+ cname  = REPEAT(" ",LEN(cname))
+ cname  = addCNullChar(name, ie)
 
  cstatus = nc_inq_type(cncid, cxtype, cname(1:ie+1), csize)
 
  If (cstatus == NC_NOERR) Then
     isize  = csize
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_type
@@ -706,23 +697,19 @@
 
  cncid  = ncid
  cxtype = xtype
-
-! Test for C Null character in path and strip trailing blanks
-
- nlen  = LEN(name)
- name  = REPEAT(" ", nlen)
- cname = REPEAT(" ", LEN(cname))
+ nlen   = LEN(name)
+ name   = REPEAT(" ", nlen)
+ cname  = REPEAT(" ", LEN(cname))
 
  cstatus = nc_inq_compound(cncid, cxtype, cname, csize, cnfieldsp)
 
  If (cstatus == NC_NOERR) Then
     ! Test for C Null character in path and strip trailing blanks
-    name = stripCNullChar(cname, nlen)
+    name       = stripCNullChar(cname, nlen)
     isize      = csize
     nfields    = cnfieldsp
- Endif
-
- status = cstatus
+ EndIf
+ status  = cstatus
 
  End Function nf_inq_compound
 !-------------------------------- nf_inq_compound_name ------------------------
@@ -746,15 +733,14 @@
  cncid  = ncid
  cxtype = xtype
  nlen   = LEN(name)
+ name   = REPEAT(" ",LEN(name))
  cname  = REPEAT(" ",LEN(cname))
  
  cstatus = nc_inq_compound_name(cncid, cxtype, cname)
 
  If (cstatus == NC_NOERR) Then
-    ! Strip trailing blanks from cname and strip off NULL character
      name = stripCNullChar(cname, nlen)
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_compound_name
@@ -782,8 +768,7 @@
 
  If (cstatus == NC_NOERR) Then
     isize  = csize
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_compound_size
@@ -811,9 +796,8 @@
 
  If (cstatus == NC_NOERR) Then
     nfields = cnfields
- Endif
-
- status = cstatus
+ EndIf
+ status  = cstatus
 
  End Function nf_inq_compound_nfields
 !-------------------------------- nf_inq_compound_field -----------------------
@@ -844,20 +828,19 @@
  cxtype   = xtype
  cfieldid = fieldid-1
  nlen     = LEN(name)
+ name     = REPEAT(" ",LEN(name))
  cname    = REPEAT(" ",LEN(cname))
  
  cstatus = nc_inq_compound_field_f(cncid, cxtype, cfieldid, cname, coffset, &
                                    cfield_typeid, cndims, cdim_sizes)
 
  If (cstatus == NC_NOERR) Then
-    ! Strip trailing blanks from cname and strip off NULL character
-    name = stripCNullChar(cname, nlen)
-    offset       = coffset
-    field_typeid = cfield_typeid
-    ndims        = cndims
+    name               = stripCNullChar(cname, nlen)
+    offset             = coffset
+    field_typeid       = cfield_typeid
+    ndims              = cndims
     dim_sizes(1:ndims) = cdim_sizes(1:ndims)
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_compound_field
@@ -883,15 +866,14 @@
  cxtype   = xtype
  cfieldid = fieldid - 1
  nlen     = LEN(name)
+ name     = REPEAT(" ",LEN(name))
  cname    = REPEAT(" ",LEN(cname))
  
  cstatus = nc_inq_compound_fieldname(cncid, cxtype, cfieldid, cname)
 
  If (cstatus == NC_NOERR) Then
-    ! Strip trailing blanks from cname and strip off NULL character
     name = stripCNullChar(cname, nlen)
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_compound_fieldname
@@ -916,17 +898,14 @@
 
  cncid  = ncid
  cxtype = xtype
-
-! Test for C Null character in path and strip trailing blanks
-
- cname = addCNullChar(name, ie)
+ cname  = REPEAT(" ",LEN(cname))
+ cname  = addCNullChar(name, ie)
 
  cstatus = nc_inq_compound_fieldindex(cncid, cxtype, cname(1:ie+1), cfieldid)
 
  If (cstatus == NC_NOERR) Then
     fieldid = cfieldid + 1
- Endif
-
+ EndIf
  status  = cstatus
 
  End Function nf_inq_compound_fieldindex
@@ -956,8 +935,7 @@
 
  If (cstatus == NC_NOERR) Then
     offset = coffset
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_compound_fieldoffset
@@ -986,9 +964,8 @@
 
  If (cstatus == NC_NOERR) Then
     field_typeid = cfield_typeid
- Endif
-
- status = cstatus
+ EndIf
+ status  = cstatus
 
  End Function nf_inq_compound_fieldtype
 !-------------------------------- nf_inq_compound_fieldndims ------------------
@@ -1015,8 +992,7 @@
 
  If (cstatus == NC_NOERR) Then
     ndims = cndims 
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_compound_fieldndims
@@ -1059,7 +1035,7 @@
  Character(LEN=*), Intent(IN)  :: name
  Integer,          Intent(OUT) :: xtype
 
- Integer                      :: status
+ Integer                       :: status
 
  Integer(KIND=C_INT)          :: cncid, cxtype, cbase_typeid, cstatus
  Character(LEN=(LEN(name)+1)) :: cname
@@ -1068,17 +1044,14 @@
  cncid        = ncid
  cxtype       = xtype
  cbase_typeid = base_typeid
-
-! Test for C Null character in path and strip trailing blanks
-
- cname = addCNullChar(name, ie)
+ cname        = REPEAT(" ",LEN(cname))
+ cname        = addCNullChar(name, ie)
 
  cstatus = nc_def_vlen(cncid, cname(1:ie+1), cbase_typeid, cxtype)
 
  If (cstatus == NC_NOERR) Then
     xtype  = cxtype
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_def_vlen
@@ -1105,17 +1078,16 @@
  cncid  = ncid
  cxtype = xtype
  nlen   = LEN(name)
+ name   = REPEAT(" ",LEN(name))
  cname  = REPEAT(" ",LEN(cname))
  
  cstatus = nc_inq_vlen(cncid, cxtype, cname, cdatum_size, cbase_type)
 
  If (cstatus == NC_NOERR) Then
-    ! Strip trailing blanks from cname and strip off NULL character
-    name = stripCNullChar(cname, nlen)
+    name       = stripCNullChar(cname, nlen)
     datum_size = cdatum_size 
     base_type  = cbase_type 
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_vlen
@@ -1144,6 +1116,7 @@
  cncid  = ncid
  cxtype = xtype
  nlen   = LEN(name)
+ name   = REPEAT(" ",LEN(name))
  cname  = REPEAT(" ",LEN(cname))
  
 
@@ -1152,13 +1125,12 @@
 
  If (cstatus == NC_NOERR) Then
     ! Test for C Null character in path and strip trailing blanks
-    name = stripCNullChar(cname, nlen)
+    name       = stripCNullChar(cname, nlen)
     isize      = csize
     nfields    = cnfields
     iclass     = cclass
     base_type  = cbase_type
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_user_type
@@ -1183,17 +1155,14 @@
 
  cncid        = ncid
  cbase_typeid = base_typeid
-
-! Test for C Null character in path and strip trailing blanks
-
- cname = addCNullChar(name, ie)
+ cname        = REPEAT(" ",LEN(cname))
+ cname        = addCNullChar(name, ie)
 
  cstatus = nc_def_enum(cncid, cbase_typeid, cname(1:ie+1), ctypeid)
 
  If (cstatus == NC_NOERR) Then
     typeid = ctypeid
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_def_enum
@@ -1223,10 +1192,8 @@
 
  cncid  = ncid
  cxtype = xtype
-
-! Test for C Null character in path and strip trailing blanks
-
- cname = addCNullChar(name, ie)
+ cname  = REPEAT(" ",LEN(cname))
+ cname  = addCNullChar(name, ie)
 
  cvalueptr = C_LOC(value)
 
@@ -1259,6 +1226,7 @@
  cncid  = ncid
  cxtype = xtype
  nlen   = LEN(name)
+ name   = REPEAT(" ",LEN(name))
  cname  = REPEAT(" ",LEN(cname))
 
  cstatus = nc_inq_enum (cncid, cxtype, cname, c_base_nf_type, c_base_size, &
@@ -1266,19 +1234,18 @@
 
  If (cstatus == NC_NOERR) Then
     ! Test for C Null character in path and strip trailing blanks
-    name = stripCNullChar(cname, nlen)
+    name         = stripCNullChar(cname, nlen)
     base_nf_type = c_base_nf_type
     base_size    = c_base_size
     num_members  = c_num_members
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_enum
 !-------------------------------- nf_inq_enum_member ---------------------------
  Function nf_inq_enum_member( ncid, xtype, idx, name, value) RESULT (status)
 
-! get name and value for an enum. We use a C_CHAR string to pass data
+! Get name and value for an enum. We use a C_CHAR string to pass data
 ! from nc_inq_enum_member to the calling routine. Value is a void
 ! pointer in nc_inq_enum_member. Don't use an explicit interface in
 ! the calling program. Declare nf_inq_enum_member external
@@ -1301,6 +1268,7 @@
  cxtype = xtype
  cidx   = idx - 1
  nlen   = LEN(name)
+ name  = REPEAT(" ",LEN(name))
  cname = REPEAT(" ",LEN(cname))
 
  cstatus = nc_inq_enum_member(cncid, cxtype, cidx, cname, value)
@@ -1308,8 +1276,7 @@
  If (cstatus == NC_NOERR) Then
     ! Test for C Null character in path and strip trailing blanks
     name = stripCNullChar(cname, nlen)
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_enum_member
@@ -1327,8 +1294,6 @@
 
  Integer                         :: status
 
-! Local vars
-
  Integer(KIND=C_INT)          :: cncid, cxtype, cstatus
  Integer(KIND=C_LONG_LONG)    :: cvalue  
  Character(LEN=NC_MAX_NAME+1) :: cname
@@ -1338,6 +1303,7 @@
  cxtype = xtype
  cvalue = value
  nlen   = LEN(name)
+ name   = REPEAT(" ",LEN(name))
  cname  = REPEAT(" ",LEN(cname))
 
  cstatus = nc_inq_enum_ident(cncid, cxtype, cvalue, cname)
@@ -1345,8 +1311,7 @@
  If (cstatus == NC_NOERR) Then
     ! Test for C Null character in path and strip trailing blanks
     name = stripCNullChar(cname, nlen)
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_enum_ident
@@ -1373,17 +1338,14 @@
  cncid  = ncid
  csize  = isize
  cxtype = xtype
-
-! Test for C Null character in path and strip trailing blanks
-
- cname = addCNullChar(name, ie)
+ cname  = REPEAT(" ",LEN(cname))
+ cname  = addCNullChar(name, ie)
 
  cstatus = nc_def_opaque(cncid, csize, cname(1:ie+1), cxtype)
 
  If (cstatus == NC_NOERR) Then
     xtype  = cxtype 
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_def_opaque
@@ -1409,16 +1371,16 @@
  cncid  = ncid
  cxtype = xtype
  nlen   = LEN(name)
+ name   = REPEAT(" ",LEN(name))
  cname  = REPEAT(" ",LEN(cname))
 
  cstatus = nc_inq_opaque(cncid, cxtype, cname, csize)
 
  If (cstatus == NC_NOERR) Then
     ! Test for C Null character in path and strip trailing blanks
-    name = stripCNullChar(cname, nlen)
+    name   = stripCNullChar(cname, nlen)
     isize  = csize
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_opaque
@@ -1486,26 +1448,21 @@
  cncid         = ncid
  cvarid        = varid-1
  chunksizes(1) = 0
- cstat1        = NC_NOERR
 
  cstatus = nc_inq_var_chunking_ints(cncid, cvarid, ccontiguous, cchunksizes) 
 
- If (cstatus == NC_NOERR) Then
-    cstat1  = nc_inq_varndims(cncid, cvarid, cndims)
-    If (cstat1 == NC_NOERR) Then
-       ndims = cndims
-       If (ndims > 0) Then
-          chunksizes(ndims:1:-1) = cchunksizes(1:ndims)
-       EndIf
-    EndIf
-    contiguous = ccontiguous
- Endif
- 
- If (cstat1 /= NC_NOERR) Then
-    status = cstat1
- Else
-    status = cstatus
- Endif
+ cstat1  = nc_inq_varndims(cncid, cvarid, cndims)
+
+ ndims = cndims
+
+ If (cstat1 == NC_NOERR) Then
+   If (ndims > 0) Then
+     chunksizes(ndims:1:-1) = cchunksizes(1:ndims)
+   EndIf
+ EndIf 
+   
+ contiguous = ccontiguous
+ status     = cstatus
 
  End Function nf_inq_var_chunking
 !-------------------------------- nf_def_var_deflate --------------------------
@@ -1563,8 +1520,7 @@
     shuffle       = cshuffle
     deflate       = cdeflate
     deflate_level = cdeflate_level
- Endif
-  
+ EndIf
  status = cstatus
  
  End Function nf_inq_var_deflate
@@ -1581,7 +1537,7 @@
  Integer, Intent(IN)    :: ncid, varid
  Integer, Intent(INOUT) :: options_mask, pixels_per_block
 
- Integer :: status
+ Integer                :: status
 
  Integer(C_INT) :: cncid, cvarid, coptions_mask, cpixels_per_block, cstatus
 
@@ -1593,8 +1549,7 @@
  If (cstatus == NC_NOERR) Then
     options_mask     = coptions_mask
     pixels_per_block = cpixels_per_block
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_var_szip
@@ -1646,7 +1601,7 @@
 
  If (cstatus == NC_NOERR) Then
     fletcher32 = cfletcher32 
- Endif
+ EndIf
  
  status = cstatus
 
@@ -1660,20 +1615,23 @@
 
  Implicit NONE
 
- Integer, Intent(IN)    :: ncid, varid, no_fill
- Integer, Intent(IN)    :: fill_value 
+ Integer, Intent(IN)                        :: ncid, varid, no_fill
+ Character(KIND=C_CHAR), Intent(IN), TARGET :: fill_value(*)
 
- Integer                :: status
+ Integer                                    :: status
 
  Integer(KIND=C_INT) :: cncid, cvarid, cno_fill, cstatus
+ Type(C_PTR)         :: cfill_value_p
 
  cncid    = ncid
  cvarid   = varid-1
- cno_fill = no_fill 
+ cno_fill = no_fill
 
- cstatus = nc_def_var_fill(cncid, cvarid, cno_fill, fill_value)
+ cfill_value_p = C_LOC(fill_value)
 
- status = cstatus
+ cstatus       = nc_def_var_fill(cncid, cvarid, cno_fill, cfill_value_p)
+
+ status        = cstatus
 
  End Function nf_def_var_fill
 !-------------------------------- nf_inq_var_fill -----------------------------
@@ -1685,11 +1643,11 @@
 
  Implicit NONE
 
- Integer, Intent(IN)    :: ncid, varid
- Integer, Intent(OUT)   :: no_fill
- Integer, Intent(INOUT) :: fill_value 
+ Integer, Intent(IN)                   :: ncid, varid
+ Integer, Intent(OUT)                  :: no_fill
+ Character(KIND=C_CHAR), Intent(INOUT) :: fill_value(*)
 
- Integer                :: status
+ Integer                               :: status
 
  Integer(KIND=C_INT) :: cncid, cvarid, cno_fill, cstatus
 
@@ -1700,9 +1658,8 @@
 
  If (cstatus == NC_NOERR) Then
     no_fill = cno_fill 
- Endif
-
- status = cstatus
+ EndIf
+ status  = cstatus
 
  End Function nf_inq_var_fill
 !-------------------------------- nf_def_var_endian ---------------------------
@@ -1752,9 +1709,8 @@
 
  If (cstatus == NC_NOERR) Then
     endiann = cendiann
- Endif
-
- status = cstatus
+ EndIf
+ status  = cstatus
 
  End Function nf_inq_var_endian
 !--------------------------------- nf_put_att --------------------------------
@@ -1785,10 +1741,8 @@
  cxtype    = xtype
  cnlen     = nlen
  cvalueptr = C_LOC(value)
-
-! add C null char to name if missing
-
- cname = addCNullChar(name, ie)
+ cname     = REPEAT(" ",LEN(cname))
+ cname     = addCNullChar(name, ie)
 
  cstatus = nc_put_att(cncid, cvarid, cname(1:ie+1), cxtype, cnlen, cvalueptr)
 
@@ -1810,17 +1764,15 @@
  Character(LEN=*),       Intent(IN)    :: name
  Character(KIND=C_CHAR), Intent(INOUT) :: value(*)
 
- Integer                             :: status
+ Integer                               :: status
 
  Integer(KIND=C_INT)          :: cncid, cvarid, cstatus
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
- cncid = ncid
+ cncid  = ncid
  cvarid = varid -1 ! Subtract 1 to get C varid
-
-! add C null char to name if missing
-
+ cname  = REPEAT(" ",LEN(cname))
  cname = addCNullChar(name, ie)
 
  cstatus = nc_get_att(cncid, cvarid, cname(1:ie+1), value)
@@ -1844,9 +1796,8 @@
  Implicit NONE
 
  Integer,                Intent(IN)            :: ncid, xtype, nlen
-! Character(LEN=*),       Intent(INOUT), TARGET :: vlen_element
- Character(KIND=C_CHAR), Intent(INOUT)          :: vlen_element(*)
- Character(KIND=C_CHAR), Intent(IN),    TARGET  :: value(*)
+ Character(KIND=C_CHAR), Intent(INOUT)         :: vlen_element(*)
+ Character(KIND=C_CHAR), Intent(IN),   TARGET  :: value(*)
 
  Integer                                       :: status
 
@@ -1897,8 +1848,7 @@
 
  If (cstatus == NC_NOERR) Then
     nlen = cnlen 
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_get_vlen_element
@@ -1920,7 +1870,7 @@
  Integer(C_INT) :: cstatus
  Type(C_PTR)    :: cvl
 
- cvl     = C_LOC(vl) !void pointer in C interface
+ cvl = C_LOC(vl) !void pointer in C interface
 
  cstatus = nc_free_vlen(cvl)
 
@@ -1938,7 +1888,7 @@ End Function nf_free_vlen
 
  Implicit NONE
 
- Integer, Intent(IN) :: ilen
+ Integer,                Intent(IN)         :: ilen
  Character(KIND=C_CHAR), Intent(IN), TARGET :: vl(*)
 
  Integer                                    :: status
@@ -1948,7 +1898,7 @@ End Function nf_free_vlen
  Type(C_PTR)       :: cvl
 
  clen = ilen
- cvl     = C_LOC(vl) !void pointer in C interface
+ cvl  = C_LOC(vl) !void pointer in C interface
 
  cstatus = nc_free_vlens(clen, cvl)
 
@@ -1966,7 +1916,7 @@ End Function nf_free_vlens
 
  Implicit NONE
 
- Integer, Intent(IN) :: ilen
+ Integer,                Intent(IN)         :: ilen
  Character(KIND=C_CHAR), Intent(IN), TARGET :: vl(*)
 
  Integer                                    :: status
@@ -1976,7 +1926,7 @@ End Function nf_free_vlens
  Type(C_PTR)       :: cvl
 
  clen = ilen
- cvl     = C_LOC(vl) !void pointer in C interface
+ cvl  = C_LOC(vl) !void pointer in C interface
 
  cstatus = nc_free_string(clen, cvl)
 
@@ -2306,8 +2256,7 @@ End Function nf_free_string
 
  cstatus = nc_get_var1_longlong(cncid, cvarid, cndexptr, cival)
 
- ival = cival
-
+ ival   = cival
  status = cstatus
 
  End Function nf_get_var1_int64
@@ -2538,8 +2487,7 @@ End Function nf_free_string
     chunk_size = cchunk_size
     nelems     = cnelems
     preemption = cpreemption
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_get_chunk_cache
@@ -2592,6 +2540,7 @@ End Function nf_free_string
 
  cncid  = ncid
  cvarid = varid-1
+
  cstatus = nc_get_var_chunk_cache_ints(cncid, cvarid, cchunk_size, cnelems, &
                                        cpreemption)
 
@@ -2599,8 +2548,7 @@ End Function nf_free_string
     chunk_size = cchunk_size
     nelems     = cnelems
     preemption = cpreemption
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_get_var_chunk_cache

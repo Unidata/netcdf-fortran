@@ -15,9 +15,11 @@
 !
 !   http:www.apache.org/licenses/LICENSE-2.0.html
 !
-! The author grants to UCAR the right to revise and extend the software
+! The author grants to the University Corporation for Atmospheric Research
+! (UCAR), Boulder, CO, USA the right to revise and extend the software
 ! without restriction. However, the author retains all copyrights and
-! intellectual property rights explicit or implied by the Apache license
+! intellectual property rights explicitly stated in or implied by the
+! Apache license
 
 ! Version 1.: Sept. 2005 - Initial Cray X1 version
 ! Version 2.: May   2006 - Updated to support g95
@@ -58,14 +60,11 @@
  
  cstatus = nc_def_dim(cncid, cname(1:ie+1), cdlen, cdimid)
 
- If (cstatus == NC_NOERR) Then
-    If (cdimid == -1) Then  ! Return dimid=-1
-       dimid = -1
-    Else                    ! Add 1 to get FORTRAN dimid
-       dimid = cdimid+1
-    EndIf
- Endif
-
+ If (cstatus == NC_EBADDIM) Then  ! Return dimid=-1
+   dimid = -1
+ Else                    ! Add 1 to get FORTRAN dimid
+   dimid = cdimid+1
+ EndIf
  status = cstatus
 
  End Function nf_def_dim
@@ -128,6 +127,8 @@
  Integer                      :: ie
 
  cncid = ncid
+ dimid  =  0 
+ cdimid = -1
 
 ! Check to see if a C null character was appended in FORTRAN
 
@@ -135,15 +136,13 @@
  
  cstatus = nc_inq_dimid(cncid, cname(1:ie+1), cdimid)
 
- If (cstatus == NC_NOERR) Then
-    ! add one to get FORTRAN dimid if not = -1
-    If (cdimid == -1 ) Then
-       dimid = -1
-    Else
-       dimid = cdimid + 1
-    EndIf
- Endif
+! add one to get FORTRAN dimid if not = -1
 
+ If (cstatus == NC_EBADDIM) Then
+   dimid = -1
+ Else
+   dimid = cdimid + 1
+ EndIf
  status = cstatus
 
  End Function nf_inq_dimid

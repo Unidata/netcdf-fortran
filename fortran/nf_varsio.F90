@@ -16,9 +16,11 @@
 !
 !   http:www.apache.org/licenses/LICENSE-2.0.html
 !
-! The author grants to UCAR the right to revise and extend the software
+! The author grants to the University Corporation for Atmospheric Research
+! (UCAR), Boulder, CO, USA the right to revise and extend the software
 ! without restriction. However, the author retains all copyrights and
-! intellectual property rights explicit or implied by the Apache license
+! intellectual property rights explicitly stated in or implied by the
+! Apache license
 
 ! Version 1.: Sept  2005 - Initial Cray X1 version
 ! Version 2.: May   2006 - Updated to support g95
@@ -445,15 +447,14 @@
 
  Integer,                Intent(IN)         :: ncid, varid
  Integer,                Intent(IN)         :: start(*), counts(*), strides(*)
- Character(KIND=C_CHAR), Intent(IN), TARGET :: values(*) 
-
- Integer :: status
+! Character(KIND=C_CHAR), Intent(IN), TARGET :: values(*) 
+ Type(C_PTR),            VALUE              :: values
+ Integer                                    :: status
 
  Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
  Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
  Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr,&
-                                      cvaluesptr
+ Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr
  Integer                           :: ndims
 
  cncid    = ncid
@@ -480,10 +481,12 @@
    cstridesptr = C_LOC(cstrides)
  EndIf
 
- cvaluesptr = C_LOC(values)
+! cvaluesptr = C_LOC(values)
 
+! cstatus = nc_put_vars(cncid, cvarid, cstartptr, ccountsptr, &
+!                       cstridesptr, cvaluesptr)
  cstatus = nc_put_vars(cncid, cvarid, cstartptr, ccountsptr, &
-                       cstridesptr, cvaluesptr)
+                       cstridesptr, values)
 
  status = cstatus
 
@@ -907,7 +910,8 @@
 
  Integer,                Intent(IN)    :: ncid, varid
  Integer,                Intent(IN)    :: start(*), counts(*), strides(*)
- Character(KIND=C_CHAR), Intent(INOUT) :: values
+! Character(KIND=C_CHAR), Intent(INOUT) :: values
+ Type(C_PTR)             VALUE         :: values
 
  Integer                               :: status
 

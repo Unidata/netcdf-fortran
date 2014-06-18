@@ -25,6 +25,7 @@ $Id: fort-lib.c,v 1.15 2009/02/13 15:58:00 ed Exp $
 #include <errno.h>
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include "netcdf.h"
 
 #ifdef USE_NETCDF4
@@ -150,3 +151,21 @@ nc_inq_compound_field_f(int ncid, nc_type xtype, int fieldid, char *name,
 }
 
 #endif /*USE_NETCDF4*/
+
+/*
+ add a dummy nc_rename_grp function if it is not supported. This is include
+ here so we can build/test with netCDF < version 4.3.1 without 
+*/
+
+#ifndef NC_HAVE_RENAME_GRP
+extern int
+nc_rename_grp(int ncid, const char *name)
+{
+ printf("\n*** Warning - nc_rename_grp not supported in this netCDF version\n");
+ printf("*** Update your netCDF C libraries to version 4.3.1 or higher\n");
+
+ return NC_ENOGRP;
+
+}
+#endif
+

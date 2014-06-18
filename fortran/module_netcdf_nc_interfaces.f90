@@ -17,9 +17,11 @@ Module netcdf_nc_interfaces
 !
 !   http:www.apache.org/licenses/LICENSE-2.0.html
 !
-! The author grants to UCAR the right to revise and extend the software
+! The author grants to the University Corporation for Atmospheric Research
+! (UCAR), Boulder, CO, USA the right to revise and extend the software
 ! without restriction. However, the author retains all copyrights and
-! intellectual property rights explicit or implied by the Apache license
+! intellectual property rights explicitly stated in or implied by the
+! Apache license
 
 ! Version 1.:  Sept. 2005 - Initial Cray X1 version
 ! Version 2.:  May   2006 - Updated to support g95
@@ -406,12 +408,12 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid
- Character(KIND=C_CHAR), Intent(IN)  :: name(*)
- Integer(KIND=C_SIZE_T), VALUE       :: nlen
- Integer(KIND=C_INT),    Intent(OUT) :: idp 
+ Integer(KIND=C_INT),    VALUE         :: ncid
+ Character(KIND=C_CHAR), Intent(IN)    :: name(*)
+ Integer(KIND=C_SIZE_T), VALUE         :: nlen
+ Integer(KIND=C_INT),    Intent(INOUT) :: idp 
 
- Integer(KIND=C_INT)                 :: nc_def_dim
+ Integer(KIND=C_INT)                   :: nc_def_dim
 
  End Function nc_def_dim
 End Interface
@@ -421,11 +423,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid
- Character(KIND=C_CHAR), Intent(IN)  :: name(*)
- Integer(KIND=C_INT),    Intent(OUT) :: idp 
+ Integer(KIND=C_INT),    VALUE         :: ncid
+ Character(KIND=C_CHAR), Intent(IN)    :: name(*)
+ Integer(KIND=C_INT),    Intent(INOUT) :: idp 
 
- Integer(KIND=C_INT)                 :: nc_inq_dimid
+ Integer(KIND=C_INT)                   :: nc_inq_dimid
 
  End Function nc_inq_dimid
 End Interface
@@ -730,10 +732,10 @@ Interface
  USE ISO_C_BINDING,  ONLY: C_INT
  USE NETCDF_NC_DATA, ONLY: CINT
 
- Integer(KIND=C_INT), VALUE      :: ncid, varid
+ Integer(KIND=C_INT), VALUE     :: ncid, varid
  Integer(KIND=CINT), Intent(IN) :: op(*)
 
- Integer(KIND=C_INT)             :: nc_put_var_int
+ Integer(KIND=C_INT)            :: nc_put_var_int
 
  End Function nc_put_var_int
 End Interface
@@ -745,7 +747,7 @@ Interface
  USE NETCDF_NC_DATA, ONLY: CINT
 
  Integer(KIND=C_INT), VALUE       :: ncid, varid
- Integer(KIND=CINT), Intent(OUT) :: ip(*)
+ Integer(KIND=CINT),  Intent(OUT) :: ip(*)
 
  Integer(KIND=C_INT)              :: nc_get_var_int
 
@@ -1015,7 +1017,7 @@ Interface
  Type(C_PTR),         VALUE      :: indexp
  Real(KIND=C_FLOAT),  Intent(IN) :: op
 
- Integer(KIND=C_INT)            :: nc_put_var1_float
+ Integer(KIND=C_INT)             :: nc_put_var1_float
 
  End Function nc_put_var1_float
 End Interface
@@ -1216,7 +1218,7 @@ Interface
 
  Integer(KIND=C_INT), VALUE      :: ncid, varid
  Type(C_PTR),         VALUE      :: startp, countp
- Integer(KIND=CINT), Intent(IN) :: op(*)
+ Integer(KIND=CINT),  Intent(IN) :: op(*)
 
  Integer(KIND=C_INT)             :: nc_put_vara_int
 
@@ -1231,7 +1233,7 @@ Interface
 
  Integer(KIND=C_INT), VALUE       :: ncid, varid
  Type(C_PTR),         VALUE       :: startp, countp
- Integer(KIND=CINT), Intent(OUT) :: ip(*)
+ Integer(KIND=CINT),  Intent(OUT) :: ip(*)
 
  Integer(KIND=C_INT)              :: nc_get_vara_int
 
@@ -1388,7 +1390,7 @@ Interface
  Type(C_PTR),         VALUE      :: startp, countp, stridep
  Integer(KIND=CINT1), Intent(IN) :: op(*)
 
- Integer(KIND=C_INT)              :: nc_put_vars_uchar
+ Integer(KIND=C_INT)             :: nc_put_vars_uchar
 
  End Function nc_put_vars_uchar
 End Interface
@@ -1476,7 +1478,7 @@ Interface
 
  Integer(KIND=C_INT), VALUE      :: ncid, varid
  Type(C_PTR),         VALUE      :: startp, countp, stridep
- Integer(KIND=CINT), Intent(IN) :: op(*)
+ Integer(KIND=CINT),  Intent(IN) :: op(*)
 
  Integer(KIND=C_INT)             :: nc_put_vars_int
 
@@ -1746,7 +1748,7 @@ Interface
 
  Integer(KIND=C_INT), VALUE      :: ncid, varid
  Type(C_PTR),         VALUE      :: startp, countp, stridep, imapp
- Integer(KIND=CINT), Intent(IN) :: op(*)
+ Integer(KIND=CINT),  Intent(IN) :: op(*)
 
  Integer(KIND=C_INT)             :: nc_put_varm_int
 
@@ -1762,7 +1764,7 @@ Interface
 
  Integer(KIND=C_INT), VALUE       :: ncid, varid
  Type(C_PTR),         VALUE       :: startp, countp, stridep, imapp
- Integer(KIND=CINT), Intent(OUT)  :: ip(*)
+ Integer(KIND=CINT),  Intent(OUT) :: ip(*)
 
  Integer(KIND=C_INT)              :: nc_get_varm_int
 
@@ -2270,6 +2272,7 @@ CONTAINS
 
  nlen  = LEN_TRIM(string)
  inull = SCAN(string, C_NULL_CHAR)
+
  If (inull > 1) nlen = inull - 1
  nlen = MAX(1,nlen)  ! Make sure nlen is at least 1
 
@@ -2299,10 +2302,11 @@ CONTAINS
 
  ie    = LEN_TRIM(cstring)
  inull = SCAN(cstring, C_NULL_CHAR)
+
  If (inull > 1) ie=inull-1
  ie = MAX(1, MIN(ie,nlen)) ! limit ie to 1 or nlen
 
- string = REPEAT(" ", nlen)
+ string       = REPEAT(" ", nlen)
  string(1:ie) = cstring(1:ie)
 
  End Function StripCNullChar

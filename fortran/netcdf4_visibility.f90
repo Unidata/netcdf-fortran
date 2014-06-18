@@ -18,6 +18,7 @@ public :: nf90_create_par, nf90_open_par, nf90_var_par_access, &
      nf90_inq_var_chunking, &
      nf90_def_var_fill, nf90_inq_var_fill, &
      nf90_def_var_endian, nf90_inq_var_endian, nf90_inq_user_type, &
-     nf90_put_att_any, nf90_get_att_any, nf90_get_var_any, nf90_put_var_any
+     nf90_put_att_any, nf90_get_att_any, nf90_get_var_any, nf90_put_var_any, &
+     nf90_rename_grp
      
   

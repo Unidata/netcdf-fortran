@@ -10,16 +10,26 @@ Module netcdf4_nf_interfaces
 !             Center for Advanced Vehicular Systems 
 !             Mississippi State University
 !             rweed@cavs.msstate.edu
+!
+! The author grants to the University Center for Atmospheric Research
+! (UCAR), Boulder, CO, USA the right to revise and extend the software
+! without restriction. However, the author retains all copyrights and
+! intellectual property rights explicitly stated in or implied by the
+! Apache license
 
 ! Version 1. April 2009 - Initial module based on netCDF 4.0.1 interfaces
 !                         A separate module is required to avoid a
 !                         module dependency problem
-! Version 2. April 2010 - updated to Netcdf 4.1.1
+! Version 2. April 2010 - Updated to Netcdf 4.1.1
+! Version 3. Aug.  2013 - Made nf_def_var_fill and nf_inq_var_fill external
+!                         to support new nf90_ non-integer fill characters
+!                         Added interface for new nf_rename_grp function 
+!                         Changed interface type defs to USE netcdf_nf_data
 
 ! Most legacy programs don't need to use this module. However, I've created
 ! it to support FORTRAN programmers who like to provide explicit interfaces
 ! for all subroutines and functions in their codes. Therefore, this module is
-! is primarily for people writting new programs.
+! is primarily for people writing new programs.
 
 !           Explicit interfaces to netCDF 4 specific FORTRAN functions
 
@@ -30,7 +40,6 @@ Interface
  Integer,          Intent(IN)  :: cmode, comm, info
  Character(LEN=*), Intent(IN)  :: path
  Integer,          Intent(OUT) :: ncid
-
  Integer                       :: status
 
  End Function nf_create_par
@@ -51,8 +60,7 @@ Interface
  Function nf_var_par_access( ncid, varid, iaccess) RESULT (status)
 
  Integer, Intent(IN) :: ncid, varid, iaccess
-
- Integer :: status
+ Integer             :: status
 
  End Function nf_var_par_access
 End Interface
@@ -63,7 +71,6 @@ Interface
  Integer,          Intent(IN)  :: ncid
  Character(LEN=*), Intent(IN)  :: name
  Integer,          Intent(OUT) :: groupid
-
  Integer                       :: status
 
  End Function nf_inq_ncid
@@ -75,7 +82,6 @@ Interface
  Integer, Intent(IN)    :: ncid
  Integer, Intent(OUT)   :: numgrps
  Integer, Intent(INOUT) :: ncids(*)
-
  Integer                :: status
 
  End Function nf_inq_grps
@@ -86,7 +92,6 @@ Interface
 
  Integer,          Intent(IN)  :: ncid
  Character(LEN=*), Intent(OUT) :: name
-
  Integer                       :: status
 
  End Function nf_inq_grpname
@@ -98,7 +103,6 @@ Interface
  Integer,          Intent(IN)  :: ncid
  Integer,          Intent(OUT) :: nlen 
  Character(LEN=*), Intent(OUT) :: name
-
  Integer                       :: status
 
  End Function nf_inq_grpname_full
@@ -109,7 +113,6 @@ Interface
 
  Integer, Intent(IN)  :: ncid
  Integer, Intent(OUT) :: nlen 
-
  Integer              :: status
 
  End Function nf_inq_grpname_len
@@ -120,7 +123,6 @@ Interface
 
  Integer, Intent(IN)    :: ncid
  Integer, Intent(INOUT) :: parent_ncid
-
  Integer                :: status
 
  End Function nf_inq_grp_parent
@@ -132,7 +134,6 @@ Interface
  Integer,          Intent(IN)    :: ncid
  Character(LEN=*), Intent(IN)    :: grp_name
  Integer,          Intent(INOUT) :: grp_ncid
-
  Integer                         :: status
 
  End Function nf_inq_grp_full_ncid
@@ -144,7 +145,6 @@ Interface
  Integer,          Intent(IN)    :: ncid
  Character(LEN=*), Intent(IN)    :: grp_name
  Integer,          Intent(INOUT) :: parent_ncid
-
  Integer                         :: status
 
  End Function nf_inq_grp_ncid
@@ -156,7 +156,6 @@ Interface
  Integer, Intent(IN)    :: ncid
  Integer, Intent(OUT)   :: nvars 
  Integer, Intent(INOUT) :: varids(*)
-
  Integer                :: status
 
  End Function nf_inq_varids
@@ -168,7 +167,6 @@ Interface
  Integer, Intent(IN)    :: ncid, include_parents
  Integer, Intent(OUT)   :: ndims
  Integer, Intent(INOUT) :: dimids(*)
-
  Integer                :: status
 
  End Function nf_inq_dimids
@@ -180,7 +178,6 @@ Interface
  Integer, Intent(IN)    :: ncid
  Integer, Intent(OUT)   :: ntypes
  Integer, Intent(INOUT) :: typeids(*)
-
  Integer                :: status
 
  End Function nf_inq_typeids
@@ -192,7 +189,6 @@ Interface
  Integer,          Intent(IN)  :: ncid 
  Character(LEN=*), Intent(IN)  :: name
  Integer,          Intent(OUT) :: typeid
-
  Integer                       :: status
 
  End Function nf_inq_typeid
@@ -204,10 +200,25 @@ Interface
  Integer,          Intent(IN)  :: parent_ncid
  Character(LEN=*), Intent(IN)  :: name
  Integer,          Intent(OUT) :: new_ncid
-
  Integer                       :: status
 
  End Function nf_def_grp
+End Interface
+!-------------------------------- nf_rename_grp -------------------------------
+Interface
+ Function nf_rename_grp( grpid, name) RESULT (status)
+
+! rename previously defined group
+
+ USE netcdf4_nc_interfaces
+
+ Implicit NONE
+
+ Integer,          Intent(IN)  :: grpid
+ Character(LEN=*), Intent(IN)  :: name
+ Integer                       :: status
+
+ End Function nf_rename_grp
 End Interface
 !-------------------------------- nf_def_compound -----------------------------
 Interface
@@ -216,7 +227,6 @@ Interface
  Integer,          Intent(IN)  :: ncid, isize
  Character(LEN=*), Intent(IN)  :: name
  Integer,          Intent(OUT) :: typeid 
-
  Integer                       :: status
 
  End Function nf_def_compound
@@ -228,7 +238,6 @@ Interface
 
  Integer,          Intent(IN) :: ncid, xtype, field_typeid, offset 
  Character(LEN=*), Intent(IN) :: name
-
  Integer                      :: status
 
  End Function nf_insert_compound
@@ -241,7 +250,6 @@ Interface
  Integer,          Intent(IN)    :: ncid, xtype, field_typeid, offset, ndims
  Integer,          Intent(INOUT) :: dim_sizes(*)
  Character(LEN=*), Intent(IN)    :: name
-
  Integer                         :: status
 
  End Function nf_insert_array_compound
@@ -253,7 +261,6 @@ Interface
  Integer,          Intent(IN)  :: ncid, xtype
  Character(LEN=*), Intent(IN)  :: name
  Integer,          Intent(OUT) :: isize
-
  Integer                       :: status
 
  End Function nf_inq_type
@@ -265,7 +272,6 @@ Interface
  Integer,          Intent(IN)    :: ncid, xtype
  Character(LEN=*), Intent(INOUT) :: name
  Integer,          Intent(INOUT) :: isize, nfields
-
  Integer                         :: status
 
  End Function nf_inq_compound
@@ -276,7 +282,6 @@ Interface
 
  Integer,          Intent(IN)  :: ncid, xtype
  Character(LEN=*), Intent(OUT) :: name
-
  Integer                       :: status
 
  End Function nf_inq_compound_name
@@ -287,8 +292,7 @@ Interface
 
  Integer, Intent(IN)    :: ncid, xtype
  Integer, Intent(INOUT) :: isize
-
- Integer :: status
+ Integer                :: status
 
  End Function nf_inq_compound_size
 End Interface
@@ -298,7 +302,6 @@ Interface
 
  Integer, Intent(IN)    :: ncid, xtype
  Integer, Intent(INOUT) :: nfields
-
  Integer                :: status
 
  End Function nf_inq_compound_nfields
@@ -312,7 +315,6 @@ Interface
  Character(LEN=*), Intent(OUT) :: name
  Integer,          Intent(OUT) :: offset, field_typeid, ndims
  Integer,          Intent(OUT) :: dim_sizes(*)
-
  Integer                       :: status
 
  End Function nf_inq_compound_field
@@ -323,7 +325,6 @@ Interface
 
  Integer,          Intent(IN)  :: ncid, xtype, fieldid
  Character(LEN=*), Intent(OUT) :: name
-
  Integer                       :: status
 
  End Function nf_inq_compound_fieldname
@@ -336,7 +337,6 @@ Interface
  Integer,          Intent(IN)  :: ncid, xtype
  Character(LEN=*), Intent(IN)  :: name
  Integer,          Intent(OUT) :: fieldid
-
  Integer                       :: status
 
  End Function nf_inq_compound_fieldindex
@@ -348,7 +348,6 @@ Interface
 
  Integer, Intent(IN)  :: ncid, xtype, fieldid
  Integer, Intent(OUT) :: offset
-
  Integer              :: status
 
  End Function nf_inq_compound_fieldoffset
@@ -360,7 +359,6 @@ Interface
 
  Integer, Intent(IN)  :: ncid, xtype, fieldid
  Integer, Intent(OUT) :: field_typeid
-
  Integer              :: status
 
  End Function nf_inq_compound_fieldtype
@@ -372,7 +370,6 @@ Interface
 
  Integer, Intent(IN)  :: ncid, xtype, fieldid
  Integer, Intent(OUT) :: ndims
- 
  Integer              :: status
 
  End Function nf_inq_compound_fieldndims
@@ -384,7 +381,6 @@ Interface
 
  Integer, Intent(IN)    :: ncid, xtype, fieldid
  Integer, Intent(INOUT) :: dim_sizes(*)
-
  Integer                :: status
 
  End Function nf_inq_compound_fielddim_sizes
@@ -396,7 +392,6 @@ Interface
  Integer,          Intent(IN)  :: ncid, base_typeid 
  Character(LEN=*), Intent(IN)  :: name
  Integer,          Intent(OUT) :: xtype
-
  Integer                       :: status
 
  End Function nf_def_vlen
@@ -408,7 +403,6 @@ Interface
  Integer,          Intent(IN)  :: ncid, xtype
  Character(LEN=*), Intent(OUT) :: name
  Integer,          Intent(OUT) :: datum_size, base_type
-
  Integer                       :: status
 
  End Function nf_inq_vlen
@@ -421,7 +415,6 @@ Interface
  Integer,          Intent(IN)    :: ncid, xtype
  Character(LEN=*), Intent(INOUT) :: name
  Integer,          Intent(OUT)   :: isize, nfields, base_type, iclass
-
  Integer                         :: status
 
  End Function nf_inq_user_type
@@ -433,7 +426,6 @@ Interface
  Integer,          Intent(IN)  :: ncid, base_typeid 
  Character(LEN=*), Intent(IN)  :: name
  Integer,          Intent(OUT) :: typeid
-
  Integer                       :: status
 
  End Function nf_def_enum
@@ -445,12 +437,11 @@ End Interface
 !Interface
 ! Function nf_insert_enum( ncid, xtype, name, value) RESULT (status)
 
-! USE netcdf4_nc_interfaces
+! USE netcdf_nf_data
 
 ! Integer,                Intent(IN)         :: ncid, xtype
 ! Character(LEN=*),       Intent(IN)         :: name
 ! Character(KIND=C_CHAR), Intent(IN), TARGET :: value(*)
-
 ! Integer                                    :: status
 
 ! End Function nf_insert_enum
@@ -460,12 +451,11 @@ Interface
  Function nf_inq_enum( ncid, xtype, name, base_nf_type, base_size, &
                        num_members) RESULT (status)
 
- USE netcdf4_nc_interfaces
+! USE netcdf_nf_data
 
  Integer,          Intent(IN)    :: ncid, xtype
  Character(LEN=*), Intent(INOUT) :: name
  Integer,          Intent(INOUT) :: base_nf_type, base_size, num_members
-
  Integer                         :: status
 
  End Function nf_inq_enum
@@ -477,11 +467,12 @@ End Interface
 !Interface
 ! Function nf_inq_enum_member( ncid, xtype, idx, name, value) RESULT (status)
 
-! USE netcdf4_nc_interfaces
+! USE netcdf_nf_data
 
 ! Integer,                Intent(IN)  :: ncid, xtype, idx
 ! Character(LEN=*),       Intent(OUT) :: name
 ! Character(KIND=C_CHAR), Intent(OUT) :: value(*)
+! Integer                             :: status
 
 ! End Function nf_inq_enum_member
 !End Interface
@@ -491,7 +482,6 @@ Interface
 
  Integer,          Intent(IN)    :: ncid, xtype, value 
  Character(LEN=*), Intent(INOUT) :: name
-
  Integer                         :: status
 
  End Function nf_inq_enum_ident
@@ -503,7 +493,6 @@ Interface
  Integer,          Intent(IN)  :: ncid, isize
  Character(LEN=*), Intent(IN)  :: name
  Integer,          Intent(OUT) :: xtype
-
  Integer                       :: status
 
  End Function nf_def_opaque
@@ -515,7 +504,6 @@ Interface
  Integer,          Intent(IN)    :: ncid, xtype
  Character(LEN=*), Intent(INOUT) :: name
  Integer,          Intent(OUT)   :: isize
-
  Integer                         :: status
 
  End Function nf_inq_opaque
@@ -527,7 +515,6 @@ Interface
 
  Integer, Intent(IN)    :: ncid, varid, contiguous
  Integer, Intent(INOUT) :: chunksizes(*)
-
  Integer                :: status
 
  End Function nf_def_var_chunking
@@ -540,7 +527,6 @@ Interface
  Integer, Intent(IN)    :: ncid, varid
  Integer, Intent(INOUT) :: contiguous
  Integer, Intent(INOUT) :: chunksizes(*)
-
  Integer                :: status
 
  End Function nf_inq_var_chunking
@@ -551,7 +537,6 @@ Interface
                                RESULT (status)
 
  Integer, Intent(IN) :: ncid, varid, shuffle, deflate, deflate_level
-
  Integer             :: status
 
  End Function nf_def_var_deflate
@@ -563,7 +548,6 @@ Interface
 
  Integer, Intent(IN)  :: ncid, varid
  Integer, Intent(OUT) :: shuffle, deflate, deflate_level
-
  Integer              :: status
 
  End Function nf_inq_var_deflate
@@ -576,8 +560,7 @@ Interface
 
  Integer, Intent(IN)    :: ncid, varid
  Integer, Intent(INOUT) :: options_mask, pixels_per_block
-
- Integer          :: status
+ Integer                :: status
 
  End Function nf_inq_var_szip
 End Interface
@@ -586,7 +569,6 @@ Interface
  Function nf_def_var_fletcher32( ncid, varid, fletcher32) RESULT(status)
 
  Integer, Intent(IN) :: ncid, varid, fletcher32
-
  Integer             :: status
 
  End Function nf_def_var_fletcher32
@@ -597,40 +579,36 @@ Interface
 
  Integer, Intent(IN)  :: ncid, varid
  Integer, Intent(OUT) :: fletcher32
-
  Integer              :: status
 
  End Function nf_inq_var_fletcher32
 End Interface
 !-------------------------------- nf_def_var_fill -----------------------------
-Interface
- Function nf_def_var_fill( ncid, varid, no_fill, fill_value) RESULT(status)
+!Interface
+! Function nf_def_var_fill( ncid, varid, no_fill, fill_value) RESULT(status)
 
- Integer, Intent(IN)    :: ncid, varid, no_fill
- Integer, Intent(IN)    :: fill_value 
+! Integer, Intent(IN)    :: ncid, varid, no_fill
+! Integer, Intent(IN)    :: fill_value 
+! Integer                :: status
 
- Integer                :: status
-
- End Function nf_def_var_fill
-End Interface
+! End Function nf_def_var_fill
+!End Interface
 !-------------------------------- nf_inq_var_fill -----------------------------
-Interface
- Function nf_inq_var_fill( ncid, varid, no_fill, fill_value) RESULT(status)
+!Interface
+! Function nf_inq_var_fill( ncid, varid, no_fill, fill_value) RESULT(status)
 
- Integer, Intent(IN)    :: ncid, varid
- Integer, Intent(OUT)   :: no_fill
- Integer, Intent(INOUT) :: fill_value 
+! Integer, Intent(IN)    :: ncid, varid
+! Integer, Intent(OUT)   :: no_fill
+! Integer, Intent(INOUT) :: fill_value 
+! Integer                :: status
 
- Integer                :: status
-
- End Function nf_inq_var_fill
-End Interface
+! End Function nf_inq_var_fill
+!End Interface
 !-------------------------------- nf_def_var_endian ---------------------------
 Interface
  Function nf_def_var_endian( ncid, varid, endiann) RESULT(status)
 
  Integer, Intent(IN) :: ncid, varid, endiann
-
  Integer             :: status
 
  End Function nf_def_var_endian
@@ -641,7 +619,6 @@ Interface
 
  Integer, Intent(IN)  :: ncid, varid
  Integer, Intent(OUT) :: endiann
-
  Integer              :: status
 
  End Function nf_inq_var_endian
@@ -652,13 +629,13 @@ End Interface
 !Interface
 ! Function nf_put_att(ncid, varid, name, xtype, nlen, value) RESULT(status)
  
-! USE netcdf4_nc_interfaces
+! USE netcdf_nf_data
 
 ! Integer,                Intent(IN)         :: ncid, varid, nlen, xtype
 ! Character(LEN=*),       Intent(IN)         :: name
 ! Character(KIND=C_CHAR), Intent(IN), TARGET :: value(*)
+! Integer                                    :: status
 
-! Integer :: status
 ! End Function nf_put_att
 !--------------------------------- nf_get_att --------------------------------
 ! Commented out because we use C_CHAR array to pass data of different
@@ -666,15 +643,14 @@ End Interface
 !Interface
 ! Function nf_get_att(ncid, varid, name, value) RESULT(status)
 
-! USE netcdf4_nc_interfaces
+! USE netcdf_nf_data
 
 ! Implicit NONE
 
 ! Integer,                Intent(IN)    :: ncid, varid
 ! Character(LEN=*),       Intent(IN)    :: name
 ! Character(KIND=C_CHAR), Intent(INOUT) :: value(*)
-
-! Integer                             :: status
+! Integer                               :: status
 
 ! End Function nf_get_att
 !End Interface
@@ -685,12 +661,11 @@ End Interface
 ! Function nf_put_vlen_element(ncid, xtype, vlen_element, nlen, value)&
 !                               RESULT(status)
 
-! USE netcdf4_nc_interfaces
+! USE netcdf_nf_data
 
 ! Integer,                Intent(IN)            :: ncid, xtype, nlen
 ! Character(LEN=*),       Intent(INOUT), TARGET :: vlen_element
 ! Character(KIND=C_CHAR), Intent(IN),    TARGET :: value(*)
-
 ! Integer                                       :: status
 
 ! End Function nf_put_vlen_element
@@ -702,7 +677,7 @@ End Interface
 ! Function nf_get_vlen_element(ncid, xtype, vlen_element, nlen, value) &
 !                              RESULT(status)
 
-! USE netcdf4_nc_interfaces
+! USE netcdf_nf_data
 
 ! Implicit NONE
 
@@ -710,7 +685,6 @@ End Interface
 ! Integer,                Intent(INOUT)         :: nlen
 ! Character(LEN=*),       Intent(INOUT), TARGET :: vlen_element
 ! Character(KIND=C_CHAR), Intent(INOUT)         :: value(*)
-
 ! Integer                                       :: status
 
 ! End Function nf_get_vlen_element
@@ -722,8 +696,8 @@ End Interface
 ! Function nf_free_vlen(vl) RESULT(status)
 
 ! Character(KIND=C_CHAR), Intent(IN), TARGET :: vl(*)
-
 ! Integer                                    :: status
+
 ! End Function nf_free_vlen
 !End Interface
 !--------------------------------- nf_put_var ---------------------------------
@@ -732,11 +706,10 @@ End Interface
 !Interface
 ! Function nf_put_var(ncid, varid, values) RESULT(status)
 
-! USE netcdf4_nc_interfaces
+! USE netcdf_nf_data
 
 ! Integer,                Intent(IN)         :: ncid, varid
 ! Character(KIND=C_CHAR), Intent(IN), TARGET :: values(*)
-
 ! Integer                                    :: status
 
 ! End Function nf_put_var
@@ -747,11 +720,10 @@ End Interface
 !Interface
 ! Function nf_get_var(ncid, varid, values) RESULT(status)
 
-! USE netcdf4_nc_interfaces
+! USE netcdf_nf_data
 
 ! Integer,                Intent(IN)         :: ncid, varid
 ! Character(KIND=C_CHAR), Intent(INOUT),     :: values(*)
-
 ! Integer                                    :: status
 
 ! End Function nf_get_var
@@ -760,12 +732,11 @@ End Interface
 Interface
  Function nf_put_var1_int64(ncid, varid, ndex, ival) RESULT(status)
 
- USE netcdf4_nc_interfaces, ONLY: IK8
+ USE netcdf_nf_data, ONLY: IK8
 
  Integer,           Intent(IN) :: ncid, varid
  Integer,           Intent(IN) :: ndex(*)
  Integer(KIND=IK8), Intent(IN) :: ival
-
  Integer                       :: status
 
  End Function nf_put_var1_int64
@@ -774,12 +745,11 @@ End Interface
 Interface
  Function nf_put_vara_int64(ncid, varid, start, counts, ivals) RESULT(status)
 
- USE netcdf4_nc_interfaces, ONLY: IK8
+ USE netcdf_nf_data, ONLY: IK8
 
  Integer,           Intent(IN) :: ncid, varid
  Integer,           Intent(IN) :: start(*), counts(*)
  Integer(KIND=IK8), Intent(IN) :: ivals(*)
-
  Integer                       :: status
 
  End Function nf_put_vara_int64
@@ -789,12 +759,11 @@ Interface
  Function nf_put_vars_int64(ncid, varid, start, counts, strides, ivals) &
                              RESULT(status)
  
- USE netcdf4_nc_interfaces, ONLY: IK8
+ USE netcdf_nf_data, ONLY: IK8
 
  Integer,           Intent(IN) :: ncid, varid
  Integer,           Intent(IN) :: start(*), counts(*), strides(*)
  Integer(KIND=IK8), Intent(IN) :: ivals(*)
-
  Integer                       :: status
 
  End Function nf_put_vars_int64
@@ -804,12 +773,11 @@ Interface
  Function nf_put_varm_int64(ncid, varid, start, counts, strides, maps, &
                             ivals) RESULT(status)
 
- USE netcdf4_nc_interfaces, ONLY: IK8
+ USE netcdf_nf_data, ONLY: IK8
 
  Integer,           Intent(IN) :: ncid, varid
  Integer,           Intent(IN) :: start(*), counts(*), strides(*), maps(*)
  Integer(KIND=IK8), Intent(IN) :: ivals(*)
-
  Integer                       :: status
 
  End Function nf_put_varm_int64
@@ -818,11 +786,10 @@ End Interface
 Interface
  Function nf_put_var_int64(ncid, varid, ivals) RESULT(status)
 
- USE netcdf4_nc_interfaces, ONLY: IK8
+ USE netcdf_nf_data, ONLY: IK8
 
  Integer,           Intent(IN) :: ncid, varid
  Integer(KIND=IK8), Intent(IN) :: ivals(*)
-
  Integer                       :: status
 
  End Function nf_put_var_int64
@@ -831,12 +798,11 @@ End Interface
 Interface
  Function nf_get_var1_int64(ncid, varid, ndex, ival) RESULT(status)
 
- USE netcdf4_nc_interfaces, ONLY: IK8
+ USE netcdf_nf_data, ONLY: IK8
 
  Integer,           Intent(IN)  :: ncid, varid
  Integer,           Intent(IN)  :: ndex(*)
  Integer(KIND=IK8), Intent(OUT) :: ival
-
  Integer                        :: status
 
  End Function nf_get_var1_int64
@@ -845,12 +811,11 @@ End Interface
 Interface
  Function nf_get_vara_int64(ncid, varid, start, counts, ivals) RESULT(status)
 
- USE netcdf4_nc_interfaces, ONLY: IK8
+ USE netcdf_nf_data, ONLY: IK8
 
  Integer,           Intent(IN)  :: ncid, varid
  Integer,           Intent(IN)  :: start(*), counts(*)
  Integer(KIND=IK8), Intent(OUT) :: ivals(*)
-
  Integer                        :: status
 
  End Function nf_get_vara_int64
@@ -860,12 +825,11 @@ Interface
  Function nf_get_vars_int64(ncid, varid, start, counts, strides, ivals) &
                              RESULT(status)
 
- USE netcdf4_nc_interfaces, ONLY: IK8
+ USE netcdf_nf_data, ONLY: IK8
 
  Integer,           Intent(IN)  :: ncid, varid
  Integer,           Intent(IN)  :: start(*), counts(*), strides(*)
  Integer(KIND=IK8), Intent(OUT) :: ivals(*)
-
  Integer                        :: status
 
  End Function nf_get_vars_int64
@@ -875,12 +839,11 @@ Interface
  Function nf_get_varm_int64(ncid, varid, start, counts, strides, maps, &
                             ivals) RESULT(status)
 
- USE netcdf4_nc_interfaces, ONLY: IK8
+ USE netcdf_nf_data, ONLY: IK8
 
  Integer,           Intent(IN)  :: ncid, varid
  Integer,           Intent(IN)  :: start(*), counts(*), strides(*), maps(*)
  Integer(KIND=IK8), Intent(OUT) :: ivals(*)
-
  Integer                        :: status
 
  End Function nf_get_varm_int64
@@ -889,11 +852,10 @@ End Interface
 Interface
  Function nf_get_var_int64(ncid, varid, ivals) RESULT(status)
 
- USE netcdf4_nc_interfaces, ONLY: IK8
+ USE netcdf_nf_data, ONLY: IK8
 
  Integer,           Intent(IN)  :: ncid, varid
  Integer(KIND=IK8), Intent(OUT) :: ivals(*)
-
  Integer                        :: status
 
  End Function nf_get_var_int64
@@ -903,7 +865,6 @@ Interface
  Function nf_set_chunk_cache(chunk_size, nelems, preemption) RESULT(status)
 
  Integer, Intent(IN) :: chunk_size, nelems, preemption
-
  Integer             :: status
 
  End Function nf_set_chunk_cache
@@ -913,7 +874,6 @@ Interface
  Function nf_get_chunk_cache(chunk_size, nelems, preemption) RESULT(status)
 
  Integer, Intent(INOUT) :: chunk_size, nelems, preemption
-
  Integer                :: status
 
  End Function nf_get_chunk_cache
@@ -922,12 +882,11 @@ End Interface
 Interface
  Function nf_set_var_chunk_cache(ncid, varid, chunk_size, nelems, preemption) RESULT(status)
 
- USE netcdf4_nc_interfaces
+! USE netcdf_nf_data
 
  Implicit NONE
 
  Integer, Intent(IN) :: ncid, varid, chunk_size, nelems, preemption
-
  Integer             :: status
 
  End Function nf_set_var_chunk_cache
@@ -939,13 +898,12 @@ Interface
 ! get chunk cache size. Note this follows the fort-nc4 version which uses
 ! uses nc_get_var_chunk_cache_ints to avoid size_t issues with fortran. 
 
- USE netcdf4_nc_interfaces
+! USE netcdf_nf_data
 
  Implicit NONE
 
  Integer, Intent(IN)    :: ncid, varid
  Integer, Intent(INOUT) :: chunk_size, nelems, preemption
-
  Integer                :: status
 
  End Function nf_get_var_chunk_cache
@@ -965,5 +923,7 @@ End Interface
  Integer, External :: nf_free_string
  Integer, External :: nf_put_var
  Integer, External :: nf_get_var
+ Integer, External :: nf_def_var_fill
+ Integer, External :: nf_inq_var_fill
 
 End Module netcdf4_nf_interfaces

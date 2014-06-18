@@ -218,6 +218,14 @@
     nf90_def_grp = nf_def_grp(parent_ncid, name, new_ncid)
   end function nf90_def_grp
   ! -----------
+  function nf90_rename_grp(grpid, name)
+    integer, intent(in) :: grpid
+    character (len = *), intent(in) :: name
+    integer :: nf90_rename_grp
+
+    nf90_rename_grp = nf_rename_grp(grpid, name)
+  end function nf90_rename_grp
+  ! -----------
   function nf90_def_compound(ncid, size, name, typeid)
     integer, intent(in) :: ncid
     integer, intent(in) :: size
@@ -570,25 +578,145 @@
     nf90_inq_var_endian = nf_inq_var_endian(ncid, varid, endian)
   end function nf90_inq_var_endian
   ! -----------
-  function nf90_def_var_fill(ncid, varid, no_fill, fill)
-    integer, intent(in) :: ncid
-    integer, intent(in) :: varid
-    integer, intent(in) :: no_fill
-    integer, intent(in) :: fill
-    integer :: nf90_def_var_fill
+!  function nf90_def_var_fill(ncid, varid, no_fill, fill)
+!    integer, intent(in) :: ncid
+!    integer, intent(in) :: varid
+!    integer, intent(in) :: no_fill
+!    integer, intent(in) :: fill
+!    integer :: nf90_def_var_fill
   
-    nf90_def_var_fill = nf_def_var_fill(ncid, varid, no_fill, fill)
-  end function nf90_def_var_fill
+!    nf90_def_var_fill = nf_def_var_fill(ncid, varid, no_fill, fill)
+!  end function nf90_def_var_fill
   ! -----------
-  function nf90_inq_var_fill(ncid, varid, no_fill, fill)
-    integer, intent(in) :: ncid
-    integer, intent(in) :: varid
-    integer, intent(out) :: no_fill
-    integer, intent(out) :: fill
-    integer :: nf90_inq_var_fill
+!  function nf90_inq_var_fill(ncid, varid, no_fill, fill)
+!    integer, intent(in) :: ncid
+!    integer, intent(in) :: varid
+!    integer, intent(out) :: no_fill
+!    integer, intent(out) :: fill
+!    integer :: nf90_inq_var_fill
   
-    nf90_inq_var_fill = nf_inq_var_fill(ncid, varid, no_fill, fill)
-  end function nf90_inq_var_fill
+!    nf90_inq_var_fill = nf_inq_var_fill(ncid, varid, no_fill, fill)
+!  end function nf90_inq_var_fill
+
+  function nf90_def_var_fill_OneByteInt(ncid, varid, no_fill, fill)
+    integer, intent(in)                  :: ncid
+    integer, intent(in)                  :: varid
+    integer, intent(in)                  :: no_fill
+    integer(kind=OneByteInt), intent(in) :: fill
+    integer :: nf90_def_var_fill_OneByteInt
+  
+    nf90_def_var_fill_OneByteInt = nf_def_var_fill(ncid, varid, no_fill, fill)
+  end function nf90_def_var_fill_OneByteInt
+  ! -----------
+  function nf90_def_var_fill_TwoByteInt(ncid, varid, no_fill, fill)
+    integer, intent(in)                  :: ncid
+    integer, intent(in)                  :: varid
+    integer, intent(in)                  :: no_fill
+    integer(kind=TwoByteInt), intent(in) :: fill
+    integer :: nf90_def_var_fill_TwoByteInt
+  
+    nf90_def_var_fill_TwoByteInt = nf_def_var_fill(ncid, varid, no_fill, fill)
+  end function nf90_def_var_fill_TwoByteInt
+  ! -----------
+  function nf90_def_var_fill_FourByteInt(ncid, varid, no_fill, fill)
+    integer, intent(in)                  :: ncid
+    integer, intent(in)                  :: varid
+    integer, intent(in)                  :: no_fill
+    integer(kind=FourByteInt), intent(in) :: fill
+    integer :: nf90_def_var_fill_FourByteInt
+  
+    nf90_def_var_fill_FourByteInt = nf_def_var_fill(ncid, varid, no_fill, fill)
+  end function nf90_def_var_fill_FourByteInt
+  ! -----------
+  function nf90_def_var_fill_EightByteInt(ncid, varid, no_fill, fill)
+    integer, intent(in)                  :: ncid
+    integer, intent(in)                  :: varid
+    integer, intent(in)                  :: no_fill
+    integer(kind=EightByteInt), intent(in) :: fill
+    integer :: nf90_def_var_fill_EightByteInt
+  
+    nf90_def_var_fill_EightByteInt = nf_def_var_fill(ncid, varid, no_fill, fill)
+  end function nf90_def_var_fill_EightByteInt
+  ! -----------
+  function nf90_def_var_fill_FourByteReal(ncid, varid, no_fill, fill)
+    integer, intent(in)                  :: ncid
+    integer, intent(in)                  :: varid
+    integer, intent(in)                  :: no_fill
+    real(kind=FourByteReal), intent(in) :: fill
+    integer :: nf90_def_var_fill_FourByteReal
+  
+    nf90_def_var_fill_FourByteReal = nf_def_var_fill(ncid, varid, no_fill, fill)
+  end function nf90_def_var_fill_FourByteReal
+  ! -----------
+  function nf90_def_var_fill_EightByteReal(ncid, varid, no_fill, fill)
+    integer, intent(in)                  :: ncid
+    integer, intent(in)                  :: varid
+    integer, intent(in)                  :: no_fill
+    real(kind=EightByteReal), intent(in) :: fill
+    integer :: nf90_def_var_fill_EightByteReal
+  
+    nf90_def_var_fill_EightByteReal = nf_def_var_fill(ncid, varid, no_fill, fill)
+  end function nf90_def_var_fill_EightByteReal
+  ! -----------
+  function nf90_inq_var_fill_OneByteInt(ncid, varid, no_fill, fill)
+    integer, intent(in)                     :: ncid
+    integer, intent(in)                     :: varid
+    integer, intent(inout)                  :: no_fill
+    integer(kind=OneByteInt), intent(inout) :: fill
+    integer :: nf90_inq_var_fill_OneByteInt
+  
+    nf90_inq_var_fill_OneByteInt = nf_inq_var_fill(ncid, varid, no_fill, fill)
+  end function nf90_inq_var_fill_OneByteInt
+  ! -----------
+  function nf90_inq_var_fill_TwoByteInt(ncid, varid, no_fill, fill)
+    integer, intent(in)                     :: ncid
+    integer, intent(in)                     :: varid
+    integer, intent(inout)                  :: no_fill
+    integer(kind=TwoByteInt), intent(inout) :: fill
+    integer :: nf90_inq_var_fill_TwoByteInt
+  
+    nf90_inq_var_fill_TwoByteInt = nf_inq_var_fill(ncid, varid, no_fill, fill)
+  end function nf90_inq_var_fill_TwoByteInt
+  ! -----------
+  function nf90_inq_var_fill_FourByteInt(ncid, varid, no_fill, fill)
+    integer, intent(in)                      :: ncid
+    integer, intent(in)                      :: varid
+    integer, intent(inout)                   :: no_fill
+    integer(kind=FourByteInt), intent(inout) :: fill
+    integer :: nf90_inq_var_fill_FourByteInt
+  
+    nf90_inq_var_fill_FourByteInt = nf_inq_var_fill(ncid, varid, no_fill, fill)
+  end function nf90_inq_var_fill_FourByteInt
+  ! -----------
+  function nf90_inq_var_fill_EightByteInt(ncid, varid, no_fill, fill)
+    integer, intent(in)                       :: ncid
+    integer, intent(in)                       :: varid
+    integer, intent(inout)                    :: no_fill
+    integer(kind=EightByteInt), intent(inout) :: fill
+    integer :: nf90_inq_var_fill_EightByteInt
+  
+    nf90_inq_var_fill_EightByteInt = nf_inq_var_fill(ncid, varid, no_fill, fill)
+  end function nf90_inq_var_fill_EightByteInt
+  ! -----------
+  function nf90_inq_var_fill_FourByteReal(ncid, varid, no_fill, fill)
+    integer, intent(in)                    :: ncid
+    integer, intent(in)                    :: varid
+    integer, intent(inout)                 :: no_fill
+    real(kind=FourByteReal), intent(inout) :: fill
+    integer :: nf90_inq_var_fill_FourByteReal
+  
+    nf90_inq_var_fill_FourByteReal = nf_inq_var_fill(ncid, varid, no_fill, fill)
+  end function nf90_inq_var_fill_FourByteReal
+  ! -----------
+  function nf90_inq_var_fill_EightByteReal(ncid, varid, no_fill, fill)
+    integer, intent(in)                        :: ncid
+    integer, intent(in)                        :: varid
+    integer, intent(inout)                     :: no_fill
+    real(kind=EightByteReal), intent(inout)    :: fill
+    integer :: nf90_inq_var_fill_EightByteReal
+  
+    nf90_inq_var_fill_EightByteReal = nf_inq_var_fill(ncid, varid, no_fill, fill)
+  end function nf90_inq_var_fill_EightByteReal
   ! -----------
   function nf90_put_att_any(ncid, varid, name, typeid, length, values)
     integer,                          intent( in) :: ncid, varid

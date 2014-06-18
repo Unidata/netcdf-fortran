@@ -66,6 +66,9 @@ FCALLSCFUN3(NF_INT, nc_inq_typeid, NF_INQ_TYPEID, nf_inq_typeid,
 FCALLSCFUN3(NF_INT, nc_def_grp, NF_DEF_GRP, nf_def_grp,
 	    NCID, STRING, PCINT2FINT)
 
+FCALLSCFUN2(NF_INT, nc_rename_grp, NF_RENAME_GRP, nf_rename_grp,
+            NCID, STRING)
+
 FCALLSCFUN4(NF_INT, nc_def_compound, NF_DEF_COMPOUND, nf_def_compound,
 	    NCID, FINT2CSIZET, STRING, PCINT2FINT)
 

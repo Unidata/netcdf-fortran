@@ -8,7 +8,7 @@
             nf90_sync, nf90_abort, nf90_close, nf90_delete
             
   ! File level inquiry
-  public :: nf90_inquire
+  public :: nf90_inquire, nf90_inq_path
   
   ! Dimension routines
   public :: nf90_def_dim, nf90_inq_dimid, nf90_rename_dim, nf90_inquire_dimension

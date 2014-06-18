@@ -16,9 +16,11 @@
 !
 !   http:www.apache.org/licenses/LICENSE-2.0.html
 !
-! The author grants to UCAR the right to revise and extend the software
+! The author grants to the University Corporation for Atmospheric Research
+! (UCAR), Boulder, CO, USA the right to revise and extend the software
 ! without restriction. However, the author retains all copyrights and
-! intellectual property rights explicit or implied by the Apache license
+! intellectual property rights explicitly stated in or implied by the
+! Apache license
 
 ! Version 1.: Sept. 2005 - Initial Cray X1 version
 ! Version 2.: May   2006 - Updated to support g95
@@ -131,12 +133,12 @@
  Integer,              Intent(IN) :: start(*), counts(*)
  Integer(KIND=NFINT1), Intent(IN) :: i1vals(*)
 
- Integer                         :: status
+ Integer                          :: status
 
  Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
  Integer(KIND=C_SIZE_T), TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
  Type(C_PTR)                    :: cstartptr, ccountsptr
- Integer :: ndims
+ Integer                        :: ndims
 
  If (C_SIGNED_CHAR < 0) Then ! schar not supported by processor
    status = NC_EBADTYPE
@@ -189,7 +191,7 @@
  Integer,              Intent(IN) :: start(*), counts(*)
  Integer(KIND=NFINT2), Intent(IN) :: i2vals(*)
 
- Integer                         :: status
+ Integer                          :: status
 
  Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
  Integer(KIND=C_SIZE_T), TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
@@ -245,12 +247,12 @@
  Integer,        Intent(IN) :: start(*), counts(*)
  Integer(NFINT), Intent(IN) :: ivals(*)
 
- Integer             :: status
+ Integer                    :: status
 
  Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
  Integer(KIND=C_SIZE_T), TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
  Type(C_PTR)                    :: cstartptr, ccountsptr
- Integer :: ndims
+ Integer                        :: ndims
 
  cncid   = ncid
  cvarid  = varid - 1 ! Subtract 1 to get C varid
@@ -294,7 +296,7 @@
  Integer,      Intent(IN) :: start(*), counts(*)
  Real(NFREAL), Intent(IN) :: rvals(*)
 
- Integer               :: status
+ Integer                  :: status
 
  Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
  Integer(KIND=C_SIZE_T), TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
@@ -389,13 +391,14 @@
 
  Integer,                Intent(IN)         :: ncid, varid
  Integer,                Intent(IN)         :: start(*), counts(*)
- Character(KIND=C_CHAR), Intent(IN), TARGET :: values(*)
-
+! Character(KIND=C_CHAR), Intent(IN), TARGET :: values(*)
+ Type(C_PTR),            VALUE              :: values
  Integer                                    :: status
 
  Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
  Integer(KIND=C_SIZE_T), TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Type(C_PTR)                    :: cstartptr, ccountsptr, cvaluesptr
+! Type(C_PTR)                    :: cstartptr, ccountsptr, cvaluesptr
+ Type(C_PTR)                    :: cstartptr, ccountsptr
  Integer                        :: ndims
 
  cncid   = ncid
@@ -418,9 +421,10 @@
    ccountsptr = C_LOC(ccounts)
  EndIf
 
- cvaluesptr = C_LOC(values)
+! cvaluesptr = C_LOC(values)
 
- cstatus = nc_put_vara(cncid, cvarid, cstartptr, ccountsptr, cvaluesptr)
+! cstatus = nc_put_vara(cncid, cvarid, cstartptr, ccountsptr, cvaluesptr)
+ cstatus = nc_put_vara(cncid, cvarid, cstartptr, ccountsptr, values)
 
  status = cstatus
 
@@ -529,7 +533,7 @@
  Integer,              Intent(IN)  :: start(*), counts(*)
  Integer(KIND=NFINT1), Intent(OUT) :: i1vals(*)
 
- Integer                          :: status
+ Integer                           :: status
 
  Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
  Integer(KIND=C_SIZE_T), TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
@@ -587,7 +591,7 @@
  Integer,              Intent(IN)  :: start(*), counts(*)
  Integer(KIND=NFINT2), Intent(OUT) :: i2vals(*)
 
- Integer                          :: status
+ Integer                           :: status
 
  Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
  Integer(KIND=C_SIZE_T), TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
@@ -643,7 +647,7 @@
  Integer,        Intent(IN)  :: start(*), counts(*)
  Integer(NFINT), Intent(OUT) :: ivals(*)
 
- Integer              :: status
+ Integer                     :: status
 
  Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
  Integer(KIND=C_SIZE_T), TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
@@ -787,8 +791,8 @@
 
  Integer,                Intent(IN)            :: ncid, varid
  Integer,                Intent(IN)            :: start(*), counts(*)
- Character(KIND=C_CHAR), Intent(INOUT), TARGET :: values(*)
-
+! Character(KIND=C_CHAR), Intent(INOUT), TARGET :: values(*)
+ Type(C_PTR),            VALUE                 :: values
  Integer                                       :: status
 
  Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus

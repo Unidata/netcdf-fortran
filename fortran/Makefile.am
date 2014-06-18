@@ -44,7 +44,7 @@ endif
 libnetcdff_la_SOURCES += module_netcdf_nc_data.F90 module_netcdf_nc_interfaces.f90 \
                          module_netcdf_nf_data.F90 module_netcdf_nf_interfaces.F90 \
                          module_netcdf_f03.f90 \
-			 nf_attio.F90 nf_control.f90 nf_dim.f90 nf_misc.f90 \
+			 nf_attio.F90 nf_control.F90 nf_dim.f90 nf_misc.f90 \
                          nf_genatt.f90 nf_geninq.f90 nf_genvar.f90 \
                          nf_vario.F90 nf_var1io.F90 nf_varaio.F90 \
                          nf_varmio.F90 nf_varsio.F90
@@ -55,6 +55,11 @@ libnetcdff_la_SOURCES += module_netcdf4_nc_interfaces.f90 \
                          module_netcdf4_nf_interfaces.F90 module_netcdf4_f03.f90 \
                          nf_lib.c nf_nc4.f90
 endif USE_NETCDF4
+
+if USE_LOGGING
+# add nf_logging to build
+libnetcdff_la_SOURCES += nf_logging.F90
+endif USE_LOGGING
 
 #else !BUILD_F03
 
@@ -108,6 +113,11 @@ LCHEADERS += netcdf_fortv2_c_interfaces.mod
 UCHEADERS += NETCDF_FORTV2_C_INTERFACES.mod
 endif BUILD_V2
 
+if USE_NETCDF4
+LCHEADERS += netcdf4_nc_interfaces.mod netcdf4_nf_interfaces.mod netcdf4_f03.mod
+UCHEADERS += NETCDF4_NC_INTERFACES.mod NETCDF4_NF_INTERFACES.mod NETCDF4_F03.mod
+endif USE_NETCDF4
+
 endif BUILD_F03
 
 
@@ -134,6 +144,12 @@ if BUILD_V2
 netcdf_fortv2_c_interfaces.mod: module_netcdf_fortv2_c_interfaces.o
 endif BUILD_V2
 #endif !UPPER_CASE_MOD
+
+if USE_NETCDF4
+netcdf4_nc_interfaces.mod: module_netcdf4_nc_interfaces.o
+netcdf4_nf_interfaces.mod: module_netcdf4_nf_interfaces.o
+netcdf4_f03.mod: module_netcdf4_f03.o
+endif USE_NETCDF4
 
 endif BUILD_F03
 

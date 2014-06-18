@@ -15,9 +15,11 @@
 !
 !   http:www.apache.org/licenses/LICENSE-2.0.html
 !
-! The author grants to UCAR the right to revise and extend the software
+! The author grants to the University Corporation for Atmospheric Research
+! (UCAR), Boulder, CO, USA the right to revise and extend the software
 ! without restriction. However, the author retains all copyrights and
-! intellectual property rights explicit or implied by the Apache license
+! intellectual property rights explicitly stated in or implied by the
+! Apache license
 
 ! Version 1.: Sept. 2005 - Initial Cray X1 version
 ! Version 2.: May   2006 - Updated to support g95
@@ -69,8 +71,7 @@
  If (cstatus == NC_NOERR) Then
     ! Add one to returned C varid to yield FORTRAN id
     varid = cvarid + 1
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_def_var
@@ -97,8 +98,7 @@
 
  If (cstatus == NC_NOERR) Then
     vndims = cvndims
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_varndims
@@ -156,7 +156,7 @@
     If (ndims > 0) Then
        dimids(1:ndims) = cdimids(ndims:1:-1)+1
     EndIf
- Endif
+ EndIf
 
  status = cstatus
 
@@ -233,8 +233,7 @@
 
  If (cstatus == NC_NOERR) Then
     varid  = cvarid + 1  ! add one to get Fortran id number
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_varid
@@ -270,8 +269,7 @@
  If (cstatus == NC_NOERR) Then
     ! Find first C null character in tmpname if present and set end of string
     name = stripCNullChar(tmpname, nlen)
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_varname
@@ -299,7 +297,7 @@
 
  If (cstatus == NC_NOERR) Then
     xtype  = cxtype
- Endif
+ EndIf
  status = cstatus
 
  End Function nf_inq_vartype
@@ -326,7 +324,7 @@
 
  If (cstatus == NC_NOERR) Then
     nvatts = cnvatts
- Endif
+ EndIf
 
  status = cstatus
 

@@ -15,9 +15,11 @@ Module netcdf_nc_data
 !
 !   http:www.apache.org/licenses/LICENSE-2.0.html
 !
-! The author grants to UCAR the right to revise and extend the software
+! The author grants to the University Corporation for Atmospheric Research
+! (UCAR), Boulder, CO, USA the right to revise and extend the software
 ! without restriction. However, the author retains all copyrights and
-! intellectual property rights explicit or implied by the Apache license
+! intellectual property rights explicitly stated in or implied by the
+! Apache license
 
 ! Version 1.:  Sept. 2005 - Initial Cray X1 version
 ! Version 2.:  May 2006   - Updated to support g95
@@ -27,6 +29,7 @@ Module netcdf_nc_data
 ! Version 6.:  April 2010 - Updated to NetCDF 4.1.1
 ! Version 7.:  Feb.  2012 - Added support for F2008 Intrinsic kinds
 ! Version 8.:  Feb.  2013 - Updated for netcdf fortran-4.4
+! Version 9.:  April 2014 - Changed C_PTRDIFF_T to UCAR definitions
 
  USE ISO_C_BINDING  ! All subsequent USE associations of netcdf_nc_data
                     ! will inherit ISO_C_BINDING data
@@ -52,11 +55,11 @@ Module netcdf_nc_data
  Integer, Parameter, PRIVATE :: REAL64 = SELECTED_REAL_KIND(P=13, R=307)  ! double
  Integer, Parameter, PRIVATE :: INT8   = SELECTED_INT_KIND( 2)
  Integer, Parameter, PRIVATE :: INT16  = SELECTED_INT_KIND( 4)
- Integer, Parameter, PRIVATE :: INT32  = SELECTED_INT_KIND( 8)            ! int
+ Integer, Parameter, PRIVATE :: INT32  = SELECTED_INT_KIND( 9)            ! int
  Integer, Parameter, PRIVATE :: INT64  = SELECTED_INT_KIND(18)            ! long long
 #endif
 
-! Set KIND parameters used in f03 interface routines etc.
+! Set KIND parameters to shorter names used in f03 interface routines etc.
 
  Integer, Parameter :: RK4 = REAL32
  Integer, Parameter :: RK8 = REAL64
@@ -65,24 +68,21 @@ Module netcdf_nc_data
  Integer, Parameter :: IK4 = INT32
  Integer, Parameter :: IK8 = INT64
  
-! Create some PRIVATE variables to test for short and int2 KINDs
-
-! Integer*1, PRIVATE :: i1
-! Integer*2, PRIVATE :: i2
- 
 ! Define processor/compiler dependent parameters for ptrdiff_t, signed char,
 ! and short types. Note prtdiff_t was not defined in the FORTRAN 2003
 ! standard as an interoperable type in ISO_C_BINDING but was added as part of
 ! the recent TS29113 Technical Specification "Futher Interoperability with C" 
-! passed in 2012. For now we will make our own using C_INTPTR_T but allow users 
-! to use the default definition for compilers that support TS29113
-! (like gfortran 4.8). 
+! passed in 2012. For now we will make our own using C_INT32_T or C_INT64_T
+! but allow users to use the default definition for compilers that support 
+! TS29113 (like gfortran 4.8). Default will be C_INTPTR_T 
 
 #ifndef HAVE_TS29113_SUPPORT
 #if (SIZEOF_PTRDIFF_T == 4)
  Integer, Parameter :: C_PTRDIFF_T = C_INT32_T
 #elif (SIZEOF_PTRDIFF_T == 8)
  Integer, Parameter :: C_PTRDIFF_T = C_INT64_T
+#else
+ Integer, Parameter :: C_PTRDIFF_T = C_INTPTR_T
 #endif
 #endif
 
@@ -98,19 +98,15 @@ Module netcdf_nc_data
 
 #ifdef NF_INT1_IS_C_SIGNED_CHAR
  Integer, Parameter :: CINT1 = C_SIGNED_CHAR
-! Integer, Parameter :: NFINT1 = KIND(i1)
  Integer, Parameter :: NFINT1 = IK1
 #elif NF_INT1_IS_C_SHORT
  Integer, Parameter :: CINT1 = C_SHORT
-! Integer, Parameter :: NFINT1 = KIND(i1)
  Integer, Parameter :: NFINT1 = IK2
 #elif NF_INT1_IS_C_INT
  Integer, Parameter :: CINT1 = C_INT
-! Integer, Parameter :: NFINT1 = KIND(i1) 
  Integer, Parameter :: NFINT1 = IK4
 #elif NF_INT1_IS_C_LONG
  Integer, Parameter :: CINT1 = C_LONG
-! Integer, Parameter :: NFINT1 = KIND(i1)
  Integer, Parameter :: NFINT1 = IK8
 #endif
 
@@ -118,15 +114,12 @@ Module netcdf_nc_data
 
 #ifdef NF_INT2_IS_C_SHORT
  Integer, Parameter :: CINT2 = C_SHORT
-! Integer, Parameter :: NFINT2 = KIND(i2)
  Integer, Parameter :: NFINT2 = IK2
 #elif NF_INT2_IS_C_INT
  Integer, Parameter :: CINT2 = C_INT
-! Integer, Parameter :: NFINT2 = KIND(i2) 
  Integer, Parameter :: NFINT2 = IK4
 #elif NF_INT2_IS_C_LONG
  Integer, Parameter :: CINT2 = C_LONG
-! Integer, Parameter :: NFINT2 = KIND(i2)
  Integer, Parameter :: NFINT2 = IK8
 #endif
 
@@ -162,22 +155,22 @@ Module netcdf_nc_data
 !               
 ! Define enumerator nc_type data as integers
 
- Integer(KIND=C_INT), Parameter ::  NC_NAT    = 0
- Integer(KIND=C_INT), Parameter ::  NC_BYTE   = 1
- Integer(KIND=C_INT), Parameter ::  NC_CHAR   = 2
- Integer(KIND=C_INT), Parameter ::  NC_SHORT  = 3
- Integer(KIND=C_INT), Parameter ::  NC_INT    = 4
- Integer(KIND=C_INT), Parameter ::  NC_FLOAT  = 5
- Integer(KIND=C_INT), Parameter ::  NC_DOUBLE = 6
+ Integer(KIND=C_INT), Parameter :: NC_NAT    = 0
+ Integer(KIND=C_INT), Parameter :: NC_BYTE   = 1
+ Integer(KIND=C_INT), Parameter :: NC_CHAR   = 2
+ Integer(KIND=C_INT), Parameter :: NC_SHORT  = 3
+ Integer(KIND=C_INT), Parameter :: NC_INT    = 4
+ Integer(KIND=C_INT), Parameter :: NC_FLOAT  = 5
+ Integer(KIND=C_INT), Parameter :: NC_DOUBLE = 6
 
 ! Default fill values
 
- Integer(KIND=C_INT), Parameter :: NC_FILL_CHAR    = 0
- Integer(KIND=C_INT), Parameter :: NC_FILL_BYTE    = -127
- Integer(KIND=C_INT), Parameter :: NC_FILL_SHORT   = -32767
- Integer(KIND=C_INT), Parameter :: NC_FILL_INT     = -2147483647
- Real(KIND=C_FLOAT),  Parameter :: NC_FILL_FLOAT   = 9.9692099683868690E+36
- Real(KIND=C_DOUBLE), Parameter :: NC_FILL_DOUBLE  = 9.9692099683868690D+36
+ Character(KIND=C_CHAR),      Parameter :: NC_FILL_CHAR   = C_NULL_CHAR 
+ Integer(KIND=C_SIGNED_CHAR), Parameter :: NC_FILL_BYTE   = -127_C_SIGNED_CHAR
+ Integer(KIND=C_SHORT),       Parameter :: NC_FILL_SHORT  = -32767_C_SHORT
+ Integer(KIND=C_INT),         Parameter :: NC_FILL_INT    = -2147483647_C_INT
+ Real(KIND=C_FLOAT),          Parameter :: NC_FILL_FLOAT  = 9.9692099683868690E+36
+ Real(KIND=C_DOUBLE),         Parameter :: NC_FILL_DOUBLE = 9.9692099683868690D+36
 
 ! Mode flags for opening and creating datasets
 
@@ -202,7 +195,7 @@ Module netcdf_nc_data
 ! Unlimited dimension size argument and global attibute ID
 
  Integer(KIND=C_INT),  Parameter :: NC_UNLIMITED = 0
- Integer(KIND=C_INT),  Parameter :: NC_GLOBAL    = -1
+ Integer(KIND=C_INT),  Parameter :: NC_GLOBAL    = 0 
 
 ! Implementation limits (WARNING!  SHOULD BE THE SAME AS C INTERFACE)
 
@@ -258,10 +251,10 @@ Module netcdf_nc_data
 
 #ifdef USE_NETCDF4
 !                          NETCDF4 data
- Integer(KIND=C_INT), Parameter :: NC_FORMAT_NETCDF4   = 3
+ Integer(KIND=C_INT), Parameter :: NC_FORMAT_NETCDF4         = 3
  Integer(KIND=C_INT), Parameter :: NC_FORMAT_NETCDF4_CLASSIC = 4
- Integer(KIND=C_INT), Parameter :: NC_NETCDF4        = 4096
- Integer(KIND=C_INT), Parameter :: NC_CLASSIC_MODEL  = 256
+ Integer(KIND=C_INT), Parameter :: NC_NETCDF4                = 4096
+ Integer(KIND=C_INT), Parameter :: NC_CLASSIC_MODEL          = 256
 
 ! extra netcdf4 types
  Integer(KIND=C_INT), Parameter :: NC_LONG     = NC_INT
@@ -275,12 +268,12 @@ Module netcdf_nc_data
  Integer(KIND=C_INT), Parameter :: NC_OPAQUE   = 14
  Integer(KIND=C_INT), Parameter :: NC_ENUM     = 15
  Integer(KIND=C_INT), Parameter :: NC_COMPOUND = 16
-!extra netcd4 fill values
- Integer(KIND=C_INT), Parameter :: NC_FILL_UBYTE   = 255
- Integer(KIND=C_INT), Parameter :: NC_FILL_USHORT  = 65535
 
-! Integer(KIND=C_LONG), Parameter :: NC_FILL_UINT   = 4294967295_C_LONG
-! Integer(KIND=C_LONG_LONG), Parameter :: NC_FILL_INT64 = -9223372036854775806
+!extra netcd4 fill values
+ Integer(KIND=C_INT),       Parameter :: NC_FILL_UBYTE  = 255
+ Integer(KIND=C_INT),       Parameter :: NC_FILL_USHORT = 65535
+ Integer(KIND=C_LONG),      Parameter :: NC_FILL_UINT   = 4294967295_C_LONG
+ Integer(KIND=C_LONG_LONG), Parameter :: NC_FILL_INT64  = -9223372036854775806_C_LONG_LONG
 
 ! extra netcdf4 variable flags 
  Integer(KIND=C_INT), Parameter :: NC_CHUNK_SEQ      = 0 

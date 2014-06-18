@@ -201,6 +201,11 @@
       integer nf_def_grp
       external nf_def_grp
 
+!     New rename grp function
+
+      integer nf_rename_grp
+      external nf_rename_grp
+
 !     New options for netCDF variables.
       integer nf_def_var_deflate
       external nf_def_var_deflate

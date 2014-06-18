@@ -15,9 +15,11 @@
 !
 !   http:www.apache.org/licenses/LICENSE-2.0.html
 !
-! The author grants to UCAR the right to revise and extend the software
+! The author grants to the University Corporation for Atmospheric Research
+! (UCAR), Boulder, CO, USA the right to revise and extend the software
 ! without restriction. However, the author retains all copyrights and
-! intellectual property rights explicit or implied by the Apache license
+! intellectual property rights explicitly stated in or implied by the
+! Apache license
 
 ! Version 1.: Sept. 2005  - Initial Cray X1 version
 !             April 2006  - Updated to include 3.6.1 function nf_inq_format
@@ -61,8 +63,7 @@
     Else
        unlimdimid = cunlimdimid + 1
     EndIf
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq
@@ -78,7 +79,7 @@
  Integer, Intent(IN)  :: ncid
  Integer, Intent(OUT) :: ndims
 
- Integer               :: status
+ Integer              :: status
 
  Integer(KIND=C_INT) :: cncid, cndims, cstatus
 
@@ -88,8 +89,7 @@
 
  If (cstatus == NC_NOERR) Then
     ndims  = cndims
- Endif
-    
+ EndIf    
  status = cstatus
 
  End Function nf_inq_ndims
@@ -115,8 +115,7 @@
 
  If (cstatus == NC_NOERR) Then
     nvars  = cnvars
- Endif
-    
+ EndIf    
  status = cstatus
 
  End Function nf_inq_nvars
@@ -142,8 +141,7 @@
 
  If (cstatus == NC_NOERR) Then
     ngatts = cngatts
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_natts
@@ -175,8 +173,7 @@
     Else
        unlimdimid = cunlimdimid + 1
     EndIf
- Endif
-
+ EndIf
  status = cstatus
 
  End Function nf_inq_unlimdim
@@ -204,8 +201,7 @@
 ! Return format_type 
     
     format_type = cformatp
- Endif
-
- status = cstatus
+ EndIf
+ status  = cstatus
 
  End Function nf_inq_format

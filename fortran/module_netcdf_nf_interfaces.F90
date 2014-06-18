@@ -23,9 +23,11 @@ Module netcdf_nf_interfaces
 !
 !   http:www.apache.org/licenses/LICENSE-2.0.html
 !
-! The author grants to UCAR the right to revise and extend the software
+! The author grants to the University Corporation for Atmospheric Research
+! (UCAR), Boulder, CO, USA the right to revise and extend the software
 ! without restriction. However, the author retains all copyrights and
-! intellectual property rights explicit or implied by the Apache license
+! intellectual property rights explicitly stated in or implied by the
+! Apache license
 
 ! Version 1. Sept. 2005 - Initial Cray X1 version
 ! Version 2. May, 2006  - Updated to support g95
@@ -38,60 +40,10 @@ Module netcdf_nf_interfaces
 ! for all subroutines and functions in their codes. Therefore, this module is
 ! is primarily for people writting new programs.
 
-! The following will allow us to use the Fortran 2008 default intrinsic
-! kind variables contained in Fortran 2008 ISO_FORTAN_ENV module when
-! compilers support it. Actually most of the major compilers (and even
-! the latest gfortran) support these now (Feb. 2012)
-
-#ifdef HAVE_F2008
- USE ISO_FORTRAN_ENV, ONLY: REAL32, REAL64, INT32, INT64
-#endif
- 
  Implicit NONE
 
 #include "nfconfig.inc"
 
-#ifndef HAVE_F2008
-
-! Create our own REAL32, REAL64, INT32, INT64 if we don't have F2008
-! ISO_FORTRAN_ENV module
-
- Integer, Parameter, PRIVATE :: REAL32 = SELECTED_REAL_KIND(P=6,  R=37)   ! float 
- Integer, Parameter, PRIVATE :: REAL64 = SELECTED_REAL_KIND(P=13, R=307)  ! double
- Integer, Parameter, PRIVATE :: INT32  = SELECTED_INT_KIND( 8)            ! int
- Integer, Parameter, PRIVATE :: INT64  = SELECTED_INT_KIND(18)            ! long long
-#endif
-
-! Define some local (private to module) kind parameters for byte and
-! integer types if they are present. Similar global values are set
-! in module_netcdf_nc_interfaces so we make them private here and avoid
-! having to USE associate netcdf_c_interfaces to get them. This logic
-! is needed to avoid interface problems when the FORTRAN compiler does
-! not support BYTE or Integer(2) data types.
-
-
- Integer, Parameter, PRIVATE :: RK4 = REAL32
- Integer, Parameter, PRIVATE :: RK8 = REAL64
- Integer, Parameter, PRIVATE :: IK4 = INT32
- Integer, Parameter, PRIVATE :: IK8 = INT32
-
-! Create some PRIVATE variables to test for KIND
-
- Integer*1, PRIVATE          :: i1
- Integer*2, PRIVATE          :: i2
- Integer, Parameter, PRIVATE :: NFINT1 = KIND(i1)
- Integer, Parameter, PRIVATE :: NFINT2 = KIND(i2)
-#ifdef NF_INT_IS_C_LONG
- Integer, Parameter, PRIVATE :: NFINT = IK8
-#else
- Integer, Parameter, PRIVATE :: NFINT = IK4
-#endif
-
-#ifdef NF_REAL_IS_C_DOUBLE
-  Integer, Parameter, PRIVATE :: NFREAL = RK8
-#else
-  Integer, Parameter, PRIVATE :: NFREAL = RK4
-#endif
 !-------------------- Explicit Interfaces for nf routines ------------------
 
 ! Misc functions first
@@ -103,15 +55,13 @@ Interface
 
  End Function nf_inq_libvers
 End Interface
-!-------------------------------- nf_stderror ---------------------------------
+!-------------------------------- nf_strerror ---------------------------------
 Interface
  Function nf_strerror(nerr) RESULT(errmsg)
 
- USE netcdf_nc_interfaces, ONLY:C_INT
- 
- Integer(C_INT), Intent(IN) :: nerr
+ Integer, Intent(IN) :: nerr
 
- Character(LEN=80)               :: errmsg
+ Character(LEN=80)   :: errmsg
 
  End Function nf_strerror
 End Interface
@@ -120,7 +70,6 @@ Interface
  Function nf_issyserr(nerr) RESULT(status)
 
  Integer, Intent(IN) :: nerr
- 
  Logical             :: status
 
  End Function nf_issyserr
@@ -134,7 +83,6 @@ Interface
  Character(LEN=*), Intent(IN)  :: path
  Integer,          Intent(IN)  :: cmode
  Integer,          Intent(OUT) :: ncid
-
  Integer                       :: status
 
  End Function nf_create
@@ -147,7 +95,6 @@ Interface
  Character(LEN=*), Intent(IN)  :: path
  Integer,          Intent(IN)  :: cmode, initialsz, chunksizehintp
  Integer,          Intent(OUT) :: ncid
-
  Integer                       :: status
 
  End Function nf__create
@@ -160,7 +107,6 @@ Interface
  Character(LEN=*), Intent(IN)  :: path
  Integer,          Intent(IN)  :: cmode, initialsz, chunksizehintp, basepe
  Integer,          Intent(OUT) :: ncid
-
  Integer                       :: status
 
  End Function nf__create_mp
@@ -172,7 +118,6 @@ Interface
  Character(LEN=*), Intent(IN)    :: path
  Integer,          Intent(IN)    :: mode
  Integer,          Intent(INOUT) :: ncid
-
  Integer                         :: status
 
  End Function nf_open
@@ -184,7 +129,6 @@ Interface
  Character(LEN=*), Intent(IN)    :: path
  Integer,          Intent(IN)    :: mode, chunksizehintp
  Integer,          Intent(INOUT) :: ncid
-
  Integer                         :: status
 
  End Function nf__open
@@ -196,7 +140,6 @@ Interface
  Character(LEN=*), Intent(IN)    :: path
  Integer,          Intent(IN)    :: mode, chunksizehintp, basepe
  Integer,          Intent(INOUT) :: ncid
-
  Integer                         :: status
 
  End Function nf__open_mp
@@ -208,7 +151,6 @@ Interface
  Integer,          Intent(IN)    :: ncid
  Integer,          Intent(INOUT) :: pathlen
  Character(LEN=*), Intent(INOUT) :: path
-
  Integer                         :: status
 
  End Function nf_inq_path
@@ -219,7 +161,6 @@ Interface
 
  Integer, Intent(IN)  :: ncid, fillmode
  Integer, Intent(OUT) :: old_mode
-
  Integer              :: status
 
  End Function nf_set_fill
@@ -230,7 +171,6 @@ Interface
 
  Integer, Intent(IN)  :: newform
  Integer, Intent(OUT) :: old_format
-
  Integer              :: status
 
  End Function nf_set_default_format
@@ -240,7 +180,6 @@ Interface
  Function nf_redef(ncid) RESULT(status)
 
  Integer, Intent(IN) :: ncid
-
  Integer             :: status
 
  End Function nf_redef
@@ -250,7 +189,6 @@ Interface
  Function nf_enddef(ncid) RESULT(status)
 
  Integer, Intent(IN) :: ncid
-
  Integer             :: status
 
  End Function nf_enddef
@@ -261,7 +199,6 @@ Interface
                         RESULT(status)
 
  Integer, Intent(IN) :: ncid, h_minfree, v_align, v_minfree, r_align
-
  Integer             :: status
 
  End Function nf__enddef
@@ -272,7 +209,6 @@ Interface
  Function nf_sync(ncid) RESULT(status)
 
  Integer, Intent(IN) :: ncid
-
  Integer             :: status
 
  End Function nf_sync
@@ -282,7 +218,6 @@ Interface
  Function nf_abort(ncid) RESULT(status)
 
  Integer, Intent(IN) :: ncid
-
  Integer             :: status
 
  End Function nf_abort
@@ -291,10 +226,7 @@ End Interface
 Interface
  Function nf_close(ncid) RESULT(status)
 
-! Close netCDF file id ncid
-
  Integer, Intent(IN) :: ncid
-
  Integer             :: status
 
  End Function nf_close
@@ -304,7 +236,6 @@ Interface
  Function nf_delete(path) RESULT(status)
 
  Character(LEN=*), Intent(IN) :: path
-
  Integer                      :: status
 
  End Function nf_delete
@@ -315,7 +246,6 @@ Interface
 
  Character(LEN=*), Intent(IN) :: path
  Integer,          Intent(IN) :: pe
-
  Integer                      :: status
 
  End Function nf_delete_mp
@@ -325,7 +255,6 @@ Interface
  Function nf_set_base_pe(ncid, pe) RESULT(status)
 
  Integer, Intent(IN) :: ncid, pe
-
  Integer             :: status
 
  End Function nf_set_base_pe
@@ -335,8 +264,7 @@ Interface
  Function nf_inq_base_pe(ncid, pe) RESULT(status)
 
  Integer, Intent(IN)  :: ncid
- Integer, Intent(OUT) ::  pe
-
+ Integer, Intent(OUT) :: pe
  Integer              :: status
 
  End Function nf_inq_base_pe
@@ -351,7 +279,6 @@ Interface
  Integer,          Intent(IN)  :: ncid, dlen
  Integer,          Intent(OUT) :: dimid
  Character(LEN=*), Intent(IN)  :: name
-
  Integer                       :: status
 
  End Function nf_def_dim
@@ -363,7 +290,6 @@ Interface
  Integer,          Intent(IN)   :: ncid, dimid
  Integer,          Intent(OUT)  :: dlen
  Character(LEN=*), Intent(OUT)  :: name
-
  Integer                        :: status
 
  End Function nf_inq_dim
@@ -375,7 +301,6 @@ Interface
  Integer,          Intent(IN)  :: ncid
  Integer,          Intent(OUT) :: dimid
  Character(LEN=*), Intent(IN)  :: name
-
  Integer                       :: status
 
  End Function nf_inq_dimid
@@ -386,7 +311,6 @@ Interface
 
  Integer, Intent(IN)  :: ncid, dimid
  Integer, Intent(OUT) :: dlen
-
  Integer              :: status
 
  End Function nf_inq_dimlen
@@ -397,7 +321,6 @@ Interface
 
  Integer,          Intent(IN)   :: ncid, dimid
  Character(LEN=*), Intent(OUT)  :: name
-
  Integer                        :: status
 
  End Function nf_inq_dimname
@@ -408,7 +331,6 @@ Interface
 
  Integer,          Intent(IN)  :: ncid, dimid
  Character(LEN=*), Intent(IN)  :: name
-
  Integer                       :: status
 
  End Function nf_rename_dim
@@ -422,7 +344,6 @@ Interface
 
  Integer, Intent(IN)  :: ncid
  Integer, Intent(OUT) :: ndims, nvars, ngatts, unlimdimid
-
  Integer              :: status
 
  End Function nf_inq
@@ -433,7 +354,6 @@ Interface
 
  Integer, Intent(IN)  :: ncid
  Integer, Intent(OUT) :: ndims
-
  Integer              :: status
 
  End Function nf_inq_ndims
@@ -444,7 +364,6 @@ Interface
 
  Integer, Intent(IN)  :: ncid
  Integer, Intent(OUT) :: nvars
-
  Integer              :: status
 
  End Function nf_inq_nvars
@@ -455,7 +374,6 @@ Interface
 
  Integer, Intent(IN)  :: ncid
  Integer, Intent(OUT) :: ngatts
-
  Integer              :: status
 
  End Function nf_inq_natts
@@ -466,7 +384,6 @@ Interface
 
  Integer, Intent(IN)  :: ncid
  Integer, Intent(OUT) :: unlimdimid
-
  Integer              :: status
 
  End Function nf_inq_unlimdim
@@ -477,7 +394,6 @@ Interface
 
  Integer, Intent(IN)  :: ncid
  Integer, Intent(OUT) :: format_type
-
  Integer              :: status
 
  End Function nf_inq_format
@@ -489,13 +405,10 @@ End Interface
 Interface
  Function nf_def_var(ncid, name, xtype, nvdims, vdims, varid) RESULT (status)
 
-
-
  Integer,          Intent(IN)  :: ncid, xtype, nvdims
  Integer,          Intent(IN)  :: vdims(*)
  Integer,          Intent(OUT) :: varid
  Character(LEN=*), Intent(IN)  :: name
-
  Integer                       :: status
 
  End Function nf_def_var
@@ -506,7 +419,6 @@ Interface
 
  Integer, Intent(IN)  :: ncid, varid
  Integer, Intent(OUT) :: vndims
-
  Integer              :: status
 
  End Function nf_inq_varndims
@@ -520,7 +432,6 @@ Interface
  Character(LEN=*), Intent(OUT) :: name
  Integer,          Intent(OUT) :: dimids(*)
  Integer,          Intent(OUT) :: ndims, xtype, natts
-
  Integer                       :: status
 
  End Function nf_inq_var
@@ -531,7 +442,6 @@ Interface
 
  Integer, Intent(IN)  :: ncid, varid
  Integer, Intent(OUT) :: dimids(*)
-
  Integer              :: status
 
  End Function nf_inq_vardimid
@@ -543,7 +453,6 @@ Interface
  Integer,          Intent(IN)  :: ncid
  Integer,          Intent(OUT) :: varid
  Character(LEN=*), Intent(IN)  :: name
-
  Integer                       :: status
 
  End Function nf_inq_varid
@@ -554,7 +463,6 @@ Interface
 
  Integer,          Intent(IN)   :: ncid, varid
  Character(LEN=*), Intent(OUT)  :: name
-
  Integer                        :: status
 
  End Function nf_inq_varname
@@ -565,7 +473,6 @@ Interface
 
  Integer, Intent(IN)  :: ncid, varid
  Integer, Intent(OUT) :: xtype
-
  Integer              :: status
 
  End Function nf_inq_vartype
@@ -576,7 +483,6 @@ Interface
 
  Integer, Intent(IN)  :: ncid, varid
  Integer, Intent(OUT) :: nvatts
-
  Integer              :: status
 
  End Function nf_inq_varnatts
@@ -587,7 +493,6 @@ Interface
 
  Integer,          Intent(IN) :: ncid, varid
  Character(LEN=*), Intent(IN) :: name
-
  Integer                      :: status
 
  End Function nf_rename_var
@@ -597,7 +502,6 @@ Interface
  Function nf_copy_var(ncid_in, varid, ncid_out) RESULT(status)
 
  Integer, Intent(IN) :: ncid_in, varid, ncid_out
-
  Integer             :: status
 
  End Function nf_copy_var
@@ -612,7 +516,6 @@ Interface
  Integer,          Intent(IN)  :: ncid, varid
  Integer,          Intent(OUT) :: nlen, xtype
  Character(LEN=*), Intent(IN)  :: name
-
  Integer                       :: status
 
  End Function nf_inq_att
@@ -624,7 +527,6 @@ Interface
  Integer,          Intent(IN)  :: ncid, varid
  Integer,          Intent(OUT) :: xtype
  Character(LEN=*), Intent(IN)  :: name
-
  Integer                       :: status
 
  End Function nf_inq_atttype
@@ -636,7 +538,6 @@ Interface
  Integer,          Intent(IN)  :: ncid, varid
  Integer,          Intent(OUT) :: nlen
  Character(LEN=*), Intent(IN)  :: name
-
  Integer                       :: status
 
  End Function nf_inq_attlen
@@ -648,7 +549,6 @@ Interface
  Integer,          Intent(IN)  :: ncid, varid
  Integer,          Intent(OUT) :: attnum
  Character(LEN=*), Intent(IN)  :: name
-
  Integer                       :: status
 
  End Function nf_inq_attid
@@ -659,7 +559,6 @@ Interface
 
  Integer,          Intent(IN)  :: ncid, varid, attnum
  Character(LEN=*), Intent(OUT) :: name
-
  Integer                       :: status
 
  End Function nf_inq_attname
@@ -671,7 +570,6 @@ Interface
 
  Integer,          Intent(IN)  :: ncid_in, varid_in, ncid_out, varid_out
  Character(LEN=*), Intent(IN)  :: name
-
  Integer                       :: status
 
  End Function nf_copy_att
@@ -682,7 +580,6 @@ Interface
 
  Integer,          Intent(IN) :: ncid, varid
  Character(LEN=*), Intent(IN) :: name, newname
-
  Integer                      :: status
 
  End Function nf_rename_att
@@ -693,7 +590,6 @@ Interface
 
  Integer,          Intent(IN) :: ncid, varid
  Character(LEN=*), Intent(IN) :: name
-
  Integer                      :: status
 
  End Function nf_del_att
@@ -708,7 +604,6 @@ Interface
  Integer,          Intent(IN) :: ncid, varid
  Integer,          Intent(IN) :: ndex(*)
  Character(LEN=1), Intent(IN) :: chval
-
  Integer                      :: status
 
  End Function nf_put_var1_text
@@ -717,13 +612,12 @@ End Interface
 Interface
  Function nf_put_var1_int1(ncid, varid, ndex, ival) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT1
+ USE netcdf_nf_data, ONLY: NFINT1
 
- Integer,              Intent(IN) :: ncid, varid
- Integer,              Intent(IN) :: ndex(*)
+ Integer,         Intent(IN) :: ncid, varid
+ Integer,         Intent(IN) :: ndex(*)
  Integer(NFINT1), Intent(IN) :: ival
-
- Integer                          :: status
+ Integer                     :: status
 
  End Function nf_put_var1_int1
 End Interface
@@ -731,12 +625,11 @@ End Interface
 Interface
  Function nf_put_var1_int2(ncid, varid, ndex, ival) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT2
+ USE netcdf_nf_data, ONLY: NFINT2
 
  Integer,         Intent(IN) :: ncid, varid
  Integer,         Intent(IN) :: ndex(*)
  Integer(NFINT2), Intent(IN) :: ival
-
  Integer                     :: status
 
  End Function nf_put_var1_int2
@@ -745,11 +638,10 @@ End Interface
 Interface
  Function nf_put_var1_int(ncid, varid, ndex, ival) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT
+ USE netcdf_nf_data, ONLY: NFINT
  Integer,        Intent(IN) :: ncid, varid
  Integer,        Intent(IN) :: ndex(*)
  Integer(NFINT), Intent(IN) :: ival
-
  Integer                    :: status
 
  End Function nf_put_var1_int
@@ -758,13 +650,12 @@ End Interface
 Interface
  Function nf_put_var1_real(ncid, varid, ndex, rval) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFREAL
+ USE netcdf_nf_data, ONLY: NFREAL
 
  Integer,      Intent(IN) :: ncid, varid
  Integer,      Intent(IN) :: ndex(*)
  Real(NFREAL), Intent(IN) :: rval
-
- Integer               :: status
+ Integer                  :: status
 
  End Function nf_put_var1_real
 End Interface
@@ -772,12 +663,11 @@ End Interface
 Interface
  Function nf_put_var1_double(ncid, varid, ndex, dval) RESULT(status)
 
- USE netcdf_nc_data, ONLY: RK8
+ USE netcdf_nf_data, ONLY: RK8
 
  Integer,   Intent(IN) :: ncid, varid
  Integer,   Intent(IN) :: ndex(*)
  Real(RK8), Intent(IN) :: dval
-
  Integer               :: status
 
  End Function nf_put_var1_double
@@ -789,7 +679,6 @@ Interface
  Integer,          Intent(IN)  :: ncid, varid
  Integer,          Intent(IN)  :: ndex(*)
  Character(LEN=1), Intent(OUT) :: chval
-
  Integer                       :: status
 
  End Function nf_get_var1_text
@@ -798,13 +687,12 @@ End Interface
 Interface
  Function nf_get_var1_int1(ncid, varid, ndex, ival) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT1
+ USE netcdf_nf_data, ONLY: NFINT1
 
- Integer,             Intent(IN)  :: ncid, varid
- Integer,             Intent(IN)  :: ndex(*)
+ Integer,         Intent(IN)  :: ncid, varid
+ Integer,         Intent(IN)  :: ndex(*)
  Integer(NFINT1), Intent(OUT) :: ival
-
- Integer                          :: status
+ Integer                      :: status
 
  End Function nf_get_var1_int1
 End Interface
@@ -812,13 +700,12 @@ End Interface
 Interface
  Function nf_get_var1_int2(ncid, varid, ndex, ival) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT2
+ USE netcdf_nf_data, ONLY: NFINT2
 
- Integer,              Intent(IN)  :: ncid, varid
- Integer,              Intent(IN)  :: ndex(*)
+ Integer,         Intent(IN)  :: ncid, varid
+ Integer,         Intent(IN)  :: ndex(*)
  Integer(NFINT2), Intent(OUT) :: ival
-
- Integer                          :: status
+ Integer                      :: status
 
  End Function nf_get_var1_int2
 End Interface
@@ -826,12 +713,11 @@ End Interface
 Interface
  Function nf_get_var1_int(ncid, varid, ndex, ival) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT
+ USE netcdf_nf_data, ONLY: NFINT
  Integer,        Intent(IN)  :: ncid, varid
  Integer,        Intent(IN)  :: ndex(*)
  Integer(NFINT), Intent(OUT) :: ival
-
- Integer              :: status
+ Integer                     :: status
 
  End Function nf_get_var1_int
 End Interface
@@ -839,13 +725,12 @@ End Interface
 Interface
  Function nf_get_var1_real(ncid, varid, ndex, rval) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFREAL
+ USE netcdf_nf_data, ONLY: NFREAL
 
- Integer,   Intent(IN)  :: ncid, varid
- Integer,   Intent(IN)  :: ndex(*)
+ Integer,      Intent(IN)  :: ncid, varid
+ Integer,      Intent(IN)  :: ndex(*)
  Real(NFREAL), Intent(OUT) :: rval
-
- Integer                :: status
+ Integer                   :: status
 
  End Function nf_get_var1_real
 End Interface
@@ -853,12 +738,11 @@ End Interface
 Interface
  Function nf_get_var1_double(ncid, varid, ndex, rval) RESULT(status)
 
- USE netcdf_nc_data, ONLY: RK8
+ USE netcdf_nf_data, ONLY: RK8
 
  Integer,   Intent(IN)  :: ncid, varid
  Integer,   Intent(IN)  :: ndex(*)
  Real(RK8), Intent(OUT) :: rval
-
  Integer                :: status
 
  End Function nf_get_var1_double
@@ -872,7 +756,6 @@ Interface nf_put_var_text
 
  Integer,          Intent(IN) :: ncid, varid
  Character(LEN=*), Intent(IN) :: text
-
  Integer                      :: status
 
  End Function nf_put_var_text
@@ -881,7 +764,6 @@ Interface nf_put_var_text
 
  Integer,          Intent(IN) :: ncid, varid
  Character(LEN=1), Intent(IN) :: text(*)
-
  Integer                      :: status
 
  End Function nf_put_var_text_a
@@ -890,12 +772,11 @@ End Interface
 Interface
  Function nf_put_var_int1(ncid, varid, i1vals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT1
+ USE netcdf_nf_data, ONLY: NFINT1
 
- Integer,             Intent(IN) :: ncid, varid
+ Integer,         Intent(IN) :: ncid, varid
  Integer(NFINT1), Intent(IN) :: i1vals(*)
-
- Integer                         :: status
+ Integer                     :: status
 
  End Function nf_put_var_int1
 End Interface
@@ -903,12 +784,11 @@ End Interface
 Interface
  Function nf_put_var_int2(ncid, varid, i2vals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT2
+ USE netcdf_nf_data, ONLY: NFINT2
 
- Integer,             Intent(IN) :: ncid, varid
+ Integer,         Intent(IN) :: ncid, varid
  Integer(NFINT2), Intent(IN) :: i2vals(*)
-
- Integer                         :: status
+ Integer                     :: status
 
  End Function nf_put_var_int2
 End Interface
@@ -916,10 +796,10 @@ End Interface
 Interface
  Function nf_put_var_int(ncid, varid, ivals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT
+ USE netcdf_nf_data, ONLY: NFINT
+
  Integer,        Intent(IN) :: ncid, varid
  Integer(NFINT), Intent(IN) :: ivals(*)
-
  Integer             :: status
 
  End Function nf_put_var_int
@@ -928,10 +808,10 @@ End Interface
 Interface
  Function nf_put_var_real(ncid, varid, rvals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFREAL
+ USE netcdf_nf_data, ONLY: NFREAL
+
  Integer,      Intent(IN) :: ncid, varid
  Real(NFREAL), Intent(IN) :: rvals(*)
-
  Integer                  :: status
 
  End Function nf_put_var_real
@@ -940,11 +820,10 @@ End Interface
 Interface
  Function nf_put_var_double(ncid, varid, dvals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: RK8
+ USE netcdf_nf_data, ONLY: RK8
 
  Integer,   Intent(IN) :: ncid, varid
  Real(RK8), Intent(IN) :: dvals(*)
-
  Integer               :: status
 
  End Function nf_put_var_double
@@ -955,7 +834,6 @@ Interface nf_get_var_text
 
  Integer,          Intent(IN)  :: ncid, varid
  Character(LEN=*), Intent(OUT) :: text
-
  Integer                       :: status
 
  End Function nf_get_var_text
@@ -964,7 +842,6 @@ Interface nf_get_var_text
 
  Integer,          Intent(IN)  :: ncid, varid
  Character(LEN=1), Intent(OUT) :: text(*)
-
  Integer                       :: status
 
  End Function nf_get_var_text_a
@@ -973,11 +850,10 @@ End Interface
 Interface
  Function nf_get_var_int1(ncid, varid, i1vals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT1
+ USE netcdf_nf_data, ONLY: NFINT1
 
  Integer,         Intent(IN)  :: ncid, varid
  Integer(NFINT1), Intent(OUT) :: i1vals(*)
-
  Integer                      :: status
 
  End Function nf_get_var_int1
@@ -986,11 +862,10 @@ End Interface
 Interface
  Function nf_get_var_int2(ncid, varid, i2vals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT2
+ USE netcdf_nf_data, ONLY: NFINT2
 
  Integer,         Intent(IN)  :: ncid, varid
  Integer(NFINT2), Intent(OUT) :: i2vals(*)
-
  Integer                      :: status
 
  End Function nf_get_var_int2
@@ -999,13 +874,11 @@ End Interface
 Interface
  Function nf_get_var_int(ncid, varid, ivals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT
+ USE netcdf_nf_data, ONLY: NFINT
  
  Integer,        Intent(IN)  :: ncid, varid
  Integer(NFINT), Intent(OUT) :: ivals(*)
-
-
- Integer              :: status
+ Integer                     :: status
 
  End Function nf_get_var_int
 End Interface
@@ -1013,11 +886,10 @@ End Interface
 Interface
  Function nf_get_var_real(ncid, varid, rvals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFREAL
+ USE netcdf_nf_data, ONLY: NFREAL
 
  Integer,      Intent(IN)  :: ncid, varid
  Real(NFREAL), Intent(OUT) :: rvals(*)
-
  Integer                   :: status
 
  End Function nf_get_var_real
@@ -1026,11 +898,10 @@ End Interface
 Interface
  Function nf_get_var_double(ncid, varid, dvals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: RK8
+ USE netcdf_nf_data, ONLY: RK8
 
  Integer,   Intent(IN)  :: ncid, varid
  Real(RK8), Intent(OUT) :: dvals(*)
-
  Integer                :: status
 
  End Function nf_get_var_double
@@ -1046,7 +917,6 @@ Interface nf_put_vars_text
  Integer,          Intent(IN) :: ncid, varid
  Integer,          Intent(IN) :: start(*), counts(*), strides(*)
  Character(LEN=*), Intent(IN) :: text
-
  Integer                      :: status
 
  End Function nf_put_vars_text
@@ -1057,7 +927,6 @@ Interface nf_put_vars_text
  Integer,          Intent(IN) :: ncid, varid
  Integer,          Intent(IN) :: start(*), counts(*), strides(*)
  Character(LEN=1), Intent(IN) :: text(*)
-
  Integer                      :: status
 
  End Function nf_put_vars_text_a
@@ -1067,12 +936,11 @@ Interface
  Function nf_put_vars_int1(ncid, varid, start, counts, strides, i1vals) &
                               RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT1
+ USE netcdf_nf_data, ONLY: NFINT1
 
  Integer,         Intent(IN) :: ncid, varid
  Integer,         Intent(IN) :: start(*), counts(*), strides(*)
  Integer(NFINT1), Intent(IN) :: i1vals(*)
-
  Integer                     :: status
 
  End Function nf_put_vars_int1
@@ -1082,12 +950,11 @@ Interface
  Function nf_put_vars_int2(ncid, varid, start, counts, strides, i2vals) &
                               RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT2
+ USE netcdf_nf_data, ONLY: NFINT2
 
  Integer,         Intent(IN) :: ncid, varid
  Integer,         Intent(IN) :: start(*), counts(*), strides(*)
  Integer(NFINT2), Intent(IN) :: i2vals(*)
-
  Integer                     :: status
 
  End Function nf_put_vars_int2
@@ -1097,12 +964,11 @@ Interface
  Function nf_put_vars_int(ncid, varid, start, counts, strides, ivals) &
                              RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT
+ USE netcdf_nf_data, ONLY: NFINT
 
  Integer,        Intent(IN) :: ncid, varid
  Integer,        Intent(IN) :: start(*), counts(*), strides(*)
  Integer(NFINT), Intent(IN) :: ivals(*)
-
  Integer                    :: status
 
  End Function nf_put_vars_int
@@ -1112,13 +978,12 @@ Interface
  Function nf_put_vars_real(ncid, varid, start, counts, strides, rvals) &
                               RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFREAL
+ USE netcdf_nf_data, ONLY: NFREAL
 
  Integer,      Intent(IN) :: ncid, varid
  Integer,      Intent(IN) :: start(*), counts(*), strides(*)
  Real(NFREAL), Intent(IN) :: rvals(*)
-
- Integer               :: status
+ Integer                  :: status
 
  End Function nf_put_vars_real
 End Interface
@@ -1127,12 +992,11 @@ Interface
  Function nf_put_vars_double(ncid, varid, start, counts, strides, dvals) &
                                 RESULT(status)
 
- USE netcdf_nc_data, ONLY: RK8
+ USE netcdf_nf_data, ONLY: RK8
 
  Integer,   Intent(IN) :: ncid, varid
  Integer,   Intent(IN) :: start(*), counts(*), strides(*)
  Real(RK8), Intent(IN) :: dvals(*)
-
  Integer               :: status
 
  End Function nf_put_vars_double
@@ -1145,8 +1009,7 @@ Interface nf_get_vars_text
  Integer,          Intent(IN)  :: ncid, varid
  Integer,          Intent(IN)  :: start(*), counts(*), strides(*)
  Character(LEN=*), Intent(OUT) :: text
-
- Integer :: status
+ Integer                       :: status
 
  End Function nf_get_vars_text
 ! array of characters
@@ -1156,7 +1019,6 @@ Interface nf_get_vars_text
  Integer,          Intent(IN)  :: ncid, varid
  Integer,          Intent(IN)  :: start(*), counts(*), strides(*)
  Character(LEN=1), Intent(OUT) :: text(*)
-
  Integer                       :: status
 
  End Function nf_get_vars_text_a
@@ -1166,12 +1028,11 @@ Interface
  Function nf_get_vars_int1(ncid, varid, start, counts, strides, i1vals) &
                               RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT1
+ USE netcdf_nf_data, ONLY: NFINT1
 
  Integer,         Intent(IN)  :: ncid, varid
  Integer,         Intent(IN)  :: start(*), counts(*), strides(*)
  Integer(NFINT1), Intent(OUT) :: i1vals(*)
-
  Integer                      :: status
 
  End Function nf_get_vars_int1
@@ -1181,13 +1042,12 @@ Interface
  Function nf_get_vars_int2(ncid, varid, start, counts, strides, i2vals) &
                               RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT2
+ USE netcdf_nf_data, ONLY: NFINT2
 
  Integer,         Intent(IN)  :: ncid, varid
  Integer,         Intent(IN)  :: start(*), counts(*), strides(*)
  Integer(NFINT2), Intent(OUT) :: i2vals(*)
-
- Integer                          :: status
+ Integer                      :: status
 
  End Function nf_get_vars_int2
 End Interface
@@ -1196,12 +1056,11 @@ Interface
  Function nf_get_vars_int(ncid, varid, start, counts, strides, ivals) &
                              RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT
+ USE netcdf_nf_data, ONLY: NFINT
 
  Integer,        Intent(IN)  :: ncid, varid
  Integer,        Intent(IN)  :: start(*), counts(*), strides(*)
  Integer(NFINT), Intent(OUT) :: ivals(*)
-
  Integer                     :: status
 
  End Function nf_get_vars_int
@@ -1211,12 +1070,11 @@ Interface
  Function nf_get_vars_real(ncid, varid, start, counts, strides, rvals) &
                               RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFREAL
+ USE netcdf_nf_data, ONLY: NFREAL
 
  Integer,      Intent(IN)  :: ncid, varid
  Integer,      Intent(IN)  :: start(*), counts(*), strides(*)
  Real(NFREAL), Intent(OUT) :: rvals(*)
-
  Integer                   :: status
 
  End Function nf_get_vars_real
@@ -1226,12 +1084,11 @@ Interface
  Function nf_get_vars_double(ncid, varid, start, counts, strides, dvals) &
                                 RESULT(status)
 
- USE netcdf_nc_data, ONLY: RK8
+ USE netcdf_nf_data, ONLY: RK8
 
  Integer,   Intent(IN)  :: ncid, varid
  Integer,   Intent(IN)  :: start(*), counts(*), strides(*)
  Real(RK8), Intent(OUT) :: dvals(*)
-
  Integer                :: status
 
  End Function nf_get_vars_double
@@ -1249,7 +1106,6 @@ Interface nf_put_varm_text
  Integer,          Intent(IN) :: ncid, varid
  Integer,          Intent(IN) :: start(*), counts(*), strides(*), maps(*)
  Character(LEN=*), Intent(IN) :: text
-
  Integer                      :: status
 
  End Function nf_put_varm_text
@@ -1260,7 +1116,6 @@ Interface nf_put_varm_text
  Integer,          Intent(IN) :: ncid, varid
  Integer,          Intent(IN) :: start(*), counts(*), strides(*), maps(*)
  Character(LEN=1), Intent(IN) :: text(*)
-
  Integer                      :: status
 
  End Function nf_put_varm_text_a
@@ -1270,12 +1125,11 @@ Interface
  Function nf_put_varm_int1(ncid, varid, start, counts, strides, maps, &
                               i1vals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT1
+ USE netcdf_nf_data, ONLY: NFINT1
 
  Integer,         Intent(IN) :: ncid, varid
  Integer,         Intent(IN) :: start(*), counts(*), strides(*), maps(*)
  Integer(NFINT1), Intent(IN) :: i1vals(*)
-
  Integer                     :: status
 
  End Function nf_put_varm_int1
@@ -1285,12 +1139,11 @@ Interface
  Function nf_put_varm_int2(ncid, varid, start, counts, strides, maps, &
                               i2vals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT2
+ USE netcdf_nf_data, ONLY: NFINT2
 
  Integer,         Intent(IN) :: ncid, varid
  Integer,         Intent(IN) :: start(*), counts(*), strides(*), maps(*)
  Integer(NFINT2), Intent(IN) :: i2vals(*)
-
  Integer                     :: status
 
  End Function nf_put_varm_int2
@@ -1300,12 +1153,11 @@ Interface
  Function nf_put_varm_int(ncid, varid, start, counts, strides, maps, &
                              ivals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT
+ USE netcdf_nf_data, ONLY: NFINT
 
  Integer,        Intent(IN) :: ncid, varid
  Integer,        Intent(IN) :: start(*), counts(*), strides(*), maps(*)
  Integer(NFINT), Intent(IN) :: ivals(*)
-
  Integer                    :: status
 
  End Function nf_put_varm_int
@@ -1316,12 +1168,11 @@ Interface
  Function nf_put_varm_real(ncid, varid, start, counts, strides, maps, &
                               rvals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFREAL
+ USE netcdf_nf_data, ONLY: NFREAL
 
  Integer,      Intent(IN) :: ncid, varid
  Integer,      Intent(IN) :: start(*), counts(*), strides(*), maps(*)
  Real(NFREAL), Intent(IN) :: rvals(*)
-
  Integer                  :: status
 
  End Function nf_put_varm_real
@@ -1331,12 +1182,11 @@ Interface
  Function nf_put_varm_double(ncid, varid, start, counts, strides, maps, &
                                 dvals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: RK8
+ USE netcdf_nf_data, ONLY: RK8
 
  Integer,   Intent(IN) :: ncid, varid
  Integer,   Intent(IN) :: start(*), counts(*), strides(*), maps(*)
  Real(RK8), Intent(IN) :: dvals(*)
-
  Integer               :: status
 
  End Function nf_put_varm_double
@@ -1349,7 +1199,6 @@ Interface nf_get_varm_text
  Integer,          Intent(IN)  :: ncid, varid
  Integer,          Intent(IN)  :: start(*), counts(*), strides(*), maps(*)
  Character(LEN=*), Intent(OUT) :: text
-
  Integer                       :: status
 
  End Function nf_get_varm_text
@@ -1360,7 +1209,6 @@ Interface nf_get_varm_text
  Integer,          Intent(IN)  :: ncid, varid
  Integer,          Intent(IN)  :: start(*), counts(*), strides(*), maps(*)
  Character(LEN=1), Intent(OUT) :: text(*)
-
  Integer                       :: status
 
  End Function nf_get_varm_text_a
@@ -1370,12 +1218,11 @@ Interface
  Function nf_get_varm_int1(ncid, varid, start, counts, strides, maps, &
                               i1vals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT1
+ USE netcdf_nf_data, ONLY: NFINT1
 
  Integer,         Intent(IN)  :: ncid, varid
  Integer,         Intent(IN)  :: start(*), counts(*), strides(*), maps(*)
  Integer(NFINT1), Intent(OUT) :: i1vals(*)
-
  Integer                      :: status
 
  End Function nf_get_varm_int1
@@ -1385,12 +1232,11 @@ Interface
  Function nf_get_varm_int2(ncid, varid, start, counts, strides, maps, &
                               i2vals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT2
+ USE netcdf_nf_data, ONLY: NFINT2
 
  Integer,         Intent(IN)  :: ncid, varid
  Integer,         Intent(IN)  :: start(*), counts(*), strides(*), maps(*)
  Integer(NFINT2), Intent(OUT) :: i2vals(*)
-
  Integer                      :: status
 
  End Function nf_get_varm_int2
@@ -1400,12 +1246,11 @@ Interface
  Function nf_get_varm_int(ncid, varid, start, counts, strides, maps, &
                              ivals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT
+ USE netcdf_nf_data, ONLY: NFINT
 
  Integer,        Intent(IN)  :: ncid, varid
  Integer,        Intent(IN)  :: start(*), counts(*), strides(*), maps(*)
  Integer(NFINT), Intent(OUT) :: ivals(*)
-
  Integer                     :: status
 
  End Function nf_get_varm_int
@@ -1415,12 +1260,11 @@ Interface
  Function nf_get_varm_real(ncid, varid, start, counts, strides, maps, &
                               rvals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFREAL
+ USE netcdf_nf_data, ONLY: NFREAL
 
  Integer,      Intent(IN)  :: ncid, varid
  Integer,      Intent(IN)  :: start(*), counts(*), strides(*), maps(*)
  Real(NFREAL), Intent(OUT) :: rvals(*)
-
  Integer                   :: status
 
  End Function nf_get_varm_real
@@ -1430,12 +1274,11 @@ Interface
  Function nf_get_varm_double(ncid, varid, start, counts, strides, maps, &
                              dvals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: RK8
+ USE netcdf_nf_data, ONLY: RK8
 
  Integer,   Intent(IN)  :: ncid, varid
  Integer,   Intent(IN)  :: start(*), counts(*), strides(*), maps(*)
  Real(RK8), Intent(OUT) :: dvals(*)
-
  Integer                :: status
 
  End Function nf_get_varm_double
@@ -1450,7 +1293,6 @@ Interface nf_put_vara_text
  Integer,          Intent(IN) :: ncid, varid
  Integer,          Intent(IN) :: start(*), counts(*)
  Character(LEN=*), Intent(IN) :: text
-
  Integer                      :: status
 
  End Function nf_put_vara_text
@@ -1460,7 +1302,6 @@ Interface nf_put_vara_text
  Integer,          Intent(IN) :: ncid, varid
  Integer,          Intent(IN) :: start(*), counts(*)
  Character(LEN=1), Intent(IN) :: text(*)
-
  Integer                      :: status
 
  End Function nf_put_vara_text_a
@@ -1469,12 +1310,11 @@ End Interface
 Interface
  Function nf_put_vara_int1(ncid, varid, start, counts, i1vals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT1
+ USE netcdf_nf_data, ONLY: NFINT1
 
  Integer,         Intent(IN) :: ncid, varid
  Integer,         Intent(IN) :: start(*), counts(*)
  Integer(NFINT1), Intent(IN) :: i1vals(*)
-
  Integer                     :: status
 
  End Function nf_put_vara_int1
@@ -1483,12 +1323,11 @@ End Interface
 Interface
  Function nf_put_vara_int2(ncid, varid, start, counts, i2vals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT2
+ USE netcdf_nf_data, ONLY: NFINT2
 
  Integer,         Intent(IN) :: ncid, varid
  Integer,         Intent(IN) :: start(*), counts(*)
  Integer(NFINT2), Intent(IN) :: i2vals(*)
-
  Integer                     :: status
 
  End Function nf_put_vara_int2
@@ -1497,12 +1336,11 @@ End Interface
 Interface
  Function nf_put_vara_int(ncid, varid, start, counts, ivals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT
+ USE netcdf_nf_data, ONLY: NFINT
 
  Integer,        Intent(IN) :: ncid, varid
  Integer,        Intent(IN) :: start(*), counts(*)
  Integer(NFINT), Intent(IN) :: ivals(*)
-
  Integer                    :: status
 
  End Function nf_put_vara_int
@@ -1511,12 +1349,11 @@ End Interface
 Interface
  Function nf_put_vara_real(ncid, varid, start, counts, rvals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFREAL
+ USE netcdf_nf_data, ONLY: NFREAL
 
  Integer,      Intent(IN) :: ncid, varid
  Integer,      Intent(IN) :: start(*), counts(*)
  Real(NFREAL), Intent(IN) :: rvals(*)
-
  Integer                  :: status
 
  End Function nf_put_vara_real
@@ -1526,12 +1363,11 @@ Interface
  Function nf_put_vara_double(ncid, varid, start, counts, dvals) &
                                 RESULT(status)
 
- USE netcdf_nc_data, ONLY: RK8
+ USE netcdf_nf_data, ONLY: RK8
 
  Integer,   Intent(IN) :: ncid, varid
  Integer,   Intent(IN) :: start(*), counts(*)
  Real(RK8), Intent(IN) :: dvals(*)
-
  Integer               :: status
 
  End Function nf_put_vara_double
@@ -1543,7 +1379,6 @@ Interface nf_get_vara_text
  Integer,          Intent(IN)  :: ncid, varid
  Integer,          Intent(IN)  :: start(*), counts(*)
  Character(LEN=*), Intent(OUT) :: text
-
  Integer                       :: status
 
  End Function nf_get_vara_text
@@ -1553,7 +1388,6 @@ Interface nf_get_vara_text
  Integer,          Intent(IN)  :: ncid, varid
  Integer,          Intent(IN)  :: start(*), counts(*)
  Character(LEN=1), Intent(OUT) :: text(*)
-
  Integer                       :: status
 
  End Function nf_get_vara_text_a
@@ -1562,13 +1396,12 @@ End Interface
 Interface
  Function nf_get_vara_int1(ncid, varid, start, counts, i1vals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT1
+ USE netcdf_nf_data, ONLY: NFINT1
 
  Integer,         Intent(IN)  :: ncid, varid
  Integer,         Intent(IN)  :: start(*), counts(*)
  Integer(NFINT1), Intent(OUT) :: i1vals(*)
-
- Integer                          :: status
+ Integer                      :: status
 
  End Function nf_get_vara_int1
 End Interface
@@ -1576,13 +1409,12 @@ End Interface
 Interface
  Function nf_get_vara_int2(ncid, varid, start, counts, i2vals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT2
+ USE netcdf_nf_data, ONLY: NFINT2
 
  Integer,         Intent(IN)  :: ncid, varid
  Integer,         Intent(IN)  :: start(*), counts(*)
  Integer(NFINT2), Intent(OUT) :: i2vals(*)
-
- Integer                          :: status
+ Integer                      :: status
 
  End Function nf_get_vara_int2
 End Interface
@@ -1590,13 +1422,12 @@ End Interface
 Interface
  Function nf_get_vara_int(ncid, varid, start, counts, ivals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT
+ USE netcdf_nf_data, ONLY: NFINT
 
  Integer,        Intent(IN)  :: ncid, varid
  Integer,        Intent(IN)  :: start(*), counts(*)
  Integer(NFINT), Intent(OUT) :: ivals(*)
-
- Integer              :: status
+ Integer                     :: status
 
  End Function nf_get_vara_int
 End Interface
@@ -1604,12 +1435,11 @@ End Interface
 Interface
  Function nf_get_vara_real(ncid, varid, start, counts, rvals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFREAL
+ USE netcdf_nf_data, ONLY: NFREAL
 
  Integer,      Intent(IN)  :: ncid, varid
  Integer,      Intent(IN)  :: start(*), counts(*)
  Real(NFREAL), Intent(OUT) :: rvals(*)
-
  Integer                   :: status
 
  End Function nf_get_vara_real
@@ -1619,12 +1449,11 @@ Interface
  Function nf_get_vara_double(ncid, varid, start, counts, dvals) &
                                 RESULT(status)
 
- USE netcdf_nc_data, ONLY: RK8
+ USE netcdf_nf_data, ONLY: RK8
 
  Integer,   Intent(IN)  :: ncid, varid
  Integer,   Intent(IN)  :: start(*), counts(*)
  Real(RK8), Intent(OUT) :: dvals(*)
-
  Integer                :: status
 
  End Function nf_get_vara_double
@@ -1635,19 +1464,15 @@ Interface nf_put_att_text
 
  Integer,          Intent(IN) :: ncid, varid, nlen
  Character(LEN=*), Intent(IN) :: name, text
-
  Integer                      :: status
 
  End Function nf_put_att_text
 ! array of characters
  Function nf_put_att_text_a(ncid, varid, name, nlen, text) RESULT(status)
 
-
-
  Integer,          Intent(IN) :: ncid, varid, nlen
  Character(LEN=*), Intent(IN) :: name
  Character(LEN=1), Intent(IN) :: text(*)
-
  Integer                      :: status
 
  End Function nf_put_att_text_a
@@ -1657,12 +1482,11 @@ Interface
  Function nf_put_att_int1(ncid, varid, name, xtype, nlen, i1vals) &
                              RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT1
+ USE netcdf_nf_data, ONLY: NFINT1
 
  Integer,          Intent(IN) :: ncid, varid, nlen, xtype
  Character(LEN=*), Intent(IN) :: name
  Integer(NFINT1),  Intent(IN) :: i1vals(*)
-
  Integer                      :: status
 
  End Function nf_put_att_int1
@@ -1672,12 +1496,11 @@ Interface
  Function nf_put_att_int2(ncid, varid, name, xtype, nlen, i2vals) &
                              RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT2
+ USE netcdf_nf_data, ONLY: NFINT2
 
  Integer,          Intent(IN) :: ncid, varid, nlen, xtype
  Character(LEN=*), Intent(IN) :: name
  Integer(NFINT2),  Intent(IN) :: i2vals(*)
-
  Integer                      :: status
 
  End Function nf_put_att_int2
@@ -1687,12 +1510,11 @@ Interface
  Function nf_put_att_int(ncid, varid, name, xtype, nlen, ivals) &
                             RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT
+ USE netcdf_nf_data, ONLY: NFINT
 
  Integer,          Intent(IN) :: ncid, varid, nlen, xtype
  Character(LEN=*), Intent(IN) :: name
  Integer(NFINT),   Intent(IN) :: ivals(*)
-
  Integer                      :: status
 
  End Function nf_put_att_int
@@ -1702,12 +1524,11 @@ Interface
  Function nf_put_att_real(ncid, varid, name, xtype, nlen, rvals) &
                              RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFREAL
+ USE netcdf_nf_data, ONLY: NFREAL
 
  Integer,          Intent(IN) :: ncid, varid, nlen, xtype
  Character(LEN=*), Intent(IN) :: name
  Real(NFREAL),     Intent(IN) :: rvals(*)
-
  Integer                      :: status
 
  End Function nf_put_att_real
@@ -1717,12 +1538,11 @@ Interface
  Function nf_put_att_double(ncid, varid, name, xtype, nlen, dvals) &
                                RESULT(status)
 
- USE netcdf_nc_data, ONLY: RK8
+ USE netcdf_nf_data, ONLY: RK8
 
  Integer,          Intent(IN) :: ncid, varid, nlen, xtype
  Character(LEN=*), Intent(IN) :: name
  Real(RK8),        Intent(IN) :: dvals(*)
-
  Integer                      :: status
 
  End Function nf_put_att_double
@@ -1733,8 +1553,7 @@ Interface nf_get_att_text
 
  Integer,          Intent(IN)  :: ncid, varid
  Character(LEN=*), Intent(IN)  :: name
- Character(LEN=*), Intent(OUT) ::  text
-
+ Character(LEN=*), Intent(OUT) :: text
  Integer                       :: status
 
  End Function nf_get_att_text
@@ -1743,8 +1562,7 @@ Interface nf_get_att_text
 
  Integer,          Intent(IN)  :: ncid, varid
  Character(LEN=*), Intent(IN)  :: name
- Character(LEN=1), Intent(OUT) ::  text(*)
-
+ Character(LEN=1), Intent(OUT) :: text(*)
  Integer                       :: status
 
  End Function nf_get_att_text_a
@@ -1753,12 +1571,11 @@ End Interface
 Interface
  Function nf_get_att_int1(ncid, varid, name, i1vals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT1
+ USE netcdf_nf_data, ONLY: NFINT1
 
  Integer,          Intent(IN)  :: ncid, varid
  Character(LEN=*), Intent(IN)  :: name
  Integer(NFINT1),  Intent(OUT) :: i1vals(*)
-
  Integer                       :: status
 
  End Function nf_get_att_int1
@@ -1767,12 +1584,11 @@ End Interface
 Interface
  Function nf_get_att_int2(ncid, varid, name, i2vals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT2
+ USE netcdf_nf_data, ONLY: NFINT2
 
  Integer,          Intent(IN)  :: ncid, varid
  Character(LEN=*), Intent(IN)  :: name
  Integer(NFINT2),  Intent(OUT) :: i2vals(*)
-
  Integer                       :: status
 
  End Function nf_get_att_int2
@@ -1781,12 +1597,11 @@ End Interface
 Interface
  Function nf_get_att_int(ncid, varid, name, ivals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFINT
+ USE netcdf_nf_data, ONLY: NFINT
 
  Integer,          Intent(IN)  :: ncid, varid
  Character(LEN=*), Intent(IN)  :: name
  Integer(NFINT),   Intent(OUT) :: ivals(*)
-
  Integer                       :: status
 
  End Function nf_get_att_int
@@ -1795,12 +1610,11 @@ End Interface
 Interface
  Function nf_get_att_real(ncid, varid, name, rvals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: NFREAL
+ USE netcdf_nf_data, ONLY: NFREAL
 
  Integer,          Intent(IN)  :: ncid, varid
  Character(LEN=*), Intent(IN)  :: name
  Real(NFREAL),     Intent(OUT) :: rvals(*)
-
  Integer                       :: status
 
  End Function nf_get_att_real
@@ -1809,13 +1623,12 @@ End Interface
 Interface
  Function nf_get_att_double(ncid, varid, name, dvals) RESULT(status)
 
- USE netcdf_nc_data, ONLY: RK8
+ USE netcdf_nf_data, ONLY: RK8
 
 
  Integer,          Intent(IN)  :: ncid, varid
  Character(LEN=*), Intent(IN)  :: name
  Real(RK8),        Intent(OUT) :: dvals(*)
-
  Integer                       :: status
 
  End Function nf_get_att_double

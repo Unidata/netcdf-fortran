@@ -141,4 +141,15 @@ function nf90_inquire(ncid, nDimensions, nVariables, nAttributes, unlimitedDimId
   endif
 end function nf90_inquire
 
+function nf90_inq_path(ncid, pathlen, path)
+
+  integer,            intent(in)    :: ncid
+  integer,            intent(inout) :: pathlen
+  character(len = *), intent(inout) :: path
+
+  integer                           :: nf90_inq_path
+
+  nf90_inq_path = nf_inq_path(ncid, pathlen, path)
+
+end function nf90_inq_path
 

@@ -17,9 +17,11 @@ Module netcdf_nf_data
 !
 !   http:www.apache.org/licenses/LICENSE-2.0.html
 !
-! The author grants to UCAR the right to revise and extend the software
+! The author grants to the University Corporation for Atmospheric Research
+! (UCAR), Boulder, CO, USA the right to revise and extend the software
 ! without restriction. However, the author retains all copyrights and
-! intellectual property rights explicit or implied by the Apache license
+! intellectual property rights explicitly stated in or implied by the
+! Apache license
 
 ! Version 1. Sept. 2005 - initial Cray X1 version for netcdf 3.6,0
 ! Version 2. Apr.  2005 - updated to be consistent with netcdf 3.6.1
@@ -28,13 +30,12 @@ Module netcdf_nf_data
 ! Version 5. Feb.  2013 - Updated for netCDF 4.4
 
 ! This module is provided as a replacement for parts of the netcdf2.inc,
-! netcdf3.inc and netcdf4.inc include file2. It does not include the 
+! netcdf3.inc and netcdf4.inc include files. It does not include the 
 ! external statements for the nf_ functions. The latter are not needed
 ! if you use the interfaces in module_netcdf_nf_interfaces. If you
 ! want the externals, just use the include files.
 
- USE netcdf_nc_data, ONLY: RK4, RK8, IK4, IK8, NFINT1, NFINT2, &
-                           NFINT, NFREAL                   
+ USE netcdf_nc_data
                                                          
  Implicit NONE
 
@@ -45,208 +46,210 @@ Module netcdf_nf_data
 !                
 ! Define enumerator nc_type data as integers
 
- Integer, Parameter ::  NF_NAT    = 0
- Integer, Parameter ::  NF_BYTE   = 1
+ Integer, Parameter ::  NF_NAT    = NC_NAT 
+ Integer, Parameter ::  NF_BYTE   = NC_BYTE 
  Integer, Parameter ::  NF_INT1   = NF_BYTE
- Integer, Parameter ::  NF_CHAR   = 2
- Integer, Parameter ::  NF_SHORT  = 3
+ Integer, Parameter ::  NF_CHAR   = NC_CHAR 
+ Integer, Parameter ::  NF_SHORT  = NC_SHORT 
  Integer, Parameter ::  NF_INT2   = NF_SHORT
- Integer, Parameter ::  NF_INT    = 4
- Integer, Parameter ::  NF_FLOAT  = 5
+ Integer, Parameter ::  NF_INT    = NC_INT 
+ Integer, Parameter ::  NF_FLOAT  = NC_FLOAT 
  Integer, Parameter ::  NF_REAL   = NF_FLOAT
- Integer, Parameter ::  NF_DOUBLE = 6
+ Integer, Parameter ::  NF_DOUBLE = NC_DOUBLE 
 
 ! Default fill values
 
- Integer, Parameter :: NF_FILL_CHAR  = 0 
- Integer, Parameter :: NF_FILL_BYTE  = -127
- Integer, Parameter :: NF_FILL_SHORT = -32767
- Integer, Parameter :: NF_FILL_INT   = -2147483647
+ Integer,          Parameter :: NF_FILL_CHAR  = IACHAR(NC_FILL_CHAR) 
+ Integer(IK1),     Parameter :: NF_FILL_BYTE  = NC_FILL_BYTE
+ Integer(IK2),     Parameter :: NF_FILL_SHORT = NC_FILL_SHORT
+ Integer,          Parameter :: NF_FILL_INT   = NC_FILL_INT
 
- Real(RK4), Parameter :: NF_FILL_FLOAT  = 9.9692099683868690E+36
- Real(RK4), Parameter :: NF_FILL_REAL   = NF_FILL_FLOAT
- Real(RK4), Parameter :: NF_FILL_REAL4  = NF_FILL_FLOAT 
- Real(RK8), Parameter :: NF_FILL_DOUBLE = 9.9692099683868690D+36
- Real(RK8), Parameter :: NF_FILL_REAL8  = NF_FILL_DOUBLE 
+ Real(RK4),        Parameter :: NF_FILL_FLOAT  = NC_FILL_FLOAT
+ Real(RK4),        Parameter :: NF_FILL_REAL   = NF_FILL_FLOAT
+ Real(RK4),        Parameter :: NF_FILL_REAL4  = NF_FILL_FLOAT 
+ Real(RK8),        Parameter :: NF_FILL_DOUBLE = NC_FILL_DOUBLE
+ Real(RK8),        Parameter :: NF_FILL_REAL8  = NF_FILL_DOUBLE 
 
 ! Mode flags for opening and creating datasets
 
- Integer, Parameter :: NF_NOWRITE          = 0
- Integer, Parameter :: NF_WRITE            = 1
- Integer, Parameter :: NF_CLOBBER          = 0
- Integer, Parameter :: NF_NOCLOBBER        = 4
- Integer, Parameter :: NF_FILL             = 0
- Integer, Parameter :: NF_NOFILL           = 256
- Integer, Parameter :: NF_LOCK             = 1024
- Integer, Parameter :: NF_SHARE            = 2048
- Integer, Parameter :: NF_STRICT_NC3       = 8
- Integer, Parameter :: NF_64BIT_OFFSET     = 512
- Integer, Parameter :: NF_SIZEHINT_DEFAULT = 0
- Integer, Parameter :: NF_ALIGN_CHUNK      = -1
- Integer, Parameter :: NF_FORMAT_CLASSIC   = 1
- Integer, Parameter :: NF_FORMAT_64BIT     = 2
- Integer, Parameter :: NF_DISKLESS         = 8
- Integer, Parameter :: NF_MMAP             = 16
+ Integer, Parameter :: NF_NOWRITE          = NC_NOWRITE 
+ Integer, Parameter :: NF_WRITE            = NC_WRITE 
+ Integer, Parameter :: NF_CLOBBER          = NC_CLOBBER 
+ Integer, Parameter :: NF_NOCLOBBER        = NC_NOCLOBBER 
+ Integer, Parameter :: NF_FILL             = NC_FILL 
+ Integer, Parameter :: NF_NOFILL           = NC_NOFILL 
+ Integer, Parameter :: NF_LOCK             = NC_LOCK 
+ Integer, Parameter :: NF_SHARE            = NC_SHARE 
+ Integer, Parameter :: NF_STRICT_NC3       = NC_STRICT_NC3 
+ Integer, Parameter :: NF_64BIT_OFFSET     = NC_64BIT_OFFSET 
+ Integer, Parameter :: NF_SIZEHINT_DEFAULT = NC_SIZEHINT_DEFAULT 
+ Integer, Parameter :: NF_ALIGN_CHUNK      = NC_ALIGN_CHUNK
+ Integer, Parameter :: NF_FORMAT_CLASSIC   = NC_FORMAT_CLASSIC
+ Integer, Parameter :: NF_FORMAT_64BIT     = NC_FORMAT_64BIT 
+ Integer, Parameter :: NF_DISKLESS         = NC_DISKLESS 
+ Integer, Parameter :: NF_MMAP             = NC_MMAP
 
 ! Unlimited dimension size argument and global attibute ID
 
- Integer,  Parameter :: NF_UNLIMITED = 0
- Integer,  Parameter :: NF_GLOBAL    = 0
+ Integer,  Parameter :: NF_UNLIMITED = NC_UNLIMITED 
+ Integer,  Parameter :: NF_GLOBAL    = NC_GLOBAL 
 
 ! Implementation limits (WARNING!  SHOULD BE THE SAME AS C INTERFACE)
 
- Integer, Parameter :: NF_MAX_DIMS     = 1024 
- Integer, Parameter :: NF_MAX_ATTRS    = 8192 
- Integer, Parameter :: NF_MAX_VARS     = 8192 
- Integer, Parameter :: NF_MAX_NAME     = 256 
- Integer, Parameter :: NF_MAX_VAR_DIMS = NF_MAX_DIMS
+ Integer, Parameter :: NF_MAX_DIMS     = NC_MAX_DIMS 
+ Integer, Parameter :: NF_MAX_ATTRS    = NC_MAX_ATTRS 
+ Integer, Parameter :: NF_MAX_VARS     = NC_MAX_VARS 
+ Integer, Parameter :: NF_MAX_NAME     = NC_MAX_NAME 
+ Integer, Parameter :: NF_MAX_VAR_DIMS = NC_MAX_DIMS
 
 ! Error codes
 
- Integer, Parameter :: NF_NOERR        =  0
- Integer, Parameter :: NC2_ERR         = -1
- Integer, Parameter :: NF_SYSERR       = -31
- Integer, Parameter :: NF_EXDR         = -32
- Integer, Parameter :: NF_EBADID       = -33
- Integer, Parameter :: NF_EBFILE       = -34
- Integer, Parameter :: NF_EEXIST       = -35
- Integer, Parameter :: NF_EINVAL       = -36
- Integer, Parameter :: NF_EPERM        = -37
- Integer, Parameter :: NF_ENOTINDEFINE = -38
- Integer, Parameter :: NF_EINDEFINE    = -39
- Integer, Parameter :: NF_EINVALCOORDS = -40
- Integer, Parameter :: NF_EMAXDIMS     = -41
- Integer, Parameter :: NF_ENAMEINUSE   = -42
- Integer, Parameter :: NF_ENOTATT      = -43
- Integer, Parameter :: NF_EMAXATTS     = -44
- Integer, Parameter :: NF_EBADTYPE     = -45
- Integer, Parameter :: NF_EBADDIM      = -46
- Integer, Parameter :: NF_EUNLIMPOS    = -47
- Integer, Parameter :: NF_EMAXVARS     = -48
- Integer, Parameter :: NF_ENOTVAR      = -49
- Integer, Parameter :: NF_EGLOBAL      = -50
- Integer, Parameter :: NF_ENOTNC       = -51
- Integer, Parameter :: NF_ESTS         = -52
- Integer, Parameter :: NF_EMAXNAME     = -53
- Integer, Parameter :: NF_EUNLIMIT     = -54
- Integer, Parameter :: NF_ENORECVARS   = -55
- Integer, Parameter :: NF_ECHAR        = -56
- Integer, Parameter :: NF_EEDGE        = -57
- Integer, Parameter :: NF_ESTRIDE      = -58
- Integer, Parameter :: NF_EBADNAME     = -59
- Integer, Parameter :: NF_ERANGE       = -60
- Integer, Parameter :: NF_ENOMEM       = -61
- Integer, Parameter :: NF_EVARSIZE     = -62
- Integer, Parameter :: NF_EDIMSIZE     = -63
- Integer, Parameter :: NF_ETRUNC       = -64
+ Integer, Parameter :: NF_NOERR        = NC_NOERR 
+ Integer, Parameter :: NF2_ERR         = NC2_ERR 
+ Integer, Parameter :: NF_SYSERR       = NC_SYSERR 
+ Integer, Parameter :: NF_EXDR         = NC_EXDR 
+ Integer, Parameter :: NF_EBADID       = NC_EBADID 
+ Integer, Parameter :: NF_EBFILE       = NC_EBFILE 
+ Integer, Parameter :: NF_EEXIST       = NC_EEXIST 
+ Integer, Parameter :: NF_EINVAL       = NC_EINVAL 
+ Integer, Parameter :: NF_EPERM        = NC_EPERM 
+ Integer, Parameter :: NF_ENOTINDEFINE = NC_ENOTINDEFINE
+ Integer, Parameter :: NF_EINDEFINE    = NC_EINDEFINE
+ Integer, Parameter :: NF_EINVALCOORDS = NC_EINVALCOORDS
+ Integer, Parameter :: NF_EMAXDIMS     = NC_EMAXDIMS
+ Integer, Parameter :: NF_ENAMEINUSE   = NC_ENAMEINUSE
+ Integer, Parameter :: NF_ENOTATT      = NC_ENOTATT
+ Integer, Parameter :: NF_EMAXATTS     = NC_EMAXATTS
+ Integer, Parameter :: NF_EBADTYPE     = NC_EBADTYPE
+ Integer, Parameter :: NF_EBADDIM      = NC_EBADDIM
+ Integer, Parameter :: NF_EUNLIMPOS    = NC_EUNLIMPOS
+ Integer, Parameter :: NF_EMAXVARS     = NC_EMAXVARS
+ Integer, Parameter :: NF_ENOTVAR      = NC_ENOTVAR 
+ Integer, Parameter :: NF_EGLOBAL      = NC_EGLOBAL 
+ Integer, Parameter :: NF_ENOTNC       = NC_ENOTNC
+ Integer, Parameter :: NF_ESTS         = NC_ESTS
+ Integer, Parameter :: NF_EMAXNAME     = NC_EMAXNAME
+ Integer, Parameter :: NF_EUNLIMIT     = NC_EUNLIMIT
+ Integer, Parameter :: NF_ENORECVARS   = NC_ENORECVARS
+ 
+ Integer, Parameter :: NF_ECHAR        = NC_ECHAR 
+ Integer, Parameter :: NF_EEDGE        = NC_EEDGE
+ Integer, Parameter :: NF_ESTRIDE      = NC_ESTRIDE 
+ Integer, Parameter :: NF_EBADNAME     = NC_EBADNAME
+ Integer, Parameter :: NF_ERANGE       = NC_ERANGE
+ Integer, Parameter :: NF_ENOMEM       = NC_ENOMEM
+ Integer, Parameter :: NF_EVARSIZE     = NC_EVARSIZE
+ Integer, Parameter :: NF_EDIMSIZE     = NC_EDIMSIZE 
+ Integer, Parameter :: NF_ETRUNC       = NC_ETRUNC 
 
 ! Error handling codes
 
- Integer, Parameter :: NF_FATAL   = 1
- Integer, Parameter :: NF_VERBOSE = 2
+ Integer, Parameter :: NF_FATAL   = NC_FATAL 
+ Integer, Parameter :: NF_VERBOSE = NC_VERBOSE 
 
-#if USE_NETCDF4
+#ifdef USE_NETCDF4
 
 ! NETCDF4 parameters 
 
 ! data types
 
- Integer, Parameter :: NF_LONG     = NF_INT
- Integer, Parameter :: NF_UBYTE    = 7
- Integer, Parameter :: NF_USHORT   = 8 
- Integer, Parameter :: NF_UINT     = 9
- Integer, Parameter :: NF_INT64    = 10 
- Integer, Parameter :: NF_UINT64   = 11 
- Integer, Parameter :: NF_STRING   = 12
- Integer, Parameter :: NF_VLEN     = 13
- Integer, Parameter :: NF_OPAQUE   = 14
- Integer, Parameter :: NF_ENUM     = 15
- Integer, Parameter :: NF_COMPOUND = 16
+ Integer, Parameter :: NF_LONG     = NC_LONG
+ Integer, Parameter :: NF_UBYTE    = NC_UBYTE 
+ Integer, Parameter :: NF_USHORT   = NC_USHORT 
+ Integer, Parameter :: NF_UINT     = NC_UINT 
+ Integer, Parameter :: NF_INT64    = NC_INT64 
+ Integer, Parameter :: NF_UINT64   = NC_UINT64 
+ Integer, Parameter :: NF_STRING   = NC_STRING 
+ Integer, Parameter :: NF_VLEN     = NC_VLEN 
+ Integer, Parameter :: NF_OPAQUE   = NC_OPAQUE 
+ Integer, Parameter :: NF_ENUM     = NC_ENUM 
+ Integer, Parameter :: NF_COMPOUND = NC_COMPOUND
 
 ! Netcdf4 fill flags - for some reason the F90 values are different
 
- Integer, Parameter :: NF_FILL_UBYTE   = 255
- Integer, Parameter :: NF_FILL_UINT1   = NF_FILL_UBYTE 
- Integer, Parameter :: NF_FILL_USHORT  = 65535
- Integer, Parameter :: NF_FILL_UINT2   = NF_FILL_USHORT
-
- Integer(IK8), Parameter :: NF_FILL_UINT = 4294967295_IK8
+ Integer,      Parameter :: NF_FILL_UBYTE  = NC_FILL_UBYTE 
+ Integer,      Parameter :: NF_FILL_UINT1  = NF_FILL_UBYTE 
+ Integer,      Parameter :: NF_FILL_USHORT = NC_FILL_USHORT
+ Integer,      Parameter :: NF_FILL_UINT2  = NF_FILL_USHORT
+ Integer(IK8), Parameter :: NF_FILL_UINT   = NC_FILL_UINT
+ Integer(IK8), Parameter :: NF_FILL_INT64  = NC_FILL_INT64 
 
 ! new format types
- Integer, Parameter :: NF_FORMAT_NETCDF4         = 3
- Integer, Parameter :: NF_FORMAT_NETCDF4_CLASSIC = 4
+ Integer, Parameter :: NF_FORMAT_NETCDF4         = NC_FORMAT_NETCDF4 
+ Integer, Parameter :: NF_FORMAT_NETCDF4_CLASSIC = NC_FORMAT_NETCDF4_CLASSIC
+ 
 ! Netcdf4 create mode flags
- Integer, Parameter :: NF_NETCDF4        = 4096
- Integer, Parameter :: NF_HDF5           = 4096 ! deprecated
- Integer, Parameter :: NF_CLASSIC_MODEL  = 256
+ Integer, Parameter :: NF_NETCDF4        = NC_NETCDF4 
+ Integer, Parameter :: NF_HDF5           = NF_NETCDF4 ! deprecated
+ Integer, Parameter :: NF_CLASSIC_MODEL  = NC_CLASSIC_MODEL 
 ! Netcdf4 variable flags
- Integer, Parameter :: NF_CHUNK_SEQ      = 0 
- Integer, Parameter :: NF_CHUNK_SUB      = 1 
- Integer, Parameter :: NF_CHUNK_SIZES    = 2 
- Integer, Parameter :: NF_ENDIAN_NATIVE  = 0 
- Integer, Parameter :: NF_ENDIAN_LITTLE  = 1 
- Integer, Parameter :: NF_ENDIAN_BIG     = 2 
- Integer, Parameter :: NF_CHUNKED        = 0
- Integer, Parameter :: NF_NOTCONTIGUOS   = 0
- Integer, Parameter :: NF_CONTIGUOUS     = 1
- Integer, Parameter :: NF_NOCHECKSUM     = 0
- Integer, Parameter :: NF_FLETCHER32     = 1
- Integer, Parameter :: NF_NOSHUFFLE      = 0
- Integer, Parameter :: NF_SHUFFLE        = 1
- Integer, Parameter :: NF_INDEPENDENT    = 0
- Integer, Parameter :: NF_COLLECTIVE     = 1
+ Integer, Parameter :: NF_CHUNK_SEQ      = NC_CHUNK_SEQ 
+ Integer, Parameter :: NF_CHUNK_SUB      = NC_CHUNK_SUB 
+ Integer, Parameter :: NF_CHUNK_SIZES    = NC_CHUNK_SIZES 
+ Integer, Parameter :: NF_ENDIAN_NATIVE  = NC_ENDIAN_NATIVE 
+ Integer, Parameter :: NF_ENDIAN_LITTLE  = NC_ENDIAN_LITTLE 
+ Integer, Parameter :: NF_ENDIAN_BIG     = NC_ENDIAN_BIG 
+ Integer, Parameter :: NF_CHUNKED        = NC_CHUNKED 
+ Integer, Parameter :: NF_NOTCONTIGUOUS  = NC_NOTCONTIGUOUS 
+ Integer, Parameter :: NF_CONTIGUOUS     = NC_CONTIGUOUS 
+ Integer, Parameter :: NF_NOCHECKSUM     = NC_NOCHECKSUM 
+ Integer, Parameter :: NF_FLETCHER32     = NC_FLETCHER32 
+ Integer, Parameter :: NF_NOSHUFFLE      = NC_NOSHUFFLE
+ Integer, Parameter :: NF_SHUFFLE        = NC_SHUFFLE 
+ Integer, Parameter :: NF_INDEPENDENT    = NC_INDEPENDENT 
+ Integer, Parameter :: NF_COLLECTIVE     = NC_COLLECTIVE
 
 ! Flags for parallel I/O
 
- Integer, Parameter :: NF_MPIIO          = 8192
- Integer, Parameter :: NF_MPIPOSIX       = 16384 
- Integer, Parameter :: NF_PNETCDF        = 32768
+ Integer, Parameter :: NF_MPIIO          = NC_MPIIO 
+ Integer, Parameter :: NF_MPIPOSIX       = NC_MPIPOSIX 
+ Integer, Parameter :: NF_PNETCDF        = NC_PNETCDF
 
 ! SZIP flags
  
- Integer, Parameter :: NF_SZIP_EC_OPTION_MASK = 4
- Integer, Parameter :: NF_SZIP_NN_OPTION_MASK = 32
+ Integer, Parameter :: NF_SZIP_EC_OPTION_MASK = NC_SZIP_EC_OPTION_MASK 
+ Integer, Parameter :: NF_SZIP_NN_OPTION_MASK = NC_SZIP_NN_OPTION_MASK 
 
 ! Netcdf4 error flags
 
- Integer, Parameter :: NF_EHDFERR        = -101
- Integer, Parameter :: NF_ECANTREAD      = -102
- Integer, Parameter :: NF_ECANTWRITE     = -103
- Integer, Parameter :: NF_ECANTCREATE    = -104
- Integer, Parameter :: NF_EFILEMETA      = -105
- Integer, Parameter :: NF_EDIMMETA       = -106
- Integer, Parameter :: NF_EATTMETA       = -107
- Integer, Parameter :: NF_EVARMETA       = -108
- Integer, Parameter :: NF_ENOCOMPOUND    = -109
- Integer, Parameter :: NF_EATTEXISTS     = -110
- Integer, Parameter :: NF_ENOTNC4        = -111
- Integer, Parameter :: NF_ESTRICTNC3     = -112
- Integer, Parameter :: NF_ENOTNC3        = -113
- Integer, Parameter :: NF_ENOPAR         = -114
- Integer, Parameter :: NF_EPARINIT       = -115
- Integer, Parameter :: NF_EBADGRPID      = -116
- Integer, Parameter :: NF_EBADTYPID      = -117
- Integer, Parameter :: NF_ETYPDEFINED    = -118
- Integer, Parameter :: NF_EBADFIELD      = -119
- Integer, Parameter :: NF_EBADCLASS      = -120
- Integer, Parameter :: NF_EMAPTYPE       = -121
- Integer, Parameter :: NF_ELATEFILL      = -122
- Integer, Parameter :: NF_ELATEDEF       = -123
- Integer, Parameter :: NF_EDIMSCALE      = -124
- Integer, Parameter :: NF_ENOGRP         = -125
+ Integer, Parameter :: NF_EHDFERR        = NC_EHDFERR 
+ Integer, Parameter :: NF_ECANTREAD      = NC_ECANTREAD 
+ Integer, Parameter :: NF_ECANTWRITE     = NC_ECANTWRITE 
+ Integer, Parameter :: NF_ECANTCREATE    = NC_ECANTCREATE 
+ Integer, Parameter :: NF_EFILEMETA      = NC_EFILEMETA 
+ Integer, Parameter :: NF_EDIMMETA       = NC_EDIMMETA 
+ Integer, Parameter :: NF_EATTMETA       = NC_EATTMETA
+ Integer, Parameter :: NF_EVARMETA       = NC_EVARMETA 
+ Integer, Parameter :: NF_ENOCOMPOUND    = NC_ENOCOMPOUND 
+ Integer, Parameter :: NF_EATTEXISTS     = NC_EATTEXISTS 
+ Integer, Parameter :: NF_ENOTNC4        = NC_ENOTNC4 
+ Integer, Parameter :: NF_ESTRICTNC3     = NC_ESTRICTNC3 
+ Integer, Parameter :: NF_ENOTNC3        = NC_ENOTNC3 
+ Integer, Parameter :: NF_ENOPAR         = NC_ENOPAR
+ Integer, Parameter :: NF_EPARINIT       = NC_EPARINIT 
+ Integer, Parameter :: NF_EBADGRPID      = NC_EBADGRPID
+ Integer, Parameter :: NF_EBADTYPID      = NC_EBADTYPID
+ Integer, Parameter :: NF_ETYPDEFINED    = NC_ETYPDEFINED
+ Integer, Parameter :: NF_EBADFIELD      = NC_EBADFIELD
+ Integer, Parameter :: NF_EBADCLASS      = NC_EBADCLASS 
+ Integer, Parameter :: NF_EMAPTYPE       = NC_EMAPTYPE 
+ Integer, Parameter :: NF_ELATEFILL      = NC_ELATEFILL 
+ Integer, Parameter :: NF_ELATEDEF       = NC_ELATEDEF 
+ Integer, Parameter :: NF_EDIMSCALE      = NC_EDIMSCALE 
+ Integer, Parameter :: NF_ENOGRP         = NC_ENOGRP 
 #endif
 
 #ifndef NO_NETCDF_2
 ! V2 interface values
 
- Integer, Parameter :: NCBYTE     = 1
- Integer, Parameter :: NCCHAR     = 2
- Integer, Parameter :: NCSHORT    = 3
- Integer, Parameter :: NCLONG     = 4
- Integer, Parameter :: NCFLOAT    = 5
- Integer, Parameter :: NCDOUBLE   = 6
+ Integer, Parameter :: NCBYTE     = NF_BYTE 
+ Integer, Parameter :: NCCHAR     = NF_CHAR 
+ Integer, Parameter :: NCSHORT    = NF_SHORT 
+ Integer, Parameter :: NCLONG     = NF_INT 
+ Integer, Parameter :: NCFLOAT    = NF_FLOAT 
+ Integer, Parameter :: NCDOUBLE   = NF_DOUBLE 
 
- Integer, Parameter :: NCRDWR     = 1
+ Integer, Parameter :: NCRDWR     = NF_WRITE 
  Integer, Parameter :: NCCREATE   = 2
  Integer, Parameter :: NCEXCL     = 4
  Integer, Parameter :: NCINDEF    = 8
@@ -254,23 +257,23 @@ Module netcdf_nf_data
  Integer, Parameter :: NCHSYNC    = 32
  Integer, Parameter :: NCNDIRTY   = 64
  Integer, Parameter :: NCHDIRTY   = 128
- Integer, Parameter :: NCFILL     = 0
- Integer, Parameter :: NCNOFILL   = 256
+ Integer, Parameter :: NCFILL     = NF_FILL 
+ Integer, Parameter :: NCNOFILL   = NF_NOFILL 
  Integer, Parameter :: NCLINK     = 32768
 
- Integer, Parameter :: NCNOWRIT   = 0
- Integer, Parameter :: NCWRITE    = NCRDWR
+ Integer, Parameter :: NCNOWRIT   = NF_NOWRITE 
+ Integer, Parameter :: NCWRITE    = NF_WRITE
  Integer, Parameter :: NCCLOB     = NF_CLOBBER
  Integer, Parameter :: NCNOCLOB   = NF_NOCLOBBER
 
- Integer, Parameter :: NCUNLIM    = 0
- Integer, Parameter :: NCGLOBAL   = 0
+ Integer, Parameter :: NCUNLIM    = NF_UNLIMITED 
+ Integer, Parameter :: NCGLOBAL   = NF_GLOBAL 
 
  Integer, Parameter :: MAXNCOP    = 64
- Integer, Parameter :: MAXNCDIM   = 1024
- Integer, Parameter :: MAXNCATT   = 8192
- Integer, Parameter :: MAXNCVAR   = 8192
- Integer, Parameter :: MAXNCNAM   = 256
+ Integer, Parameter :: MAXNCDIM   = NF_MAX_DIMS 
+ Integer, Parameter :: MAXNCATT   = NF_MAX_ATTRS 
+ Integer, Parameter :: MAXNCVAR   = NF_MAX_VARS 
+ Integer, Parameter :: MAXNCNAM   = NF_MAX_NAME 
  Integer, Parameter :: MAXVDIMS   = MAXNCDIM
 
  Integer, Parameter :: NCNOERR    = NF_NOERR
@@ -295,18 +298,17 @@ Module netcdf_nf_data
  Integer, Parameter :: NCESTC     = NF_ESTS
  Integer, Parameter :: NCENTOOL   = NF_EMAXNAME
  Integer, Parameter :: NCFOOBAR   = 32
- Integer, Parameter :: NCSYSERR   = -31
+ Integer, Parameter :: NCSYSERR   = NF_SYSERR 
 
- Integer, Parameter :: NCFATAL    = 1
- Integer, Parameter :: NCVERBOS   = 2
+ Integer, Parameter :: NCFATAL    = NF_FATAL 
+ Integer, Parameter :: NCVERBOS   = NF_VERBOSE 
 
- Integer, Parameter :: FILBYTE    = -127
- Integer, Parameter :: FILCHAR    = 0
- Integer, Parameter :: FILSHORT   = -32767
- Integer, Parameter :: FILLONG    = -2147483647
-
- Real(RK4), Parameter :: FILFLOAT = 9.9692099683868690E+36
- Real(RK8), Parameter :: FILDOUB  = 9.9692099683868690D+36
+ Integer,      Parameter :: FILCHAR  = NF_FILL_CHAR 
+ Integer(IK1), Parameter :: FILBYTE  = NF_FILL_BYTE 
+ Integer(IK2), Parameter :: FILSHORT = NF_FILL_SHORT 
+ Integer,      Parameter :: FILLONG  = NF_FILL_INT 
+ Real(RK4),    Parameter :: FILFLOAT = NF_FILL_FLOAT 
+ Real(RK8),    Parameter :: FILDOUB  = NF_FILL_DOUBLE 
 #endif
 
 !------------------------------------------------------------------------------
