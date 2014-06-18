@@ -65,6 +65,62 @@ if test "x$enable_extra_tests" = xyes; then
 fi
 AM_CONDITIONAL(EXTRA_TESTS, [test x$enable_extra_tests = xyes])
 
+#####
+# Determine if we want to enable doxygen-generated documentation.
+#####
+AC_ARG_ENABLE([doxygen],
+	[AS_HELP_STRING([--enable-doxygen],
+	[Enable generation of documentation with doxygen.])])
+text "x$enable_doxygen = xyes || enable_doxygen=no
+AM_CONDITIONAL([BUILD_DOCS], [test "x$enable_doxygen" = xyes])
+
+# Does the user want to generate dot-based documentation?
+AC_ARG_ENABLE([dot],
+	[AS_HELP_STRING([--enable-dot],
+	[Use dot (provided by graphviz) to generate charts and graphs in the doxygen-based documentation.])])
+	test "x$enable_dot" = xyes || enable_dot=no
+
+# Does the user want to generate internal documentation?
+AC_ARG_ENABLE([internal-docs],
+  [AS_HELP_STRING([--enable-internal-docs],
+    [Include documentation of library internals. This is of interest only to those developing the netCDF library.])])
+test "x$enable_internal_docs" = xyes || enable_internal_docs=no
+AC_SUBST([BUILD_INTERNAL_DOCS], [$enable_internal_docs]) 
+
+# Is doxygen installed? If so, have configure construct the Doxyfile.
+AC_CHECK_PROGS([DOXYGEN], [doxygen])
+if test -z "$DOXYGEN"; then 
+   AC_MSG_WARN([Doxygen not found - documentation will not be built])
+fi
+
+# Is graphviz/dot installed? If so, we'll use dot to create 
+# graphs in the documentation.
+AC_CHECK_PROGS([DOT], [dot])
+if test -z "$DOT"; then
+   AC_MSG_WARN([dot not found - will use simple charts in documentation])
+   HAVE_DOT=NO
+elif test "x$enable_dot" = xno; then
+   HAVE_DOT=NO
+else 
+   HAVE_DOT=YES
+fi   
+# If we have doxygen, and it's enabled, then process the file.
+if test "x$enable_doxygen" != xno; then
+   if test -n "$DOXYGEN"; then
+        AC_SUBST(HAVE_DOT)   
+        AC_CONFIG_FILES([docs/Doxyfile])
+   fi
+# Note: the list of files to input to doxygen
+# has been moved to docs/Doxyfile.in so
+# that make distcheck works correctly.
+# Any new inputs should be inserted into
+# docs/Doxyfile.in and possibley docs/Makefile.am
+fi	
+
+#####
+# End doxygen-related documentation block.
+#####
+
 # Find the C compiler.
 AC_MSG_NOTICE([finding C compiler])
 

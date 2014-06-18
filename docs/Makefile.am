@@ -28,7 +28,8 @@ html_mans = netcdf_fortran-man.html
 
 # These files will be included with the dist.
 EXTRA_DIST = netcdf.m4 $(pdf_docs) $(html_mans) $(txt_docs)	\
-$(dvi_docs) $(ps_docs) $(info_docs) $(html_docs) $(man_MANS)
+$(dvi_docs) $(ps_docs) $(info_docs) $(html_docs) $(man_MANS) \
+CMakeLists.txt netcdf-50x50.png Doxyfile.in 
 
 # All the documents depend on defines.texi for some common
 # definitions.

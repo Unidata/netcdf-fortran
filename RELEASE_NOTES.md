@@ -1,4 +1,5 @@
-Release Notes {#release_notes_fortran}
+Release Notes {#release_notes}
+==============================
 
 \brief Release notes file for the netcdf-fortran package.
 

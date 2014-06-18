@@ -18,7 +18,9 @@ SET(NC4F_VERSION_PATCH 0)
 SET(NC4F_VERSION_NOTE "-rc1")
 SET(NC4F_VERSION ${NC4F_VERSION_MAJOR}.${NC4F_VERSION_MINOR}.${NC4F_VERSION_PATCH}${NC4F_VERSION_NOTE})
 SET(VERSION ${NC4F_VERSION})
-SET(NC4F_SO_VERSION 0.0.0)
+SET(NC4F_LIB_VERSION 0.0.0)
+SET(NC4F_SO_VERSION 0)
+SET(PACKAGE_VERSION ${VERSION})
 
 # Get system configuration,
 # Use it to determine osname,
@@ -34,6 +36,13 @@ IF(UNAME)
   getuname(cpu    -m)
   set(BUILDNAME        "${osname}-${osrel}-${cpu}" CACHE STRING "Build name variable for CDash")
 ENDIF()
+
+# Determine if DOXYGEN and DOT are available. These will be used
+# when building the documentation.
+
+FIND_PACKAGE(Doxygen)
+FIND_PROGRAM(NC_DOT NAMES dot)
+
 
 # For CMAKE_INSTALL_LIBDIR
 INCLUDE(GNUInstallDirs)
@@ -498,13 +507,6 @@ configure_file("${NC4F_SOURCE_DIR}/libsrc/nfconfig.in.cmake"
 configure_file("${NC4F_SOURCE_DIR}/config.h.cmake.in"
   "${NC4F_BINARY_DIR}/config.h")
 
-# Create nf-config file: TODO
-# FILE(MAKE_DIRECTORY ${NC4F_BINARY_DIR}/tmp)
-# configure_file("${NC4F_SOURCE_DIR}/nf-config.cmake.in"
-#   "${NC4F_BINARY_DIR}/tmp/nf-config" @ONLY)
-# FILE(COPY "${NC4F_BINARY_DIR}/tmp/nf-config"
-#    DESTINATION ${NC4F_BINARY_DIR}/
-#    FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 # For now, just copy a stub file
 FILE(COPY "${NC4F_SOURCE_DIR}/nf-config.cmake.in"
   DESTINATION "${NC4F_BINARY_DIR}"
@@ -573,6 +575,41 @@ ELSE()
   ENDIF()
 
 ENDIF()
+
+# Determine whether or not to generate documentation.
+OPTION(ENABLE_DOXYGEN "Enable generation of doxygen-based documentation." OFF)
+IF(ENABLE_DOXYGEN)
+  IF(DOXYGEN_FOUND)
+    # Offer the option to build internal documentation.
+    OPTION(ENABLE_INTERNAL_DOCS "Build internal documentation. This is of interest to developers only." OFF)
+    IF(ENABLE_INTERNAL_DOCS)
+      SET(BUILD_INTERNAL_DOCS YES CACHE STRING "")
+    ELSE()
+      SET(BUILD_INTERNAL_DOCS NO CACHE STRING "")
+    ENDIF()
+    
+    # Option to turn on the TODO list in the doxygen-generated documentation.
+    OPTION(ENABLE_DOXYGEN_TASKS "Turn on test, todo, bug lists in documentation. This is of interest to developers only." OFF)
+    IF(ENABLE_DOXYGEN_TASKS)
+      SET(SHOW_DOXYGEN_TAG_LIST YES CACHE STRING "")
+    ELSE(ENABLE_DOXYGEN_TASKS)
+      SET(SHOW_DOXYGEN_TODO_LIST NO CACHE STRING "")
+    ENDIF(ENABLE_DOXYGEN_TASKS)
+
+    # Specify whether or not 'dot' was found on the system path.
+    IF(NC_DOT)
+      SET(HAVE_DOT YES CACHE STRING "")
+    ELSE(NC_DOT)
+      SET(HAVE_DOT NO CACHE_STRING "")
+    ENDIF(NC_DOT)
+
+  ELSE(DOXYGEN_FOUND)
+    MESSAGE(STATUS "Unable to build internal documentation.  Doxygen does not appear to be on your executable path. Install doxygen and configure the project again.")
+    SET(ENABLE_DOXYGEN OFF)
+  ENDIF(DOXYGEN_FOUND)
+ENDIF()
+
+
 
 ###
 # End 'seek out dependent libraries'
