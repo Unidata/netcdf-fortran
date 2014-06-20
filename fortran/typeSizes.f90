@@ -48,12 +48,13 @@ contains
   !   the bit_size intrinsic, but I haven't seen this in a long time. 
 
     ! Local variables
-    integer (kind =  OneByteInt) :: One
-    integer (kind =  TwoByteInt) :: Two
-    integer (kind = FourByteInt) :: Four
+    integer (kind =  OneByteInt)  :: One
+    integer (kind =  TwoByteInt)  :: Two
+    integer (kind = FourByteInt)  :: Four
+    integer (kind = EightByteInt) :: Eight
 
-    if (bit_size( One) == 8  .and. bit_size( Two) == 16 .and.  &
-        bit_size(Four) == 32 .and.                             &
+    if (bit_size( One) == 8  .and. bit_size( Two)   == 16 .and.  &
+        bit_size(Four) == 32 .and. bit_size( Eight) == 64 .and.  &
         FourByteReal > 0 .and. EightByteReal > 0 .and. &
         FourByteReal /= EightByteReal) then
       byteSizesOK = .true.

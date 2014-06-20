@@ -327,14 +327,14 @@
 
  Integer,                Intent(IN)         :: ncid, varid
  Integer,                Intent(IN)         :: ndex(*)
-! Character(KIND=C_CHAR), Intent(IN), TARGET :: values(*)
- Type(C_PTR),            VALUE              :: values
+ Character(KIND=C_CHAR), Intent(IN), TARGET :: values(*)
+! Type(C_PTR),            VALUE              :: values
  Integer                                    :: status
 
  Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
  Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
  Type(C_PTR)                    :: cndexptr
-! Type(C_PTR)                    :: cvaluesptr
+ Type(C_PTR)                    :: cvaluesptr ! comment for type(C_PTR) values
  Integer                        :: ndims
 
  cncid  = ncid
@@ -353,10 +353,10 @@
    cndexptr = C_LOC(cndex)
  EndIf
 
-! cvaluesptr = C_LOC(values)
+ cvaluesptr = C_LOC(values)
 
-! cstatus = nc_put_var1(cncid, cvarid, cndexptr, cvaluesptr)
- cstatus = nc_put_var1(cncid, cvarid, cndexptr, values)
+ cstatus = nc_put_var1(cncid, cvarid, cndexptr, cvaluesptr)
+! cstatus = nc_put_var1(cncid, cvarid, cndexptr, values)
 
  status = cstatus
 
@@ -660,15 +660,15 @@
 
  Integer,                Intent(IN)          :: ncid, varid
  Integer,                Intent(IN)          :: ndex(*)
-! Character(KIND=C_CHAR), Intent(OUT), TARGET :: values(*)
- Type(C_PTR),            VALUE               :: values
+ Character(KIND=C_CHAR), Intent(OUT), TARGET :: values(*)
+! Type(C_PTR),            VALUE               :: values
 
  Integer                                     :: status
 
  Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
  Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
  Type(C_PTR)                    :: cndexptr
-! Type(C_PTR)                    :: cvaluesptr
+ Type(C_PTR)                    :: cvaluesptr
  Integer                        :: ndims
 
  cncid  = ncid

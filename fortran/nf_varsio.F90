@@ -447,14 +447,16 @@
 
  Integer,                Intent(IN)         :: ncid, varid
  Integer,                Intent(IN)         :: start(*), counts(*), strides(*)
-! Character(KIND=C_CHAR), Intent(IN), TARGET :: values(*) 
- Type(C_PTR),            VALUE              :: values
+ Character(KIND=C_CHAR), Intent(IN), TARGET :: values(*) 
+! Type(C_PTR),            VALUE              :: values
  Integer                                    :: status
 
  Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
  Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
  Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr
+ Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr, &
+                                      cvaluesptr
+! Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr
  Integer                           :: ndims
 
  cncid    = ncid
@@ -481,12 +483,12 @@
    cstridesptr = C_LOC(cstrides)
  EndIf
 
-! cvaluesptr = C_LOC(values)
+ cvaluesptr = C_LOC(values)
 
-! cstatus = nc_put_vars(cncid, cvarid, cstartptr, ccountsptr, &
-!                       cstridesptr, cvaluesptr)
  cstatus = nc_put_vars(cncid, cvarid, cstartptr, ccountsptr, &
-                       cstridesptr, values)
+                       cstridesptr, cvaluesptr)
+! cstatus = nc_put_vars(cncid, cvarid, cstartptr, ccountsptr, &
+!                       cstridesptr, values)
 
  status = cstatus
 
@@ -910,8 +912,8 @@
 
  Integer,                Intent(IN)    :: ncid, varid
  Integer,                Intent(IN)    :: start(*), counts(*), strides(*)
-! Character(KIND=C_CHAR), Intent(INOUT) :: values
- Type(C_PTR)             VALUE         :: values
+ Character(KIND=C_CHAR), Intent(INOUT) :: values
+! Type(C_PTR)             VALUE         :: values
 
  Integer                               :: status
 
