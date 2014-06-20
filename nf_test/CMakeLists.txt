@@ -63,6 +63,8 @@ if (USE_NETCDF4)
     SET(ftst_vars5_SOURCES ftst_vars5.F fortlib.c handle_err.F)
     SET(ftst_vars6_SOURCES ftst_vars6.F fortlib.c handle_err.F)
     SET(ftst_groups_SOURCES ftst_groups.F fortlib.c handle_err.F)
+    SET(ftst_path_SOURCES ftst_path.F fortlib.c handle_err.F)
+    SET(ftst_rengrps_SOURCES ftst_rengrps.F fortlib.c handle_err.F)
   endif(BUILD_F03)
   # Add these netCDF-4 f90 test programs.
   SET(nc4_f90_PROGRAMS
