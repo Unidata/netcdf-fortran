@@ -259,3 +259,7 @@
 
 /* Define to `unsigned int' if <sys/types.h> does not define. */
 #cmakedefine size_t
+
+/* Other various options */
+#cmakedefine ENABLE_DOXYGEN
+#cmakedefine ENABLE_INTERNAL_DOCS

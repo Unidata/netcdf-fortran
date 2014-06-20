@@ -9,7 +9,7 @@
 ACLOCAL_AMFLAGS = -I m4
 
 # These files get added to the distribution.
-EXTRA_DIST = README COPYRIGHT nf-config.in
+EXTRA_DIST = README COPYRIGHT nf-config.in CTestConfig.cmake CTestConfig.cmake.in nf-config.cmake.in 
 
 pkgconfigdir=$(libdir)/pkgconfig
 pkgconfig_DATA = netcdf-fortran.pc
@@ -26,7 +26,7 @@ endif
 
 # This is the list of subdirs for which Makefiles will be constructed
 # and run. 
-SUBDIRS = $(LIBSRC_DIR) $(FTN_DIR) nf_test $(F03_TESTS) man4 examples
+SUBDIRS = $(LIBSRC_DIR) $(FTN_DIR) nf_test $(F03_TESTS) docs examples
 
 # Remove these generated files, for a distclean.
 DISTCLEANFILES = VERSION comps.txt test_prog
