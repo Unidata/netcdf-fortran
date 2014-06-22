@@ -1,13 +1,10 @@
-Unidata NetCDF Fortran Library {#readme}
+Unidata NetCDF Fortran Library
 ========================================
 
-\brief Overview of the NetCDF-Fortran Libraries.
 
-[TOC]
+Overview 
+--------
 
-
-Overview {#netcdff_overview}
-============================
 
 The Unidata network Common Data Form (netCDF) is an interface for scientific data access and a set of freely-distributed software libraries that provide an implementation of the interface.  The netCDF library also defines a machine-independent format for representing scientific data.  Together, the interface, library, and format support the creation, access, and sharing of scientific data.  This software package provides Fortran application interfaces for accessing netCDF data.  It depends on the netCDF C libray, which must be installed first.  Other separate software distributions available from Unidata provide C Java, C++, and Python.  They have been tested on various common platforms.
 
@@ -21,8 +18,8 @@ For more information about netCDF, see the netCDF Web page at
 
 * http://www.unidata.ucar.edu/netcdf/
 
-Getting NetCDF {#getting_netcdff}
-==================================
+Getting NetCDF
+--------------
 
 You can obtain a copy of the latest released versions of netCDF software from
 
@@ -39,8 +36,8 @@ To install this package, please see the file INSTALL in the distribution, or the
 
 * http://www.unidata.ucar.edu/netcdf/docs/netcdf-fortran-install.html
 
-Additional Documentation {#additional_documentation}
-=================================================
+Additional Documentation
+------------------------
 
 The netCDF-3 C and FORTRAN-77 interfaces are documented in man(1) pages at
 
@@ -49,8 +46,8 @@ The netCDF-3 C and FORTRAN-77 interfaces are documented in man(1) pages at
 
 User's Guides are also available in several forms from the same location.
 
-Mailing List  {#mailing_list}
-=============================
+Mailing List
+------------
 
 A mailing list, netcdfgroup@unidata.ucar.edu, exists for discussion of the netCDF interface and announcements about netCDF bugs, fixes, and enhancements.  For information about how to subscribe, see the URL
 
