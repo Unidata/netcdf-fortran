@@ -10,10 +10,11 @@ Entries are in reverse chronological order (most recent first).
 
 ### 4.4-rc1 	Released 2013-10-06
 
+* Added doxygen-generated documentation, using the `--enable-doxygen` and `-DENABLE_DOXYGEN` flags for autotools and cmake-based builds, respectively.
+
 * Added missing error codes for DAP and some netCDF-4 errors
 
-* Fixed some documentation for F77 API, added make rule for creating
-		netcdf-f77 HTML files.
+* Fixed some documentation for F77 API, added make rule for creating netcdf-f77 HTML files.
 
 ### 4.4-beta5 	Released 2013-08-27
 
