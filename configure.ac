@@ -4,11 +4,11 @@
 # This is part of Unidata's netCDF package. Copyright 2011, see the
 # COPYRIGHT file for more information.
 
-# Running autoconf on this file will trigger a warning if 
+# Running autoconf on this file will trigger a warning if
 # autoconf is not at least the specified version.
 AC_PREREQ([2.59])
 
-# Initialize with name, version, and support email address. 
+# Initialize with name, version, and support email address.
 AC_INIT([netCDF-Fortran], [4.4-rc1], [support-netcdf@unidata.ucar.edu])
 
 # Create the VERSION file, which contains the package version from
@@ -36,7 +36,7 @@ AC_CONFIG_SRCDIR([libsrc/fort-attio.c])
 AC_MSG_NOTICE([checking user options])
 
 # Does the user want to run extra tests with valgrind?
-AC_MSG_CHECKING([whether extra valgrind tests should be run])	
+AC_MSG_CHECKING([whether extra valgrind tests should be run])
 AC_ARG_ENABLE([valgrind-tests],
               [AS_HELP_STRING([--enable-valgrind-tests],
                               [build with valgrind-tests (valgrind is required, static builds only)])])
@@ -71,7 +71,7 @@ AM_CONDITIONAL(EXTRA_TESTS, [test x$enable_extra_tests = xyes])
 AC_ARG_ENABLE([doxygen],
 	[AS_HELP_STRING([--enable-doxygen],
 	[Enable generation of documentation with doxygen.])])
-text "x$enable_doxygen = xyes || enable_doxygen=no
+text "x$enable_doxygen" = xyes || enable_doxygen=no
 AM_CONDITIONAL([BUILD_DOCS], [test "x$enable_doxygen" = xyes])
 
 # Does the user want to generate dot-based documentation?
@@ -85,15 +85,15 @@ AC_ARG_ENABLE([internal-docs],
   [AS_HELP_STRING([--enable-internal-docs],
     [Include documentation of library internals. This is of interest only to those developing the netCDF library.])])
 test "x$enable_internal_docs" = xyes || enable_internal_docs=no
-AC_SUBST([BUILD_INTERNAL_DOCS], [$enable_internal_docs]) 
+AC_SUBST([BUILD_INTERNAL_DOCS], [$enable_internal_docs])
 
 # Is doxygen installed? If so, have configure construct the Doxyfile.
 AC_CHECK_PROGS([DOXYGEN], [doxygen])
-if test -z "$DOXYGEN"; then 
+if test -z "$DOXYGEN"; then
    AC_MSG_WARN([Doxygen not found - documentation will not be built])
 fi
 
-# Is graphviz/dot installed? If so, we'll use dot to create 
+# Is graphviz/dot installed? If so, we'll use dot to create
 # graphs in the documentation.
 AC_CHECK_PROGS([DOT], [dot])
 if test -z "$DOT"; then
@@ -101,13 +101,13 @@ if test -z "$DOT"; then
    HAVE_DOT=NO
 elif test "x$enable_dot" = xno; then
    HAVE_DOT=NO
-else 
+else
    HAVE_DOT=YES
-fi   
+fi
 # If we have doxygen, and it's enabled, then process the file.
 if test "x$enable_doxygen" != xno; then
    if test -n "$DOXYGEN"; then
-        AC_SUBST(HAVE_DOT)   
+        AC_SUBST(HAVE_DOT)
         AC_CONFIG_FILES([docs/Doxyfile])
    fi
 # Note: the list of files to input to doxygen
@@ -115,7 +115,7 @@ if test "x$enable_doxygen" != xno; then
 # that make distcheck works correctly.
 # Any new inputs should be inserted into
 # docs/Doxyfile.in and possibley docs/Makefile.am
-fi	
+fi
 
 #####
 # End doxygen-related documentation block.
@@ -246,7 +246,7 @@ if test "x$enable_f03" = xyes ; then nc_build_f03=yes; fi
 if test "x$nc_iso_c_binding" = xno; then
   #Cannot build f03 native code
   AC_MSG_NOTICE([Fortran 2003 interface not supported; Using fortran 90 interface])
-  nc_build_f90=yes  
+  nc_build_f90=yes
 fi
 
 # Guarantee build state; f90 currently overrides f03
@@ -316,11 +316,11 @@ fi
 # See if the fortran 90 build is desired. If so, set some stuff
 if test "x$nc_build_f90" = xyes; then
    AC_MSG_NOTICE([setting up Fortran 90])
-   if test "${F90+set}" != set; then 
-      F90=$FC 
+   if test "${F90+set}" != set; then
+      F90=$FC
    fi
    AC_MSG_CHECKING([what FC is set to])
-   AC_MSG_RESULT([$FC])   
+   AC_MSG_RESULT([$FC])
 
    if test "x$nc_build_f03" = xno; then
      # Some f90 compilers change the case of the mod file names. Others
@@ -335,7 +335,7 @@ if test "x$nc_build_f90" = xyes; then
 
    # Set the FCLIBS flag to help with shared libraries.
 #   AC_FC_LIBRARY_LDFLAGS
-#   AC_F77_LIBRARY_LDFLAGS      
+#   AC_F77_LIBRARY_LDFLAGS
 fi
 
 AM_CONDITIONAL(BUILD_F03, [test "x$nc_build_f03" = xyes])
@@ -361,7 +361,7 @@ AC_PROG_INSTALL
 
 AC_MSG_NOTICE([trying to set fortran flags for this platform])
 AC_MSG_CHECKING([what FC is set to])
-AC_MSG_RESULT([$FC])   
+AC_MSG_RESULT([$FC])
 # Set fortran flag if the user has not already set it in CPPFLAGS.
 case "$CPPFLAGS" in
  *pgiFortran*|*NAGf90Fortran*|*f2cFortran*|*hpuxFortran*|*apolloFortran*|*sunFortran*|*IBMR2Fortran*|*CRAYFortran*|*PATHSCALE_COMPILER*|*gFortran*|*mipsFortran*|*DECFortran*|*vmsFortran*|*CONVEXFortran*|*PowerStationFortran*|*AbsoftUNIXFortran*|*AbsoftProFortran*|*SXFortran*)
@@ -371,14 +371,14 @@ case "$CPPFLAGS" in
          pgf95|pgf90|pgf77|ifort*|lf90|lf95)
             AC_DEFINE(pgiFortran, [1], [Turned on by netCDF configure.])
             ;;
-          *gfortran) 
+          *gfortran)
              if (gfortran --version | grep '(GCC 4.1.' || gfortran --version | grep '(GCC 4.0.'); then
-                AC_DEFINE(gFortran, [1], [Turned on by netCDF configure.])    
+                AC_DEFINE(gFortran, [1], [Turned on by netCDF configure.])
              else
-                AC_DEFINE(pgiFortran, [1], [Turned on by netCDF configure.])    
+                AC_DEFINE(pgiFortran, [1], [Turned on by netCDF configure.])
              fi
              ;;
-          *g77) 
+          *g77)
              AC_DEFINE(f2cFortran, [1], [Turned on by netCDF configure.])
              ;;
           *)
@@ -560,7 +560,7 @@ NC_LIBS="-lnetcdf"
 NC_LIBS="$LDFLAGS $NC_LIBS $LIBS"
 
 case "x$target_os" in
-xsolaris*) 
+xsolaris*)
   NEWNCLIBS=""
   for x in $NC_LIBS ; do
     case "$x" in
@@ -589,7 +589,7 @@ AC_MSG_NOTICE([generating header files and makefiles])
 
 # We will output a fortran inc file, nfconfig.inc.
 AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_HEADERS([libsrc/nfconfig1.inc:libsrc/nfconfig.in], 
+AC_CONFIG_HEADERS([libsrc/nfconfig1.inc:libsrc/nfconfig.in],
    [sed '1d;s%^/\* \(.*\) \*/%\1%' libsrc/nfconfig1.inc >conftest.tmp && mv conftest.tmp libsrc/nfconfig.inc])
 
 AC_CONFIG_FILES([Makefile
@@ -606,4 +606,3 @@ AC_CONFIG_FILES([Makefile
 		 [test -f  nf-config && chmod 755 nf-config ])
 
 AC_OUTPUT()
-
