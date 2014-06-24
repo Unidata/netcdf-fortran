@@ -272,7 +272,7 @@ Module netcdf_nc_data
 !extra netcd4 fill values
  Integer(KIND=C_INT),       Parameter :: NC_FILL_UBYTE  = 255
  Integer(KIND=C_INT),       Parameter :: NC_FILL_USHORT = 65535
- Integer(KIND=C_LONG),      Parameter :: NC_FILL_UINT   = 4294967295_C_LONG
+ Integer(KIND=C_LONG_LONG), Parameter :: NC_FILL_UINT   = 4294967295_C_LONG_LONG
  Integer(KIND=C_LONG_LONG), Parameter :: NC_FILL_INT64  = -9223372036854775806_C_LONG_LONG
 
 ! extra netcdf4 variable flags 
