@@ -166,11 +166,11 @@
  cncid   = ncid
  cdimid  = dimid - 1 ! Subtract 1 to get C dimid
 
+ cstatus = nc_inq_dimlen(cncid, cdimid, cdlen)
+
  If (cstatus == NC_NOERR) Then
-    cstatus = nc_inq_dimlen(cncid, cdimid, cdlen)
     dlen   = cdlen
  Endif
-
  status = cstatus
 
  End Function nf_inq_dimlen
