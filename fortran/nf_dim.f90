@@ -165,6 +165,7 @@
 
  cncid   = ncid
  cdimid  = dimid - 1 ! Subtract 1 to get C dimid
+ dlen    = 0
 
  cstatus = nc_inq_dimlen(cncid, cdimid, cdlen)
 
