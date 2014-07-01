@@ -426,6 +426,9 @@ ENDIF()
 OPTION(ENABLE_FORTRAN_TYPE_CHECKS
   "Determine Fortran types corresponding to netCDF types" OFF)
 
+# Toggle whether or not to run tests.
+OPTION(ENABLE_TESTS "Enable netcdf-fortran tests." ON)
+
 # A script to print out information at the end of the configuration step.
 MACRO(print_conf_summary)
   MESSAGE("")
@@ -622,8 +625,12 @@ INCLUDE_DIRECTORIES(${NC4F_BINARY_DIR})
 ADD_SUBDIRECTORY(fortran)
 
 ADD_SUBDIRECTORY(libsrc)
-ADD_SUBDIRECTORY(nf_test)
-ADD_SUBDIRECTORY(nf03_test)
+
+IF(ENABLE_TESTS)
+  ADD_SUBDIRECTORY(nf_test)
+  ADD_SUBDIRECTORY(nf03_test)
+ENDIF()
+
 # Build the Fortran examples
 ADD_SUBDIRECTORY(examples)
 ADD_SUBDIRECTORY(docs)

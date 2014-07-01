@@ -1,15 +1,11 @@
-The NetCDF Fortran 77 Interface Guide 
+The NetCDF Fortran 77 Interface Guide {#nc_f77_interface_guide}
 =====================================
 
+[TOC]
+
 This document describes the FORTRAN-77 interface to the netCDF library.
-This document applies to netCDF version No value for VERSION. This
-document was last updated in No value for UPDATED.
 
-For a complete description of the netCDF format and utilities see
-[(netcdf)Top](netcdf.html#Top) section ‘Top’ in The NetCDF Users Guide.
-
-
-1. Use of the NetCDF Library {.chapter}
+1. Use of the NetCDF Library {#nc_f77_using}
 ============================
 
 You can use the netCDF library without knowing about all of the netCDF
@@ -18,7 +14,7 @@ routines are required to define the necessary dimensions, variables, and
 attributes, and to write the data to the netCDF dataset. (Even less are
 needed if you use the ncgen utility to create the dataset before running
 a program using netCDF library calls to write data. See
-[(netcdf)ncgen](netcdf.html#ncgen) section ‘ncgen’ in The NetCDF Users
+section ‘ncgen’ in The NetCDF Users
 Guide.) Similarly, if you are writing software to access data stored in
 a particular netCDF object, only a small subset of the netCDF library is
 required to open the netCDF dataset and access the data. Authors of
