@@ -5,8 +5,8 @@ The NetCDF Fortran 77 Interface Guide {#nc_f77_interface_guide}
 
 This document describes the FORTRAN-77 interface to the netCDF library.
 
-1. Use of the NetCDF Library {#nc_f77_using}
-============================
+1 Use of the NetCDF Library {#Use_of_the_NetCDF_Library}
+=============================
 
 You can use the netCDF library without knowing about all of the netCDF
 interface. If you are creating a netCDF dataset, only a handful of
@@ -16,22 +16,22 @@ needed if you use the ncgen utility to create the dataset before running
 a program using netCDF library calls to write data. See
 section ‘ncgen’ in The NetCDF Users
 Guide.) Similarly, if you are writing software to access data stored in
-a particular netCDF object, only a small subset of the netCDF library is
+a particular netCDF object, only a smallbset of the netCDF library is
 required to open the netCDF dataset and access the data. Authors of
 generic applications that access arbitrary netCDF datasets need to be
 familiar with more of the netCDF library.
 
-In this chapter we provide templates of common sequences of netCDF calls
+In this we provide templates of common sequences of netCDF calls
 needed for common uses. For clarity we present only the names of
 routines; omit declarations and error checking; omit the type-specific
 suffixes of routine names for variables and attributes; indent
 statements that are typically invoked multiple times; and use ... to
 represent arbitrary sequences of other statements. Full parameter lists
-are described in later chapters.
+are described in laters.
 
 
 
-1.1 Creating a NetCDF Dataset {.section}
+1.1 Creating a NetCDF Dataset {#Creating_a_NetCDF_Dataset}
 -----------------------------
 
 Here is a typical sequence of netCDF calls used to create a new netCDF
@@ -39,7 +39,7 @@ dataset:
 
  
 
-~~~~ {.example}
+
     NF_CREATE           ! create netCDF dataset: enter define mode
          ... 
        NF_DEF_DIM       ! define dimensions: from name and length
@@ -53,7 +53,7 @@ dataset:
        NF_PUT_VAR       ! provide values for variable
          ... 
     NF_CLOSE            ! close: save new netCDF dataset
-~~~~
+
 
 Only one call is needed to create a netCDF dataset, at which point you
 will be in the first of two netCDF modes. When accessing an open netCDF
@@ -75,10 +75,10 @@ changes do not require more storage space). Single values may be written
 to a netCDF variable with one of the members of the NF\_PUT\_VAR1
 family, depending on what type of data you have to write. All the values
 of a variable may be written at once with one of the members of the
-NF\_PUT\_VAR family. Arrays or array cross-sections of a variable may be
+NF\_PUT\_VAR family. Arrays or array crosss of a variable may be
 written using members of the NF\_PUT\_VARA family. Subsampled array
 sections may be written using members of the NF\_PUT\_VARS family.
-Mapped array sections may be written using members of the NF\_PUT\_VARM
+Mapped arrays may be written using members of the NF\_PUT\_VARM
 family. (Subsampled and mapped access are general forms of data access
 that are explained later.)
 
@@ -91,7 +91,7 @@ setting the NF\_SHARE flag when opening the dataset. But even if this
 flag is set, changes to attribute values or changes made in define mode
 are not written out until NF\_SYNC or NF\_CLOSE is called.
 
-1.2 Reading a NetCDF Dataset with Known Names {.section}
+1.2 Reading a NetCDF Dataset with Known Names {#Reading_a_NetCDF_Dataset_with_Known_Names} 
 ---------------------------------------------
 
 Here we consider the case where you know the names of not only the
@@ -102,7 +102,7 @@ is:
 
  
 
-~~~~ {.example}
+
     NF_OPEN               ! open existing netCDF dataset
          ... 
        NF_INQ_DIMID       ! get dimension IDs
@@ -114,11 +114,11 @@ is:
        NF_GET_VAR         ! get values of variables
          ... 
     NF_CLOSE              ! close netCDF dataset
-~~~~
+
 
 First, a single call opens the netCDF dataset, given the dataset name,
 and returns a netCDF ID that is used to refer to the open netCDF dataset
-in all subsequent calls.
+in allbsequent calls.
 
 Next, a call to NF\_INQ\_DIMID for each dimension of interest gets the
 dimension ID from the dimension name. Similarly, each required variable
@@ -130,17 +130,17 @@ NF\_GET\_ATT\_DOUBLE) for each desired attribute. Variable data values
 can be directly accessed from the netCDF dataset with calls to members
 of the NF\_GET\_VAR1 family for single values, the NF\_GET\_VAR family
 for entire variables, or various other members of the NF\_GET\_VARA,
-NF\_GET\_VARS, or NF\_GET\_VARM families for array, subsampled or mapped
+NF\_GET\_VARS, or NF\_GET\_VARM families for array,bsampled or mapped
 access.
 
 Finally, the netCDF dataset is closed with NF\_CLOSE. There is no need
 to close a dataset open only for reading.
 
 
-1.3 Reading a netCDF Dataset with Unknown Names {.section}
+1.3 Reading a netCDF Dataset with Unknown Names {#Reading_a_netCDF_Dataset_with_Unknown_Names}
 -----------------------------------------------
 
-It is possible to write programs (e.g., generic software) which do such
+It is possible to write programs (e.g., generic software) which doch
 things as processing every variable, without needing to know in advance
 the names of these variables. Similarly, the names of dimensions and
 attributes may be unknown.
@@ -152,7 +152,7 @@ The following template illustrates how they are used:
 
  
 
-~~~~ {.example}
+
     NF_OPEN                   ! open existing netCDF dataset
       ... 
     NF_INQ                    ! find out what is in it
@@ -170,7 +170,7 @@ The following template illustrates how they are used:
        NF_GET_VAR             ! get values of variables
          ... 
     NF_CLOSE                  ! close netCDF dataset
-~~~~
+
 
 As in the previous example, a single call opens the existing netCDF
 dataset, returning a netCDF ID. This netCDF ID is given to the NF\_INQ
@@ -194,7 +194,7 @@ to the number of variables. These can be used in NF\_INQ\_VAR calls to
 find out the names, types, shapes, and the number of attributes assigned
 to each variable.
 
-Once the number of attributes for a variable is known, successive calls
+Once the number of attributes for a variable is known,ccessive calls
 to NF\_INQ\_ATTNAME return the name for each attribute given the netCDF
 ID, variable ID, and attribute number. Armed with the attribute name, a
 call to NF\_INQ\_ATT returns its type and length. Given the type and
@@ -207,7 +207,7 @@ be accessed by calling a member of the NF\_GET\_VAR1 family for single
 values, or members of the NF\_GET\_VAR, NF\_GET\_VARA, NF\_GET\_VARS, or
 NF\_GET\_VARM for various kinds of array access.
 
-1.4 Adding New Dimensions, Variables, Attributes {.section}
+1.4 Adding New Dimensions, Variables, Attributes {#Adding_New_Dimensions__Variables__Attributes}
 ------------------------------------------------
 
 An existing netCDF dataset can be extensively altered. New dimensions,
@@ -218,7 +218,7 @@ sequence of calls to add new netCDF components to an existing dataset:
 
  
 
-~~~~ {.example}
+
     NF_OPEN             ! open existing netCDF dataset
       ... 
     NF_REDEF            ! put it into define mode
@@ -234,7 +234,7 @@ sequence of calls to add new netCDF components to an existing dataset:
       NF_PUT_VAR        ! provide new variable values
         ... 
     NF_CLOSE            ! close netCDF dataset
-~~~~
+
 
 A netCDF dataset is first opened by the NF\_OPEN call. This call puts
 the open dataset in data mode, which means existing data values can be
@@ -261,15 +261,15 @@ netCDF dataset and leave it in its previous consistent state (before you
 entered define mode).
 
 At most one process should have a netCDF dataset open for writing at one
-time. The library is designed to provide limited support for multiple
+time. The library is designed to provide limitedpport for multiple
 concurrent readers with one writer, via disciplined use of the NF\_SYNC
 function and the NF\_SHARE flag. If a writer makes changes in define
-mode, such as the addition of new variables, dimensions, or attributes,
+mode,ch as the addition of new variables, dimensions, or attributes,
 some means external to the library is necessary to prevent readers from
 making concurrent accesses and to inform readers to call NF\_SYNC before
 the next access.
 
-1.5 Error Handling {.section}
+1.5 Error Handling {#Error_Handling_1_5} 
 ------------------
 
 The netCDF library provides the facilities needed to handle errors in a
@@ -287,10 +287,10 @@ Occasionally, low-level I/O errors may occur in a layer below the netCDF
 library. For example, if a write operation causes you to exceed disk
 quotas or to attempt to write to a device that is no longer available,
 you may get an error from a layer below the netCDF library, but the
-resulting write error will still be reflected in the returned status
+rlting write error will still be reflected in the returned status
 value.
 
-1.6 Compiling and Linking with the NetCDF Library {.section}
+1.6 Compiling and Linking with the NetCDF Library {#Compiling_and_Linking_with_the_NetCDF_Library}
 -------------------------------------------------
 
 Details of how to compile and link a program that uses the netCDF C or
@@ -301,25 +301,19 @@ link a program that uses the netCDF library on a Unix platform, so that
 you can adjust these examples to fit your installation.
 
 Every FORTRAN file that references netCDF functions or constants must
-contain an appropriate INCLUDE statement before the first such
+contain an appropriate INCLUDE statement before the first
 reference:
 
- 
+	INCLUDE 'netcdf.inc'
 
-~~~~ {.example}
-INCLUDE 'netcdf.inc'
-~~~~
 
 Unless the netcdf.inc file is installed in a standard directory where
 the FORTRAN compiler always looks, you must use the -I option when
 invoking the compiler, to specify a directory where netcdf.inc is
 installed, for example:
 
- 
+	f77 -c -I/usr/local/include myprogram.f
 
-~~~~ {.example}
-f77 -c -I/usr/local/include myprogram.f
-~~~~
 
 Unless the netCDF library is installed in a standard directory where the
 linker always looks, you must use the -L and -l options to link an
@@ -331,19 +325,19 @@ library for linking.
 
 For example, if installed as a shared library, use something like:
 
-~~~~ {.example}
-f77 -o myprogram myprogram.o -L/usr/local/lib -lnetcdff
-~~~~
+
+	f77 -o myprogram myprogram.o -L/usr/local/lib -lnetcdff
+
 
 If installed as a static library, you will at least need to mention the
-netCDF C library and perhaps other libraries, such as hdf5 or curl,
+netCDF C library and perhaps other libraries,ch as hdf5 or curl,
 depending on how the C library was built. For example:
 
  
 
-~~~~ {.example}
-f77 -o myprogram myprogram.o -L/usr/local/lib -lnetcdff -lnetcdf
-~~~~
+
+	f77 -o myprogram myprogram.o -L/usr/local/lib -lnetcdff -lnetcdf
+
 
 Use of the nf-config utility program, installed as part of the
 netcdf-fortran software, provides an easier way to compile and link,
@@ -358,36 +352,36 @@ Fortran program in one step:
 
  
 
-~~~~ {.example}
-f77 myprogram.f -o myprogram `nf-config --fflags --flibs`
-~~~~
+
+	f77 myprogram.f -o myprogram `nf-config --fflags --flibs`
+
 
 If it is installed on your system, you could also use the ‘pkg-config’
 utility to compile and link Fortran programs with the netCDF libraries.
-This is especially useful in Makefiles, to insulate them from changes to
+This is especially useful in Makefiles, to ilate them from changes to
 library versions and dependencies. Here is an example of how you could
 compile and link a Fortran program with netCDF libraries using
 pkg-config:
 
  
 
-~~~~ {.example}
-export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
-f77 myprogram.f -o myprogram `pkg-config --cflags --libs netcdf-fortran`
-~~~~
+
+	export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+	f77 myprogram.f -o myprogram `pkg-config --cflags --libs netcdf-fortran`
+
 
 where here ‘–cflags’ means compiler flags and ‘libs’ requests that the
 approriate libraries be linked in.
 
 
 
-2. Datasets {.chapter}
+2. Datasets  {#Datasets_}
 ===========
 
-2.1 Datasets Introduction {.section}
+2.1 Datasets Introduction {#Datasets_Introduction} 
 -------------------------
 
-This chapter presents the interfaces of the netCDF functions that deal
+This presents the interfaces of the netCDF functions that deal
 with a netCDF dataset or the whole netCDF library.
 
 A netCDF dataset that has not yet been opened can only be referred to by
@@ -406,7 +400,7 @@ Functions that deal with the netCDF library include:
 -   Get version of library.
 -   Get error message corresponding to a returned error code.
 
-The operations supported on a netCDF dataset as a single object are:
+The operationspported on a netCDF dataset as a single object are:
 
 -   Create, given dataset name and whether to overwrite or not.
 -   Open for access, given dataset name and read or write intent.
@@ -415,17 +409,17 @@ The operations supported on a netCDF dataset as a single object are:
 -   Close, writing to disk if required.
 -   Inquire about the number of dimensions, number of variables, number
     of global attributes, and ID of the unlimited dimension, if any.
--   Synchronize to disk to make sure it is current.
+-   Synchronize to disk to makere it is current.
 -   Set and unset nofill mode for optimized sequential writes.
--   After a summary of conventions used in describing the netCDF
-    interfaces, the rest of this chapter presents a detailed description
+-   After ammary of conventions used in describing the netCDF
+    interfaces, the rest of this presents a detailed description
     of the interfaces for these operations.
 
-2.2 NetCDF Library Interface Descriptions {.section}
+2.2 NetCDF Library Interface Descriptions {#NetCDF_Library_Interface_Descriptions} 
 -----------------------------------------
 
 Each interface description for a particular netCDF function in this and
-later chapters contains:
+laters contains:
 
 -   a description of the purpose of the function;
 -   a FORTRAN function prototype that presents the type and order of the
@@ -438,41 +432,37 @@ later chapters contains:
 The examples follow a simple convention for error handling, always
 checking the error status returned from each netCDF function call and
 calling a handle\_error function in case an error was detected. For an
-example of such a function, see Section 5.2 "Get error message
+example ofch a function, see Section 5.2 "Get error message
 corresponding to error status: nf\_strerror".
 
-2.3 NF\_STRERROR {.section}
+2.3 NF_STRERROR {#NF_STRERROR} 
 ----------------
 
 The function NF\_STRERROR returns a static reference to an error message
 string corresponding to an integer netCDF error status or to a system
-error number, presumably returned by a previous call to some other
+error number, prmably returned by a previous call to some other
 netCDF function. The list of netCDF error status codes is available in
 the appropriate include file for each language binding.
 
-Usage {.heading}
------
+### Usage 
 
- 
-
-~~~~ {.example}
+~~~
 CHARACTER*80 FUNCTION NF_STRERROR(INTEGER NCERR)
-~~~~
+~~~
 
  `NCERR`
 :   An error status that might have been returned from a previous call
     to some netCDF function.
 
-Errors {.heading}
-------
+
+### Errors 
 
 If you provide an invalid integer error status that does not correspond
 to any netCDF error message or or to any system error message (as
 understood by the system strerror function), NF\_STRERROR returns a
-string indicating that there is no such error status.
+string indicating that there is noch error status.
 
-Example {.heading}
--------
+### Example 
 
 Here is an example of a simple error handling function that uses
 NF\_STRERROR to print the error message corresponding to the netCDF
@@ -480,7 +470,7 @@ error status returned from any netCDF function call and then exit:
 
  
 
-~~~~ {.example}
+~~~
 INCLUDE 'netcdf.inc'
    ... 
 SUBROUTINE HANDLE_ERR(STATUS)
@@ -490,49 +480,43 @@ IF (STATUS .NE. NF_NOERR) THEN
   STOP 'Stopped'
 ENDIF
 END
-~~~~
+~~~
 
 
-2.4 Get netCDF library version: NF\_INQ\_LIBVERS {.section}
+2.4 Get netCDF library version: NF_INQ_LIBVERS {#Get_netCDF_library_version_NF_INQ_LIBVERS} 
 ------------------------------------------------
 
 The function NF\_INQ\_LIBVERS returns a string identifying the version
 of the netCDF library, and when it was built.
 
-Usage {.heading}
------
+### Usage 
 
-
-~~~~ {.example}
+~~~
 CHARACTER*80 FUNCTION NF_INQ_LIBVERS()
-~~~~
+~~~
 
-Errors {.heading}
-------
+### Errors 
 
 This function takes no arguments, and thus no errors are possible in its
 invocation.
 
-Example {.heading}
--------
+### Example 
 
 Here is an example using nf\_inq\_libvers to print the version of the
 netCDF library with which the program is linked:
 
- 
 
-~~~~ {.example}
+~~~
 INCLUDE 'netcdf.inc'
    ... 
 PRINT *, NF_INQ_LIBVERS()
-~~~~
+~~~
 
-
-2.5 NF\_CREATE {.section}
+2.5 NF_CREATE {#NF_CREATE} 
 --------------
 
 This function creates a new netCDF dataset, returning a netCDF ID that
-can subsequently be used to refer to the netCDF dataset in other netCDF
+can sequently be used to refer to the netCDF dataset in other netCDF
 function calls. The new netCDF dataset opened for write access and
 placed in define mode, ready for you to add dimensions, variables, and
 attributes.
@@ -540,65 +524,59 @@ attributes.
 A creation mode flag specifies whether to overwrite any existing dataset
 with the same name and whether access to the dataset is shared.
 
-Usage {.heading}
------
-
+### Usage 
  
-
-~~~~ {.example}
+~~~
 INTEGER FUNCTION NF_CREATE (CHARACTER*(*) PATH, INTEGER CMODE, 
                             INTEGER ncid)
-~~~~
+~~~
 
- `PATH`
-:   The file name of the new netCDF dataset.
+ `PATH`:   The file name of the new netCDF dataset.
 
- `CMODE`
-:   The creation mode flag. The following flags are available:
+ `CMODE`:   The creation mode flag. The following flags are available:
     NF\_NOCLOBBER, NF\_SHARE, NF\_64BIT\_OFFSET, NF\_NETCDF4 and
     NF\_CLASSIC\_MODEL. You can combine the affect of multiple flags in
     a single argument by using the bitwise OR operator. For example, to
     specify both NF\_NOCLOBBER and NF\_SHARE, you could provide the
     argument OR(NF\_NOCLOBBER, NF\_SHARE).
 
-    A zero value (defined for convenience as NF\_CLOBBER) specifies the
-    default behavior: overwrite any existing dataset with the same file
-    name and buffer and cache accesses for efficiency. The dataset will
-    be in netCDF classic format. See [(netcdf)NetCDF Classic Format
-    Limitations](netcdf.html#NetCDF-Classic-Format-Limitations) section
-    ‘NetCDF Classic Format Limitations’ in The NetCDF Users Guide.
 
-    Setting NF\_NOCLOBBER means you do not want to clobber (overwrite)
-    an existing dataset; an error (NF\_EEXIST) is returned if the
-    specified dataset already exists.
+A zero value (defined for convenience as NF_CLOBBER) specifies the
+default behavior: overwrite any existing dataset with the same file
+name and buffer and cache accesses for efficiency. The dataset will
+be in netCDF classic format. See  'NetCDF Classic Format Limitations' 
+in The NetCDF Users Guide.
 
-    The NF\_SHARE flag is appropriate when one process may be writing
-    the dataset and one or more other processes reading the dataset
-    concurrently; it means that dataset accesses are not buffered and
-    caching is limited. Since the buffering scheme is optimized for
-    sequential access, programs that do not access data sequentially may
-    see some performance improvement by setting the NF\_SHARE flag. This
-    only applied to classic and 64-bit offset format files.
+Setting NF\_NOCLOBBER means you do not want to clobber (overwrite)
+an existing dataset; an error (NF_EEXIST) is returned if the
+specified dataset already exists.
 
-    Setting NF\_64BIT\_OFFSET causes netCDF to create a 64-bit offset
-    format file, instead of a netCDF classic format file. The 64-bit
-    offset format imposes far fewer restrictions on very large (i.e.
-    over 2 GB) data files. See [(netcdf)Large File
-    Support](netcdf.html#Large-File-Support) section ‘Large File
-    Support’ in The NetCDF Users Guide.
+The NF\_SHARE flag is appropriate when one process may be writing
+the dataset and one or more other processes reading the dataset
+concurrently; it means that dataset accesses are not buffered and
+caching is limited. Since the buffering scheme is optimized for
+sequential access, programs that do not access data sequentially may
+see some performance improvement by setting the NF\_SHARE flag. This
+only applied to classic and 64-bit offset format files.
 
-    Setting NF\_NETCDF4 causes netCDF to create a netCDF-4/HDF5 format
-    file. Oring NF\_CLASSIC\_MODEL with NF\_NETCDF4 causes the netCDF
-    library to create a netCDF-4/HDF5 data file, with the netCDF classic
-    model enforced - none of the new features of the netCDF-4 data model
-    may be usedin such a file, for example groups and user-defined
-    types.
+Setting NF\_64BIT\_OFFSET causes netCDF to create a 64-bit offset
+format file, instead of a netCDF classic format file. The 64-bit
+offset format imposes far fewer restrictions on very large (i.e.
+over 2 GB) data files. See [(netcdf)Large File
+Support](netcdf.html#Large-File-Support) ‘Large File
+Support’ in The NetCDF Users Guide.
+
+Setting NF\_NETCDF4 causes netCDF to create a netCDF-4/HDF5 format
+file. Oring NF\_CLASSIC\_MODEL with NF\_NETCDF4 causes the netCDF
+library to create a netCDF-4/HDF5 data file, with the netCDF classic
+model enforced - none of the new features of the netCDF-4 data model
+may be usedinch a file, for example groups and user-defined
+types.
 
  `ncid`
 :   Returned netCDF ID.
 
-Errors {.heading}
-------
+### Errors 
 
 NF\_CREATE returns the value NF\_NOERR if no errors occurred. Possible
 causes of errors include:
@@ -611,8 +589,7 @@ causes of errors include:
 -   Attempting to create a netCDF dataset in a directory where you don’t
     have permission to create files.
 
-Example {.heading}
--------
+### Example 
 
 In this example we create a netCDF dataset named foo.nc; we want the
 dataset to be created in the current directory only if a dataset with
@@ -620,16 +597,16 @@ that name does not already exist:
 
  
 
-~~~~ {.example}
+~~~
 INCLUDE 'netcdf.inc'
   ... 
 INTEGER NCID, STATUS
 ... 
 STATUS = NF_CREATE('foo.nc', NF_NOCLOBBER, NCID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
+~~~
 
-2.6 NF\_\_CREATE {.section}
+2.6 NF__CREATE {#NF__CREATE}
 ----------------
 
 This function is a variant of NF\_CREATE, NF\_\_CREATE (note the double
@@ -639,7 +616,7 @@ file, they are only used for so long as the file remains open after an
 NF\_\_CREATE.
 
 This function creates a new netCDF dataset, returning a netCDF ID that
-can subsequently be used to refer to the netCDF dataset in other netCDF
+canbsequently be used to refer to the netCDF dataset in other netCDF
 function calls. The new netCDF dataset opened for write access and
 placed in define mode, ready for you to add dimensions, variables, and
 attributes.
@@ -647,16 +624,13 @@ attributes.
 A creation mode flag specifies whether to overwrite any existing dataset
 with the same name and whether access to the dataset is shared.
 
-Usage {.heading}
------
+### Usage 
 
- 
-
-~~~~ {.example}
+~~~
 INTEGER FUNCTION NF__CREATE (CHARACTER*(*) PATH, INTEGER CMODE, INTEGER INITIALSZ, 
                             INTEGER BUFRSIZEHINT, INTEGER ncid)
-~~~~
 
+~~~
  `PATH`
 :   The file name of the new netCDF dataset.
 
@@ -681,32 +655,32 @@ INTEGER FUNCTION NF__CREATE (CHARACTER*(*) PATH, INTEGER CMODE, INTEGER INITIALS
     format file, instead of a netCDF classic format file. The 64-bit
     offset format imposes far fewer restrictions on very large (i.e.
     over 2 GB) data files. See [(netcdf)Large File
-    Support](netcdf.html#Large-File-Support) section ‘Large File
+    Support](netcdf.html#Large-File-Support) ‘Large File
     Support’ in The NetCDF Users Guide.
 
     Setting NF\_CLASSIC\_MODEL causes netCDF to enforce the classic data
     model in this file. (This only has effect for netCDF-4/HDF5 files,
     as classic and 64-bit offset files always use the classic model.)
-    When used with NF\_NETCDF4, this flag ensures that the resulting
+    When used with NF\_NETCDF4, this flag eres that the rlting
     netCDF-4/HDF5 file may never contain any new constructs from the
     enhanced data model. That is, it cannot contain groups, user defined
     types, multiple unlimited dimensions, or new atomic types. The
-    advantage of this restriction is that such files are guarenteed to
+    advantage of this restriction is thatch files are guarenteed to
     work with existing netCDF software.
 
     A zero value (defined for convenience as NF\_CLOBBER) specifies the
     default behavior: overwrite any existing dataset with the same file
     name and buffer and cache accesses for efficiency. The dataset will
     be in netCDF classic format. See [(netcdf)NetCDF Classic Format
-    Limitations](netcdf.html#NetCDF-Classic-Format-Limitations) section
+    Limitations](netcdf.html#NetCDF-Classic-Format-Limitations)
     ‘NetCDF Classic Format Limitations’ in The NetCDF Users Guide.
 
  `INITIALSZ`
 :   This parameter sets the initial size of the file at creation time.
 
  `BUFRSIZEHINT`
-:   The argument referenced by BUFRSIZEHINT controls a space versus time
-    tradeoff, memory allocated in the netcdf library versus number of
+:   The argument referenced by BUFRSIZEHINT controls a space ves time
+    tradeoff, memory allocated in the netcdf library ves number of
     system calls.
 
     Because of internal requirements, the value may not be set to
@@ -729,8 +703,7 @@ INTEGER FUNCTION NF__CREATE (CHARACTER*(*) PATH, INTEGER CMODE, INTEGER INITIALS
  `ncid`
 :   Returned netCDF ID.
 
-Errors {.heading}
-------
+### Errors 
 
 NF\_\_CREATE returns the value NF\_NOERR if no errors occurred. Possible
 causes of errors include:
@@ -743,8 +716,7 @@ causes of errors include:
 -   Attempting to create a netCDF dataset in a directory where you don’t
     have permission to create files.
 
-Example {.heading}
--------
+### Example 
 
 In this example we create a netCDF dataset named foo.nc; we want the
 dataset to be created in the current directory only if a dataset with
@@ -752,7 +724,7 @@ that name does not already exist:
 
  
 
-~~~~ {.example}
+~~~
 INCLUDE 'netcdf.inc'
   ... 
 INTEGER NCID, STATUS, INITIALSZ, BUFRSIZEHINT
@@ -761,9 +733,9 @@ INITIALSZ = 2048
 BUFRSIZEHINT = 1024
 STATUS = NF__CREATE('foo.nc', NF_NOCLOBBER, INITIALSZ, BUFRSIZEHINT, NCID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
+~~~
 
-2.7 NF\_CREATE\_PAR {.section}
+2.7 NF_CREATE_PAR {#NF_CREATE_PAR} 
 -------------------
 
 This function is a variant of nf\_create, nf\_create\_par allows users
@@ -776,7 +748,7 @@ This function is only available if the netCDF library was built with
 parallel I/O.
 
 This function creates a new netCDF dataset, returning a netCDF ID that
-can subsequently be used to refer to the netCDF dataset in other netCDF
+canbsequently be used to refer to the netCDF dataset in other netCDF
 function calls. The new netCDF dataset opened for write access and
 placed in define mode, ready for you to add dimensions, variables, and
 attributes.
@@ -786,16 +758,13 @@ operations are the default. To use collective access on a variable, See
 section [Change between Collective and Independent Parallel Access:
 NF\_VAR\_PAR\_ACCESS](#NF_005fVAR_005fPAR_005fACCESS).
 
-Usage {.heading}
------
+### Usage 
 
- 
-
-~~~~ {.example}
+~~~
 INTEGER FUNCTION NF_CREATE_PAR(CHARACTER*(*) PATH, INTEGER CMODE, 
                                INTEGER MPI_COMM, INTEGER MPI_INFO, 
                                INTEGER ncid)
-~~~~
+~~~
 
  `PATH`
 :   The file name of the new netCDF dataset.
@@ -812,7 +781,7 @@ INTEGER FUNCTION NF_CREATE_PAR(CHARACTER*(*) PATH, INTEGER CMODE,
     file. Oring NF\_CLASSIC\_MODEL with NF\_NETCDF4 causes the netCDF
     library to create a netCDF-4/HDF5 data file, with the netCDF classic
     model enforced - none of the new features of the netCDF-4 data model
-    may be usedin such a file, for example groups and user-defined
+    may be usedinch a file, for example groups and user-defined
     types.
 
     Only netCDF-4/HDF5 files may be used with parallel I/O.
@@ -826,8 +795,8 @@ INTEGER FUNCTION NF_CREATE_PAR(CHARACTER*(*) PATH, INTEGER CMODE,
  `ncid`
 :   Returned netCDF ID.
 
-Errors {.heading}
-------
+### Errors 
+
 
 NF\_CREATE returns the value NF\_NOERR if no errors occurred. Possible
 causes of errors include:
@@ -840,39 +809,36 @@ causes of errors include:
 -   Attempting to create a netCDF dataset in a directory where you don’t
     have permission to create files.
 
-Example {.heading}
--------
+### Example 
+
 
 This example is from test program nf\_test/ftst\_parallel.F.
 
  
 
-~~~~ {.example}
+~~~
 !     Create the netCDF file. 
       mode_flag = IOR(nf_netcdf4, nf_classic_model) 
       retval = nf_create_par(FILE_NAME, mode_flag, MPI_COMM_WORLD, 
      $     MPI_INFO_NULL, ncid)
       if (retval .ne. nf_noerr) stop 2
-~~~~
+~~~
 
 
-2.8 NF\_OPEN {.section}
+2.8 NF_OPEN  {#NF_OPEN_}
 ------------
 
 The function NF\_OPEN opens an existing netCDF dataset for access.
 
-Usage {.heading}
------
+### Usage 
 
- 
-
-~~~~ {.example}
+~~~
 INTEGER FUNCTION NF_OPEN(CHARACTER*(*) PATH, INTEGER OMODE, INTEGER ncid)
-~~~~
+~~~
 
  `PATH`
 :   File name for netCDF dataset to be opened. This may be an OPeNDAP
-    URL if DAP support is enabled.
+    URL if DAPpport is enabled.
 
  `OMODE`
 :   A zero value (or NF\_NOWRITE) specifies: open the dataset with
@@ -894,8 +860,8 @@ INTEGER FUNCTION NF_OPEN(CHARACTER*(*) PATH, INTEGER OMODE, INTEGER ncid)
  `ncid`
 :   Returned netCDF ID.
 
-Errors {.heading}
-------
+### Errors 
+
 
 NF\_OPEN returns the value NF\_NOERR if no errors occurred. Otherwise,
 the returned status indicates an error. Possible causes of errors
@@ -904,38 +870,32 @@ include:
 -   The specified netCDF dataset does not exist.
 -   A meaningless mode was specified.
 
-Example {.heading}
--------
+### Example 
 
 Here is an example using NF\_OPEN to open an existing netCDF dataset
 named foo.nc for read-only, non-shared access:
 
- 
-
-~~~~ {.example}
+~~~
 INCLUDE 'netcdf.inc'
  ... 
 INTEGER NCID, STATUS
 ... 
 STATUS = NF_OPEN('foo.nc', 0, NCID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
+~~~
 
-2.9 NF\_\_OPEN {.section}
+2.9 NF__OPEN  {#NF__OPEN_}
 --------------
 
-The function NF)\_OPEN opens an existing netCDF dataset for access, with
+The function NF\_OPEN opens an existing netCDF dataset for access, with
 a performance tuning parameter.
 
-Usage {.heading}
------
+### Usage 
 
- 
-
-~~~~ {.example}
-INTEGER FUNCTION NF__OPEN(CHARACTER*(*) PATH, INTEGER OMODE, INTEGER
+~~~
+INTEGER FUNCTION NF_OPEN(CHARACTER*(*) PATH, INTEGER OMODE, INTEGER
 BUFRSIZEHINT, INTEGER ncid)
-~~~~
+~~~
 
  `PATH`
 :   File name for netCDF dataset to be opened.
@@ -958,8 +918,8 @@ BUFRSIZEHINT, INTEGER ncid)
     NF\_SHARE flag.
 
  `BUFRSIZEHINT`
-:   This argument controls a space versus time tradeoff, memory
-    allocated in the netcdf library versus number of system calls.
+:   This argument controls a space ves time tradeoff, memory
+    allocated in the netcdf library ves number of system calls.
 
     Because of internal requirements, the value may not be set to
     exactly the value requested. The actual value chosen is returned by
@@ -981,8 +941,8 @@ BUFRSIZEHINT, INTEGER ncid)
  `ncid`
 :   Returned netCDF ID.
 
-Errors {.heading}
-------
+### Errors 
+
 
 NF\_\_OPEN returns the value NF\_NOERR if no errors occurred. Otherwise,
 the returned status indicates an error. Possible causes of errors
@@ -991,15 +951,13 @@ include:
 -   The specified netCDF dataset does not exist.
 -   A meaningless mode was specified.
 
-Example {.heading}
--------
+### Example 
 
 Here is an example using NF\_\_OPEN to open an existing netCDF dataset
 named foo.nc for read-only, non-shared access:
 
- 
 
-~~~~ {.example}
+~~~
 INCLUDE 'netcdf.inc'
  ... 
 INTEGER NCID, STATUS, BUFRSIZEHINT
@@ -1007,9 +965,9 @@ INTEGER NCID, STATUS, BUFRSIZEHINT
 BUFRSIZEHINT = 1024
 STATUS = NF_OPEN('foo.nc', 0, BUFRSIZEHINT, NCID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
+~~~
 
-2.10 NF\_OPEN\_PAR {.section}
+2.10 NF\_OPEN\_PAR  {#NF_OPEN_PAR}
 ------------------
 
 This function opens a netCDF-4 dataset for parallel access.
@@ -1025,9 +983,9 @@ the creation mode).
 This function is only available if netCDF-4 was build with a version of
 the HDF5 library which was built with –enable-parallel.
 
-Before either HDF5 or netCDF-4 can be installed with support for
+Before either HDF5 or netCDF-4 can be installed withpport for
 parallel programming, and MPI layer must also be installed on the
-machine, and usually a parallel file system.
+machine, and ally a parallel file system.
 
 NetCDF-4 exposes the parallel access functionality of HDF5. For more
 information about what is required to install and use the parallel
@@ -1038,16 +996,14 @@ operations are the default. To use independent access on a variable, See
 section [Change between Collective and Independent Parallel Access:
 NF\_VAR\_PAR\_ACCESS](#NF_005fVAR_005fPAR_005fACCESS).
 
-Usage {.heading}
+Usage 
 -----
 
- 
-
-~~~~ {.example}
+~~~
 INTEGER FUNCTION NF_OPEN_PAR(CHARACTER*(*) PATH, INTEGER OMODE, 
                              INTEGER MPI_COMM, INTEGER MPI_INFO, 
                              INTEGER ncid)
-~~~~
+~~~
 
  `PATH`
 :   File name for netCDF dataset to be opened.
@@ -1074,7 +1030,7 @@ INTEGER FUNCTION NF_OPEN_PAR(CHARACTER*(*) PATH, INTEGER OMODE,
  `ncid`
 :   Returned netCDF ID.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_OPEN returns the value NF\_NOERR if no errors occurred. Otherwise,
@@ -1085,40 +1041,40 @@ include:
 -   A meaningless mode was specified.
 -   Not a netCDF-4 file.
 
-Example {.heading}
+Example 
 -------
 
 This example is from the test program nf\_test/ftst\_parallel.F.
 
  
 
-~~~~ {.example}
+
 !     Reopen the file.
       retval = nf_open_par(FILE_NAME, nf_nowrite, MPI_COMM_WORLD, 
      $     MPI_INFO_NULL, ncid)
       if (retval .ne. nf_noerr) stop 2
-~~~~
 
-2.11 NF\_REDEF {.section}
+
+2.11 NF\_REDEF 
 --------------
 
 The function NF\_REDEF puts an open netCDF dataset into define mode, so
 dimensions, variables, and attributes can be added or renamed and
 attributes can be deleted.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_REDEF(INTEGER NCID)
-~~~~
+
 
  `NCID`
 :   netCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_REDEF returns the value NF\_NOERR if no errors occurred. Otherwise,
@@ -1129,7 +1085,7 @@ include:
 -   The specified netCDF dataset was opened for read-only.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_REDEF to open an existing netCDF dataset
@@ -1137,7 +1093,7 @@ named foo.nc and put it into define mode:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER NCID, STATUS
@@ -1147,36 +1103,36 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
    ... 
 STATUS = NF_REDEF(NCID)                      ! put in define mode
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-2.12 NF\_ENDDEF {.section}
+
+2.12 NF\_ENDDEF 
 ---------------
 
 The function NF\_ENDDEF takes an open netCDF dataset out of define mode.
 The changes made to the netCDF dataset while it was in define mode are
 checked and committed to disk if no problems occurred. Non-record
-variables may be initialized to a "fill value" as well (see section
+variables may be initialized to a "fill value" as well (see
 [NF\_SET\_FILL](#NF_005fSET_005fFILL)). The netCDF dataset is then
 placed in data mode, so variable data can be read or written.
 
 This call may involve copying data under some circumstances. See
 [(netcdf)File Structure and
-Performance](netcdf.html#File-Structure-and-Performance) section ‘File
+Performance](netcdf.html#File-Structure-and-Performance) ‘File
 Structure and Performance’ in NetCDF Users’ Guide.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_ENDDEF(INTEGER NCID)
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_ENDDEF returns the value NF\_NOERR if no errors occurred. Otherwise,
@@ -1187,10 +1143,10 @@ include:
 -   The specified netCDF ID does not refer to an open netCDF dataset.
     The size of one or more variables exceed the size constraints for
     whichever variant of the file format is in use). See [(netcdf)Large
-    File Support](netcdf.html#Large-File-Support) section ‘Large File
+    File Support](netcdf.html#Large-File-Support) ‘Large File
     Support’ in The NetCDF Users Guide.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_ENDDEF to finish the definitions of a new
@@ -1198,7 +1154,7 @@ netCDF dataset named foo.nc and put it into data mode:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER NCID, STATUS
@@ -1210,101 +1166,101 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 STATUS = NF_ENDDEF(NCID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-2.13 NF\_\_ENDDEF {.section}
+
+2.13 NF\_\_ENDDEF 
 -----------------
 
 The function NF\_\_ENDDEF takes an open netCDF dataset out of define
 mode. The changes made to the netCDF dataset while it was in define mode
 are checked and committed to disk if no problems occurred. Non-record
-variables may be initialized to a "fill value" as well (see section
+variables may be initialized to a "fill value" as well (see
 [NF\_SET\_FILL](#NF_005fSET_005fFILL)). The netCDF dataset is then
 placed in data mode, so variable data can be read or written.
 
 This call may involve copying data under some circumstances. See
 [(netcdf)File Structure and
-Performance](netcdf.html#File-Structure-and-Performance) section ‘File
+Performance](netcdf.html#File-Structure-and-Performance) ‘File
 Structure and Performance’ in NetCDF Users’ Guide.
 
-This function assumes specific characteristics of the netcdf version 1
+This function ames specific characteristics of the netcdf version 1
 and version 2 file formats. Users should use nf\_enddef in most
 circumstances. Although this function will be available in future netCDF
 implementations, it may not continue to have any effect on performance.
 
-The current netcdf file format has three sections, the "header" section,
-the data section for fixed size variables, and the data section for
+The current netcdf file format has threes, the "header",
+the data for fixed size variables, and the data for
 variables which have an unlimited dimension (record variables).
 
 The header begins at the beginning of the file. The index (offset) of
-the beginning of the other two sections is contained in the header.
-Typically, there is no space between the sections. This causes copying
-overhead to accrue if one wishes to change the size of the sections, as
+the beginning of the other twos is contained in the header.
+Typically, there is no space between thes. This causes copying
+overhead to accrue if one wishes to change the size of thes, as
 may happen when changing names of things, text attribute values, adding
 attributes or adding variables. Also, for buffered i/o, there may be
-advantages to aligning sections in certain ways.
+advantages to alignings in certain ways.
 
 The minfree parameters allow one to control costs of future calls to
 nf\_redef, nf\_enddef by requesting that minfree bytes be available at
-the end of the section.
+the end of the.
 
 The align parameters allow one to set the alignment of the beginning of
-the corresponding sections. The beginning of the section is rounded up
+the correspondings. The beginning of the is rounded up
 to an index which is a multiple of the align parameter. The flag value
 ALIGN\_CHUNK tells the library to use the bufrsize (see above) as the
 align parameter.
 
 The file format requires mod 4 alignment, so the align parameters are
-silently rounded up to multiples of 4. The usual call,
+silently rounded up to multiples of 4. The al call,
 
  
 
-~~~~ {.example}
+
 nf_enddef(ncid);
-~~~~
+
 
 is equivalent to
 
-~~~~ {.example}
+
 nf_enddef(ncid, 0, 4, 0, 4);
-~~~~
+
 
 The file format does not contain a "record size" value, this is
 calculated from the sizes of the record variables. This unfortunate fact
 prevents us from providing minfree and alignment control of the
 "records" in a netcdf file. If you add a variable which has an unlimited
-dimension, the third section will always be copied with the new variable
+dimension, the third will always be copied with the new variable
 added.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_ENDDEF(INTEGER NCID, INTEGER H_MINFREE, INTEGER V_ALIGN,
                INTEGER V_MINFREE, INTEGER R_ALIGN)
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
 
  `H_MINFREE`
-:   Sets the pad at the end of the "header" section.
+:   Sets the pad at the end of the "header".
 
  `V_ALIGN`
-:   Controls the alignment of the beginning of the data section for
+:   Controls the alignment of the beginning of the data for
     fixed size variables.
 
  `V_MINFREE`
-:   Sets the pad at the end of the data section for fixed size
+:   Sets the pad at the end of the data for fixed size
     variables.
 
  `R_ALIGN`
-:   Controls the alignment of the beginning of the data section for
+:   Controls the alignment of the beginning of the data for
     variables which have an unlimited dimension (record variables).
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_\_ENDDEF returns the value NF\_NOERR if no errors occurred.
@@ -1315,10 +1271,10 @@ errors include:
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 -   The size of one or more variables exceed the size constraints for
     whichever variant of the file format is in use). See [(netcdf)Large
-    File Support](netcdf.html#Large-File-Support) section ‘Large File
+    File Support](netcdf.html#Large-File-Support) ‘Large File
     Support’ in The NetCDF Users Guide.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_\_ENDDEF to finish the definitions of a new
@@ -1326,7 +1282,7 @@ netCDF dataset named foo.nc and put it into data mode:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER NCID, STATUS, H_MINFREE, V_ALIGN, V_MINFREE, R_ALIGN
@@ -1342,9 +1298,9 @@ V_MINFREE = 512
 R_ALIGN = 512
 STATUS = NF_ENDDEF(NCID, H_MINFREE, V_ALIGN, V_MINFREE, R_ALIGN)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-2.14 NF\_CLOSE {.section}
+
+2.14 NF\_CLOSE 
 --------------
 
 The function NF\_CLOSE closes an open netCDF dataset. If the dataset is
@@ -1354,19 +1310,19 @@ to restore the dataset to the consistent state before define mode was
 last entered.) After an open netCDF dataset is closed, its netCDF ID may
 be reassigned to the next netCDF dataset that is opened or created.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_CLOSE(INTEGER NCID)
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_CLOSE returns the value NF\_NOERR if no errors occurred. Otherwise,
@@ -1377,7 +1333,7 @@ include:
     failed.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_CLOSE to finish the definitions of a new
@@ -1385,7 +1341,7 @@ netCDF dataset named foo.nc and release its netCDF ID:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER NCID, STATUS
@@ -1397,9 +1353,9 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 STATUS = NF_CLOSE(NCID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-2.15 NF\_INQ Family {.section}
+
+2.15 NF\_INQ Family 
 -------------------
 
 Members of the NF\_INQ family of functions return information about an
@@ -1417,12 +1373,12 @@ function, NF\_INQ\_FORMAT, returns the (rarely needed) format version.
 No I/O is performed when these functions are called, since the required
 information is available in memory for each open netCDF dataset.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ          (INTEGER NCID, INTEGER ndims,
                                   INTEGER nvars,INTEGER ngatts,
                                   INTEGER unlimdimid)
@@ -1431,7 +1387,7 @@ INTEGER FUNCTION NF_INQ_NVARS    (INTEGER NCID, INTEGER nvars)
 INTEGER FUNCTION NF_INQ_NATTS    (INTEGER NCID, INTEGER ngatts)
 INTEGER FUNCTION NF_INQ_UNLIMDIM (INTEGER NCID, INTEGER unlimdimid)
 INTEGER FUNCTION NF_INQ_FORMAT   (INTEGER NCID, INTEGER format)
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -1456,7 +1412,7 @@ INTEGER FUNCTION NF_INQ_FORMAT   (INTEGER NCID, INTEGER format)
     NF\_FORMAT\_64BIT, NF\_FORMAT\_NETCDF4,
     NF\_FORMAT\_NETCDF4\_CLASSIC.
 
-Errors {.heading}
+Errors 
 ------
 
 All members of the NF\_INQ family return the value NF\_NOERR if no
@@ -1465,7 +1421,7 @@ Possible causes of errors include:
 
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_INQ to find out about a netCDF dataset
@@ -1473,7 +1429,7 @@ named foo.nc:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER STATUS, NCID, NDIMS, NVARS, NGATTS, UNLIMDIMID
@@ -1483,9 +1439,9 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
    ... 
 STATUS = NF_INQ(NCID, NDIMS, NVARS, NGATTS, UNLIMDIMID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-2.16 NF\_SYNC {.section}
+
+2.16 NF\_SYNC 
 -------------
 
 The function NF\_SYNC offers a way to synchronize the disk copy of a
@@ -1503,7 +1459,7 @@ This function is backward-compatible with previous versions of the
 netCDF library. The intent was to allow sharing of a netCDF dataset
 among multiple readers and one writer, by having the writer call
 NF\_SYNC after writing and the readers call NF\_SYNC before each read.
-For a writer, this flushes buffers to disk. For a reader, it makes sure
+For a writer, this flushes buffers to disk. For a reader, it makesre
 that the next read will be from disk rather than from previously cached
 buffers, so that the reader will see changes made by the writing process
 (e.g., the number of records written) without having to close and reopen
@@ -1518,7 +1474,7 @@ NF\_SYNC function still provides finer granularity than the NF\_SHARE
 flag, if only a few netCDF accesses need to be synchronized among
 processes.
 
-It is important to note that changes to the ancillary data, such as
+It is important to note that changes to the ancillary data,ch as
 attribute values, are not propagated automatically by use of the
 NF\_SHARE flag. Use of the NF\_SYNC function is still required for this
 purpose.
@@ -1545,19 +1501,19 @@ without having to close and reopen the dataset.
 Data is automatically synchronized to disk when a netCDF dataset is
 closed, or whenever you leave define mode.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_SYNC(INTEGER NCID)
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_SYNC returns the value NF\_NOERR if no errors occurred. Otherwise,
@@ -1567,7 +1523,7 @@ include:
 -   The netCDF dataset is in define mode.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_SYNC to synchronize the disk writes of a
@@ -1575,7 +1531,7 @@ netCDF dataset named foo.nc:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER STATUS, NCID
@@ -1587,9 +1543,9 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
    ... 
 STATUS = NF_SYNC(NCID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-2.17 NF\_ABORT {.section}
+
+2.17 NF\_ABORT 
 --------------
 
 You no longer need to call this function, since it is called
@@ -1601,19 +1557,19 @@ define mode was entered by a call to NF\_REDEF, the netCDF dataset is
 restored to its state before definition mode was entered and the dataset
 is closed.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_ABORT(INTEGER NCID)
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_ABORT returns the value NF\_NOERR if no errors occurred. Otherwise,
@@ -1624,7 +1580,7 @@ include:
     deletion of the dataset failed.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_ABORT to back out of redefinitions of a
@@ -1632,7 +1588,7 @@ dataset named foo.nc:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER STATUS, NCID, LATID
@@ -1650,9 +1606,9 @@ IF (STATUS .NE. NF_NOERR) THEN  ! dimension definition failed
    IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 ENDIF
 ...
-~~~~
 
-2.18 NF\_SET\_FILL {.section}
+
+2.18 NF\_SET\_FILL 
 ------------------
 
 This function is intended for advanced usage, to optimize writes under
@@ -1666,7 +1622,7 @@ write a value beyond data that has not yet been written. This makes it
 possible to detect attempts to read data before it was written. See
 section [Fill Values](#Fill-Values), for more information on the use of
 fill values. See [(netcdf)Attribute
-Conventions](netcdf.html#Attribute-Conventions) section ‘Attribute
+Conventions](netcdf.html#Attribute-Conventions) ‘Attribute
 Conventions’ in The NetCDF Users Guide, for information about how to
 define your own fill values.
 
@@ -1710,15 +1666,15 @@ The use of this feature may not be available (or even needed) in future
 releases. Programmers are cautioned against heavy reliance upon this
 feature.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_SET_FILL(INTEGER NCID, INTEGER FILLMODE,
                              INTEGER old_mode)
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -1730,7 +1686,7 @@ INTEGER FUNCTION NF_SET_FILL(INTEGER NCID, INTEGER FILLMODE,
 :   Returned current fill mode of the dataset before this call, either
     NF\_NOFILL or NF\_FILL.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_SET\_FILL returns the value NF\_NOERR if no errors occurred.
@@ -1742,15 +1698,15 @@ errors include:
     access.
 -   The fill mode argument is neither NF\_NOFILL nor NF\_FILL..
 
-Example {.heading}
+Example 
 -------
 
-Here is an example using NF\_SET\_FILL to set nofill mode for subsequent
+Here is an example using NF\_SET\_FILL to set nofill mode forbsequent
 writes of a netCDF dataset named foo.nc:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER NCID, STATUS, OMODE
@@ -1765,9 +1721,9 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
    ... 
 ! write data with no prefilling
    ... 
-~~~~
 
-2.19 NF\_SET\_DEFAULT\_FORMAT {.section}
+
+2.19 NF\_SET\_DEFAULT\_FORMAT 
 -----------------------------
 
 This function is intended for advanced users.
@@ -1803,14 +1759,14 @@ Constants are provided in the netcdf.inc file to be used with this
 function: nf\_format\_classic, nf\_format\_64bit, nf\_format\_netcdf4
 and nf\_format\_netcdf4\_classic.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_SET_DEFAULT_FORMAT(INTEGER FORMAT, INTEGER OLD_FORMT)
-~~~~
+
 
  `FORMAT`
 :   Either nf\_format\_classic, nf\_format\_64bit, nf\_format\_netcdf4
@@ -1820,7 +1776,7 @@ INTEGER FUNCTION NF_SET_DEFAULT_FORMAT(INTEGER FORMAT, INTEGER OLD_FORMT)
 :   The default format at the time the function is called is returned
     here.
 
-Errors {.heading}
+Errors 
 ------
 
 The following error codes may be returned by this function:
@@ -1828,12 +1784,12 @@ The following error codes may be returned by this function:
 -   An NF\_EINVAL error is returned if an invalid default format is
     specified.
 
-Example {.heading}
+Example 
 -------
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER STATUS, OLD_FORMAT
@@ -1841,13 +1797,13 @@ INTEGER STATUS, OLD_FORMAT
 STATUS = NF_SET_DEFAULT_FORMAT(nf_format_64bit, OLD_FORMAT)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
    ... 
-~~~~
 
-2.20 Set HDF5 Chunk Cache for Future File Opens/Creates: NF\_SET\_CHUNK\_CACHE {.section}
+
+2.20 Set HDF5 Chunk Cache for Future File Opens/Creates: NF\_SET\_CHUNK\_CACHE 
 ------------------------------------------------------------------------------
 
 This function changes the chunk cache settings in the HDF5 library. The
-settings apply for subsequent file opens/creates. This function does not
+settings apply forbsequent file opens/creates. This function does not
 change the chunk cache settings of already open files.
 
 This affects the per-file chunk cache which the HDF5 layer maintains.
@@ -1857,14 +1813,14 @@ For more information, see the documentation for the H5Pset\_cache()
 function in the HDF5 library at the HDF5 website:
 [http://hdfgroup.org/HDF5/](http://hdfgroup.org/HDF5/).
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER NF_SET_CHUNK_CACHE(INTEGER SIZE, INTEGER NELEMS, INTEGER PREEMPTION);
-~~~~
+
 
  `SIZE`
 :   The total size of the raw data chunk cache in MegaBytes.
@@ -1881,7 +1837,7 @@ INTEGER NF_SET_CHUNK_CACHE(INTEGER SIZE, INTEGER NELEMS, INTEGER PREEMPTION);
     a value of 100 means fully read chunks are always preempted before
     other chunks.
 
-Return Codes {.heading}
+Return Codes 
 ------------
 
  `NF_NOERR`
@@ -1894,11 +1850,11 @@ Return Codes {.heading}
 
 
 
-2.21 Get the HDF5 Chunk Cache Settings for Future File Opens/Creates: NF\_GET\_CHUNK\_CACHE {.section}
+2.21 Get the HDF5 Chunk Cache Settings for Future File Opens/Creates: NF\_GET\_CHUNK\_CACHE 
 -------------------------------------------------------------------------------------------
 
 This function gets the chunk cache settings for the HDF5 library. The
-settings apply for subsequent file opens/creates.
+settings apply forbsequent file opens/creates.
 
 This affects the per-file chunk cache which the HDF5 layer maintains.
 The chunk cache size can be tuned for better performance.
@@ -1907,14 +1863,14 @@ For more information, see the documentation for the H5Pget\_cache()
 function in the HDF5 library at the HDF5 website:
 [http://hdfgroup.org/HDF5/](http://hdfgroup.org/HDF5/).
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER NC_GET_CHUNK_CACHE(INTEGER SIZE, INTEGER NELEMS, INTEGER PREEMPTION);
-~~~~
+
 
  `SIZE`
 :   The total size of the raw data chunk cache will be put here.
@@ -1931,16 +1887,16 @@ INTEGER NC_GET_CHUNK_CACHE(INTEGER SIZE, INTEGER NELEMS, INTEGER PREEMPTION);
     is strictly LRU) while a value of 100 means fully read chunks are
     always preempted before other chunks.
 
-Return Codes {.heading}
+Return Codes 
 ------------
 
  `NC_NOERR`
 :   No error.
 
-3. Groups {.chapter}
+3. Groups 
 =========
 
-NetCDF-4 added support for hierarchical groups within netCDF datasets.
+NetCDF-4 addedpport for hierarchical groups within netCDF datasets.
 
 Groups are identified with a ncid, which identifies both the open file,
 and the group within that file. When a file is opened with NF\_OPEN or
@@ -1962,25 +1918,25 @@ group is refered to by the ncid.
 Dimensions are visible in their groups, and all child groups.
 
 Group operations are only permitted on netCDF-4 files - that is, files
-created with the HDF5 flag in nf\_create. (see section
+created with the HDF5 flag in nf\_create. (see
 [NF\_CREATE](#NF_005fCREATE)). Groups are not compatible with the netCDF
 classic data model, so files created with the NF\_CLASSIC\_MODEL file
 cannot contain groups (except the root group).
 
-3.1 Find a Group ID: NF\_INQ\_NCID {.section}
+3.1 Find a Group ID: NF\_INQ\_NCID 
 ----------------------------------
 
 Given an ncid and group name (NULL or "" gets root group), return ncid
 of the named group.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_NCID(INTEGER NCID, CHARACTER*(*) NAME, INTEGER GRPID)
-~~~~
+
 
  `NCID`
 :   The group id for this operation.
@@ -1992,7 +1948,7 @@ INTEGER FUNCTION NF_INQ_NCID(INTEGER NCID, CHARACTER*(*) NAME, INTEGER GRPID)
  `GRPID`
 :   The ID of the group will go here.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -2004,43 +1960,43 @@ Errors {.heading}
  `NF_ENOTNC4`
 :   Attempting a netCDF-4 operation on a netCDF-3 file. NetCDF-4
     operations can only be performed on files defined with a create mode
-    which includes flag HDF5. (see section [NF\_OPEN](#NF_005fOPEN)).
+    which includes flag HDF5. (see [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_ESTRICTNC3`
 :   This file was created with the strict netcdf-3 flag, therefore
-    netcdf-4 operations are not allowed. (see section
+    netcdf-4 operations are not allowed. (see
     [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_EHDFERR`
 :   An error was reported by the HDF5 layer.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_groups.F.
 
  
 
-~~~~ {.example}
+
 C     Check getting the group by name
       retval = nf_inq_ncid(ncid, group_name, grpid_in)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-3.2 Get a List of Groups in a Group: NF\_INQ\_GRPS {.section}
+
+3.2 Get a List of Groups in a Group: NF\_INQ\_GRPS 
 --------------------------------------------------
 
 Given a location id, return the number of groups it contains, and an
 array of their ncids.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_GRPS(INTEGER NCID, INTEGER NUMGRPS, INTEGER NCIDS)
-~~~~
+
 
  `NCID`
 :   The group id for this operation.
@@ -2052,7 +2008,7 @@ INTEGER FUNCTION NF_INQ_GRPS(INTEGER NCID, INTEGER NUMGRPS, INTEGER NCIDS)
 :   An array of ints which will receive the IDs of all the groups in
     this group.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -2064,42 +2020,42 @@ Errors {.heading}
  `NF_ENOTNC4`
 :   Attempting a netCDF-4 operation on a netCDF-3 file. NetCDF-4
     operations can only be performed on files defined with a create mode
-    which includes flag HDF5. (see section [NF\_OPEN](#NF_005fOPEN)).
+    which includes flag HDF5. (see [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_ESTRICTNC3`
 :   This file was created with the strict netcdf-3 flag, therefore
-    netcdf-4 operations are not allowed. (see section
+    netcdf-4 operations are not allowed. (see
     [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_EHDFERR`
 :   An error was reported by the HDF5 layer.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_groups.F.
 
  
 
-~~~~ {.example}
+
 C     What groups are there from the root group?
       retval = nf_inq_grps(ncid, ngroups_in, grpids)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-3.3 Find all the Variables in a Group: NF\_INQ\_VARIDS {.section}
+
+3.3 Find all the Variables in a Group: NF\_INQ\_VARIDS 
 ------------------------------------------------------
 
 Find all varids for a location.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_VARIDS(INTEGER NCID, INTEGERS VARIDS)
-~~~~
+
 
  `NCID`
 :   The group id for this operation.
@@ -2107,9 +2063,9 @@ INTEGER FUNCTION NF_INQ_VARIDS(INTEGER NCID, INTEGERS VARIDS)
  `VARIDS`
 :   An already allocated array to store the list of varids. Use
     nf\_inq\_nvars to find out how many variables there are. (see
-    section [NF\_INQ Family](#NF_005fINQ-Family)).
+    [NF\_INQ Family](#NF_005fINQ-Family)).
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -2121,43 +2077,43 @@ Errors {.heading}
  `NF_ENOTNC4`
 :   Attempting a netCDF-4 operation on a netCDF-3 file. NetCDF-4
     operations can only be performed on files defined with a create mode
-    which includes flag HDF5. (see section [NF\_OPEN](#NF_005fOPEN)).
+    which includes flag HDF5. (see [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_ESTRICTNC3`
 :   This file was created with the strict netcdf-3 flag, therefore
-    netcdf-4 operations are not allowed. (see section
+    netcdf-4 operations are not allowed. (see
     [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_EHDFERR`
 :   An error was reported by the HDF5 layer.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_groups.F.
 
  
 
-~~~~ {.example}
-C     Check varids in subgroup.
-      retval = nf_inq_varids(subgrp_in, nvars, varids_in)
-      if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-3.4 Find all Dimensions Visible in a Group: NF\_INQ\_DIMIDS {.section}
+C     Check varids inbgroup.
+      retval = nf_inq_varidsbgrp_in, nvars, varids_in)
+      if (retval .ne. nf_noerr) call handle_err(retval)
+
+
+3.4 Find all Dimensions Visible in a Group: NF\_INQ\_DIMIDS 
 -----------------------------------------------------------
 
 Find all dimids for a location. This finds all dimensions in a group, or
 any of its parents.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_DIMIDS(INTEGER NCID, INTEGER NDIMS, INTEGER DIMIDS, INTEGER INCLUDE_PARENTS)
-~~~~
+
 
  `NCID`
 :   The group id for this operation.
@@ -2170,13 +2126,13 @@ INTEGER FUNCTION NF_INQ_DIMIDS(INTEGER NCID, INTEGER NDIMS, INTEGER DIMIDS, INTE
  `DIMIDS`
 :   An array of ints when the dimids of the visible dimensions will be
     stashed. Use nf\_inq\_ndims to find out how many dims are visible
-    from this group. (see section [NF\_INQ Family](#NF_005fINQ-Family)).
+    from this group. (see [NF\_INQ Family](#NF_005fINQ-Family)).
 
  `INCLUDE_PARENTS`
 :   If zero, only the group specified by NCID will be searched for
     dimensions. Otherwise parent groups will be searched too.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -2188,45 +2144,45 @@ Errors {.heading}
  `NF_ENOTNC4`
 :   Attempting a netCDF-4 operation on a netCDF-3 file. NetCDF-4
     operations can only be performed on files defined with a create mode
-    which includes flag HDF5. (see section [NF\_OPEN](#NF_005fOPEN)).
+    which includes flag HDF5. (see [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_ESTRICTNC3`
 :   This file was created with the strict netcdf-3 flag, therefore
-    netcdf-4 operations are not allowed. (see section
+    netcdf-4 operations are not allowed. (see
     [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_EHDFERR`
 :   An error was reported by the HDF5 layer.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_groups.F.
 
  
 
-~~~~ {.example}
-C     Check dimids in subgroup.
-      retval = nf_inq_dimids(subgrp_in, ndims, dimids_in, 0)
+
+C     Check dimids inbgroup.
+      retval = nf_inq_dimidsbgrp_in, ndims, dimids_in, 0)
       if (retval .ne. nf_noerr) call handle_err(retval)
       if (ndims .ne. 2 .or. dimids_in(1) .ne. dimids(1) .or.
      &     dimids_in(2) .ne. dimids(2)) stop 2
-~~~~
 
-3.5 Find the Length of a Group’s Name: NF\_INQ\_GRPNAME\_LEN {.section}
+
+3.5 Find the Length of a Group’s Name: NF\_INQ\_GRPNAME\_LEN 
 ------------------------------------------------------------
 
 Given ncid, find length of the full name. (Root group is named "/", with
 length 1.)
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_GRPNAME_LEN(INTEGER NCID, INTEGER LEN)
-~~~~
+
 
  `NCID`
 :   The group id for this operation.
@@ -2234,7 +2190,7 @@ INTEGER FUNCTION NF_INQ_GRPNAME_LEN(INTEGER NCID, INTEGER LEN)
  `LEN`
 :   An integer where the length will be placed.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -2246,48 +2202,48 @@ Errors {.heading}
  `NF_ENOTNC4`
 :   Attempting a netCDF-4 operation on a netCDF-3 file. NetCDF-4
     operations can only be performed on files defined with a create mode
-    which includes flag HDF5. (see section [NF\_OPEN](#NF_005fOPEN)).
+    which includes flag HDF5. (see [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_ESTRICTNC3`
 :   This file was created with the strict netcdf-3 flag, therefore
-    netcdf-4 operations are not allowed. (see section
+    netcdf-4 operations are not allowed. (see
     [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_EHDFERR`
 :   An error was reported by the HDF5 layer.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_groups.F.
 
  
 
-~~~~ {.example}
+
 C     Check the length of the full name.
       retval = nf_inq_grpname_len(grpids(1), full_name_len)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-3.6 Find a Group’s Name: NF\_INQ\_GRPNAME {.section}
+
+3.6 Find a Group’s Name: NF\_INQ\_GRPNAME 
 -----------------------------------------
 
 Given ncid, find relative name of group. (Root group is named "/").
 
 The name provided by this function is relative to the parent group. For
 a full path name for the group is, with all parent groups included,
-separated with a forward slash (as in Unix directory names) See section
+separated with a forward slash (as in Unix directory names) See
 [Find a Group’s Full Name:
 NF\_INQ\_GRPNAME\_FULL](#NF_005fINQ_005fGRPNAME_005fFULL).
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_GRPNAME(INTEGER NCID, CHARACTER*(*) NAME)
-~~~~
+
 
 `NCID`
 
@@ -2300,7 +2256,7 @@ will be less than NF\_MAX\_NAME in length.
 
 ``
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -2312,32 +2268,32 @@ Errors {.heading}
  `NF_ENOTNC4`
 :   Attempting a netCDF-4 operation on a netCDF-3 file. NetCDF-4
     operations can only be performed on files defined with a create mode
-    which includes flag HDF5. (see section [NF\_OPEN](#NF_005fOPEN)).
+    which includes flag HDF5. (see [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_ESTRICTNC3`
 :   This file was created with the strict netcdf-3 flag, therefore
-    netcdf-4 operations are not allowed. (see section
+    netcdf-4 operations are not allowed. (see
     [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_EHDFERR`
 :   An error was reported by the HDF5 layer.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_groups.F.
 
  
 
-~~~~ {.example}
+
 C     Check the name of the root group.
       retval = nf_inq_grpname(ncid, name_in)
       if (retval .ne. nf_noerr) call handle_err(retval)
       if (name_in(1:1) .ne. '/') stop 2
-~~~~
 
 
-3.7 Find a Group’s Full Name: NF\_INQ\_GRPNAME\_FULL {.section}
+
+3.7 Find a Group’s Full Name: NF\_INQ\_GRPNAME\_FULL 
 ----------------------------------------------------
 
 Given ncid, find complete name of group. (Root group is named "/").
@@ -2348,17 +2304,17 @@ Unix directory names). For a name relative to the parent group See
 section [Find a Group’s Name:
 NF\_INQ\_GRPNAME](#NF_005fINQ_005fGRPNAME).
 
-To find the length of the full name See section [Find the Length of a
+To find the length of the full name See [Find the Length of a
 Group’s Name: NF\_INQ\_GRPNAME\_LEN](#NF_005fINQ_005fGRPNAME_005fLEN).
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_GRPNAME_FULL(INTEGER NCID, INTEGER LEN, CHARACTER*(*) NAME)
-~~~~
+
 
  `NCID`
 :   The group id for this operation.
@@ -2369,7 +2325,7 @@ INTEGER FUNCTION NF_INQ_GRPNAME_FULL(INTEGER NCID, INTEGER LEN, CHARACTER*(*) NA
  `NAME`
 :   The name of the group will be copied to this character array.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -2381,30 +2337,30 @@ Errors {.heading}
  `NF_ENOTNC4`
 :   Attempting a netCDF-4 operation on a netCDF-3 file. NetCDF-4
     operations can only be performed on files defined with a create mode
-    which includes flag HDF5. (see section [NF\_OPEN](#NF_005fOPEN)).
+    which includes flag HDF5. (see [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_ESTRICTNC3`
 :   This file was created with the strict netcdf-3 flag, therefore
-    netcdf-4 operations are not allowed. (see section
+    netcdf-4 operations are not allowed. (see
     [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_EHDFERR`
 :   An error was reported by the HDF5 layer.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_groups.F.
 
  
 
-~~~~ {.example}
+
 C     Check the full name.
       retval = nf_inq_grpname_full(grpids(1), full_name_len, name_in2)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-3.8 Find a Group’s Parent: NF\_INQ\_GRP\_PARENT {.section}
+
+3.8 Find a Group’s Parent: NF\_INQ\_GRP\_PARENT 
 -----------------------------------------------
 
 Given ncid, find the ncid of the parent group.
@@ -2412,14 +2368,14 @@ Given ncid, find the ncid of the parent group.
 When used with the root group, this function returns the NF\_ENOGRP
 error (since the root group has no parent.)
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_GRP_PARENT(INTEGER NCID, INTEGER PARENT_NCID)
-~~~~
+
 
  `NCID`
 :   The group id.
@@ -2427,7 +2383,7 @@ INTEGER FUNCTION NF_INQ_GRP_PARENT(INTEGER NCID, INTEGER PARENT_NCID)
  `PARENT_NCID`
 :   The ncid of the parent group will be copied here.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -2442,42 +2398,42 @@ Errors {.heading}
  `NF_ENOTNC4`
 :   Attempting a netCDF-4 operation on a netCDF-3 file. NetCDF-4
     operations can only be performed on files defined with a create mode
-    which includes flag HDF5. (see section [NF\_OPEN](#NF_005fOPEN)).
+    which includes flag HDF5. (see [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_ESTRICTNC3`
 :   This file was created with the strict netcdf-3 flag, therefore
-    netcdf-4 operations are not allowed. (see section
+    netcdf-4 operations are not allowed. (see
     [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_EHDFERR`
 :   An error was reported by the HDF5 layer.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_groups.F.
 
  
 
-~~~~ {.example}
+
 C     Check the parent ncid.
       retval = nf_inq_grp_parent(grpids(1), grpid_in)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-3.9 Find a Group by Name: NF\_INQ\_GRP\_NCID {.section}
+
+3.9 Find a Group by Name: NF\_INQ\_GRP\_NCID 
 --------------------------------------------
 
 Given a group name an an ncid, find the ncid of the group id.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_GRP_NCID(INTEGER NCID, CHARACTER GRP_NAME, INTEGER GRP_NCID)
-~~~~
+
 
  `NCID`
 :   The group id to look in.
@@ -2488,7 +2444,7 @@ INTEGER FUNCTION NF_INQ_GRP_NCID(INTEGER NCID, CHARACTER GRP_NAME, INTEGER GRP_N
  `GRP_NCID`
 :   This will get the group id, if it is found.
 
-Return Codes {.heading}
+Return Codes 
 ------------
 
 The following return codes may be returned by this function.
@@ -2508,43 +2464,43 @@ The following return codes may be returned by this function.
  `NF_ENOTNC4`
 :   Attempting a netCDF-4 operation on a netCDF-3 file. NetCDF-4
     operations can only be performed on files defined with a create mode
-    which includes flag HDF5. (see section [NF\_OPEN](#NF_005fOPEN)).
+    which includes flag HDF5. (see [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_ESTRICTNC3`
 :   This file was created with the strict netcdf-3 flag, therefore
-    netcdf-4 operations are not allowed. (see section
+    netcdf-4 operations are not allowed. (see
     [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_EHDFERR`
 :   An error was reported by the HDF5 layer.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_types3.F.
 
  
 
-~~~~ {.example}
-C     Go to a child group and find the id of our type.
-      retval = nf_inq_grp_ncid(ncid, group_name, sub_grpid)
-      if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-3.10 Find a Group by its Fully-qualified Name: NF\_INQ\_GRP\_FULL\_NCID {.section}
+C     Go to a child group and find the id of our type.
+      retval = nf_inq_grp_ncid(ncid, group_name,b_grpid)
+      if (retval .ne. nf_noerr) call handle_err(retval)
+
+
+3.10 Find a Group by its Fully-qualified Name: NF\_INQ\_GRP\_FULL\_NCID 
 -----------------------------------------------------------------------
 
 Given a fully qualified group name an an ncid, find the ncid of the
 group id.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_GRP_FULL_NCID(INTEGER NCID, CHARACTER FULL_NAME, INTEGER GRP_NCID)
-~~~~
+
 
  `NCID`
 :   The group id to look in.
@@ -2555,7 +2511,7 @@ INTEGER FUNCTION NF_INQ_GRP_FULL_NCID(INTEGER NCID, CHARACTER FULL_NAME, INTEGER
  `GRP_NCID`
 :   This will get the group id, if it is found.
 
-Return Codes {.heading}
+Return Codes 
 ------------
 
 The following return codes may be returned by this function.
@@ -2575,43 +2531,43 @@ The following return codes may be returned by this function.
  `NF_ENOTNC4`
 :   Attempting a netCDF-4 operation on a netCDF-3 file. NetCDF-4
     operations can only be performed on files defined with a create mode
-    which includes flag HDF5. (see section [NF\_OPEN](#NF_005fOPEN)).
+    which includes flag HDF5. (see [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_ESTRICTNC3`
 :   This file was created with the strict netcdf-3 flag, therefore
-    netcdf-4 operations are not allowed. (see section
+    netcdf-4 operations are not allowed. (see
     [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_EHDFERR`
 :   An error was reported by the HDF5 layer.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_groups.F.
 
  
 
-~~~~ {.example}
+
 C     Check the full name of the root group (also "/").
       retval = nf_inq_grpname_full(ncid, full_name_len, name_in)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-3.11 Create a New Group: NF\_DEF\_GRP {.section}
+
+3.11 Create a New Group: NF\_DEF\_GRP 
 -------------------------------------
 
 Create a group. Its location id is returned in new\_ncid.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_DEF_GRP(INTEGER PARENT_NCID, CHARACTER*(*) NAME,
         INTEGER NEW_NCID)
-~~~~
+
 
  `PARENT_NCID`
 :   The group id of the parent group.
@@ -2623,7 +2579,7 @@ INTEGER FUNCTION NF_DEF_GRP(INTEGER PARENT_NCID, CHARACTER*(*) NAME,
  `NEW_NCID`
 :   The ncid of the new group will be placed there.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -2644,11 +2600,11 @@ Errors {.heading}
  `NF_ENOTNC4`
 :   Attempting a netCDF-4 operation on a netCDF-3 file. NetCDF-4
     operations can only be performed on files defined with a create mode
-    which includes flag HDF5. (see section [NF\_OPEN](#NF_005fOPEN)).
+    which includes flag HDF5. (see [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_ESTRICTNC3`
 :   This file was created with the strict netcdf-3 flag, therefore
-    netcdf-4 operations are not allowed. (see section
+    netcdf-4 operations are not allowed. (see
     [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_EHDFERR`
@@ -2660,30 +2616,30 @@ Errors {.heading}
  `NF_ENOTINDEFINE`
 :   Not in define mode.
 
-Example {.heading}
+Example 
 -------
 
 In this exampe rom nf\_test/ftst\_groups.F, a groups is reated, and then
-a sub-group is created in that group.
+ab-group is created in that group.
 
  
 
-~~~~ {.example}
+
 C     Create the netCDF file.
       retval = nf_create(file_name, NF_NETCDF4, ncid)
       if (retval .ne. nf_noerr) call handle_err(retval)
 
-C     Create a group and a subgroup.
+C     Create a group and abgroup.
       retval = nf_def_grp(ncid, group_name, grpid)
       if (retval .ne. nf_noerr) call handle_err(retval)
-      retval = nf_def_grp(grpid, sub_group_name, sub_grpid)
+      retval = nf_def_grp(grpid,b_group_name,b_grpid)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-4. Dimensions {.chapter}
+
+4. Dimensions 
 =============
 
-4.1 Dimensions Introduction {.section}
+4.1 Dimensions Introduction 
 ---------------------------
 
 Dimensions for a netCDF dataset are defined when it is created, while
@@ -2693,15 +2649,15 @@ length. At most one dimension in a netCDF dataset can have the unlimited
 length, which means variables using this dimension can grow along this
 dimension.
 
-There is a suggested limit (100) to the number of dimensions that can be
+There is aggested limit (100) to the number of dimensions that can be
 defined in a single netCDF dataset. The limit is the value of the
 predefined macro NF\_MAX\_DIMS. The purpose of the limit is to make
 writing generic applications simpler. They need only provide an array of
 NF\_MAX\_DIMS dimensions to handle any netCDF dataset. The
 implementation of the netCDF library does not enforce this advisory
 maximum, so it is possible to use more dimensions, if necessary, but
-netCDF utilities that assume the advisory maximums may not be able to
-handle the resulting netCDF datasets.
+netCDF utilities that ame the advisory maximums may not be able to
+handle the rlting netCDF datasets.
 
 Ordinarily, the name and length of a dimension are fixed when the
 dimension is first defined. The name may be changed later, but the
@@ -2713,14 +2669,14 @@ A netCDF dimension in an open netCDF dataset is referred to by a small
 integer called a dimension ID. In the FORTRAN interface, dimension IDs
 are 1, 2, 3, ..., in the order in which the dimensions were defined.
 
-Operations supported on dimensions are:
+Operationspported on dimensions are:
 
 -   Create a dimension, given its name and length.
 -   Get a dimension ID from its name.
 -   Get a dimension’s name and length from its ID.
 -   Rename a dimension.
 
-4.2 NF\_DEF\_DIM {.section}
+4.2 NF\_DEF\_DIM 
 ----------------
 
 The function NF\_DEF\_DIM adds a new dimension to an open netCDF dataset
@@ -2729,15 +2685,15 @@ netCDF ID, the dimension name, and the dimension length. At most one
 unlimited length dimension, called the record dimension, may be defined
 for each netCDF dataset.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_DEF_DIM (INTEGER NCID, CHARACTER*(*) NAME,
                           INTEGER LEN, INTEGER dimid)
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -2753,7 +2709,7 @@ INTEGER FUNCTION NF_DEF_DIM (INTEGER NCID, CHARACTER*(*) NAME,
  `dimid`
 :   Returned dimension ID.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_DEF\_DIM returns the value NF\_NOERR if no errors occurred.
@@ -2768,7 +2724,7 @@ errors include:
     length dimension defined for this netCDF dataset.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_DEF\_DIM to create a dimension named lat of
@@ -2777,7 +2733,7 @@ named foo.nc:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER STATUS, NCID, LATID, RECID
@@ -2789,9 +2745,9 @@ STATUS = NF_DEF_DIM(NCID, 'lat', 18, LATID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 STATUS = NF_DEF_DIM(NCID, 'rec', NF_UNLIMITED, RECID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-4.3 NF\_INQ\_DIMID {.section}
+
+4.3 NF\_INQ\_DIMID 
 ------------------
 
 The function NF\_INQ\_DIMID returns (as an argument) the ID of a netCDF
@@ -2799,15 +2755,15 @@ dimension, given the name of the dimension. If ndims is the number of
 dimensions defined for a netCDF dataset, each dimension has an ID
 between 1 and ndims.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_DIMID (INTEGER NCID, CHARACTER*(*) NAME,
                                INTEGER dimid)
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -2818,7 +2774,7 @@ INTEGER FUNCTION NF_INQ_DIMID (INTEGER NCID, CHARACTER*(*) NAME,
  `dimid`
 :   Returned dimension ID.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_INQ\_DIMID returns the value NF\_NOERR if no errors occurred.
@@ -2829,16 +2785,16 @@ errors include:
     netCDF dataset.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_INQ\_DIMID to determine the dimension ID of
-a dimension named lat, assumed to have been defined previously in an
+a dimension named lat, amed to have been defined previously in an
 existing netCDF dataset named foo.nc:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER STATUS, NCID, LATID
@@ -2848,9 +2804,9 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
    ... 
 STATUS = NF_INQ_DIMID(NCID, 'lat', LATID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-4.4 NF\_INQ\_DIM Family {.section}
+
+4.4 NF\_INQ\_DIM Family 
 -----------------------
 
 This family of functions returns information about a netCDF dimension.
@@ -2863,19 +2819,19 @@ NF\_INQ\_DIMLEN. The function NF\_INQ\_DIM returns all the information
 about a dimension; the other functions each return just one item of
 information.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_DIM     (INTEGER NCID, INTEGER DIMID,
                                  CHARACTER*(*) name, INTEGER len)
 INTEGER FUNCTION NF_INQ_DIMNAME (INTEGER NCID, INTEGER DIMID,
                                  CHARACTER*(*) name)
 INTEGER FUNCTION NF_INQ_DIMLEN  (INTEGER NCID, INTEGER DIMID,
                                  INTEGER len)
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -2894,7 +2850,7 @@ INTEGER FUNCTION NF_INQ_DIMLEN  (INTEGER NCID, INTEGER DIMID,
     the current maximum value used for writing any variables with this
     dimension, that is the maximum record number.
 
-Errors {.heading}
+Errors 
 ------
 
 These functions return the value NF\_NOERR if no errors occurred.
@@ -2904,7 +2860,7 @@ errors include:
 -   The dimension ID is invalid for the specified netCDF dataset.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_INQ\_DIM to determine the length of a
@@ -2913,7 +2869,7 @@ unlimited dimension for an existing netCDF dataset named foo.nc:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER STATUS, NCID, LATID, LATLEN, RECID, NRECS
@@ -2933,9 +2889,9 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 ! get unlimited dimension name and current length
 STATUS = NF_INQ_DIM(NCID, RECID, RECNAME, NRECS)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-4.5 NF\_RENAME\_DIM {.section}
+
+4.5 NF\_RENAME\_DIM 
 -------------------
 
 The function NF\_RENAME\_DIM renames an existing dimension in a netCDF
@@ -2943,15 +2899,15 @@ dataset open for writing. If the new name is longer than the old name,
 the netCDF dataset must be in define mode. You cannot rename a dimension
 to have the same name as another dimension.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_RENAME_DIM (INTEGER NCID, INTEGER DIMID,
                                 CHARACTER*(*) NAME)
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -2963,7 +2919,7 @@ INTEGER FUNCTION NF_RENAME_DIM (INTEGER NCID, INTEGER DIMID,
  `NAME`
 :   New dimension name.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_RENAME\_DIM returns the value NF\_NOERR if no errors occurred.
@@ -2976,7 +2932,7 @@ errors include:
 -   The new name is longer than the old name and the netCDF dataset is
     not in define mode.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_RENAME\_DIM to rename the dimension lat to
@@ -2984,7 +2940,7 @@ latitude in an existing netCDF dataset named foo.nc:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER STATUS, NCID, LATID
@@ -3002,15 +2958,15 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 ! leave define mode
 STATUS = NF_ENDDEF(NCID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-5. User Defined Data Types {.chapter}
+
+5. User Defined Data Types 
 ==========================
 
-5.1 User Defined Types Introduction {.section}
+5.1 User Defined Types Introduction 
 -----------------------------------
 
-NetCDF-4 has added support for four different user defined data types.
+NetCDF-4 has addedpport for four different user defined data types.
 
  `compound type`
 :   Like a C struct, a compound type is a collection of types, including
@@ -3028,35 +2984,35 @@ NetCDF-4 has added support for four different user defined data types.
     integer values, and store the integer values.
 
 Users may construct user defined type with the various NF\_DEF\_\*
-functions described in this section. They may learn about user defined
-types by using the NF\_INQ\_ functions defined in this section.
+functions described in this. They may learn about user defined
+types by using the NF\_INQ\_ functions defined in this.
 
 Once types are constructed, define variables of the new type with
-NF\_DEF\_VAR (see section [Create a Variable:
+NF\_DEF\_VAR (see [Create a Variable:
 `NF_DEF_VAR`](#NF_005fDEF_005fVAR)). Write to them with NF\_PUT\_VAR1,
-NF\_PUT\_VAR, NF\_PUT\_VARA, or NF\_PUT\_VARS (see section
+NF\_PUT\_VAR, NF\_PUT\_VARA, or NF\_PUT\_VARS (see
 [Variables](#Variables)). Read data of user-defined type with
 NF\_GET\_VAR1, NF\_GET\_VAR, NF\_GET\_VARA, or NF\_GET\_VARS (see
 section [Variables](#Variables)).
 
-Create attributes of the new type with NF\_PUT\_ATT (see section
+Create attributes of the new type with NF\_PUT\_ATT (see
 [NF\_PUT\_ATT\_ type](#NF_005fPUT_005fATT_005f-type)). Read attributes
-of the new type with NF\_GET\_ATT (see section [NF\_GET\_ATT\_
+of the new type with NF\_GET\_ATT (see [NF\_GET\_ATT\_
 type](#NF_005fGET_005fATT_005f-type)).
 
-5.2 Learn the IDs of All Types in Group: NF\_INQ\_TYPEIDS {.section}
+5.2 Learn the IDs of All Types in Group: NF\_INQ\_TYPEIDS 
 ---------------------------------------------------------
 
 Learn the number of types defined in a group, and their IDs.
 
-Usage {.heading}
+Usage 
 -----
 
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_TYPEIDS(INTEGER NCID, INTEGER NTYPES, 
         INTEGER TYPEIDS)
-~~~~
+
 
  `NCID`
 :   The group id.
@@ -3069,7 +3025,7 @@ INTEGER FUNCTION NF_INQ_TYPEIDS(INTEGER NCID, INTEGER NTYPES,
 :   A pointer to an int array which will get the typeids. If NULL,
     ignored.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -3078,34 +3034,34 @@ Errors {.heading}
  `NF_BADID`
 :   Bad ncid.
 
-Example {.heading}
+Example 
 -------
 
 The following example is from the test program nf\_test/ftst\_vars3.F.
 
  
 
-~~~~ {.example}
+
       retval = nf_inq_typeids(ncid, num_types, typeids)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
 
-5.3 Find a Typeid from Group and Name: NF\_INQ\_TYPEID {.section}
+
+5.3 Find a Typeid from Group and Name: NF\_INQ\_TYPEID 
 ------------------------------------------------------
 
 Given a group ID and a type name, find the ID of the type. If the type
 is not found in the group, then the parents are searched. If still not
 found, the entire file is searched.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_TYPEID(INTEGER NCID, CHARACTER NAME, NF_TYPE TYPEIDP)
-~~~~
+
 
  `NCID`
 :   The group id.
@@ -3116,7 +3072,7 @@ INTEGER FUNCTION NF_INQ_TYPEID(INTEGER NCID, CHARACTER NAME, NF_TYPE TYPEIDP)
  `TYPEIDP`
 :   The typeid of the named type (if found).
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -3128,22 +3084,22 @@ Errors {.heading}
  `NF_EBADTYPE`
 :   Can’t find type.
 
-Example {.heading}
+Example 
 -------
 
 The following example is from nf\_test/ftst\_types3.F:
 
  
 
-~~~~ {.example}
-C     Go to a child group and find the id of our type.
-      retval = nf_inq_grp_ncid(ncid, group_name, sub_grpid)
-      if (retval .ne. nf_noerr) call handle_err(retval)
-      retval = nf_inq_typeid(sub_grpid, type_name, typeid_in)
-      if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-5.4 Learn About a User Defined Type: NF\_INQ\_TYPE {.section}
+C     Go to a child group and find the id of our type.
+      retval = nf_inq_grp_ncid(ncid, group_name,b_grpid)
+      if (retval .ne. nf_noerr) call handle_err(retval)
+      retval = nf_inq_typeidb_grpid, type_name, typeid_in)
+      if (retval .ne. nf_noerr) call handle_err(retval)
+
+
+5.4 Learn About a User Defined Type: NF\_INQ\_TYPE 
 --------------------------------------------------
 
 Given an ncid and a typeid, get the information about a type. This
@@ -3153,15 +3109,15 @@ type, whether compound, opaque, enumeration, or variable length array.
 For even more information about a user defined type [Learn About a User
 Defined Type: NF\_INQ\_USER\_TYPE](#NF_005fINQ_005fUSER_005fTYPE).
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_TYPE(INTEGER NCID, INTEGER XTYPE, 
         CHARACTER*(*) NAME, INTEGER SIZE)
-~~~~
+
 
  `NCID`
 :   The ncid for the group containing the type (ignored for atomic
@@ -3184,7 +3140,7 @@ INTEGER FUNCTION NF_INQ_TYPE(INTEGER NCID, INTEGER XTYPE,
     nc\_vlen\_t). String size is returned as the size of one C character
     pointer.
 
-Return Codes {.heading}
+Return Codes 
 ------------
 
  `NF_NOERR`
@@ -3209,7 +3165,7 @@ Return Codes {.heading}
  `NF_EHDFERR`
 :   An error was reported by the HDF5 layer.
 
-Example {.heading}
+Example 
 -------
 
 This example is from the test program nf\_test/ftst\_vars3.F, and it
@@ -3217,7 +3173,7 @@ uses all the possible inquiry functions on an enum type.
 
  
 
-~~~~ {.example}
+
 C     Check the enum type.
       retval = NF_INQ_TYPEIDS(ncid, num_types, typeids)
       if (retval .ne. nf_noerr) call handle_err(retval)
@@ -3230,25 +3186,25 @@ C     Check the enum type.
      &     member_value)
       if (retval .ne. nf_noerr) call handle_err(retval)
       if (member_name(1:len(one_name)) .ne. one_name) stop 2
-~~~~
 
-5.5 Learn About a User Defined Type: NF\_INQ\_USER\_TYPE {.section}
+
+5.5 Learn About a User Defined Type: NF\_INQ\_USER\_TYPE 
 --------------------------------------------------------
 
 Given an ncid and a typeid, get the information about a user defined
 type. This function will work on any user defined type, whether
 compound, opaque, enumeration, or variable length array.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_USER_TYPE(INTEGER NCID, INTEGER XTYPE,
         CHARACTER*(*) NAME, INTEGER SIZE, INTEGER BASE_NF_TYPE, 
         INTEGER NFIELDS, INTEGER CLASS)
-~~~~
+
 
  `NCID`
 :   The ncid for the group containing the user defined type.
@@ -3275,7 +3231,7 @@ INTEGER FUNCTION NF_INQ_USER_TYPE(INTEGER NCID, INTEGER XTYPE,
 :   The class of the user defined type, NF\_VLEN, NF\_OPAQUE, NF\_ENUM,
     or NF\_COMPOUND, will be copied here.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -3290,27 +3246,27 @@ Errors {.heading}
  `NF_EHDFERR`
 :   An error was reported by the HDF5 layer.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_types2.F.
 
  
 
-~~~~ {.example}
+
 C     Check the type.
       retval = nf_inq_user_type(ncid, typeids(1), name_in, size_in, 
      &     base_type_in, nfields_in, class_in)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-5.6 Compound Types Introduction {.section}
+
+5.6 Compound Types Introduction 
 -------------------------------
 
-NetCDF-4 added support for compound types, which allow users to
+NetCDF-4 addedpport for compound types, which allow users to
 construct a new type - a combination of other types, like a C struct.
 
-Compound types are not supported in classic or 64-bit offset format
+Compound types are notpported in classic or 64-bit offset format
 files.
 
 To write data in a compound type, first use nf\_def\_compound to create
@@ -3325,35 +3281,35 @@ In Fortran a character buffer must be used for the compound data. The
 user must read the data from within that buffer in the same way that the
 C compiler which compiled netCDF would store the structure.
 
-The use of compound types introduces challenges and portability issues
+The use of compound types introduces challenges and portability ies
 for Fortran users.
 
-### 5.6.1 Creating a Compound Type: NF\_DEF\_COMPOUND {.subsection}
+### 5.6.1 Creating a Compound Type: NF\_DEF\_COMPOUND 
 
 Create a compound type. Provide an ncid, a name, and a total size (in
 bytes) of one element of the completed compound type.
 
 After calling this function, fill out the type with repeated calls to
-NF\_INSERT\_COMPOUND (see section [Inserting a Field into a Compound
+NF\_INSERT\_COMPOUND (see [Inserting a Field into a Compound
 Type: NF\_INSERT\_COMPOUND](#NF_005fINSERT_005fCOMPOUND)). Call
 NF\_INSERT\_COMPOUND once for each field you wish to insert into the
 compound type.
 
-Note that there does not seem to be a way to read such types into
+Note that there does not seem to be a way to readch types into
 structures in Fortran 90 (and there are no structures in Fortran 77).
 
 Fortran users may use character buffers to read and write compound
 types.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_DEF_COMPOUND(INTEGER NCID, INTEGER SIZE,
         CHARACTER*(*) NAME, INTEGER TYPEIDP)
-~~~~
+
 
  `NCID`
 :   The groupid where this compound type will be created.
@@ -3367,7 +3323,7 @@ INTEGER FUNCTION NF_DEF_COMPOUND(INTEGER NCID, INTEGER SIZE,
  `TYPEIDP`
 :   The typeid of the new type will be placed here.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -3389,12 +3345,12 @@ Errors {.heading}
  `NF_ENOTNC4`
 :   Attempting a netCDF-4 operation on a netCDF-3 file. NetCDF-4
     operations can only be performed on files defined with a create mode
-    which includes flag NF\_NETCDF4. (see section
+    which includes flag NF\_NETCDF4. (see
     [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_ESTRICTNC3`
 :   This file was created with the strict netcdf-3 flag, therefore
-    netcdf-4 operations are not allowed. (see section
+    netcdf-4 operations are not allowed. (see
     [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_EHDFERR`
@@ -3406,33 +3362,33 @@ Errors {.heading}
  `NF_ENOTINDEFINE`
 :   Not in define mode.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_types2.F.
 
  
 
-~~~~ {.example}
+
 C     Define a compound type.
       retval = nf_def_compound(ncid, cmp_size, type_name, 
      &     cmp_typeid)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-### 5.6.2 Inserting a Field into a Compound Type: NF\_INSERT\_COMPOUND {.subsection}
+
+### 5.6.2 Inserting a Field into a Compound Type: NF\_INSERT\_COMPOUND 
 
 Insert a named field into a compound type.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNTION NF_INSERT_COMPOUND(INTEGER TYPEID, CHARACTER*(*) NAME, INTEGER OFFSET, 
         INTEGER FIELD_TYPEID)
-~~~~
+
 
  `TYPEID`
 :   The typeid for this compound type, as returned by NF\_DEF\_COMPOUND,
@@ -3448,7 +3404,7 @@ INTEGER FUNTION NF_INSERT_COMPOUND(INTEGER TYPEID, CHARACTER*(*) NAME, INTEGER O
  `FIELD_TYPEID`
 :   The type of the field to be inserted.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -3470,12 +3426,12 @@ Errors {.heading}
  `NF_ENOTNC4`
 :   Attempting a netCDF-4 operation on a netCDF-3 file. NetCDF-4
     operations can only be performed on files defined with a create mode
-    which includes flag NF\_NETCDF4. (see section
+    which includes flag NF\_NETCDF4. (see
     [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_ESTRICTNC3`
 :   This file was created with the strict netcdf-3 flag, therefore
-    netcdf-4 operations are not allowed. (see section
+    netcdf-4 operations are not allowed. (see
     [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_EHDFERR`
@@ -3484,14 +3440,14 @@ Errors {.heading}
  `NF_ENOTINDEFINE`
 :   Not in define mode.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_types.F.
 
  
 
-~~~~ {.example}
+
 C     Define a compound type.
       retval = nf_def_compound(ncid, WIND_T_SIZE, type_name, 
      &     wind_typeid)
@@ -3500,23 +3456,23 @@ C     Define a compound type.
       if (retval .ne. nf_noerr) call handle_err(retval)
       retval = nf_insert_compound(ncid, wind_typeid, v_name, 4, NF_INT)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
 
-### 5.6.3 Inserting an Array Field into a Compound Type: NF\_INSERT\_ARRAY\_COMPOUND {.subsection}
+
+### 5.6.3 Inserting an Array Field into a Compound Type: NF\_INSERT\_ARRAY\_COMPOUND 
 
 Insert a named array field into a compound type.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INSERT_ARRAY_COMPOUND(INTEGER NCID, INTEGER XTYPE,
         CHARACTER*(*) NAME, INTEGER OFFSET, INTEGER FIELD_TYPEID,
         INTEGER NDIMS, INTEGER DIM_SIZES) 
-~~~~
+
 
  `NCID`
 :   The ID of the file that contains the array type and the compound
@@ -3542,7 +3498,7 @@ INTEGER FUNCTION NF_INSERT_ARRAY_COMPOUND(INTEGER NCID, INTEGER XTYPE,
  `DIM_SIZES`
 :   An array containing the sizes of each dimension.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -3564,12 +3520,12 @@ Errors {.heading}
  `NF_ENOTNC4`
 :   Attempting a netCDF-4 operation on a netCDF-3 file. NetCDF-4
     operations can only be performed on files defined with a create mode
-    which includes flag NF\_NETCDF4. (see section
+    which includes flag NF\_NETCDF4. (see
     [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_ESTRICTNC3`
 :   This file was created with the strict netcdf-3 flag, therefore
-    netcdf-4 operations are not allowed. (see section
+    netcdf-4 operations are not allowed. (see
     [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_EHDFERR`
@@ -3584,14 +3540,14 @@ Errors {.heading}
     and can’t be changed. If you wish to add an array to a compound
     type, you must do so before the compound type is committed.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_types2.F.
 
  
 
-~~~~ {.example}
+
 C     Define a compound type.
       retval = nf_def_compound(ncid, cmp_size, type_name, 
      &     cmp_typeid)
@@ -3603,21 +3559,21 @@ C     Include an array.
       retval = nf_insert_array_compound(ncid, cmp_typeid, ary_name, 0, 
      &     NF_INT, NDIMS, dim_sizes)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-### 5.6.4 Learn About a Compound Type: NF\_INQ\_COMPOUND {.subsection}
+
+### 5.6.4 Learn About a Compound Type: NF\_INQ\_COMPOUND 
 
 Get the number of fields, length in bytes, and name of a compound type.
 
 In addtion to the NF\_INQ\_COMPOUND function, three additional functions
 are provided which get only the name, size, and number of fields.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_COMPOUND(INTEGER NCID, INTEGER XTYPE,
         CHARACTER*(*) NAME, INTEGER SIZEP, INTEGER NFIELDSP)
 
@@ -3629,7 +3585,7 @@ INTEGER FUNCTION NF_INQ_COMPOUND_SIZE(INTEGER NCID, INTEGER XTYPE,
 
 INTEGER FUNCTION NF_INQ_COMPOUND_NFIELDS(INTEGER NCID, INTEGER XTYPE, 
         INTEGER NFIELDSP)
-~~~~
+
 
  `NCID`
 :   The ID of any group in the file that contains the compound type.
@@ -3648,7 +3604,7 @@ INTEGER FUNCTION NF_INQ_COMPOUND_NFIELDS(INTEGER NCID, INTEGER XTYPE,
  `NFIELDSP`
 :   The number of fields in the compound type will be placed here.
 
-Return Codes {.heading}
+Return Codes 
 ------------
 
  `NF_NOERR`
@@ -3673,14 +3629,14 @@ Return Codes {.heading}
  `NF_EHDFERR`
 :   An error was reported by the HDF5 layer.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_types.F.
 
  
 
-~~~~ {.example}
+
 C     Check it differently.
       retval = nf_inq_compound(ncid, typeids(1), name_in, size_in, 
      &     nfields_in)
@@ -3698,18 +3654,18 @@ C     Check it one piece at a time.
       retval = nf_inq_compound_name(ncid, typeids(1), name_in)
       if (retval .ne. nf_noerr) call handle_err(retval)
       if (name_in(1:len(type_name)) .ne. type_name) stop 2
-~~~~
 
-### 5.6.5 Learn About a Field of a Compound Type: NF\_INQ\_COMPOUND\_FIELD {.subsection}
+
+### 5.6.5 Learn About a Field of a Compound Type: NF\_INQ\_COMPOUND\_FIELD 
 
 Get information about one of the fields of a compound type.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_COMPOUND_FIELD(INTEGER NCID, INTEGER XTYPE,
         INTEGER FIELDID, CHARACTER*(*) NAME, INTEGER OFFSETP, 
         INTEGER FIELD_TYPEIDP, INTEGER NDIMSP, INTEGER DIM_SIZESP)
@@ -3731,7 +3687,7 @@ INTEGER FUNCTION NF_INQ_COMPOUND_FIELDNDIMS(INTEGER NCID,
 
 INTEGER FUNCTION NF_INQ_COMPOUND_FIELDDIM_SIZES(INTEGER NCID, 
         INTEGER XTYPE, INTEGER FIELDID, INTEGER DIM_SIZES)
-~~~~
+
 
  `NCID`
 :   The groupid where this compound type exists.
@@ -3759,7 +3715,7 @@ INTEGER FUNCTION NF_INQ_COMPOUND_FIELDDIM_SIZES(INTEGER NCID,
  `DIM_SIZESP`
 :   An integer array which will get the dimension sizes of the field.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -3771,14 +3727,14 @@ Errors {.heading}
  `NF_EHDFERR`
 :   An error was reported by the HDF5 layer.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/fst\_types.F.
 
  
 
-~~~~ {.example}
+
 C     Check the first field of the compound type.
       retval = nf_inq_compound_field(ncid, typeids(1), 1, name_in, 
      &     offset_in, field_typeid_in, ndims_in, dim_sizes_in)
@@ -3800,12 +3756,12 @@ C     Check the first field of the compound type.
      &     ndims_in)
       if (retval .ne. nf_noerr) call handle_err(retval)
       if (ndims_in .ne. 0) stop 2
-~~~~
 
-5.7 Variable Length Array Introduction {.section}
+
+5.7 Variable Length Array Introduction 
 --------------------------------------
 
-NetCDF-4 added support for a variable length array type. This is not
+NetCDF-4 addedpport for a variable length array type. This is not
 supported in classic or 64-bit offset files, or in netCDF-4 files which
 were created with the NF\_CLASSIC\_MODEL flag.
 
@@ -3825,8 +3781,8 @@ allocated memory, which must still be freed (see below).
 
 VLEN arrays are handled differently with respect to allocation of
 memory. Generally, when reading data, it is up to the user to malloc
-(and subsequently free) the memory needed to hold the data. It is up to
-the user to ensure that enough memory is allocated.
+(andbsequently free) the memory needed to hold the data. It is up to
+the user to ere that enough memory is allocated.
 
 With VLENs, this is impossible. The user cannot know the size of an
 array of VLEN until after reading the array. Therefore when reading VLEN
@@ -3841,19 +3797,19 @@ Compression is permitted but may not be effective for VLEN data, because
 the compression is applied to the nc\_vlen\_t structures, rather than
 the actual data.
 
-### 5.7.1 Define a Variable Length Array (VLEN): NF\_DEF\_VLEN {.subsection}
+### 5.7.1 Define a Variable Length Array (VLEN): NF\_DEF\_VLEN 
 
 Use this function to define a variable length array type.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_DEF_VLEN(INTEGER NCID, CHARACTER*(*) NAME, 
         INTEGER BASE_TYPEID, INTEGER XTYPEP)
-~~~~
+
 
  `NCID`
 :   The ncid of the file to create the VLEN type in.
@@ -3868,7 +3824,7 @@ INTEGER FUNCTION NF_DEF_VLEN(INTEGER NCID, CHARACTER*(*) NAME,
  `XTYPEP`
 :   The typeid of the new VLEN type will be set here.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -3895,33 +3851,33 @@ Errors {.heading}
  `NF_ENOMEM`
 :   Out of memory.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_vars4.F.
 
  
 
-~~~~ {.example}
+
 C     Create the vlen type.
       retval = nf_def_vlen(ncid, vlen_type_name, nf_int, vlen_typeid)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-### 5.7.2 Learning about a Variable Length Array (VLEN) Type: NF\_INQ\_VLEN {.subsection}
+
+### 5.7.2 Learning about a Variable Length Array (VLEN) Type: NF\_INQ\_VLEN 
 
 Use this type to learn about a vlen.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_VLEN(INTEGER NCID, INTEGER XTYPE,
         CHARACTER*(*) NAME, INTEGER DATUM_SIZEP, INTEGER  
         BASE_NF_TYPEP)
-~~~~
+
 
  `NCID`
 :   The ncid of the file that contains the VLEN type.
@@ -3941,7 +3897,7 @@ INTEGER FUNCTION NF_INQ_VLEN(INTEGER NCID, INTEGER XTYPE,
 :   An integer that will get the type of the VLEN base type. (In other
     words, what type is this a VLEN of?)
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -3956,22 +3912,22 @@ Errors {.heading}
  `NF_EBADGRPID`
 :   Group ID part of ncid was invalid.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_vars4.F.
 
  
 
-~~~~ {.example}
-C     Use nf_inq_vlen and make sure we get the same answers as we did
+
+C     Use nf_inq_vlen and makere we get the same answers as we did
 C     with nf_inq_user_type.
       retval = nf_inq_vlen(ncid, typeids(1), type_name, base_size, 
      &     base_type)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-### 5.7.3 Releasing Memory for a Variable Length Array (VLEN) Type: NF\_FREE\_VLEN {.subsection}
+
+### 5.7.3 Releasing Memory for a Variable Length Array (VLEN) Type: NF\_FREE\_VLEN 
 
 When a VLEN is read into user memory from the file, the HDF5 library
 performs memory allocations for each of the variable length arrays
@@ -3983,19 +3939,19 @@ for all memory allocation. But, with VLEN arrays, the underlying HDF5
 library allocates the memory for the user, and the user is responsible
 for deallocating that memory.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_FREE_VLEN(CHARACTER VL);
-~~~~
+
 
  `VL`
 :   The variable length array structure which is to be freed.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -4004,23 +3960,23 @@ Errors {.heading}
  `NF_EBADTYPE`
 :   Can’t find the typeid.
 
-Example {.heading}
+Example 
 -------
 
-### 5.7.4 Set a Variable Length Array with NF\_PUT\_VLEN\_ELEMENT {.subsection}
+### 5.7.4 Set a Variable Length Array with NF\_PUT\_VLEN\_ELEMENT 
 
 Use this to set the element of the (potentially) n-dimensional array of
 VLEN. That is, this sets the data in one variable length array.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_PUT_VLEN_ELEMENT(INTEGER NCID, INTEGER XTYPE,
         CHARACTER*(*) VLEN_ELEMENT, INTEGER LEN, DATA)
-~~~~
+
 
  `NCID`
 :   The ncid of the file that contains the VLEN type.
@@ -4037,7 +3993,7 @@ INTEGER FUNCTION NF_PUT_VLEN_ELEMENT(INTEGER NCID, INTEGER XTYPE,
  `DATA`
 :   The data to be stored. Must match the base type of this VLEN.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -4052,35 +4008,35 @@ Errors {.heading}
  `NF_EBADGRPID`
 :   Group ID part of ncid was invalid.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_vars4.F.
 
  
 
-~~~~ {.example}
+
 C     Set up the vlen with this helper function, since F77 can't deal
 C     with pointers.
       retval = nf_put_vlen_element(ncid, vlen_typeid, vlen, 
      &     vlen_len, data1)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-### 5.7.5 Set a Variable Length Array with NF\_GET\_VLEN\_ELEMENT {.subsection}
+
+### 5.7.5 Set a Variable Length Array with NF\_GET\_VLEN\_ELEMENT 
 
 Use this to set the element of the (potentially) n-dimensional array of
 VLEN. That is, this sets the data in one variable length array.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_GET_VLEN_ELEMENT(INTEGER NCID, INTEGER XTYPE,
         CHARACTER*(*) VLEN_ELEMENT, INTEGER LEN, DATA)
-~~~~
+
 
  `NCID`
 :   The ncid of the file that contains the VLEN type.
@@ -4098,7 +4054,7 @@ INTEGER FUNCTION NF_GET_VLEN_ELEMENT(INTEGER NCID, INTEGER XTYPE,
 :   The data will be copied here. Sufficient storage must be available
     or bad things will happen to you.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -4113,14 +4069,14 @@ Errors {.heading}
  `NF_EBADGRPID`
 :   Group ID part of ncid was invalid.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_vars4.F.
 
  
 
-~~~~ {.example}
+
 C     Read the vlen attribute.
       retval = nf_get_att(ncid, NF_GLOBAL, 'att1', vlen_in)
       if (retval .ne. nf_noerr) call handle_err(retval)
@@ -4129,12 +4085,12 @@ C     Get the data from the vlen we just read.
       retval = nf_get_vlen_element(ncid, vlen_typeid, vlen_in, 
      &     vlen_len_in, data1_in)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-5.8 Opaque Type Introduction {.section}
+
+5.8 Opaque Type Introduction 
 ----------------------------
 
-NetCDF-4 added support for the opaque type. This is not supported in
+NetCDF-4 addedpport for the opaque type. This is notpported in
 classic or 64-bit offset files.
 
 The opaque type is a type which is a collection of objects of a known
@@ -4147,19 +4103,19 @@ NF\_DEF\_OPAQUE](#NF_005fDEF_005fOPAQUE). If encountering an enum type
 in a new data file, use [Learn About an Opaque Type:
 NF\_INQ\_OPAQUE](#NF_005fINQ_005fOPAQUE) to learn its name and size.
 
-### 5.8.1 Creating Opaque Types: NF\_DEF\_OPAQUE {.subsection}
+### 5.8.1 Creating Opaque Types: NF\_DEF\_OPAQUE 
 
 Create an opaque type. Provide a size and a name.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_DEF_OPAQUE(INTEGER NCID, INTEGER SIZE, 
         CHARACTER*(*) NAME, INTEGER TYPEIDP)
-~~~~
+
 
  `NCID`
 :   The groupid where the type will be created. The type may be used
@@ -4176,7 +4132,7 @@ INTEGER FUNCTION NF_DEF_OPAQUE(INTEGER NCID, INTEGER SIZE,
     typeid when defining variables of this type with [Create a Variable:
     `NF_DEF_VAR`](#NF_005fDEF_005fVAR).
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -4191,33 +4147,33 @@ Errors {.heading}
  `NF_EHDFERR`
 :   An error was reported by the HDF5 layer.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_vars3.F.
 
  
 
-~~~~ {.example}
+
 C     Create the opaque type.
       retval = nf_def_opaque(ncid, opaque_size, opaque_type_name, 
      &     opaque_typeid)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-### 5.8.2 Learn About an Opaque Type: NF\_INQ\_OPAQUE {.subsection}
+
+### 5.8.2 Learn About an Opaque Type: NF\_INQ\_OPAQUE 
 
 Given a typeid, get the information about an opaque type.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_OPAQUE(INTEGER NCID, INTEGER XTYPE,
         CHARACTER*(*) NAME, INTEGER SIZEP)
-~~~~
+
 
  `NCID`
 :   The ncid for the group containing the opaque type.
@@ -4233,7 +4189,7 @@ INTEGER FUNCTION NF_INQ_OPAQUE(INTEGER NCID, INTEGER XTYPE,
  `SIZEP`
 :   The size of the opaque type will be copied here.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -4248,44 +4204,44 @@ Errors {.heading}
  `NF_EHDFERR`
 :   An error was reported by the HDF5 layer.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_vars3.F.
 
  
 
-~~~~ {.example}
-C     Use nf_inq_opaque and make sure we get the same answers as we did
+
+C     Use nf_inq_opaque and makere we get the same answers as we did
 C     with nf_inq_user_type.
       retval = nf_inq_opaque(ncid, typeids(2), type_name, base_size)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-5.9 Enum Type Introduction {.section}
+
+5.9 Enum Type Introduction 
 --------------------------
 
-NetCDF-4 added support for the enum type. This is not supported in
+NetCDF-4 addedpport for the enum type. This is notpported in
 classic or 64-bit offset files.
 
-### 5.9.1 Creating a Enum Type: NF\_DEF\_ENUM {.subsection}
+### 5.9.1 Creating a Enum Type: NF\_DEF\_ENUM 
 
 Create an enum type. Provide an ncid, a name, and a base integer type.
 
 After calling this function, fill out the type with repeated calls to
-NF\_INSERT\_ENUM (see section [Inserting a Field into a Enum Type:
+NF\_INSERT\_ENUM (see [Inserting a Field into a Enum Type:
 NF\_INSERT\_ENUM](#NF_005fINSERT_005fENUM)). Call NF\_INSERT\_ENUM once
 for each value you wish to make part of the enumeration.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_DEF_ENUM(INTEGER NCID, INTEGER BASE_TYPEID, 
         CHARACTER*(*) NAME, INTEGER TYPEIDP)
-~~~~
+
 
  `NCID`
 :   The groupid where this compound type will be created.
@@ -4301,7 +4257,7 @@ INTEGER FUNCTION NF_DEF_ENUM(INTEGER NCID, INTEGER BASE_TYPEID,
  `TYPEIDP`
 :   The typeid of the new type will be placed here.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -4323,12 +4279,12 @@ Errors {.heading}
  `NF_ENOTNC4`
 :   Attempting a netCDF-4 operation on a netCDF-3 file. NetCDF-4
     operations can only be performed on files defined with a create mode
-    which includes flag NF\_NETCDF4. (see section
+    which includes flag NF\_NETCDF4. (see
     [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_ESTRICTNC3`
 :   This file was created with the strict netcdf-3 flag, therefore
-    netcdf-4 operations are not allowed. (see section
+    netcdf-4 operations are not allowed. (see
     [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_EHDFERR`
@@ -4344,25 +4300,25 @@ This example is from nf\_test/ftst\_vars3.F.
 
  
 
-~~~~ {.example}
+
 C     Create the enum type.
       retval = nf_def_enum(ncid, NF_INT, enum_type_name, enum_typeid)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-### 5.9.2 Inserting a Field into a Enum Type: NF\_INSERT\_ENUM {.subsection}
+
+### 5.9.2 Inserting a Field into a Enum Type: NF\_INSERT\_ENUM 
 
 Insert a named member into a enum type.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INSERT_ENUM(INTEGER NCID, INTEGER XTYPE, 
         CHARACTER IDENTIFIER, INTEGER VALUE)
-~~~~
+
 
  `NCID`
 :   The ncid of the group which contains the type.
@@ -4377,7 +4333,7 @@ INTEGER FUNCTION NF_INSERT_ENUM(INTEGER NCID, INTEGER XTYPE,
  `VALUE`
 :   The value that is to be associated with this member.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -4398,12 +4354,12 @@ Errors {.heading}
  `NF_ENOTNC4`
 :   Attempting a netCDF-4 operation on a netCDF-3 file. NetCDF-4
     operations can only be performed on files defined with a create mode
-    which includes flag NF\_NETCDF4. (see section
+    which includes flag NF\_NETCDF4. (see
     [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_ESTRICTNC3`
 :   This file was created with the strict netcdf-3 flag, therefore
-    netcdf-4 operations are not allowed. (see section
+    netcdf-4 operations are not allowed. (see
     [NF\_OPEN](#NF_005fOPEN)).
 
  `NF_EHDFERR`
@@ -4412,36 +4368,36 @@ Errors {.heading}
  `NF_ENOTINDEFINE`
 :   Not in define mode.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_vars3.F.
 
  
 
-~~~~ {.example}
+
       one = 1
       zero = 0
       retval = nf_insert_enum(ncid, enum_typeid, zero_name, zero)
       if (retval .ne. nf_noerr) call handle_err(retval)
       retval = nf_insert_enum(ncid, enum_typeid, one_name, one)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-### 5.9.3 Learn About a Enum Type: NF\_INQ\_ENUM {.subsection}
+
+### 5.9.3 Learn About a Enum Type: NF\_INQ\_ENUM 
 
 Get information about a user-defined enumeration type.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_ENUM(INTEGER NCID, INTEGER XTYPE,
         CHARACTER*(*) NAME, INTEGER BASE_NF_TYPE, INTEGER BASE_SIZE, 
         INTEGER NUM_MEMBERS)
-~~~~
+
 
  `NCID`
 :   The group ID of the group which holds the enum type.
@@ -4465,7 +4421,7 @@ INTEGER FUNCTION NF_INQ_ENUM(INTEGER NCID, INTEGER XTYPE,
 :   An integer which will get the number of members defined for this
     enumeration type.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -4477,7 +4433,7 @@ Errors {.heading}
  `NF_EHDFERR`
 :   An error was reported by the HDF5 layer.
 
-Example {.heading}
+Example 
 -------
 
 In this example from nf\_test/ftst\_vars3.F, an enum type is created and
@@ -4485,26 +4441,26 @@ then examined:
 
  
 
-~~~~ {.example}
+
       retval = nf_inq_enum(ncid, typeids(1), type_name, base_type, 
      &     base_size, num_members)
       if (retval .ne. nf_noerr) call handle_err(retval)
       if (base_type .ne. NF_INT .or. num_members .ne. 2) stop 2
-~~~~
 
-### 5.9.4 Learn the Name of a Enum Type: nf\_inq\_enum\_member {.subsection}
+
+### 5.9.4 Learn the Name of a Enum Type: nf\_inq\_enum\_member 
 
 Get information about a member of an enum type.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_ENUM_MEMBER(INTEGER NCID, INTEGER XTYPE, 
         INTEGER IDX, CHARACTER*(*) NAME, INTEGER VALUE)
-~~~~
+
 
  `NCID`
 :   The groupid where this enum type exists.
@@ -4522,7 +4478,7 @@ INTEGER FUNCTION NF_INQ_ENUM_MEMBER(INTEGER NCID, INTEGER XTYPE,
  `VALUE`
 :   An integer that will get the value associated with this member.
 
-Errors {.heading}
+Errors 
 ------
 
  `NF_NOERR`
@@ -4534,14 +4490,14 @@ Errors {.heading}
  `NF_EHDFERR`
 :   An error was reported by the HDF5 layer.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_vars3.F:
 
  
 
-~~~~ {.example}
+
 C     Check the members of the enum type.
       retval = nf_inq_enum_member(ncid, typeids(1), 1, member_name, 
      &     member_value)
@@ -4553,24 +4509,24 @@ C     Check the members of the enum type.
       if (retval .ne. nf_noerr) call handle_err(retval)
       if (member_name(1:len(one_name)) .ne. one_name .or.
      &     member_value .ne. 1) stop 2
-~~~~
 
-### 5.9.5 Learn the Name of a Enum Type: NF\_INQ\_ENUM\_IDENT {.subsection}
+
+### 5.9.5 Learn the Name of a Enum Type: NF\_INQ\_ENUM\_IDENT 
 
 Get the name which is associated with an enum member value.
 
 This is similar to NF\_INQ\_ENUM\_MEMBER, but instead of using the index
 of the member, you use the value of the member.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_ENUM_IDENT(INTEGER NCID, INTEGER XTYPE,
         INTEGER VALUE, CHARACTER*(*) IDENTIFIER)
-~~~~
+
 
  `NCID`
 :   The groupid where this enum type exists.
@@ -4585,7 +4541,7 @@ INTEGER FUNCTION NF_INQ_ENUM_IDENT(INTEGER NCID, INTEGER XTYPE,
 :   A character array that will get the identifier. It will have a
     maximum length of NF\_MAX\_NAME.
 
-Return Code {.heading}
+Return Code 
 -----------
 
  `NF_NOERR`
@@ -4600,7 +4556,7 @@ Return Code {.heading}
  `NF_EINVAL`
 :   The value was not found in the enum.
 
-Example {.heading}
+Example 
 -------
 
 In this example from nf\_test/ftst\_vars3.F, the values for 0 and 1 are
@@ -4608,19 +4564,19 @@ checked in an enum.
 
  
 
-~~~~ {.example}
+
       retval = nf_inq_enum_ident(ncid, typeids(1), 0, member_name)
       if (retval .ne. nf_noerr) call handle_err(retval)
       if (member_name(1:len(zero_name)) .ne. zero_name) stop 2
       retval = nf_inq_enum_ident(ncid, typeids(1), 1, member_name)
       if (retval .ne. nf_noerr) call handle_err(retval)
       if (member_name(1:len(one_name)) .ne. one_name) stop 2
-~~~~
 
-6. Variables {.chapter}
+
+6. Variables 
 ============
 
-6.1 Variables Introduction {.section}
+6.1 Variables Introduction 
 --------------------------
 
 Variables for a netCDF dataset are defined when the dataset is created,
@@ -4643,9 +4599,9 @@ variables were defined. A function is available for getting the variable
 ID from the variable name and vice-versa.
 
 Attributes (see [Attributes](#Attributes)) may be associated with a
-variable to specify such properties as units.
+variable to specifych properties as units.
 
-Operations supported on variables are:
+Operationspported on variables are:
 
 -   Create a variable, given its name, data type, and shape.
 -   Get a variable ID from its name.
@@ -4655,19 +4611,19 @@ Operations supported on variables are:
     value.
 -   Put an array of values into a variable, given variable ID, corner
     indices, edge lengths, and a block of values.
--   Put a subsampled or mapped array-section of values into a variable,
+-   Put absampled or mapped array of values into a variable,
     given variable ID, corner indices, edge lengths, stride vector,
     index mapping vector, and a block of values.
 -   Get a data value from a variable, given variable ID and indices.
 -   Get an array of values from a variable, given variable ID, corner
     indices, and edge lengths.
--   Get a subsampled or mapped array-section of values from a variable,
+-   Get absampled or mapped array of values from a variable,
     given variable ID, corner indices, edge lengths, stride vector, and
     index mapping vector.
 -   Rename a variable.
 
 
-6.2 Language Types Corresponding to netCDF external data types {.section}
+6.2 Language Types Corresponding to netCDF external data types 
 --------------------------------------------------------------
 
 The following table gives the netCDF external data types and the
@@ -4695,7 +4651,7 @@ Note that there are no netCDF types corresponding to 64-bit integers or
 to characters wider than 8 bits in the current version of the netCDF
 library.
 
-6.3 Create a Variable: `NF_DEF_VAR` {.section}
+6.3 Create a Variable: `NF_DEF_VAR` 
 -----------------------------------
 
 The function NF\_DEF\_VAR adds a new variable to an open netCDF dataset
@@ -4703,16 +4659,16 @@ in define mode. It returns (as an argument) a variable ID, given the
 netCDF ID, the variable name, the variable type, the number of
 dimensions, and a list of the dimension IDs.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_DEF_VAR(INTEGER NCID, CHARACTER*(*) NAME,
                             INTEGER XTYPE, INTEGER NVDIMS,
                             INTEGER VDIMS(*), INTEGER varid)
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -4745,7 +4701,7 @@ INTEGER FUNCTION NF_DEF_VAR(INTEGER NCID, CHARACTER*(*) NAME,
  `varid`
 :   Returned variable ID.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_DEF\_VAR returns the value NF\_NOERR if no errors occurred.
@@ -4765,7 +4721,7 @@ errors include:
     maximum number of variables permitted in a netCDF dataset.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_DEF\_VAR to create a variable named rh of
@@ -4774,7 +4730,7 @@ dataset named foo.nc:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER  STATUS, NCID
@@ -4799,9 +4755,9 @@ RHDIMS(2) = LATDIM
 RHDIMS(3) = TIMDIM
 STATUS = NF_DEF_VAR (NCID, 'rh', NF_DOUBLE, 3, RHDIMS, RHID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-6.4 Define Chunking Parameters for a Variable: `NF_DEF_VAR_CHUNKING` {.section}
+
+6.4 Define Chunking Parameters for a Variable: `NF_DEF_VAR_CHUNKING` 
 --------------------------------------------------------------------
 
 The function NF\_DEF\_VAR\_CHUNKING sets the storage parameters for a
@@ -4809,9 +4765,9 @@ variable in a netCDF-4 file. It can set the chunk sizes to get chunked
 storage, or it can set the contiguous flag to get contiguous storage.
 
 Variables that make use of one or more unlimited dimensions,
-compression, or checksums must use chunking. Such variables are created
+compression, or checms must use chunking. Such variables are created
 with default chunk sizes of 1 for each unlimited dimension and the
-dimension length for other dimensions, except that if the resulting
+dimension length for other dimensions, except that if the rlting
 chunks are too large, the default chunk sizes for non-record dimensions
 are reduced.
 
@@ -4822,20 +4778,20 @@ for VLEN types) must be less than 4 GiB.
 This function may only be called after the variable is defined, but
 before nc\_enddef is called. Once the chunking parameters are set for a
 variable, they cannot be changed. This function can be used to change
-the default chunking for record, compressed, or checksummed variables
+the default chunking for record, compressed, or checmmed variables
 before nc\_enddef is called.
 
 Note that you cannot set chunking for scalar variables. Only non-scalar
 variables can have chunking.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 NF_DEF_VAR_CHUNKING(INTEGER NCID, INTEGER VARID, INTEGER STORAGE, INTEGER CHUNKSIZES)
-~~~~
+
 
  `ncid`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -4845,7 +4801,7 @@ NF_DEF_VAR_CHUNKING(INTEGER NCID, INTEGER VARID, INTEGER STORAGE, INTEGER CHUNKS
 
  `storage`
 :   If NF\_CONTIGUOUS, then contiguous storage is used for this
-    variable. Variables with compression, shuffle filter, checksums, or
+    variable. Variables with compression, shuffle filter, checms, or
     one or more unlimited dimensions cannot use contiguous storage. If
     contiguous storage is turned on, the chunksizes parameter is
     ignored.
@@ -4856,7 +4812,7 @@ NF_DEF_VAR_CHUNKING(INTEGER NCID, INTEGER VARID, INTEGER STORAGE, INTEGER CHUNKS
     called.
 
     By default contiguous storage is used for fix-sized variables when
-    conpression, chunking, checksums, or endianness control are not
+    conpression, chunking, checms, or endianness control are not
     used.
 
  `chunksizes`
@@ -4864,7 +4820,7 @@ NF_DEF_VAR_CHUNKING(INTEGER NCID, INTEGER VARID, INTEGER STORAGE, INTEGER CHUNKS
     each dimension in the variable. If contiguous storage is used, then
     the chunksizes parameter is ignored.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_DEF\_VAR\_CHUNKING returns the value NF\_NOERR if no errors
@@ -4880,7 +4836,7 @@ Possible return codes include:
 
  `NF_EINVAL`
 :   Invalid input. This can occur when the user attempts to set
-    contiguous storage for a variable with compression or checksums, or
+    contiguous storage for a variable with compression or checms, or
     one or more unlimited dimensions.
 
  `NF_ENOTNC4`
@@ -4890,7 +4846,7 @@ Possible return codes include:
 :   Can’t find this variable.
 
  `NF_ELATEDEF`
-:   This variable has already been the subject of a NF\_ENDDEF call. In
+:   This variable has already been thebject of a NF\_ENDDEF call. In
     netCDF-4 files NF\_ENDDEF will be called automatically for any data
     read or write. Once enddef has been called, it is impossible to set
     the chunking for a variable.
@@ -4898,14 +4854,14 @@ Possible return codes include:
  `NF_ENOTINDEFINE`
 :   Not in define mode. This is returned for netCDF classic or 64-bit
     offset files, or for netCDF-4 files, when they were been created
-    with NF\_STRICT\_NC3 flag. (see section
+    with NF\_STRICT\_NC3 flag. (see
     [NF\_CREATE](#NF_005fCREATE)).
 
  `NF_ESTRICTNC3`
 :   Trying to create a var some place other than the root group in a
     netCDF file with NF\_STRICT\_NC3 turned on.
 
-Example {.heading}
+Example 
 -------
 
 In this example from nf\_test/ftst\_vars.F, a file is created, two
@@ -4915,7 +4871,7 @@ chunk).
 
  
 
-~~~~ {.example}
+
 C     Create the netCDF file.
       retval = nf_create(FILE_NAME, NF_NETCDF4, ncid)
       if (retval .ne. nf_noerr) call handle_err(retval)
@@ -4937,22 +4893,22 @@ C     Turn on chunking.
       chunks(2) = NX
       retval = NF_DEF_VAR_chunking(ncid, varid, NF_CHUNKED, chunks)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-6.5 Learn About Chunking Parameters for a Variable: `NF_INQ_VAR_CHUNKING` {.section}
+
+6.5 Learn About Chunking Parameters for a Variable: `NF_INQ_VAR_CHUNKING` 
 -------------------------------------------------------------------------
 
 The function NF\_INQ\_VAR\_CHUNKING returns the chunking settings for a
 variable in a netCDF-4 file.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 NF_INQ_VAR_CHUNKING(INTEGER NCID, INTEGER VARID, INTEGER STORAGE, INTEGER CHUNKSIZES);
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -4968,7 +4924,7 @@ NF_INQ_VAR_CHUNKING(INTEGER NCID, INTEGER VARID, INTEGER STORAGE, INTEGER CHUNKS
 :   An array of chunk sizes. The length of CHUNKSIZES must be the same
     as the number of dimensions of the variable.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_INQ\_VAR\_CHUNKING returns the value NF\_NOERR if no errors
@@ -4988,25 +4944,25 @@ Possible return codes include:
  `NF_ENOTVAR`
 :   Can’t find this variable.
 
-Example {.heading}
+Example 
 -------
 
 In this example from nf\_test/ftst\_vars.F, a variable with chunked
-storage is checked to ensure that the chunksizes are set to expected
+storage is checked to ere that the chunksizes are set to expected
 values.
 
  
 
-~~~~ {.example}
-C     Is everything set that is supposed to be?
+
+C     Is everything set that ispposed to be?
       retval = nf_inq_var_chunking(ncid, varid, storage, chunks_in)
       if (retval .ne. nf_noerr) call handle_err(retval)
       if (storage .ne. NF_CHUNKED) stop 2
       if (chunks(1) .ne. chunks_in(1)) stop 2
       if (chunks(2) .ne. chunks_in(2)) stop 2
-~~~~
 
-6.6 Set HDF5 Chunk Cache for a Variable: NF\_SET\_VAR\_CHUNK\_CACHE {.section}
+
+6.6 Set HDF5 Chunk Cache for a Variable: NF\_SET\_VAR\_CHUNK\_CACHE 
 -------------------------------------------------------------------
 
 This function changes the chunk cache settings for a variable. The
@@ -5017,15 +4973,15 @@ For more information, see the documentation for the H5Pset\_cache()
 function in the HDF5 library at the HDF5 website:
 [http://hdfgroup.org/HDF5/](http://hdfgroup.org/HDF5/).
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 NF_SET_VAR_CHUNK_CACHE(INTEGER NCID, INTEGER VARID, INTEGER SIZE, INTEGER NELEMS, 
                INTEGER PREEMPTION);
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to nc\_open or nc\_create.
@@ -5054,7 +5010,7 @@ NF_SET_VAR_CHUNK_CACHE(INTEGER NCID, INTEGER VARID, INTEGER SIZE, INTEGER NELEMS
     other chunks. (The C API uses a float between 0 and 1 for this
     value).
 
-Return Codes {.heading}
+Return Codes 
 ------------
 
  `NF_NOERR`
@@ -5063,14 +5019,14 @@ Return Codes {.heading}
  `NF_EINVAL`
 :   Preemption must be between zero and 100 (inclusive).
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_vars2.F:
 
  
 
-~~~~ {.example}
+
       include 'netcdf.inc'
  ...
 C     These will be used to set the per-variable chunk cache.
@@ -5082,9 +5038,9 @@ C        Set variable caches.
          retval = nf_set_var_chunk_cache(ncid, varid(i), CACHE_SIZE, 
      &        CACHE_NELEMS, CACHE_PREEMPTION)
          if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-6.7 Get the HDF5 Chunk Cache Settings for a variable: NF\_GET\_VAR\_CHUNK\_CACHE {.section}
+
+6.7 Get the HDF5 Chunk Cache Settings for a variable: NF\_GET\_VAR\_CHUNK\_CACHE 
 --------------------------------------------------------------------------------
 
 This function gets the current chunk cache settings for a variable in a
@@ -5094,15 +5050,15 @@ For more information, see the documentation for the H5Pget\_cache()
 function in the HDF5 library at the HDF5 website:
 [http://hdfgroup.org/HDF5/](http://hdfgroup.org/HDF5/).
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER NF_GET_VAR_CHUNK_CACHE(INTEGER NCID, INTEGER VARID, INTEGER SIZE, INTEGER NELEMS, 
                                INTEGER PREEMPTION);
-~~~~
+
 
  `ncid`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -5126,20 +5082,20 @@ INTEGER NF_GET_VAR_CHUNK_CACHE(INTEGER NCID, INTEGER VARID, INTEGER SIZE, INTEGE
     is strictly LRU) while a value of 100 means fully read chunks are
     always preempted before other chunks.
 
-Return Codes {.heading}
+Return Codes 
 ------------
 
  `NC_NOERR`
 :   No error.
 
-Example {.heading}
+Example 
 -------
 
 This example is from nf\_test/ftst\_vars2.c:
 
  
 
-~~~~ {.example}
+
       include 'netcdf.inc'
 ...
 C     These will be used to set the per-variable chunk cache.
@@ -5158,9 +5114,9 @@ C     cache.
          if (cache_size_in .ne. CACHE_SIZE .or. cache_nelems_in .ne. 
      &        CACHE_NELEMS .or. cache_preemption .ne. CACHE_PREEMPTION)
      &        stop 8
-~~~~
 
-6.8 Define Fill Parameters for a Variable: `nf_def_var_fill` {.section}
+
+6.8 Define Fill Parameters for a Variable: `nf_def_var_fill` 
 ------------------------------------------------------------
 
 The function NF\_DEF\_VAR\_FILL sets the fill parameters for a variable
@@ -5169,14 +5125,14 @@ in a netCDF-4 file.
 This function must be called after the variable is defined, but before
 NF\_ENDDEF is called.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 NF_DEF_VAR_FILL(INTEGER NCID, INTEGER VARID, INTEGER NO_FILL, FILL_VALUE);
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -5199,7 +5155,7 @@ NF_DEF_VAR_FILL(INTEGER NCID, INTEGER VARID, INTEGER NO_FILL, FILL_VALUE);
     \_FillValue attribute, created for this purpose. If NULL, this
     argument will be ignored.
 
-Return Codes {.heading}
+Return Codes 
 ------------
 
  `NF_NOERR`
@@ -5215,7 +5171,7 @@ Return Codes {.heading}
 :   Can’t find this variable.
 
  `NF_ELATEDEF`
-:   This variable has already been the subject of a NF\_ENDDEF call. In
+:   This variable has already been thebject of a NF\_ENDDEF call. In
     netCDF-4 files NF\_ENDDEF will be called automatically for any data
     read or write. Once enddef has been called, it is impossible to set
     the fill for a variable.
@@ -5223,29 +5179,29 @@ Return Codes {.heading}
  `NF_ENOTINDEFINE`
 :   Not in define mode. This is returned for netCDF classic or 64-bit
     offset files, or for netCDF-4 files, when they were been created
-    with NF\_STRICT\_NC3 flag. (see section
+    with NF\_STRICT\_NC3 flag. (see
     [NF\_CREATE](#NF_005fCREATE)).
 
  `NF_EPERM`
 :   Attempt to create object in read-only file.
 
-Example {.heading}
+Example 
 -------
 
-6.9 Learn About Fill Parameters for a Variable: `NF_INQ_VAR_FILL` {.section}
+6.9 Learn About Fill Parameters for a Variable: `NF_INQ_VAR_FILL` 
 -----------------------------------------------------------------
 
 The function NF\_INQ\_VAR\_FILL returns the fill settings for a variable
 in a netCDF-4 file.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 NF_INQ_VAR_FILL(INTEGER NCID, INTEGER VARID, INTEGER NO_FILL, FILL_VALUE)
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -5261,7 +5217,7 @@ NF_INQ_VAR_FILL(INTEGER NCID, INTEGER VARID, INTEGER NO_FILL, FILL_VALUE)
 :   This will get the fill value for this variable. This parameter will
     be ignored if it is NULL.
 
-Return Codes {.heading}
+Return Codes 
 ------------
 
  `NF_NOERR`
@@ -5276,10 +5232,10 @@ Return Codes {.heading}
  `NF_ENOTVAR`
 :   Can’t find this variable.
 
-Example {.heading}
+Example 
 -------
 
-6.10 Define Compression Parameters for a Variable: `NF_DEF_VAR_DEFLATE` {.section}
+6.10 Define Compression Parameters for a Variable: `NF_DEF_VAR_DEFLATE` 
 -----------------------------------------------------------------------
 
 The function NF\_DEF\_VAR\_DEFLATE sets the deflate parameters for a
@@ -5294,15 +5250,15 @@ exactly map the data to disk location.
 NF\_DEF\_VAR\_DEFLATE must be called after the variable is defined, but
 before NF\_ENDDEF is called.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 NF_DEF_VAR_DEFLATE(INTEGER NCID, INTEGER VARID, INTEGER SHUFFLE, INTEGER DEFLATE, 
                    INTEGER DEFLATE_LEVEL);
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -5326,11 +5282,11 @@ NF_DEF_VAR_DEFLATE(INTEGER NCID, INTEGER VARID, INTEGER SHUFFLE, INTEGER DEFLATE
     deflate, which turns on the filter but makes only trivial changes to
     the data.
 
-    Informal testing at NetCDF World Headquarters suggests that there is
+    Informal testing at NetCDF World Headquartersggests that there is
     little to be gained (with the limited set of test data used here),
     in setting the deflate level above 2 or 3.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_DEF\_VAR\_DEFLATE returns the value NF\_NOERR if no errors occurred.
@@ -5351,7 +5307,7 @@ Possible return codes include:
 :   Can’t find this variable.
 
  `NF_ELATEDEF`
-:   This variable has already been the subject of a NF\_ENDDEF call. In
+:   This variable has already been thebject of a NF\_ENDDEF call. In
     netCDF-4 files NF\_ENDDEF will be called automatically for any data
     read or write. Once enddef has been called, it is impossible to set
     the deflate for a variable.
@@ -5359,7 +5315,7 @@ Possible return codes include:
  `NF_ENOTINDEFINE`
 :   Not in define mode. This is returned for netCDF classic or 64-bit
     offset files, or for netCDF-4 files, when they were been created
-    with NF\_STRICT\_NC3 flag. (see section
+    with NF\_STRICT\_NC3 flag. (see
     [NF\_CREATE](#NF_005fCREATE)).
 
  `NF_EPERM`
@@ -5369,7 +5325,7 @@ Possible return codes include:
 :   Invalid deflate\_level. The deflate level must be between 0 and 9,
     inclusive.
 
-Example {.heading}
+Example 
 -------
 
 In this example from nf\_test/ftst\_vars.F, a file is created with two
@@ -5378,7 +5334,7 @@ filter are turned on. The deflate level is set to 4 below.
 
  
 
-~~~~ {.example}
+
 C     Create the netCDF file.
       retval = nf_create(FILE_NAME, NF_NETCDF4, ncid)
       if (retval .ne. nf_noerr) call handle_err(retval)
@@ -5401,14 +5357,14 @@ C     Turn on chunking.
       retval = NF_DEF_VAR_CHUNKING(ncid, varid, NF_CHUNKED, chunks)
       if (retval .ne. nf_noerr) call handle_err(retval)
 
-C     Turn on deflate compression, fletcher32 checksum.
+C     Turn on deflate compression, fletcher32 checm.
       retval = NF_DEF_VAR_deflate(ncid, varid, 0, 1, 4)
       if (retval .ne. nf_noerr) call handle_err(retval)
       retval = NF_DEF_VAR_FLETCHER32(ncid, varid, NF_FLETCHER32)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-6.11 Learn About Deflate Parameters for a Variable: `NF_INQ_VAR_DEFLATE` {.section}
+
+6.11 Learn About Deflate Parameters for a Variable: `NF_INQ_VAR_DEFLATE` 
 ------------------------------------------------------------------------
 
 The function NF\_INQ\_VAR\_DEFLATE returns the deflate settings for a
@@ -5417,15 +5373,15 @@ variable in a netCDF-4 file.
 It is not necessary to know the deflate settings to read the variable.
 (Deflate is completely transparent to readers of the data).
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 NF_INQ_VAR_DEFLATE(INTEGER NCID, INTEGER VARID, INTEGER SHUFFLE, 
                    INTEGER DEFLATE, INTEGER DEFLATE_LEVEL);
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -5445,7 +5401,7 @@ NF_INQ_VAR_DEFLATE(INTEGER NCID, INTEGER VARID, INTEGER SHUFFLE,
 :   NF\_INQ\_VAR\_DEFLATE function will write the deflate\_level here,
     if deflate is in use.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_INQ\_VAR\_DEFLATE returns the value NF\_NOERR if no errors occurred.
@@ -5465,7 +5421,7 @@ Possible return codes include:
  `NF_ENOTVAR`
 :   Can’t find this variable.
 
-Example {.heading}
+Example 
 -------
 
 In this example code from nf\_test/ftst\_vars.F, a file with a variable
@@ -5473,16 +5429,16 @@ using deflate is opened, and the deflate level checked.
 
  
 
-~~~~ {.example}
-C     Is everything set that is supposed to be?
+
+C     Is everything set that ispposed to be?
       retval = nf_inq_var_deflate(ncid, varid, shuffle, deflate, 
      +     deflate_level)
       if (retval .ne. nf_noerr) call handle_err(retval)
       if (shuffle .ne. 0 .or. deflate .ne. 1 .or. 
      +     deflate_level .ne. 4) stop 2
-~~~~
 
-6.12 Learn About Szip Parameters for a Variable: `NF_INQ_VAR_SZIP` {.section}
+
+6.12 Learn About Szip Parameters for a Variable: `NF_INQ_VAR_SZIP` 
 ------------------------------------------------------------------
 
 The function NF\_INQ\_VAR\_SZIP returns the szip settings for a variable
@@ -5491,15 +5447,15 @@ in a netCDF-4 file.
 It is not necessary to know the szip settings to read the variable.
 (Szip is completely transparent to readers of the data).
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 NF_INQ_VAR_SZIP(INTEGER NCID, INTEGER VARID, INTEGER OPTION_MASK, 
                         PIXELS_PER_BLOCK);
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -5513,7 +5469,7 @@ NF_INQ_VAR_SZIP(INTEGER NCID, INTEGER VARID, INTEGER OPTION_MASK,
  `PIXELS_PER_BLOCK`
 :   The number of bits per pixel will be put here.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_INQ\_VAR\_SZIP returns the value NF\_NOERR if no errors occurred.
@@ -5534,23 +5490,23 @@ Possible return codes include:
 :   Can’t find this variable.
 
 
-6.13 Define Checksum Parameters for a Variable: `NF_DEF_VAR_FLETCHER32` {.section}
+6.13 Define Checm Parameters for a Variable: `NF_DEF_VAR_FLETCHER32` 
 -----------------------------------------------------------------------
 
-The function NF\_DEF\_VAR\_FLETCHER32 sets the checksum property for a
+The function NF\_DEF\_VAR\_FLETCHER32 sets the checm property for a
 variable in a netCDF-4 file.
 
 This function may only be called after the variable is defined, but
 before NF\_ENDDEF is called.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 NF_DEF_VAR_FLETCHER32(INTEGER NCID, INTEGER VARID, INTEGER CHECKSUM);
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -5559,10 +5515,10 @@ NF_DEF_VAR_FLETCHER32(INTEGER NCID, INTEGER VARID, INTEGER CHECKSUM);
 :   Variable ID.
 
  `CHECKSUM`
-:   If this is NF\_FLETCHER32, fletcher32 checksums will be turned on
+:   If this is NF\_FLETCHER32, fletcher32 checms will be turned on
     for this variable.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_DEF\_VAR\_FLETCHER32 returns the value NF\_NOERR if no errors
@@ -5583,29 +5539,29 @@ Possible return codes include:
 :   Can’t find this variable.
 
  `NF_ELATEDEF`
-:   This variable has already been the subject of a NF\_ENDDEF call. In
+:   This variable has already been thebject of a NF\_ENDDEF call. In
     netCDF-4 files NF\_ENDDEF will be called automatically for any data
     read or write. Once enddef has been called, it is impossible to set
-    the checksum property for a variable.
+    the checm property for a variable.
 
  `NF_ENOTINDEFINE`
 :   Not in define mode. This is returned for netCDF classic or 64-bit
     offset files, or for netCDF-4 files, when they were been created
-    with NF\_STRICT\_NC3 flag. (see section
+    with NF\_STRICT\_NC3 flag. (see
     [NF\_CREATE](#NF_005fCREATE)).
 
  `NF_EPERM`
 :   Attempt to create object in read-only file.
 
-Example {.heading}
+Example 
 -------
 
 In this example from nf\_test/ftst\_vars.F, the variable in a file has
-the Fletcher32 checksum filter turned on.
+the Fletcher32 checm filter turned on.
 
  
 
-~~~~ {.example}
+
 C     Create the netCDF file.
       retval = nf_create(FILE_NAME, NF_NETCDF4, ncid)
       if (retval .ne. nf_noerr) call handle_err(retval)
@@ -5628,28 +5584,28 @@ C     Turn on chunking.
       retval = NF_DEF_VAR_CHUNKING(ncid, varid, NF_CHUNKED, chunks)
       if (retval .ne. nf_noerr) call handle_err(retval)
 
-C     Turn on deflate compression, fletcher32 checksums.
+C     Turn on deflate compression, fletcher32 checms.
       retval = NF_DEF_VAR_DEFLATE(ncid, varid, 0, 1, 4)
       if (retval .ne. nf_noerr) call handle_err(retval)
       retval = NF_DEF_VAR_FLETCHER32(ncid, varid, NF_FLETCHER32)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
 
-6.14 Learn About Checksum Parameters for a Variable: `NF_INQ_VAR_FLETCHER32` {.section}
+
+6.14 Learn About Checm Parameters for a Variable: `NF_INQ_VAR_FLETCHER32` 
 ----------------------------------------------------------------------------
 
-The function NF\_INQ\_VAR\_FLETCHER32 returns the checksum settings for
+The function NF\_INQ\_VAR\_FLETCHER32 returns the checm settings for
 a variable in a netCDF-4 file.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 NF_INQ_VAR_FLETCHER32(INTEGER NCID, INTEGER VARID, INTEGER CHECKSUM);
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -5662,7 +5618,7 @@ NF_INQ_VAR_FLETCHER32(INTEGER NCID, INTEGER VARID, INTEGER CHECKSUM);
     fletcher32 filter is turned on for this variable, and NF\_NOCHECKSUM
     if it is not.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_INQ\_VAR\_FLETCHER32 returns the value NF\_NOERR if no errors
@@ -5682,22 +5638,22 @@ Possible return codes include:
  `NF_ENOTVAR`
 :   Can’t find this variable.
 
-Example {.heading}
+Example 
 -------
 
-In this example from nf\_test/ftst\_vars.F the checksum filter is
+In this example from nf\_test/ftst\_vars.F the checm filter is
 checked for a file. Since it was turned on for this variable, the
-checksum variable is set to NF\_FLETCHER32.
+checm variable is set to NF\_FLETCHER32.
 
  
 
-~~~~ {.example}
-      retval = nf_inq_var_fletcher32(ncid, varid, checksum)
-      if (retval .ne. nf_noerr) call handle_err(retval)
-      if (checksum .ne. NF_FLETCHER32) stop 2
-~~~~
 
-6.15 Define Endianness of a Variable: `NF_DEF_VAR_ENDIAN` {.section}
+      retval = nf_inq_var_fletcher32(ncid, varid, checm)
+      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (checm .ne. NF_FLETCHER32) stop 2
+
+
+6.15 Define Endianness of a Variable: `NF_DEF_VAR_ENDIAN` 
 ---------------------------------------------------------
 
 The function NF\_DEF\_VAR\_ENDIAN sets the endianness for a variable in
@@ -5713,14 +5669,14 @@ endian machine.
 In some cases a user might wish to change from native endianness to
 either big or little-endianness. This function allows them to do that.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 NF_DEF_VAR_ENDIAN(INTEGER NCID, INTEGER VARID, INTEGER ENDIAN)
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -5733,7 +5689,7 @@ NF_DEF_VAR_ENDIAN(INTEGER NCID, INTEGER VARID, INTEGER ENDIAN)
     default). Set to NF\_ENDIAN\_LITTLE for little endian, or
     NF\_ENDIAN\_BIG for big endian.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_DEF\_VAR\_ENDIAN returns the value NF\_NOERR if no errors occurred.
@@ -5754,7 +5710,7 @@ Possible return codes include:
 :   Can’t find this variable.
 
  `NF_ELATEDEF`
-:   This variable has already been the subject of a NF\_ENDDEF call. In
+:   This variable has already been thebject of a NF\_ENDDEF call. In
     netCDF-4 files NF\_ENDDEF will be called automatically for any data
     read or write. Once enddef has been called, it is impossible to set
     the endianness of a variable.
@@ -5763,12 +5719,12 @@ Possible return codes include:
 :   Not in define mode. This is returned for netCDF classic or 64-bit
     offset files, or for netCDF-4 files, when they were been created
     with NF\_STRICT\_NC3 flag, and the file is not in define mode. (see
-    section [NF\_CREATE](#NF_005fCREATE)).
+    [NF\_CREATE](#NF_005fCREATE)).
 
  `NF_EPERM`
 :   Attempt to create object in read-only file.
 
-Example {.heading}
+Example 
 -------
 
 In this example from nf\_test/ftst\_vars.c, a file is created with one
@@ -5776,7 +5732,7 @@ variable, and its endianness is set to NF\_ENDIAN\_BIG.
 
  
 
-~~~~ {.example}
+
 C     Create the netCDF file.
       retval = nf_create(FILE_NAME, NF_NETCDF4, ncid)
       if (retval .ne. nf_noerr) call handle_err(retval)
@@ -5803,22 +5759,22 @@ C     Set variable to big-endian (default is whatever is native to
 C     writing machine).
       retval = NF_DEF_VAR_endian(ncid, varid, NF_ENDIAN_BIG)
       if (retval .ne. nf_noerr) call handle_err(retval)
-~~~~
 
-6.16 Learn About Endian Parameters for a Variable: `NF_INQ_VAR_ENDIAN` {.section}
+
+6.16 Learn About Endian Parameters for a Variable: `NF_INQ_VAR_ENDIAN` 
 ----------------------------------------------------------------------
 
 The function NF\_INQ\_VAR\_ENDIAN returns the endianness settings for a
 variable in a netCDF-4 file.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 NF_INQ_VAR_ENDIAN(INTEGER NCID, INTEGER VARID, INTEGER ENDIAN)
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -5832,7 +5788,7 @@ NF_INQ_VAR_ENDIAN(INTEGER NCID, INTEGER VARID, INTEGER ENDIAN)
     stored in big-endian format, and NF\_ENDIAN\_NATIVE if the
     endianness is not set, and the variable is not created yet.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_INQ\_VAR\_ENDIAN returns the value NF\_NOERR if no errors occurred.
@@ -5852,36 +5808,36 @@ Possible return codes include:
  `NF_ENOTVAR`
 :   Can’t find this variable.
 
-Example {.heading}
+Example 
 -------
 
 In this example from nf\_test/ftst\_vars.F, the endianness of a variable
-is checked to make sure it is NF\_ENDIAN\_BIG.
+is checked to makere it is NF\_ENDIAN\_BIG.
 
  
 
-~~~~ {.example}
+
       retval = nf_inq_var_endian(ncid, varid, endianness)
       if (retval .ne. nf_noerr) call handle_err(retval)
       if (endianness .ne. NF_ENDIAN_BIG) stop 2
-~~~~
 
 
-6.17 Get a Variable ID from Its Name: NF\_INQ\_VARID {.section}
+
+6.17 Get a Variable ID from Its Name: NF\_INQ\_VARID 
 ----------------------------------------------------
 
 The function NF\_INQ\_VARID returns the ID of a netCDF variable, given
 its name.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_VARID(INTEGER NCID, CHARACTER*(*) NAME, 
                               INTEGER varid)
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -5892,7 +5848,7 @@ INTEGER FUNCTION NF_INQ_VARID(INTEGER NCID, CHARACTER*(*) NAME,
  `varid`
 :   Returned variable ID.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_INQ\_VARID returns the value NF\_NOERR if no errors occurred.
@@ -5903,7 +5859,7 @@ errors include:
     the specified netCDF dataset.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_INQ\_VARID to find out the ID of a variable
@@ -5911,7 +5867,7 @@ named rh in an existing netCDF dataset named foo.nc:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER  STATUS, NCID, RHID
@@ -5921,10 +5877,10 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
    ... 
 STATUS = NF_INQ_VARID (NCID, 'rh', RHID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
 
-6.18 Get Information about a Variable from Its ID: NF\_INQ\_VAR family {.section}
+
+6.18 Get Information about a Variable from Its ID: NF\_INQ\_VAR family 
 ----------------------------------------------------------------------
 
 A family of functions that returns information about a netCDF variable,
@@ -5940,12 +5896,12 @@ information about a variable.
 These other functions include NF\_INQ\_VARNAME, NF\_INQ\_VARTYPE,
 NF\_INQ\_VARNDIMS, NF\_INQ\_VARDIMID, and NF\_INQ\_VARNATTS.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_VAR      (INTEGER NCID, INTEGER VARID,
                                   CHARACTER*(*) name, INTEGER xtype,
                                   INTEGER ndims, INTEGER dimids(*),
@@ -5960,7 +5916,7 @@ INTEGER FUNCTION NF_INQ_VARDIMID (INTEGER NCID, INTEGER VARID,
                                   INTEGER dimids(*))
 INTEGER FUNCTION NF_INQ_VARNATTS (INTEGER NCID, INTEGER VARID, 
                                   INTEGER natts)
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -6001,7 +5957,7 @@ errors include:
 -   The variable ID is invalid for the specified netCDF dataset.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_INQ\_VAR to find out about a variable named
@@ -6009,7 +5965,7 @@ rh in an existing netCDF dataset named foo.nc:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER  STATUS, NCID
@@ -6027,9 +5983,9 @@ STATUS = NF_INQ_VARID (NCID, 'rh', RHID)  ! get ID
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 STATUS = NF_INQ_VAR (NCID, RHID, RHNAME, RHTYPE, RHN, RHDIMS, RHNATT)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-6.19 Write a Single Data Value: NF\_PUT\_VAR1\_ type {.section}
+
+6.19 Write a Single Data Value: NF\_PUT\_VAR1\_ type 
 ----------------------------------------------------
 
 The functions NF\_PUT\_VAR1\_type (for various types) put a single data
@@ -6039,12 +5995,12 @@ index that specifies which value to add or alter, and the data value.
 The value is converted to the external data type of the variable, if
 necessary.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION  NF_PUT_VAR1_TEXT(INTEGER NCID, INTEGER VARID,
                                    INTEGER INDEX(*), CHARACTER CHVAL)
 INTEGER FUNCTION  NF_PUT_VAR1_INT1(INTEGER NCID, INTEGER VARID,
@@ -6059,7 +6015,7 @@ INTEGER FUNCTION  NF_PUT_VAR1_DOUBLE(INTEGER NCID, INTEGER VARID,
                                    INTEGER INDEX(*), DOUBLE    DVAL) 
 INTEGER FUNCTION  NF_PUT_VAR1(INTEGER NCID, INTEGER VARID,
                                    INTEGER INDEX(*), *) 
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -6083,10 +6039,10 @@ INTEGER FUNCTION  NF_PUT_VAR1(INTEGER NCID, INTEGER VARID,
  `DVAL`
 :   Pointer to the data value to be written. If the type of data values
     differs from the netCDF variable type, type conversion will occur.
-    See [(netcdf)Type Conversion](netcdf.html#Type-Conversion) section
+    See [(netcdf)Type Conversion](netcdf.html#Type-Conversion)
     ‘Type Conversion’ in The NetCDF Users Guide.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_PUT\_VAR1\_ type returns the value NF\_NOERR if no errors occurred.
@@ -6103,19 +6059,19 @@ errors include:
 -   The specified netCDF is in define mode rather than data mode.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_PUT\_VAR1\_DOUBLE to set the (4,3,2)
 element of the variable named rh to 0.5 in an existing netCDF dataset
-named foo.nc. For simplicity in this example, we assume that we know
+named foo.nc. For simplicity in this example, we ame that we know
 that rh is dimensioned with lon, lat, and time, so we want to set the
 value of rh that corresponds to the fourth lon value, the third lat
 value, and the second time value:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER  STATUS             ! error status
@@ -6131,9 +6087,9 @@ STATUS = NF_INQ_VARID (NCID, 'rh', RHID)  ! get ID
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 STATUS = NF_PUT_VAR1_DOUBLE (NCID, RHID, RHINDX, 0.5)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-6.20 Write an Entire Variable: NF\_PUT\_VAR\_ type {.section}
+
+6.20 Write an Entire Variable: NF\_PUT\_VAR\_ type 
 --------------------------------------------------
 
 The NF\_PUT\_VAR\_ type family of functions write all the values of a
@@ -6141,7 +6097,7 @@ variable into a netCDF variable of an open netCDF dataset. This is the
 simplest interface to use for writing a value in a scalar variable or
 whenever all the values of a multidimensional variable can all be
 written at once. The values to be written are associated with the netCDF
-variable by assuming that the last dimension of the netCDF variable
+variable by aming that the last dimension of the netCDF variable
 varies fastest in the C interface. The values are converted to the
 external data type of the variable, if necessary.
 
@@ -6151,19 +6107,19 @@ don’t specify how many records are to be written. If you try to write
 all the values of a record variable into a netCDF file that has no
 record data yet (hence has 0 records), nothing will be written.
 Similarly, if you try to write all the values of a record variable from
-an array but there are more records in the file than you assume, more
+an array but there are more records in the file than you ame, more
 in-memory data will be accessed than you expect, which may cause a
-segmentation violation. To avoid such problems, it is better to use the
+segmentation violation. To avoidch problems, it is better to use the
 NF\_PUT\_VARA\_type interfaces for variables that use the NF\_UNLIMITED
-dimension. See section [Write an Array of Values: NF\_PUT\_VARA\_
+dimension. See [Write an Array of Values: NF\_PUT\_VARA\_
 type](#NF_005fPUT_005fVARA_005f-type).
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_PUT_VAR_TEXT  (INTEGER NCID, INTEGER VARID,
                                    CHARACTER*(*) TEXT)
 INTEGER FUNCTION NF_PUT_VAR_INT1  (INTEGER NCID, INTEGER VARID,
@@ -6178,7 +6134,7 @@ INTEGER FUNCTION NF_PUT_VAR_DOUBLE(INTEGER NCID, INTEGER VARID,
                                    DOUBLE DVALS(*))
 INTEGER FUNCTION NF_PUT_VAR       (INTEGER NCID, INTEGER VARID,
                                    VALS(*))
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -6198,12 +6154,12 @@ INTEGER FUNCTION NF_PUT_VAR       (INTEGER NCID, INTEGER VARID,
     data into a numeric variable or numeric data into a text variable.
     For numeric data, if the type of data differs from the netCDF
     variable type, type conversion will occur (see [(netcdf)Type
-    Conversion](netcdf.html#Type-Conversion) section ‘Type Conversion’
+    Conversion](netcdf.html#Type-Conversion) ‘Type Conversion’
     in The NetCDF Users Guide). The order in which the data will be
     written into the specified variable is with the first dimension
     varying fastest (like the ordinary FORTRAN convention).
 
-Errors {.heading}
+Errors 
 ------
 
 Members of the NF\_PUT\_VAR\_ type family return the value NF\_NOERR if
@@ -6219,18 +6175,18 @@ Possible causes of errors include:
     mode.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_PUT\_VAR\_DOUBLE to add or change all the
 values of the variable named rh to 0.5 in an existing netCDF dataset
-named foo.nc. For simplicity in this example, we assume that we know
+named foo.nc. For simplicity in this example, we ame that we know
 that rh is dimensioned with lon and lat, and that there are ten lon
 values and five lat values.
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 PARAMETER (LATS=5, LONS=10) ! dimension lengths
@@ -6249,26 +6205,26 @@ DO 10 ILON = 1, LONS
 10 CONTINUE
 STATUS = NF_PUT_var_DOUBLE (NCID, RHID, RHVALS)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
 
-6.21 Write an Array of Values: NF\_PUT\_VARA\_ type {.section}
+
+6.21 Write an Array of Values: NF\_PUT\_VARA\_ type 
 ---------------------------------------------------
 
 The function NF\_PUT\_VARA\_ type writes values into a netCDF variable
 of an open netCDF dataset. The part of the netCDF variable to write is
 specified by giving a corner and a vector of edge lengths that refer to
-an array section of the netCDF variable. The values to be written are
-associated with the netCDF variable by assuming that the first dimension
+an array of the netCDF variable. The values to be written are
+associated with the netCDF variable by aming that the first dimension
 of the netCDF variable varies fastest in the FORTRAN interface. The
 netCDF dataset must be in data mode.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_PUT_VARA_TEXT(INTEGER NCID, INTEGER VARID,
                                   INTEGER START(*), INTEGER COUNT(*),
                                   CHARACTER*(*) TEXT)
@@ -6290,7 +6246,7 @@ INTEGER FUNCTION NF_PUT_VARA_DOUBLE(INTEGER NCID, INTEGER VARID,
 INTEGER FUNCTION NF_PUT_VARA     (INTEGER NCID, INTEGER VARID,
                                   INTEGER START(*), INTEGER COUNT(*),
                                   VALS(*)) 
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -6333,10 +6289,10 @@ INTEGER FUNCTION NF_PUT_VARA     (INTEGER NCID, INTEGER VARID,
     data into a numeric variable or numeric data into a text variable.
     For numeric data, if the type of data differs from the netCDF
     variable type, type conversion will occur (see [(netcdf)Type
-    Conversion](netcdf.html#Type-Conversion) section ‘Type Conversion’
+    Conversion](netcdf.html#Type-Conversion) ‘Type Conversion’
     in The NetCDF Users Guide).
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_PUT\_VARA\_ type returns the value NF\_NOERR if no errors occurred.
@@ -6358,18 +6314,18 @@ errors include:
     mode.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_PUT\_VARA\_DOUBLE to add or change all the
 values of the variable named rh to 0.5 in an existing netCDF dataset
-named foo.nc. For simplicity in this example, we assume that we know
+named foo.nc. For simplicity in this example, we ame that we know
 that rh is dimensioned with time, lat, and lon, and that there are three
 time values, five lat values, and ten lon values.
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 PARAMETER (NDIMS=3)         ! number of dimensions
@@ -6393,29 +6349,24 @@ DO 10 ILON = 1, LONS
 10 CONTINUE
 STATUS = NF_PUT_VARA_DOUBLE (NCID, RHID, START, COUNT, RHVALS)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-* * * * *
 
-  ---------------------------------------------------------------------------- ------------------------------------------------------------------------ --- ---------------------------------------------------------------------- --------------------------------- -------------------------------------- --- --- --- --- ----------------------------------------- ------------ ------------------------------------ ----------------------------------
-  [[\<](#NF_005fPUT_005fVARA_005f-type "Previous section in reading order")]   [[\>](#NF_005fPUT_005fVARM_005f-type "Next section in reading order")]       [[\<\<](#Variables "Beginning of this chapter or previous chapter")]   [[Up](#Variables "Up section")]   [[\>\>](#Attributes "Next chapter")]                   [[Top](#Top "Cover (top) of document")]   [Contents]   [[Index](#Combined-Index "Index")]   [[?](#SEC_About "About (help)")]
-  ---------------------------------------------------------------------------- ------------------------------------------------------------------------ --- ---------------------------------------------------------------------- --------------------------------- -------------------------------------- --- --- --- --- ----------------------------------------- ------------ ------------------------------------ ----------------------------------
 
-6.22 NF\_PUT\_VARS\_ type {.section}
+6.22 NF\_PUT\_VARS\_ type 
 -------------------------
 
 Each member of the family of functions NF\_PUT\_VARS\_ type writes a
-subsampled (strided) array section of values into a netCDF variable of
-an open netCDF dataset. The subsampled array section is specified by
+subsampled (strided) array of values into a netCDF variable of
+an open netCDF dataset. Thebsampled array is specified by
 giving a corner, a vector of counts, and a stride vector. The netCDF
 dataset must be in data mode.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_PUT_VARS_TEXT  (INTEGER NCID, INTEGER VARID,
                             INTEGER START(*), INTEGER COUNT(*),
                             INTEGER STRIDE(*),CHARACTER*(*) TEXT)
@@ -6437,7 +6388,7 @@ INTEGER FUNCTION NF_PUT_VARS_DOUBLE(INTEGER NCID, INTEGER VARID,
 INTEGER FUNCTION NF_PUT_VARS       (INTEGER NCID, INTEGER VARID,
                             INTEGER START(*), INTEGER COUNT(*),
                             INTEGER STRIDE(*), VALS(*))
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -6487,10 +6438,10 @@ INTEGER FUNCTION NF_PUT_VARS       (INTEGER NCID, INTEGER VARID,
     data into a numeric variable or numeric data into a text variable.
     For numeric data, if the type of data differs from the netCDF
     variable type, type conversion will occur (see [(netcdf)Type
-    Conversion](netcdf.html#Type-Conversion) section ‘Type Conversion’
+    Conversion](netcdf.html#Type-Conversion) ‘Type Conversion’
     in The NetCDF Users Guide).
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_PUT\_VARS\_ type returns the value NF\_NOERR if no errors occurred.
@@ -6505,7 +6456,7 @@ errors include:
 -   The specified netCDF is in define mode rather than data mode.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example of using NF\_PUT\_VARS\_REAL to write – from an
@@ -6515,7 +6466,7 @@ the dimensions):
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 PARAMETER (NDIM=2)   ! rank of netCDF variable
@@ -6524,11 +6475,11 @@ INTEGER STATUS       ! return code
 INTEGER RHID         ! variable ID
 INTEGER START(NDIM)  ! netCDF variable start point
 INTEGER COUNT(NDIM)  ! size of internal array
-INTEGER STRIDE(NDIM) ! netCDF variable subsampling intervals
-REAL RH(3,2)         ! note subsampled sizes for netCDF variable
+INTEGER STRIDE(NDIM) ! netCDF variablebsampling intervals
+REAL RH(3,2)         ! notebsampled sizes for netCDF variable
                      ! dimensions
 DATA START   /1, 1/  ! start at first netCDF variable value
-DATA COUNT   /3, 2/  ! size of internal array: entire (subsampled)
+DATA COUNT   /3, 2/  ! size of internal array: entire bsampled)
                      ! netCDF variable
 DATA STRIDE /2, 2/   ! access every other netCDF element
    ... 
@@ -6541,33 +6492,25 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 STATUS = NF_PUT_VARS_REAL(NCID, RHID, START, COUNT, STRIDE, RH)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
-~~~~
-
-* * * * *
-
-  ---------------------------------------------------------------------------- ------------------------------------------------------------------------ --- ---------------------------------------------------------------------- --------------------------------- -------------------------------------- --- --- --- --- ----------------------------------------- ------------ ------------------------------------ ----------------------------------
-  [[\<](#NF_005fPUT_005fVARS_005f-type "Previous section in reading order")]   [[\>](#NF_005fGET_005fVAR1_005f-type "Next section in reading order")]       [[\<\<](#Variables "Beginning of this chapter or previous chapter")]   [[Up](#Variables "Up section")]   [[\>\>](#Attributes "Next chapter")]                   [[Top](#Top "Cover (top) of document")]   [Contents]   [[Index](#Combined-Index "Index")]   [[?](#SEC_About "About (help)")]
-  ---------------------------------------------------------------------------- ------------------------------------------------------------------------ --- ---------------------------------------------------------------------- --------------------------------- -------------------------------------- --- --- --- --- ----------------------------------------- ------------ ------------------------------------ ----------------------------------
-
-6.23 NF\_PUT\_VARM\_ type {.section}
+6.23 NF\_PUT\_VARM\_ type 
 -------------------------
 
 The NF\_PUT\_VARM\_ type family of functions writes a mapped array
 section of values into a netCDF variable of an open netCDF dataset. The
-mapped array section is specified by giving a corner, a vector of
+mapped array is specified by giving a corner, a vector of
 counts, a stride vector, and an index mapping vector. The index mapping
 vector is a vector of integers that specifies the mapping between the
 dimensions of a netCDF variable and the in-memory structure of the
-internal data array. No assumptions are made about the ordering or
+internal data array. No amptions are made about the ordering or
 length of the dimensions of the data array. The netCDF dataset must be
 in data mode.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_PUT_VARM_TEXT  (INTEGER NCID, INTEGER VARID,
                             INTEGER START(*), INTEGER COUNT(*),
                             INTEGER STRIDE(*), INTEGER IMAP(*),
@@ -6592,7 +6535,7 @@ INTEGER FUNCTION NF_PUT_VARM_DOUBLE(INTEGER NCID, INTEGER VARID,
                             INTEGER START(*), INTEGER COUNT(*),
                             INTEGER STRIDE(*), INTEGER IMAP(*),
                             DOUBLE DVALS(*))
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -6653,10 +6596,10 @@ INTEGER FUNCTION NF_PUT_VARM_DOUBLE(INTEGER NCID, INTEGER VARID,
     into a numeric variable or numeric data into a text variable. For
     numeric data, if the type of data differs from the netCDF variable
     type, type conversion will occur (see [(netcdf)Type
-    Conversion](netcdf.html#Type-Conversion) section ‘Type Conversion’
+    Conversion](netcdf.html#Type-Conversion) ‘Type Conversion’
     in The NetCDF Users Guide).
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_PUT\_VARM\_ type returns the value NF\_NOERR if no errors occurred.
@@ -6672,7 +6615,7 @@ errors include:
 -   The specified netCDF is in define mode rather than data mode.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 The following IMAP vector maps in the trivial way a 2x3x4 netCDF
@@ -6680,7 +6623,7 @@ variable and an internal array of the same shape:
 
  
 
-~~~~ {.example}
+
 REAL A(2,3,4)       ! same shape as netCDF variable
 INTEGER IMAP(3)
 DATA IMAP /1, 2, 6/ ! netCDF dimension       inter-element distance
@@ -6688,10 +6631,10 @@ DATA IMAP /1, 2, 6/ ! netCDF dimension       inter-element distance
                     ! most rapidly varying       1
                     ! intermediate               2 (=IMAP(1)*2)
                     ! most slowly varying        6 (=IMAP(2)*3)
-~~~~
+
 
 Using the IMAP vector above with NF\_PUT\_VARM\_REAL obtains the same
-result as simply using NF\_PUT\_VAR\_REAL.
+rlt as simply using NF\_PUT\_VAR\_REAL.
 
 Here is an example of using NF\_PUT\_VARM\_REAL to write – from a
 transposed, internal array – a netCDF variable named rh which is
@@ -6700,7 +6643,7 @@ order of the dimensions):
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 PARAMETER (NDIM=2)   ! rank of netCDF variable
@@ -6709,7 +6652,7 @@ INTEGER STATUS       ! return code
 INTEGER RHID         ! variable ID
 INTEGER START(NDIM)  ! netCDF variable start point
 INTEGER COUNT(NDIM)  ! size of internal array
-INTEGER STRIDE(NDIM) ! netCDF variable subsampling intervals
+INTEGER STRIDE(NDIM) ! netCDF variablebsampling intervals
 INTEGER IMAP(NDIM)   ! internal array inter-element distances
 REAL RH(6,4)         ! note transposition of netCDF variable dimensions
 DATA START   /1, 1/  ! start at first netCDF variable element
@@ -6726,15 +6669,15 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
    ... 
 STATUS = NF_PUT_VARM_REAL(NCID, RHID, START, COUNT, STRIDE, IMAP, RH)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
+
 
 Here is another example of using NF\_PUT\_VARM\_REAL to write – from a
-transposed, internal array – a subsample of the same netCDF variable, by
+transposed, internal array – absample of the same netCDF variable, by
 writing every other point of the netCDF variable:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 PARAMETER (NDIM=2)   ! rank of netCDF variable
@@ -6743,11 +6686,11 @@ INTEGER STATUS       ! return code
 INTEGER RHID         ! variable ID
 INTEGER START(NDIM)  ! netCDF variable start point
 INTEGER COUNT(NDIM)  ! size of internal array
-INTEGER STRIDE(NDIM) ! netCDF variable subsampling intervals
+INTEGER STRIDE(NDIM) ! netCDF variablebsampling intervals
 INTEGER IMAP(NDIM)   ! internal array inter-element distances
-REAL RH(3,2)         ! note transposition of (subsampled) dimensions
+REAL RH(3,2)         ! note transposition of bsampled) dimensions
 DATA START   /1, 1/  ! start at first netCDF variable value
-DATA COUNT   /2, 3/  ! order of (subsampled) dimensions corresponds
+DATA COUNT   /2, 3/  ! order of bsampled) dimensions corresponds
                      ! to netCDF variable -- not internal array
 DATA STRIDE /2, 2/   ! sample every other netCDF element
 DATA IMAP   /3, 1/   ! would be `1, 2' if not transposing
@@ -6760,9 +6703,9 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
    ... 
 STATUS = NF_PUT_VARM_REAL(NCID, RHID, START, COUNT, STRIDE, IMAP, RH)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-6.24 NF\_GET\_VAR1\_ type {.section}
+
+6.24 NF\_GET\_VAR1\_ type 
 -------------------------
 
 The functions NF\_GET\_VAR1\_ type get a single data value from a
@@ -6772,12 +6715,12 @@ which value to get, and the address of a location into which the data
 value will be read. The value is converted from the external data type
 of the variable, if necessary.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION  NF_GET_VAR1_TEXT(INTEGER NCID, INTEGER VARID,
                                    INTEGER INDEX(*), CHARACTER CHVAL)
 INTEGER FUNCTION  NF_GET_VAR1_INT1(INTEGER NCID, INTEGER VARID,
@@ -6792,7 +6735,7 @@ INTEGER FUNCTION  NF_GET_VAR1_DOUBLE(INTEGER NCID, INTEGER VARID,
                                    INTEGER INDEX(*), DOUBLE    DVAL) 
 INTEGER FUNCTION  NF_GET_VAR1(INTEGER NCID, INTEGER VARID,
                                    INTEGER INDEX(*), VAL) 
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -6818,10 +6761,10 @@ INTEGER FUNCTION  NF_GET_VAR1(INTEGER NCID, INTEGER VARID,
     CHARACTER data from a numeric variable or numeric data from a
     character variable. For numeric data, if the type of data differs
     from the netCDF variable type, type conversion will occur. (see
-    [(netcdf)Type Conversion](netcdf.html#Type-Conversion) section ‘Type
+    [(netcdf)Type Conversion](netcdf.html#Type-Conversion) ‘Type
     Conversion’ in The NetCDF Users Guide).
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_GET\_VAR1\_ type returns the value NF\_NOERR if no errors occurred.
@@ -6838,19 +6781,19 @@ errors include:
 -   The specified netCDF is in define mode rather than data mode.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_GET\_VAR1\_DOUBLE to get the (4,3,2)
 element of the variable named rh in an existing netCDF dataset named
-foo.nc. For simplicity in this example, we assume that we know that rh
+foo.nc. For simplicity in this example, we ame that we know that rh
 is dimensioned with lon, lat, and time, so we want to get the value of
 rh that corresponds to the fourth lon value, the third lat value, and
 the second time value:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER STATUS, NCID
@@ -6866,15 +6809,9 @@ STATUS = NF_INQ_VARID (NCID, 'rh', RHID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 STATUS = NF_GET_VAR1_DOUBLE (NCID, RHID, RHINDX, RHVAL)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-* * * * *
 
-  ---------------------------------------------------------------------------- ------------------------------------------------------------------------ --- ---------------------------------------------------------------------- --------------------------------- -------------------------------------- --- --- --- --- ----------------------------------------- ------------ ------------------------------------ ----------------------------------
-  [[\<](#NF_005fGET_005fVAR1_005f-type "Previous section in reading order")]   [[\>](#NF_005fGET_005fVARA_005f-type "Next section in reading order")]       [[\<\<](#Variables "Beginning of this chapter or previous chapter")]   [[Up](#Variables "Up section")]   [[\>\>](#Attributes "Next chapter")]                   [[Top](#Top "Cover (top) of document")]   [Contents]   [[Index](#Combined-Index "Index")]   [[?](#SEC_About "About (help)")]
-  ---------------------------------------------------------------------------- ------------------------------------------------------------------------ --- ---------------------------------------------------------------------- --------------------------------- -------------------------------------- --- --- --- --- ----------------------------------------- ------------ ------------------------------------ ----------------------------------
-
-6.25 NF\_GET\_VAR\_ type {.section}
+6.25 NF\_GET\_VAR\_ type 
 ------------------------
 
 The members of the NF\_GET\_VAR\_ type family of functions read all the
@@ -6888,18 +6825,18 @@ Take care when using the simplest forms of this interface with record
 variables (variables that use the NF\_UNLIMITED dimension) when you
 don’t specify how many records are to be read. If you try to read all
 the values of a record variable into an array but there are more records
-in the file than you assume, more data will be read than you expect,
-which may cause a segmentation violation. To avoid such problems, it is
+in the file than you ame, more data will be read than you expect,
+which may cause a segmentation violation. To avoidch problems, it is
 better to use the NF\_GET\_VARA\_type interfaces for variables that use
-the NF\_UNLIMITED dimension. See section [NF\_GET\_VARA\_
+the NF\_UNLIMITED dimension. See [NF\_GET\_VARA\_
 type](#NF_005fGET_005fVARA_005f-type).
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_GET_VAR_TEXT  (INTEGER NCID, INTEGER VARID,
                                    CHARACTER*(*) text)
 INTEGER FUNCTION NF_GET_VAR_INT1  (INTEGER NCID, INTEGER VARID,
@@ -6914,7 +6851,7 @@ INTEGER FUNCTION NF_GET_VAR_DOUBLE(INTEGER NCID, INTEGER VARID,
                                    DOUBLE dvals(*))
 INTEGER FUNCTION NF_GET_VAR       (INTEGER NCID, INTEGER VARID,
                                    vals(*))
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -6934,10 +6871,10 @@ INTEGER FUNCTION NF_GET_VAR       (INTEGER NCID, INTEGER VARID,
     from a numeric variable or numeric data from a text variable. For
     numeric data, if the type of data differs from the netCDF variable
     type, type conversion will occur (see [(netcdf)Type
-    Conversion](netcdf.html#Type-Conversion) section ‘Type Conversion’
+    Conversion](netcdf.html#Type-Conversion) ‘Type Conversion’
     in The NetCDF Users Guide).
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_GET\_VAR\_ type returns the value NF\_NOERR if no errors occurred.
@@ -6950,18 +6887,18 @@ errors include:
 -   The specified netCDF is in define mode rather than data mode.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_GET\_VAR\_DOUBLE to read all the values of
 the variable named rh from an existing netCDF dataset named foo.nc. For
-simplicity in this example, we assume that we know that rh is
+simplicity in this example, we ame that we know that rh is
 dimensioned with lon and lat, and that there are ten lon values and five
 lat values.
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 PARAMETER (LATS=5, LONS=10) ! dimension lengths
@@ -6976,15 +6913,9 @@ STATUS = NF_INQ_VARID (NCID, 'rh', RHID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 STATUS = NF_GET_VAR_DOUBLE (NCID, RHID, RHVALS)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-* * * * *
 
-  --------------------------------------------------------------------------- ------------------------------------------------------------------------ --- ---------------------------------------------------------------------- --------------------------------- -------------------------------------- --- --- --- --- ----------------------------------------- ------------ ------------------------------------ ----------------------------------
-  [[\<](#NF_005fGET_005fVAR_005f-type "Previous section in reading order")]   [[\>](#NF_005fGET_005fVARS_005f-type "Next section in reading order")]       [[\<\<](#Variables "Beginning of this chapter or previous chapter")]   [[Up](#Variables "Up section")]   [[\>\>](#Attributes "Next chapter")]                   [[Top](#Top "Cover (top) of document")]   [Contents]   [[Index](#Combined-Index "Index")]   [[?](#SEC_About "About (help)")]
-  --------------------------------------------------------------------------- ------------------------------------------------------------------------ --- ---------------------------------------------------------------------- --------------------------------- -------------------------------------- --- --- --- --- ----------------------------------------- ------------ ------------------------------------ ----------------------------------
-
-6.26 NF\_GET\_VARA\_ type {.section}
+6.26 NF\_GET\_VARA\_ type 
 -------------------------
 
 The members of the NF\_GET\_VARA\_ type family of functions read an
@@ -6993,12 +6924,12 @@ array is specified by giving a corner and a vector of edge lengths. The
 values are read into consecutive locations with the first dimension
 varying fastest. The netCDF dataset must be in data mode.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_GET_VARA_TEXT(INTEGER NCID, INTEGER VARID,
                                   INTEGER START(*), INTEGER COUNT(*),
                                   CHARACTER*(*) text)
@@ -7017,7 +6948,7 @@ INTEGER FUNCTION NF_GET_VARA_REAL(INTEGER NCID, INTEGER VARID,
 INTEGER FUNCTION NF_GET_VARA_DOUBLE(INTEGER NCID, INTEGER VARID,
                                   INTEGER START(*), INTEGER COUNT(*),
                                   DOUBLE dvals(*))
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -7059,10 +6990,10 @@ INTEGER FUNCTION NF_GET_VARA_DOUBLE(INTEGER NCID, INTEGER VARID,
     from a numeric variable or numeric data from a text variable. For
     numeric data, if the type of data differs from the netCDF variable
     type, type conversion will occur (see [(netcdf)Type
-    Conversion](netcdf.html#Type-Conversion) section ‘Type Conversion’
+    Conversion](netcdf.html#Type-Conversion) ‘Type Conversion’
     in The NetCDF Users Guide).
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_GET\_VARA\_ type returns the value NF\_NOERR if no errors occurred.
@@ -7083,18 +7014,18 @@ errors include:
 -   The specified netCDF is in define mode rather than data mode.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_GET\_VARA\_DOUBLE to read all the values of
 the variable named rh from an existing netCDF dataset named foo.nc. For
-simplicity in this example, we assume that we know that rh is
+simplicity in this example, we ame that we know that rh is
 dimensioned with lon, lat, and time, and that there are ten lon values,
 five lat values, and three time values.
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 PARAMETER (NDIMS=3)                  ! number of dimensions
@@ -7113,30 +7044,24 @@ STATUS = NF_INQ_VARID (NCID, 'rh', RHID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 STATUS = NF_GET_VARA_DOUBLE (NCID, RHID, START, COUNT, RHVALS)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-* * * * *
 
-  ---------------------------------------------------------------------------- ------------------------------------------------------------------------ --- ---------------------------------------------------------------------- --------------------------------- -------------------------------------- --- --- --- --- ----------------------------------------- ------------ ------------------------------------ ----------------------------------
-  [[\<](#NF_005fGET_005fVARA_005f-type "Previous section in reading order")]   [[\>](#NF_005fGET_005fVARM_005f-type "Next section in reading order")]       [[\<\<](#Variables "Beginning of this chapter or previous chapter")]   [[Up](#Variables "Up section")]   [[\>\>](#Attributes "Next chapter")]                   [[Top](#Top "Cover (top) of document")]   [Contents]   [[Index](#Combined-Index "Index")]   [[?](#SEC_About "About (help)")]
-  ---------------------------------------------------------------------------- ------------------------------------------------------------------------ --- ---------------------------------------------------------------------- --------------------------------- -------------------------------------- --- --- --- --- ----------------------------------------- ------------ ------------------------------------ ----------------------------------
-
-6.27 NF\_GET\_VARS\_ type {.section}
+6.27 NF\_GET\_VARS\_ type 
 -------------------------
 
-The NF\_GET\_VARS\_ type family of functions read a subsampled (strided)
-array section of values from a netCDF variable of an open netCDF
-dataset. The subsampled array section is specified by giving a corner, a
+The NF\_GET\_VARS\_ type family of functions read absampled (strided)
+array of values from a netCDF variable of an open netCDF
+dataset. Thebsampled array is specified by giving a corner, a
 vector of edge lengths, and a stride vector. The values are read with
 the first dimension of the netCDF variable varying fastest. The netCDF
 dataset must be in data mode.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_GET_VARS_TEXT  (INTEGER NCID, INTEGER VARID,
                             INTEGER START(*), INTEGER COUNT(*),
                             INTEGER STRIDE(*),CHARACTER*(*) text)
@@ -7155,7 +7080,7 @@ INTEGER FUNCTION NF_GET_VARS_REAL  (INTEGER NCID, INTEGER VARID,
 INTEGER FUNCTION NF_GET_VARS_DOUBLE(INTEGER NCID, INTEGER VARID,
                             INTEGER START(*), INTEGER COUNT(*),
                             INTEGER STRIDE(*), DOUBLE dvals(*))
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -7203,10 +7128,10 @@ INTEGER FUNCTION NF_GET_VARS_DOUBLE(INTEGER NCID, INTEGER VARID,
     from a numeric variable or numeric data from a text variable. For
     numeric data, if the type of data differs from the netCDF variable
     type, type conversion will occur (see [(netcdf)Type
-    Conversion](netcdf.html#Type-Conversion) section ‘Type Conversion’
+    Conversion](netcdf.html#Type-Conversion) ‘Type Conversion’
     in The NetCDF Users Guide).
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_GET\_VARS\_ type returns the value NF\_NOERR if no errors occurred.
@@ -7221,19 +7146,19 @@ errors include:
 -   The specified netCDF is in define mode rather than data mode.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_GET\_VARS\_DOUBLE to read every other value
 in each dimension of the variable named rh from an existing netCDF
 dataset named foo.nc. Values are assigned, using the same dimensional
 strides, to a 2-parameter array. For simplicity in this example, we
-assume that we know that rh is dimensioned with lon, lat, and time, and
+ame that we know that rh is dimensioned with lon, lat, and time, and
 that there are ten lon values, five lat values, and three time values.
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 PARAMETER (NDIMS=3)                  ! number of dimensions
@@ -7253,33 +7178,27 @@ STATUS = NF_INQ_VARID (NCID, 'rh', RHID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 STATUS = NF_GET_VARS_DOUBLE(NCID,RHID,START,COUNT,STRIDE,DATA(1,1,1))
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-* * * * *
 
-  ---------------------------------------------------------------------------- -------------------------------------------------------------------------------------- --- ---------------------------------------------------------------------- --------------------------------- -------------------------------------- --- --- --- --- ----------------------------------------- ------------ ------------------------------------ ----------------------------------
-  [[\<](#NF_005fGET_005fVARS_005f-type "Previous section in reading order")]   [[\>](#Reading-and-Writing-Character-String-Values "Next section in reading order")]       [[\<\<](#Variables "Beginning of this chapter or previous chapter")]   [[Up](#Variables "Up section")]   [[\>\>](#Attributes "Next chapter")]                   [[Top](#Top "Cover (top) of document")]   [Contents]   [[Index](#Combined-Index "Index")]   [[?](#SEC_About "About (help)")]
-  ---------------------------------------------------------------------------- -------------------------------------------------------------------------------------- --- ---------------------------------------------------------------------- --------------------------------- -------------------------------------- --- --- --- --- ----------------------------------------- ------------ ------------------------------------ ----------------------------------
-
-6.28 NF\_GET\_VARM\_ type {.section}
+6.28 NF\_GET\_VARM\_ type 
 -------------------------
 
 The NF\_GET\_VARM\_ type family of functions reads a mapped array
 section of values from a netCDF variable of an open netCDF dataset. The
-mapped array section is specified by giving a corner, a vector of edge
+mapped array is specified by giving a corner, a vector of edge
 lengths, a stride vector, and an index mapping vector. The index mapping
 vector is a vector of integers that specifies the mapping between the
 dimensions of a netCDF variable and the in-memory structure of the
-internal data array. No assumptions are made about the ordering or
+internal data array. No amptions are made about the ordering or
 length of the dimensions of the data array. The netCDF dataset must be
 in data mode.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_GET_VARM_TEXT  (INTEGER NCID, INTEGER VARID,
                             INTEGER START(*), INTEGER COUNT(*),
                             INTEGER STRIDE(*), INTEGER IMAP(*),
@@ -7304,7 +7223,7 @@ INTEGER FUNCTION NF_GET_VARM_DOUBLE(INTEGER NCID, INTEGER VARID,
                             INTEGER START(*), INTEGER COUNT(*),
                             INTEGER STRIDE(*), INTEGER IMAP(*),
                             DOUBLE dvals(*))
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -7366,10 +7285,10 @@ INTEGER FUNCTION NF_GET_VARM_DOUBLE(INTEGER NCID, INTEGER VARID,
     from a numeric variable or numeric data from a text variable. For
     numeric data, if the type of data differs from the netCDF variable
     type, type conversion will occur (see [(netcdf)Type
-    Conversion](netcdf.html#Type-Conversion) section ‘Type Conversion’
+    Conversion](netcdf.html#Type-Conversion) ‘Type Conversion’
     in The NetCDF Users Guide).
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_GET\_VARM\_ type returns the value NF\_NOERR if no errors occurred.
@@ -7385,7 +7304,7 @@ errors include:
 -   The specified netCDF is in define mode rather than data mode.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 The following IMAP vector maps in the trivial way a 2x3x4 netCDF
@@ -7393,7 +7312,7 @@ variable and an internal array of the same shape:
 
  
 
-~~~~ {.example}
+
 REAL A(2,3,4)       ! same shape as netCDF variable
 INTEGER IMAP(3)
 DATA IMAP /1, 2, 6/ ! netCDF dimension       inter-element distance
@@ -7401,10 +7320,10 @@ DATA IMAP /1, 2, 6/ ! netCDF dimension       inter-element distance
                     ! most rapidly varying       1
                     ! intermediate               2 (=IMAP(1)*2)
                     ! most slowly varying        6 (=IMAP(2)*3)
-~~~~
+
 
 Using the IMAP vector above with NF\_GET\_VARM\_REAL obtains the same
-result as simply using NF\_GET\_VAR\_REAL.
+rlt as simply using NF\_GET\_VAR\_REAL.
 
 Here is an example of using NF\_GET\_VARM\_REAL to transpose a netCDF
 variable named rh which is described by the FORTRAN declaration REAL
@@ -7412,7 +7331,7 @@ RH(4,6) (note the size and order of the dimensions):
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 PARAMETER (NDIM=2)   ! rank of netCDF variable
@@ -7421,7 +7340,7 @@ INTEGER STATUS       ! return code
 INTEGER RHID         ! variable ID
 INTEGER START(NDIM)  ! netCDF variable start point
 INTEGER COUNT(NDIM)  ! size of internal array
-INTEGER STRIDE(NDIM) ! netCDF variable subsampling intervals
+INTEGER STRIDE(NDIM) ! netCDF variablebsampling intervals
 INTEGER IMAP(NDIM)   ! internal array inter-element distances
 REAL    RH(6,4)      ! note transposition of netCDF variable dimensions
 DATA START   /1, 1/  ! start at first netCDF variable element
@@ -7438,15 +7357,15 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
    ... 
 STATUS = NF_GET_VARM_REAL(NCID, RHID, START, COUNT, STRIDE, IMAP, RH)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
+
 
 Here is another example of using NF\_GET\_VARM\_REAL to simultaneously
-transpose and subsample the same netCDF variable, by accessing every
+transpose andbsample the same netCDF variable, by accessing every
 other point of the netCDF variable:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 PARAMETER (NDIM=2)   ! rank of netCDF variable
@@ -7455,11 +7374,11 @@ INTEGER STATUS       ! return code
 INTEGER RHID         ! variable ID
 INTEGER START(NDIM)  ! netCDF variable start point
 INTEGER COUNT(NDIM)  ! size of internal array
-INTEGER STRIDE(NDIM) ! netCDF variable subsampling intervals
+INTEGER STRIDE(NDIM) ! netCDF variablebsampling intervals
 INTEGER IMAP(NDIM)   ! internal array inter-element distances
-REAL    RH(3,2)      ! note transposition of (subsampled) dimensions
+REAL    RH(3,2)      ! note transposition of bsampled) dimensions
 DATA START   /1, 1/  ! start at first netCDF variable value
-DATA COUNT   /2, 3/  ! order of (subsampled) dimensions corresponds
+DATA COUNT   /2, 3/  ! order of bsampled) dimensions corresponds
                      ! to netCDF variable -- not internal array
 DATA STRIDE /2, 2/   ! sample every other netCDF element
 DATA IMAP   /3, 1/   ! would be `1, 2' if not transposing
@@ -7472,26 +7391,20 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
    ... 
 STATUS = NF_GET_VARM_REAL(NCID, RHID, START, COUNT, STRIDE, IMAP, RH)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-* * * * *
 
-  ---------------------------------------------------------------------------- ------------------------------------------------------ --- ---------------------------------------------------------------------- --------------------------------- -------------------------------------- --- --- --- --- ----------------------------------------- ------------ ------------------------------------ ----------------------------------
-  [[\<](#NF_005fGET_005fVARM_005f-type "Previous section in reading order")]   [[\>](#Fill-Values "Next section in reading order")]       [[\<\<](#Variables "Beginning of this chapter or previous chapter")]   [[Up](#Variables "Up section")]   [[\>\>](#Attributes "Next chapter")]                   [[Top](#Top "Cover (top) of document")]   [Contents]   [[Index](#Combined-Index "Index")]   [[?](#SEC_About "About (help)")]
-  ---------------------------------------------------------------------------- ------------------------------------------------------ --- ---------------------------------------------------------------------- --------------------------------- -------------------------------------- --- --- --- --- ----------------------------------------- ------------ ------------------------------------ ----------------------------------
-
-6.29 Reading and Writing Character String Values {.section}
+6.29 Reading and Writing Character String Values 
 ------------------------------------------------
 
 Character strings are not a primitive netCDF external data type, in part
-because FORTRAN does not support the abstraction of variable-length
+because FORTRAN does notpport the abstraction of variable-length
 character strings (the FORTRAN LEN function returns the static length of
-a character string, not its dynamic length). As a result, a character
+a character string, not its dynamic length). As a rlt, a character
 string cannot be written or read as a single object in the netCDF
 interface. Instead, a character string must be treated as an array of
 characters, and array access must be used to read and write character
 strings as variable data in netCDF datasets. Furthermore,
-variable-length strings are not supported by the netCDF interface except
+variable-length strings are notpported by the netCDF interface except
 by convention; for example, you may treat a zero byte as terminating a
 character string, but you must explicitly specify the length of strings
 to be read from and written to netCDF variables.
@@ -7537,13 +7450,13 @@ edge-length vector corresponding to the character-position dimension.
 
 Here is an example that defines a record variable, tx, for character
 strings and stores a character-string value into the third record using
-NF\_PUT\_VARA\_TEXT. In this example, we assume the string variable and
+NF\_PUT\_VARA\_TEXT. In this example, we ame the string variable and
 data are to be added to an existing netCDF dataset named foo.nc that
 already has an unlimited record dimension time.
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER   TDIMS, TXLEN
@@ -7585,15 +7498,9 @@ TCOUNT(1) = TXLEN  ! number of chars to write
 TCOUNT(2) = 1      ! only write one record
 STATUS = NF_PUT_VARA_TEXT (NCID, TXID, TSTART, TCOUNT, TXVAL)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-* * * * *
 
-  ------------------------------------------------------------------------------------------ ---------------------------------------------------------------- --- ---------------------------------------------------------------------- --------------------------------- -------------------------------------- --- --- --- --- ----------------------------------------- ------------ ------------------------------------ ----------------------------------
-  [[\<](#Reading-and-Writing-Character-String-Values "Previous section in reading order")]   [[\>](#NF_005fRENAME_005fVAR "Next section in reading order")]       [[\<\<](#Variables "Beginning of this chapter or previous chapter")]   [[Up](#Variables "Up section")]   [[\>\>](#Attributes "Next chapter")]                   [[Top](#Top "Cover (top) of document")]   [Contents]   [[Index](#Combined-Index "Index")]   [[?](#SEC_About "About (help)")]
-  ------------------------------------------------------------------------------------------ ---------------------------------------------------------------- --- ---------------------------------------------------------------------- --------------------------------- -------------------------------------- --- --- --- --- ----------------------------------------- ------------ ------------------------------------ ----------------------------------
-
-6.30 Fill Values {.section}
+6.30 Fill Values 
 ----------------
 
 What happens when you try to read a value that was never written in an
@@ -7608,7 +7515,7 @@ returns a special fill value used to fill in any undefined values when a
 netCDF variable is first written.
 
 You may ignore fill values and use the entire range of a netCDF external
-data type, but in this case you should make sure you write all data
+data type, but in this case you should makere you write all data
 values before reading them. If you know you will be writing all the data
 before reading it, you can specify that no prefilling of variables with
 fill values will occur by calling NF\_SET\_FILL before writing. This may
@@ -7626,17 +7533,17 @@ The default fill value for characters is the zero byte, a useful value
 for detecting the end of variable-length C character strings. If you
 need a fill value for a byte variable, it is recommended that you
 explicitly define an appropriate \_FillValue attribute, as generic
-utilities such as ncdump will not assume a default fill value for byte
+utilitiesch as ncdump will not ame a default fill value for byte
 variables.
 
 Type conversion for fill values is identical to type conversion for
 other values: attempting to convert a value from one type to another
-type that can’t represent the value results in a range error. Such
-errors may occur on writing or reading values from a larger type (such
-as double) to a smaller type (such as float), if the fill value for the
+type that can’t represent the value rlts in a range error. Such
+errors may occur on writing or reading values from a larger type ch
+as double) to a smaller type ch as float), if the fill value for the
 larger type cannot be represented in the smaller type.
 
-6.31 NF\_RENAME\_VAR {.section}
+6.31 NF\_RENAME\_VAR 
 --------------------
 
 The function NF\_RENAME\_VAR changes the name of a netCDF variable in an
@@ -7644,15 +7551,15 @@ open netCDF dataset. If the new name is longer than the old name, the
 netCDF dataset must be in define mode. You cannot rename a variable to
 have the name of any existing variable.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_RENAME_VAR (INTEGER NCID, INTEGER VARID,
                                 CHARACTER*(*) NEWNAM)
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -7663,7 +7570,7 @@ INTEGER FUNCTION NF_RENAME_VAR (INTEGER NCID, INTEGER VARID,
  `NAME`
 :   New name for the specified variable.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_RENAME\_VAR returns the value NF\_NOERR if no errors occurred.
@@ -7674,7 +7581,7 @@ errors include:
 -   The variable ID is invalid for the specified netCDF dataset.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_RENAME\_VAR to rename the variable rh to
@@ -7682,7 +7589,7 @@ rel\_hum in an existing netCDF dataset named foo.nc:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER  STATUS, NCID
@@ -7699,10 +7606,10 @@ STATUS = NF_RENAME_VAR (NCID, RHID, 'rel_hum')
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 STATUS = NF_ENDDEF (NCID) ! leave definition mode
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
 
-6.32 Change between Collective and Independent Parallel Access: NF\_VAR\_PAR\_ACCESS {.section}
+
+6.32 Change between Collective and Independent Parallel Access: NF\_VAR\_PAR\_ACCESS 
 ------------------------------------------------------------------------------------
 
 The function NF\_VAR\_PAR\_ACCESS changes whether read/write operations
@@ -7725,14 +7632,14 @@ a variable to collective lasts only as long as that file is open.
 The variable can be changed from collective to independent, and back, as
 often as desired.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER NF_VAR_PAR_ACCESS(INTEGER NCID, INTEGER VARID, INTEGER ACCESS);
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN\_PAR (see
@@ -7746,7 +7653,7 @@ INTEGER NF_VAR_PAR_ACCESS(INTEGER NCID, INTEGER VARID, INTEGER ACCESS);
 :   NF\_INDEPENDENT to set this variable to independent operations.
     NF\_COLLECTIVE to set it to collective operations.
 
-Return Values {.heading}
+Return Values 
 -------------
 
  `NF_NOERR`
@@ -7761,7 +7668,7 @@ Return Values {.heading}
  `NF_NOPAR`
 :   File not opened for parallel access.
 
-Example {.heading}
+Example 
 -------
 
 This example comes from test program nf\_test/ftst\_parallel.F. For this
@@ -7771,19 +7678,19 @@ netcdf.
 
  
 
-~~~~ {.example}
+
       retval = nf_var_par_access(ncid, varid, nf_collective)
       if (retval .ne. nf_noerr) stop 2
-~~~~
 
 
-7. Attributes {.chapter}
+
+7. Attributes 
 =============
 
-7.1 Attributes Introduction {.section}
+7.1 Attributes Introduction 
 ---------------------------
 
-Attributes may be associated with each netCDF variable to specify such
+Attributes may be associated with each netCDF variable to specifych
 properties as units, special values, maximum and minimum valid values,
 scaling factors, and offsets. Attributes for a netCDF dataset are
 defined when the dataset is first created, while the netCDF dataset is
@@ -7803,16 +7710,16 @@ space than the attribute as originally defined.
 
 It is also possible to have attributes that are not associated with any
 variable. These are called global attributes and are identified by using
-NF\_GLOBAL as a variable pseudo-ID. Global attributes are usually
+NF\_GLOBAL as a variable pseudo-ID. Global attributes are ally
 related to the netCDF dataset as a whole and may be used for purposes
 such as providing a title or processing history for a netCDF dataset.
 
 Attributes are much more useful when they follow established community
 conventions. See [(netcdf)Attribute
-Conventions](netcdf.html#Attribute-Conventions) section ‘Attribute
+Conventions](netcdf.html#Attribute-Conventions) ‘Attribute
 Conventions’ in The NetCDF Users Guide.
 
-Operations supported on attributes are:
+Operationspported on attributes are:
 
 -   Create an attribute, given its variable ID, name, data type, length,
     and value.
@@ -7823,7 +7730,7 @@ Operations supported on attributes are:
 -   Rename an attribute.
 -   Delete an attribute.
 
-7.2 NF\_PUT\_ATT\_ type {.section}
+7.2 NF\_PUT\_ATT\_ type 
 -----------------------
 
 The function NF\_PUT\_ATT\_ type adds or changes a variable attribute or
@@ -7831,7 +7738,7 @@ global attribute of an open netCDF dataset. If this attribute is new, or
 if the space required to store the attribute is greater than before, the
 netCDF dataset must be in define mode.
 
-Usage {.heading}
+Usage 
 -----
 
 Although it’s possible to create attributes of all types, text and
@@ -7839,7 +7746,7 @@ double attributes are adequate for most purposes.
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION  NF_PUT_ATT_TEXT  (INTEGER NCID, INTEGER VARID,
                                     CHARACTER*(*) NAME, INTEGER LEN,
                                     CHARACTER*(*) TEXT)
@@ -7861,7 +7768,7 @@ INTEGER FUNCTION  NF_PUT_ATT_DOUBLE(INTEGER NCID, INTEGER VARID,
 INTEGER FUNCTION  NF_PUT_ATT       (INTEGER NCID, INTEGER VARID,
                                     CHARACTER*(*) NAME, INTEGER XTYPE,
                                     LEN, * VALS(*))
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -7871,11 +7778,11 @@ INTEGER FUNCTION  NF_PUT_ATT       (INTEGER NCID, INTEGER VARID,
     or NF\_GLOBAL for a global attribute.
 
  `NAME`
-:   Attribute name. Attribute name conventions are assumed by some
+:   Attribute name. Attribute name conventions are amed by some
     netCDF generic applications, e.g., ‘units’ as the name for a string
     attribute that gives the units for a netCDF variable. See
     [(netcdf)Attribute Conventions](netcdf.html#Attribute-Conventions)
-    section ‘Attribute Conventions’ in The NetCDF Users Guide.
+    ‘Attribute Conventions’ in The NetCDF Users Guide.
 
  `XTYPE`
 :   One of the set of predefined netCDF external data types. The type of
@@ -7900,10 +7807,10 @@ INTEGER FUNCTION  NF_PUT_ATT       (INTEGER NCID, INTEGER VARID,
     into a numeric attribute or numeric data into a text attribute. For
     numeric data, if the type of data differs from the attribute type,
     type conversion will occur See [(netcdf)Type
-    Conversion](netcdf.html#Type-Conversion) section ‘Type Conversion’
+    Conversion](netcdf.html#Type-Conversion) ‘Type Conversion’
     in The NetCDF Users Guide.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_PUT\_ATT\_ type returns the value NF\_NOERR if no errors occurred.
@@ -7920,7 +7827,7 @@ errors include:
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 -   The number of attributes for this variable exceeds NF\_MAX\_ATTRS.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_PUT\_ATT\_DOUBLE to add a variable
@@ -7929,7 +7836,7 @@ attribute named title to an existing netCDF dataset named foo.nc:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER STATUS, NCID
@@ -7954,9 +7861,9 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
    ... 
 STATUS = NF_ENDDEF (NCID)    ! leave define mode
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-7.3 NF\_INQ\_ATT Family {.section}
+
+7.3 NF\_INQ\_ATT Family 
 -----------------------
 
 This family of functions returns information about a netCDF attribute.
@@ -7978,12 +7885,12 @@ The function NF\_INQ\_ATT returns the attribute’s type and length. The
 other functions each return just one item of information about an
 attribute.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_INQ_ATT    (INTEGER NCID, INTEGER VARID,
                                 CHARACTER*(*) NAME, INTEGER xtype,
                                 INTEGER len)
@@ -7995,7 +7902,7 @@ INTEGER FUNCTION NF_INQ_ATTNAME(INTEGER NCID, INTEGER VARID,
                                 INTEGER ATTNUM, CHARACTER*(*) name)
 INTEGER FUNCTION NF_INQ_ATTID  (INTEGER NCID, INTEGER VARID,
                                 CHARACTER*(*) NAME, INTEGER attnum)
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -8029,7 +7936,7 @@ INTEGER FUNCTION NF_INQ_ATTID  (INTEGER NCID, INTEGER VARID,
     very useful, because accessing information about an attribute
     requires its name.)
 
-Errors {.heading}
+Errors 
 ------
 
 Each function returns the value NF\_NOERR if no errors occurred.
@@ -8043,7 +7950,7 @@ errors include:
     more than the number of attributes defined for the specified
     variable.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_INQ\_ATT to find out the type and length of
@@ -8053,7 +7960,7 @@ foo.nc:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER STATUS, NCID
@@ -8070,20 +7977,20 @@ STATUS = NF_INQ_ATTLEN (NCID, RHID, 'valid_range', VRLEN)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 STATUS = NF_INQ_ATTLEN (NCID, NF_GLOBAL, 'title', TLEN)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-7.4 NF\_GET\_ATT\_ type {.section}
+
+7.4 NF\_GET\_ATT\_ type 
 -----------------------
 
 Members of the NF\_GET\_ATT\_ type family of functions get the value(s)
 of a netCDF attribute, given its variable ID and name.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_GET_ATT_TEXT   (INTEGER NCID, INTEGER VARID,
                                     CHARACTER*(*) NAME,
                                     CHARACTER*(*) text)
@@ -8104,7 +8011,7 @@ INTEGER FUNCTION NF_GET_ATT_DOUBLE (INTEGER NCID, INTEGER VARID,
                                     DOUBLE dvals(*))
 INTEGER FUNCTION NF_GET_ATT        (INTEGER NCID, INTEGER VARID,
                                     CHARACTER*(*) NAME, * vals(*))
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
@@ -8130,10 +8037,10 @@ INTEGER FUNCTION NF_GET_ATT        (INTEGER NCID, INTEGER VARID,
     character data from a numeric variable or numeric data from a text
     variable. For numeric data, if the type of data differs from the
     netCDF variable type, type conversion will occur. See [(netcdf)Type
-    Conversion](netcdf.html#Type-Conversion) section ‘Type Conversion’
+    Conversion](netcdf.html#Type-Conversion) ‘Type Conversion’
     in The The NetCDF Users Guide.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_GET\_ATT\_ type returns the value NF\_NOERR if no errors occurred.
@@ -8146,20 +8053,20 @@ errors include:
 -   One or more of the attribute values are out of the range of values
     representable by the desired type.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_GET\_ATT\_DOUBLE to determine the values of
 a variable attribute named valid\_range for a netCDF variable named rh
 and a global attribute named title in an existing netCDF dataset named
-foo.nc. In this example, it is assumed that we don’t know how many
+foo.nc. In this example, it is amed that we don’t know how many
 values will be returned, but that we do know the types of the
 attributes. Hence, to allocate enough space to store them, we must first
 inquire about the length of the attributes.
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 PARAMETER (MVRLEN=3)           ! max number of "valid_range" values
@@ -8176,7 +8083,7 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 STATUS = NF_INQ_VARID (NCID, 'rh', RHID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
    ... 
-! find out attribute lengths, to make sure we have enough space
+! find out attribute lengths, to makere we have enough space
 STATUS = NF_INQ_ATTLEN (NCID, RHID, 'valid_range', VRLEN)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 STATUS = NF_INQ_ATTLEN (NCID, NF_GLOBAL, 'title', TLEN)
@@ -8196,9 +8103,9 @@ ELSE
     STATUS = NF_GET_ATT_TEXT (NCID, NF_GLOBAL, 'title', TITLE)
     IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 ENDIF
-~~~~
 
-7.5 NF\_COPY\_ATT {.section}
+
+7.5 NF\_COPY\_ATT 
 -----------------
 
 The function NF\_COPY\_ATT copies an attribute from one open netCDF
@@ -8208,20 +8115,20 @@ variable to another within the same netCDF.
 If used to copy an attribute of user-defined type, then that
 user-defined type must already be defined in the target file. In the
 case of user-defined attributes, enddef/redef is called for ncid\_in and
-ncid\_out if they are in define mode. (This is the ensure that all
+ncid\_out if they are in define mode. (This is the ere that all
 user-defined types are committed to the file(s) before the copy is
 attempted.)
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_COPY_ATT (INTEGER NCID_IN, INTEGER VARID_IN,
                               CHARACTER*(*) NAME, INTEGER NCID_OUT,
                               INTEGER VARID_OUT)
-~~~~
+
 
  `NCID_IN`
 :   The netCDF ID of an input netCDF dataset from which the attribute
@@ -8247,7 +8154,7 @@ INTEGER FUNCTION NF_COPY_ATT (INTEGER NCID_IN, INTEGER VARID_IN,
     attribute will be copied, or NF\_GLOBAL to copy to a global
     attribute.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_COPY\_ATT returns the value NF\_NOERR if no errors occurred.
@@ -8262,18 +8169,18 @@ errors include:
 -   The input or output netCDF ID does not refer to an open netCDF
     dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_COPY\_ATT to copy the variable attribute
 units from the variable rh in an existing netCDF dataset named foo.nc to
 the variable avgrh in another existing netCDF dataset named bar.nc,
-assuming that the variable avgrh already exists, but does not yet have a
+aming that the variable avgrh already exists, but does not yet have a
 units attribute:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER STATUS             ! error status
@@ -8298,9 +8205,9 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
    ... 
 STATUS = NF_ENDDEF (NCID2) ! leave define mode
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-7.6 NF\_RENAME\_ATT {.section}
+
+7.6 NF\_RENAME\_ATT 
 -------------------
 
 The function NF\_RENAME\_ATT changes the name of an attribute. If the
@@ -8308,16 +8215,16 @@ new name is longer than the original name, the netCDF dataset must be in
 define mode. You cannot rename an attribute to have the same name as
 another attribute of the same variable.
 
-Usage {.heading}
+Usage 
 -----
 
  
 
-~~~~ {.example}
+
 INTEGER FUNCTION NF_RENAME_ATT (INTEGER NCID, INTEGER VARID,
                                 CHARACTER*(*) NAME,
                                 CHARACTER*(*) NEWNAME)
-~~~~
+
 
  `NCID`
 :   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE
@@ -8333,7 +8240,7 @@ INTEGER FUNCTION NF_RENAME_ATT (INTEGER NCID, INTEGER VARID,
     name is longer than the current name, the netCDF dataset must be in
     define mode.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_RENAME\_ATT returns the value NF\_NOERR if no errors occurred.
@@ -8348,7 +8255,7 @@ errors include:
 -   The specified attribute does not exist.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_RENAME\_ATT to rename the variable
@@ -8357,7 +8264,7 @@ named foo.nc:
 
  
 
-~~~~ {.example}
+
 INCLUDE "netcdf.inc"
    ... 
 INTEGER STATUS   ! error status
@@ -8373,15 +8280,15 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 ! rename attribute
 STATUS = NF_RENAME_ATT (NCID, RHID, "units", "Units")
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
 
-7.7 NF\_DEL\_ATT {.section}
+
+7.7 NF\_DEL\_ATT 
 ----------------
 
 The function NF\_DEL\_ATT deletes a netCDF attribute from an open netCDF
 dataset. The netCDF dataset must be in define mode.
 
-Usage {.heading}
+Usage 
 -----
 
 INTEGER FUNCTION NF\_DEL\_ATT (INTEGER NCID, INTEGER VARID,
@@ -8397,7 +8304,7 @@ CHARACTER\*(\*) NAME)
  `NAME`
 :   The name of the attribute to be deleted.
 
-Errors {.heading}
+Errors 
 ------
 
 NF\_DEL\_ATT returns the value NF\_NOERR if no errors occurred.
@@ -8409,7 +8316,7 @@ errors include:
 -   The specified attribute does not exist.
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-Example {.heading}
+Example 
 -------
 
 Here is an example using NF\_DEL\_ATT to delete the variable attribute
@@ -8417,7 +8324,7 @@ Units for a variable rh in an existing netCDF dataset named foo.nc:
 
  
 
-~~~~ {.example}
+
 INCLUDE 'netcdf.inc'
    ... 
 INTEGER STATUS            ! error status
@@ -8437,12 +8344,12 @@ STATUS = NF_DEL_ATT (NCID, RHID, 'Units')
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 STATUS = NF_ENDDEF (NCID) ! leave define mode
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
-~~~~
+
 
 A. NetCDF 2 to NetCDF 3 Fortran 77 Transition Guide {.appendix}
 ===================================================
 
-A.1 Overview of FORTRAN interface changes {.section}
+A.1 Overview of FORTRAN interface changes 
 -----------------------------------------
 
 NetCDF version 3 includes a complete rewrite of the netCDF library. It
@@ -8464,28 +8371,28 @@ FORTRAN interfaces that provide some significant benefits:
     between the language-independent external netCDF types (NF\_BYTE,
     ..., NF\_DOUBLE) and language-dependent internal data types (INT\*1,
     ..., DOUBLE PRECISION);
--   support for future enhancements, by eliminating obstacles to the
-    clean addition of support for packed data and multithreading;
+-  pport for future enhancements, by eliminating obstacles to the
+    clean addition ofpport for packed data and multithreading;
 -   more standard error behavior, by uniformly communicating an error
     status back to the calling program in the return value of each
     function.
 
 It is not necessary to rewrite programs that use the version 2 FORTRAN
 interface, because the netCDF-3 library includes a backward
-compatibility interface that supports all the old functions, globals,
+compatibility interface thatpports all the old functions, globals,
 and behavior. We are hoping that the benefits of the new interface will
 be an incentive to use it in new netCDF applications. It is possible to
 convert old applications to the new interface incrementally, replacing
 netCDF-2 calls with the corresponding netCDF-3 calls one at a time.
 
-Other changes in the implementation of netCDF result in improved
+Other changes in the implementation of netCDF rlt in improved
 portability, maintainability, and performance on most platforms. A clean
 separation between I/O and type layers facilitates platform-specific
 optimizations. The new library no longer uses a vendor-provided XDR
 library, which simplifies linking programs that use netCDF and speeds up
 data access significantly in most cases.
 
-A.2 The New FORTRAN Interface {.section}
+A.2 The New FORTRAN Interface 
 -----------------------------
 
 First, here’s an example of FORTRAN code that uses the netCDF-2
@@ -8493,7 +8400,7 @@ interface:
 
  
 
-~~~~ {.example}
+
 ! Use a buffer big enough for values of any type
 DOUBLE PRECISION DBUF(NDATA)
 REAL RBUF(NDATA)
@@ -8517,14 +8424,14 @@ ELSEIF (XTYPE .EQ. NCFLOAT) THEN
    CALL RANALYZE(RBUF)
 ...
 ENDIF
-~~~~
+
 
 Here’s how you might handle this with the new netCDF-3 FORTRAN
 interface:
 
  
 
-~~~~ {.example}
+
 ! I want to use doubles for my analysis
 DOUBLE PRECISION DBUF(NDATA)
 INT STATUS
@@ -8536,13 +8443,13 @@ IF(STATUS .NE. NF_NOERR) THEN
    ...
 ENDIF
 CALL DANALYZE(DBUF)
-~~~~
+
 
 The example above illustrates changes in function names, data type
-conversion, and error handling, discussed in detail in the sections
+conversion, and error handling, discussed in detail in thes
 below.
 
-A.3 Function Naming Conventions {.section}
+A.3 Function Naming Conventions 
 -------------------------------
 
 The netCDF-3 Fortran 77 library employs a naming convention intended to
@@ -8559,8 +8466,8 @@ variables, a single character modifier is appended to VAR:
 
 -   VAR entire variable access
 -   VAR1 single value access
--   VARA array or array section access
--   VARS strided access to a subsample of values
+-   VARA array or array access
+-   VARS strided access to absample of values
 -   VARM mapped access to values not contiguous in memory
 
 At the end of the name for variable and attribute functions, there is a
@@ -8573,10 +8480,10 @@ Also, all PARAMETER names in the public FORTRAN interface begin with the
 prefix NF\_. For example, the PARAMETER which was formerly MAXNCNAM is
 now NF\_MAX\_NAME, and the former FILFLOAT is now NF\_FILL\_FLOAT.
 
-As previously mentioned, all the old names are still supported for
+As previously mentioned, all the old names are stillpported for
 backward compatibility.
 
-A.4 Type Conversion {.section}
+A.4 Type Conversion 
 -------------------
 
 With the new interface, users need not be aware of the external type of
@@ -8595,9 +8502,9 @@ more important in netCDF version 4, when new external types will be
 added for packed data for which there is no natural corresponding
 internal type, for example, arrays of 11-bit values.
 
-Converting from one numeric type to another may result in an error if
+Converting from one numeric type to another may rlt in an error if
 the target type is not capable of representing the converted value. (In
-netCDF-2, such overflows can only happen in the XDR layer.) For example,
+netCDF-2,ch overflows can only happen in the XDR layer.) For example,
 a REAL may not be able to hold data stored externally as an NF\_DOUBLE
 (an IEEE floating-point number). When accessing an array of values, an
 NF\_ERANGE error is returned if one or more values are out of the range
@@ -8605,7 +8512,7 @@ of representable values, but other values are converted properly.
 
 Note that mere loss of precision in type conversion does not return an
 error. Thus, if you read double precision values into an INTEGER, for
-example, no error results unless the magnitude of the double precision
+example, no error rlts unless the magnitude of the double precision
 value exceeds the representable range of INTEGERs on your platform.
 Similarly, if you read a large integer into a REAL incapable of
 representing all the bits of the integer in its mantissa, this loss
@@ -8661,7 +8568,7 @@ parameter name below the function declarations.
 
  
 
-~~~~ {.example}
+
 CHARACTER*80 FUNCTION  NF_INQ_LIBVERS()
 CHARACTER*80 FUNCTION  NF_STRERROR  (NCERR)
 INTEGER FUNCTION  NF_CREATE         (PATH, CMODE, ncid)
@@ -8869,4 +8776,4 @@ INTEGER       VARID_IN     ! variable ID
 INTEGER       VARID_OUT    ! variable ID
 INTEGER       XTYPE        ! external type: NF_BYTE, NF_CHAR, ... , 
 INTEGER       xtype        ! returned external type
-~~~~
+
