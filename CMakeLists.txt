@@ -325,8 +325,6 @@ ENDMACRO()
 SET (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules/"
   CACHE INTERNAL "Location of our custom CMake modules.")
 
-SET(CMAKE_BUILD_TYPE Debug)
-SET(CMAKE_Fortran_COMPILER gfortran)
 SET(USE_LOGGING "ON")
 
 #####
@@ -587,7 +585,7 @@ IF(ENABLE_DOXYGEN)
     ELSE()
       SET(BUILD_INTERNAL_DOCS NO CACHE STRING "")
     ENDIF()
-    
+
     # Option to turn on the TODO list in the doxygen-generated documentation.
     OPTION(ENABLE_DOXYGEN_TASKS "Turn on test, todo, bug lists in documentation. This is of interest to developers only." OFF)
     IF(ENABLE_DOXYGEN_TASKS)
