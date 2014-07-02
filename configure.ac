@@ -600,6 +600,7 @@ AC_CONFIG_FILES([Makefile
                  fortran/Makefile
                  nf_test/Makefile
                  nf03_test/Makefile
+                 CMakeExtras/Makefile
                  examples/Makefile
                  examples/F90/Makefile
                  examples/F77/Makefile],
