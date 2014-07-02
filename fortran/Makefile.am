@@ -16,7 +16,7 @@ CLEANFILES =
 DISTCLEANFILES =
 
 # This, plus either netcdf4.f90 or netcdf.f90, is the main source.
-libnetcdff_la_SOURCES += typeSizes.f90 
+libnetcdff_la_SOURCES += typeSizes.f90
 
 if USE_NETCDF4
 NETCDF_O = netcdf4.o
@@ -70,7 +70,7 @@ libnetcdff_la_DEPENDENCIES += netcdf_attributes.f90 netcdf_constants.f90 netcdf_
                               netcdf_visibility.f90 netcdf_eightbyte.f90
 
 if USE_NETCDF4
-libnetcdff_la_SOURCES += netcdf4.f90 
+libnetcdff_la_SOURCES += netcdf4.f90
 # These are the extra netCDF-4 F90 source files.
 libnetcdff_la_DEPENDENCIES += netcdf4_func.f90 netcdf4_externals.f90 netcdf4_visibility.f90 \
                               netcdf4.f90 netcdf4_eightbyte.f90 \
@@ -95,13 +95,13 @@ EXTRA_DIST += netcdf_attributes.f90 netcdf_constants.f90 netcdf_dims.f90 \
         netcdf_visibility.f90 netcdf_eightbyte.f90 \
         netcdf4_func.f90 netcdf4_externals.f90 netcdf4_visibility.f90 \
         netcdf4.f90 netcdf4_eightbyte.f90 \
-        netcdf4_variables.f90 netcdf4_file.f90 netcdf.inc
+        netcdf4_variables.f90 netcdf4_file.f90 netcdf.inc CMakeLists.txt
 
 # Some fortran compilers change the file names of .mod files to all
 # uppercase. Just to be special.
 
-LCHEADERS = 
-UCHEADERS = 
+LCHEADERS =
+UCHEADERS =
 
 if BUILD_F03
 LCHEADERS += netcdf_nc_data.mod netcdf_nc_interfaces.mod netcdf_nf_data.mod \
@@ -191,7 +191,7 @@ nodist_include_HEADERS += netcdf.inc
 
 BUILT_SOURCES += netcdf.inc
 
-# Build netcdf.inc file from netcdf2, netcdf3 and netcdf4 files 
+# Build netcdf.inc file from netcdf2, netcdf3 and netcdf4 files
 
 netcdf.inc: $(top_srcdir)/fortran/netcdf2.inc $(top_srcdir)/fortran/netcdf3.inc $(top_srcdir)/fortran/netcdf4.inc
 	echo '!     NetCDF-3.' > netcdf.inc

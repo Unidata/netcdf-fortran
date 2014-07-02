@@ -73,7 +73,7 @@ netcdf_f77.3: $(top_srcdir)/docs/netcdf.m4
 # The nfconfig.in file is turned into nfconfig.inc by the configure
 # script. The man page is generated on the developers machine for the
 # dist.
-EXTRA_DIST = nfconfig.in nfconfig.inc $(man_MANS) netcdf_f.h
+EXTRA_DIST = nfconfig.in nfconfig.inc $(man_MANS) netcdf_f.h CMakeLists.txt
 
 # These files need to be cleaned up my make.
 CLEANFILES = nfconfig1.inc netcdf.inc

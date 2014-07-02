@@ -1,5 +1,5 @@
 ## This is a automake file, part of Unidata's netCDF package.
-# Copyright 2006, see the COPYRIGHT file for more information.  
+# Copyright 2006, see the COPYRIGHT file for more information.
 
 # This file builds F90 examples.
 
@@ -24,7 +24,7 @@ pres_temp_4D_wr_SOURCES = pres_temp_4D_wr.f90
 pres_temp_4D_rd_SOURCES = pres_temp_4D_rd.f90
 
 # Cleaning up files created during the process.
-CLEANFILES = simple_xy.nc sfc_pres_temp.nc pres_temp_4D.nc 
+CLEANFILES = simple_xy.nc sfc_pres_temp.nc pres_temp_4D.nc
 
 if USE_NETCDF4
 
@@ -91,7 +91,7 @@ check_PROGRAMS = $(TESTPROGRAMS)
 
 # Make sure the script which compares file outputs is included in the
 # dist.
-EXTRA_DIST = do_comps.sh run_nc4_comps.sh run_f90_par_examples.sh
+EXTRA_DIST = do_comps.sh run_nc4_comps.sh run_f90_par_examples.sh CMakeLists.txt
 
 # Run all test programs, plus the do_comps.sh script, which checks
 # that all the output files are the same as the C example output

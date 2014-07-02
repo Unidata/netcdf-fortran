@@ -106,7 +106,7 @@ CLEANFILES += tests.mod
 # test03_get.F and test03_put.f need to be distributed, so that the user
 # need not have m4.
 EXTRA_DIST = test03_get.F test03_put.F fills.cdl create_fills.sh	\
-run_f77_par_test.sh
+run_f77_par_test.sh CMakeLists.txt
 
 test: check
 

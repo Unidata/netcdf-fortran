@@ -1,5 +1,5 @@
 ## This is a automake file, part of Unidata's netCDF package.
-# Copyright 2011, see the COPYRIGHT file for more information.  
+# Copyright 2011, see the COPYRIGHT file for more information.
 
 # This file builds F77 examples.
 
@@ -21,7 +21,7 @@ endif
 
 check_PROGRAMS = $(TESTPROGRAMS)
 
-EXTRA_DIST = do_comps.sh
+EXTRA_DIST = do_comps.sh CMakeLists.txt
 
 # Here's the source code for the programs.
 simple_xy_wr_SOURCES = simple_xy_wr.f
