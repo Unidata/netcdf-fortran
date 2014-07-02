@@ -613,7 +613,9 @@ ENDIF()
 # End 'seek out dependent libraries'
 ###
 
-INSTALL(PROGRAMS ${NC4F_BINARY_DIR}/nf-config DESTINATION bin COMPONENT utilities)
+INSTALL(PROGRAMS ${NC4F_BINARY_DIR}/nf-config
+        DESTINATION "${CMAKE_INSTALL_BINDIR}"
+        COMPONENT utilities)
 
 INCLUDE_DIRECTORIES(${NC4F_BINARY_DIR})
 # End autotools-style checks for config.h
