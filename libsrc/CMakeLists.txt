@@ -5,7 +5,7 @@ SET(include_HEADERS nfconfig.inc)
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # The (temporary) library we are building.
-SET(ncfortran_LIBRARY_SOURCES 
+SET(ncfortran_LIBRARY_SOURCES
   fort-attio.c fort-control.c fort-dim.c
   fort-genatt.c fort-geninq.c fort-genvar.c fort-lib.c fort-misc.c
   fort-v2compat.c fort-vario.c fort-var1io.c fort-varaio.c fort-varmio.c
@@ -31,7 +31,7 @@ IF(BUILD_PARALLEL)
 ENDIF(BUILD_PARALLEL)
 
 # TODO: Figure out the cmake syntax for this
-# netcdf_f77.3: $(top_srcdir)/man4/netcdf.m4
+# netcdf_f77.3: $(top_srcdir)/docs/netcdf.m4
 #	m4 $(M4FLAGS) $(ARGS_MANPAGE) $? >$@ || rm $@
 
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR} ${CMAKE_CPP_FLAGS})

@@ -4,7 +4,7 @@
 # Modified versions of nf_test routines used to test the use of
 # F03 interface netcdf modules instead of netcdf include files
 
-# This file builds and runs the following: 
+# This file builds and runs the following:
 
 # The nf_test program, which tests the netCDF fortran 77 interface.
 
@@ -31,7 +31,7 @@ AM_FFLAGS = ${AM_FCFLAGS}
 TESTS =
 
 # All tests need to link to fortran and C libraries.
-LDADD = ${top_builddir}/fortran/libnetcdff.la 
+LDADD = ${top_builddir}/fortran/libnetcdff.la
 
 # The create_fills shell creates the file fills.nc, needed by later
 # tests.
@@ -39,7 +39,7 @@ TESTS += create_fills.sh
 # Need access to top_srcdir
 TESTS_ENVIRONMENT=TOPSRCDIR=${abs_top_srcdir}
 
-# nf03_test is the main test program. 
+# nf03_test is the main test program.
 check_PROGRAMS = nf03_test
 TESTS += nf03_test
 nf03_test_SOURCES = module_tests.F90 f03lib_f_interfaces.f90 test03_get.F test03_put.F nf03_error.F nf03_test.F	\
@@ -79,7 +79,7 @@ if BUILD_V2
 check_PROGRAMS += f03tst_v2
 TESTS += f03tst_v2
 CLEANFILES += ftst_v2.nc
-f03tst_v2_SOURCES = f03tst_v2.F 
+f03tst_v2_SOURCES = f03tst_v2.F
 endif # BUILD_V2
 
 # Test parallel I/O
@@ -111,12 +111,12 @@ run_f77_par_test.sh
 test: check
 
 # Did the user build the V2 F77 API? If so, run this test.
-# This fails with pgifortran, but works with gfortran. 
+# This fails with pgifortran, but works with gfortran.
 if !USING_PGI
 if BUILD_V2
 check_PROGRAMS += tst03_f77_v2
 TESTS += tst03_f77_v2
-CLEANFILES += tst_f77_v2.nc
+CLEANFILES += tst_f77_v2.nc temp.tmp
 tst03_f77_v2_SOURCES = tst03_f77_v2.F
 endif # BUILD_V2
 endif !USING_PGI

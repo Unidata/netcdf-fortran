@@ -9,7 +9,7 @@
 ACLOCAL_AMFLAGS = -I m4
 
 # These files get added to the distribution.
-EXTRA_DIST = README COPYRIGHT nf-config.in CTestConfig.cmake CTestConfig.cmake.in nf-config.cmake.in 
+EXTRA_DIST = README.md RELEASE_NOTES.md netcdf-fortran.pc.in F03Interfaces_LICENSE CMakeLists.txt COPYRIGHT nf-config.in config.h.cmake.in CTestConfig.cmake.in nf-config.cmake.in
 
 pkgconfigdir=$(libdir)/pkgconfig
 pkgconfig_DATA = netcdf-fortran.pc
@@ -25,7 +25,7 @@ LIBSRC_DIR = libsrc
 endif
 
 # This is the list of subdirs for which Makefiles will be constructed
-# and run. 
+# and run.
 SUBDIRS = $(LIBSRC_DIR) $(FTN_DIR) nf_test $(F03_TESTS) docs examples
 
 # Remove these generated files, for a distclean.
@@ -70,7 +70,7 @@ install-data-hook:
 	@echo '| http://www.unidata.ucar.edu/software/netcdf/                |'
 	@echo '|                                                             |'
 	@echo '| NetCDF is developed and maintained at the Unidata Program   |'
-	@echo '| Center. Unidata provides a broad array of data and software |' 
+	@echo '| Center. Unidata provides a broad array of data and software |'
 	@echo '| tools for use in geoscience education and research.         |'
 	@echo '| http://www.unidata.ucar.edu                                 |'
 	@echo '+-------------------------------------------------------------+'

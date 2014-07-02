@@ -12,47 +12,46 @@
 man_MANS = netcdf_fortran.3
 
 # These are the source files for all the netcdf manuals.
-info_TEXINFOS = netcdf-f90.texi netcdf-f77.texi
+# info_TEXINFOS = netcdf-f90.texi netcdf-f77.texi
 
 # Get lists of the coresponding ps, info, and pdf files.
-html_docs = ${info_TEXINFOS:.texi=.html} 
-html_dirs = ${info_TEXINFOS:.texi=} 
-ps_docs = ${info_TEXINFOS:.texi=.ps} 
-dvi_docs = ${info_TEXINFOS:.texi=.dvi} 
-pdf_docs = ${info_TEXINFOS:.texi=.pdf}
-info_docs= ${info_TEXINFOS:.texi=.info}
-txt_docs= ${info_TEXINFOS:.texi=.txt}
+#html_docs = ${info_TEXINFOS:.texi=.html}
+#html_dirs = ${info_TEXINFOS:.texi=}
+#ps_docs = ${info_TEXINFOS:.texi=.ps}
+#dvi_docs = ${info_TEXINFOS:.texi=.dvi}
+#pdf_docs = ${info_TEXINFOS:.texi=.pdf}
+#info_docs= ${info_TEXINFOS:.texi=.info}
+#txt_docs= ${info_TEXINFOS:.texi=.txt}
 
 # These are html versions of the man pages.
-html_mans = netcdf_fortran-man.html
+#html_mans = netcdf_fortran-man.html
 
 # These files will be included with the dist.
-EXTRA_DIST = netcdf.m4 $(pdf_docs) $(html_mans) $(txt_docs)	\
-$(dvi_docs) $(ps_docs) $(info_docs) $(html_docs) $(man_MANS) \
-CMakeLists.txt netcdf-50x50.png Doxyfile.in 
+EXTRA_DIST = netcdf.m4 $(man_MANS) \
+CMakeLists.txt netcdf-50x50.png Doxyfile.in
 
 # All the documents depend on defines.texi for some common
 # definitions.
-netcdf_fortran_TEXINFOS = defines.texi
+# netcdf_fortran_TEXINFOS = defines.texi
 
 # Get texi2dvi to shut the hell up, and work better for parallel
 # builds. The --tidy option may be useful getting parallel builds to
 # work someday.
-TEXI2DVI = texi2dvi -s 
+# TEXI2DVI = texi2dvi -s
 
 # Turn off parallel builds in this directory.
-.NOTPARALLEL:
+# .NOTPARALLEL:
 
 # To build documentation you must have M4 in their path.
 M4=m4
 
 # Rule to generate the text copies of the documentation.
-.texi.txt: 
-	makeinfo -o $*.txt --no-headers $(srcdir)/$<
+#.texi.txt:
+#	makeinfo -o $*.txt --no-headers $(srcdir)/$<
 
 # Generate the HTML version of the netcdf-3 F03 man page.
-netcdf_fortran-man.html: $(top_srcdir)/man4/netcdf_fortran.3
-	groff -man -Thtml $? > $@
+#netcdf_fortran-man.html: $(top_srcdir)/docs/netcdf_fortran.3
+#	groff -man -Thtml $? > $@
 
 #netcdf-fortran.html:
 #	$(MAKEINFO) --html $(AM_MAKEINFOHTMLFLAGS) $(MAKEINFOFLAGS) -I$(srcdir) netcdf-fortran.texi
@@ -62,29 +61,28 @@ netcdf_fortran-man.html: $(top_srcdir)/man4/netcdf_fortran.3
 # everything needed for the website. Run this and copy the resulting
 # tarball to the /contents/netcdf/docs directory to update the on-line
 # docs.
-web-tarball: $(pdf_docs) $(html_mans) $(txt_docs) $(dvi_docs) $(ps_docs) $(info_docs) $(html_docs)
-	tar cf netcdf_info.tar *.info*
-	gzip -f netcdf_info.tar
-	zip netcdf_info *.info
-	tar cf netcdf_pdf.tar *.pdf
-	gzip -f netcdf_pdf.tar
-	zip netcdf_pdf *.pdf
-	tar cf netcdf_html.tar *.html $(html_dirs)
-	gzip -f netcdf_html.tar
-	zip netcdf_html *.html $(html_dirs)
-	tar cf netcdf_txt.tar *.txt
-	gzip -f netcdf_txt.tar
-	zip netcdf_txt *.txt
-	tar cf netcdf_man.tar netcdf_fortran.3
-	gzip -f netcdf_man.tar
-	zip netcdf_man netcdf_fortran.3
-	tar cf netcdf_docs.tar $(html_dirs) *.pdf *.txt *.html *.tar.gz *.zip 
-	gzip -f netcdf_docs.tar
+
+#web-tarball: $(pdf_docs) $(html_mans) $(txt_docs) $(dvi_docs) $(ps_docs) $(info_docs) $(html_docs)
+#	tar cf netcdf_info.tar *.info*
+#	gzip -f netcdf_info.tar
+#	zip netcdf_info *.info
+#	tar cf netcdf_pdf.tar *.pdf
+#	gzip -f netcdf_pdf.tar
+#	zip netcdf_pdf *.pdf
+#	tar cf netcdf_html.tar *.html $(html_dirs)
+#	gzip -f netcdf_html.tar
+#	zip netcdf_html *.html $(html_dirs)
+#	tar cf netcdf_txt.tar *.txt
+#	gzip -f netcdf_txt.tar
+#	zip netcdf_txt *.txt
+#	tar cf netcdf_man.tar netcdf_fortran.3
+#	gzip -f netcdf_man.tar
+#	zip netcdf_man netcdf_fortran.3
+#	tar cf netcdf_docs.tar $(html_dirs) *.pdf *.txt *.html *.tar.gz *.zip
+#	gzip -f netcdf_docs.tar
 
 # Clean up all the junk we created!
-MAINTAINERCLEANFILES = $(ps_docs) $(pdf_docs) $(txt_docs) $(info_docs)	\
-$(html_docs) ${f77_examples} ${f90_examples}	\
-netcdf_fortran-man.html stamp-* version*
+MAINTAINERCLEANFILES = netcdf_fortran-man.html stamp-* version*
 
 ARGS_MANPAGE = -DAPI=FORTRAN -DNETCDF4=TRUE
 if BUILD_DAP
@@ -93,5 +91,5 @@ endif
 if BUILD_PARALLEL
 ARGS_MANPAGE += -DPARALLEL_IO=TRUE
 endif
-manpages: $(top_srcdir)/man4/netcdf.m4
+manpages: $(top_srcdir)/docs/netcdf.m4
 	m4 $(M4FLAGS) $(ARGS_MANPAGE) $? >netcdf_fortran.3 || rm netcdf_fortran.3

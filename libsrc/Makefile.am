@@ -67,7 +67,7 @@ endif
 if BUILD_PARALLEL
 ARGS_MANPAGE += -DPARALLEL_IO=TRUE
 endif
-netcdf_f77.3: $(top_srcdir)/man4/netcdf.m4
+netcdf_f77.3: $(top_srcdir)/docs/netcdf.m4
 	m4 $(M4FLAGS) $(ARGS_MANPAGE) $? >$@ || rm $@
 
 # The nfconfig.in file is turned into nfconfig.inc by the configure
@@ -77,5 +77,4 @@ EXTRA_DIST = nfconfig.in nfconfig.inc $(man_MANS) netcdf_f.h
 
 # These files need to be cleaned up my make.
 CLEANFILES = nfconfig1.inc netcdf.inc
-DISTCLEANFILES = nfconfig.inc 
-
+DISTCLEANFILES = nfconfig.inc
