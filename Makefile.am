@@ -26,7 +26,8 @@ endif
 
 # This is the list of subdirs for which Makefiles will be constructed
 # and run.
-SUBDIRS = $(LIBSRC_DIR) $(FTN_DIR) nf_test $(F03_TESTS) docs examples
+SUBDIRS = $(LIBSRC_DIR) $(FTN_DIR) nf_test $(F03_TESTS) docs examples \
+	CMakeExtras
 
 # Remove these generated files, for a distclean.
 DISTCLEANFILES = VERSION comps.txt test_prog
