@@ -13,9 +13,9 @@ AM_FCFLAGS += $(FCFLAGS_f90) @MOD_FLAG@$(top_builddir)/fortran
 AM_FFLAGS = ${AM_FCFLAGS}
 
 # All tests need to link to fortran and C libraries.
-LDADD = ${top_builddir}/fortran/libnetcdff.la 
+LDADD = ${top_builddir}/fortran/libnetcdff.la
 
-# nf_test is the main test program. 
+# nf_test is the main test program.
 check_PROGRAMS = nf_test
 TESTS = nf_test
 
@@ -106,7 +106,7 @@ f90tst_vars4_SOURCES = f90tst_vars4.f90
 if BUILD_V2
 check_PROGRAMS += ftst_v2
 TESTS += ftst_v2
-ftst_v2_SOURCES = ftst_v2.F 
+ftst_v2_SOURCES = ftst_v2.F
 endif # BUILD_V2
 
 # This is the netCDF-4 F90 large file test.
@@ -154,8 +154,8 @@ check_PROGRAMS += ftest
 TESTS += ftest
 if BUILD_F03
 ftest_SOURCES = ftest.F f03lib.c
-else 
-ftest_SOURCES = ftest.F fortlib.c 
+else
+ftest_SOURCES = ftest.F fortlib.c
 endif
 endif # BUILD_V2
 
@@ -170,10 +170,10 @@ tst_f90_SOURCES = tst_f90.f90
 # test_get.F and test_put.f need to be distributed, so that the user
 # need not have m4. fills.nc is used by test program ftest.
 EXTRA_DIST = test_get.F test_put.F fills.cdl create_fills.sh	\
-             run_f90_par_test.sh run_f77_par_test.sh ref_fills.nc 
+             run_f90_par_test.sh run_f77_par_test.sh ref_fills.nc \
+			CMakeLists.txt
 
 # Cleaning up files created during the process.
-CLEANFILES = scratch.nc test.nc copy.nc fills.nc tst_*.nc ftst_*.nc f90tst_*.nc
+CLEANFILES = scratch.nc test.nc copy.nc fills.nc tst_*.nc ftst_*.nc f90tst_*.nc temp.tmp
 
 MAINTAINERCLEANFILES = test_get.F test_put.F
-

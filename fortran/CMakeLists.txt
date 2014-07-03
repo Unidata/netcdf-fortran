@@ -91,7 +91,7 @@ ENDMACRO(APPENDFILE file1 file2)
 SET(NETCDF_INC ${CMAKE_CURRENT_BINARY_DIR}/netcdf.inc)
 SET_DIRECTORY_PROPERTIES (PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES ${NETCDF_INC})
 if (EXISTS ${NETCDF_INC})
-	FILE (REMOVE ${NETCDF_INC})
+  FILE (REMOVE ${NETCDF_INC})
 endif ()
 
 # Build netcdf.inc file from selected netcdf2, netcdf3 and netcdf4 apis
@@ -125,10 +125,10 @@ include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/libsrc)
 OPTION(BUILD_SHARED_LIBS "Configure netCDF as a shared library." ON)
 SET (LIB_TYPE STATIC)
 IF (BUILD_SHARED_LIBS)
-	SET(LIB_TYPE SHARED)
-	IF(CMAKE_COMPILER_IS_GNUCC)
-		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
-	ENDIF()
+  SET(LIB_TYPE SHARED)
+  IF(CMAKE_COMPILER_IS_GNUCC)
+    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+  ENDIF()
 ENDIF()
 
 # This is what we are building: a convenience library of Fortran 2003 functions.
@@ -138,8 +138,8 @@ ENDIF()
 ADD_LIBRARY(netcdff ${netcdff_SOURCES})
 TARGET_LINK_LIBRARIES(netcdff ${NETCDF_C_LIBRARY})
 SET_TARGET_PROPERTIES(netcdff PROPERTIES
-                      VERSION 4.2
-                      SOVERSION 4
+                      VERSION ${PACKAGE_VERSION}
+                      SOVERSION ${NC4F_SO_VERSION}
                       )
 
 ##
@@ -147,33 +147,33 @@ SET_TARGET_PROPERTIES(netcdff PROPERTIES
 # Adapted from http://www.cmake.org/Wiki/CMake_RPATH_handling
 ##
 IF(NOT MSVC)
-	# use, i.e. don't skip the full RPATH for the build tree
-	SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+  # use, i.e. don't skip the full RPATH for the build tree
+  SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
 
-	# when building, don't use the install RPATH already
-	# (but later on when installing)
-	SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
+  # when building, don't use the install RPATH already
+  # (but later on when installing)
+  SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 
-	SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+  SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 
-	# add the automatically determined parts of the RPATH
-	# which point to directories outside the build tree to the install RPATH
-	SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+  # add the automatically determined parts of the RPATH
+  # which point to directories outside the build tree to the install RPATH
+  SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
-	# the RPATH to be used when installing, but only if it's not a system directory
-	LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
-	IF("${isSystemDir}" STREQUAL "-1")
-		SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
-	ENDIF("${isSystemDir}" STREQUAL "-1")
+  # the RPATH to be used when installing, but only if it's not a system directory
+  LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+  IF("${isSystemDir}" STREQUAL "-1")
+    SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+  ENDIF("${isSystemDir}" STREQUAL "-1")
 ENDIF()
 
 # Installation of the program
 INSTALL(TARGETS netcdff
-    RUNTIME DESTINATION "${CMAKE_INSTALL_PREFIX}/bin" COMPONENT bin
-    LIBRARY DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" COMPONENT shlib
-    ARCHIVE DESTINATION "${CMAKE_INSTALL_PREFIX}/lib" COMPONENT shlib
+    RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT bin
+    LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT shlib
+    ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT shlib
     )
 INSTALL(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/
-        DESTINATION "${CMAKE_INSTALL_PREFIX}/include"
+        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
         FILES_MATCHING PATTERN "*.mod" PATTERN "netcdf.inc"
         )

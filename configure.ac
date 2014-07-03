@@ -9,7 +9,7 @@
 AC_PREREQ([2.59])
 
 # Initialize with name, version, and support email address.
-AC_INIT([netCDF-Fortran], [4.4-rc1], [support-netcdf@unidata.ucar.edu])
+AC_INIT([netCDF-Fortran], [4.4.0], [support-netcdf@unidata.ucar.edu])
 
 # Create the VERSION file, which contains the package version from
 # AC_INIT.
@@ -71,7 +71,7 @@ AM_CONDITIONAL(EXTRA_TESTS, [test x$enable_extra_tests = xyes])
 AC_ARG_ENABLE([doxygen],
 	[AS_HELP_STRING([--enable-doxygen],
 	[Enable generation of documentation with doxygen.])])
-text "x$enable_doxygen" = xyes || enable_doxygen=no
+    test "x$enable_doxygen" = xyes || enable_doxygen=no
 AM_CONDITIONAL([BUILD_DOCS], [test "x$enable_doxygen" = xyes])
 
 # Does the user want to generate dot-based documentation?
@@ -600,6 +600,7 @@ AC_CONFIG_FILES([Makefile
                  fortran/Makefile
                  nf_test/Makefile
                  nf03_test/Makefile
+                 CMakeExtras/Makefile
                  examples/Makefile
                  examples/F90/Makefile
                  examples/F77/Makefile],

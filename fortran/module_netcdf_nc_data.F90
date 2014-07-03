@@ -108,6 +108,9 @@ Module netcdf_nc_data
 #elif NF_INT1_IS_C_LONG
  Integer, Parameter :: CINT1 = C_LONG
  Integer, Parameter :: NFINT1 = IK8
+#else
+ Integer, Parameter :: CINT1 = C_SIGNED_CHAR
+ Integer, Parameter :: NFINT1 = IK1
 #endif
 
 ! INT2 KINDs
@@ -121,6 +124,9 @@ Module netcdf_nc_data
 #elif NF_INT2_IS_C_LONG
  Integer, Parameter :: CINT2 = C_LONG
  Integer, Parameter :: NFINT2 = IK8
+#else
+ Integer, Parameter :: CINT2 = C_SHORT
+ Integer, Parameter :: NFINT2 = IK2
 #endif
 
 ! Set Fortran default integer kind. This

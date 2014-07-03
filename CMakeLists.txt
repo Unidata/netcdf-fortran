@@ -15,11 +15,11 @@ set(PACKAGE "netcdf-fortran" CACHE STRING "")
 SET(NC4F_VERSION_MAJOR 4)
 SET(NC4F_VERSION_MINOR 4)
 SET(NC4F_VERSION_PATCH 0)
-SET(NC4F_VERSION_NOTE "-rc1")
+SET(NC4F_VERSION_NOTE "")
 SET(NC4F_VERSION ${NC4F_VERSION_MAJOR}.${NC4F_VERSION_MINOR}.${NC4F_VERSION_PATCH}${NC4F_VERSION_NOTE})
 SET(VERSION ${NC4F_VERSION})
-SET(NC4F_LIB_VERSION 0.0.0)
-SET(NC4F_SO_VERSION 0)
+SET(NC4F_LIB_VERSION 6.0.1)
+SET(NC4F_SO_VERSION 6)
 SET(PACKAGE_VERSION ${VERSION})
 
 # Get system configuration,
@@ -366,57 +366,47 @@ OPTION(TEST_PARALLEL "Run parallel I/O tests for F90 and F77" OFF)
 OPTION (ENABLE_NETCDF_4 "Enable netCDF-4" ON)
 IF(ENABLE_NETCDF_4)  # TODO: Seems like we should just use one of these
   SET(USE_NETCDF4 ON CACHE BOOL "")
-  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DUSE_NETCDF4")
+  ADD_DEFINITIONS(-DUSE_NETCDF4)
   SET(ENABLE_NETCDF_4 ON CACHE BOOL "")
   SET(ENABLE_NETCDF4 ON CACHE BOOL "")
 ENDIF()
 IF (UNIX AND ${CMAKE_SIZEOF_VOID_P} MATCHES "8")
-  SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DLONGLONG_IS_LONG")
+  ADD_DEFINITIONS(-DLONGLONG_IS_LONG)
   # for easier debugging of cfortran.h
   IF (APPLE)
     SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fmacro-backtrace-limit=0")
   endif ()
 ENDIF()
-# assume gfortran. Intel and nag don't seem to be supported in cfortran.h
-# TODO rather maintain an exclude list
-if (Fortran_COMPILER_NAME MATCHES "^gfortran*" OR
-    Fortran_COMPILER_NAME MATCHES "^f95" OR
-    Fortran_COMPILER_NAME MATCHES "^mpif90"
-    )
-  #  gFortran is used in cfortran.h
-  SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DgFortran ")
 
-  SET(TEST_C_PTRDIFF_T_F90
-    "${CMAKE_CURRENT_SOURCE_DIR}/CMakeExtras/test_c_ptrdiff_t.f90")
-  SET(TEST_C_PTRDIFF_T_OBJ
-    "${CMAKE_CURRENT_BINARY_DIR}/test_c_ptrdiff_t")
-  EXECUTE_PROCESS (
-    COMMAND ${CMAKE_Fortran_COMPILER} -o ${TEST_C_PTRDIFF_T_OBJ} ${TEST_C_PTRDIFF_T_F90}
-    RESULT_VARIABLE COMPILE_FAILED ERROR_QUIET)
-  FILE (REMOVE ${TEST_C_PTRDIFF_T_OBJ})
-  IF (COMPILE_FAILED)
-    # if the compile returns 1 - the compile failed => C_PTRDIFF_T is not defined
-    # get sizeof of ptrdiff_t
-    SET (SIZEOF_PTRDIFF_T_C
-      "${CMAKE_CURRENT_SOURCE_DIR}/CMakeExtras/sizeof_ptrdiff_t.c")
-    SET (SIZEOF_PTRDIFF_T_OBJ
-      "${CMAKE_CURRENT_BINARY_DIR}/sizeof_ptrdiff_t")
-    EXECUTE_PROCESS (
-      COMMAND ${CMAKE_C_COMPILER} -o ${SIZEOF_PTRDIFF_T_OBJ} ${SIZEOF_PTRDIFF_T_C})
-    EXECUTE_PROCESS (COMMAND ${SIZEOF_PTRDIFF_T_OBJ}
+# Determine C/Fortran pointer compatibility.
+try_compile(COMPILE_SUCCESS ${CMAKE_CURRENT_BINARY_DIR}
+  "${CMAKE_CURRENT_SOURCE_DIR}/CMakeExtras/test_c_ptrdiff_t.f90"
+  )
+IF (COMPILE_SUCCESS)
+  ADD_DEFINITIONS(-DHAVE_TS29113_SUPPORT)
+ELSE ()
+  # If the compile fails, PTRDIFF_T is not defined.
+  # Get sizeof of ptrdiff_t.
+  SET(EXEC_NAME "${CMAKE_CURRENT_BINARY_DIR}/sizeof_ptrdiff_t")
+  try_compile(COMPILE_SUCCESS2 ${CMAKE_CURRENT_BINARY_DIR}
+    "${CMAKE_CURRENT_SOURCE_DIR}/CMakeExtras/sizeof_ptrdiff_t.c"
+    COPY_FILE ${EXEC_NAME}
+    )
+  IF (COMPILE_SUCCESS2)
+    EXECUTE_PROCESS(
+      COMMAND ${EXEC_NAME}
       OUTPUT_VARIABLE SIZEOF_PTRDIFF_T
-      RESULT_VARIABLE SIZEOF_RESULT)
+      RESULT_VARIABLE SIZEOF_RESULT
+      )
     IF (SIZEOF_RESULT)
       MESSAGE (FATAL_ERROR "UNABLE TO DETERMINE SIZEOF PTRDIFF_T")
     ELSE (SIZEOF_RESULT)
-      SET (CMAKE_Fortran_FLAGS
-        "-DSIZEOF_PTRDIFF_T=${SIZEOF_PTRDIFF_T} ${CMAKE_Fortran_FLAGS}")
+      ADD_DEFINITIONS(-DSIZEOF_PTRDIFF_T=${SIZEOF_PTRDIFF_T})
     ENDIF (SIZEOF_RESULT)
-    FILE (REMOVE ${SIZEOF_PTRDIFF_T_OBJ})
-  else (COMPILE_FAILED)
-    SET (CMAKE_Fortran_FLAGS "-DHAVE_TS29113_SUPPORT ${CMAKE_Fortran_FLAGS}")
-  endif(COMPILE_FAILED)
-endif ()
+  ELSE()
+    MESSAGE(FATAL_ERROR "Unable to compile ptrdiff")
+  ENDIF()
+endif()
 
 OPTION (ENABLE_NETCDF_V2 "Support old netCDF version-2 Fortran API" OFF)
 IF(ENABLE_NETCDF_V2) # TODO: Can we just use one of these?
@@ -616,7 +606,9 @@ ENDIF()
 # End 'seek out dependent libraries'
 ###
 
-INSTALL(PROGRAMS ${NC4F_BINARY_DIR}/nf-config DESTINATION bin COMPONENT utilities)
+INSTALL(PROGRAMS ${NC4F_BINARY_DIR}/nf-config
+        DESTINATION "${CMAKE_INSTALL_BINDIR}"
+        COMPONENT utilities)
 
 INCLUDE_DIRECTORIES(${NC4F_BINARY_DIR})
 # End autotools-style checks for config.h
