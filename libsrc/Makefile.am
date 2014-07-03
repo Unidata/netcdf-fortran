@@ -5,8 +5,11 @@
 # that interfaces between fortran and C.
 
 # The (temporary) library we are building.
+# The version number is specified using the following
+# guideline:
+# http://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html
 noinst_LTLIBRARIES = libnetcdfc.la
-libnetcdfc_la_LDFLAGS = $(AM_LDFLAGS) -version-number 5:3:1
+libnetcdfc_la_LDFLAGS = $(AM_LDFLAGS) -version-number 6:0:1
 
 # Tell make to install these as a header file.
 include_HEADERS = nfconfig.inc

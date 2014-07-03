@@ -15,6 +15,8 @@ EXTRA_DIST =
 CLEANFILES =
 DISTCLEANFILES =
 
+libnetcdff_la_LDFLAGS = $(AM_LDFLAGS) -version-number 6:0:1
+
 # This, plus either netcdf4.f90 or netcdf.f90, is the main source.
 libnetcdff_la_SOURCES += typeSizes.f90
 
