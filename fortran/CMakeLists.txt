@@ -138,8 +138,8 @@ ENDIF()
 ADD_LIBRARY(netcdff ${netcdff_SOURCES})
 TARGET_LINK_LIBRARIES(netcdff ${NETCDF_C_LIBRARY})
 SET_TARGET_PROPERTIES(netcdff PROPERTIES
-                      VERSION 4.2
-                      SOVERSION 4
+                      VERSION ${PACKAGE_VERSION}
+                      SOVERSION ${NC4F_SO_VERSION}
                       )
 
 ##
