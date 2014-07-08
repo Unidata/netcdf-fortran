@@ -6,7 +6,7 @@ Release Notes {#release_notes}
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
-## 4.4 Released TBD
+## 4.4 Released 2014-07-08
 
 * For 32-bit platforms fixed integer fill parameters, initialized potentially
   unitialized variables, and provided some missing defaults (R. Weed).
