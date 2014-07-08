@@ -13,6 +13,21 @@ Entries are in reverse chronological order (most recent first).
 
 * Fixed CMake builds on 32-bit platforms.
 
+* Added new inq_path and rename_grps functions analogous to
+  corresponding C functions. Added associated tests. (R. Weed)
+
+* Added support for NF_MPIIO, NF_MPIPOSIX, NF_PNETCDF flags and
+  NF_FILL_UINT. (R. Weed)
+
+* Fixed potential bug in attribute functions for integer values when
+  Fortran INTEGER*1 or INTEGER*2 types are the same size as C
+  long. (R. Weed)
+
+* Added test for compiler support of Fortran 2008 ISO_FORTRAN_ENV
+  additions and TS29113 standard extension.
+
+* Fixed C_PTR_DIFF_T issue reported by Orion Poplowski. (R. Weed)
+
 ### 4.4-rc1 	Released 2013-10-06
 
 * Added doxygen-generated documentation, using the `--enable-doxygen` and `-DENABLE_DOXYGEN` flags for autotools and cmake-based builds, respectively.
