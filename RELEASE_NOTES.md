@@ -8,6 +8,11 @@ Entries are in reverse chronological order (most recent first).
 
 ## 4.4 Released TBD
 
+* For 32-bit platforms fixed integer fill parameters, initialized potentially
+  unitialized variables, and provided some missing defaults (R. Weed).
+
+* Fixed CMake builds on 32-bit platforms.
+
 ### 4.4-rc1 	Released 2013-10-06
 
 * Added doxygen-generated documentation, using the `--enable-doxygen` and `-DENABLE_DOXYGEN` flags for autotools and cmake-based builds, respectively.
