@@ -550,7 +550,7 @@ fi
 
 # Automake conditionals need to be called, whether the answer is yes
 # or no.
-AM_CONDITIONAL(TEST_PARALLEL, [test "x$enable_parallel" = xyes -a "x$enable_parallel_tests" = xyes])
+AM_CONDITIONAL(TEST_PARALLEL, [test "x$enable_parallel_tests" = xyes])
 AM_CONDITIONAL(USE_VALGRIND_TESTS, [test "x$enable_valgrind_tests" = xyes])
 
 # Flags for nf-config script; by design $prefix, $includir, $libdir,
