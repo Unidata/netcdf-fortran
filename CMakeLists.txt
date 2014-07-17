@@ -179,7 +179,7 @@ ENDMACRO(GEN_m4)
 # Binary tests, but ones which depend on value of 'TEMP_LARGE' being defined.
 MACRO(add_bin_env_temp_large_test prefix F)
   ADD_EXECUTABLE(${prefix}_${F} ${F}.c)
-  TARGET_LINK_LIBRARIES(${prefix}_${F} netcdf)
+  TARGET_LINK_LIBRARIES(${prefix}_${F} netcdff)
   IF(MSVC)
     SET_TARGET_PROPERTIES(${prefix}_${F}
       PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"
@@ -197,7 +197,7 @@ ENDMACRO()
 # Tests which are binary, but depend on a particular environmental variable.
 MACRO(add_bin_env_test prefix F)
   ADD_EXECUTABLE(${prefix}_${F} ${F}.c)
-  TARGET_LINK_LIBRARIES(${prefix}_${F} netcdf)
+  TARGET_LINK_LIBRARIES(${prefix}_${F} netcdff)
   IF(MSVC)
     SET_TARGET_PROPERTIES(${prefix}_${F}
       PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"
@@ -214,7 +214,7 @@ ENDMACRO()
 # Build a binary used by a script, but don't make a test out of it.
 MACRO(build_bin_test F)
   ADD_EXECUTABLE(${F} ${F}.c)
-  TARGET_LINK_LIBRARIES(${F} netcdf)
+  TARGET_LINK_LIBRARIES(${F} netcdff)
   IF(MSVC)
     SET_TARGET_PROPERTIES(${F}
       PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"
@@ -240,10 +240,16 @@ MACRO(build_bin_test_no_prefix F)
   ENDIF()
 ENDMACRO()
 
-
 MACRO(add_bin_test prefix F)
-  ADD_EXECUTABLE(${prefix}_${F} ${F}.c)
-  TARGET_LINK_LIBRARIES(${prefix}_${F} netcdf)
+  
+  IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${F}.F)
+    set(ext ".F")
+  ELSE()
+    set(ext ".f90")
+  ENDIF()
+
+  ADD_EXECUTABLE(${prefix}_${F} ${F}${ext})
+  TARGET_LINK_LIBRARIES(${prefix}_${F} netcdff netcdf)
   IF(MSVC)
     SET_TARGET_PROPERTIES(${prefix}_${F}
       PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"
@@ -333,7 +339,7 @@ SET(USE_LOGGING "ON")
 # Tests which are binary, but depend on a particular environmental variable.
 MACRO(add_bin_env_test prefix F)
   ADD_EXECUTABLE(${prefix}_${F} ${F}.c)
-  TARGET_LINK_LIBRARIES(${prefix}_${F} netcdf)
+  TARGET_LINK_LIBRARIES(${prefix}_${F} netcdff)
   IF(MSVC)
     SET_TARGET_PROPERTIES(${prefix}_${F}
       PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"
@@ -350,7 +356,7 @@ ENDMACRO()
 # Build a binary used by a script, but don't make a test out of it.
 MACRO(build_bin_test F)
   ADD_EXECUTABLE(${F} ${F}.c)
-  TARGET_LINK_LIBRARIES(${F} netcdf)
+  TARGET_LINK_LIBRARIES(${F} netcdff)
   IF(MSVC)
     SET_TARGET_PROPERTIES(${F}
       PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"
@@ -363,6 +369,9 @@ OPTION(LARGE_FILE_TESTS "Run large file tests, which are slow and take lots of d
 OPTION(BUILD_BENCHMARKS "Run F90 I/O Benchmarks" OFF)
 OPTION(TEST_WITH_VALGRIND "Run extra tests with valgrind" OFF)
 OPTION(TEST_PARALLEL "Run parallel I/O tests for F90 and F77" OFF)
+IF(TEST_PARALLEL)
+  SET(STATUS_PARALLEL ON)
+ENDIF()
 OPTION (ENABLE_NETCDF_4 "Enable netCDF-4" ON)
 IF(ENABLE_NETCDF_4)  # TODO: Seems like we should just use one of these
   SET(USE_NETCDF4 ON CACHE BOOL "")
@@ -605,6 +614,16 @@ ENDIF()
 ###
 # End 'seek out dependent libraries'
 ###
+
+###
+# Set global linker flags
+###
+IF(CMAKE_LINK_FLAGS)
+  SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} ${CMAKE_LINK_FLAGS}")
+  SET(CMAKE_SHARED_LINKER_FLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${CMAKE_LINK_FLAGS}")
+  SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${CMAKE_LINK_FLAGS}")
+ENDIF()
+
 
 INSTALL(PROGRAMS ${NC4F_BINARY_DIR}/nf-config
         DESTINATION "${CMAKE_INSTALL_BINDIR}"

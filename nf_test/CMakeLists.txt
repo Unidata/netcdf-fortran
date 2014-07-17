@@ -114,7 +114,7 @@ if (USE_NETCDF4)
     SET(check_PROGRAMS ${check_PROGRAMS} f90tst_parallel f90tst_parallel2 f90tst_parallel3
       f90tst_nc4_par)
     #f90tst_parallel_fill
-    SET(TESTS ${TESTS} run_f90_par_test.sh)
+    SET(SCRIPT_TESTS run_f90_par_test.sh)
     SET(f90tst_parallel_SOURCES f90tst_parallel.f90)
     SET(f90tst_parallel2_SOURCES f90tst_parallel2.f90)
     SET(f90tst_parallel3_SOURCES f90tst_parallel3.f90)
@@ -125,7 +125,7 @@ if (USE_NETCDF4)
   # Test parallel I/O for F77.
   IF (TEST_PARALLEL)
     SET(check_PROGRAMS ${check_PROGRAMS} ftst_parallel ftst_parallel_nasa)
-    SET(TESTS ${TESTS} run_f77_par_test.sh)
+    SET(SCRIPT_TESTS ${SCRIPT_TESTS} run_f77_par_test.sh)
     SET(ftst_parallel_SOURCES ftst_parallel.F)
     SET(ftst_parallel_nasa_SOURCES ftst_parallel_nasa.F)
   ENDIF (TEST_PARALLEL)
@@ -164,10 +164,18 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/fortran ${CMAKE_SOURCE_DIR}/libsrc
   ${NC4F_BINARY_DIR}/libsrc)
 LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/fortran ${CMAKE_SOURCE_DIR}/libsrc 
   ${NC4F_BINARY_DIR}/fortran)
+
+# Create pre-compiled tests.
 FOREACH(t ${TESTS})
   ADD_EXECUTABLE(${t} ${${t}_SOURCES})
   TARGET_LINK_LIBRARIES(${t} ncfortran netcdff ${NETCDF_C_LIBRARY})
-  ADD_TEST(${t} ${t})
+  #ADD_TEST(${t} ${t})
+  add_bin_test(nf_test ${t})
+ENDFOREACH()
+
+# Add script-based tests.
+FOREACH(t ${SCRIPT_TESTS})
+  add_sh_test(nf_test ${t})
 ENDFOREACH()
 
 # test_get.F and test_put.f need to be distributed, so that the user

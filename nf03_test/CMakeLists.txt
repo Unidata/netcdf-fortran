@@ -50,7 +50,6 @@ IF(USE_NETCDF4)
   # Test parallel I/O
   IF(TEST_PARALLEL)
     LIST(APPEND check_PROGRAMS f03tst_parallel)
-    LIST(APPEND TESTS run_f90_par_test.sh)
     LIST(APPEND CLEANFILES ftst_parallel.nc)
     SET(f03tst_parallel_SOURCES f03tst_parallel.F)
   ENDIF(TEST_PARALLEL)
