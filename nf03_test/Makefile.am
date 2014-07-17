@@ -85,7 +85,6 @@ endif # BUILD_V2
 # Test parallel I/O
 if TEST_PARALLEL
 check_PROGRAMS += f03tst_parallel
-TESTS += run_f90_par_test.sh
 CLEANFILES += ftst_parallel.nc
 f03tst_parallel_SOURCES = f03tst_parallel.F
 endif # TEST_PARALLEL
