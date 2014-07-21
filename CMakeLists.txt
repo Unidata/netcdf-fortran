@@ -241,7 +241,7 @@ MACRO(build_bin_test_no_prefix F)
 ENDMACRO()
 
 MACRO(add_bin_test prefix F)
-  
+
   IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${F}.F)
     set(ext ".F")
   ELSE()
@@ -249,7 +249,7 @@ MACRO(add_bin_test prefix F)
   ENDIF()
 
   ADD_EXECUTABLE(${prefix}_${F} ${F}${ext})
-  TARGET_LINK_LIBRARIES(${prefix}_${F} netcdff netcdf)
+  TARGET_LINK_LIBRARIES(${prefix}_${F} netcdff)
   IF(MSVC)
     SET_TARGET_PROPERTIES(${prefix}_${F}
       PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"

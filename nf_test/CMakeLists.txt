@@ -7,7 +7,7 @@ SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Process these files with m4.
 SET(m4_SOURCES test_get test_put)
-foreach (f ${m4_SOURCES})      
+foreach (f ${m4_SOURCES})
 		   GEN_m4(${f})
 endforeach(f)
 
@@ -139,7 +139,7 @@ IF (BUILD_V2)
   SET(TESTS ${TESTS} ftest)
   IF (BUILD_F03)
     SET(ftest_SOURCES ftest.F f03lib.c)
-  ELSE() 
+  ELSE()
     SET(ftest_SOURCES ftest.F fortlib.c)
   ENDIF(BUILD_F03)
 ENDIF(BUILD_V2)
@@ -155,22 +155,22 @@ IF(NOT NETCDF_C_LIBRARY)
 ENDIF()
 
 # Need a copy of ref_fills.nc for ftest
-execute_process(COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/ref_fills.nc 
+execute_process(COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/ref_fills.nc
   ${CMAKE_CURRENT_BINARY_DIR}/fills.nc)
 
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/fortran ${CMAKE_SOURCE_DIR}/libsrc 
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/fortran ${CMAKE_SOURCE_DIR}/libsrc
   ${CMAKE_SOURCE_DIR} ${CMAKE_CPP_FLAGS}
   ${NETCDF_C_INCLUDE_DIR} ${NC4F_BINARY_DIR}/fortran
   ${NC4F_BINARY_DIR}/libsrc)
-LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/fortran ${CMAKE_SOURCE_DIR}/libsrc 
+LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/fortran ${CMAKE_SOURCE_DIR}/libsrc
   ${NC4F_BINARY_DIR}/fortran)
 
 # Create pre-compiled tests.
 FOREACH(t ${TESTS})
   ADD_EXECUTABLE(${t} ${${t}_SOURCES})
   TARGET_LINK_LIBRARIES(${t} ncfortran netcdff ${NETCDF_C_LIBRARY})
-  #ADD_TEST(${t} ${t})
-  add_bin_test(nf_test ${t})
+  ADD_TEST(${t} ${t})
+  #add_bin_test(nf_test ${t})
 ENDFOREACH()
 
 # Add script-based tests.
