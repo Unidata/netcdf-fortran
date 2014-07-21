@@ -354,9 +354,9 @@ MACRO(add_bin_env_test prefix F)
 ENDMACRO()
 
 # Build a binary used by a script, but don't make a test out of it.
-MACRO(build_bin_test F)
-  ADD_EXECUTABLE(${F} ${F}.c)
-  TARGET_LINK_LIBRARIES(${F} netcdff)
+MACRO(build_bin_test F ext)
+  ADD_EXECUTABLE(${F} ${F}${ext})
+  TARGET_LINK_LIBRARIES(${F} ncfortran netcdff ${NETCDF_C_LIBRARY})
   IF(MSVC)
     SET_TARGET_PROPERTIES(${F}
       PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"

@@ -113,21 +113,25 @@ if (USE_NETCDF4)
   IF (TEST_PARALLEL)
     SET(check_PROGRAMS ${check_PROGRAMS} f90tst_parallel f90tst_parallel2 f90tst_parallel3
       f90tst_nc4_par)
-    #f90tst_parallel_fill
-    SET(SCRIPT_TESTS run_f90_par_test.sh)
-    SET(f90tst_parallel_SOURCES f90tst_parallel.f90)
-    SET(f90tst_parallel2_SOURCES f90tst_parallel2.f90)
-    SET(f90tst_parallel3_SOURCES f90tst_parallel3.f90)
-    SET(f90tst_nc4_par_SOURCES f90tst_nc4_par.f90)
+    
+    build_bin_test(f90tst_parallel ".f90")
+    build_bin_test(f90tst_parallel2 ".f90")
+    build_bin_test(f90tst_parallel3 ".f90")
+    build_bin_test(f90tst_nc4_par ".f90")
+
     #SET(f90tst_parallel_fill_SOURCES f90tst_parallel_fill.f90)
+    
   ENDIF (TEST_PARALLEL)
 
   # Test parallel I/O for F77.
   IF (TEST_PARALLEL)
     SET(check_PROGRAMS ${check_PROGRAMS} ftst_parallel ftst_parallel_nasa)
-    SET(SCRIPT_TESTS ${SCRIPT_TESTS} run_f77_par_test.sh)
-    SET(ftst_parallel_SOURCES ftst_parallel.F)
-    SET(ftst_parallel_nasa_SOURCES ftst_parallel_nasa.F)
+    SET(SCRIPT_TESTS ${SCRIPT_TESTS} run_f77_par_test)
+     
+    # Add executables for f77_par_tst
+    build_bin_test(ftst_parallel ".F")
+    build_bin_test(ftst_parallel_nasa ".F")
+    
   ENDIF (TEST_PARALLEL)
 
 endif(USE_NETCDF4)
@@ -170,13 +174,19 @@ FOREACH(t ${TESTS})
   ADD_EXECUTABLE(${t} ${${t}_SOURCES})
   TARGET_LINK_LIBRARIES(${t} ncfortran netcdff ${NETCDF_C_LIBRARY})
   ADD_TEST(${t} ${t})
-  #add_bin_test(nf_test ${t})
 ENDFOREACH()
+
+# Copy test scripts in to current directory.
+FILE(GLOB COPY_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.sh)
+FILE(COPY ${COPY_FILES}
+	  DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/
+	  FILE_PERMISSIONS OWNER_WRITE OWNER_READ OWNER_EXECUTE)
 
 # Add script-based tests.
 FOREACH(t ${SCRIPT_TESTS})
   add_sh_test(nf_test ${t})
 ENDFOREACH()
+
 
 # test_get.F and test_put.f need to be distributed, so that the user
 # need not have m4. fills.nc is used by test program ftest.
