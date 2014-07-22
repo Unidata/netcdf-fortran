@@ -22,6 +22,8 @@ SET(NC4F_LIB_VERSION 6.0.1)
 SET(NC4F_SO_VERSION 6)
 SET(PACKAGE_VERSION ${VERSION})
 
+# Set known dependencies.
+SET(EXTRA_DEPS "")
 # Get system configuration,
 # Use it to determine osname,
 # os release, cpu. These will be used
@@ -364,7 +366,6 @@ MACRO(build_bin_test F ext)
   ENDIF()
 ENDMACRO()
 
-OPTION(BUILD_SHARED_LIBS "Configure netcdff as a shared library." ON)
 OPTION(LARGE_FILE_TESTS "Run large file tests, which are slow and take lots of disk." OFF)
 OPTION(BUILD_BENCHMARKS "Run F90 I/O Benchmarks" OFF)
 OPTION(TEST_WITH_VALGRIND "Run extra tests with valgrind" OFF)
@@ -375,9 +376,11 @@ ENDIF()
 OPTION (ENABLE_NETCDF_4 "Enable netCDF-4" ON)
 IF(ENABLE_NETCDF_4)  # TODO: Seems like we should just use one of these
   SET(USE_NETCDF4 ON CACHE BOOL "")
+
   ADD_DEFINITIONS(-DUSE_NETCDF4)
   SET(ENABLE_NETCDF_4 ON CACHE BOOL "")
   SET(ENABLE_NETCDF4 ON CACHE BOOL "")
+
 ENDIF()
 IF (UNIX AND ${CMAKE_SIZEOF_VOID_P} MATCHES "8")
   ADD_DEFINITIONS(-DLONGLONG_IS_LONG)
@@ -528,6 +531,10 @@ IF(NOT MSVC)
   # (but later on when installing)
   SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 
+  IF(APPLE)
+    SET(CMAKE_MACOSX_RPATH ON)
+  ENDIF()
+
   SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
 
   # add the automatically determined parts of the RPATH
@@ -575,6 +582,18 @@ ELSE()
   ENDIF()
 
 ENDIF()
+
+IF(ENABLE_NETCDF_4)
+  # When libnetcdf is static, we need to specify libhdf as well.
+  IF(MSVC)
+    FIND_PACKAGE(HDF5 COMPONENTS C HL NO_MODULE REQUIRED)
+  ELSE()
+    FIND_PACKAGE(HDF5 COMPONENTS C HL REQUIRED)
+  ENDIF()
+  INCLUDE_DIRECTORIES(${HDF5_INCLUDE_DIR})
+  SET(EXTRA_DEPS ${EXTRA_DEPS} ${HDF5_LIBRARIES})
+ENDIF()
+
 
 # Determine whether or not to generate documentation.
 OPTION(ENABLE_DOXYGEN "Enable generation of doxygen-based documentation." OFF)
