@@ -279,7 +279,13 @@ MACRO(print_conf_summary)
   ENDIF()
   MESSAGE(STATUS "\tUsing pnetcdf:\t\t\t" ${STATUS_PNETCDF})
   MESSAGE(STATUS "\tUsing Parallel IO:\t\t" ${STATUS_PARALLEL})
-  MESSAGE(STATUS "\tLinking against:\t\t" ${NETCDF_C_LIBRARY})
+  MESSAGE(STATUS "\tLinking against:\t\t" "${NETCDF_C_LIBRARY} ${EXTRA_DEPS}")
+  FOREACH(_LIB ${EXTRA_DEPS})
+    GET_FILENAME_COMPONENT(_LIB_NAME ${_LIB} NAME_WE)
+    STRING(REGEX REPLACE "^lib" "" _NAME ${_LIB_NAME})
+    LIST(APPEND NCF_LIBS "-l${_NAME}")
+  ENDFOREACH()
+  MESSAGE(STATUS "\tLib flags:\t\t" "${NCF_LIBS}")
 
   MESSAGE("")
 
@@ -432,7 +438,7 @@ OPTION(ENABLE_FORTRAN_TYPE_CHECKS
 OPTION(ENABLE_TESTS "Enable netcdf-fortran tests." ON)
 
 # A script to print out information at the end of the configuration step.
-MACRO(print_conf_summary)
+MACRO(print_conf_summary2)
   MESSAGE("")
   MESSAGE("")
   MESSAGE(STATUS "CMake Summary:")
@@ -592,7 +598,20 @@ IF(ENABLE_NETCDF_4)
   ENDIF()
   INCLUDE_DIRECTORIES(${HDF5_INCLUDE_DIR})
   SET(EXTRA_DEPS ${EXTRA_DEPS} ${HDF5_LIBRARIES})
+
+  # Look to see if we need to link against libcurl.
 ENDIF()
+
+OPTION (ENABLE_DAP "Enable DAP." ON)
+IF(ENABLE_DAP)
+  FIND_PACKAGE(CURL)
+  IF(NOT CURL_LIBRARY)
+    MESSAGE(FATAL_ERROR "${NETCDF_C_LIBRARY} depends on libcurl, which cannot be found.")
+  ENDIF()
+  INCLUDE_DIRECTORIES(${CURL_INCLUDE_DIRS})
+  SET(EXTRA_DEPS ${EXTRA_DEPS} ${CURL_LIBRARY})
+ENDIF(ENABLE_DAP)
+
 
 
 # Determine whether or not to generate documentation.
