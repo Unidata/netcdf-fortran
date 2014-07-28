@@ -51,6 +51,7 @@
   include "netcdf_externals.f90"
   include "netcdf4_externals.f90"
   include "netcdf_overloads.f90"
+  include "netcdf4_overloads.f90"
   include "netcdf_visibility.f90"
   include "netcdf4_visibility.f90"
 contains

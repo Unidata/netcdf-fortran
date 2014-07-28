@@ -36,7 +36,7 @@ netcdf4.$(OBJEXT): netcdf_constants.f90 netcdf_externals.f90 netcdf4_externals.f
         netcdf_overloads.f90 netcdf_visibility.f90 netcdf4_visibility.f90 \
         netcdf_file.f90 netcdf4_file.f90 netcdf_dims.f90 netcdf_attributes.f90 \
         netcdf4_variables.f90 netcdf_text_variables.f90 netcdf_expanded.f90 \
-        netcdf4_eightbyte.f90 netcdf4_func.f90
+        netcdf4_eightbyte.f90 netcdf4_func.f90 netcdf4_overloads.f90
 
 if !BUILD_F03
 libnetcdff_la_LIBADD = ${top_builddir}/libsrc/libnetcdfc.la
@@ -76,7 +76,8 @@ libnetcdff_la_SOURCES += netcdf4.f90
 # These are the extra netCDF-4 F90 source files.
 libnetcdff_la_DEPENDENCIES += netcdf4_func.f90 netcdf4_externals.f90 netcdf4_visibility.f90 \
                               netcdf4.f90 netcdf4_eightbyte.f90 \
-                              netcdf4_variables.f90 netcdf4_file.f90
+                              netcdf4_variables.f90 netcdf4_file.f90 \
+                              netcdf4_overloads.f90
 else !USE_NETCDF4
 libnetcdff_la_SOURCES += netcdf.f90 netcdf3_file.f90
 endif !USE_NETCDF4
@@ -96,7 +97,7 @@ EXTRA_DIST += netcdf_attributes.f90 netcdf_constants.f90 netcdf_dims.f90 \
         netcdf_overloads.f90 netcdf_text_variables.f90 netcdf_variables.f90 \
         netcdf_visibility.f90 netcdf_eightbyte.f90 \
         netcdf4_func.f90 netcdf4_externals.f90 netcdf4_visibility.f90 \
-        netcdf4.f90 netcdf4_eightbyte.f90 \
+        netcdf4.f90 netcdf4_eightbyte.f90 netcdf4_overloads.f90 \
         netcdf4_variables.f90 netcdf4_file.f90 netcdf.inc CMakeLists.txt
 
 # Some fortran compilers change the file names of .mod files to all
