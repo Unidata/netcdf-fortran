@@ -172,7 +172,7 @@ LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/fortran ${CMAKE_SOURCE_DIR}/libsrc
 # Create pre-compiled tests.
 FOREACH(t ${TESTS})
   ADD_EXECUTABLE(${t} ${${t}_SOURCES})
-  TARGET_LINK_LIBRARIES(${t} ncfortran netcdff ${NETCDF_C_LIBRARY} ${EXTRA_DEPS})
+  TARGET_LINK_LIBRARIES(${t} netcdff)
   ADD_TEST(${t} ${t})
 ENDFOREACH()
 

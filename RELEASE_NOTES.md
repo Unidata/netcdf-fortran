@@ -6,6 +6,14 @@ Release Notes {#release_notes}
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
+## 4.4.1 Released TBD
+
+### 4.4.1-RC1 Released TBD
+
+* Added a new variable for cmake-based builds, `NC_EXTRA_DEPS`.  Use this to specify additional dependencies when linking against a static `netcdf-c` library, e.g.
+
+> netcdf-fortran/build$ cmake .. -DNC\_EXTRA\_DEPS="-lhdf5 -lhdf5_hl -lcurl"
+
 ## 4.4 Released 2014-07-08
 
 * For 32-bit platforms fixed integer fill parameters, initialized potentially

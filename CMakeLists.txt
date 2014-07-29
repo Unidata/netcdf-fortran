@@ -233,15 +233,6 @@ MACRO(add_bin_test_no_prefix F)
   ENDIF()
 ENDMACRO()
 
-# Binary tests which are used by a script looking for a specific name.
-MACRO(build_bin_test_no_prefix F)
-  build_bin_test(${F})
-  ADD_TEST(${F} ${EXECUTABLE_OUTPUT_PATH}/${F})
-  IF(MSVC)
-    SET_PROPERTY(TEST ${F} PROPERTY FOLDER "tests/")
-  ENDIF()
-ENDMACRO()
-
 MACRO(add_bin_test prefix F)
 
   IF(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/${F}.F)
@@ -279,14 +270,14 @@ MACRO(print_conf_summary)
   ENDIF()
   MESSAGE(STATUS "\tUsing pnetcdf:\t\t\t" ${STATUS_PNETCDF})
   MESSAGE(STATUS "\tUsing Parallel IO:\t\t" ${STATUS_PARALLEL})
-  MESSAGE(STATUS "\tLinking against:\t\t" "${NETCDF_C_LIBRARY} ${EXTRA_DEPS}")
+
+  SET(ALL_DEP_LIBS "${NETCDF_C_LIBRARY};${EXTRA_DEPS}")
+  MESSAGE(STATUS "\tLinking against:\t\t" "${ALL_DEP_LIBS}")
   FOREACH(_LIB ${EXTRA_DEPS})
     GET_FILENAME_COMPONENT(_LIB_NAME ${_LIB} NAME_WE)
     STRING(REGEX REPLACE "^lib" "" _NAME ${_LIB_NAME})
     LIST(APPEND NCF_LIBS "-l${_NAME}")
   ENDFOREACH()
-  MESSAGE(STATUS "\tLib flags:\t\t" "${NCF_LIBS}")
-
   MESSAGE("")
 
 ENDMACRO()
@@ -437,47 +428,6 @@ OPTION(ENABLE_FORTRAN_TYPE_CHECKS
 # Toggle whether or not to run tests.
 OPTION(ENABLE_TESTS "Enable netcdf-fortran tests." ON)
 
-# A script to print out information at the end of the configuration step.
-MACRO(print_conf_summary2)
-  MESSAGE("")
-  MESSAGE("")
-  MESSAGE(STATUS "CMake Summary:")
-  MESSAGE("")
-  MESSAGE(STATUS   "\tBuild Type:                  ${CMAKE_BUILD_TYPE}")
-  IF (BUILD_SHARED_LIBS)
-    MESSAGE(STATUS "\tBuilding Shared Libraries:   ON")
-  ELSE()
-    MESSAGE(STATUS "\tBuilding Shared Libraries:   OFF")
-  ENDIF()
-  IF (ENABLE_NETCDF_4)
-    MESSAGE(STATUS "\tBuilding netCDF-4:           ON")
-  ELSE()
-    MESSAGE(STATUS "\tBuilding netCDF-4:           OFF")
-  ENDIF()
-  IF (ENABLE_DAP)
-    MESSAGE(STATUS "\tBuilding DAP Support:        ON")
-  ELSE()
-    MESSAGE(STATUS "\tBuilding DAP Support:        OFF")
-  ENDIF()
-  IF(CMAKE_PREFIX_PATH)
-    MESSAGE(STATUS "\tCMake Prefix Path:           ${CMAKE_PREFIX_PATH}")
-  ENDIF()
-  IF (STATUS_PNETCDF)
-    MESSAGE(STATUS "\tUsing pnetcdf:               ON")
-  ELSE()
-    MESSAGE(STATUS "\tUsing pnetcdf:               OFF")
-  ENDIF()
-  IF (STATUS_PARALLEL)
-    MESSAGE(STATUS "\tUsing Parallel IO:           ON")
-  ELSE()
-    MESSAGE(STATUS "\tUsing Parallel IO:           OFF")
-  ENDIF()
-  MESSAGE(STATUS   "\tLinking against:             ${ALL_TLL_LIBS}")
-
-  MESSAGE("")
-
-ENDMACRO()
-
 # Support old version-2 API for backward compatibility
 SET (ENABLE_LOGGING "ON")
 IF(ENABLE_LOGGING)
@@ -572,9 +522,36 @@ CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/CTestConfig.cmake.in"
   "${CMAKE_SOURCE_DIR}/CTestConfig.cmake"
   @ONLY)
 
+
+###
+# Allow the user to specify libraries
+# to link against, similar to automakes 'LIBS' variable.
+###
+SET(NC_EXTRA_DEPS "" CACHE STRING "Additional libraries to link against.")
+IF(NC_EXTRA_DEPS)
+  STRING(REPLACE " " ";" DEPS_LIST ${NC_EXTRA_DEPS})
+  FOREACH(_DEP ${DEPS_LIST})
+    STRING(REGEX REPLACE "^-l" "" _LIB ${_DEP})
+    FIND_LIBRARY("${_LIB}_DEP" NAMES "${_LIB}" "lib${_LIB}")
+    MESSAGE(${${_LIB}_DEP})
+    IF(NOT "${_LIB}_DEP")
+      MESSAGE(FATAL_ERROR "Error finding ${_LIB}.")
+    ELSE()
+      MESSAGE(STATUS "Found ${_LIB}: ${${_LIB}_DEP}")
+    ENDIF()
+    SET(EXTRA_DEPS ${EXTRA_DEPS} "${${_LIB}_DEP}")
+  ENDFOREACH()
+  MESSAGE("Extra deps: ${EXTRA_DEPS}")
+  LIST(REMOVE_DUPLICATES EXTRA_DEPS)
+ENDIF()
+###
+# End user-specified dependent libraries.
+###
+
 ###
 # Seek out dependent libraries.
 ###
+
 FIND_LIBRARY(NETCDF_C_LIBRARY NAMES netcdf libnetcdf)
 IF(NOT NETCDF_C_LIBRARY)
   MESSAGE(FATAL_ERROR "libnetcdf not found. Please reinstall and try again.")
@@ -582,37 +559,16 @@ ELSE()
   MESSAGE(STATUS "Found netcdf: ${NETCDF_C_LIBRARY}")
   FIND_PATH(NC_H_INCLUDE_DIR "netcdf.h")
   IF(NOT NC_H_INCLUDE_DIR)
-    MESSAGE(FATAL_ERROR "Directory containing netcdf.h cannot be found. Please reinstall and try again.")
+    MESSAGE(FATAL_ERROR "Directory containing netcdf.h cannot be found. Please# reinstall and try again.")
   ELSE()
     INCLUDE_DIRECTORIES(${NC_H_INCLUDE_DIR})
   ENDIF()
 
 ENDIF()
 
-IF(ENABLE_NETCDF_4)
-  # When libnetcdf is static, we need to specify libhdf as well.
-  IF(MSVC)
-    FIND_PACKAGE(HDF5 COMPONENTS C HL NO_MODULE REQUIRED)
-  ELSE()
-    FIND_PACKAGE(HDF5 COMPONENTS C HL REQUIRED)
-  ENDIF()
-  INCLUDE_DIRECTORIES(${HDF5_INCLUDE_DIR})
-  SET(EXTRA_DEPS ${EXTRA_DEPS} ${HDF5_LIBRARIES})
-
-  # Look to see if we need to link against libcurl.
-ENDIF()
-
-OPTION (ENABLE_DAP "Enable DAP." ON)
-IF(ENABLE_DAP)
-  FIND_PACKAGE(CURL)
-  IF(NOT CURL_LIBRARY)
-    MESSAGE(FATAL_ERROR "${NETCDF_C_LIBRARY} depends on libcurl, which cannot be found.")
-  ENDIF()
-  INCLUDE_DIRECTORIES(${CURL_INCLUDE_DIRS})
-  SET(EXTRA_DEPS ${EXTRA_DEPS} ${CURL_LIBRARY})
-ENDIF(ENABLE_DAP)
-
-
+###
+# End 'seek out dependent libraries'
+###
 
 # Determine whether or not to generate documentation.
 OPTION(ENABLE_DOXYGEN "Enable generation of doxygen-based documentation." OFF)
@@ -646,12 +602,6 @@ IF(ENABLE_DOXYGEN)
     SET(ENABLE_DOXYGEN OFF)
   ENDIF(DOXYGEN_FOUND)
 ENDIF()
-
-
-
-###
-# End 'seek out dependent libraries'
-###
 
 ###
 # Set global linker flags
