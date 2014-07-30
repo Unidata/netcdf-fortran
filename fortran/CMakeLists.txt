@@ -16,13 +16,13 @@ SET(netcdff_SOURCES
   nf_varmio.F90 nf_varsio.F90
 )
 
-IF (${USE_NETCDF4})
+IF (USE_NETCDF4)
   SET(netcdff_SOURCES ${netcdff_SOURCES}
     module_netcdf4_nc_interfaces.f90
     module_netcdf4_nf_interfaces.F90 module_netcdf4_f03.f90
     nf_lib.c nf_nc4.f90
     )
-ENDIF(${USE_NETCDF4})
+ENDIF(USE_NETCDF4)
 
 IF (${USE_LOGGING})
   SET(netcdff_SOURCES ${netcdff_SOURCES}
