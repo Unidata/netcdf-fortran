@@ -14,6 +14,8 @@ Entries are in reverse chronological order (most recent first).
 
 > netcdf-fortran/build$ cmake .. -DNC\_EXTRA\_DEPS="-lhdf5 -lhdf5_hl -lcurl"
 
+* Fixed to build correctly with netCDF-3-only C library, for example C library configured with --disable-netcdf-4 (R. Weed).
+
 ## 4.4 Released 2014-07-08
 
 * For 32-bit platforms fixed integer fill parameters, initialized potentially
@@ -22,19 +24,19 @@ Entries are in reverse chronological order (most recent first).
 * Fixed CMake builds on 32-bit platforms.
 
 * Added new `inq_path` and `rename_grps` functions analogous to
-  corresponding C functions. Added associated tests. (R. Weed)
+  corresponding C functions. Added associated tests (R. Weed).
 
 * Added support for NF\_MPIIO, `NF_MPIPOSIX`, `NF_PNETCDF` flags and
   `NF_FILL_UINT`. (R. Weed)
 
 * Fixed potential bug in attribute functions for integer values when
   Fortran `INTEGER*1` or `INTEGER*2` types are the same size as C
-  long. (R. Weed)
+  long (R. Weed).
 
 * Added test for compiler support of Fortran 2008 `ISO_FORTRAN_ENV`
   additions and TS29113 standard extension.
 
-* Fixed `C_PTR_DIFF_T` issue reported by Orion Poplowski. (R. Weed)
+* Fixed `C_PTR_DIFF_T` issue reported by Orion Poplowski (R. Weed).
 
 ### 4.4-rc1 	Released 2013-10-06
 
