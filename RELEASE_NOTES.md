@@ -13,7 +13,7 @@ Entries are in reverse chronological order (most recent first).
 * Added a new variable for cmake-based builds, `NC_EXTRA_DEPS`.  Use this to specify additional dependencies when linking against a static `netcdf-c` library, e.g.
 
 ```
-   netcdf-fortran/build$ cmake .. -DNC\_EXTRA\_DEPS="-lhdf5 -lhdf5_hl -lcurl"
+   netcdf-fortran/build$ cmake .. -DNC_EXTRA_DEPS="-lhdf5 -lhdf5_hl -lcurl"
 ```
 
 * Fixed to build correctly with netCDF-3-only C library, for example C library configured with --disable-netcdf-4 (R. Weed).
