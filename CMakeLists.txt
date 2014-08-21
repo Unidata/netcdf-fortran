@@ -552,18 +552,25 @@ ENDIF()
 # Seek out dependent libraries.
 ###
 
-FIND_LIBRARY(NETCDF_C_LIBRARY NAMES netcdf libnetcdf)
-IF(NOT NETCDF_C_LIBRARY)
-  MESSAGE(FATAL_ERROR "libnetcdf not found. Please reinstall and try again.")
+# We need the
+FIND_PACKAGE(netCDF REQUIRED)
+IF (netCDF_FOUND)
+  INCLUDE_DIRECTORIES(SYSTEM ${netCDF_INCLUDE_DIR})
+  SET(NETCDF_C_LIBRARY ${netCDF_LIBRARIES})
 ELSE()
-  MESSAGE(STATUS "Found netcdf: ${NETCDF_C_LIBRARY}")
-  FIND_PATH(NC_H_INCLUDE_DIR "netcdf.h")
-  IF(NOT NC_H_INCLUDE_DIR)
-    MESSAGE(FATAL_ERROR "Directory containing netcdf.h cannot be found. Please# reinstall and try again.")
+  # netCDF not properly packaged. Try to find it manually.
+  FIND_LIBRARY(NETCDF_C_LIBRARY NAMES netcdf libnetcdf)
+  IF(NOT NETCDF_C_LIBRARY)
+    MESSAGE(FATAL_ERROR "libnetcdf not found. Please reinstall and try again.")
   ELSE()
-    INCLUDE_DIRECTORIES(${NC_H_INCLUDE_DIR})
+    MESSAGE(STATUS "Found netcdf: ${NETCDF_C_LIBRARY}")
+    FIND_PATH(NC_H_INCLUDE_DIR "netcdf.h")
+    IF(NOT NC_H_INCLUDE_DIR)
+      MESSAGE(FATAL_ERROR "Directory containing netcdf.h cannot be found. Please reinstall and try again.")
+    ELSE()
+      INCLUDE_DIRECTORIES(SYSTEM ${NC_H_INCLUDE_DIR})
+    ENDIF()
   ENDIF()
-
 ENDIF()
 
 ###
