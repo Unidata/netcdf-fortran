@@ -1653,7 +1653,7 @@ End Interface
  Integer, External :: ncvdef
  Integer, External :: ncvid
  Integer, External :: nctlen
- Integer, External :: ncslen
+ Integer, External :: ncsfil
 #endif
 !--------------------------- End Module netcdf_nf_interfaces - ----------------
 
