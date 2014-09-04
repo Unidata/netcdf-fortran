@@ -76,7 +76,8 @@
     endif
     if (present(contiguous)) then
        if (contiguous) then
-          nf90_def_var_oneDim = nf_def_var_chunking(ncid, varid, 1, 0)       
+          chunksizes1(1) = 0
+          nf90_def_var_oneDim = nf_def_var_chunking(ncid, varid, 1, chunksizes1(1:1))       
        endif
     endif
     if (nf90_def_var_oneDim .ne. nf90_noerr) return
@@ -190,7 +191,8 @@
     endif
     if (present(contiguous)) then
        if (contiguous) then
-          nf90_def_var_ManyDims = nf_def_var_chunking(ncid, varid, 1, 0)       
+          chunksizes1(1) = 0
+          nf90_def_var_ManyDims = nf_def_var_chunking(ncid, varid, 1, chunksizes1(1:1))       
        endif
     endif
     if (nf90_def_var_ManyDims .ne. nf90_noerr) return
