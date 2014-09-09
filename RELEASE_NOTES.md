@@ -6,6 +6,10 @@ Release Notes {#release_notes}
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
+## 4.4.2 Released TBD
+
+### 4.4.2-RC1 Released TBD
+
 ## 4.4.1 Released 2014-09-09
 
 * No significant changes from RC1.
