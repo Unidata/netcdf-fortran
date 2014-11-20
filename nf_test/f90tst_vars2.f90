@@ -27,7 +27,7 @@ program f90tst_vars2
   integer :: nvars, ngatts, ndims, unlimdimid, file_format
   integer :: x, y
   integer, parameter :: DEFLATE_LEVEL = 4
-  integer (kind = 8), parameter :: TOE_SAN_VALUE = 2147483648_8
+  integer (kind = EightByteInt), parameter :: TOE_SAN_VALUE = 2147483648_EightByteInt
   character (len = *), parameter :: VAR1_NAME = "Chon-Ji"
   character (len = *), parameter :: VAR2_NAME = "Tan-Gun"
   character (len = *), parameter :: VAR3_NAME = "Toe-San"
@@ -42,7 +42,7 @@ program f90tst_vars2
   character (len = nf90_max_name) :: name_in
   integer :: endianness_in, deflate_level_in
   logical :: shuffle_in, fletcher32_in, contiguous_in
-  integer (kind = 8) :: toe_san_in
+  integer (kind = EightByteInt) :: toe_san_in
   integer :: cache_size_in, cache_nelems_in, cache_preemption_in
 
   print *, ''

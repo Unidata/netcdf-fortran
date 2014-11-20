@@ -25,7 +25,7 @@ program f90tst_grps
   integer :: nvars, ngatts, ndims, unlimdimid, file_format
   integer, parameter :: CACHE_NELEMS = 10000, CACHE_SIZE = 1000000
   integer, parameter :: DEFLATE_LEVEL = 4
-  integer (kind = 8), parameter :: TOE_SAN_VALUE = 2147483648_8
+  integer (kind = EightByteInt), parameter :: TOE_SAN_VALUE = 2147483648_EightByteInt
   character (len = *), parameter :: VAR1_NAME = "Payroll"
   character (len = *), parameter :: VAR2_NAME = "Spies"
   character (len = *), parameter :: VAR3_NAME = "Propaganda"
