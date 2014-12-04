@@ -310,7 +310,8 @@ test "x$nc_build_f03" = xyes && nc_build_f77=no
 if test "x$nc_build_f90" = xno; then
    F90=
    # If F77 is set, and FC isn't, then set FC to whatever F77 was set to.
-   FC=$F77
+   AS_IF([test x${F77+set} = xset -a x${FC+set} = x],[FC=$F77])
+
 fi
 
 # See if the fortran 90 build is desired. If so, set some stuff

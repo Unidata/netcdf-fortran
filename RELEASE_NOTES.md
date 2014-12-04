@@ -10,6 +10,9 @@ Entries are in reverse chronological order (most recent first).
 
 ### 4.4.2-RC1 Released TBD
 
+* Incorporated a patch submitted by Thomas Jahns which fixed `FC` being unconditionally overwritten by `F77` when `Fortran 90` was disabled.
+
+
 ## 4.4.1 Released 2014-09-09
 
 * No significant changes from RC1.
