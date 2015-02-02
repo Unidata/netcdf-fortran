@@ -6,12 +6,13 @@ Release Notes {#release_notes}
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
-## 4.4.2 Released TBD
+## 4.4.2 Released 2015-02-02
 
-### 4.4.2-RC1 Released TBD
+* Added infrastructure to support the new `netcdf-c` option, `ENABLE_REMOTE_FORTRAN_BOOTSTRAP`.
+
+* Incorporated changes submitted by Nico Schlomer which extends the cmake compatibility between `netcdf-c` and `netcdf-fortran`.
 
 * Incorporated a patch submitted by Thomas Jahns which fixed `FC` being unconditionally overwritten by `F77` when `Fortran 90` was disabled.
-
 
 ## 4.4.1 Released 2014-09-09
 
@@ -21,8 +22,8 @@ Entries are in reverse chronological order (most recent first).
 
 * Added a new variable for cmake-based builds, `NC_EXTRA_DEPS`.  Use this to specify additional dependencies when linking against a static `netcdf-c` library, e.g.
 
-```
-   netcdf-fortran/build$ cmake .. -DNC_EXTRA_DEPS="-lhdf5 -lhdf5_hl -lcurl"
+```.fortran
+netcdf-fortran/build$ cmake .. -DNC_EXTRA_DEPS="-lhdf5 -lhdf5_hl -lcurl"
 ```
 
 * Fixed to build correctly with netCDF-3-only C library, for example C library configured with --disable-netcdf-4 (R. Weed).
