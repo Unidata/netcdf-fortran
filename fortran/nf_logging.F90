@@ -9,7 +9,7 @@
 
  Integer, Intent(IN) :: new_level
 
- Integer,            :: status
+ Integer             :: status
 
  Integer(C_INT) :: cnew_level, cstatus
 
