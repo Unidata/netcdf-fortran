@@ -6,6 +6,10 @@ Release Notes {#release_notes}
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
+## 4.4.3 Released TBD
+
+* Updated the `cfortran.doc` license document for the `cfortran.h` library.  The most recent version was pulled from http://cfortran.sourceforge.net.  The previous version did not reflect that the author had released cfortran under the LGPL.  See [Github Issue 27](https://github.com/Unidata/netcdf-fortran/issues/27) for more information.
+
 ## 4.4.2 Released 2015-02-02
 
 * Added infrastructure to support the new `netcdf-c` option, `ENABLE_REMOTE_FORTRAN_BOOTSTRAP`.
