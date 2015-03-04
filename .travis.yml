@@ -1,0 +1,27 @@
+language: c
+compiler:
+  - gcc
+
+before_install:
+  - sudo apt-get update -qq
+  - sudo apt-get install -y -qq libcurl4-openssl-dev m4 wget autoconf libtool gfortran git
+  - wget http://www.unidata.ucar.edu/downloads/netcdf/ftp/hdf5-1.8.14.tar.bz2
+  - sudo mv hdf5-1.8.14.tar.bz2 /usr
+  - pushd /usr
+  - sudo tar -jxf hdf5-1.8.14.tar.bz2
+  - popd
+  - wget ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-4.3.3.1.tar.gz
+  - tar -zxf netcdf-4.3.3.1.tar.gz
+  - cd netcdf-4.3.3.1
+  - ./configure --prefix=/usr
+  - make -j 2
+  - sudo make install
+
+
+before_script:
+  - autoreconf -if
+  - ./configure
+
+script:
+  - make -j 2
+  - make check
