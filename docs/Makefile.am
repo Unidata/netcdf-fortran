@@ -28,7 +28,8 @@ man_MANS = netcdf_fortran.3
 
 # These files will be included with the dist.
 EXTRA_DIST = netcdf.m4 $(man_MANS) \
-CMakeLists.txt netcdf-50x50.png Doxyfile.in
+CMakeLists.txt netcdf-50x50.png Doxyfile.in \
+cfortran.doc
 
 # All the documents depend on defines.texi for some common
 # definitions.
