@@ -12,11 +12,11 @@ before_install:
   - popd
   - wget ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-4.3.3.1.tar.gz
   - tar -zxf netcdf-4.3.3.1.tar.gz
-  - cd netcdf-4.3.3.1
+  - pushd netcdf-4.3.3.1
   - ./configure --prefix=/usr
   - make -j 2
   - sudo make install
-
+  - popd
 
 before_script:
   - autoreconf -if
