@@ -19,6 +19,7 @@ before_install:
   - ./configure --prefix=/usr --disable-static --enable-shared
   - make -j 4
   - sudo make install
+  - cd ..
 
 before_script:
   - autoreconf -if
