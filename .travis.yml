@@ -5,23 +5,25 @@ compiler:
 before_install:
   - sudo apt-get update -qq
   - sudo apt-get install -y -qq libcurl4-openssl-dev m4 wget autoconf libtool gfortran git
-  - wget http://www.unidata.ucar.edu/downloads/netcdf/ftp/hdf5-1.8.14.tar.bz2
-  - sudo mv hdf5-1.8.14.tar.bz2 /usr
-  - pushd /usr
-  - sudo tar -jxf hdf5-1.8.14.tar.bz2
-  - popd
-  - wget ftp://ftp.unidata.ucar.edu/pub/netcdf/netcdf-4.3.3.1.tar.gz
-  - tar -zxf netcdf-4.3.3.1.tar.gz
-  - pushd netcdf-4.3.3.1
-  - ./configure --prefix=/usr
-  - make -j 2
-  - sudo make install
-  - popd
+
+  # We need to install hdf5.
+  # hdf5-1.8.14.tar.bz2
+  - wget http://www.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8.14/src/hdf5-1.8.14.tar.bz2
+  - tar -jxf hdf5-1.8.14.tar.bz2
+  - cd hdf5-1.8.14 && ./configure --enable-shared --disable-static --disable-fortran --enable-hl --disable-fortran --prefix=/usr && make -j 4 && make install
+
+  # Now we need to install libnetcdf
+  - git clone http://www.github.com/Unidata/netcdf-c
+  - cd netcdf-c
+  - autoreconf -if
+  - ./configure --prefix=/usr --disable-static --enable-shared
+  - make -j 4
+  - make install
 
 before_script:
   - autoreconf -if
   - ./configure
 
 script:
-  - make -j 2
+  - make -j 4
   - make check
