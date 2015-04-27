@@ -36,8 +36,35 @@ IF(UNAME)
   getuname(osname -s)
   getuname(osrel  -r)
   getuname(cpu    -m)
-  set(BUILDNAME        "${osname}-${osrel}-${cpu}" CACHE STRING "Build name variable for CDash")
+  set(TMP_BUILDNAME        "${osname}-${osrel}-${cpu}" CACHE STRING "Build name variable for CDash")
 ENDIF()
+
+###
+# Allow for some customization of the buildname.
+# This will make it easier to identify different builds,
+# based on values passed from command line/shell scripts.
+#
+# For ctest scripts, we can use CTEST_BUILD_NAME.
+###
+
+SET(BUILDNAME_PREFIX "" CACHE STRING "")
+SET(BUILDNAME_SUFFIX "" CACHE STRING "")
+
+IF(BUILDNAME_PREFIX)
+  SET(TMP_BUILDNAME "${BUILDNAME_PREFIX}-${TMP_BUILDNAME}")
+ENDIF()
+
+IF(BUILDNAME_SUFFIX)
+  SET(TMP_BUILDNAME "${TMP_BUILDNAME}-${BUILDNAME_SUFFIX}")
+ENDIF()
+
+IF(NOT BUILDNAME)
+  SET(BUILDNAME "${TMP_BUILDNAME}" CACHE STRING "Build name variable for CDash")
+ENDIF()
+###
+# End BUILDNAME customization.
+###
+
 
 # Determine if DOXYGEN and DOT are available. These will be used
 # when building the documentation.
