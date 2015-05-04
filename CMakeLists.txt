@@ -289,14 +289,18 @@ MACRO(print_conf_summary)
   MESSAGE("")
   MESSAGE(STATUS "\tBuild Type:\t\t\t" ${CMAKE_BUILD_TYPE})
   MESSAGE(STATUS "\tBuilding Shared Libraries:\t" ${BUILD_SHARED_LIBS})
-  MESSAGE(STATUS "\tBuilding netCDF-4:\t\t" ${ENABLE_NETCDF_4})
+  MESSAGE(STATUS "\tBuilding netCDF-4:\t\t" ${ENABLE_NETCDF4})
   MESSAGE(STATUS "\tBuilding DAP Support:\t\t" ${ENABLE_DAP})
-  MESSAGE(STATUS "\tBuilding Utilities:\t\t" ${BUILD_UTILITIES})
+
+  IF(STATUS_PNETCDF)
+    MESSAGE(STATUS "\tUsing pnetcdf:\t\t\t" ${STATUS_PNETCDF})
+  ENDIF(STATUS_PNETCDF)
+
+  MESSAGE(STATUS "\tUsing Parallel IO:\t\t" ${STATUS_PARALLEL})
+
   IF(CMAKE_PREFIX_PATH)
     MESSAGE(STATUS "\tCMake Prefix Path:\t\t" "${CMAKE_PREFIX_PATH}")
   ENDIF()
-  MESSAGE(STATUS "\tUsing pnetcdf:\t\t\t" ${STATUS_PNETCDF})
-  MESSAGE(STATUS "\tUsing Parallel IO:\t\t" ${STATUS_PARALLEL})
 
   SET(ALL_DEP_LIBS "${NETCDF_C_LIBRARY};${EXTRA_DEPS}")
   MESSAGE(STATUS "\tLinking against:\t\t" "${ALL_DEP_LIBS}")
@@ -440,16 +444,35 @@ ENDIF()
 ###
 
 CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nc_def_opaque "" USE_NETCDF4)
+CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nccreate "" USE_NETCDF_V2)
+CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nc_set_log_level "" USE_LOGGING)
+CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} oc_open "" BUILD_DAP)
+CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nc_use_parallel_enabled "" BUILD_PARALLEL)
 
+##
+# Set some status messages for the summary.
+##
 
-IF(USE_NETCDF4)  # TODO: Seems like we should just use one of these
-  SET(USE_NETCDF4 ON CACHE BOOL "")
+SET(STATUS_PARALLEL OFF)
+IF(BUILD_PARALLEL)
+  SET(STATUS_PARALLEL ON)
+ENDIF()
 
+IF(BUILD_DAP)
+  SET(ENABLE_DAP ON)
+ENDIF()
+
+##
+# End status messages/variables.
+##
+
+IF(USE_NETCDF4)
+  SET(ENABLE_NETCDF4 ON)
   ADD_DEFINITIONS(-DUSE_NETCDF4)
   SET(ENABLE_NETCDF_4 ON CACHE BOOL "")
   SET(ENABLE_NETCDF4 ON CACHE BOOL "")
-
 ENDIF()
+
 IF (UNIX AND ${CMAKE_SIZEOF_VOID_P} MATCHES "8")
   ADD_DEFINITIONS(-DLONGLONG_IS_LONG)
   # for easier debugging of cfortran.h
@@ -488,8 +511,7 @@ ELSE ()
   ENDIF()
 endif()
 
-OPTION (ENABLE_NETCDF_V2 "Support old netCDF version-2 Fortran API" OFF)
-IF(ENABLE_NETCDF_V2) # TODO: Can we just use one of these?
+IF(USE_NETCDF_V2)
   SET(BUILD_V2 ON CACHE BOOL "")
 ENDIF()
 # Turn this on by default when it's working
