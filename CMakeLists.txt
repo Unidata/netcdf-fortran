@@ -397,8 +397,52 @@ OPTION(TEST_PARALLEL "Run parallel I/O tests for F90 and F77" OFF)
 IF(TEST_PARALLEL)
   SET(STATUS_PARALLEL ON)
 ENDIF()
-OPTION (ENABLE_NETCDF_4 "Enable netCDF-4" ON)
-IF(ENABLE_NETCDF_4)  # TODO: Seems like we should just use one of these
+
+###
+# Seek out dependent libraries.
+###
+
+IF(NOT netCDF_LIBRARIES AND NOT netCDF_INCLUDE_DIR)
+  FIND_PACKAGE(netCDF QUIET)
+ELSE()
+  SET(netCDF_FOUND TRUE)
+ENDIF()
+
+IF (netCDF_FOUND)
+  INCLUDE_DIRECTORIES(SYSTEM ${netCDF_INCLUDE_DIR})
+  SET(NETCDF_C_LIBRARY ${netCDF_LIBRARIES})
+  SET(NETCDF_C_INCLUDE_DIR ${netCDF_INCLUDE_DIR})
+ELSE()
+  # netCDF not properly packaged. Try to find it manually.
+  FIND_LIBRARY(NETCDF_C_LIBRARY NAMES netcdf libnetcdf)
+  IF(NOT NETCDF_C_LIBRARY)
+    MESSAGE(FATAL_ERROR "libnetcdf not found. Please reinstall and try again.")
+  ELSE()
+    MESSAGE(STATUS "Found netcdf: ${NETCDF_C_LIBRARY}")
+    FIND_PATH(NC_H_INCLUDE_DIR "netcdf.h")
+    IF(NOT NC_H_INCLUDE_DIR)
+      MESSAGE(FATAL_ERROR "Directory containing netcdf.h cannot be found. Please reinstall and try again.")
+    ELSE()
+      INCLUDE_DIRECTORIES(SYSTEM ${NC_H_INCLUDE_DIR})
+    ENDIF()
+  ENDIF()
+ENDIF()
+
+###
+# End 'seek out dependent libraries'
+###
+
+
+
+###
+# TODO: Replace these with automatically-determined
+# checks, like in configure.ac.
+###
+
+CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nc_def_opaque "" USE_NETCDF4)
+
+
+IF(USE_NETCDF4)  # TODO: Seems like we should just use one of these
   SET(USE_NETCDF4 ON CACHE BOOL "")
 
   ADD_DEFINITIONS(-DUSE_NETCDF4)
@@ -573,41 +617,6 @@ IF(NC_EXTRA_DEPS)
 ENDIF()
 ###
 # End user-specified dependent libraries.
-###
-
-###
-# Seek out dependent libraries.
-###
-
-# We need the
-IF(NOT netCDF_LIBRARIES AND NOT netCDF_INCLUDE_DIR)
-  FIND_PACKAGE(netCDF QUIET)
-ELSE()
-  SET(netCDF_FOUND TRUE)
-ENDIF()
-
-IF (netCDF_FOUND)
-  INCLUDE_DIRECTORIES(SYSTEM ${netCDF_INCLUDE_DIR})
-  SET(NETCDF_C_LIBRARY ${netCDF_LIBRARIES})
-  SET(NETCDF_C_INCLUDE_DIR ${netCDF_INCLUDE_DIR})
-ELSE()
-  # netCDF not properly packaged. Try to find it manually.
-  FIND_LIBRARY(NETCDF_C_LIBRARY NAMES netcdf libnetcdf)
-  IF(NOT NETCDF_C_LIBRARY)
-    MESSAGE(FATAL_ERROR "libnetcdf not found. Please reinstall and try again.")
-  ELSE()
-    MESSAGE(STATUS "Found netcdf: ${NETCDF_C_LIBRARY}")
-    FIND_PATH(NC_H_INCLUDE_DIR "netcdf.h")
-    IF(NOT NC_H_INCLUDE_DIR)
-      MESSAGE(FATAL_ERROR "Directory containing netcdf.h cannot be found. Please reinstall and try again.")
-    ELSE()
-      INCLUDE_DIRECTORIES(SYSTEM ${NC_H_INCLUDE_DIR})
-    ENDIF()
-  ENDIF()
-ENDIF()
-
-###
-# End 'seek out dependent libraries'
 ###
 
 # Determine whether or not to generate documentation.
