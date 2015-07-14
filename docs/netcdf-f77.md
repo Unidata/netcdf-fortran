@@ -5,7 +5,7 @@ The NetCDF Fortran 77 Interface Guide {#nc_f77_interface_guide}
 
 This document describes the FORTRAN-77 interface to the netCDF library.
 
-1 Use of the NetCDF Library {#Use_of_the_NetCDF_Library}
+1 Use of the NetCDF Library {#f77_Use_of_the_NetCDF_Library}
 =============================
 
 You can use the netCDF library without knowing about all of the netCDF
@@ -31,7 +31,7 @@ are described in laters.
 
 
 
-1.1 Creating a NetCDF Dataset {#Creating_a_NetCDF_Dataset}
+1.1 Creating a NetCDF Dataset {#f77_Creating_a_NetCDF_Dataset}
 -----------------------------
 
 Here is a typical sequence of netCDF calls used to create a new netCDF
@@ -91,7 +91,7 @@ setting the NF\_SHARE flag when opening the dataset. But even if this
 flag is set, changes to attribute values or changes made in define mode
 are not written out until NF\_SYNC or NF\_CLOSE is called.
 
-1.2 Reading a NetCDF Dataset with Known Names {#Reading_a_NetCDF_Dataset_with_Known_Names} 
+1.2 Reading a NetCDF Dataset with Known Names {#f77_Reading_a_NetCDF_Dataset_with_Known_Names} 
 ---------------------------------------------
 
 Here we consider the case where you know the names of not only the
@@ -137,7 +137,7 @@ Finally, the netCDF dataset is closed with NF\_CLOSE. There is no need
 to close a dataset open only for reading.
 
 
-1.3 Reading a netCDF Dataset with Unknown Names {#Reading_a_netCDF_Dataset_with_Unknown_Names}
+1.3 Reading a netCDF Dataset with Unknown Names {#f77_Reading_a_netCDF_Dataset_with_Unknown_Names}
 -----------------------------------------------
 
 It is possible to write programs (e.g., generic software) which doch
@@ -207,7 +207,7 @@ be accessed by calling a member of the NF\_GET\_VAR1 family for single
 values, or members of the NF\_GET\_VAR, NF\_GET\_VARA, NF\_GET\_VARS, or
 NF\_GET\_VARM for various kinds of array access.
 
-1.4 Adding New Dimensions, Variables, Attributes {#Adding_New_Dimensions__Variables__Attributes}
+1.4 Adding New Dimensions, Variables, Attributes {#f77_Adding_New_Dimensions__Variables__Attributes}
 ------------------------------------------------
 
 An existing netCDF dataset can be extensively altered. New dimensions,
@@ -269,7 +269,7 @@ some means external to the library is necessary to prevent readers from
 making concurrent accesses and to inform readers to call NF\_SYNC before
 the next access.
 
-1.5 Error Handling {#Error_Handling_1_5} 
+1.5 Error Handling {#f77_Error_Handling_1_5} 
 ------------------
 
 The netCDF library provides the facilities needed to handle errors in a
@@ -290,7 +290,7 @@ you may get an error from a layer below the netCDF library, but the
 rlting write error will still be reflected in the returned status
 value.
 
-1.6 Compiling and Linking with the NetCDF Library {#Compiling_and_Linking_with_the_NetCDF_Library}
+1.6 Compiling and Linking with the NetCDF Library {#f77_Compiling_and_Linking_with_the_NetCDF_Library}
 -------------------------------------------------
 
 Details of how to compile and link a program that uses the netCDF C or
@@ -375,10 +375,10 @@ approriate libraries be linked in.
 
 
 
-2. Datasets  {#Datasets_}
+2. Datasets  {#f77_Datasets}
 ===========
 
-2.1 Datasets Introduction {#Datasets_Introduction} 
+2.1 Datasets Introduction {#f77_Datasets_Introduction} 
 -------------------------
 
 This presents the interfaces of the netCDF functions that deal
@@ -415,7 +415,7 @@ The operationspported on a netCDF dataset as a single object are:
     interfaces, the rest of this presents a detailed description
     of the interfaces for these operations.
 
-2.2 NetCDF Library Interface Descriptions {#NetCDF_Library_Interface_Descriptions} 
+2.2 NetCDF Library Interface Descriptions {#f77_NetCDF_Library_Interface_Descriptions} 
 -----------------------------------------
 
 Each interface description for a particular netCDF function in this and
@@ -435,7 +435,7 @@ calling a handle\_error function in case an error was detected. For an
 example ofch a function, see Section 5.2 "Get error message
 corresponding to error status: nf\_strerror".
 
-2.3 NF_STRERROR {#NF_STRERROR} 
+2.3 NF_STRERROR {#f77_NF_STRERROR} 
 ----------------
 
 The function NF\_STRERROR returns a static reference to an error message
@@ -483,7 +483,7 @@ END
 ~~~
 
 
-2.4 Get netCDF library version: NF_INQ_LIBVERS {#Get_netCDF_library_version_NF_INQ_LIBVERS} 
+2.4 Get netCDF library version: NF_INQ_LIBVERS {#f77_Get_netCDF_library_version_NF_INQ_LIBVERS} 
 ------------------------------------------------
 
 The function NF\_INQ\_LIBVERS returns a string identifying the version
@@ -512,7 +512,7 @@ INCLUDE 'netcdf.inc'
 PRINT *, NF_INQ_LIBVERS()
 ~~~
 
-2.5 NF_CREATE {#NF_CREATE} 
+2.5 NF_CREATE {#f77_NF_CREATE} 
 --------------
 
 This function creates a new netCDF dataset, returning a netCDF ID that
@@ -576,7 +576,7 @@ types.
  `ncid`
 :   Returned netCDF ID.
 
-### Errors 
+### Errors
 
 NF\_CREATE returns the value NF\_NOERR if no errors occurred. Possible
 causes of errors include:
@@ -606,7 +606,7 @@ STATUS = NF_CREATE('foo.nc', NF_NOCLOBBER, NCID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 ~~~
 
-2.6 NF__CREATE {#NF__CREATE}
+2.6 NF__CREATE {#f77_F__CREATE}
 ----------------
 
 This function is a variant of NF\_CREATE, NF\_\_CREATE (note the double
@@ -735,7 +735,7 @@ STATUS = NF__CREATE('foo.nc', NF_NOCLOBBER, INITIALSZ, BUFRSIZEHINT, NCID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 ~~~
 
-2.7 NF_CREATE_PAR {#NF_CREATE_PAR} 
+2.7 NF_CREATE_PAR {#f77_NF_CREATE_PAR} 
 -------------------
 
 This function is a variant of nf\_create, nf\_create\_par allows users
@@ -825,7 +825,7 @@ This example is from test program nf\_test/ftst\_parallel.F.
 ~~~
 
 
-2.8 NF_OPEN  {#NF_OPEN_}
+2.8 NF_OPEN  {#f77_NF_OPEN_}
 ------------
 
 The function NF\_OPEN opens an existing netCDF dataset for access.
@@ -967,7 +967,7 @@ STATUS = NF_OPEN('foo.nc', 0, BUFRSIZEHINT, NCID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 ~~~
 
-2.10 NF\_OPEN\_PAR  {#NF_OPEN_PAR}
+2.10 NF_OPEN_PAR  {#f77_NF_OPEN_PAR}
 ------------------
 
 This function opens a netCDF-4 dataset for parallel access.
@@ -1048,14 +1048,14 @@ This example is from the test program nf\_test/ftst\_parallel.F.
 
  
 
-
+~~~~
 !     Reopen the file.
       retval = nf_open_par(FILE_NAME, nf_nowrite, MPI_COMM_WORLD, 
      $     MPI_INFO_NULL, ncid)
       if (retval .ne. nf_noerr) stop 2
+~~~~
 
-
-2.11 NF\_REDEF 
+2.11 NF_REDEF {#f77_NF-REDEF}
 --------------
 
 The function NF\_REDEF puts an open netCDF dataset into define mode, so
@@ -1092,7 +1092,7 @@ Here is an example using NF\_REDEF to open an existing netCDF dataset
 named foo.nc and put it into define mode:
 
  
-
+~~~~
 
 INCLUDE 'netcdf.inc'
    ... 
@@ -1104,8 +1104,9 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 STATUS = NF_REDEF(NCID)                      ! put in define mode
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
+~~~~
 
-2.12 NF\_ENDDEF 
+2.12 NF_ENDDEF {#f77_NF-ENDDEF} 
 ---------------
 
 The function NF\_ENDDEF takes an open netCDF dataset out of define mode.
@@ -1152,8 +1153,7 @@ Example
 Here is an example using NF\_ENDDEF to finish the definitions of a new
 netCDF dataset named foo.nc and put it into data mode:
 
- 
-
+~~~~
 
 INCLUDE 'netcdf.inc'
    ... 
@@ -1167,8 +1167,10 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 STATUS = NF_ENDDEF(NCID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
+~~~~
 
-2.13 NF\_\_ENDDEF 
+
+2.13 NF__ENDDEF {#f77_NF__ENDDEF}
 -----------------
 
 The function NF\_\_ENDDEF takes an open netCDF dataset out of define
@@ -1280,8 +1282,7 @@ Example
 Here is an example using NF\_\_ENDDEF to finish the definitions of a new
 netCDF dataset named foo.nc and put it into data mode:
 
- 
-
+~~~~
 
 INCLUDE 'netcdf.inc'
    ... 
@@ -1299,8 +1300,9 @@ R_ALIGN = 512
 STATUS = NF_ENDDEF(NCID, H_MINFREE, V_ALIGN, V_MINFREE, R_ALIGN)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
+~~~~
 
-2.14 NF\_CLOSE 
+2.14 NF_CLOSE {#f77_NF-CLOSE} 
 --------------
 
 The function NF\_CLOSE closes an open netCDF dataset. If the dataset is
@@ -1355,7 +1357,7 @@ STATUS = NF_CLOSE(NCID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 
-2.15 NF\_INQ Family 
+2.15 NF_INQ Family {#f77_NF-INQ-Family} 
 -------------------
 
 Members of the NF\_INQ family of functions return information about an
@@ -1427,8 +1429,7 @@ Example
 Here is an example using NF\_INQ to find out about a netCDF dataset
 named foo.nc:
 
- 
-
+~~~~
 
 INCLUDE 'netcdf.inc'
    ... 
@@ -1440,8 +1441,9 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 STATUS = NF_INQ(NCID, NDIMS, NVARS, NGATTS, UNLIMDIMID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
+~~~~
 
-2.16 NF\_SYNC 
+2.16 NF_SYNC {#f77_NF-SYNC} 
 -------------
 
 The function NF\_SYNC offers a way to synchronize the disk copy of a
@@ -1545,7 +1547,7 @@ STATUS = NF_SYNC(NCID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 
-2.17 NF\_ABORT 
+2.17 NF_ABORT {#f77_NF-ABORT} 
 --------------
 
 You no longer need to call this function, since it is called
@@ -1586,8 +1588,7 @@ Example
 Here is an example using NF\_ABORT to back out of redefinitions of a
 dataset named foo.nc:
 
- 
-
+~~~~
 
 INCLUDE 'netcdf.inc'
    ... 
@@ -1607,8 +1608,9 @@ IF (STATUS .NE. NF_NOERR) THEN  ! dimension definition failed
 ENDIF
 ...
 
+~~~~
 
-2.18 NF\_SET\_FILL 
+2.18 NF_SET_FILL {#f77_NF-SET-FILL}
 ------------------
 
 This function is intended for advanced usage, to optimize writes under
@@ -1704,8 +1706,7 @@ Example
 Here is an example using NF\_SET\_FILL to set nofill mode forbsequent
 writes of a netCDF dataset named foo.nc:
 
- 
-
+~~~~
 
 INCLUDE 'netcdf.inc'
    ... 
@@ -1722,8 +1723,9 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 ! write data with no prefilling
    ... 
 
+~~~~
 
-2.19 NF\_SET\_DEFAULT\_FORMAT 
+2.19 NF_SET_DEFAULT_FORMAT {#f77_NF-SET-DEFAULT-FORMAT} 
 -----------------------------
 
 This function is intended for advanced users.
@@ -1799,7 +1801,7 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
    ... 
 
 
-2.20 Set HDF5 Chunk Cache for Future File Opens/Creates: NF\_SET\_CHUNK\_CACHE 
+2.20 Set HDF5 Chunk Cache for Future File Opens/Creates: NF_SET_CHUNK_CACHE {#f77_Set-HDF5-Chunk}
 ------------------------------------------------------------------------------
 
 This function changes the chunk cache settings in the HDF5 library. The
@@ -1850,7 +1852,7 @@ Return Codes
 
 
 
-2.21 Get the HDF5 Chunk Cache Settings for Future File Opens/Creates: NF\_GET\_CHUNK\_CACHE 
+2.21 Get the HDF5 Chunk Cache Settings for Future File Opens/Creates: NF_GET_CHUNK_CACHE {#f77_NF-GET-CHUNK-CACHE}
 -------------------------------------------------------------------------------------------
 
 This function gets the chunk cache settings for the HDF5 library. The
@@ -1893,7 +1895,7 @@ Return Codes
  `NC_NOERR`
 :   No error.
 
-3. Groups 
+3. Groups {#f77_Groups} 
 =========
 
 NetCDF-4 addedpport for hierarchical groups within netCDF datasets.
@@ -1923,7 +1925,7 @@ created with the HDF5 flag in nf\_create. (see
 classic data model, so files created with the NF\_CLASSIC\_MODEL file
 cannot contain groups (except the root group).
 
-3.1 Find a Group ID: NF\_INQ\_NCID 
+3.1 Find a Group ID: NF_INQ_NCID {#f77_NF-INQ-NCID}
 ----------------------------------
 
 Given an ncid and group name (NULL or "" gets root group), return ncid
@@ -1983,7 +1985,7 @@ C     Check getting the group by name
       if (retval .ne. nf_noerr) call handle_err(retval)
 
 
-3.2 Get a List of Groups in a Group: NF\_INQ\_GRPS 
+3.2 Get a List of Groups in a Group: NF_INQ_GRPS {#f77_NF-INQ-GRPS}
 --------------------------------------------------
 
 Given a location id, return the number of groups it contains, and an
@@ -2043,7 +2045,7 @@ C     What groups are there from the root group?
       if (retval .ne. nf_noerr) call handle_err(retval)
 
 
-3.3 Find all the Variables in a Group: NF\_INQ\_VARIDS 
+3.3 Find all the Variables in a Group: NF_INQ_VARIDS {#f77_NF-INQ-VARIDS}
 ------------------------------------------------------
 
 Find all varids for a location.
@@ -2100,7 +2102,7 @@ C     Check varids inbgroup.
       if (retval .ne. nf_noerr) call handle_err(retval)
 
 
-3.4 Find all Dimensions Visible in a Group: NF\_INQ\_DIMIDS 
+3.4 Find all Dimensions Visible in a Group: NF_INQ_DIMIDS {#f77_NF-INQ-DIMIDS}
 -----------------------------------------------------------
 
 Find all dimids for a location. This finds all dimensions in a group, or
@@ -2169,7 +2171,7 @@ C     Check dimids inbgroup.
      &     dimids_in(2) .ne. dimids(2)) stop 2
 
 
-3.5 Find the Length of a Group’s Name: NF\_INQ\_GRPNAME\_LEN 
+3.5 Find the Length of a Group’s Name: NF_INQ_GRPNAME_LE {#f77_NF-INQ-GRPNAME-LE}
 ------------------------------------------------------------
 
 Given ncid, find length of the full name. (Root group is named "/", with
@@ -2225,7 +2227,7 @@ C     Check the length of the full name.
       if (retval .ne. nf_noerr) call handle_err(retval)
 
 
-3.6 Find a Group’s Name: NF\_INQ\_GRPNAME 
+3.6 Find a Group’s Name: NF_INQ_GRPNAME {#f77_NF-INQ-GRPNAME} 
 -----------------------------------------
 
 Given ncid, find relative name of group. (Root group is named "/").
@@ -2293,7 +2295,7 @@ C     Check the name of the root group.
 
 
 
-3.7 Find a Group’s Full Name: NF\_INQ\_GRPNAME\_FULL 
+3.7 Find a Group’s Full Name: NF_INQ_GRPNAME_FULL {#f77_NF-INQ-GRPNAME-FULL} 
 ----------------------------------------------------
 
 Given ncid, find complete name of group. (Root group is named "/").
@@ -2360,7 +2362,7 @@ C     Check the full name.
       if (retval .ne. nf_noerr) call handle_err(retval)
 
 
-3.8 Find a Group’s Parent: NF\_INQ\_GRP\_PARENT 
+3.8 Find a Group’s Parent: NF_INQ_GRP_PARENT {#f77_NF-INQ-GRP-PARENT} 
 -----------------------------------------------
 
 Given ncid, find the ncid of the parent group.
@@ -2421,7 +2423,7 @@ C     Check the parent ncid.
       if (retval .ne. nf_noerr) call handle_err(retval)
 
 
-3.9 Find a Group by Name: NF\_INQ\_GRP\_NCID 
+3.9 Find a Group by Name: NF_INQ_GRP_NCID {#f77_NF-INQ-GRP-NCID} 
 --------------------------------------------
 
 Given a group name an an ncid, find the ncid of the group id.
@@ -2487,7 +2489,7 @@ C     Go to a child group and find the id of our type.
       if (retval .ne. nf_noerr) call handle_err(retval)
 
 
-3.10 Find a Group by its Fully-qualified Name: NF\_INQ\_GRP\_FULL\_NCID 
+3.10 Find a Group by its Fully-qualified Name: NF_INQ_GRP_FULL_NCID {#f77_NF-INQ-GRP-FULL-NCID} 
 -----------------------------------------------------------------------
 
 Given a fully qualified group name an an ncid, find the ncid of the
@@ -2554,7 +2556,7 @@ C     Check the full name of the root group (also "/").
       if (retval .ne. nf_noerr) call handle_err(retval)
 
 
-3.11 Create a New Group: NF\_DEF\_GRP 
+3.11 Create a New Group: NF_DEF_GRP {#f77_NF-DEF-GRP}
 -------------------------------------
 
 Create a group. Its location id is returned in new\_ncid.
@@ -2636,10 +2638,10 @@ C     Create a group and abgroup.
       if (retval .ne. nf_noerr) call handle_err(retval)
 
 
-4. Dimensions 
+4. Dimensions {#f77_Dimensions} 
 =============
 
-4.1 Dimensions Introduction 
+4.1 Dimensions Introduction {#f77_Dimensions-Introduction} 
 ---------------------------
 
 Dimensions for a netCDF dataset are defined when it is created, while
@@ -2676,7 +2678,7 @@ Operationspported on dimensions are:
 -   Get a dimension’s name and length from its ID.
 -   Rename a dimension.
 
-4.2 NF\_DEF\_DIM 
+4.2 NF_DEF_DIM {#f77_NF-DEF-DIM} 
 ----------------
 
 The function NF\_DEF\_DIM adds a new dimension to an open netCDF dataset
@@ -2747,7 +2749,7 @@ STATUS = NF_DEF_DIM(NCID, 'rec', NF_UNLIMITED, RECID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 
-4.3 NF\_INQ\_DIMID 
+4.3 NF_INQ_DIMID {#f77_NF-INQ-DIMID} 
 ------------------
 
 The function NF\_INQ\_DIMID returns (as an argument) the ID of a netCDF
@@ -2806,7 +2808,7 @@ STATUS = NF_INQ_DIMID(NCID, 'lat', LATID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 
-4.4 NF\_INQ\_DIM Family 
+4.4 NF_INQ_DIM Family {#f77_NF-INQ-DIM-Family}
 -----------------------
 
 This family of functions returns information about a netCDF dimension.
@@ -2891,7 +2893,7 @@ STATUS = NF_INQ_DIM(NCID, RECID, RECNAME, NRECS)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 
-4.5 NF\_RENAME\_DIM 
+4.5 NF_RENAME_DIM {#f77_NF-RENAME-DIM} 
 -------------------
 
 The function NF\_RENAME\_DIM renames an existing dimension in a netCDF
@@ -2960,13 +2962,13 @@ STATUS = NF_ENDDEF(NCID)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 
-5. User Defined Data Types 
+5. User Defined Data Types {#f77_User-Defined-Data-Types} 
 ==========================
 
-5.1 User Defined Types Introduction 
+5.1 User Defined Types Introduction {#f77_User-Defined-Types-Introduction}
 -----------------------------------
 
-NetCDF-4 has addedpport for four different user defined data types.
+NetCDF-4 has added support for four different user defined data types.
 
  `compound type`
 :   Like a C struct, a compound type is a collection of types, including
@@ -3000,7 +3002,7 @@ Create attributes of the new type with NF\_PUT\_ATT (see
 of the new type with NF\_GET\_ATT (see [NF\_GET\_ATT\_
 type](#NF_005fGET_005fATT_005f-type)).
 
-5.2 Learn the IDs of All Types in Group: NF\_INQ\_TYPEIDS 
+5.2 Learn the IDs of All Types in Group: NF_INQ_TYPEIDS {#f77_NF-INQ-TYPEIDS} 
 ---------------------------------------------------------
 
 Learn the number of types defined in a group, and their IDs.
@@ -3047,7 +3049,7 @@ The following example is from the test program nf\_test/ftst\_vars3.F.
 
 
 
-5.3 Find a Typeid from Group and Name: NF\_INQ\_TYPEID 
+5.3 Find a Typeid from Group and Name: NF_INQ_TYPEID {#f77_NF-INQ-TYPEID} 
 ------------------------------------------------------
 
 Given a group ID and a type name, find the ID of the type. If the type
@@ -3099,7 +3101,7 @@ C     Go to a child group and find the id of our type.
       if (retval .ne. nf_noerr) call handle_err(retval)
 
 
-5.4 Learn About a User Defined Type: NF\_INQ\_TYPE 
+5.4 Learn About a User Defined Type: NF_INQ_TYPE {#f77_NF-INQ-TYPE} 
 --------------------------------------------------
 
 Given an ncid and a typeid, get the information about a type. This
@@ -3188,7 +3190,7 @@ C     Check the enum type.
       if (member_name(1:len(one_name)) .ne. one_name) stop 2
 
 
-5.5 Learn About a User Defined Type: NF\_INQ\_USER\_TYPE 
+5.5 Learn About a User Defined Type: NF_INQ_USER_TYPE {#f77_NF-INQ-USER-TYPE} 
 --------------------------------------------------------
 
 Given an ncid and a typeid, get the information about a user defined
@@ -3260,7 +3262,7 @@ C     Check the type.
       if (retval .ne. nf_noerr) call handle_err(retval)
 
 
-5.6 Compound Types Introduction 
+5.6 Compound Types Introduction {#f77_Compound-Types-Introduction} 
 -------------------------------
 
 NetCDF-4 addedpport for compound types, which allow users to
@@ -3284,7 +3286,7 @@ C compiler which compiled netCDF would store the structure.
 The use of compound types introduces challenges and portability ies
 for Fortran users.
 
-### 5.6.1 Creating a Compound Type: NF\_DEF\_COMPOUND 
+### 5.6.1 Creating a Compound Type: NF_DEF_COMPOUND {#f77_NF-DEF-COMPOUND} 
 
 Create a compound type. Provide an ncid, a name, and a total size (in
 bytes) of one element of the completed compound type.
@@ -3376,7 +3378,7 @@ C     Define a compound type.
       if (retval .ne. nf_noerr) call handle_err(retval)
 
 
-### 5.6.2 Inserting a Field into a Compound Type: NF\_INSERT\_COMPOUND 
+### 5.6.2 Inserting a Field into a Compound Type: NF_INSERT_COMPOUND {#f77_NF-INSERT-COMPOUND} 
 
 Insert a named field into a compound type.
 
@@ -3459,7 +3461,7 @@ C     Define a compound type.
 
 
 
-### 5.6.3 Inserting an Array Field into a Compound Type: NF\_INSERT\_ARRAY\_COMPOUND 
+### 5.6.3 Inserting an Array Field into a Compound Type: NF_INSERT_ARRAY_COMPOUND {#f77_NF-INSERT-ARRAY-COMPOUND}
 
 Insert a named array field into a compound type.
 
@@ -3561,7 +3563,7 @@ C     Include an array.
       if (retval .ne. nf_noerr) call handle_err(retval)
 
 
-### 5.6.4 Learn About a Compound Type: NF\_INQ\_COMPOUND 
+### 5.6.4 Learn About a Compound Type: NF_INQ_COMPOUND {#f77_NF-INQ-COMPOUND}
 
 Get the number of fields, length in bytes, and name of a compound type.
 
@@ -3656,7 +3658,7 @@ C     Check it one piece at a time.
       if (name_in(1:len(type_name)) .ne. type_name) stop 2
 
 
-### 5.6.5 Learn About a Field of a Compound Type: NF\_INQ\_COMPOUND\_FIELD 
+### 5.6.5 Learn About a Field of a Compound Type: NF_INQ_COMPOUND_FIELD {#f77_NF-INQ-COMPOUND-FIELD} 
 
 Get information about one of the fields of a compound type.
 
@@ -3734,7 +3736,7 @@ This example is from nf\_test/fst\_types.F.
 
  
 
-
+~~~~
 C     Check the first field of the compound type.
       retval = nf_inq_compound_field(ncid, typeids(1), 1, name_in, 
      &     offset_in, field_typeid_in, ndims_in, dim_sizes_in)
@@ -3756,7 +3758,7 @@ C     Check the first field of the compound type.
      &     ndims_in)
       if (retval .ne. nf_noerr) call handle_err(retval)
       if (ndims_in .ne. 0) stop 2
-
+~~~~
 
 5.7 Variable Length Array Introduction 
 --------------------------------------
@@ -8346,10 +8348,10 @@ STATUS = NF_ENDDEF (NCID) ! leave define mode
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 
-A. NetCDF 2 to NetCDF 3 Fortran 77 Transition Guide {.appendix}
+A. NetCDF 2 to NetCDF 3 Fortran 77 Transition Guide {#f77_nc2_to_nc3_transition_guide}
 ===================================================
 
-A.1 Overview of FORTRAN interface changes 
+A.1 Overview of FORTRAN interface changes {#f77_overview_of_interface_changes}
 -----------------------------------------
 
 NetCDF version 3 includes a complete rewrite of the netCDF library. It
@@ -8392,7 +8394,7 @@ optimizations. The new library no longer uses a vendor-provided XDR
 library, which simplifies linking programs that use netCDF and speeds up
 data access significantly in most cases.
 
-A.2 The New FORTRAN Interface 
+A.2 The New FORTRAN Interface {#f77_new_fortran_interface}
 -----------------------------
 
 First, here’s an example of FORTRAN code that uses the netCDF-2
@@ -8449,7 +8451,7 @@ The example above illustrates changes in function names, data type
 conversion, and error handling, discussed in detail in thes
 below.
 
-A.3 Function Naming Conventions 
+A.3 Function Naming Conventions {#f77_function_naming_conventions}
 -------------------------------
 
 The netCDF-3 Fortran 77 library employs a naming convention intended to
@@ -8483,7 +8485,7 @@ now NF\_MAX\_NAME, and the former FILFLOAT is now NF\_FILL\_FLOAT.
 As previously mentioned, all the old names are stillpported for
 backward compatibility.
 
-A.4 Type Conversion 
+A.4 Type Conversion {#f77_type_conversion}
 -------------------
 
 With the new interface, users need not be aware of the external type of
@@ -8559,7 +8561,7 @@ functions, see the netCDF-2 User’s Guide.
 :   NF\_PUT\_ATT\_DOUBLE, NF\_PUT\_ATT\_REAL, NF\_PUT\_ATT\_INT,
     NF\_PUT\_ATT\_INT1NF\_PUT
 
-B. Summary of FORTRAN 77 Interface {.appendix}
+B. Summary of FORTRAN 77 Interface {#f77_interface_summary}
 ==================================
 
 Input parameters are in upper case, output parameters are in lower case.
@@ -8568,6 +8570,7 @@ parameter name below the function declarations.
 
  
 
+~~~~
 
 CHARACTER*80 FUNCTION  NF_INQ_LIBVERS()
 CHARACTER*80 FUNCTION  NF_STRERROR  (NCERR)
@@ -8777,3 +8780,4 @@ INTEGER       VARID_OUT    ! variable ID
 INTEGER       XTYPE        ! external type: NF_BYTE, NF_CHAR, ... , 
 INTEGER       xtype        ! returned external type
 
+~~~~
