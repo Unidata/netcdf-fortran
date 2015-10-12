@@ -20,9 +20,11 @@ C $Id: nf_test.F,v 1.29 2009/09/01 16:56:46 ed Exp $
         nfailsTotal = nfailsTotal + nfails
         if ( nfails .ne. 0) then
             print *, ' '
-            print *, '  ### ', nfails, ' FAILURES TESTING ', name, 
+            print *, '  ### ', nfails, ' FAILURES TESTING ', name,
      +               '! ###'
+        call EXIT
         end if
+
         end
 
         program nf_test
@@ -376,12 +378,11 @@ C           /* Test write functions */
         call test('nf_rename_att', test_nf_rename_att)
         call test('nf_del_att', test_nf_del_att)
         call test('nf_set_fill', test_nf_set_fill)
-        call test('nf_set_default_format', 
+        call test('nf_set_default_format',
      +       test_nf_set_default_format)
 
         print *,'Total number of failures: ', nfailsTotal
         if (nfailsTotal .ne. 0) stop 2
-        print *,'*** SUCCESS!'        
+        print *,'*** SUCCESS!'
 
         end
-
