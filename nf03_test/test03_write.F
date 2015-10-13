@@ -78,11 +78,11 @@ C On exit, delete this file
         end
 
 
-C Test nf_redef 
+C Test nf_redef
 C (In fact also tests nf_enddef - called from test_nf_enddef)
 C    BAD_ID
 C    attempt redef (error) & enddef on read-only file
-C    create file, define dims & vars. 
+C    create file, define dims & vars.
 C    attempt put var (error)
 C    attempt redef (error) & enddef.
 C    put vars
@@ -130,7 +130,7 @@ C           /* read-only tests */
         if (err .ne. NF_ENOTINDEFINE)
      +      call errore('nf_redef in NF_NOWRITE mode: ', err)
         err = nf_close(ncid)
-        if (err .ne. 0) 
+        if (err .ne. 0)
      +      call errore('nf_close: ', err)
 
 C           /* tests using scratch file */
@@ -143,7 +143,7 @@ C           /* tests using scratch file */
         call def_vars(ncid)
         call put_atts(ncid)
         err = nf_inq_varid(ncid, 'd', vid)
-        if (err .ne. 0) 
+        if (err .ne. 0)
      +      call errore('nf_inq_varid: ', err)
         var = 1.0
         err = nf_put_var1_double(ncid, vid, (/0/), var)
@@ -168,7 +168,7 @@ C           /* tests using scratch file */
         err = nf_def_var(ncid, 'abc', NF_INT, 0, (/0/), vid)
         if (err .ne. 0)
      +      call errore('nf_def_var: ', err)
-        err = nf_put_att_text(ncid, NF_GLOBAL, 'title', len(title), 
+        err = nf_put_att_text(ncid, NF_GLOBAL, 'title', len(title),
      +                        title)
         if (err .ne .0)
      +      call errore('nf_put_att_text: ', err)
@@ -180,7 +180,7 @@ C           /* tests using scratch file */
         if (err .ne. 0)
      +      call errore('nf_put_var1_double: ', err)
         err = nf_close(ncid)
-        if (err .ne. 0) 
+        if (err .ne. 0)
      +      call errore('nf_close: ', err)
 
 C           /* check scratch file written as expected */
@@ -189,11 +189,11 @@ C           /* check scratch file written as expected */
         if (err .ne. 0)
      +      call errore('nf_open: ', err)
         err = nf_inq_dim(ncid, dimid, name, length)
-        if (err .ne. 0) 
+        if (err .ne. 0)
      +      call errore('nf_inq_dim: ', err)
         if (name .ne. "abc")
      +      call errori('Unexpected dim name in netCDF ', ncid)
-        if (length .ne. 8) 
+        if (length .ne. 8)
      +      call errori('Unexpected dim length: ', length)
         err = nf_get_var1_double(ncid, vid, (/0/), var)
         if (err .ne. 0)
@@ -210,7 +210,7 @@ C           /* check scratch file written as expected */
      +      call errori('delete failed for netCDF: ', err)
         end
 
-C Test nf_enddef 
+C Test nf_enddef
 C Simply calls test_nf_redef which tests both nf_redef & nf_enddef
 
         subroutine test_nf_enddef()
@@ -433,17 +433,17 @@ C           /* define-mode tests: unlimited dim */
         if (err .ne. 0)
      +      call errore('nf_redef: ', err)
         err = nf_def_dim(ncid, dim_name(1), NF_UNLIMITED, dimid)
-        if (err .ne. 0) 
+        if (err .ne. 0)
      +      call errore('nf_def_dim: ', err)
-        if (dimid .ne. 1) 
+        if (dimid .ne. 1)
      +      call errori('Unexpected dimid: ', dimid)
         err = nf_inq_unlimdim(ncid, dimid)
-        if (err .ne. 0) 
+        if (err .ne. 0)
      +      call errore('nf_inq_unlimdim: ', err)
-        if (dimid .ne. RECDIM) 
+        if (dimid .ne. RECDIM)
      +      call error('Unexpected recdim: ')
         err = nf_inq_dimlen(ncid, dimid, length)
-        if (length .ne. 0) 
+        if (length .ne. 0)
      +      call errori('Unexpected length: ', 0)
         err = nf_def_dim(ncid, 'abc', NF_UNLIMITED, dimid)
         if (err .ne. NF_EUNLIMIT)
@@ -451,21 +451,21 @@ C           /* define-mode tests: unlimited dim */
 
 C           /* define-mode tests: remaining dims */
         do 1, i = 2, NDIMS
-            err = nf_def_dim(ncid, dim_name(i-1), dim_len(i), 
+            err = nf_def_dim(ncid, dim_name(i-1), dim_len(i),
      +                       dimid)
             if (err .ne. NF_ENAMEINUSE)
      +          call errore('duplicate name: ', err)
             err = nf_def_dim(ncid, BAD_NAME, dim_len(i), dimid)
             if (err .ne. NF_EBADNAME)
      +          call errore('bad name: ', err)
-            err = nf_def_dim(ncid, dim_name(i), NF_UNLIMITED-1, 
+            err = nf_def_dim(ncid, dim_name(i), NF_UNLIMITED-1,
      +                       dimid)
             if (err .ne. NF_EDIMSIZE)
      +          call errore('bad size: ', err)
             err = nf_def_dim(ncid, dim_name(i), dim_len(i), dimid)
-            if (err .ne. 0) 
+            if (err .ne. 0)
      +          call errore('nf_def_dim: ', err)
-            if (dimid .ne. i) 
+            if (dimid .ne. i)
      +          call errori('Unexpected dimid: ', 0)
 1       continue
 
@@ -574,7 +574,7 @@ C           /* scalar tests */
         err = nf_def_var(ncid, 'abc', NF_SHORT, 0, dimids, vid)
         if (err .ne. 0)
      +      call errore('nf_def_var: ', err)
-        err = nf_inq_var(ncid, vid, name, datatype, ndims, dimids, 
+        err = nf_inq_var(ncid, vid, name, datatype, ndims, dimids,
      +                   na)
         if (err .ne. 0)
      +      call errore('nf_inq_var: ', err)
@@ -617,9 +617,9 @@ C           /* general tests using global vars */
         end if
         call def_dims(ncid)
         do 1, i = 1, NVARS
-            err = nf_def_var(ncid, var_name(i), var_type(i), 
+            err = nf_def_var(ncid, var_name(i), var_type(i),
      +                       var_rank(i), var_dimid(1,i), vid)
-            if (err .ne. 0) 
+            if (err .ne. 0)
      +          call errore('nf_def_var: ', err)
             if (vid .ne. i)
      +          call error('Unexpected varid')
@@ -759,11 +759,11 @@ C    try with same ncid for source and target, same variable
             vid = VARID(i)
             do 2, j = 1, NATTS(i)
                 name = ATT_NAME(j,i)
-                err = nf_copy_att(ncid_in, BAD_VARID, name, ncid_out, 
+                err = nf_copy_att(ncid_in, BAD_VARID, name, ncid_out,
      +                            vid)
                 if (err .ne. NF_ENOTVAR)
      +              call errore('bad var id: ', err)
-                err = nf_copy_att(ncid_in, vid, name, ncid_out, 
+                err = nf_copy_att(ncid_in, vid, name, ncid_out,
      +                            BAD_VARID)
                 if (err .ne. NF_ENOTVAR)
      +              call errore('bad var id: ', err)
@@ -821,7 +821,7 @@ C           if this att. exists them copy ':a' to it
                 err = nf_rename_att(ncid_out, i, att_name(1,i), 'a')
                 if (err .ne. 0)
      +              call errore('nf_rename_att: ', err)
-                err = nf_copy_att(ncid_out, NF_GLOBAL, 'a', ncid_out, 
+                err = nf_copy_att(ncid_out, NF_GLOBAL, 'a', ncid_out,
      +                            i)
                 if (err .ne. 0)
      +              call errore('nf_copy_att: ', err)
@@ -849,8 +849,8 @@ C           /* Reopen & check */
      +              call errore('nf_get_att_text: ', err)
                 if (value .ne. 'A')
      +              call error('Unexpected value')
-            end if                                                   
-4       continue                                                   
+            end if
+4       continue
 
         err = nf_close(ncid_out)
         if (err .ne. 0)
@@ -1254,7 +1254,7 @@ C           /* get all variables & check all values equal default fill */
             end if
 
             do 2, j = 1, var_nels(i)
-                err = index2indexes(j, var_rank(i), var_shape(1,i), 
+                err = index2indexes(j, var_rank(i), var_shape(1,i),
      +                              index)
                 if (err .ne. 0)
      +              call error('error in index2indexes()')
@@ -1268,7 +1268,7 @@ C           /* get all variables & check all values equal default fill */
                     if (err .ne. 0)
      +                  call errore('nf_get_var1_double failed: ',err)
                 end if
-                if (value .ne. fill .and. 
+                if (value .ne. fill .and.
      +              abs((fill - value)/fill) .gt. 1.0e-9) then
                     call errord('Unexpected fill value: ', value)
                 else
@@ -1317,7 +1317,7 @@ C           /* data mode. write records */
 C           /* get all variables & check all values equal 42 */
         do 4, i = 1, NVARS
             do 5, j = 1, var_nels(i)
-                err = index2indexes(j, var_rank(i), var_shape(1,i), 
+                err = index2indexes(j, var_rank(i), var_shape(1,i),
      +                              index)
                 if (err .ne. 0)
      +              call error('error in index2indexes')
@@ -1359,28 +1359,28 @@ C *    close file & create again for test using attribute _FillValue
       subroutine test_nf_set_default_format()
       use tests
       implicit none
-      
+
       integer ncid
       integer err
       integer i
       integer version
       integer old_format
       integer nf_get_file_version
-      
+
 C     /* bad format */
-      err = nf_set_default_format(5, old_format)
+      err = nf_set_default_format(99, old_format)
       IF (err .ne. NF_EINVAL)
      +     call errore("bad default format: status = %d", err)
-     
+
 C     /* Cycle through available formats. (actually netcdf-4 formats are
 C     ignored for the moment - ed 5/15/5) */
       do 1 i=1, 2
          err = nf_set_default_format(i, old_format)
-         if (err .ne. 0) 
+         if (err .ne. 0)
      +         call errore("setting classic format: status = %d", err)
          err = nf_create(scratch, NF_CLOBBER, ncid)
          if (err .ne. 0) call errore("bad nf_create: status = %d", err)
-         err = nf_put_att_text(ncid, NF_GLOBAL, "testatt", 
+         err = nf_put_att_text(ncid, NF_GLOBAL, "testatt",
      +        4, "blah")
          if (err .ne. 0) call errore("bad put_att: status = %d", err)
          err = nf_close(ncid)
@@ -1395,12 +1395,12 @@ C    /* Remove the left-over file. */
 C      err = nf_delete(scratch)
       if (err .ne. 0) call errore("remove failed", err)
       end
-      
+
 C     This function looks in a file for the netCDF magic number.
       integer function nf_get_file_version(path, version)
       use tests
       implicit none
-      
+
       character*(*) path
       integer version, iosnum
       character magic*4
@@ -1433,4 +1433,3 @@ C     If the first three characters are not "CDF" we're done.
  1    close(f)
       return
       end
-
