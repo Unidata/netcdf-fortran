@@ -12,6 +12,7 @@ before_install:
   - cd /
   - sudo wget http://www.unidata.ucar.edu/downloads/netcdf/ftp/travisdeps_wnc.tar.bz2
   - sudo tar -jxf travisdeps_wnc.tar.bz2
+  - sudo ldconfig
   - cd -
 
   # Install netcdf-c
@@ -31,5 +32,5 @@ before_script:
   - cmake ..
 
 script:
-  - make -j 4
+  - make
   - make test
