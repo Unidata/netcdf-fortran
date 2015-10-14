@@ -28,6 +28,7 @@ before_script:
 
   - tar -jxf travisdeps_wnc.tar.bz2
   - export LD_LIBRARY_PATH=$HOME/usr/lib
+  - export PATH=$HOME/usr/bin:$PATH
   - cd -
   ##
   # What to do to build.
