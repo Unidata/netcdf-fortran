@@ -1,35 +1,40 @@
+sudo:false
 language: c
 compiler:
   - gcc
 
+addons:
+    apt:
+      packages:
+      - libcurl4-openssl-dev
+      - m4
+      - wget
+      - autoconf
+      - libtool
+      - gfortran
+      - git
+
+
 before_install:
-  - sudo apt-get update -qq
-  - sudo apt-get install -y -qq libcurl4-openssl-dev m4 wget autoconf libtool gfortran git
+
+
+before_script:
 
   ###
   # Install dependencies from a pre-built binary.
   ###
-  - cd /
-  - sudo wget http://www.unidata.ucar.edu/downloads/netcdf/ftp/travisdeps_wnc.tar.bz2
-  - sudo tar -jxf travisdeps_wnc.tar.bz2
-  - sudo ldconfig
+  - cd $HOME
+  - wget http://www.unidata.ucar.edu/downloads/netcdf/ftp/travisdeps_wnc.tar.bz2
+
+  - tar -jxf travisdeps_wnc.tar.bz2
+  - export LD_LIBRARY_PATH=$HOME/usr/lib
   - cd -
-
-  # Install netcdf-c
-  # - git clone http://github.com/Unidata/netcdf-c
-  # - cd netcdf-c
-  # - mkdir build
-  # - cd build
-  # - cmake .. -DENABLE_TESTS=OFF -DCMAKE_INSTALL_PREFIX=/usr
-  # - make -j 4
-  # - sudo make install
-  # - cd ..
-  # - cd ..
-
-before_script:
+  ##
+  # What to do to build.
+  ##
   - mkdir build
   - cd build
-  - cmake ..
+  - cmake .. -DCMAKE_PREFIX_PATH=$HOME/usr
 
 script:
   - make
