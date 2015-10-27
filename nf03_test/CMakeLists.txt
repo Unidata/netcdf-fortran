@@ -71,15 +71,12 @@ LIST(APPEND CLEANFILES tests.mod)
 SET(EXTRA_DIST test03_get.F test03_put.F fills.cdl create_fills.sh run_f77_par_test.sh)
 
 # Did the user build the V2 F77 API? If so, run this test.
-# This fails with pgifortran, but works with gfortran.
-IF(NOT USING_PGI)
-  IF(BUILD_V2)
-    LIST(APPEND check_PROGRAMS tst03_f77_v2)
-    LIST(APPEND TESTS tst03_f77_v2)
-    LIST(APPEND CLEANFILES tst_f77_v2.nc)
-    SET(tst03_f77_v2_SOURCES tst03_f77_v2.F)
-  ENDIF(BUILD_V2)
-ENDIF(NOT USING_PGI)
+IF(BUILD_V2)
+  LIST(APPEND check_PROGRAMS tst03_f77_v2)
+  LIST(APPEND TESTS tst03_f77_v2)
+  LIST(APPEND CLEANFILES tst_f77_v2.nc)
+  SET(tst03_f77_v2_SOURCES module_tests.F90 tst03_f77_v2.F)
+ENDIF(BUILD_V2)
 
 # Need a copy of ref_fills.nc for ftest
 execute_process(COMMAND cp ${CMAKE_SOURCE_DIR}/nf_test/ref_fills.nc ${CMAKE_CURRENT_BINARY_DIR}/fills.nc)
