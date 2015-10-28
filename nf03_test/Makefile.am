@@ -110,12 +110,9 @@ run_f77_par_test.sh CMakeLists.txt
 test: check
 
 # Did the user build the V2 F77 API? If so, run this test.
-# This fails with pgifortran, but works with gfortran.
-if !USING_PGI
 if BUILD_V2
 check_PROGRAMS += tst03_f77_v2
 TESTS += tst03_f77_v2
 CLEANFILES += tst_f77_v2.nc temp.tmp
-tst03_f77_v2_SOURCES = tst03_f77_v2.F
+tst03_f77_v2_SOURCES = module_tests.F90 tst03_f77_v2.F
 endif # BUILD_V2
-endif !USING_PGI

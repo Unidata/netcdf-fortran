@@ -391,13 +391,6 @@ case "$CPPFLAGS" in
       esac
 esac
 
-case "$FC" in
-pgf95|pgf90|pgf77|ifort*|lf90|lf95) using_pgi=yes ;;
-*) ;;
-esac
-
-AM_CONDITIONAL(USING_PGI, [test "x$using_pgi" = "xyes"])
-
 # Check to see if any macros must be set to enable large (>2GB) files.
 AC_SYS_LARGEFILE
 
