@@ -70,9 +70,9 @@ C
         data msg(20) / 'NetCDF: In Fortran, string too short' /
         data msg(21) / 'NetCDF: NC_MAX_NAME exceeded' /
         data msg(22) / 'NetCDF: NC_UNLIMITED size already in use' /
-        data msg(23) 
+        data msg(23)
      +  / 'NetCDF: nc_rec op when there are no record vars' /
-        data msg(24) 
+        data msg(24)
      +  /'NetCDF: Attempt to convert between text & numbers'/
         data msg(25) / 'NetCDF: Start+count exceeds dimension bound' /
         data msg(26) / 'NetCDF: Illegal stride' /
@@ -80,7 +80,7 @@ C
 
 C       /* Try on a bad error status */
         message = nf_strerror(-666)!/* should fail */
-        if (message .ne. 'Unknown Error')
+        if (message(1:13) .ne. 'Unknown Error')
      +      call errorc('nf_strerror on bad error status returned: ',
      +          message)
 
@@ -118,7 +118,7 @@ C       /* Create a non-netCDF file named 'temp.tmp' */
         OPEN(unit51, FILE=TEMPFILE)
         WRITE(51,*) 'text'
         CLOSE(51)
-        
+
 C       /* Try to open a nonexistent file */
         err = nf_open('tooth-fairy.nc', NF_NOWRITE, ncid)!/* should fail */
         if (err .eq. NF_NOERR)
@@ -154,17 +154,17 @@ C       /* Opened OK, see if can open again and get a different netCDF ID */
             err = nf_create(scratch, NF_NOCLOBBER, ncid2)
             if (err .ne. 0) then
                 call errore('nf_create: ', err)
-            else 
+            else
                 err = nf_close(ncid2)
             end if
             err = nf_open(scratch, NF_WRITE, ncid2)
             if (err .ne. 0) then
                 call errore('nf_open: ', err)
-            else 
+            else
                 err = nf_close(ncid2)
             end if
             err = nf_delete(scratch)
-            if (err .ne. 0) 
+            if (err .ne. 0)
      +          call errorc('delete of scratch file failed', scratch)
         end if
 
@@ -174,7 +174,7 @@ C       /* Opened OK, see if can open again and get a different netCDF ID */
         end
 
 
-C 
+C
 C Test nf_close.
 C    Try to close a netCDF file twice, check whether second close fails.
 C    Try on bad handle, check error return.
@@ -197,12 +197,12 @@ C       /* Close a netCDF file twice, second time should fail */
         err = nf_close(ncid)
         if (err .ne. NF_EBADID)
      +      call error('nf_close of closed file should have failed')
-        
+
 C       /* Try with a bad netCDF ID */
         err = nf_close(BAD_ID)!/* should fail */
         if (err .ne. NF_EBADID)
      +      call errore(
-     +          'nf_close with bad netCDF ID returned wrong error: ', 
+     +          'nf_close with bad netCDF ID returned wrong error: ',
      +          err)
 
 C       /* Close in data mode */
@@ -215,14 +215,14 @@ C       /* Close in data mode */
 
         if (.not. readonly) then        !/* tests using netCDF scratch file */
             err = nf_create(scratch, NF_NOCLOBBER, ncid)
-            if (err .ne. 0) 
+            if (err .ne. 0)
      +          call errore('nf_create: ', err)
             err = nf_close(ncid)
             if (err .ne. 0)
      +          call errore('nf_close in define mode: ', err)
             err = nf_delete(scratch)
             if (err .ne. 0)
-     +          call errorc('delete of scratch file failed: ', 
+     +          call errorc('delete of scratch file failed: ',
      +              scratch)
         end if
         end
@@ -256,12 +256,12 @@ C On exit, any open netCDF files are closed.
         err = nf_open(testfile, NF_NOWRITE, ncid)
         if (err .ne. 0)
      +      call errore('nf_open: ', err)
-        
+
 C       /* Try on bad handle */
         err = nf_inq(BAD_ID, ndims, nvars, ngatts, recdim)
         if (err .ne. NF_EBADID)
      +      call errore('bad ncid: ', err)
-        
+
         err = nf_inq(ncid, ndims, nvars, ngatts, recdim)
         if (err .ne. 0) then
             call errore('nf_inq: ', err)
@@ -316,7 +316,7 @@ C               /* Add dim, var, global att */
                 if (err .ne. 0)
      +              call errore('nf_def_var: ', err)
 
-                err = nf_put_att_text(ncid2, NF_GLOBAL, 'inqa', 
+                err = nf_put_att_text(ncid2, NF_GLOBAL, 'inqa',
      +                                len('stuff'), 'stuff')
                 if (err .ne. 0)
      +              call errore('nf_put_att_text: ', err)
@@ -356,7 +356,7 @@ C               /* Make sure nf_inq stills sees additions in data mode */
                 err = nf_close(ncid2)
                 err = nf_delete(scratch)
                 if (err .ne. 0)
-     +              call errorc('delete of scratch file failed:', 
+     +              call errorc('delete of scratch file failed:',
      +                  scratch)
             end if
         end if
@@ -461,7 +461,7 @@ C               /* Make sure nf_inq stills sees additions in data mode */
         if (err .ne. 0) then
             call errore('nf_inq_unlimdim: ', err)
         else if (unlimdim .ne. RECDIM) then
-            call errori('nf_inq_unlimdim: wrong number returned, ', 
+            call errori('nf_inq_unlimdim: wrong number returned, ',
      +                  unlimdim)
         end if
         err = nf_close(ncid)
@@ -488,7 +488,7 @@ C               /* Make sure nf_inq stills sees additions in data mode */
             call errore('nf_inq_format: ', err)
         else if (nformat .ne. nf_format_classic .and.
      +           nformat .ne. nf_format_64bit) then
-            call errori('nf_inq_format: wrong format number returned, ', 
+            call errori('nf_inq_format: wrong format number returned, ',
      +                  nformat)
         end if
         err = nf_close(ncid)
@@ -675,7 +675,7 @@ C               /* Make sure nf_inq stills sees additions in data mode */
         if (err .ne. 0)
      +      call errore('nf_open: ', err)
         do 1, i = 1, NVARS
-            err = nf_inq_var(BAD_ID, i, name, datatype, ndims, dimids, 
+            err = nf_inq_var(BAD_ID, i, name, datatype, ndims, dimids,
      +                       na)
             if (err .ne. NF_EBADID)
      +          call errore('bad ncid: ', err)
@@ -683,7 +683,7 @@ C               /* Make sure nf_inq stills sees additions in data mode */
      +                       na)
             if (err .ne. NF_ENOTVAR)
      +          call errore('bad var id: ', err)
-            err = nf_inq_var(ncid, i, name, datatype, ndims, dimids, 
+            err = nf_inq_var(ncid, i, name, datatype, ndims, dimids,
      +                       na)
             if (err .ne. 0) then
                 call errore('nf_inq_var: ', err)
@@ -726,7 +726,7 @@ C               /* Make sure nf_inq stills sees additions in data mode */
             err = nf_inq_vardimid(ncid, i, dimids)
             if (err .ne. 0) then
                 call errore('nf_inq_vardimid: ', err)
-            else if (.not.int_vec_eq(var_dimid(1,i), dimids, 
+            else if (.not.int_vec_eq(var_dimid(1,i), dimids,
      +               var_rank(i))) then
                 call error('unexpected dimid')
             end if
@@ -872,19 +872,19 @@ C               /* Make sure nf_inq stills sees additions in data mode */
         integer n
 
         err = nf_open(testfile, NF_NOWRITE, ncid)
-        if (err .ne. 0) 
+        if (err .ne. 0)
      +      call errore('nf_open: ', err)
 
         do 1, i = 0, NVARS
             do 2, j = 1, NATTS(i)
                 err = nf_inq_att(BAD_ID, i, ATT_NAME(j,i), t, n)
-                if (err .ne. NF_EBADID) 
+                if (err .ne. NF_EBADID)
      +              call errore('bad ncid: ', err)
                 err = nf_inq_att(ncid, BAD_VARID, ATT_NAME(j,i), t, n)
-                if (err .ne. NF_ENOTVAR) 
+                if (err .ne. NF_ENOTVAR)
      +              call errore('bad var id: ', err)
                 err = nf_inq_att(ncid, i, 'noSuch', t, n)
-                if (err .ne. NF_ENOTATT) 
+                if (err .ne. NF_ENOTATT)
      +              call errore('Bad attribute name: ', err)
                 err = nf_inq_att(ncid, i, ATT_NAME(j,i), t, n)
                 if (err .ne. 0) then
@@ -892,7 +892,7 @@ C               /* Make sure nf_inq stills sees additions in data mode */
                 else
                     if (t .ne. ATT_TYPE(j,i))
      +                  call error('type not that expected')
-                    if (n .ne. ATT_LEN(j,i)) 
+                    if (n .ne. ATT_LEN(j,i))
      +                  call error('length not that expected')
                 end if
 2           continue
@@ -965,7 +965,7 @@ C               /* Make sure nf_inq stills sees additions in data mode */
                 err = nf_inq_atttype(BAD_ID, i, ATT_NAME(j,i), datatype)
                 if (err .ne. NF_EBADID)
      +              call errore('bad ncid: ', err)
-                err = nf_inq_atttype(ncid, BAD_VARID, ATT_NAME(j,i), 
+                err = nf_inq_atttype(ncid, BAD_VARID, ATT_NAME(j,i),
      +                               datatype)
                 if (err .ne. NF_ENOTVAR)
      +              call errore('bad varid: ', err)
@@ -1049,7 +1049,7 @@ C               /* Make sure nf_inq stills sees additions in data mode */
                 err = nf_inq_attid(BAD_ID, i, ATT_NAME(j,i), attnum)
                 if (err .ne. NF_EBADID)
      +              call errore('bad ncid: ', err)
-                err = nf_inq_attid(ncid, BAD_VARID, ATT_NAME(j,i), 
+                err = nf_inq_attid(ncid, BAD_VARID, ATT_NAME(j,i),
      +                             attnum)
                 if (err .ne. NF_ENOTVAR)
      +              call errore('bad varid: ', err)
