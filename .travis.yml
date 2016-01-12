@@ -1,42 +1,23 @@
-sudo: false
+sudo: required
 language: c
-compiler:
-  - gcc
+services:
+    - docker
 
-addons:
-    apt:
-      packages:
-      - libcurl4-openssl-dev
-      - m4
-      - wget
-      - autoconf
-      - libtool
-      - gfortran
-      - git
+env:
+    matrix:
+        - DOCKIMG=unidata/nctests:serial   USECMAKE=TRUE USEAC=TRUE USE_CC=gcc   COPTS='-DCMAKE_C_FLAGS=-fsigned-char' CURHOST=docker-gcc-x64-signed
+        - DOCKIMG=unidata/nctests:serial   USECMAKE=TRUE USEAC=TRUE USE_CC=clang COPTS='-DCMAKE_C_FLAGS=-fsigned-char' CURHOST=docker-clang-x64-signed
+        - DOCKIMG=unidata/nctests:serial32 USECMAKE=TRUE USEAC=TRUE USE_CC=gcc   COPTS='-DCMAKE_C_FLAGS=-fsigned-char' CURHOST=docker-gcc-x86-signed
+        - DOCKIMG=unidata/nctests:serial32 USECMAKE=TRUE USEAC=TRUE USE_CC=clang COPTS='-DCMAKE_C_FLAGS=-fsigned-char' CURHOST=docker-clang-x86-signed
 
+        - DOCKIMG=unidata/nctests:serial   USECMAKE=TRUE USEAC=TRUE USE_CC=gcc   COPTS='-DCMAKE_C_FLAGS=-funsigned-char' CURHOST=docker-gcc-x64-unsigned
+        - DOCKIMG=unidata/nctests:serial   USECMAKE=TRUE USEAC=TRUE USE_CC=clang COPTS='-DCMAKE_C_FLAGS=-funsigned-char' CURHOST=docker-clang-x64-unsigned
+        - DOCKIMG=unidata/nctests:serial32 USECMAKE=TRUE USEAC=TRUE USE_CC=gcc   COPTS='-DCMAKE_C_FLAGS=-funsigned-char' CURHOST=docker-gcc-x86-unsigned
+        - DOCKIMG=unidata/nctests:serial32 USECMAKE=TRUE USEAC=TRUE USE_CC=clang COPTS='-DCMAKE_C_FLAGS=-funsigned-char' CURHOST=docker-clang-x86-unsigned
 
 before_install:
-
-
-before_script:
-
-  ###
-  # Install dependencies from a pre-built binary.
-  ###
-  - cd $HOME
-  - wget http://www.unidata.ucar.edu/downloads/netcdf/ftp/travisdeps_wnc.tar.bz2
-
-  - tar -jxf travisdeps_wnc.tar.bz2
-  - export LD_LIBRARY_PATH=$HOME/usr/lib
-  - export PATH=$HOME/usr/bin:$PATH
-  - cd -
-  ##
-  # What to do to build.
-  ##
-  - mkdir build
-  - cd build
-  - cmake .. -DCMAKE_PREFIX_PATH=$HOME/usr
+    - docker pull $DOCKIMG > /dev/null
 
 script:
-  - make
-  - make test
+
+    - docker run --rm -it -h "$CURHOST" -e USEDASH=FALSE -e RUNC=OFF -e RUNF=TRUE -e RUNCXX=OFF -e RUNP=OFF -e RUNNCO=OFF -e USECMAKE=$USECMAKE -e USEAC=$USEAC -e COPTS=$COPTS -v $(pwd):/netcdf-fortran $DOCKIMG
