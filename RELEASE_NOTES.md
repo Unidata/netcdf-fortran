@@ -1,4 +1,4 @@
-Release Notes {#release_notes}
+Release Notes {#nf_release_notes}
 ==============================
 
 \brief Release notes file for the netcdf-fortran package.
@@ -6,7 +6,9 @@ Release Notes {#release_notes}
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
-## 4.4.3 Released TBD
+## 4.4.3 Released 2016-01-20
+
+* Corrected a bug which would return a false-positive in `nf_test` when using netCDF-C `4.4.0`.
 
 * Updated the `cfortran.doc` license document for the `cfortran.h` library.  The most recent version was pulled from http://cfortran.sourceforge.net.  The previous version did not reflect that the author had released cfortran under the LGPL.  See [Github Issue 27](https://github.com/Unidata/netcdf-fortran/issues/27) for more information.
 
@@ -74,7 +76,7 @@ netcdf-fortran/build$ cmake .. -DNC_EXTRA_DEPS="-lhdf5 -lhdf5_hl -lcurl"
 		OpenMPI and gcc/gfortran-4.8.x on the Mac.  Also added
 		test from Reto Stöckli for NCF-250 bug, demonstrating
 		it was fixed in previous commit.
-		
+
 * Add support for NF\_MPIIO, NF\_MPIPOSIX, NF\_PNETCDF, and
 		NF\_FILL\_UINT in the data files.
 
@@ -111,13 +113,13 @@ netcdf-fortran/build$ cmake .. -DNC_EXTRA_DEPS="-lhdf5 -lhdf5_hl -lcurl"
 ### 4.4-beta1	Released 2012-03-02
 
 * `Fortran 2003 Support`
-       
+
     Version 4.4 is the first release to support fortran 2003 and to use the ISO C Bindings available in fortran 2003 to replace the older C code wrappers.
 
     Congratulations and thanks to Richard Weed at Mississippi State University, who is the author of new code.
-	        
+
     See the file `README_F03_MODS` for a more complete description of the changes. Many changes to the build structure have been made at the same time as the new 2003 code has been inserted.
 
-    As part of the fortran 2003 refactor, the directory structure has been significantly modified.  All the previous F90 C wrapper code has been moved to the "libsrc" directory. 
+    As part of the fortran 2003 refactor, the directory structure has been significantly modified.  All the previous F90 C wrapper code has been moved to the "libsrc" directory.
 
     All of the fortran code has been moved to the "fortran" directory. The directories names F77 and F90 have been removed. The most important consequence of this refactor is that pure Fortran77 compilers are no longer supported. It is assumed that the compiler supports at least Fortran 90 and also Fortran 77.  If it also supports the ISO C Bindings, then the new 2003 code is used instead of the older C wrappers.
