@@ -10,10 +10,11 @@ AM_FFLAGS = ${AM_FCFLAGS}
 AM_LDFLAGS = ${top_builddir}/fortran/libnetcdff.la -lnetcdf
 
 # These are the example programs.
-TESTPROGRAMS = simple_xy_wr simple_xy_rd sfc_pres_temp_wr	\
+F90_TESTS = simple_xy_wr simple_xy_rd sfc_pres_temp_wr	\
 sfc_pres_temp_rd pres_temp_4D_wr pres_temp_4D_rd
 
-TESTSCRIPTS = #do_comps.sh
+check_PROGRAMS = $(F90_TESTS)
+TESTS = $(F90_TESTS) # do_comps.sh
 
 # Here's the source code for the programs.
 simple_xy_wr_SOURCES = simple_xy_wr.f90
@@ -40,11 +41,14 @@ nc4_sfc_pres_temp_wr_SOURCES = nc4_sfc_pres_temp_wr.f90
 nc4_pres_temp_4D_wr_SOURCES = nc4_pres_temp_4D_wr.f90
 
 # Add example to the tests run.
-TESTPROGRAMS += nc4_simple_xy_wr nc4_sfc_pres_temp_wr	\
+F90_EXTRA_TESTS = nc4_simple_xy_wr nc4_sfc_pres_temp_wr	\
 nc4_pres_temp_4D_wr
 
+check_PROGRAMS += $(F90_EXTRA_TESTS)
+TESTS += $(F90_EXTRA_TESTS)
+
 # Add this test script.
-TESTSCRIPTS += run_nc4_comps.sh
+#TESTS += run_nc4_comps.sh
 
 # Make sure all the files created by our netcdf-4 tests get cleaned.
 CLEANFILES += nc4_simple_xy_wr.f90 simple_xy.cdl			\
@@ -55,16 +59,17 @@ endif #EXTRA_EXAMPLE_TESTS
 
 # Optionally add parallel i/o examples.
 if TEST_PARALLEL
-TESTPROGRAMS += simple_xy_par_wr simple_xy_par_rd simple_xy_par_wr2
+check_PROGRAMS += simple_xy_par_wr simple_xy_par_rd simple_xy_par_wr2
 simple_xy_par_wr_SOURCES = simple_xy_par_wr.f90
 simple_xy_par_wr2_SOURCES = simple_xy_par_wr2.f90
 simple_xy_par_rd_SOURCES = simple_xy_par_rd.f90
-TESTSCRIPTS += run_f90_par_examples.sh
+TESTS += run_f90_par_examples.sh
 CLEANFILES += simple_xy_par.nc
 endif # TEST_PARALLEL
 
 # NetCDF-4 examples.
-TESTPROGRAMS += simple_xy_nc4_wr simple_xy_nc4_rd
+check_PROGRAMS += simple_xy_nc4_wr simple_xy_nc4_rd
+TESTS += simple_xy_nc4_wr simple_xy_nc4_rd
 simple_xy_nc4_wr_SOURCES = simple_xy_nc4_wr.f90
 simple_xy_nc4_rd_SOURCES = simple_xy_nc4_rd.f90
 CLEANFILES += simple_xy_nc4.nc
@@ -86,14 +91,6 @@ nc4_pres_temp_4D_wr.f90:
 	sed -e 's/nf90_clobber/nf90_netcdf4/' pres_temp_4D_wr.f90 \
 	| sed -e 's/pres_temp_4D/nc4_pres_temp_4D/' > nc4_pres_temp_4D_wr.f90
 
-# Build these test programs.
-check_PROGRAMS = $(TESTPROGRAMS)
-
 # Make sure the script which compares file outputs is included in the
 # dist.
 EXTRA_DIST = do_comps.sh run_nc4_comps.sh run_f90_par_examples.sh CMakeLists.txt
-
-# Run all test programs, plus the do_comps.sh script, which checks
-# that all the output files are the same as the C example output
-# files.
-TESTS = $(TESTPROGRAMS) # $(TESTSCRIPTS)
