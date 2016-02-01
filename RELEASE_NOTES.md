@@ -6,6 +6,16 @@ Release Notes {#nf_release_notes}
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
+## 4.4.4 Under Development
+
+* Integrated improvements provided by Richard Weed.  For a *complete* list of modifications, see the file `docs/netcdf_fortran_4.4.2dev_notes_RW.pdf`.  **It is highly detailed and worth reading!**
+
+    The highlights of the improvements are as follows:
+
+  * Explicit dependencies on `NC_MAX_DIM` constant for arrays has been removed and replaced with dynamically-allocated arrays.
+  * Support for `nc_open_mem()` in the C library, allowing for the creation of "in memory" files.
+  * General clean up.
+
 ## 4.4.3 Released 2016-01-20
 
 * Corrected a bug which would return a false-positive in `nf_test` when using netCDF-C `4.4.0`.
