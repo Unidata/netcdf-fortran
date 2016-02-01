@@ -25,6 +25,7 @@ Module netcdf4_nf_interfaces
 !                         to support new nf90_ non-integer fill characters
 !                         Added interface for new nf_rename_grp function 
 !                         Changed interface type defs to USE netcdf_nf_data
+! Version 4. Jan.   2016  General code cleanup
 
 ! Most legacy programs don't need to use this module. However, I've created
 ! it to support FORTRAN programmers who like to provide explicit interfaces
@@ -734,10 +735,10 @@ Interface
 
  USE netcdf_nf_data, ONLY: IK8
 
- Integer,           Intent(IN) :: ncid, varid
- Integer,           Intent(IN) :: ndex(*)
- Integer(KIND=IK8), Intent(IN) :: ival
- Integer                       :: status
+ Integer,      Intent(IN) :: ncid, varid
+ Integer,      Intent(IN) :: ndex(*)
+ Integer(IK8), Intent(IN) :: ival
+ Integer                  :: status
 
  End Function nf_put_var1_int64
 End Interface
@@ -747,10 +748,10 @@ Interface
 
  USE netcdf_nf_data, ONLY: IK8
 
- Integer,           Intent(IN) :: ncid, varid
- Integer,           Intent(IN) :: start(*), counts(*)
- Integer(KIND=IK8), Intent(IN) :: ivals(*)
- Integer                       :: status
+ Integer,      Intent(IN) :: ncid, varid
+ Integer,      Intent(IN) :: start(*), counts(*)
+ Integer(IK8), Intent(IN) :: ivals(*)
+ Integer                  :: status
 
  End Function nf_put_vara_int64
 End Interface
@@ -761,10 +762,10 @@ Interface
  
  USE netcdf_nf_data, ONLY: IK8
 
- Integer,           Intent(IN) :: ncid, varid
- Integer,           Intent(IN) :: start(*), counts(*), strides(*)
- Integer(KIND=IK8), Intent(IN) :: ivals(*)
- Integer                       :: status
+ Integer,      Intent(IN) :: ncid, varid
+ Integer,      Intent(IN) :: start(*), counts(*), strides(*)
+ Integer(IK8), Intent(IN) :: ivals(*)
+ Integer                  :: status
 
  End Function nf_put_vars_int64
 End Interface
@@ -775,10 +776,10 @@ Interface
 
  USE netcdf_nf_data, ONLY: IK8
 
- Integer,           Intent(IN) :: ncid, varid
- Integer,           Intent(IN) :: start(*), counts(*), strides(*), maps(*)
- Integer(KIND=IK8), Intent(IN) :: ivals(*)
- Integer                       :: status
+ Integer,      Intent(IN) :: ncid, varid
+ Integer,      Intent(IN) :: start(*), counts(*), strides(*), maps(*)
+ Integer(IK8), Intent(IN) :: ivals(*)
+ Integer                  :: status
 
  End Function nf_put_varm_int64
 End Interface
@@ -788,9 +789,9 @@ Interface
 
  USE netcdf_nf_data, ONLY: IK8
 
- Integer,           Intent(IN) :: ncid, varid
- Integer(KIND=IK8), Intent(IN) :: ivals(*)
- Integer                       :: status
+ Integer,      Intent(IN) :: ncid, varid
+ Integer(IK8), Intent(IN) :: ivals(*)
+ Integer                  :: status
 
  End Function nf_put_var_int64
 End Interface
@@ -800,10 +801,10 @@ Interface
 
  USE netcdf_nf_data, ONLY: IK8
 
- Integer,           Intent(IN)  :: ncid, varid
- Integer,           Intent(IN)  :: ndex(*)
- Integer(KIND=IK8), Intent(OUT) :: ival
- Integer                        :: status
+ Integer,      Intent(IN)  :: ncid, varid
+ Integer,      Intent(IN)  :: ndex(*)
+ Integer(IK8), Intent(OUT) :: ival
+ Integer                   :: status
 
  End Function nf_get_var1_int64
 End Interface
@@ -813,10 +814,10 @@ Interface
 
  USE netcdf_nf_data, ONLY: IK8
 
- Integer,           Intent(IN)  :: ncid, varid
- Integer,           Intent(IN)  :: start(*), counts(*)
- Integer(KIND=IK8), Intent(OUT) :: ivals(*)
- Integer                        :: status
+ Integer,      Intent(IN)  :: ncid, varid
+ Integer,      Intent(IN)  :: start(*), counts(*)
+ Integer(IK8), Intent(OUT) :: ivals(*)
+ Integer                   :: status
 
  End Function nf_get_vara_int64
 End Interface
@@ -827,10 +828,10 @@ Interface
 
  USE netcdf_nf_data, ONLY: IK8
 
- Integer,           Intent(IN)  :: ncid, varid
- Integer,           Intent(IN)  :: start(*), counts(*), strides(*)
- Integer(KIND=IK8), Intent(OUT) :: ivals(*)
- Integer                        :: status
+ Integer,      Intent(IN)  :: ncid, varid
+ Integer,      Intent(IN)  :: start(*), counts(*), strides(*)
+ Integer(IK8), Intent(OUT) :: ivals(*)
+ Integer                   :: status
 
  End Function nf_get_vars_int64
 End Interface
@@ -841,10 +842,10 @@ Interface
 
  USE netcdf_nf_data, ONLY: IK8
 
- Integer,           Intent(IN)  :: ncid, varid
- Integer,           Intent(IN)  :: start(*), counts(*), strides(*), maps(*)
- Integer(KIND=IK8), Intent(OUT) :: ivals(*)
- Integer                        :: status
+ Integer,      Intent(IN)  :: ncid, varid
+ Integer,      Intent(IN)  :: start(*), counts(*), strides(*), maps(*)
+ Integer(IK8), Intent(OUT) :: ivals(*)
+ Integer                   :: status
 
  End Function nf_get_varm_int64
 End Interface
@@ -854,9 +855,9 @@ Interface
 
  USE netcdf_nf_data, ONLY: IK8
 
- Integer,           Intent(IN)  :: ncid, varid
- Integer(KIND=IK8), Intent(OUT) :: ivals(*)
- Integer                        :: status
+ Integer,      Intent(IN)  :: ncid, varid
+ Integer(IK8), Intent(OUT) :: ivals(*)
+ Integer                   :: status
 
  End Function nf_get_var_int64
 End Interface

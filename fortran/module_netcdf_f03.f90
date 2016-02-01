@@ -1,9 +1,9 @@
 Module netcdf_f03
 
-!> Module to provide inheritance of data and interfaces from nf_data and
+!! Module to provide inheritance of data and interfaces from nf_data and
 !! nf_interfaces modules. Not really needed by netCDF but provided for
 !! folks writing new code or updating old code who would prefer using
-!! modules instead of the old netcdf.inc include file.
+!! a module instead of the old netcdf.inc include file.
 
 !! Written by: Richard Weed, Ph.D.
 !!             Center for Advanced Vehicular Systems

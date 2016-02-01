@@ -24,8 +24,10 @@
 ! Version 2.: May   2006 - Updated to support g95
 ! Version 3.: April 2009 - Updated for netCDF 4.0.1
 ! Version 4.: April 2010 - Updated for netCDF 4.1.1
-! Version 5.: May   2014 - Ensure return error status checked from C API calls          
-         
+! Version 5.: May   2014 - Ensure return error status checked from C API calls
+! Version 6.: Jan.  2016 - General code cleanup. Changed name processing to
+!                          reflect change in addCNullChar 
+
 !-------------------------------- nf_inq_att ---------------------------------
  Function nf_inq_att(ncid, varid, name, xtype, nlen) RESULT(status)
 
@@ -41,9 +43,9 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cstatus, cvarid
- Integer(KIND=C_SIZE_T)       :: cnlen
- Integer(KIND=C_INT)          :: cxtype
+ Integer(C_INT)               :: cncid, cstatus, cvarid
+ Integer(C_SIZE_T)            :: cnlen
+ Integer(C_INT)               :: cxtype
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -54,7 +56,7 @@
 
  cname = addCNullChar(name, ie)
 
- cstatus = nc_inq_att(cncid, cvarid, cname(1:ie+1), cxtype, cnlen)
+ cstatus = nc_inq_att(cncid, cvarid, cname(1:ie), cxtype, cnlen)
 
  If (cstatus == NC_NOERR) Then
     xtype = cxtype
@@ -78,8 +80,8 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cstatus, cvarid
- Integer(KIND=C_INT)          :: cxtype
+ Integer(C_INT)               :: cncid, cstatus, cvarid
+ Integer(C_INT)               :: cxtype
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -90,7 +92,7 @@
 
  cname = addCNullChar(name, ie)
 
- cstatus = nc_inq_atttype(cncid, cvarid, cname(1:ie+1), cxtype)
+ cstatus = nc_inq_atttype(cncid, cvarid, cname(1:ie), cxtype)
 
  If (cstatus == NC_NOERR) Then
     xtype = cxtype
@@ -113,8 +115,8 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cstatus, cvarid
- Integer(KIND=C_SIZE_T)       :: cnlen
+ Integer(C_INT)               :: cncid, cstatus, cvarid
+ Integer(C_SIZE_T)            :: cnlen
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -125,7 +127,7 @@
 
  cname = addCNullChar(name, ie)
 
- cstatus = nc_inq_attlen(cncid, cvarid, cname(1:ie+1), cnlen)
+ cstatus = nc_inq_attlen(cncid, cvarid, cname(1:ie), cnlen)
 
  If (cstatus == NC_NOERR) Then
     nlen = cnlen
@@ -148,7 +150,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cstatus, cattnum, cvarid
+ Integer(C_INT)               :: cncid, cstatus, cattnum, cvarid
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -159,7 +161,7 @@
 
  cname = addCNullChar(name, ie)
 
- cstatus = nc_inq_attid(cncid, cvarid, cname(1:ie+1), cattnum)
+ cstatus = nc_inq_attid(cncid, cvarid, cname(1:ie), cattnum)
  
  If (cstatus == NC_NOERR) Then
     attnum = cattnum + 1 ! add 1 to get FORTRAN att id
@@ -181,7 +183,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cstatus, cattnum, cvarid
+ Integer(C_INT)               :: cncid, cstatus, cattnum, cvarid
  Character(LEN=(LEN(name)+1)) :: tmpname
  Integer                      :: nlen
 
@@ -219,7 +221,7 @@
 
  Integer                      :: status
 
- Integer(KIND=C_INT)          :: cncidin, cncidout,cvaridin, cvaridout, cstatus
+ Integer(C_INT)               :: cncidin, cncidout,cvaridin, cvaridout, cstatus
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -232,7 +234,7 @@
 
  cname = addCNullChar(name, ie)
 
- cstatus = nc_copy_att(cncidin, cvaridin, cname(1:ie+1), &
+ cstatus = nc_copy_att(cncidin, cvaridin, cname(1:ie), &
                        cncidout, cvaridout)
 
  status = cstatus
@@ -252,7 +254,7 @@
 
  Integer                      :: status
 
- Integer(KIND=C_INT)             :: cncid, cvarid, cstatus
+ Integer(C_INT)                  :: cncid, cvarid, cstatus
  Character(LEN=(LEN(name)+1))    :: cname 
  Character(LEN=(LEN(newname)+1)) :: cnewname 
  Integer                         :: ie1, ie2, inull
@@ -267,7 +269,7 @@
 
  cnewname = addCNullChar(newname, ie2)
 
- cstatus = nc_rename_att(cncid, cvarid, cname(1:ie1+1), cnewname(1:ie2+1))
+ cstatus = nc_rename_att(cncid, cvarid, cname(1:ie1), cnewname(1:ie2))
 
  status = cstatus
 
@@ -286,7 +288,7 @@
 
  Integer                      :: status
 
- Integer(KIND=C_INT)          :: cncid, cvarid, cstatus
+ Integer(C_INT)               :: cncid, cvarid, cstatus
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -297,7 +299,7 @@
 
  cname = addCNullChar(name, ie)
 
- cstatus = nc_del_att(cncid, cvarid, cname(1:ie+1))
+ cstatus = nc_del_att(cncid, cvarid, cname(1:ie))
 
  status = cstatus
 

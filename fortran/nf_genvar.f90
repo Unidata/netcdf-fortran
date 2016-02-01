@@ -25,8 +25,12 @@
 ! Version 2.: May   2006 - Updated to support g95
 ! Version 3.: April 2009 - Updated for netCDF 4.0.1
 ! Version 4.: April 2010 - Updated for netCDF 4.1.1
-! Version 5.: May   2014 - Ensure return error status checked from C API calls          
-          
+! Version 5.: May   2014 - Ensure return error status checked from C API calls
+! Version 6.: Jan.  2016 - General code cleanup. Replaced automatic arrays
+!                          sized with NC_MAX_DIMS with allocatable arrays.
+!                          Change name processing to reflect change in
+!                          addCNullChar
+
 !-------------------------------- nf_def_var -------------------------------
  Function nf_def_var(ncid, name, xtype, nvdims, vdims, varid) RESULT (status)
 
@@ -44,10 +48,11 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cnvdims, cvarid, cstatus, cxtype
- Integer(KIND=C_INT)          :: cvdims(NC_MAX_DIMS)
+ Integer(C_INT)               :: cncid, cnvdims, cvarid, cstatus, cxtype
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
+
+ Integer(C_INT), ALLOCATABLE :: cvdims(:)
 
  cncid   = ncid
  cnvdims = nvdims
@@ -60,19 +65,25 @@
 ! Flip dimids to C order and subtract -1 to yield C ids prior
 ! to calling nc_def_var. Replaces C utility f2c_dimids
 
- cvdims = 0
- If (nvdims /= 0) Then 
+ If (nvdims > 0) Then
+   ALLOCATE(cvdims(nvdims))
    cvdims(1:nvdims) = vdims(nvdims:1:-1)-1
+ Else
+   ALLOCATE(cvdims(1))
+   cvdims(1) = 0
  EndIf
 
- cstatus = nc_def_var(cncid, cname(1:ie+1), cxtype, &
-                     cnvdims, cvdims, cvarid)
+ cstatus = nc_def_var(cncid, cname(1:ie), cxtype, cnvdims, cvdims, &  
+                      cvarid)
 
  If (cstatus == NC_NOERR) Then
     ! Add one to returned C varid to yield FORTRAN id
-    varid = cvarid + 1
+      varid = cvarid + 1
  EndIf
+
  status = cstatus
+ 
+ If (ALLOCATED(cvdims)) DEALLOCATE(cvdims)
 
  End Function nf_def_var
 !-------------------------------- nf_inq_varndims --------------------------
@@ -89,7 +100,7 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid, cvndims, cstatus
+ Integer(C_INT) :: cncid, cvarid, cvndims, cstatus
 
  cncid   = ncid
  cvarid  = varid - 1
@@ -120,11 +131,13 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cstatus, cndims, cvarid, cnatts
- Integer(KIND=C_INT)          :: cdimids(NC_MAX_DIMS)
- Integer(KIND=C_INT)          :: cxtype
+ Integer(C_INT)               :: cncid, cstatus, cndims, cvarid, &
+                                 cnatts, cstat1
+ Integer(C_INT)               :: cxtype
  Character(LEN=NC_MAX_NAME+1) :: tmpname
  Integer                      :: nlen
+
+ Integer(C_INT), ALLOCATABLE :: cdimids(:)
 
  cncid  = ncid
  cvarid = varid - 1 ! subtract -1 to yield cvarid
@@ -139,26 +152,39 @@
  natts     = 0
  ndims     = 0
 
+ cstat1  = nc_inq_varndims(cncid, cvarid, cndims)
+ status  = cstat1
+
+ If (cndims > 0) Then
+   ALLOCATE(cdimids(cndims))
+ Else
+   ALLOCATE(cdimids(1))
+ EndIf
+
+ cdimids=0
+ 
  cstatus = nc_inq_var(cncid, cvarid, tmpname, cxtype, cndims, cdimids, cnatts)
 
  If (cstatus == NC_NOERR) Then
-    xtype = cxtype
-    natts = cnatts
-    ndims = cndims
+   xtype = cxtype
+   natts = cnatts
+   ndims = cndims
 
-    ! Check tmpname for a C null character and strip it and trailing blanks
+! Check tmpname for a C null character and strip it and trailing blanks
 
-    name = stripCNullChar(tmpname, nlen)
+   name = stripCNullChar(tmpname, nlen)
 
-    ! Reverse order of cdimids and add one to yield FORTRAN id numbers
-    ! Replaces c2f_dimids C utility
+! Reverse order of cdimids and add one to yield FORTRAN id numbers
+! Replaces c2f_dimids C utility
  
-    If (ndims > 0) Then
-       dimids(1:ndims) = cdimids(ndims:1:-1)+1
-    EndIf
+   If (ndims > 0) Then
+     dimids(1:ndims) = cdimids(ndims:1:-1)+1
+   EndIf
  EndIf
 
  status = cstatus
+
+ If (ALLOCATED(cdimids)) DEALLOCATE(cdimids)
 
  End Function nf_inq_var
 !-------------------------------- nf_inq_vardimid -----------------------
@@ -175,24 +201,33 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT) :: cncid, cstatus, cstat2, cndims, cvarid
- Integer(KIND=C_INT) :: cvdimids(NC_MAX_DIMS)
- Integer             :: ndims
+ Integer(C_INT) :: cncid, cstatus, cstat2, cndims, cvarid
+ Integer        :: ndims
+
+ Integer(C_INT), ALLOCATABLE :: cvdimids(:)
 
  cncid     = ncid
  cvarid    = varid - 1 ! subtract -1 to get C id number
  dimids(1) = 0
- cvdimids  = 0
  cndims    = 0
  ndims     = 0
  
  cstat2  = nc_inq_varndims(cncid, cvarid, cndims)
+
+ If (cndims > 0) Then
+   ALLOCATE(cvdimids(cndims))
+ Else
+   ALLOCATE(cvdimids(1))
+ EndIf
+
+ cvdimids = 0
+
  cstatus = nc_inq_vardimid(cncid, cvarid, cvdimids)
 
 ! Reverse order of cdimids and add 1 to yield FORTRAN id numbers
 ! Replaces c2f_dimids C utility
  
- If (cstat2 == NC_NOERR .AND. cstatus == NC_NOERR) Then
+ If (cstatus == NC_NOERR) Then
    ndims = cndims
    If (ndims > 0) Then    
      dimids(1:ndims) = cvdimids(ndims:1:-1)+1
@@ -202,6 +237,8 @@
  EndIf
  
  status = cstatus
+
+ If (ALLOCATED(cvdimids)) DEALLOCATE(cvdimids)
 
  End Function nf_inq_vardimid
 !-------------------------------- nf_inq_varid --------------------------
@@ -219,7 +256,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cvarid, cstatus
+ Integer(C_INT)               :: cncid, cvarid, cstatus
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -229,7 +266,7 @@
 
  cname = addCNullChar(name, ie)
 
- cstatus = nc_inq_varid(cncid, cname(1:ie+1), cvarid)
+ cstatus = nc_inq_varid(cncid, cname(1:ie), cvarid)
 
  If (cstatus == NC_NOERR) Then
     varid  = cvarid + 1  ! add one to get Fortran id number
@@ -251,7 +288,7 @@
 
  Integer                        :: status
 
- Integer(KIND=C_INT)          :: cncid, cvarid, cstatus
+ Integer(C_INT)               :: cncid, cvarid, cstatus
  Character(LEN=NC_MAX_NAME+1) :: tmpname 
  Integer                      :: nlen
 
@@ -266,8 +303,9 @@
 
  cstatus = nc_inq_varname(cncid, cvarid, tmpname)
 
+ ! Find first C null character in tmpname if present and set end of string
+
  If (cstatus == NC_NOERR) Then
-    ! Find first C null character in tmpname if present and set end of string
     name = stripCNullChar(tmpname, nlen)
  EndIf
  status = cstatus
@@ -287,8 +325,8 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid, cstatus
- Integer(KIND=C_INT) :: cxtype
+ Integer(C_INT) :: cncid, cvarid, cstatus
+ Integer(C_INT) :: cxtype
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract one to get C id number
@@ -315,7 +353,7 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid, cnvatts, cstatus
+ Integer(C_INT) :: cncid, cvarid, cnvatts, cstatus
 
  cncid  = ncid
  cvarid = varid - 1 ! subtract one to get C id number
@@ -343,7 +381,7 @@
 
  Integer                      :: status
 
- Integer(KIND=C_INT)          :: cncid, cvarid, cstatus
+ Integer(C_INT)               :: cncid, cvarid, cstatus
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -354,7 +392,7 @@
 
  cname = addCNullChar(name, ie)
 
- cstatus = nc_rename_var(cncid, cvarid, cname(1:ie+1))
+ cstatus = nc_rename_var(cncid, cvarid, cname(1:ie))
 
  status = cstatus
 
@@ -371,7 +409,7 @@
  Integer, Intent(IN) :: ncid_in, varid, ncid_out
  Integer             :: status
 
- Integer(KIND=C_INT) :: cncidin, cvarid, cncidout, cstatus
+ Integer(C_INT) :: cncidin, cvarid, cncidout, cstatus
 
  cncidin  = ncid_in
  cncidout = ncid_out

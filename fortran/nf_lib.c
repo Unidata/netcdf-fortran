@@ -13,6 +13,10 @@ $Id: fort-lib.c,v 1.15 2009/02/13 15:58:00 ed Exp $
 
  Version 1.0, April, 2009 - based on netcdf-4.0.1 source
  Version 2.0, April, 2010 - based on netcdf-4.1.1 source
+ Version 3.0, Jan.   2016 - added functions to return number of
+                            groups, types, and compound field
+                            dim_sizes. Needed to support move to
+                            allocatable arrays for starts, strides, etc
 
  modified by: Richard Weed Ph.D.
               Center for Advanced Vehicular Systems
@@ -118,6 +122,18 @@ nc_insert_array_compound_f(int ncid, int typeid, char *name,
 }
 
 extern int
+nc_inq_compound_field_ndims(int ncid, nc_type xtype, int fieldid, int *ndims)
+{
+ int ret;
+
+   /* Find out how many dims. */
+   if ((ret = nc_inq_compound_field(ncid, xtype, fieldid, NULL, NULL, 
+				    NULL, ndims, NULL)))
+      return ret;
+      return NC_NOERR;
+}
+
+extern int
 nc_inq_compound_field_f(int ncid, nc_type xtype, int fieldid, char *name, 
 			size_t *offsetp, nc_type *field_typeidp, int *ndimsp, 
 			int *dim_sizesp)
@@ -150,6 +166,26 @@ nc_inq_compound_field_f(int ncid, nc_type xtype, int fieldid, char *name,
    return NC_NOERR;
 }
 
+extern int
+nc_inq_numgrps(int ncid, int *numgrps)
+{
+ int ret;
+
+ if ((ret = nc_inq_grps(ncid, numgrps, NULL))) 
+
+    return ret;
+}  
+ 
+extern int
+nc_inq_numtypes(int ncid, int *numtypes)
+{
+ int ret;
+
+ if ((ret = nc_inq_typeids(ncid, numtypes, NULL))) 
+
+    return ret;
+}  
+ 
 #endif /*USE_NETCDF4*/
 
 /*

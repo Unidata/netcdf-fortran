@@ -25,8 +25,11 @@
 ! Version 2.: May   2006 - Updated to support g95
 ! Version 3.: April 2009 - Updated for netCDF 4.0.1
 ! Version 4.: April 2010 - Updated for netCDF 4.1.1
-! Version 5.: May   2014 - Ensure return error status checked from C API calls          
-          
+! Version 5.: May   2014 - Ensure return error status
+!                          checked from C API calls
+! Version 6.: Jan.  2016 - General code cleanup. Changed name
+!                          processing to reflect change in addCNullChar
+
 !-------------------------------- nf_def_dim -------------------------------
  Function nf_def_dim(ncid, name, dlen, dimid) RESULT (status)
 
@@ -43,8 +46,8 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cdimid, cstatus
- Integer(KIND=C_SIZE_T)       :: cdlen
+ Integer(C_INT)               :: cncid, cdimid, cstatus
+ Integer(C_SIZE_T)            :: cdlen
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -58,7 +61,7 @@
 
  cname = addCNullChar(name, ie)
  
- cstatus = nc_def_dim(cncid, cname(1:ie+1), cdlen, cdimid)
+ cstatus = nc_def_dim(cncid, cname(1:ie), cdlen, cdimid)
 
  If (cstatus == NC_EBADDIM) Then  ! Return dimid=-1
    dimid = -1
@@ -83,8 +86,8 @@
  
  Integer                       :: status
 
- Integer(KIND=C_INT)        :: cncid, cdimid, cstatus
- Integer(KIND=C_SIZE_T)     :: cdlen
+ Integer(C_INT)             :: cncid, cdimid, cstatus
+ Integer(C_SIZE_T)          :: cdlen
  Integer                    :: nlen
  Character(LEN=NC_MAX_NAME) :: tmpname 
 
@@ -122,7 +125,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cdimid, cstatus
+ Integer(C_INT)               :: cncid, cdimid, cstatus
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -134,7 +137,7 @@
 
  cname = addCNullChar(name, ie)
  
- cstatus = nc_inq_dimid(cncid, cname(1:ie+1), cdimid)
+ cstatus = nc_inq_dimid(cncid, cname(1:ie), cdimid)
 
 ! add one to get FORTRAN dimid if not = -1
 
@@ -160,8 +163,8 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT)    :: cncid, cdimid, cstatus
- Integer(KIND=C_SIZE_T) :: cdlen
+ Integer(C_INT)    :: cncid, cdimid, cstatus
+ Integer(C_SIZE_T) :: cdlen
 
  cncid   = ncid
  cdimid  = dimid - 1 ! Subtract 1 to get C dimid
@@ -189,7 +192,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)        :: cncid, cdimid, cstatus
+ Integer(C_INT)             :: cncid, cdimid, cstatus
  Integer                    :: nlen
  Character(LEN=NC_MAX_NAME) :: tmpname 
 
@@ -225,7 +228,7 @@
 
  Integer                      :: status
 
- Integer(KIND=C_INT)          :: cncid, cdimid, cstatus
+ Integer(C_INT)               :: cncid, cdimid, cstatus
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -236,7 +239,7 @@
 
  cname = addCNullChar(name, ie)
 
- cstatus = nc_rename_dim(cncid, cdimid, cname(1:ie+1))
+ cstatus = nc_rename_dim(cncid, cdimid, cname(1:ie))
 
  status = cstatus
 

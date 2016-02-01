@@ -25,6 +25,7 @@
 ! Version 2.: May   2006 - Updated to support g95
 ! Version 3.: April 2009 - Updated for netCDF 4.0.1
 ! Version 4.: April 2010 - Updated for netCDF 4.1.1
+! Version 5.: Jan   2016 - General code cleanup
  
 !-------------------------------- nf_inq_libvers ---------------------------
  Function nf_inq_libvers() RESULT(vermsg)

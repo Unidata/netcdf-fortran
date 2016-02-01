@@ -34,6 +34,8 @@ Module netcdf_nf_interfaces
 ! Version 3. April 2009 - Updated for netCDF 4.0.1
 ! Version 4. April 2010 - Updated for netCDF 4.1.1
 ! Version 5. Feb.  2013 - Added nf_inq_path support for fortran 4.4
+! Version 6. Jan.  2016 - General code cleanup, added interface for
+!                         nf_open_mem function
          
 ! Most legacy programs don't need to use this module. However, I've created
 ! it to support FORTRAN programmers who like to provide explicit interfaces
@@ -143,6 +145,22 @@ Interface
  Integer                         :: status
 
  End Function nf__open_mp
+End Interface
+!-------------------------------- nf_open_mem ---------------------------------
+Interface nf90_open_mem
+ Function nf_open_mem(path, mode, size, memory, ncid) RESULT (status)
+
+ USE ISO_C_BINDING, ONLY : C_CHAR
+
+ Character(LEN=*),       Intent(IN)           :: path
+ Integer,                Intent(IN)           :: mode
+ Integer,                Intent(IN)           :: size 
+ Character(KIND=C_CHAR), Intent(IN),   TARGET :: memory(*)
+ Integer,                Intent(INOUT)        :: ncid
+
+ Integer                               :: status
+
+ End Function nf_open_mem
 End Interface
 !-------------------------------- nf_inq_path ---------------------------------
 Interface
@@ -1634,7 +1652,7 @@ Interface
  End Function nf_get_att_double
 End Interface
 
-! Externals for functions that use C_CHAR strings to pass data to void
+! Externals for functions that use C_CHAR arrays to pass data to void
 ! pointers
 
  Integer, External :: nf_put_var1
@@ -1643,6 +1661,7 @@ End Interface
  Integer, External :: nf_get_vars
  Integer, External :: nf_put_vara
  Integer, External :: nf_get_vara
+! Integer, External :: nf_open_mem
 
 #ifndef NO_NETCDF_2
 ! External definitons for Netcdf2 functions 
@@ -1655,6 +1674,6 @@ End Interface
  Integer, External :: nctlen
  Integer, External :: ncsfil
 #endif
-!--------------------------- End Module netcdf_nf_interfaces - ----------------
 
+!--------------------------- End Module netcdf_nf_interfaces - ----------------
 End Module netcdf_nf_interfaces

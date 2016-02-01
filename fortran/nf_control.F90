@@ -28,7 +28,10 @@
 ! Version 5.: Feb.   2013 - Added nf_inq_path support for fortran 4.4
 ! Vertion 6.: Nov.   2013 - Added nf_set_log_level support
 ! Version 7.: May,   2014 - Ensure return error status checked from C API calls
-!
+! Version 8.: Jan.,  2016 - General code cleanup. Changed name processing to
+!                           reflect change in addCNullChar function. Added
+!                           support for nc_open_mem
+ 
 !-------------------------------- nf_create --------------------------------
  Function nf_create(path, cmode, ncid) RESULT (status)
 
@@ -45,21 +48,20 @@
  
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: ccmode, cncid, cstatus
+ Integer(C_INT)               :: ccmode, cncid, cstatus
  Character(LEN=(LEN(path)+1)) :: cpath
  Integer                      :: ie
 
  ccmode = cmode
  cncid  = 0
  
-! Check for C null character on path. We will always add a null
-! char so we don't need a second one
+! Check for C null character on path and add one if not present.
 
  cpath = addCNullChar(path, ie)
  
 ! Call nc_create to create file
 
- cstatus = nc_create(cpath(1:ie+1), ccmode, cncid)
+ cstatus = nc_create(cpath(1:ie), ccmode, cncid)
  
  If (cstatus == NC_NOERR) Then
     ncid   = cncid 
@@ -85,8 +87,8 @@
  
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: ccmode, cncid, cstatus
- Integer(KIND=C_SIZE_T)       :: cinit, cchunk
+ Integer(C_INT)               :: ccmode, cncid, cstatus
+ Integer(C_SIZE_T)            :: cinit, cchunk
  Character(LEN=(LEN(path)+1)) :: cpath
  Integer                      :: ie
 
@@ -95,14 +97,13 @@
  cinit  = initialsz
  cncid  = 0
  
-! Check for C null character on path. We will always add a null
-! char so we don't need a second one
+! Check for C null character on path and add one if not present.
 
  cpath = addCNullChar(path, ie)
  
 ! Call nc_create to create file
 
- cstatus = nc__create(cpath(1:ie+1), ccmode, cinit, cchunk, cncid)
+ cstatus = nc__create(cpath(1:ie), ccmode, cinit, cchunk, cncid)
  
  If (cstatus == NC_NOERR) Then
     ncid   = cncid 
@@ -116,7 +117,7 @@
 
 ! Creates a new NetCDF file and returns the file id and a status flag
 ! This is an alternate form of nf__create for shared memory MPP systems 
-! two additional tuning parameters
+! plus two additional tuning parameters
 
  USE netcdf_nc_interfaces
 
@@ -128,9 +129,9 @@
  
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: ccmode, cncid, cstatus
- Integer(KIND=C_INT), TARGET  :: cbasepe
- Integer(KIND=C_SIZE_T)       :: cinit, cchunk
+ Integer(C_INT)               :: ccmode, cncid, cstatus
+ Integer(C_INT), TARGET       :: cbasepe
+ Integer(C_SIZE_T)            :: cinit, cchunk
  Type(C_PTR)                  :: cbasepeptr
  Character(LEN=(LEN(path)+1)) :: cpath
  Integer                      :: ie
@@ -142,14 +143,13 @@
  cbasepe    = basepe
  cbasepeptr = C_LOC(cbasepe)
 
-! Check for C null character on path. We will always add a null
-! char so we don't need a second one
+! Check for C null character on path and add one if not present.
 
  cpath = addCNullChar(path, ie)
  
 ! Call nc_create_mp to create file for base pe
 
- cstatus = nc__create_mp(cpath(1:ie+1), ccmode, cinit, cbasepeptr, &
+ cstatus = nc__create_mp(cpath(1:ie), ccmode, cinit, cbasepeptr, &
                          cchunk, cncid)
  
  If (cstatus == NC_NOERR) Then
@@ -173,21 +173,20 @@
  
  Integer                         :: status
 
- Integer(KIND=C_INT)          :: cmode, cncid, cstatus
+ Integer(C_INT)               :: cmode, cncid, cstatus
  Character(LEN=(LEN(path)+1)) :: cpath
  Integer                      :: ie
 
  cmode = mode
  cncid = 0
  
-! Check for C null character on path. We will always add a null
-! char so we don't need a second one
+! Check for C null character on path and add one if not present.
 
  cpath = addCNullChar(path, ie) 
  
 ! Call nc_create to create file
 
- cstatus = nc_open(cpath(1:ie+1), cmode, cncid)
+ cstatus = nc_open(cpath(1:ie), cmode, cncid)
  
  If (cstatus == NC_NOERR) Then
     ncid   = cncid
@@ -211,8 +210,8 @@
  
  Integer                         :: status
 
- Integer(KIND=C_INT)          :: cmode, cncid, cstatus
- Integer(KIND=C_SIZE_T)       :: cchunk
+ Integer(C_INT)               :: cmode, cncid, cstatus
+ Integer(C_SIZE_T)            :: cchunk
  Character(LEN=(LEN(path)+1)) :: cpath
  Integer                      :: inull, ie
 
@@ -220,14 +219,13 @@
  cchunk = chunksizehintp
  cncid  = 0
  
-! Check for C null character in path. A null character is always added
-! before we pass path to C we don't need a second one
+! Check for C null character on path and add one if not present.
 
  cpath = addCNullChar(path,ie)
  
 ! Call nc_create to create file
 
- cstatus = nc__open(cpath(1:ie+1), cmode, cchunk, cncid)
+ cstatus = nc__open(cpath(1:ie), cmode, cchunk, cncid)
  
  If (cstatus == NC_NOERR) Then
     ncid   = cncid
@@ -252,9 +250,9 @@
  
  Integer                         :: status
 
- Integer(KIND=C_INT)          :: cmode, cncid, cstatus
- Integer(KIND=C_INT), TARGET  :: cbasepe
- Integer(KIND=C_SIZE_T)       :: cchunk
+ Integer(C_INT)               :: cmode, cncid, cstatus
+ Integer(C_INT), TARGET       :: cbasepe
+ Integer(C_SIZE_T)            :: cchunk
  Type(C_PTR)                  :: cbasepeptr
  Character(LEN=(LEN(path)+1)) :: cpath
  Integer                      :: ie
@@ -265,14 +263,13 @@
  cbasepe    = basepe
  cbasepeptr = C_LOC(cbasepe)
  
-! Check for C null character in path. A null character is always added
-! before we pass path to C we don't need a second one
+! Check for C null character on path and add one if not present.
 
- cpath = addCNullChar(path, ie) 
+ cpath = addCNullChar(path, ie)
  
 ! Call nc_create to create file
 
- cstatus = nc__open_mp(cpath(1:ie+1), cmode, cbasepeptr, cchunk, &
+ cstatus = nc__open_mp(cpath(1:ie), cmode, cbasepeptr, cchunk, &
                        cncid)
  
  If (cstatus == NC_NOERR) Then
@@ -281,6 +278,44 @@
  status = cstatus
 
  End Function nf__open_mp
+!-------------------------------- nf_open_mem --------------------------------
+ Function nf_open_mem(path, mode, size, memory, ncid) RESULT(status)
+
+! Open a block of memory passed as an array of C_CHAR bytes as a
+! netcdf file. Note the file can only be opened as read-only
+
+   USE netcdf_nc_interfaces
+
+   Implicit NONE
+
+   Character(LEN=*),       Intent(IN)           :: path
+   Integer,                Intent(IN)           :: mode
+   Integer,                Intent(IN)           :: size
+   Character(KIND=C_CHAR), Intent(IN),   TARGET :: memory(*)
+   Integer,                Intent(INOUT)        :: ncid
+
+   Integer                            :: status
+ 
+   Integer(C_INT)             :: cstatus, cmode, cncid
+   Character(LEN=LEN(path)+1) :: cpath
+   Integer(C_SIZE_T)          :: csize
+   Type(C_PTR)                :: cmemoryptr
+
+   Integer :: ie
+
+   cpath = addCNullChar(path, ie)
+   cmode = mode
+   csize = size
+
+   cmemoryptr = C_LOC(memory)
+
+   cstatus = nc_open_mem(cpath(1:ie), cmode, csize, cmemoryptr, cncid)
+
+   ncid = cncid
+
+   status = cstatus
+ 
+ End Function nf_open_mem
 !-------------------------------- nf_inq_path ------------------------------
  Function nf_inq_path(ncid, pathlen, path) RESULT(status)
 
@@ -328,7 +363,7 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT) :: cncid, cfill, coldmode, cstatus
+ Integer(C_INT) :: cncid, cfill, coldmode, cstatus
 
  cncid    = ncid
  cfill    = fillmode
@@ -357,7 +392,7 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT) :: cnew, cold, cstatus
+ Integer(C_INT) :: cnew, cold, cstatus
 
  cnew = newform
 
@@ -372,7 +407,7 @@
 !-------------------------------- nf_redef ---------------------------------
  Function nf_redef(ncid) RESULT(status)
  
-! Re-Enter definition mode for NetCDF file id ncid 
+! Reenter definition mode for NetCDF file id ncid 
 
  USE netcdf_nc_interfaces
 
@@ -382,7 +417,7 @@
 
  Integer             :: status
 
- Integer(KIND=C_INT) :: cncid, cstatus
+ Integer(C_INT) :: cncid, cstatus
 
  cncid = ncid
 
@@ -404,7 +439,7 @@
 
  Integer             :: status
 
- Integer(KIND=C_INT) :: cncid, cstatus
+ Integer(C_INT) :: cncid, cstatus
 
  cncid = ncid
 
@@ -428,8 +463,8 @@
 
  Integer             :: status
 
- Integer(KIND=C_INT)    :: cncid, cstatus
- Integer(KIND=C_SIZE_T) :: chminfree, cvalign, cvminfree, cralign
+ Integer(C_INT)    :: cncid, cstatus
+ Integer(C_SIZE_T) :: chminfree, cvalign, cvminfree, cralign
 
  cncid     = ncid
  chminfree = h_minfree
@@ -455,7 +490,7 @@
 
  Integer             :: status
 
- Integer(KIND=C_INT) :: cncid, cstatus
+ Integer(C_INT) :: cncid, cstatus
 
  cncid = ncid
 
@@ -477,7 +512,7 @@
 
  Integer             :: status
 
- Integer(KIND=C_INT) :: cncid, cstatus
+ Integer(C_INT) :: cncid, cstatus
 
  cncid = ncid
 
@@ -499,7 +534,7 @@
 
  Integer             :: status
 
- Integer(KIND=C_INT) :: cncid, cstatus
+ Integer(C_INT) :: cncid, cstatus
 
  cncid   = ncid
 
@@ -521,13 +556,15 @@
 
  Integer                      :: status
 
- Integer(KIND=C_INT)          :: cstatus
+ Integer(C_INT)               :: cstatus
  Character(LEN=(LEN(path)+1)) :: cpath
  Integer                      :: ie
 
+! Check for C null character on path and add one if not present.
+
  cpath = addCNullChar(path,ie)
  
- cstatus = nc_delete(cpath(1:ie+1))
+ cstatus = nc_delete(cpath(1:ie))
 
  status = cstatus
 
@@ -547,15 +584,17 @@
 
  Integer                      :: status
 
- Integer(KIND=C_INT)          :: cstatus, cpe
+ Integer(C_INT)               :: cstatus, cpe
  Character(LEN=(LEN(path)+1)) :: cpath
  Integer                      :: ie
 
  cpe = pe
 
+! Check for C null character on path and add one if not present.
+
  cpath = addCNullChar(path,ie)
  
- cstatus = nc_delete_mp(cpath(1:ie+1), cpe)
+ cstatus = nc_delete_mp(cpath(1:ie), cpe)
 
  status = cstatus
 
@@ -573,7 +612,7 @@
 
  Integer             :: status
 
- Integer(KIND=C_INT) :: cncid, cpe, cstatus
+ Integer(C_INT) :: cncid, cpe, cstatus
 
  cncid = ncid
  cpe   = pe
@@ -597,7 +636,7 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT) :: cncid, cpe, cstatus
+ Integer(C_INT) :: cncid, cpe, cstatus
 
  cncid = ncid
 
@@ -607,4 +646,5 @@
     pe     = cpe
  EndIf
  status = cstatus
+
 End Function nf_inq_base_pe

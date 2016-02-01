@@ -28,7 +28,9 @@
 ! Version 3.: April 2009 - Updated for netCDF 4.0.1
 ! Version 4.: April 2010 - Updated for netCDF 4.1.1
 !                          Added preprocessor test for int and real types
-          
+! Version 5.: Jan.  2016 - Replace automatic array for cndex with allocatable
+!                          array and general code cleanup
+ 
 !--------------------------------- nf_put_var1_text ------------------------
  Function nf_put_var1_text(ncid, varid, ndex, chval) RESULT(status)
 
@@ -44,14 +46,14 @@
 
  Integer                      :: status
 
- Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
- Type(C_PTR)                    :: cndexptr
- Integer :: ndims
+ Integer(C_INT)  :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)     :: cndexptr
+ Integer         :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cndex(:)
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract one to get C varid
- cndex  = 0
  
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -59,15 +61,21 @@
  ndims    = cndims
 
  If (cstat1 == NC_NOERR) Then
-   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     cndex(1:ndims) = ndex(ndims:1:-1)-1
+   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index
+     ALLOCATE(cndex(ndims)) 
+     cndex(1:ndims) = ndex(ndims:1:-1) - 1
+     cndexptr       = C_LOC(cndex)
    EndIf
-   cndexptr = C_LOC(cndex)
  EndIf
 
  cstatus = nc_put_var1_text(cncid, cvarid, cndexptr, chval)
 
  status = cstatus
+
+! Make sure there are no dangling pointers or allocated arrays
+
+ cndexptr = C_NULL_PTR
+ If (ALLOCATED(cndex)) DEALLOCATE(cndex)
 
  End Function nf_put_var1_text
 !--------------------------------- nf_put_var1_int1 ------------------------
@@ -79,17 +87,18 @@
 
  Implicit NONE
 
- Integer,              Intent(IN) :: ncid, varid
- Integer,              Intent(IN) :: ndex(*)
- Integer(KIND=NFINT1), Intent(IN) :: ival
+ Integer,         Intent(IN) :: ncid, varid
+ Integer,         Intent(IN) :: ndex(*)
+ Integer(NFINT1), Intent(IN) :: ival
 
- Integer                          :: status
+ Integer                     :: status
 
- Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
- Type(C_PTR)                    :: cndexptr
- Integer(KIND=CINT1)            :: cival
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cndexptr
+ Integer(CINT1) :: cival
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cndex(:)
 
  If (C_SIGNED_CHAR < 0) Then ! schar not supported by processor exit
    status = NC_EBADTYPE
@@ -99,7 +108,6 @@
  cncid  = ncid
  cvarid = varid - 1 ! Subtract one to get C varid
  cival  = ival
- cndex  = 0
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -108,9 +116,10 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     cndex(1:ndims) = ndex(ndims:1:-1)-1
+     ALLOCATE(cndex(ndims)) 
+     cndex(1:ndims) = ndex(ndims:1:-1) - 1
+     cndexptr       = C_LOC(cndex)
    EndIf
-   cndexptr = C_LOC(cndex)
  EndIf
 
 #if NF_INT1_IS_C_SIGNED_CHAR
@@ -125,6 +134,11 @@
 
  status = cstatus
 
+! Make sure there are no dangling pointers or allocated arrays
+
+ cndexptr = C_NULL_PTR
+ If (ALLOCATED(cndex)) DEALLOCATE(cndex)
+
  End Function nf_put_var1_int1
 !--------------------------------- nf_put_var1_int2 ------------------------
  Function nf_put_var1_int2(ncid, varid, ndex, ival) RESULT(status)
@@ -135,17 +149,18 @@
 
  Implicit NONE
 
- Integer,              Intent(IN) :: ncid, varid
- Integer,              Intent(IN) :: ndex(*)
- Integer(KIND=NFINT2), Intent(IN) :: ival
+ Integer,         Intent(IN) :: ncid, varid
+ Integer,         Intent(IN) :: ndex(*)
+ Integer(NFINT2), Intent(IN) :: ival
 
- Integer                          :: status
+ Integer                     :: status
 
- Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
- Type(C_PTR)                    :: cndexptr
- Integer(KIND=CINT2)            :: cival
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cndexptr
+ Integer(CINT2) :: cival
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cndex(:)
 
  If (C_SHORT < 0) Then ! short not supported by processor
    status = NC_EBADTYPE
@@ -155,7 +170,6 @@
  cncid  = ncid
  cvarid = varid - 1 ! Subtract one to get C varid
  cival  = ival
- cndex  = 0
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -164,9 +178,10 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     cndex(1:ndims) = ndex(ndims:1:-1)-1
+     ALLOCATE(cndex(ndims)) 
+     cndex(1:ndims) = ndex(ndims:1:-1) - 1
+     cndexptr       = C_LOC(cndex)
    EndIf
-   cndexptr = C_LOC(cndex)
  EndIf
 
 #if NF_INT2_IS_C_SHORT
@@ -178,6 +193,11 @@
 #endif
 
  status = cstatus
+
+! Make sure there are no dangling pointers or allocated arrays
+
+ cndexptr = C_NULL_PTR
+ If (ALLOCATED(cndex)) DEALLOCATE(cndex)
 
  End Function nf_put_var1_int2
 !--------------------------------- nf_put_var1_int -------------------------
@@ -195,15 +215,15 @@
 
  Integer                    :: status
 
- Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
- Type(C_PTR)                    :: cndexptr
- Integer(KIND=CINT)             :: cival
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cndexptr
+ Integer(CINT)  :: cival
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cndex(:)
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract one to get C varid
- cndex  = 0
  cival  = ival
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
@@ -213,9 +233,10 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     cndex(1:ndims) = ndex(ndims:1:-1)-1
+     ALLOCATE(cndex(ndims)) 
+     cndex(1:ndims) = ndex(ndims:1:-1) - 1
+     cndexptr       = C_LOC(cndex)
    EndIf
-   cndexptr = C_LOC(cndex)
  EndIf
 
 #if NF_INT_IS_C_INT
@@ -225,6 +246,11 @@
 #endif
 
  status = cstatus
+
+! Make sure there are no dangling pointers or allocated arrays
+
+ cndexptr = C_NULL_PTR
+ If (ALLOCATED(cndex)) DEALLOCATE(cndex)
 
  End Function nf_put_var1_int
 !--------------------------------- nf_put_var1_real ------------------------
@@ -242,14 +268,14 @@
 
  Integer                  :: status
 
- Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
- Type(C_PTR)                    :: cndexptr
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cndexptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cndex(:)
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract one to get C varid
- cndex  = 0
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -258,9 +284,10 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     cndex(1:ndims) = ndex(ndims:1:-1)-1
+     ALLOCATE(cndex(ndims)) 
+     cndex(1:ndims) = ndex(ndims:1:-1) - 1
+     cndexptr       = C_LOC(cndex)
    EndIf
-   cndexptr = C_LOC(cndex)
  EndIf
 
 #if NF_REAL_IS_C_DOUBLE
@@ -270,6 +297,11 @@
 #endif
 
  status = cstatus
+
+! Make sure there are no dangling pointers or allocated arrays
+
+ cndexptr = C_NULL_PTR
+ If (ALLOCATED(cndex)) DEALLOCATE(cndex)
 
  End Function nf_put_var1_real
 !--------------------------------- nf_put_var1_double ----------------------
@@ -287,14 +319,14 @@
 
  Integer               :: status
 
- Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
- Type(C_PTR)                    :: cndexptr
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cndexptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cndex(:)
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract one to get C varid
- cndex  = 0
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims) ! get varid dimension
 
@@ -303,14 +335,20 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then
-     cndex(1:ndims) = ndex(ndims:1:-1)-1
+     ALLOCATE(cndex(ndims)) 
+     cndex(1:ndims) = ndex(ndims:1:-1) - 1
+     cndexptr       = C_LOC(cndex)
    EndIf
-   cndexptr = C_LOC(cndex)
  EndIf
 
  cstatus = nc_put_var1_double(cncid, cvarid, cndexptr, dval)
 
  status = cstatus
+
+! Make sure there are no dangling pointers or allocated arrays
+
+ cndexptr = C_NULL_PTR
+ If (ALLOCATED(cndex)) DEALLOCATE(cndex)
 
  End Function nf_put_var1_double
 !--------------------------------- nf_put_var1 ------------------------
@@ -328,18 +366,17 @@
  Integer,                Intent(IN)         :: ncid, varid
  Integer,                Intent(IN)         :: ndex(*)
  Character(KIND=C_CHAR), Intent(IN), TARGET :: values(*)
-! Type(C_PTR),            VALUE              :: values
+
  Integer                                    :: status
 
- Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
- Type(C_PTR)                    :: cndexptr
- Type(C_PTR)                    :: cvaluesptr ! comment for type(C_PTR) values
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cndexptr, cvaluesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cndex(:)
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract one to get C varid
- cndex  = 0
  
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -348,17 +385,26 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     cndex(1:ndims) = ndex(ndims:1:-1)-1
+     ALLOCATE(cndex(ndims)) 
+     cndex(1:ndims) = ndex(ndims:1:-1) - 1
+     cndexptr       = C_LOC(cndex)
+   Else
+     ALLOCATE(cndex(1))
+     cndex(1:ndims) = ndex(ndims:1:-1) - 1
+     cndexptr       = C_LOC(cndex)
    EndIf
-   cndexptr = C_LOC(cndex)
  EndIf
 
  cvaluesptr = C_LOC(values)
 
  cstatus = nc_put_var1(cncid, cvarid, cndexptr, cvaluesptr)
-! cstatus = nc_put_var1(cncid, cvarid, cndexptr, values)
 
  status = cstatus
+
+! Make sure there are no dangling pointers or allocated arrays
+
+ cndexptr = C_NULL_PTR
+ If (ALLOCATED(cndex)) DEALLOCATE(cndex)
 
  End Function nf_put_var1
 !--------------------------------- nf_get_var1_text ------------------------
@@ -376,14 +422,14 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
- Type(C_PTR)                    :: cndexptr
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cndexptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cndex(:)
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract one to get C varid
- cndex  =  0
  chval  = ' '
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
@@ -393,14 +439,20 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
+     ALLOCATE(cndex(ndims)) 
      cndex(1:ndims) = ndex(ndims:1:-1) -1
+     cndexptr       = C_LOC(cndex)
    EndIf
-   cndexptr = C_LOC(cndex)
   EndIf
  
  cstatus = nc_get_var1_text(cncid, cvarid, cndexptr, chval)
 
  status = cstatus
+
+! Make sure there are no dangling pointers or allocated arrays
+
+ cndexptr = C_NULL_PTR
+ If (ALLOCATED(cndex)) DEALLOCATE(cndex)
 
  End Function nf_get_var1_text
 !--------------------------------- nf_get_var1_int1 ------------------------
@@ -412,17 +464,18 @@
 
  Implicit NONE
 
- Integer,              Intent(IN)  :: ncid, varid
- Integer,              Intent(IN)  :: ndex(*)
- Integer(KIND=NFINT1), Intent(OUT) :: ival
+ Integer,         Intent(IN)  :: ncid, varid
+ Integer,         Intent(IN)  :: ndex(*)
+ Integer(NFINT1), Intent(OUT) :: ival
 
- Integer                           :: status
+ Integer                      :: status
 
- Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
- Type(C_PTR)                    :: cndexptr
- Integer(KIND=CINT1)            :: cival
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cndexptr
+ Integer(CINT1) :: cival
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cndex(:)
 
  If (C_SIGNED_CHAR < 0) Then ! schar not supported by processor exit
    status = NC_EBADTYPE
@@ -431,7 +484,6 @@
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract one to get C varid
- cndex  = 0
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -440,9 +492,10 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     cndex(1:ndims) = ndex(ndims:1:-1)-1
+     ALLOCATE(cndex(ndims)) 
+     cndex(1:ndims) = ndex(ndims:1:-1) - 1
+     cndexptr       = C_LOC(cndex)
    EndIf
-   cndexptr = C_LOC(cndex)
  EndIf
 
 #if NF_INT1_IS_C_SIGNED_CHAR
@@ -458,6 +511,11 @@
  ival   = cival
  status = cstatus
 
+! Make sure there are no dangling pointers or allocated arrays
+
+ cndexptr = C_NULL_PTR
+ If (ALLOCATED(cndex)) DEALLOCATE(cndex)
+
  End Function nf_get_var1_int1
 !--------------------------------- nf_get_var1_int2 ------------------------
  Function nf_get_var1_int2(ncid, varid, ndex, ival) RESULT(status)
@@ -468,17 +526,18 @@
 
  Implicit NONE
 
- Integer,              Intent(IN)  :: ncid, varid
- Integer,              Intent(IN)  :: ndex(*)
- Integer(KIND=NFINT2), Intent(OUT) :: ival
+ Integer,         Intent(IN)  :: ncid, varid
+ Integer,         Intent(IN)  :: ndex(*)
+ Integer(NFINT2), Intent(OUT) :: ival
 
- Integer                           :: status
+ Integer                      :: status
 
- Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
- Type(C_PTR)                    :: cndexptr
- Integer(KIND=CINT2)            :: cival
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cndexptr
+ Integer(CINT2) :: cival
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cndex(:)
 
  If (C_SHORT < 0) Then ! short not supported by processor
    status = NC_EBADTYPE
@@ -487,7 +546,6 @@
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract one to get C varid
- cndex  = 0
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -496,9 +554,10 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     cndex(1:ndims) = ndex(ndims:1:-1)-1
+     ALLOCATE(cndex(ndims)) 
+     cndex(1:ndims) = ndex(ndims:1:-1) - 1
+     cndexptr       = C_LOC(cndex)
    EndIf
-   cndexptr = C_LOC(cndex)
  EndIf
 
 #if NF_INT2_IS_C_SHORT
@@ -511,6 +570,11 @@
  
  ival   = cival
  status = cstatus
+
+! Make sure there are no dangling pointers or allocated arrays
+
+ cndexptr = C_NULL_PTR
+ If (ALLOCATED(cndex)) DEALLOCATE(cndex)
 
  End Function nf_get_var1_int2
 !--------------------------------- nf_get_var1_int -------------------------
@@ -528,15 +592,15 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
- Type(C_PTR)                    :: cndexptr
- Integer(KIND=CINT)             :: cival
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cndexptr
+ Integer(CINT)  :: cival
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cndex(:)
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract one to get C varid
- cndex  = 0
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -545,9 +609,10 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     cndex(1:ndims) = ndex(ndims:1:-1)-1
+     ALLOCATE(cndex(ndims)) 
+     cndex(1:ndims) = ndex(ndims:1:-1) - 1
+     cndexptr       = C_LOC(cndex)
    EndIf
-   cndexptr = C_LOC(cndex)
  EndIf
 
 #if NF_INT_IS_C_INT
@@ -558,6 +623,11 @@
 
  ival   = cival
  status = cstatus
+
+! Make sure there are no dangling pointers or allocated arrays
+
+ cndexptr = C_NULL_PTR
+ If (ALLOCATED(cndex)) DEALLOCATE(cndex)
 
  End Function nf_get_var1_int
 !--------------------------------- nf_get_var1_real ------------------------
@@ -575,14 +645,14 @@
 
  Integer                   :: status
 
- Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
- Type(C_PTR)                    :: cndexptr
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cndexptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cndex(:)
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract one to get C varid
- cndex  = 0
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -591,9 +661,10 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     cndex(1:ndims) = ndex(ndims:1:-1)-1
+     ALLOCATE(cndex(ndims)) 
+     cndex(1:ndims) = ndex(ndims:1:-1) - 1
+     cndexptr       = C_LOC(cndex)
    EndIf
-   cndexptr = C_LOC(cndex)
  EndIf
 
 #if NF_REAL_IS_C_DOUBLE
@@ -603,6 +674,11 @@
 #endif
 
  status = cstatus
+
+! Make sure there are no dangling pointers or allocated arrays
+
+ cndexptr = C_NULL_PTR
+ If (ALLOCATED(cndex)) DEALLOCATE(cndex)
 
  End Function nf_get_var1_real
 !--------------------------------- nf_get_var1_double ----------------------
@@ -620,14 +696,14 @@
 
  Integer                :: status
 
- Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
- Type(C_PTR)                    :: cndexptr
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cndexptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cndex(:)
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract one to get C varid
- cndex  = 0
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims) ! get varid dimension
 
@@ -636,14 +712,20 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     cndex(1:ndims) = ndex(ndims:1:-1)-1
+     ALLOCATE(cndex(ndims)) 
+     cndex(1:ndims) = ndex(ndims:1:-1) - 1
+     cndexptr       = C_LOC(cndex)
    EndIf
-   cndexptr = C_LOC(cndex)
  EndIf
 
  cstatus = nc_get_var1_double(cncid, cvarid, cndexptr, dval)
 
  status = cstatus
+
+! Make sure there are no dangling pointers or allocated arrays
+
+ cndexptr = C_NULL_PTR
+ If (ALLOCATED(cndex)) DEALLOCATE(cndex)
 
  End Function nf_get_var1_double
 !--------------------------------- nf_get_var1 -------------------------------
@@ -661,19 +743,17 @@
  Integer,                Intent(IN)          :: ncid, varid
  Integer,                Intent(IN)          :: ndex(*)
  Character(KIND=C_CHAR), Intent(OUT), TARGET :: values(*)
-! Type(C_PTR),            VALUE               :: values
 
  Integer                                     :: status
 
- Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
- Type(C_PTR)                    :: cndexptr
- Type(C_PTR)                    :: cvaluesptr
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cndexptr, cvaluesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cndex(:)
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract one to get C varid
- cndex  = 0
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims) ! get varid dimension
 
@@ -682,13 +762,19 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     cndex(1:ndims) = ndex(ndims:1:-1)-1
+     ALLOCATE(cndex(ndims)) 
+     cndex(1:ndims) = ndex(ndims:1:-1) - 1
+     cndexptr       = C_LOC(cndex)
    EndIf
-   cndexptr = C_LOC(cndex)
  EndIf
 
  cstatus = nc_get_var1(cncid, cvarid, cndexptr, values)
 
  status = cstatus
+
+! Make sure there are no dangling pointers or allocated arrays
+
+ cndexptr = C_NULL_PTR
+ If (ALLOCATED(cndex)) DEALLOCATE(cndex)
 
  End Function nf_get_var1

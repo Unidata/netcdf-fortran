@@ -26,8 +26,8 @@
 ! Version 2.: May   2006  - Updated to support g95
 ! Version 3.: April 2009  - Updated to Netcdf 4.0.1 
 ! Version 4.: April 2010  - Updated to Netcdf 4.1.1 
-! Version 5.: May   2014  - Ensure return error status checked from C API calls          
-
+! Version 5.: May   2014  - Ensure return error status checked from C API calls
+! Version 6.: Jan.  2016  - General code cleanup.
 !          
 !-------------------------------- nf_inq ----------------------------------
  Function nf_inq(ncid, ndims, nvars, ngatts, unlimdimid) RESULT(status)
@@ -45,7 +45,7 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT) :: cncid, cndims, cnvars, cngatts, cunlimdimid, cstatus
+ Integer(C_INT) :: cncid, cndims, cnvars, cngatts, cunlimdimid, cstatus
 
  cncid = ncid
 
@@ -81,7 +81,7 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT) :: cncid, cndims, cstatus
+ Integer(C_INT) :: cncid, cndims, cstatus
 
  cncid = ncid
 
@@ -107,7 +107,7 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT) :: cncid, cnvars, cstatus
+ Integer(C_INT) :: cncid, cnvars, cstatus
 
  cncid = ncid
 
@@ -133,7 +133,7 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT) :: cncid, cngatts, cstatus
+ Integer(C_INT) :: cncid, cngatts, cstatus
 
  cncid = ncid
 
@@ -159,7 +159,7 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT) :: cncid, cunlimdimid, cstatus
+ Integer(C_INT) :: cncid, cunlimdimid, cstatus
 
  cncid = ncid
 
@@ -191,7 +191,7 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT) :: cncid, cformatp, cstatus
+ Integer(C_INT) :: cncid, cformatp, cstatus
 
  cncid = ncid
 

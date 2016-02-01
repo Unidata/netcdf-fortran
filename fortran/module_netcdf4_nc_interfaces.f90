@@ -29,7 +29,11 @@ Module netcdf4_nc_interfaces
 ! Version 2.: April, 2009 - Interfaces based on netcdf-4.0.1 source         
 ! Version 3.: April, 2010 - Interfaces based on netcdf-4.1.1 source         
 ! Version 4.: Aug,   2013 - Added nc_rename_grp interfaces for netcdf-C 4.3.1
-
+! Version 5 : Jan.   2016 - General code cleanup  and added interfaces for 
+!                           three new funcions in nf_lib.c that return
+!                           the number of groups, types, and dimids for
+!                           compound fields
+                            
  USE netcdf_nc_interfaces
 
  Implicit NONE
@@ -58,10 +62,10 @@ Interface
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
  Character(KIND=C_CHAR), Intent(IN)  :: path(*)
- Integer(KIND=C_INT),    VALUE       :: cmode, comm, info
- Integer(KIND=C_INT),    Intent(OUT) :: ncidp
+ Integer(C_INT),         VALUE       :: cmode, comm, info
+ Integer(C_INT),         Intent(OUT) :: ncidp
 
- Integer(KIND=C_INT)                 :: nc_create_par_fortran
+ Integer(C_INT)                      :: nc_create_par_fortran
 
  End Function nc_create_par_fortran
 End Interface
@@ -72,10 +76,10 @@ Interface
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
  Character(KIND=C_CHAR), Intent(IN)  :: path(*)
- Integer(KIND=C_INT),    VALUE       :: mode, comm, info
- Integer(KIND=C_INT),    Intent(OUT) :: ncidp
+ Integer(C_INT),         VALUE       :: mode, comm, info
+ Integer(C_INT),         Intent(OUT) :: ncidp
 
- Integer(KIND=C_INT)                 :: nc_open_par_fortran
+ Integer(C_INT)                      :: nc_open_par_fortran
 
  End Function nc_open_par_fortran
 End Interface
@@ -85,9 +89,9 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE :: ncid, varid, par_access
+ Integer(C_INT), VALUE :: ncid, varid, par_access
 
- Integer(KIND=C_INT)        :: nc_var_par_access
+ Integer(C_INT)        :: nc_var_par_access
 
  End Function nc_var_par_access
 End Interface
@@ -97,13 +101,39 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid
+ Integer(C_INT),         VALUE         :: ncid
  Character(KIND=C_CHAR), Intent(IN)    :: name(*)
- Integer(KIND=C_INT),    Intent(INOUT) :: grp_ncid
+ Integer(C_INT),         Intent(INOUT) :: grp_ncid
 
- Integer(KIND=C_INT)                   :: nc_inq_ncid
+ Integer(C_INT)                        :: nc_inq_ncid
 
  End Function nc_inq_ncid
+End Interface
+!------------------------------- nc_inq_numgrps ------------------------------
+!**** NOT a Netcdf C function. Added to nf_lib.c support Fortran interaces
+Interface
+ Function nc_inq_numgrps(ncid, numgrps) BIND(C)
+
+ USE ISO_C_BINDING, ONLY: C_INT
+
+ Integer(C_INT), VALUE         :: ncid
+ Integer(C_INT), Intent(INOUT) :: numgrps
+
+ Integer(C_INT)                 :: nc_inq_numgrps
+ End Function nc_inq_numgrps
+End Interface
+!------------------------------- nc_inq_numtypes ------------------------------
+!**** NOT a Netcdf C function. Added to nf_lib.c support Fortran interaces
+Interface
+ Function nc_inq_numtypes(ncid, numtypes) BIND(C)
+
+ USE ISO_C_BINDING, ONLY: C_INT
+
+ Integer(C_INT), VALUE         :: ncid
+ Integer(C_INT), Intent(INOUT) :: numtypes
+
+ Integer(C_INT)                 :: nc_inq_numtypes
+ End Function nc_inq_numtypes
 End Interface
 !------------------------------- nc_inq_grps ----------------------------------
 Interface
@@ -111,11 +141,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE         :: ncid
- Integer(KIND=C_INT), Intent(INOUT) :: numgrps
- Integer(KIND=C_INT), Intent(INOUT) :: ncids(*)
+ Integer(C_INT), VALUE         :: ncid
+ Integer(C_INT), Intent(INOUT) :: numgrps
+ Integer(C_INT), Intent(INOUT) :: ncids(*)
 
- Integer(KIND=C_INT)                :: nc_inq_grps
+ Integer(C_INT)                :: nc_inq_grps
 
  End Function nc_inq_grps
 End Interface
@@ -125,10 +155,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid
+ Integer(C_INT),         VALUE         :: ncid
  Character(KIND=C_CHAR), Intent(INOUT) :: name(*)
 
- Integer(KIND=C_INT)                   :: nc_inq_grpname
+ Integer(C_INT)                        :: nc_inq_grpname
 
  End Function nc_inq_grpname
 End Interface
@@ -138,11 +168,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid
- Integer(KIND=C_SIZE_T), Intent(INOUT) :: nlen
+ Integer(C_INT),         VALUE         :: ncid
+ Integer(C_SIZE_T),      Intent(INOUT) :: nlen
  Character(KIND=C_CHAR), Intent(INOUT) :: name(*)
 
- Integer(KIND=C_INT)                   :: nc_inq_grpname_full
+ Integer(C_INT)                        :: nc_inq_grpname_full
 
  End Function nc_inq_grpname_full
 End Interface
@@ -152,10 +182,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T
 
- Integer(KIND=C_INT),    VALUE         :: ncid
- Integer(KIND=C_SIZE_T), Intent(INOUT) :: nlen
+ Integer(C_INT),    VALUE         :: ncid
+ Integer(C_SIZE_T), Intent(INOUT) :: nlen
 
- Integer(KIND=C_INT)                   :: nc_inq_grpname_len
+ Integer(C_INT)                   :: nc_inq_grpname_len
 
  End Function nc_inq_grpname_len
 End Interface
@@ -165,11 +195,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid
- Integer(KIND=C_INT),    Intent(INOUT) :: grp_ncid
+ Integer(C_INT),         VALUE         :: ncid
+ Integer(C_INT),         Intent(INOUT) :: grp_ncid
  Character(KIND=C_CHAR), Intent(INOUT) :: full_name(*)
 
- Integer(KIND=C_INT)                   :: nc_inq_grp_full_ncid
+ Integer(C_INT)                        :: nc_inq_grp_full_ncid
 
  End Function nc_inq_grp_full_ncid
 End Interface
@@ -179,10 +209,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE         :: ncid
- Integer(KIND=C_INT), Intent(INOUT) :: parent_ncid
+ Integer(C_INT), VALUE         :: ncid
+ Integer(C_INT), Intent(INOUT) :: parent_ncid
 
- Integer(KIND=C_INT)                :: nc_inq_grp_parent
+ Integer(C_INT)                :: nc_inq_grp_parent
 
  End Function nc_inq_grp_parent
 End Interface
@@ -192,11 +222,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid
+ Integer(C_INT),         VALUE         :: ncid
  Character(KIND=C_CHAR), Intent(IN)    :: grp_name(*)
- Integer(KIND=C_INT),    Intent(INOUT) :: grp_ncid
+ Integer(C_INT),         Intent(INOUT) :: grp_ncid
 
- Integer(KIND=C_INT)                   :: nc_inq_grp_ncid
+ Integer(C_INT)                        :: nc_inq_grp_ncid
 
  End Function nc_inq_grp_ncid
 End Interface
@@ -206,11 +236,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE         :: ncid
- Integer(KIND=C_INT), Intent(INOUT) :: nvars
- Integer(KIND=C_INT), Intent(INOUT) :: varids(*)
+ Integer(C_INT), VALUE         :: ncid
+ Integer(C_INT), Intent(INOUT) :: nvars
+ Integer(C_INT), Intent(INOUT) :: varids(*)
 
- Integer(KIND=C_INT)                :: nc_inq_varids_f
+ Integer(C_INT)                :: nc_inq_varids_f
 
  End Function nc_inq_varids_f
 End Interface
@@ -220,11 +250,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE         :: ncid, parent
- Integer(KIND=C_INT), Intent(INOUT) :: ndims
- Integer(KIND=C_INT), Intent(INOUT) :: dimids(*)
+ Integer(C_INT), VALUE         :: ncid, parent
+ Integer(C_INT), Intent(INOUT) :: ndims
+ Integer(C_INT), Intent(INOUT) :: dimids(*)
 
- Integer(KIND=C_INT)                :: nc_inq_dimids_f
+ Integer(C_INT)                :: nc_inq_dimids_f
 
  End Function nc_inq_dimids_f
 End Interface
@@ -234,11 +264,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE         :: ncid
- Integer(KIND=C_INT), Intent(INOUT) :: ntypes
- Integer(KIND=C_INT), Intent(INOUT) :: typeids(*)
+ Integer(C_INT), VALUE         :: ncid
+ Integer(C_INT), Intent(INOUT) :: ntypes
+ Integer(C_INT), Intent(INOUT) :: typeids(*)
 
- Integer(KIND=C_INT)                :: nc_inq_typeids
+ Integer(C_INT)                :: nc_inq_typeids
 
  End Function nc_inq_typeids
 End Interface
@@ -248,11 +278,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT), VALUE         :: ncid
+ Integer(C_INT),         VALUE         :: ncid
  Character(KIND=C_CHAR), Intent(IN) :: name(*)
- Integer(KIND=C_INT), Intent(INOUT) :: typeid
+ Integer(C_INT),         Intent(INOUT) :: typeid
 
- Integer(KIND=C_INT)                :: nc_inq_typeid
+ Integer(C_INT)                        :: nc_inq_typeid
 
  End Function nc_inq_typeid
 End Interface
@@ -262,11 +292,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: parent_ncid
+ Integer(C_INT),         VALUE         :: parent_ncid
  Character(KIND=C_CHAR), Intent(IN)    :: name(*)
- Integer(KIND=C_INT),    Intent(INOUT) :: new_ncid
+ Integer(C_INT),         Intent(INOUT) :: new_ncid
 
- Integer(KIND=C_INT)                   :: nc_def_grp
+ Integer(C_INT)                        :: nc_def_grp
 
  End Function nc_def_grp
 End Interface
@@ -276,10 +306,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: grpid
+ Integer(C_INT),         VALUE         :: grpid
  Character(KIND=C_CHAR), Intent(IN)    :: name(*)
 
- Integer(KIND=C_INT)                   :: nc_rename_grp
+ Integer(C_INT)                        :: nc_rename_grp
 
  End Function nc_rename_grp
 End Interface
@@ -289,12 +319,12 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid
- Integer(KIND=C_SIZE_T), VALUE         :: isize
+ Integer(C_INT),         VALUE         :: ncid
+ Integer(C_SIZE_T),      VALUE         :: isize
  Character(KIND=C_CHAR), Intent(IN)    :: name(*)
- Integer(KIND=C_INT),    Intent(INOUT) :: typeidp
+ Integer(C_INT),         Intent(INOUT) :: typeidp
 
- Integer(KIND=C_INT)                   :: nc_def_compound
+ Integer(C_INT)                        :: nc_def_compound
 
  End Function nc_def_compound
 End Interface
@@ -304,12 +334,12 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_CHAR
 
- Integer(KIND=C_INT),    VALUE      :: ncid
- Integer(KIND=C_INT),    VALUE      :: xtype, field_typeid ! nc_type in C 
- Integer(KIND=C_SIZE_T), VALUE      :: offset
+ Integer(C_INT),         VALUE      :: ncid
+ Integer(C_INT),         VALUE      :: xtype, field_typeid ! nc_type in C 
+ Integer(C_SIZE_T),      VALUE      :: offset
  Character(KIND=C_CHAR), Intent(IN) :: name(*)
 
- Integer(KIND=C_INT)                :: nc_insert_compound
+ Integer(C_INT)                :: nc_insert_compound
 
  End Function nc_insert_compound
 End Interface
@@ -320,13 +350,13 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid, ndims
- Integer(KIND=C_INT),    VALUE         :: xtype, field_typeid  ! nc_type in C
- Integer(KIND=C_SIZE_T), VALUE         :: offset
+ Integer(C_INT),         VALUE         :: ncid, ndims
+ Integer(C_INT),         VALUE         :: xtype, field_typeid  ! nc_type in C
+ Integer(C_SIZE_T),      VALUE         :: offset
  Character(KIND=C_CHAR), Intent(IN)    :: name(*)
- Integer(KIND=C_INT),    Intent(INOUT) :: dim_sizes(*)
+ Integer(C_INT),         Intent(INOUT) :: dim_sizes(*)
 
- Integer(KIND=C_INT)                   :: nc_insert_array_compound_f
+ Integer(C_INT)                        :: nc_insert_array_compound_f
 
  End Function nc_insert_array_compound_f
 End Interface
@@ -336,12 +366,12 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid
- Integer(KIND=C_INT),    VALUE         :: xtype ! nc_type in C
+ Integer(C_INT),         VALUE         :: ncid
+ Integer(C_INT),         VALUE         :: xtype ! nc_type in C
  Character(KIND=C_CHAR), Intent(IN)    :: name(*)
- Integer(KIND=C_SIZE_T), Intent(INOUT) :: isize
+ Integer(C_SIZE_T),      Intent(INOUT) :: isize
 
- Integer(KIND=C_INT)                   :: nc_inq_type
+ Integer(C_INT)                        :: nc_inq_type
 
  End Function nc_inq_type
 End Interface
@@ -351,12 +381,12 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid
- Integer(KIND=C_INT),    VALUE         :: xtype ! nc_type in C
+ Integer(C_INT),         VALUE         :: ncid
+ Integer(C_INT),         VALUE         :: xtype ! nc_type in C
  Character(KIND=C_CHAR), Intent(INOUT) :: name(*)
- Integer(KIND=C_SIZE_T), Intent(INOUT) :: isize, nfieldsp
+ Integer(C_SIZE_T),      Intent(INOUT) :: isize, nfieldsp
 
- Integer(KIND=C_INT)                   :: nc_inq_compound
+ Integer(C_INT)                        :: nc_inq_compound
 
  End Function nc_inq_compound
 End Interface
@@ -366,11 +396,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid
- Integer(KIND=C_INT),    VALUE         :: xtype ! nc_type in C
+ Integer(C_INT),         VALUE         :: ncid
+ Integer(C_INT),         VALUE         :: xtype ! nc_type in C
  Character(KIND=C_CHAR), Intent(INOUT) :: name(*)
 
- Integer(KIND=C_INT)                   :: nc_inq_compound_name
+ Integer(C_INT)                        :: nc_inq_compound_name
 
  End Function nc_inq_compound_name
 End Interface
@@ -380,11 +410,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T
 
- Integer(KIND=C_INT),    VALUE         :: ncid
- Integer(KIND=C_INT),    VALUE         :: xtype ! nc_type in C
- Integer(KIND=C_SIZE_T), Intent(INOUT) :: isize
+ Integer(C_INT),    VALUE         :: ncid
+ Integer(C_INT),    VALUE         :: xtype ! nc_type in C
+ Integer(C_SIZE_T), Intent(INOUT) :: isize
 
- Integer(KIND=C_INT)                   :: nc_inq_compound_size
+ Integer(C_INT)                   :: nc_inq_compound_size
 
  End Function nc_inq_compound_size
 End Interface
@@ -394,30 +424,48 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T
 
- Integer(KIND=C_INT),    VALUE         :: ncid
- Integer(KIND=C_INT),    VALUE         :: xtype ! nc_type in C
- Integer(KIND=C_SIZE_T), Intent(INOUT) :: nfieldsp
+ Integer(C_INT),    VALUE         :: ncid
+ Integer(C_INT),    VALUE         :: xtype ! nc_type in C
+ Integer(C_SIZE_T), Intent(INOUT) :: nfieldsp
 
- Integer(KIND=C_INT)                   :: nc_inq_compound_nfields
+ Integer(C_INT)                   :: nc_inq_compound_nfields
 
  End Function nc_inq_compound_nfields
 End Interface
+!------------------------------- nc_inq_compound_field_ndims ------------------
+!**** NOT a Netcdf C function. Added to nf_lib.c support Fortran interaces
+Interface
+ Function nc_inq_compound_field_ndims(ncid, xtype, fieldid, ndims) BIND(C)
+  
+ USE ISO_C_BINDING, ONLY: C_INT
+
+ Integer(C_INT), VALUE         :: ncid, fieldid
+ Integer(C_INT), VALUE         :: xtype  ! nc_type in C
+ Integer(C_INT), Intent(INOUT) :: ndims
+
+ Integer(C_INT)                   :: nc_inq_compound_field_ndims
+
+ End Function nc_inq_compound_field_ndims
+
+End Interface
+
 !------------------------------- nc_inq_compound_field_f ----------------------
 Interface
  Function nc_inq_compound_field_f(ncid, xtype, fieldid, name, offsetp, &
                                   field_typeidp, ndimsp, dim_sizesp) BIND(C)
+ 
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid, fieldid
- Integer(KIND=C_INT),    VALUE         :: xtype  ! nc_type in C
- Integer(KIND=C_INT),    Intent(INOUT) :: field_typeidp  ! nc_type in C
- Integer(KIND=C_SIZE_T), Intent(INOUT) :: offsetp
+ Integer(C_INT),         VALUE         :: ncid, fieldid
+ Integer(C_INT),         VALUE         :: xtype  ! nc_type in C
+ Integer(C_INT),         Intent(INOUT) :: field_typeidp  ! nc_type in C
+ Integer(C_SIZE_T),      Intent(INOUT) :: offsetp
  Character(KIND=C_CHAR), Intent(INOUT) :: name(*)
- Integer(KIND=C_INT),    Intent(INOUT) :: ndimsp
- Integer(KIND=C_INT),    Intent(INOUT) :: dim_sizesp(*)
+ Integer(C_INT),         Intent(INOUT) :: ndimsp
+ Integer(C_INT),         Intent(INOUT) :: dim_sizesp(*)
 
- Integer(KIND=C_INT)                   :: nc_inq_compound_field_f
+ Integer(C_INT)                   :: nc_inq_compound_field_f
 
  End Function nc_inq_compound_field_f
 End Interface
@@ -427,11 +475,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T
 
- Integer(KIND=C_INT),    VALUE         :: ncid, fieldid
- Integer(KIND=C_INT),    VALUE         :: xtype ! nc_type in C
- Integer(KIND=C_SIZE_T), Intent(INOUT) :: offsetp 
+ Integer(C_INT),    VALUE         :: ncid, fieldid
+ Integer(C_INT),    VALUE         :: xtype ! nc_type in C
+ Integer(C_SIZE_T), Intent(INOUT) :: offsetp 
 
- Integer(KIND=C_INT)                   :: nc_inq_compound_fieldoffset
+ Integer(C_INT)                   :: nc_inq_compound_fieldoffset
 
  End Function nc_inq_compound_fieldoffset
 End Interface
@@ -441,11 +489,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid, fieldid
- Integer(KIND=C_INT),    VALUE         :: xtype ! nc_type in C
+ Integer(C_INT),         VALUE         :: ncid, fieldid
+ Integer(C_INT),         VALUE         :: xtype ! nc_type in C
  Character(KIND=C_CHAR), Intent(INOUT) :: name(*)
 
- Integer(KIND=C_INT)                   :: nc_inq_compound_fieldname
+ Integer(C_INT)                        :: nc_inq_compound_fieldname
 
  End Function nc_inq_compound_fieldname
 End Interface
@@ -455,12 +503,12 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid
- Integer(KIND=C_INT),    VALUE         :: xtype ! nc_type in C
+ Integer(C_INT),         VALUE         :: ncid
+ Integer(C_INT),         VALUE         :: xtype ! nc_type in C
  Character(KIND=C_CHAR), Intent(IN)    :: name(*)
- Integer(KIND=C_INT),    Intent(INOUT) :: fieldidp
+ Integer(C_INT),         Intent(INOUT) :: fieldidp
 
- Integer(KIND=C_INT)                   :: nc_inq_compound_fieldindex
+ Integer(C_INT)                        :: nc_inq_compound_fieldindex
 
  End Function nc_inq_compound_fieldindex
 End Interface
@@ -470,11 +518,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE         :: ncid, fieldid
- Integer(KIND=C_INT), VALUE         :: xtype ! nc_type in C
- Integer(KIND=C_INT), Intent(INOUT) :: field_typeidp ! nc_type in C
+ Integer(C_INT), VALUE         :: ncid, fieldid
+ Integer(C_INT), VALUE         :: xtype ! nc_type in C
+ Integer(C_INT), Intent(INOUT) :: field_typeidp ! nc_type in C
 
- Integer(KIND=C_INT)                :: nc_inq_compound_fieldtype
+ Integer(C_INT)                :: nc_inq_compound_fieldtype
 
  End Function nc_inq_compound_fieldtype
 End Interface
@@ -484,11 +532,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE         :: ncid, fieldid
- Integer(KIND=C_INT), VALUE         :: xtype ! nc_type in C
- Integer(KIND=C_INT), Intent(INOUT) :: ndimsp
+ Integer(C_INT), VALUE         :: ncid, fieldid
+ Integer(C_INT), VALUE         :: xtype ! nc_type in C
+ Integer(C_INT), Intent(INOUT) :: ndimsp
 
- Integer(KIND=C_INT)                :: nc_inq_compound_fieldndims
+ Integer(C_INT)                :: nc_inq_compound_fieldndims
 
  End Function nc_inq_compound_fieldndims
 End Interface
@@ -498,11 +546,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE         :: ncid, fieldid
- Integer(KIND=C_INT), VALUE         :: xtype ! nc_type in C
- Integer(KIND=C_INT), Intent(INOUT) :: dim_sizes(*)
+ Integer(C_INT), VALUE         :: ncid, fieldid
+ Integer(C_INT), VALUE         :: xtype ! nc_type in C
+ Integer(C_INT), Intent(INOUT) :: dim_sizes(*)
 
- Integer(KIND=C_INT)                :: nc_inq_compound_fielddim_sizes
+ Integer(C_INT)                :: nc_inq_compound_fielddim_sizes
 
  End Function nc_inq_compound_fielddim_sizes
 End Interface
@@ -512,12 +560,12 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid
- Integer(KIND=C_INT),    VALUE         :: base_typeid ! nc_type in C
- Integer(KIND=C_INT),    Intent(INOUT) :: xtypep ! nc_type in C 
+ Integer(C_INT),         VALUE         :: ncid
+ Integer(C_INT),         VALUE         :: base_typeid ! nc_type in C
+ Integer(C_INT),         Intent(INOUT) :: xtypep ! nc_type in C 
  Character(KIND=C_CHAR), Intent(IN)    :: name(*)
 
- Integer(KIND=C_INT)                   :: nc_def_vlen
+ Integer(C_INT)                        :: nc_def_vlen
 
  End Function nc_def_vlen
 End Interface
@@ -527,13 +575,13 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid
- Integer(KIND=C_INT),    VALUE         :: xtype ! nc_type in C
- Integer(KIND=C_SIZE_T), Intent(INOUT) :: datum_sizep
- Integer(KIND=C_INT),    Intent(INOUT) :: base_nc_typep ! nc_type in C 
+ Integer(C_INT),         VALUE         :: ncid
+ Integer(C_INT),         VALUE         :: xtype ! nc_type in C
+ Integer(C_SIZE_T),      Intent(INOUT) :: datum_sizep
+ Integer(C_INT),         Intent(INOUT) :: base_nc_typep ! nc_type in C 
  Character(KIND=C_CHAR), Intent(INOUT) :: name(*)
 
- Integer(KIND=C_INT)                   :: nc_inq_vlen
+ Integer(C_INT)                        :: nc_inq_vlen
 
  End Function nc_inq_vlen
 End Interface
@@ -544,14 +592,14 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid
- Integer(KIND=C_INT),    VALUE         :: xtype ! nc_type in C
- Integer(KIND=C_SIZE_T), Intent(INOUT) :: isize , nfieldsp
- Integer(KIND=C_INT),    Intent(INOUT) :: base_nc_typep ! nc_type in C 
- Integer(KIND=C_INT),    Intent(INOUT) :: classp
+ Integer(C_INT),         VALUE         :: ncid
+ Integer(C_INT),         VALUE         :: xtype ! nc_type in C
+ Integer(C_SIZE_T),      Intent(INOUT) :: isize , nfieldsp
+ Integer(C_INT),         Intent(INOUT) :: base_nc_typep ! nc_type in C 
+ Integer(C_INT),         Intent(INOUT) :: classp
  Character(KIND=C_CHAR), Intent(INOUT) :: name(*)
 
- Integer(KIND=C_INT)                   :: nc_inq_user_type
+ Integer(C_INT)                        :: nc_inq_user_type
 
  End Function nc_inq_user_type
 End Interface
@@ -561,12 +609,12 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid
- Integer(KIND=C_INT),    VALUE       :: base_typeid ! nc_type in C
- Integer(KIND=C_INT),    Intent(OUT) :: typeidp ! nc_type in C 
+ Integer(C_INT),         VALUE       :: ncid
+ Integer(C_INT),         VALUE       :: base_typeid ! nc_type in C
+ Integer(C_INT),         Intent(OUT) :: typeidp ! nc_type in C 
  Character(KIND=C_CHAR), Intent(IN)  :: name(*)
 
- Integer(KIND=C_INT)                 :: nc_def_enum
+ Integer(C_INT)                      :: nc_def_enum
 
  End Function nc_def_enum
 End Interface
@@ -576,12 +624,12 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR, C_PTR
 
- Integer(KIND=C_INT),    VALUE      :: ncid
- Integer(KIND=C_INT),    VALUE      :: xtype ! nc_type in C
+ Integer(C_INT),         VALUE      :: ncid
+ Integer(C_INT),         VALUE      :: xtype ! nc_type in C
  Type(C_PTR),            VALUE      :: values  ! void pointer in C
  Character(KIND=C_CHAR), Intent(IN) :: name(*)
 
- Integer(KIND=C_INT)                :: nc_insert_enum
+ Integer(C_INT)                     :: nc_insert_enum
 
  End Function nc_insert_enum
 End Interface
@@ -592,13 +640,13 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid
- Integer(KIND=C_INT),    VALUE         :: xtype ! nc_type in C
- Integer(KIND=C_INT),    Intent(INOUT) :: base_nc_typep ! nc_type in C 
- Integer(KIND=C_SIZE_T), Intent(INOUT) :: base_sizep, num_membersp 
+ Integer(C_INT),         VALUE         :: ncid
+ Integer(C_INT),         VALUE         :: xtype ! nc_type in C
+ Integer(C_INT),         Intent(INOUT) :: base_nc_typep ! nc_type in C 
+ Integer(C_SIZE_T),      Intent(INOUT) :: base_sizep, num_membersp 
  Character(KIND=C_CHAR), Intent(INOUT) :: name(*)
 
- Integer(KIND=C_INT)                   :: nc_inq_enum
+ Integer(C_INT)                        :: nc_inq_enum
 
  End Function nc_inq_enum
 End Interface
@@ -608,12 +656,12 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid, idx
- Integer(KIND=C_INT),    VALUE         :: xtype ! nc_type in C
+ Integer(C_INT),         VALUE         :: ncid, idx
+ Integer(C_INT),         VALUE         :: xtype ! nc_type in C
  Character(KIND=C_CHAR), Intent(OUT)   :: value(*)
  Character(KIND=C_CHAR), Intent(INOUT) :: name(*)
 
- Integer(KIND=C_INT)                   :: nc_inq_enum_member
+ Integer(C_INT)                        :: nc_inq_enum_member
 
  End Function nc_inq_enum_member
 End Interface
@@ -623,12 +671,12 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_LONG_LONG, C_CHAR
 
- Integer(KIND=C_INT),       VALUE         :: ncid
- Integer(KIND=C_INT),       VALUE         :: xtype ! nc_type in C
- Integer(KIND=C_LONG_LONG), VALUE         :: val 
- Character(KIND=C_CHAR),    Intent(INOUT) :: name(*)
+ Integer(C_INT),         VALUE         :: ncid
+ Integer(C_INT),         VALUE         :: xtype ! nc_type in C
+ Integer(C_LONG_LONG),   VALUE         :: val 
+ Character(KIND=C_CHAR), Intent(INOUT) :: name(*)
 
- Integer(KIND=C_INT)                      :: nc_inq_enum_ident
+ Integer(C_INT)                        :: nc_inq_enum_ident
 
  End Function nc_inq_enum_ident
 End Interface
@@ -638,12 +686,12 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid
- Integer(KIND=C_SIZE_T), VALUE       :: isize
+ Integer(C_INT),         VALUE       :: ncid
+ Integer(C_SIZE_T),      VALUE       :: isize
  Character(KIND=C_CHAR), Intent(IN)  :: name(*)
- Integer(KIND=C_INT),    Intent(OUT) :: xtypep ! nc_type in C
+ Integer(C_INT),         Intent(OUT) :: xtypep ! nc_type in C
 
- Integer(KIND=C_INT)                 :: nc_def_opaque
+ Integer(C_INT)                      :: nc_def_opaque
 
  End Function nc_def_opaque
 End Interface
@@ -653,12 +701,12 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid
- Integer(KIND=C_INT),    VALUE       :: xtype ! nc_type in C
- Integer(KIND=C_SIZE_T), Intent(OUT) :: sizep
+ Integer(C_INT),         VALUE       :: ncid
+ Integer(C_INT),         VALUE       :: xtype ! nc_type in C
+ Integer(C_SIZE_T),      Intent(OUT) :: sizep
  Character(KIND=C_CHAR), Intent(OUT) :: name(*)
 
- Integer(KIND=C_INT)                 :: nc_inq_opaque
+ Integer(C_INT)                      :: nc_inq_opaque
 
  End Function nc_inq_opaque
 End Interface
@@ -668,10 +716,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_PTR
 
- Integer(KIND=C_INT), VALUE :: ncid, varid, no_fill
- Type(C_PTR),         VALUE :: cfill_value_p
+ Integer(C_INT), VALUE :: ncid, varid, no_fill
+ Type(C_PTR),    VALUE :: cfill_value_p
 
- Integer(KIND=C_INT)        :: nc_def_var_fill
+ Integer(C_INT)        :: nc_def_var_fill
 
  End Function nc_def_var_fill
 End Interface
@@ -681,11 +729,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid, varid
- Integer(KIND=C_INT),    Intent(INOUT) :: no_fill
+ Integer(C_INT),         VALUE         :: ncid, varid
+ Integer(C_INT),         Intent(INOUT) :: no_fill
  Character(KIND=C_CHAR), Intent(INOUT) :: fill_value(*)
 
- Integer(KIND=C_INT)                   :: nc_inq_var_fill
+ Integer(C_INT)                        :: nc_inq_var_fill
 
  End Function nc_inq_var_fill
 End Interface
@@ -695,10 +743,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE         :: ncid, varid
- Integer(KIND=C_INT), Intent(INOUT) :: options_mask, pixels_per_block 
+ Integer(C_INT), VALUE         :: ncid, varid
+ Integer(C_INT), Intent(INOUT) :: options_mask, pixels_per_block 
 
- Integer(KIND=C_INT)                :: nc_inq_var_szip
+ Integer(C_INT)                :: nc_inq_var_szip
 
  End Function nc_inq_var_szip
 End Interface
@@ -708,9 +756,9 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE :: ncid, varid, fletcher32
+ Integer(C_INT), VALUE :: ncid, varid, fletcher32
 
- Integer(KIND=C_INT)        :: nc_def_var_fletcher32
+ Integer(C_INT)        :: nc_def_var_fletcher32
 
  End Function nc_def_var_fletcher32
 End Interface
@@ -720,10 +768,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE         :: ncid, varid
- Integer(KIND=C_INT), Intent(INOUT) :: fletcher32
+ Integer(C_INT), VALUE         :: ncid, varid
+ Integer(C_INT), Intent(INOUT) :: fletcher32
 
- Integer(KIND=C_INT)                :: nc_inq_var_fletcher32
+ Integer(C_INT)                :: nc_inq_var_fletcher32
 
  End Function nc_inq_var_fletcher32
 End Interface
@@ -733,9 +781,9 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE :: ncid, varid, shuffle, deflate, deflate_level
+ Integer(C_INT), VALUE :: ncid, varid, shuffle, deflate, deflate_level
 
- Integer(KIND=C_INT)        :: nc_def_var_deflate
+ Integer(C_INT)        :: nc_def_var_deflate
 
  End Function nc_def_var_deflate
 End Interface
@@ -745,10 +793,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE         :: ncid, varid
- Integer(KIND=C_INT), Intent(INOUT) :: shuffle, deflate, deflate_level
+ Integer(C_INT), VALUE         :: ncid, varid
+ Integer(C_INT), Intent(INOUT) :: shuffle, deflate, deflate_level
 
- Integer(KIND=C_INT)                :: nc_inq_var_deflate
+ Integer(C_INT)                :: nc_inq_var_deflate
 
  End Function nc_inq_var_deflate
 End Interface
@@ -758,10 +806,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T
 
- Integer(KIND=C_INT),    VALUE         :: ncid, varid, contiguousp
- Integer(KIND=C_SIZE_T), Intent(INOUT) :: chunksizesp
+ Integer(C_INT),    VALUE         :: ncid, varid, contiguousp
+ Integer(C_SIZE_T), Intent(INOUT) :: chunksizesp
 
- Integer(KIND=C_INT)                   :: nc_def_var_chunking
+ Integer(C_INT)                   :: nc_def_var_chunking
 
  End Function nc_def_var_chunking
 End Interface
@@ -771,11 +819,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T
 
- Integer(KIND=C_INT),    VALUE         :: ncid, varid
- Integer(KIND=C_INT),    Intent(INOUT) :: contiguousp
- Integer(KIND=C_SIZE_T), Intent(INOUT) :: chunksizesp(*)
+ Integer(C_INT),    VALUE         :: ncid, varid
+ Integer(C_INT),    Intent(INOUT) :: contiguousp
+ Integer(C_SIZE_T), Intent(INOUT) :: chunksizesp(*)
 
- Integer(KIND=C_INT)                   :: nc_inq_var_chunking
+ Integer(C_INT)                   :: nc_inq_var_chunking
 
  End Function nc_inq_var_chunking
 End Interface
@@ -785,10 +833,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_PTR
 
- Integer(KIND=C_INT), VALUE :: ncid, varid, contiguousp
- Type(C_PTR),         VALUE :: chunksizesp
+ Integer(C_INT), VALUE :: ncid, varid, contiguousp
+ Type(C_PTR),    VALUE :: chunksizesp
 
- Integer(KIND=C_INT)        :: nc_def_var_chunking_ints
+ Integer(C_INT)        :: nc_def_var_chunking_ints
 
  End Function nc_def_var_chunking_ints
 End Interface
@@ -798,11 +846,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE         :: ncid, varid
- Integer(KIND=C_INT), Intent(INOUT) :: contiguousp
- Integer(KIND=C_INT), Intent(INOUT) :: chunksizesp(*)
+ Integer(C_INT), VALUE         :: ncid, varid
+ Integer(C_INT), Intent(INOUT) :: contiguousp
+ Integer(C_INT), Intent(INOUT) :: chunksizesp(*)
 
- Integer(KIND=C_INT)                :: nc_inq_var_chunking_ints
+ Integer(C_INT)                :: nc_inq_var_chunking_ints
 
  End Function nc_inq_var_chunking_ints
 End Interface
@@ -812,9 +860,9 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE :: ncid, varid, endiann
+ Integer(C_INT), VALUE :: ncid, varid, endiann
 
- Integer(KIND=C_INT)        :: nc_def_var_endian
+ Integer(C_INT)        :: nc_def_var_endian
 
  End Function nc_def_var_endian
 End Interface
@@ -824,10 +872,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE         :: ncid, varid
- Integer(KIND=C_INT), Intent(INOUT) :: endiann
+ Integer(C_INT), VALUE         :: ncid, varid
+ Integer(C_INT), Intent(INOUT) :: endiann
 
- Integer(KIND=C_INT)                :: nc_inq_var_endian
+ Integer(C_INT)                :: nc_inq_var_endian
 
  End Function nc_inq_var_endian
 End Interface
@@ -837,12 +885,12 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR, C_SIZE_T, C_PTR
 
- Integer(KIND=C_INT),    VALUE      :: ncid, varid, xtype
- Integer(KIND=C_SIZE_T), VALUE      :: nlen
+ Integer(C_INT),         VALUE      :: ncid, varid, xtype
+ Integer(C_SIZE_T),      VALUE      :: nlen
  Character(KIND=C_CHAR), Intent(IN) :: name(*)
  Type(C_PTR),            VALUE      :: op
 
- Integer(KIND=C_INT)                :: nc_put_att
+ Integer(C_INT)                     :: nc_put_att
 
  End Function nc_put_att
 End Interface
@@ -852,11 +900,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid, varid
+ Integer(C_INT),         VALUE       :: ncid, varid
  Character(KIND=C_CHAR), Intent(IN)  :: name(*)
  Character(KIND=C_CHAR), Intent(OUT) :: op(*)
 
- Integer(KIND=C_INT)                 :: nc_get_att
+ Integer(C_INT)                      :: nc_get_att
 
  End Function nc_get_att
 End Interface
@@ -866,12 +914,12 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_PTR, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid, xtype 
- Integer(KIND=C_SIZE_T), VALUE         :: nlen 
- Character(KIND=C_CHAR), INTENT(INOUT) :: vlen_element(*)
+ Integer(C_INT),         VALUE         :: ncid, xtype 
+ Integer(C_SIZE_T),      VALUE         :: nlen 
+ Character(KIND=C_CHAR), Intent(INOUT) :: vlen_element(*)
  Type(C_PTR),            VALUE         :: op
 
- Integer(KIND=C_INT)                   :: nc_put_vlen_element
+ Integer(C_INT)                        :: nc_put_vlen_element
 
  End Function nc_put_vlen_element
 End Interface
@@ -881,12 +929,12 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR, C_SIZE_T, C_PTR
 
- Integer(KIND=C_INT),    VALUE         :: ncid, xtype 
- Integer(KIND=C_SIZE_T), Intent(INOUT) :: nlen 
- Character(KIND=C_CHAR), INTENT(INOUT) :: vlen_element(*)
+ Integer(C_INT),         VALUE         :: ncid, xtype 
+ Integer(C_SIZE_T),      Intent(INOUT) :: nlen 
+ Character(KIND=C_CHAR), Intent(INOUT) :: vlen_element(*)
  Character(KIND=C_CHAR), Intent(INOUT) :: op(*)
 
- Integer(KIND=C_INT)                   :: nc_get_vlen_element
+ Integer(C_INT)                        :: nc_get_vlen_element
 
  End Function nc_get_vlen_element
 End Interface
@@ -898,7 +946,7 @@ Interface
 
  Type(C_PTR), VALUE  :: vl
 
- Integer(KIND=C_INT) :: nc_free_vlen
+ Integer(C_INT)      :: nc_free_vlen
 
  End Function nc_free_vlen
 End Interface
@@ -911,7 +959,7 @@ Interface
  Integer(C_SIZE_T), Intent(IN) :: len
  Type(C_PTR),       VALUE      :: vl
 
- Integer(KIND=C_INT)           :: nc_free_vlens
+ Integer(C_INT)                :: nc_free_vlens
 
  End Function nc_free_vlens
 End Interface
@@ -924,7 +972,7 @@ Interface
  Integer(C_SIZE_T), Intent(IN) :: len
  Type(C_PTR),       VALUE      :: vl
 
- Integer(KIND=C_INT)           :: nc_free_string
+ Integer(C_INT)                :: nc_free_string
 
  End Function nc_free_string
 End Interface
@@ -934,11 +982,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_LONG_LONG, C_PTR
 
- Integer(KIND=C_INT),       VALUE      :: ncid, varid
- Type(C_PTR),               VALUE      :: indexp
- Integer(KIND=C_LONG_LONG), Intent(IN) :: op
+ Integer(C_INT),       VALUE      :: ncid, varid
+ Type(C_PTR),          VALUE      :: indexp
+ Integer(C_LONG_LONG), Intent(IN) :: op
 
- Integer(KIND=C_INT)                   :: nc_put_var1_longlong
+ Integer(C_INT)                   :: nc_put_var1_longlong
 
  End Function nc_put_var1_longlong
 End Interface
@@ -948,11 +996,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_LONG_LONG, C_PTR
 
- Integer(KIND=C_INT),       VALUE       :: ncid, varid
- Type(C_PTR),               VALUE       :: indexp
- Integer(KIND=C_LONG_LONG), Intent(OUT) :: ip
+ Integer(C_INT),       VALUE       :: ncid, varid
+ Type(C_PTR),          VALUE       :: indexp
+ Integer(C_LONG_LONG), Intent(OUT) :: ip
 
- Integer(KIND=C_INT)                    :: nc_get_var1_longlong
+ Integer(C_INT)                    :: nc_get_var1_longlong
 
  End Function nc_get_var1_longlong
 End Interface
@@ -962,11 +1010,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_LONG_LONG, C_PTR
 
- Integer(KIND=C_INT),       VALUE      :: ncid, varid
- Type(C_PTR),               VALUE      :: startp, countp
- Integer(KIND=C_LONG_LONG), Intent(IN) :: op(*)
+ Integer(C_INT),       VALUE      :: ncid, varid
+ Type(C_PTR),          VALUE      :: startp, countp
+ Integer(C_LONG_LONG), Intent(IN) :: op(*)
 
- Integer(KIND=C_INT)                   :: nc_put_vara_longlong
+ Integer(C_INT)                   :: nc_put_vara_longlong
 
  End Function nc_put_vara_longlong
 End Interface
@@ -976,11 +1024,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_LONG_LONG, C_PTR
 
- Integer(KIND=C_INT),       VALUE       :: ncid, varid
- Type(C_PTR),               VALUE       :: startp, countp
- Integer(KIND=C_LONG_LONG), Intent(OUT) :: ip(*)
+ Integer(C_INT),       VALUE       :: ncid, varid
+ Type(C_PTR),          VALUE       :: startp, countp
+ Integer(C_LONG_LONG), Intent(OUT) :: ip(*)
 
- Integer(KIND=C_INT)                    :: nc_get_vara_longlong
+ Integer(C_INT)                    :: nc_get_vara_longlong
 
  End Function nc_get_vara_longlong
 End Interface
@@ -991,11 +1039,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_PTR, C_LONG_LONG
 
- Integer(KIND=C_INT),       VALUE      :: ncid, varid
- Type(C_PTR),               VALUE      :: startp, countp, stridep, imapp
- Integer(KIND=C_LONG_LONG), Intent(IN) :: op(*)
+ Integer(C_INT),       VALUE      :: ncid, varid
+ Type(C_PTR),          VALUE      :: startp, countp, stridep, imapp
+ Integer(C_LONG_LONG), Intent(IN) :: op(*)
 
- Integer(KIND=C_INT)                   :: nc_put_varm_longlong
+ Integer(C_INT)                   :: nc_put_varm_longlong
 
  End Function nc_put_varm_longlong
 End Interface
@@ -1006,11 +1054,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_PTR, C_LONG_LONG
 
- Integer(KIND=C_INT),       VALUE       :: ncid, varid
- Type(C_PTR),               VALUE       :: startp, countp, stridep, imapp
- Integer(KIND=C_LONG_LONG), Intent(OUT) :: ip(*)
+ Integer(C_INT),       VALUE       :: ncid, varid
+ Type(C_PTR),          VALUE       :: startp, countp, stridep, imapp
+ Integer(C_LONG_LONG), Intent(OUT) :: ip(*)
 
- Integer(KIND=C_INT)                    :: nc_get_varm_longlong
+ Integer(C_INT)                    :: nc_get_varm_longlong
 
  End Function nc_get_varm_longlong
 End Interface
@@ -1020,11 +1068,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_PTR, C_LONG_LONG
 
- Integer(KIND=C_INT),       VALUE      :: ncid, varid
- Type(C_PTR),               VALUE      :: startp, countp, stridep
- Integer(KIND=C_LONG_LONG), Intent(IN) :: op(*)
+ Integer(C_INT),       VALUE      :: ncid, varid
+ Type(C_PTR),          VALUE      :: startp, countp, stridep
+ Integer(C_LONG_LONG), Intent(IN) :: op(*)
 
- Integer(KIND=C_INT)                   :: nc_put_vars_longlong
+ Integer(C_INT)                   :: nc_put_vars_longlong
 
  End Function nc_put_vars_longlong
 End Interface
@@ -1034,11 +1082,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_PTR, C_LONG_LONG
 
- Integer(KIND=C_INT),       VALUE       :: ncid, varid
- Type(C_PTR),               VALUE       :: startp, countp, stridep
- Integer(KIND=C_LONG_LONG), Intent(OUT) :: ip(*)
+ Integer(C_INT),       VALUE       :: ncid, varid
+ Type(C_PTR),          VALUE       :: startp, countp, stridep
+ Integer(C_LONG_LONG), Intent(OUT) :: ip(*)
 
- Integer(KIND=C_INT)                    :: nc_get_vars_longlong
+ Integer(C_INT)                    :: nc_get_vars_longlong
 
  End Function nc_get_vars_longlong
 End Interface
@@ -1048,10 +1096,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_LONG_LONG
 
- Integer(KIND=C_INT),       VALUE      :: ncid, varid
- Integer(KIND=C_LONG_LONG), Intent(IN) :: op(*)
+ Integer(C_INT),       VALUE      :: ncid, varid
+ Integer(C_LONG_LONG), Intent(IN) :: op(*)
 
- Integer(KIND=C_INT)                   :: nc_put_var_longlong
+ Integer(C_INT)                   :: nc_put_var_longlong
 
  End Function nc_put_var_longlong
 End Interface
@@ -1061,10 +1109,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_LONG_LONG
 
- Integer(KIND=C_INT),       VALUE       :: ncid, varid
- Integer(KIND=C_LONG_LONG), Intent(OUT) :: ip(*)
+ Integer(C_INT),       VALUE       :: ncid, varid
+ Integer(C_LONG_LONG), Intent(OUT) :: ip(*)
 
- Integer(KIND=C_INT)                    :: nc_get_var_longlong
+ Integer(C_INT)                    :: nc_get_var_longlong
 
  End Function nc_get_var_longlong
 End Interface
@@ -1074,9 +1122,9 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE :: size, nelems, preemption 
+ Integer(C_INT), VALUE :: size, nelems, preemption 
 
- Integer(KIND=C_INT)        :: nc_set_chunk_cache_ints
+ Integer(C_INT)        :: nc_set_chunk_cache_ints
 
  End Function nc_set_chunk_cache_ints
 End Interface
@@ -1086,33 +1134,36 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), Intent(INOUT) :: size, nelems, preemption 
+ Integer(C_INT), Intent(INOUT) :: size, nelems, preemption 
 
- Integer(KIND=C_INT)                :: nc_get_chunk_cache_ints
+ Integer(C_INT)                :: nc_get_chunk_cache_ints
 
  End Function nc_get_chunk_cache_ints
 End Interface
 !------------------------------- nc_set_var_chunk_cache_ints ------------------
 Interface
- Function nc_set_var_chunk_cache_ints(ncid, varid, size, nelems, preemption) BIND(C)
+ Function nc_set_var_chunk_cache_ints(ncid, varid, size, nelems,        &
+                                      preemption) BIND(C)
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE :: ncid, varid, size, nelems, preemption 
+ Integer(C_INT), VALUE :: ncid, varid, size, nelems, preemption 
 
- Integer(KIND=C_INT)        :: nc_set_var_chunk_cache_ints
+ Integer(C_INT)        :: nc_set_var_chunk_cache_ints
 
  End Function nc_set_var_chunk_cache_ints
 End Interface
 !------------------------------- nc_get_var_chunk_cache_ints ------------------
 Interface
- Function nc_get_var_chunk_cache_ints(ncid, varid, size, nelems, preemption) BIND(C)
+ Function nc_get_var_chunk_cache_ints(ncid, varid, size, nelems,        &
+                                      preemption) BIND(C)
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE         :: ncid, varid
- Integer(KIND=C_INT), Intent(INOUT) :: size, nelems, preemption
- Integer(KIND=C_INT)                :: nc_get_var_chunk_cache_ints
+ Integer(C_INT), VALUE         :: ncid, varid
+ Integer(C_INT), Intent(INOUT) :: size, nelems, preemption
+
+ Integer(C_INT)                :: nc_get_var_chunk_cache_ints
 
  End Function nc_get_var_chunk_cache_ints
 End Interface
@@ -1122,10 +1173,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_SIZE_T, C_FLOAT, C_INT
 
- Integer(KIND=C_SIZE_T), VALUE :: size, nelems
- Real(KIND=C_FLOAT),     VALUE :: preemption 
+ Integer(C_SIZE_T), VALUE :: size, nelems
+ Real(C_FLOAT),     VALUE :: preemption 
 
- Integer(KIND=C_INT)           :: nc_set_chunk_cache
+ Integer(C_INT)           :: nc_set_chunk_cache
 
  End Function nc_set_chunk_cache
 End Interface
@@ -1135,10 +1186,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_SIZE_T, C_FLOAT, C_INT
 
- Integer(KIND=C_SIZE_T), Intent(INOUT) :: size, nelems
- Real(KIND=C_FLOAT),     Intent(INOUT) :: preemption 
+ Integer(C_SIZE_T), Intent(INOUT) :: size, nelems
+ Real(C_FLOAT),     Intent(INOUT) :: preemption 
 
- Integer(KIND=C_INT)                   :: nc_get_chunk_cache
+ Integer(C_INT)                   :: nc_get_chunk_cache
 
  End Function nc_get_chunk_cache
 End Interface
@@ -1148,10 +1199,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_PTR
 
- Integer(KIND=C_INT), VALUE :: ncid, varid
- Type(C_PTR),         VALUE :: op
+ Integer(C_INT), VALUE :: ncid, varid
+ Type(C_PTR),    VALUE :: op
 
- Integer(KIND=C_INT)        :: nc_put_var
+ Integer(C_INT)        :: nc_put_var
 
  End Function nc_put_var
 End Interface
@@ -1161,10 +1212,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid, varid
+ Integer(C_INT),         VALUE         :: ncid, varid
  Character(KIND=C_CHAR), Intent(INOUT) :: ip(*)
 
- Integer(KIND=C_INT)                   :: nc_get_var
+ Integer(C_INT)                        :: nc_get_var
 
  End Function nc_get_var
 End Interface

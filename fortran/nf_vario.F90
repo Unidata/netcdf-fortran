@@ -27,6 +27,7 @@
 ! Version 3.: April 2009 - Updated for netCDF 4.0.1
 ! Version 4.: April 2010 - Updated for netCDF 4.1.1
 !                          Added preprocessor tests for int and real types
+! Version 5.: Jan.  2016 - Some minor code cleanup
 
 !--------------------------------- nf_put_var_text -----------------------
  Function nf_put_var_text(ncid, varid, text) RESULT(status)
@@ -42,7 +43,7 @@
 
  Integer                      :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid,  cstatus
+ Integer(C_INT) :: cncid, cvarid,  cstatus
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract 1 to get C varid
@@ -66,7 +67,7 @@
 
  Integer                      :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid,  cstatus
+ Integer(C_INT) :: cncid, cvarid,  cstatus
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract 1 to get C varid
@@ -85,12 +86,12 @@
 
  Implicit NONE
 
- Integer,              Intent(IN) :: ncid, varid
- Integer(KIND=NFINT1), Intent(IN) :: i1vals(*)
+ Integer,         Intent(IN) :: ncid, varid
+ Integer(NFINT1), Intent(IN) :: i1vals(*)
 
- Integer                          :: status
+ Integer                     :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid,  cstatus
+ Integer(C_INT) :: cncid, cvarid,  cstatus
 
  If (C_SIGNED_CHAR < 0) Then ! schar not supported by processor
    status = NC_EBADTYPE
@@ -122,12 +123,12 @@
 
  Implicit NONE
 
- Integer,              Intent(IN) :: ncid, varid
- Integer(KIND=NFINT2), Intent(IN) :: i2vals(*)
+ Integer,         Intent(IN) :: ncid, varid
+ Integer(NFINT2), Intent(IN) :: i2vals(*)
 
- Integer                          :: status
+ Integer                     :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid,  cstatus
+ Integer(C_INT) :: cncid, cvarid,  cstatus
 
  If (C_SHORT < 0) Then ! short not supported by processor
    status = NC_EBADTYPE
@@ -162,7 +163,7 @@
 
  Integer                    :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid,  cstatus
+ Integer(C_INT) :: cncid, cvarid,  cstatus
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract 1 to get C varid
@@ -187,9 +188,10 @@
 
  Integer,         Intent(IN) :: ncid, varid
  Real(NFREAL),    Intent(IN) :: rvals(*)
+
  Integer                     :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid,  cstatus
+ Integer(C_INT) :: cncid, cvarid,  cstatus
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract 1 to get C varid
@@ -217,7 +219,7 @@
 
  Integer               :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid,  cstatus
+ Integer(C_INT) :: cncid, cvarid,  cstatus
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract 1 to get C varid
@@ -241,7 +243,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid,  cstatus
+ Integer(C_INT) :: cncid, cvarid,  cstatus
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract 1 to get C varid
@@ -266,7 +268,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid,  cstatus
+ Integer(C_INT) :: cncid, cvarid,  cstatus
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract 1 to get C varid
@@ -285,12 +287,12 @@
 
  Implicit NONE
 
- Integer,              Intent(IN)  :: ncid, varid
- Integer(KIND=NFINT1), Intent(OUT) :: i1vals(*)
+ Integer,         Intent(IN)  :: ncid, varid
+ Integer(NFINT1), Intent(OUT) :: i1vals(*)
 
- Integer                           :: status
+ Integer                      :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid,  cstatus
+ Integer(C_INT) :: cncid, cvarid,  cstatus
 
  If (C_SIGNED_CHAR < 0) Then ! schar not supported by processor
    status = NC_EBADTYPE
@@ -322,12 +324,12 @@
 
  Implicit NONE
 
- Integer,              Intent(IN)  :: ncid, varid
- Integer(KIND=NFINT2), Intent(OUT) :: i2vals(*)
+ Integer,         Intent(IN)  :: ncid, varid
+ Integer(NFINT2), Intent(OUT) :: i2vals(*)
 
- Integer                           :: status
+ Integer                      :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid,  cstatus
+ Integer(C_INT) :: cncid, cvarid,  cstatus
 
  If (C_SHORT < 0) Then ! short not supported by processor
    status = NC_EBADTYPE
@@ -362,7 +364,7 @@
 
  Integer                     :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid,  cstatus
+ Integer(C_INT) :: cncid, cvarid,  cstatus
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract 1 to get C varid
@@ -390,7 +392,7 @@
 
  Integer                   :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid,  cstatus
+ Integer(C_INT) :: cncid, cvarid,  cstatus
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract 1 to get C varid
@@ -418,7 +420,7 @@
 
  Integer                :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid, cstatus
+ Integer(C_INT) :: cncid, cvarid, cstatus
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract 1 to get C varid

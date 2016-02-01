@@ -9,7 +9,6 @@ Module netcdf_fortv2_c_interfaces
 !              Mississipi State University
 !              rweed@cavs.msstate.edu
 
-
 ! License (and other Lawyer Language)
  
 ! This software is released under the Apache 2.0 Open Source License. The
@@ -28,11 +27,9 @@ Module netcdf_fortv2_c_interfaces
 !                           in C with C_PTR and C_CHAR strings and 
 !                           NetCDF 4.0.1
 ! Version 3.; April, 2010 - Updated to NetCDF 4.1.1
+! Version 4.: Jan.   2016 - General code cleanup. Changed cmap argument
+!                           in convert_v2_imap routine to assumed shape
 
-! USE ISO_C_BINDING
-
-! USE NETCDF_NC_DATA,       ONLY: C_PTRDIFF_T
-! USE NETCDF_NC_INTERFACES, ONLY: addCNullChar, stripCNullChar
  USE NETCDF_NC_INTERFACES
 
  Implicit NONE
@@ -56,7 +53,7 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE :: val
+ Integer(C_INT), VALUE :: val
 
  End Subroutine c_ncpopt
 End Interface
@@ -66,7 +63,7 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), Intent(OUT) :: val
+ Integer(C_INT), Intent(OUT) :: val
 
  End Subroutine c_ncgopt
 End Interface
@@ -77,10 +74,10 @@ Interface
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
  Character(KIND=C_CHAR), Intent(IN)  :: pathname(*)
- Integer(KIND=C_INT),    VALUE       :: clobmode 
- Integer(KIND=C_INT),    Intent(OUT) :: rcode 
+ Integer(C_INT),         VALUE       :: clobmode 
+ Integer(C_INT),         Intent(OUT) :: rcode 
  
- Integer(KIND=C_INT)                 :: c_nccre
+ Integer(C_INT)                      :: c_nccre
 
  End Function c_nccre
 End Interface
@@ -91,10 +88,10 @@ Interface
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
  Character(KIND=C_CHAR), Intent(IN)  :: pathname(*)
- Integer(KIND=C_INT),    VALUE       :: rwmode 
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         VALUE       :: rwmode 
+ Integer(C_INT),         Intent(OUT) :: rcode
  
- Integer(KIND=C_INT)                 :: c_ncopn
+ Integer(C_INT)                      :: c_ncopn
 
  End Function c_ncopn
 End Interface
@@ -104,11 +101,11 @@ Interface
  
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid, dimlen
+ Integer(C_INT),         VALUE       :: ncid, dimlen
  Character(KIND=C_CHAR), Intent(IN)  :: dimname(*)
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         Intent(OUT) :: rcode
  
- Integer(KIND=C_INT)                 :: c_ncddef
+ Integer(C_INT)                      :: c_ncddef
 
  End Function c_ncddef
 End Interface
@@ -118,28 +115,28 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid
+ Integer(C_INT),         VALUE       :: ncid
  Character(KIND=C_CHAR), Intent(IN)  :: dimname(*)
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         Intent(OUT) :: rcode
  
- Integer(KIND=C_INT)                 :: c_ncdid
+ Integer(C_INT)                      :: c_ncdid
 
  End Function c_ncdid
 End Interface
 !-------------------------------- c_ncvdef ------------------------------------
 Interface
- Function c_ncvdef(ncid, varname, datatype, ndims, dimids, rcode) BIND(C)
+ Function c_ncvdef(ncid, varname, datatype, ndims, dimidp, rcode) BIND(C)
  
- USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
+ USE ISO_C_BINDING, ONLY: C_INT, C_CHAR, C_PTR
 
- Integer(KIND=C_INT),    VALUE       :: ncid
+ Integer(C_INT),         VALUE       :: ncid
  Character(KIND=C_CHAR), Intent(IN)  :: varname(*)
- Integer(KIND=C_INT),    VALUE       :: datatype ! nc_type variable in C
- Integer(KIND=C_INT),    VALUE       :: ndims
- Integer(KIND=C_INT),    Intent(IN)  :: dimids(*)
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         VALUE       :: datatype ! nc_type variable in C
+ Integer(C_INT),         VALUE       :: ndims
+ Type(C_PTR),            VALUE       :: dimidp
+ Integer(C_INT),         Intent(OUT) :: rcode
 
- Integer(KIND=C_INT)                 :: c_ncvdef
+ Integer(C_INT)                      :: c_ncvdef
 
  End Function c_ncvdef
 End Interface
@@ -149,11 +146,11 @@ Interface
  
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid
+ Integer(C_INT),         VALUE       :: ncid
  Character(KIND=C_CHAR), Intent(IN)  :: varname(*)
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         Intent(OUT) :: rcode
 
- Integer(KIND=C_INT)                 :: c_ncvid
+ Integer(C_INT)                      :: c_ncvid
 
  End Function c_ncvid
 End Interface
@@ -163,10 +160,10 @@ Interface
  
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE       :: datatype ! nc_type var in C
- Integer(KIND=C_INT), Intent(OUT) :: rcode
+ Integer(C_INT), VALUE       :: datatype ! nc_type var in C
+ Integer(C_INT), Intent(OUT) :: rcode
 
- Integer(KIND=C_INT)              :: c_nctlen
+ Integer(C_INT)              :: c_nctlen
 
  End Function c_nctlen
 End Interface
@@ -176,8 +173,8 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE       :: ncid 
- Integer(KIND=C_INT), Intent(OUT) :: rcode
+ Integer(C_INT), VALUE       :: ncid 
+ Integer(C_INT), Intent(OUT) :: rcode
 
  End Subroutine c_ncclos
 End Interface
@@ -187,8 +184,8 @@ Interface
  
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE       :: ncid 
- Integer(KIND=C_INT), Intent(OUT) :: rcode
+ Integer(C_INT), VALUE       :: ncid 
+ Integer(C_INT), Intent(OUT) :: rcode
 
  End Subroutine c_ncredf
 End Interface
@@ -198,8 +195,8 @@ Interface
  
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE       :: ncid 
- Integer(KIND=C_INT), Intent(OUT) :: rcode
+ Integer(C_INT), VALUE       :: ncid 
+ Integer(C_INT), Intent(OUT) :: rcode
 
  End Subroutine c_ncendf
 End Interface
@@ -209,8 +206,8 @@ Interface
  
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE       :: ncid
- Integer(KIND=C_INT), Intent(OUT) :: indims, invars, inatts, irecdim, rcode
+ Integer(C_INT), VALUE       :: ncid
+ Integer(C_INT), Intent(OUT) :: indims, invars, inatts, irecdim, rcode
 
  End Subroutine c_ncinq
 End Interface
@@ -220,8 +217,8 @@ Interface
  
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE       :: ncid 
- Integer(KIND=C_INT), Intent(OUT) :: rcode
+ Integer(C_INT), VALUE       :: ncid 
+ Integer(C_INT), Intent(OUT) :: rcode
 
  End Subroutine c_ncsnc
 End Interface
@@ -231,8 +228,8 @@ Interface
  
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE       :: ncid 
- Integer(KIND=C_INT), Intent(OUT) :: rcode
+ Integer(C_INT), VALUE       :: ncid 
+ Integer(C_INT), Intent(OUT) :: rcode
 
  End Subroutine c_ncabor
 End Interface
@@ -242,9 +239,9 @@ Interface
  
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid , dimid
+ Integer(C_INT),         VALUE       :: ncid , dimid
  Character(KIND=C_CHAR), Intent(OUT) :: dimname(*)
- Integer(KIND=C_INT),    Intent(OUT) :: size, rcode
+ Integer(C_INT),         Intent(OUT) :: size, rcode
 
  End Subroutine c_ncdinq
 End Interface
@@ -254,9 +251,9 @@ Interface
  
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid , dimid
+ Integer(C_INT),         VALUE       :: ncid , dimid
  Character(KIND=C_CHAR), Intent(IN)  :: dimname(*)
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         Intent(OUT) :: rcode
 
  End Subroutine c_ncdren
 End Interface
@@ -267,11 +264,11 @@ Interface
  
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid , varid
+ Integer(C_INT),         VALUE         :: ncid , varid
  Character(KIND=C_CHAR), Intent(INOUT) :: varname(*)
- Integer(KIND=C_INT),    Intent(OUT)   :: datatype ! nc_type var in C
- Integer(KIND=C_INT),    Intent(OUT)   :: dimarray(*)
- Integer(KIND=C_INT),    Intent(OUT)   :: indims, inatts, rcode
+ Integer(C_INT),         Intent(OUT)   :: datatype ! nc_type var in C
+ Integer(C_INT),         Intent(OUT)   :: dimarray(*)
+ Integer(C_INT),         Intent(OUT)   :: indims, inatts, rcode
 
  End Subroutine c_ncvinq
 End Interface
@@ -281,10 +278,10 @@ Interface
  
  USE ISO_C_BINDING, ONLY: C_INT, C_PTR
 
- Integer(KIND=C_INT), VALUE       :: ncid , varid
- TYPE(C_PTR),         VALUE       :: indices
- Type(C_PTR),         VALUE       :: value
- Integer(KIND=C_INT), Intent(OUT) :: rcode
+ Integer(C_INT), VALUE       :: ncid , varid
+ TYPE(C_PTR),    VALUE       :: indices
+ Type(C_PTR),    VALUE       :: value
+ Integer(C_INT), Intent(OUT) :: rcode
 
  End Subroutine c_ncvpt1
 End Interface
@@ -294,10 +291,10 @@ Interface
  
  USE ISO_C_BINDING, ONLY: C_INT, C_PTR, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid , varid
+ Integer(C_INT),         VALUE       :: ncid , varid
  TYPE(C_PTR),            VALUE       :: indices
  Character(KIND=C_CHAR), Intent(IN)  :: value(*) ! void in C
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         Intent(OUT) :: rcode
 
  End Subroutine c_ncvp1c
 End Interface
@@ -307,10 +304,10 @@ Interface
  
  USE ISO_C_BINDING, ONLY: C_INT, C_PTR
 
- Integer(KIND=C_INT), VALUE       :: ncid , varid
- Type(C_PTR),         VALUE       :: start, count
- Type(C_PTR),         VALUE       :: value
- Integer(KIND=C_INT), Intent(OUT) :: rcode
+ Integer(C_INT), VALUE       :: ncid , varid
+ Type(C_PTR),    VALUE       :: start, count
+ Type(C_PTR),    VALUE       :: value
+ Integer(C_INT), Intent(OUT) :: rcode
 
  End Subroutine c_ncvpt
 End Interface
@@ -320,10 +317,10 @@ Interface
  
  USE ISO_C_BINDING, ONLY: C_INT, C_PTR, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid , varid, lenstr
+ Integer(C_INT),         VALUE       :: ncid , varid, lenstr
  Type(C_PTR),            VALUE       :: start, count
  Character(KIND=C_CHAR), Intent(IN)  :: value(*) ! char in C
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         Intent(OUT) :: rcode
 
  End Subroutine c_ncvptc
 End Interface
@@ -334,10 +331,10 @@ Interface
  
  USE ISO_C_BINDING, ONLY: C_INT, C_PTR
 
- Integer(KIND=C_INT), VALUE       :: ncid , varid
- Type(C_PTR),         VALUE       :: start, count, strides, imap
- Type(C_PTR),         VALUE       :: value
- Integer(KIND=C_INT), Intent(OUT) :: rcode
+ Integer(C_INT), VALUE       :: ncid , varid
+ Type(C_PTR),    VALUE       :: start, count, strides, imap
+ Type(C_PTR),    VALUE       :: value
+ Integer(C_INT), Intent(OUT) :: rcode
 
  End Subroutine c_ncvptg
 End Interface
@@ -348,10 +345,10 @@ Interface
  
  USE ISO_C_BINDING, ONLY: C_INT, C_PTR, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid , varid
+ Integer(C_INT),         VALUE       :: ncid , varid
  Type(C_PTR),            VALUE       :: start, count, strides, imap
  Character(KIND=C_CHAR), Intent(IN)  :: value(*) ! char in C
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         Intent(OUT) :: rcode
 
  End Subroutine c_ncvpgc
 End Interface
@@ -361,10 +358,10 @@ Interface
  
  USE ISO_C_BINDING, ONLY: C_INT, C_PTR, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid , varid
+ Integer(C_INT),         VALUE       :: ncid , varid
  Type(C_PTR),            VALUE       :: indices
  Character(KIND=C_CHAR), Intent(OUT) :: value(*) ! void in C
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         Intent(OUT) :: rcode
 
  End Subroutine c_ncvgt1
 End Interface
@@ -374,10 +371,10 @@ Interface
  
  USE ISO_C_BINDING, ONLY: C_INT, C_PTR, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid , varid
+ Integer(C_INT),         VALUE         :: ncid , varid
  Type(C_PTR),            VALUE         :: indices
  Character(KIND=C_CHAR), Intent(INOUT) :: value(*) ! char in C
- Integer(KIND=C_INT),    Intent(OUT)   :: rcode
+ Integer(C_INT),         Intent(OUT)   :: rcode
 
  End Subroutine c_ncvg1c
 End Interface
@@ -387,10 +384,10 @@ Interface
  
  USE ISO_C_BINDING, ONLY: C_INT, C_PTR, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid , varid
+ Integer(C_INT),         VALUE       :: ncid , varid
  Type(C_PTR),            VALUE       :: start, count
  Character(KIND=C_CHAR), Intent(OUT) :: value(*) ! void in C
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         Intent(OUT) :: rcode
 
  End Subroutine c_ncvgt
 End Interface
@@ -400,10 +397,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_PTR, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid , varid, lenstr
+ Integer(C_INT),         VALUE         :: ncid , varid, lenstr
  Type(C_PTR),            VALUE         :: start, count
  Character(KIND=C_CHAR), Intent(INOUT) :: value(*) ! char in C
- Integer(KIND=C_INT),    Intent(OUT)   :: rcode
+ Integer(C_INT),         Intent(OUT)   :: rcode
 
  End Subroutine c_ncvgtc
 End Interface
@@ -414,10 +411,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_PTR, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid , varid
+ Integer(C_INT),         VALUE       :: ncid , varid
  Type(C_PTR),            VALUE       :: start, count, strides,  imap
  Character(KIND=C_CHAR), Intent(OUT) :: value(*) ! void in C
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         Intent(OUT) :: rcode
 
  End Subroutine c_ncvgtg
 End Interface
@@ -428,10 +425,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_PTR, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid , varid
+ Integer(C_INT),         VALUE       :: ncid , varid
  Type(C_PTR),            VALUE       :: start, count, strides, imap
  Character(KIND=C_CHAR), Intent(OUT) :: value(*) ! char in C
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         Intent(OUT) :: rcode
 
  End Subroutine c_ncvggc
 End Interface
@@ -441,9 +438,9 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid , varid
+ Integer(C_INT),         VALUE       :: ncid , varid
  Character(KIND=C_CHAR), Intent(IN)  :: varname(*)
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         Intent(OUT) :: rcode
 
  End Subroutine c_ncvren
 End Interface
@@ -454,12 +451,12 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_CHAR, C_PTR
 
- Integer(KIND=C_INT),    VALUE       :: ncid , varid
+ Integer(C_INT),         VALUE       :: ncid , varid
  Character(KIND=C_CHAR), Intent(IN)  :: attname(*)
- Integer(KIND=C_INT),    VALUE       :: datatype ! nc_type var in C
- Integer(KIND=C_SIZE_T), VALUE       :: attlen
+ Integer(C_INT),         VALUE       :: datatype ! nc_type var in C
+ Integer(C_SIZE_T),      VALUE       :: attlen
  Type(C_PTR),            VALUE       :: value ! void in C
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         Intent(OUT) :: rcode
 
  End Subroutine c_ncapt
 End Interface
@@ -470,12 +467,12 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid , varid
+ Integer(C_INT),         VALUE       :: ncid , varid
  Character(KIND=C_CHAR), Intent(IN)  :: attname(*)
- Integer(KIND=C_INT),    VALUE       :: datatype ! nc_type var in C
- Integer(KIND=C_SIZE_T), VALUE       :: attlen
+ Integer(C_INT),         VALUE       :: datatype ! nc_type var in C
+ Integer(C_SIZE_T),      VALUE       :: attlen
  Character(KIND=C_CHAR), Intent(IN)  :: string(*) ! char in C
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         Intent(OUT) :: rcode
 
  End Subroutine c_ncaptc
 End Interface
@@ -485,11 +482,11 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid , varid
+ Integer(C_INT),         VALUE       :: ncid , varid
  Character(KIND=C_CHAR), Intent(IN)  :: attname(*)
- Integer(KIND=C_INT),    Intent(OUT) :: datatype ! nc_type var in C
- Integer(KIND=C_INT),    Intent(OUT) :: attlen
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         Intent(OUT) :: datatype ! nc_type var in C
+ Integer(C_INT),         Intent(OUT) :: attlen
+ Integer(C_INT),         Intent(OUT) :: rcode
 
  End Subroutine c_ncainq
 End Interface
@@ -499,10 +496,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid , varid
+ Integer(C_INT),         VALUE       :: ncid , varid
  Character(KIND=C_CHAR), Intent(IN)  :: attname(*)
  Character(KIND=C_CHAR), Intent(OUT) :: value(*) ! void in C
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         Intent(OUT) :: rcode
 
  End Subroutine c_ncagt
 End Interface
@@ -512,10 +509,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid , varid, attlen
+ Integer(C_INT),         VALUE       :: ncid , varid, attlen
  Character(KIND=C_CHAR), Intent(IN)  :: attname(*)
  Character(KIND=C_CHAR), Intent(OUT) :: value(*) ! char in C
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         Intent(OUT) :: rcode
 
  End Subroutine c_ncagtc
 End Interface
@@ -526,9 +523,9 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: inncid , invarid, outncid, outvarid 
+ Integer(C_INT),         VALUE       :: inncid , invarid, outncid, outvarid 
  Character(KIND=C_CHAR), Intent(IN)  :: attname(*)
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         Intent(OUT) :: rcode
 
  End Subroutine c_ncacpy
 End Interface
@@ -538,9 +535,9 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE         :: ncid , varid, attnum
+ Integer(C_INT),         VALUE         :: ncid , varid, attnum
  Character(KIND=C_CHAR), Intent(INOUT) :: newname(*)
- Integer(KIND=C_INT),    Intent(OUT)   :: rcode
+ Integer(C_INT),         Intent(OUT)   :: rcode
 
  End Subroutine c_ncanam
 End Interface
@@ -550,9 +547,9 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid , varid
+ Integer(C_INT),         VALUE       :: ncid , varid
  Character(KIND=C_CHAR), Intent(IN)  :: attnam(*), newname(*)
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         Intent(OUT) :: rcode
 
  End Subroutine c_ncaren
 End Interface
@@ -562,9 +559,9 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
 
- Integer(KIND=C_INT),    VALUE       :: ncid , varid
+ Integer(C_INT),         VALUE       :: ncid , varid
  Character(KIND=C_CHAR), Intent(IN)  :: attname(*)
- Integer(KIND=C_INT),    Intent(OUT) :: rcode
+ Integer(C_INT),         Intent(OUT) :: rcode
 
  End Subroutine c_ncadel
 End Interface
@@ -574,10 +571,10 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT
 
- Integer(KIND=C_INT), VALUE       :: ncid , fillmode 
- Integer(KIND=C_INT), Intent(OUT) :: rcode
+ Integer(C_INT), VALUE       :: ncid , fillmode 
+ Integer(C_INT), Intent(OUT) :: rcode
 
- Integer(KIND=C_INT)              :: c_ncsfil
+ Integer(C_INT)              :: c_ncsfil
 
  End Function c_ncsfil
 End Interface
@@ -589,8 +586,8 @@ Interface
 !
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T
 
- Integer(KIND=C_INT),   VALUE :: datatype
- Integer(KIND=C_SIZE_T)       :: v2data_size
+ Integer(C_INT),   VALUE :: datatype
+ Integer(C_SIZE_T)       :: v2data_size
 
  End Function v2data_size  
 End Interface
@@ -601,29 +598,22 @@ Subroutine convert_v2_imap(cncid, cvarid, fmap, cmap, inullp)
 
 ! Replacement for f2c_v2imap C function. Uses v2data_size to return
 ! data size defined for C code. A futher test will be made using
-! C interop value.s for FORTRAN side
+! C interop values for FORTRAN side. Made cmap a assumed shape arry
+! for Jan. 2016 update to use allocatable arrays
 !
-!   USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T
-!   USE NETCDF_NC_DATA, ONLY: C_PTRDIFF_T
-!   USE netcdf_nc_interfaces, ONLY: NC_CHAR, NC_SHORT, NC_INT, NC_FLOAT, &
-!                                   NC_BYTE, NC_DOUBLE, NC_MAX_VAR_DIMS, &
-
-! USE netcdf_nc_interfaces, ONLY: nc_inq_vartype, nc_inq_varndims,     &
-!                                 nc_inq_vardimid, nc_inq_dimlen,      &
-!                                 NC_NOERR , NC_MAX_VAR_DIMS
    
  Implicit NONE
 
- Integer(KIND=C_INT),       Intent(IN)    :: cncid, cvarid
- Integer(KIND=C_INT),       Intent(IN)    :: fmap(*)
- Integer(KIND=C_PTRDIFF_T), Intent(INOUT) :: cmap(*)
- Integer,                   Intent(OUT)   :: inullp
+ Integer(C_INT),       Intent(IN)    :: cncid, cvarid
+ Integer(C_INT),       Intent(IN)    :: fmap(*)
+ Integer(C_PTRDIFF_T), Intent(INOUT) :: cmap(:)
+ Integer,              Intent(OUT)   :: inullp
 
- Integer(KIND=C_INT)    :: rank, datatype, cstat1, cstat2, cstat3, cstat4
- Integer(KIND=C_SIZE_T) :: total, length, csize
- Integer(KIND=C_INT)    :: dimids(NC_MAX_VAR_DIMS)
- Integer                :: ii, idim
+ Integer(C_INT)    :: rank, datatype, cstat1, cstat2, cstat3, cstat4
+ Integer(C_SIZE_T) :: total, length, csize
+ Integer           :: ii, idim
 
+ Integer(C_INT), ALLOCATABLE  :: dimids(:)
 !
  inullp=0
 
@@ -645,6 +635,10 @@ Subroutine convert_v2_imap(cncid, cvarid, fmap, cmap, inullp)
  If (rank <= 0) Then
    inullp=1
    Return
+ EndIf
+
+ If (rank > 0) Then
+   ALLOCATE(dimids(rank))
  EndIf
 
  If (fmap(1)==0) Then ! Special Fortran version 2 sematics

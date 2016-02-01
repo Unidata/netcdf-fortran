@@ -27,6 +27,8 @@
 ! Version 3.: April 2009 - Updated to Netcdf 4.0.1 
 ! Version 4.: April 2010 - Updated to Netcdf 4.1.1 
 ! Version 5.: Feb.  2013 - bug fixes for fortran 4.4
+! Version 6:  Jan.  2016 - General code cleanup. Changed processing of
+!                          name strings to reflect change to addCNullChar
           
 !--------------------------------- nf_put_att_text ---------------------------
  Function nf_put_att_text(ncid, varid, name, nlen, text) RESULT(status)
@@ -42,8 +44,8 @@
 
  Integer                      :: status
 
- Integer(KIND=C_INT)          :: cncid, cvarid, cstatus
- Integer(KIND=C_SIZE_T)       :: cnlen
+ Integer(C_INT)               :: cncid, cvarid, cstatus
+ Integer(C_SIZE_T)            :: cnlen
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -53,7 +55,7 @@
 
  cname = addCNullChar(name, ie)
  
- cstatus = nc_put_att_text(cncid, cvarid, cname(1:ie+1), cnlen, &
+ cstatus = nc_put_att_text(cncid, cvarid, cname(1:ie), cnlen, &
            text)
 
  status = cstatus
@@ -75,8 +77,8 @@
 
  Integer                      :: status
 
- Integer(KIND=C_INT)          :: cncid, cvarid, cstatus
- Integer(KIND=C_SIZE_T)       :: cnlen
+ Integer(C_INT)               :: cncid, cvarid, cstatus
+ Integer(C_SIZE_T)            :: cnlen
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -86,7 +88,7 @@
 
  cname = addCNullChar(name, ie)
  
- cstatus = nc_put_att_text(cncid, cvarid, cname(1:ie+1), cnlen, &
+ cstatus = nc_put_att_text(cncid, cvarid, cname(1:ie), cnlen, &
                            text)
 
  status = cstatus
@@ -102,17 +104,16 @@
 
  Implicit NONE
 
- Integer,              Intent(IN) :: ncid, varid, nlen, xtype
+ Integer,          Intent(IN) :: ncid, varid, nlen, xtype
+ Character(LEN=*), Intent(IN) :: name
+ Integer(NFINT1),  Intent(IN) :: i1vals(*)
 
- Character(LEN=*),     Intent(IN) :: name
- Integer(KIND=NFINT1), Intent(IN) :: i1vals(*)
+ Integer                      :: status
 
- Integer                          :: status
-
- Integer(KIND=C_INT)             :: cncid, cvarid, cstatus, cxtype
- Integer(KIND=C_SIZE_T)          :: cnlen
- Character(LEN=(LEN(name)+1))    :: cname
- Integer                         :: ie
+ Integer(C_INT)               :: cncid, cvarid, cstatus, cxtype
+ Integer(C_SIZE_T)            :: cnlen
+ Character(LEN=(LEN(name)+1)) :: cname
+ Integer                      :: ie
 
  If (C_SIGNED_CHAR < 0) Then ! schar not supported by processor
    status = NC_EBADTYPE
@@ -129,16 +130,16 @@
  cname = addCNullChar(name, ie)
 
 #if NF_INT1_IS_C_SIGNED_CHAR 
- cstatus = nc_put_att_schar(cncid, cvarid, cname(1:ie+1), &
+ cstatus = nc_put_att_schar(cncid, cvarid, cname(1:ie), &
                            cxtype, cnlen, i1vals) 
 #elif NF_INT1_IS_C_SHORT
- cstatus = nc_put_att_short(cncid, cvarid, cname(1:ie+1), &
+ cstatus = nc_put_att_short(cncid, cvarid, cname(1:ie), &
                             cxtype, cnlen, i1vals)
 #elif NF_INT1_IS_C_INT
- cstatus = nc_put_att_int(cncid, cvarid, cname(1:ie+1), &
+ cstatus = nc_put_att_int(cncid, cvarid, cname(1:ie), &
                             cxtype, cnlen, i1vals)
 #elif NF_INT1_IS_C_LONG
- cstatus = nc_put_att_long(cncid, cvarid, cname(1:ie+1), &
+ cstatus = nc_put_att_long(cncid, cvarid, cname(1:ie), &
                            cxtype, cnlen, i1vals)
 #endif
  status = cstatus
@@ -154,17 +155,16 @@
 
  Implicit NONE
 
- Integer,              Intent(IN) :: ncid, varid, nlen, xtype
+ Integer,          Intent(IN) :: ncid, varid, nlen, xtype
+ Character(LEN=*), Intent(IN) :: name
+ Integer(NFINT2),  Intent(IN) :: i2vals(*)
 
- Character(LEN=*),     Intent(IN) :: name
- Integer(KIND=NFINT2), Intent(IN) :: i2vals(*)
+ Integer                      :: status
 
- Integer                          :: status
-
- Integer(KIND=C_INT)             :: cncid, cvarid, cstatus, cxtype
- Integer(KIND=C_SIZE_T)          :: cnlen
- Character(LEN=(LEN(name)+1))    :: cname
- Integer                         :: ie
+ Integer(C_INT)               :: cncid, cvarid, cstatus, cxtype
+ Integer(C_SIZE_T)            :: cnlen
+ Character(LEN=(LEN(name)+1)) :: cname
+ Integer                      :: ie
 
  If (C_SHORT < 0) Then ! short not supported by processor
    status = NC_EBADTYPE
@@ -179,13 +179,13 @@
  cname = addCNullChar(name, ie)
 
 #if NF_INT2_IS_C_SHORT 
- cstatus = nc_put_att_short(cncid, cvarid, cname(1:ie+1), &
+ cstatus = nc_put_att_short(cncid, cvarid, cname(1:ie), &
                             cxtype, cnlen, i2vals) 
 #elif NF_INT2_IS_C_INT 
- cstatus = nc_put_att_int(cncid, cvarid, cname(1:ie+1), &
+ cstatus = nc_put_att_int(cncid, cvarid, cname(1:ie), &
                            cxtype, cnlen, i2vals)
 #elif NF_INT2_IS_C_LONG 
- cstatus = nc_put_att_long(cncid, cvarid, cname(1:ie+1), &
+ cstatus = nc_put_att_long(cncid, cvarid, cname(1:ie), &
                            cxtype, cnlen, i2vals)
 #endif 
  status = cstatus
@@ -202,14 +202,13 @@
  Implicit NONE
 
  Integer,          Intent(IN) :: ncid, varid, nlen, xtype
-
  Character(LEN=*), Intent(IN) :: name
  Integer(NFINT),   Intent(IN) :: ivals(*)
 
  Integer                      :: status
 
- Integer(KIND=C_INT)          :: cncid, cvarid, cstatus, cxtype
- Integer(KIND=C_SIZE_T)       :: cnlen
+ Integer(C_INT)               :: cncid, cvarid, cstatus, cxtype
+ Integer(C_SIZE_T)            :: cnlen
  Character(LEN=(LEN(name)+1)) :: cname
  Integer :: ie
 
@@ -223,10 +222,10 @@
  cname = addCNullChar(name, ie)
 
 #if NF_INT_IS_C_INT 
- cstatus = nc_put_att_int(cncid, cvarid, cname(1:ie+1), &
+ cstatus = nc_put_att_int(cncid, cvarid, cname(1:ie), &
                           cxtype, cnlen, ivals) 
 #elif NF_INT_IS_C_LONG 
- cstatus = nc_put_att_long(cncid, cvarid, cname(1:ie+1), &
+ cstatus = nc_put_att_long(cncid, cvarid, cname(1:ie), &
                           cxtype, cnlen, ivals) 
 #endif
  status = cstatus
@@ -243,14 +242,13 @@
  Implicit NONE
 
  Integer,          Intent(IN) :: ncid, varid, nlen, xtype
-
  Character(LEN=*), Intent(IN) :: name
  Real(NFREAL),     Intent(IN) :: rvals(*)
 
  Integer                      :: status
 
- Integer(KIND=C_INT)          :: cncid, cvarid, cstatus, cxtype
- Integer(KIND=C_SIZE_T)       :: cnlen
+ Integer(C_INT)               :: cncid, cvarid, cstatus, cxtype
+ Integer(C_SIZE_T)            :: cnlen
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -264,10 +262,10 @@
  cname = addCNullChar(name, ie)
 
 #if NF_REAL_IS_C_DOUBLE 
- cstatus = nc_put_att_double(cncid, cvarid, cname(1:ie+1), &
+ cstatus = nc_put_att_double(cncid, cvarid, cname(1:ie), &
                              cxtype, cnlen, rvals) 
 #else
- cstatus = nc_put_att_float(cncid, cvarid, cname(1:ie+1), &
+ cstatus = nc_put_att_float(cncid, cvarid, cname(1:ie), &
                             cxtype, cnlen, rvals) 
 #endif
  status = cstatus
@@ -284,14 +282,13 @@
  Implicit NONE
 
  Integer,          Intent(IN) :: ncid, varid, nlen, xtype
-
  Character(LEN=*), Intent(IN) :: name
  Real(RK8),        Intent(IN) :: dvals(*)
 
  Integer                      :: status
 
- Integer(KIND=C_INT)          :: cncid, cvarid, cstatus, cxtype
- Integer(KIND=C_SIZE_T)       :: cnlen
+ Integer(C_INT)               :: cncid, cvarid, cstatus, cxtype
+ Integer(C_SIZE_T)            :: cnlen
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -304,7 +301,7 @@
 
  cname = addCNullChar(name, ie)
  
- cstatus = nc_put_att_double(cncid, cvarid, cname(1:ie+1), &
+ cstatus = nc_put_att_double(cncid, cvarid, cname(1:ie), &
                              cxtype, cnlen, dvals) 
 
  status = cstatus
@@ -325,7 +322,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cvarid, cstatus
+ Integer(C_INT)               :: cncid, cvarid, cstatus
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -337,7 +334,7 @@
 
  cname = addCNullChar(name, ie)
  
- cstatus = nc_get_att_text(cncid, cvarid, cname(1:ie+1), text)
+ cstatus = nc_get_att_text(cncid, cvarid, cname(1:ie), text)
 
  status = cstatus
 
@@ -358,7 +355,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cvarid, cstatus
+ Integer(C_INT)               :: cncid, cvarid, cstatus
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -369,7 +366,7 @@
 
  cname = addCNullChar(name, ie)
  
- cstatus = nc_get_att_text(cncid, cvarid, cname(1:ie+1), text)
+ cstatus = nc_get_att_text(cncid, cvarid, cname(1:ie), text)
 
  status = cstatus
 
@@ -383,13 +380,13 @@
 
  Implicit NONE
 
- Integer,              Intent(IN)  :: ncid, varid
- Character(LEN=*),     Intent(IN)  :: name
- Integer(KIND=NFINT1), Intent(OUT) :: i1vals(*)
+ Integer,          Intent(IN)  :: ncid, varid
+ Character(LEN=*), Intent(IN)  :: name
+ Integer(NFINT1),  Intent(OUT) :: i1vals(*)
 
- Integer                          :: status
+ Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cvarid, cstatus
+ Integer(C_INT)               :: cncid, cvarid, cstatus
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -406,13 +403,13 @@
  cname = addCNullChar(name, ie)
 
 #if NF_INT1_IS_C_SIGNED_CHAR 
- cstatus = nc_get_att_schar(cncid, cvarid, cname(1:ie+1), i1vals)
+ cstatus = nc_get_att_schar(cncid, cvarid, cname(1:ie), i1vals)
 #elif NF_INT1_IS_C_SHORT
- cstatus = nc_get_att_short(cncid, cvarid, cname(1:ie+1), i1vals)
+ cstatus = nc_get_att_short(cncid, cvarid, cname(1:ie), i1vals)
 #elif NF_INT1_IS_C_INT
- cstatus = nc_get_att_int(cncid, cvarid, cname(1:ie+1), i1vals)
+ cstatus = nc_get_att_int(cncid, cvarid, cname(1:ie), i1vals)
 #elif NF_INT1_IS_C_LONG
- cstatus = nc_get_att_long(cncid, cvarid, cname(1:ie+1), i1vals)
+ cstatus = nc_get_att_long(cncid, cvarid, cname(1:ie), i1vals)
 #endif
  status = cstatus
 
@@ -426,13 +423,13 @@
 
  Implicit NONE
 
- Integer,              Intent(IN)  :: ncid, varid
- Character(LEN=*),     Intent(IN)  :: name
- Integer(KIND=NFINT2), Intent(OUT) :: i2vals(*)
+ Integer,          Intent(IN)  :: ncid, varid
+ Character(LEN=*), Intent(IN)  :: name
+ Integer(NFINT2),  Intent(OUT) :: i2vals(*)
 
- Integer                           :: status
+ Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cvarid, cstatus
+ Integer(C_INT)               :: cncid, cvarid, cstatus
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -449,11 +446,11 @@
  cname = addCNullChar(name, ie)
  
 #if NF_INT2_IS_C_SHORT
- cstatus = nc_get_att_short(cncid, cvarid, cname(1:ie+1), i2vals) 
+ cstatus = nc_get_att_short(cncid, cvarid, cname(1:ie), i2vals) 
 #elif NF_INT2_IS_C_INT
- cstatus = nc_get_att_int(cncid, cvarid, cname(1:ie+1), i2vals) 
+ cstatus = nc_get_att_int(cncid, cvarid, cname(1:ie), i2vals) 
 #elif NF_INT2_IS_C_LONG
- cstatus = nc_get_att_long(cncid, cvarid, cname(1:ie+1), i2vals) 
+ cstatus = nc_get_att_long(cncid, cvarid, cname(1:ie), i2vals) 
 #endif
  status = cstatus
 
@@ -473,7 +470,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cvarid, cstatus
+ Integer(C_INT)               :: cncid, cvarid, cstatus
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -485,9 +482,9 @@
  cname = addCNullChar(name, ie)
 
 #if NF_INT_IS_C_INT 
- cstatus = nc_get_att_int(cncid, cvarid, cname(1:ie+1), ivals)
+ cstatus = nc_get_att_int(cncid, cvarid, cname(1:ie), ivals)
 #elif NF_INT_IS_C_LONG
- cstatus = nc_get_att_long(cncid, cvarid, cname(1:ie+1), ivals)
+ cstatus = nc_get_att_long(cncid, cvarid, cname(1:ie), ivals)
 #endif
  status = cstatus
 
@@ -507,7 +504,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cvarid, cstatus
+ Integer(C_INT)               :: cncid, cvarid, cstatus
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -519,9 +516,9 @@
  cname = addCNullChar(name, ie)
 
 #if NF_REAL_IS_C_DOUBLE 
- cstatus = nc_get_att_double(cncid, cvarid, cname(1:ie+1), rvals) 
+ cstatus = nc_get_att_double(cncid, cvarid, cname(1:ie), rvals) 
 #else
- cstatus = nc_get_att_float(cncid, cvarid, cname(1:ie+1), rvals) 
+ cstatus = nc_get_att_float(cncid, cvarid, cname(1:ie), rvals) 
 #endif
  status = cstatus
 
@@ -541,7 +538,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cvarid, cstatus
+ Integer(C_INT)               :: cncid, cvarid, cstatus
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -552,7 +549,7 @@
 
  cname = addCNullChar(name, ie)
  
- cstatus = nc_get_att_double(cncid, cvarid, cname(1:ie+1), dvals)
+ cstatus = nc_get_att_double(cncid, cvarid, cname(1:ie), dvals)
 
  status = cstatus
 

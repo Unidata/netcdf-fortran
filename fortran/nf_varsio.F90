@@ -1,4 +1,5 @@
 #include "nfconfig.inc"
+
 !-------- Array/string put/get routines given start, count, and stride -------
 
 ! Replacement for fort-varsio.c
@@ -29,6 +30,9 @@
 ! Version 3.: April 2009 - Updated for netCDF 4.0.1
 ! Version 4.: April 2010 - Updated for netCDF 4.1.1
 !                          Added preprocessor tests for int and real types
+! Version 5.: Jan.  2016 - Replaced automatic arrays for starts, counts,
+!                          and strides with allocatable arrays and general
+!                          text cleanup
 
 !--------------------------------- nf_put_vars_text ----------------------
  Function nf_put_vars_text(ncid, varid, start, counts, strides, text) &
@@ -46,17 +50,15 @@
 
  Integer                      :: status
 
- Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr
- Integer                           :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:)
 
  cncid    = ncid
  cvarid   = varid - 1 ! Subtract 1 to get C varid
- cstart   = 0
- ccounts  = 0
- cstrides = 1
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -67,13 +69,16 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
-     cstart(1:ndims)   = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
      ccounts(1:ndims)  = counts(ndims:1:-1)
      cstrides(1:ndims) = strides(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
    EndIf
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
  EndIf
 
  cstatus = nc_put_vars_text(cncid, cvarid, cstartptr, ccountsptr, &
@@ -99,17 +104,15 @@
 
  Integer                      :: status
 
- Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr
- Integer                           :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:)
 
  cncid    = ncid
  cvarid   = varid - 1 ! Subtract 1 to get C varid
- cstart   = 0
- ccounts  = 0
- cstrides = 1
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -120,13 +123,16 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
-     cstart(1:ndims)   = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
      ccounts(1:ndims)  = counts(ndims:1:-1)
      cstrides(1:ndims) = strides(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
    EndIf
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
  EndIf
 
  cstatus = nc_put_vars_text(cncid, cvarid, cstartptr, ccountsptr, &
@@ -144,17 +150,18 @@
 
  Implicit NONE
 
- Integer,              Intent(IN) :: ncid, varid
- Integer,              Intent(IN) :: start(*), counts(*), strides(*)
- Integer(KIND=NFINT1), Intent(IN) :: i1vals(*)
+ Integer,         Intent(IN) :: ncid, varid
+ Integer,         Intent(IN) :: start(*), counts(*), strides(*)
+ Integer(NFINT1), Intent(IN) :: i1vals(*)
 
  Integer                          :: status
 
- Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr
- Integer                           :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:)
 
  If (C_SIGNED_CHAR < 0) Then ! schar not supported by processor
    status = NC_EBADTYPE
@@ -163,9 +170,6 @@
 
  cncid    = ncid
  cvarid   = varid - 1 ! Subtract 1 to get C varid
- cstart   = 0
- ccounts  = 0
- cstrides = 1
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -176,13 +180,16 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
-     cstart(1:ndims)   = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
      ccounts(1:ndims)  = counts(ndims:1:-1)
      cstrides(1:ndims) = strides(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
    EndIf
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
  EndIf
 
 #if NF_INT1_IS_C_SIGNED_CHAR
@@ -201,6 +208,15 @@
 
  status = cstatus
 
+! Make sure we have no dangling pointers and unallocated arrays
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
+
  End Function nf_put_vars_int1
 !--------------------------------- nf_put_vars_int2 ------------------------
  Function nf_put_vars_int2(ncid, varid, start, counts, strides, i2vals) &
@@ -212,17 +228,18 @@
 
  Implicit NONE
 
- Integer,              Intent(IN) :: ncid, varid
- Integer,              Intent(IN) :: start(*), counts(*), strides(*)
- Integer(KIND=NFINT2), Intent(IN) :: i2vals(*)
+ Integer,         Intent(IN) :: ncid, varid
+ Integer,         Intent(IN) :: start(*), counts(*), strides(*)
+ Integer(NFINT2), Intent(IN) :: i2vals(*)
 
  Integer                          :: status
 
- Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr
- Integer                           :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:)
 
  If (C_SHORT < 0) Then ! short not supported by processor
    status = NC_EBADTYPE
@@ -231,9 +248,6 @@
 
  cncid    = ncid
  cvarid   = varid - 1 ! Subtract 1 to get C varid
- cstart   = 0
- ccounts  = 0
- cstrides = 1
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -244,13 +258,16 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
-     cstart(1:ndims)   = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
      ccounts(1:ndims)  = counts(ndims:1:-1)
      cstrides(1:ndims) = strides(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
    EndIf
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
  EndIf
 
 #if NF_INT2_IS_C_SHORT
@@ -265,6 +282,15 @@
 #endif
 
  status = cstatus
+
+! Make sure we have no dangling pointers and unallocated arrays
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Function nf_put_vars_int2
 !--------------------------------- nf_put_vars_int -------------------------
@@ -283,17 +309,15 @@
 
  Integer                    :: status
 
- Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr
- Integer                           :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:)
 
  cncid    = ncid
  cvarid   = varid - 1 ! Subtract 1 to get C varid
- cstart   = 0
- ccounts  = 0
- cstrides = 1
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -304,13 +328,16 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
-     cstart(1:ndims)   = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
      ccounts(1:ndims)  = counts(ndims:1:-1)
      cstrides(1:ndims) = strides(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
    EndIf
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
  EndIf
 
 #if NF_INT_IS_C_INT
@@ -322,6 +349,15 @@
 #endif
 
  status = cstatus
+
+! Make sure we have no dangling pointers and unallocated arrays
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Function nf_put_vars_int
 !--------------------------------- nf_put_vars_real ------------------------
@@ -340,17 +376,15 @@
 
  Integer                  :: status
 
- Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr
- Integer                           :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:)
 
  cncid    = ncid
  cvarid   = varid - 1 ! Subtract 1 to get C varid
- cstart   = 0
- ccounts  = 0
- cstrides = 1
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -361,13 +395,16 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
-     cstart(1:ndims)   = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
      ccounts(1:ndims)  = counts(ndims:1:-1)
      cstrides(1:ndims) = strides(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
    EndIf
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
  EndIf
 
 #if NF_REAL_IS_C_DOUBLE
@@ -379,6 +416,15 @@
 #endif
 
  status = cstatus
+
+! Make sure we have no dangling pointers and unallocated arrays
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Function nf_put_vars_real
 !--------------------------------- nf_put_vars_double ----------------------
@@ -397,17 +443,15 @@
 
  Integer               :: status
 
- Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr
- Integer                           :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:)
 
  cncid    = ncid
  cvarid   = varid - 1 ! Subtract 1 to get C varid
- cstart   = 0
- ccounts  = 0
- cstrides = 1
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -418,19 +462,31 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
-     cstart(1:ndims)   = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
      ccounts(1:ndims)  = counts(ndims:1:-1)
      cstrides(1:ndims) = strides(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
    EndIf
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
  EndIf
 
  cstatus = nc_put_vars_double(cncid, cvarid, cstartptr, ccountsptr, &
                               cstridesptr, dvals)
 
  status = cstatus
+
+! Make sure we have no dangling pointers and unallocated arrays
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Function nf_put_vars_double
 !--------------------------------- nf_put_vars -----------------------------
@@ -448,22 +504,17 @@
  Integer,                Intent(IN)         :: ncid, varid
  Integer,                Intent(IN)         :: start(*), counts(*), strides(*)
  Character(KIND=C_CHAR), Intent(IN), TARGET :: values(*) 
-! Type(C_PTR),            VALUE              :: values
  Integer                                    :: status
 
- Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr, &
-                                      cvaluesptr
-! Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr
- Integer                           :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr, cvaluesptr 
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:)
 
  cncid    = ncid
  cvarid   = varid - 1 ! Subtract 1 to get C varid
- cstart   = 0
- ccounts  = 0
- cstrides = 1
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -474,23 +525,33 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
-     cstart(1:ndims)   = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
      ccounts(1:ndims)  = counts(ndims:1:-1)
      cstrides(1:ndims) = strides(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
    EndIf
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
  EndIf
 
  cvaluesptr = C_LOC(values)
 
  cstatus = nc_put_vars(cncid, cvarid, cstartptr, ccountsptr, &
                        cstridesptr, cvaluesptr)
-! cstatus = nc_put_vars(cncid, cvarid, cstartptr, ccountsptr, &
-!                       cstridesptr, values)
 
  status = cstatus
+
+! Make sure we have no dangling pointers and unallocated arrays
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Function nf_put_vars
 !--------------------------------- nf_get_vars_text ----------------------
@@ -509,17 +570,15 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr
- Integer                           :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:)
 
  cncid    = ncid
  cvarid   = varid - 1 ! Subtract 1 to get C varid
- cstart   = 0
- ccounts  = 0
- cstrides = 1
  text     = REPEAT(" ", LEN(text))
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
@@ -531,19 +590,31 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
-     cstart(1:ndims)   = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
      ccounts(1:ndims)  = counts(ndims:1:-1)
      cstrides(1:ndims) = strides(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
    EndIf
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
  EndIf
 
  cstatus = nc_get_vars_text(cncid, cvarid, cstartptr, ccountsptr, &
                             cstridesptr, text)
 
  status = cstatus
+
+! Make sure we have no dangling pointers and unallocated arrays
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Function nf_get_vars_text
 !--------------------------------- nf_get_vars_text_a ----------------------
@@ -562,17 +633,15 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr
- Integer                           :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:)
 
  cncid    = ncid
  cvarid   = varid - 1 ! Subtract 1 to get C varid
- cstart   = 0
- ccounts  = 0
- cstrides = 1
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -583,20 +652,31 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
-     cstart(1:ndims)   = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
      ccounts(1:ndims)  = counts(ndims:1:-1)
      cstrides(1:ndims) = strides(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
    EndIf
-
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
  EndIf
 
  cstatus = nc_get_vars_text(cncid, cvarid, cstartptr, ccountsptr, &
                             cstridesptr, text)
 
  status = cstatus
+
+! Make sure we have no dangling pointers and unallocated arrays
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Function nf_get_vars_text_a
 !--------------------------------- nf_get_vars_int1 ------------------------
@@ -609,17 +689,18 @@
 
  Implicit NONE
 
- Integer,              Intent(IN)  :: ncid, varid
- Integer,              Intent(IN)  :: start(*), counts(*), strides(*)
- Integer(KIND=NFINT1), Intent(OUT) :: i1vals(*)
+ Integer,         Intent(IN)  :: ncid, varid
+ Integer,         Intent(IN)  :: start(*), counts(*), strides(*)
+ Integer(NFINT1), Intent(OUT) :: i1vals(*)
 
  Integer                           :: status
 
- Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr
- Integer                           :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:)
 
  If (C_SIGNED_CHAR < 0) Then ! schar not supported by processor
    status = NC_EBADTYPE
@@ -628,9 +709,6 @@
 
  cncid    = ncid
  cvarid   = varid - 1 ! Subtract 1 to get C varid
- cstart   = 0
- ccounts  = 0
- cstrides = 1
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -641,13 +719,16 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
-     cstart(1:ndims)   = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
      ccounts(1:ndims)  = counts(ndims:1:-1)
      cstrides(1:ndims) = strides(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
    EndIf
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
  EndIf
 
 #if NF_INT1_IS_C_SIGNED_CHAR
@@ -666,6 +747,15 @@
 
  status = cstatus
 
+! Make sure we have no dangling pointers and unallocated arrays
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
+
  End Function nf_get_vars_int1
 !--------------------------------- nf_get_vars_int2 ------------------------
  Function nf_get_vars_int2(ncid, varid, start, counts, strides, i2vals) &
@@ -677,17 +767,18 @@
 
  Implicit NONE
 
- Integer,              Intent(IN)  :: ncid, varid
- Integer,              Intent(IN)  :: start(*), counts(*), strides(*)
- Integer(KIND=NFINT2), Intent(OUT) :: i2vals(*)
+ Integer,         Intent(IN)  :: ncid, varid
+ Integer,         Intent(IN)  :: start(*), counts(*), strides(*)
+ Integer(NFINT2), Intent(OUT) :: i2vals(*)
 
  Integer                           :: status
 
- Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr
- Integer                           :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:)
 
  If (C_SHORT < 0) Then ! short not supported by processor
    status = NC_EBADTYPE
@@ -696,9 +787,6 @@
 
  cncid    = ncid
  cvarid   = varid - 1 ! Subtract 1 to get C varid
- cstart   = 0
- ccounts  = 0
- cstrides = 1
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -709,13 +797,16 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
-     cstart(1:ndims)   = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
      ccounts(1:ndims)  = counts(ndims:1:-1)
      cstrides(1:ndims) = strides(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
    EndIf
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
  EndIf
 
 #if NF_INT2_IS_C_SHORT
@@ -730,6 +821,15 @@
 #endif
 
  status = cstatus
+
+! Make sure we have no dangling pointers and unallocated arrays
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Function nf_get_vars_int2
 !--------------------------------- nf_get_vars_int -------------------------
@@ -748,17 +848,15 @@
 
  Integer                     :: status
 
- Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr
- Integer :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:)
 
  cncid    = ncid
  cvarid   = varid - 1 ! Subtract 1 to get C varid
- cstart   = 0
- ccounts  = 0
- cstrides = 1
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -769,13 +867,16 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
-     cstart(1:ndims)   = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
      ccounts(1:ndims)  = counts(ndims:1:-1)
      cstrides(1:ndims) = strides(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
    EndIf
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
  EndIf
 
 #if NF_INT_IS_C_INT
@@ -787,6 +888,15 @@
 #endif
 
  status = cstatus
+
+! Make sure we have no dangling pointers and unallocated arrays
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Function nf_get_vars_int
 !--------------------------------- nf_get_vars_real ------------------------
@@ -805,17 +915,15 @@
 
  Integer                   :: status
 
- Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr
- Integer                           :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:)
 
  cncid    = ncid
  cvarid   = varid - 1 ! Subtract 1 to get C varid
- cstart   = 0
- ccounts  = 0
- cstrides = 1
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -826,13 +934,16 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
-     cstart(1:ndims)   = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
      ccounts(1:ndims)  = counts(ndims:1:-1)
      cstrides(1:ndims) = strides(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
    EndIf
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
  EndIf
 
 #if NF_REAL_IS_C_DOUBLE
@@ -844,6 +955,15 @@
 #endif
 
  status = cstatus
+
+! Make sure we have no dangling pointers and unallocated arrays
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Function nf_get_vars_real
 !--------------------------------- nf_get_vars_double ----------------------
@@ -862,17 +982,15 @@
 
  Integer                :: status
 
- Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr
- Integer                           :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:)
 
  cncid    = ncid
  cvarid   = varid - 1 ! Subtract 1 to get C varid
- cstart   = 0
- ccounts  = 0
- cstrides = 1
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -883,19 +1001,31 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
-     cstart(1:ndims)   = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
      ccounts(1:ndims)  = counts(ndims:1:-1)
      cstrides(1:ndims) = strides(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
    EndIf
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
  EndIf
 
  cstatus = nc_get_vars_double(cncid, cvarid, cstartptr, ccountsptr, &
                               cstridesptr, dvals)
 
  status = cstatus
+
+! Make sure we have no dangling pointers and unallocated arrays
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Function nf_get_vars_double
 !--------------------------------- nf_get_vars ----------------------------
@@ -913,21 +1043,18 @@
  Integer,                Intent(IN)    :: ncid, varid
  Integer,                Intent(IN)    :: start(*), counts(*), strides(*)
  Character(KIND=C_CHAR), Intent(INOUT) :: values
-! Type(C_PTR)             VALUE         :: values
 
  Integer                               :: status
 
- Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr
- Integer                           :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:)
 
  cncid    = ncid
  cvarid   = varid - 1 ! Subtract 1 to get C varid
- cstart   = 0
- ccounts  = 0
- cstrides = 1
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -938,18 +1065,30 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
-     cstart(1:ndims)   = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
      ccounts(1:ndims)  = counts(ndims:1:-1)
      cstrides(1:ndims) = strides(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
    EndIf
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
  EndIf
 
  cstatus = nc_get_vars(cncid, cvarid, cstartptr, ccountsptr, &
                        cstridesptr, values)
 
  status = cstatus
+
+! Make sure we have no dangling pointers and unallocated arrays
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Function nf_get_vars

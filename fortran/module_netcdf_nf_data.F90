@@ -28,6 +28,8 @@ Module netcdf_nf_data
 ! Version 3. Apr.  2009 - updated for netCDF 4.0.1
 ! Version 4. Apr.  2010 - updated for netCDF 4.1.1
 ! Version 5. Feb.  2013 - Updated for netCDF 4.4
+! Version 6. Jan.  2016 - General code cleanup and added several new
+!                         parameters to mirror whats in netcdf_constants.f90
 
 ! This module is provided as a replacement for parts of the netcdf2.inc,
 ! netcdf3.inc and netcdf4.inc include files. It does not include the 
@@ -88,6 +90,7 @@ Module netcdf_nf_data
  Integer, Parameter :: NF_FORMAT_64BIT     = NC_FORMAT_64BIT 
  Integer, Parameter :: NF_DISKLESS         = NC_DISKLESS 
  Integer, Parameter :: NF_MMAP             = NC_MMAP
+ Integer, Parameter :: NF_INMEMORY         = NC_INMEMORY
 
 ! Unlimited dimension size argument and global attibute ID
 
@@ -141,6 +144,21 @@ Module netcdf_nf_data
  Integer, Parameter :: NF_EVARSIZE     = NC_EVARSIZE
  Integer, Parameter :: NF_EDIMSIZE     = NC_EDIMSIZE 
  Integer, Parameter :: NF_ETRUNC       = NC_ETRUNC 
+ Integer, Parameter :: NF_EAXISTYPE    = NC_EAXISTYPE
+  
+! DAP error codes
+
+ Integer, Parameter :: NF_EDAP           = NC_EDAP
+ Integer, Parameter :: NF_ECURL          = NC_ECURL
+ Integer, Parameter :: NF_EIO            = NC_EIO
+ Integer, Parameter :: NF_ENODATA        = NC_ENODATA
+ Integer, Parameter :: NF_EDAPSVC        = NC_EDAPSVC
+ Integer, Parameter :: NF_EDAS           = NC_EDAS
+ Integer, Parameter :: NF_EDDS           = NC_EDDS
+ Integer, Parameter :: NF_EDATADDS       = NC_EDATADDS
+ Integer, Parameter :: NF_EDAPURL        = NC_EDAPURL
+ Integer, Parameter :: NF_EDAPCONSTRAINT = NC_EDAPCONSTRAINT
+ Integer, Parameter :: NF_ETRANSLATION   = NC_ETRANSLATION
 
 ! Error handling codes
 
@@ -175,6 +193,7 @@ Module netcdf_nf_data
  Integer(IK8), Parameter :: NF_FILL_INT64  = NC_FILL_INT64 
 
 ! new format types
+
  Integer, Parameter :: NF_FORMAT_NETCDF4         = NC_FORMAT_NETCDF4 
  Integer, Parameter :: NF_FORMAT_NETCDF4_CLASSIC = NC_FORMAT_NETCDF4_CLASSIC
  
@@ -182,7 +201,9 @@ Module netcdf_nf_data
  Integer, Parameter :: NF_NETCDF4        = NC_NETCDF4 
  Integer, Parameter :: NF_HDF5           = NF_NETCDF4 ! deprecated
  Integer, Parameter :: NF_CLASSIC_MODEL  = NC_CLASSIC_MODEL 
+
 ! Netcdf4 variable flags
+
  Integer, Parameter :: NF_CHUNK_SEQ      = NC_CHUNK_SEQ 
  Integer, Parameter :: NF_CHUNK_SUB      = NC_CHUNK_SUB 
  Integer, Parameter :: NF_CHUNK_SIZES    = NC_CHUNK_SIZES 
@@ -203,7 +224,7 @@ Module netcdf_nf_data
 
  Integer, Parameter :: NF_MPIIO          = NC_MPIIO 
  Integer, Parameter :: NF_MPIPOSIX       = NC_MPIPOSIX 
- Integer, Parameter :: NF_PNETCDF        = NC_PNETCDF
+ Integer, Parameter :: NF_PNETCDF        = NC_PNETCDF ! which is actually NC_MPIIO
 
 ! SZIP flags
  
@@ -237,9 +258,17 @@ Module netcdf_nf_data
  Integer, Parameter :: NF_ELATEDEF       = NC_ELATEDEF 
  Integer, Parameter :: NF_EDIMSCALE      = NC_EDIMSCALE 
  Integer, Parameter :: NF_ENOGRP         = NC_ENOGRP 
+ Integer, Parameter :: NF_ESTORAGE       = NC_ESTORAGE
+ Integer, Parameter :: NF_EBADCHUNK      = NC_EBADCHUNK
+ Integer, Parameter :: NF_ENOTBUILT      = NC_ENOTBUILT
+ Integer, Parameter :: NF_EDISKLESS      = NC_EDISKLESS
+ Integer, Parameter :: NF_ECANTEXTEND    = NC_ECANTEXTEND
+ Integer, Parameter :: NF_EMPI           = NC_EMPI
+
 #endif
 
 #ifndef NO_NETCDF_2
+
 ! V2 interface values
 
  Integer, Parameter :: NCBYTE     = NF_BYTE 
@@ -309,6 +338,7 @@ Module netcdf_nf_data
  Integer,      Parameter :: FILLONG  = NF_FILL_INT 
  Real(RK4),    Parameter :: FILFLOAT = NF_FILL_FLOAT 
  Real(RK8),    Parameter :: FILDOUB  = NF_FILL_DOUBLE 
+
 #endif
 
 !------------------------------------------------------------------------------

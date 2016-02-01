@@ -28,6 +28,12 @@
 ! Version 2: April 2009 - Refactored to pass value data using C_CHAR and C_PTR
 !                         strings and pointers and updated for NetCDF 4.0.1
 ! Version 3: April 2010 - updated for NetCDF 4.1.1
+! Version 4: Jan.  2016 - Code cleanup. Replaced automatic arrays dimensioned
+!                         by NC_MAX_DIMS with allocatable arrays. Fixed
+!                         potential but with strides definitions that
+!                         wasn't caught by checks since no checks for
+!                         the routines that use them exist. Changed name
+!                         processing to reflect change in addCNullchar
 
 ! ------------------------------- ncpopt -------------------------------------- 
  Subroutine ncpopt(ncopts)
@@ -38,7 +44,7 @@
 
  Integer, Intent(IN) :: ncopts
  
- Integer(KIND=C_INT) :: cncopts
+ Integer(C_INT) :: cncopts
 
  cncopts = ncopts
 
@@ -54,7 +60,7 @@
 
  Integer, Intent(INOUT) :: ncopts
 
- Integer(KIND=C_INT)    :: cncopts
+ Integer(C_INT) :: cncopts
 
  cncopts = 0 
 
@@ -78,7 +84,7 @@
 
  Character(LEN=(LEN(filename)+1)) :: cfilename
  Integer                          :: ilen
- Integer(KIND=C_INT)              :: ccmode, crcode, cncid 
+ Integer(C_INT)                   :: ccmode, crcode, cncid 
 
  ccmode = cmode
  cncid  = 0
@@ -89,7 +95,7 @@
 
  cfilename = addCNullChar(filename, ilen)
  
- cncid = c_nccre(cfilename(1:ilen+1), ccmode, crcode )
+ cncid = c_nccre(cfilename(1:ilen), ccmode, crcode )
 
  rcode = crcode 
  ncid  = cncid
@@ -110,7 +116,7 @@
 
  Character(LEN=(LEN(filename)+1)) :: cfilename
  Integer                          :: ilen
- Integer(KIND=C_INT)              :: crwmode, crcode, cncid 
+ Integer(C_INT)                   :: crwmode, crcode, cncid 
 
  crwmode = rwmode
  rcode   = 0
@@ -121,7 +127,7 @@
 
  cfilename = addCNullChar(filename, ilen)
  
- cncid = c_ncopn(cfilename(1:ilen+1), crwmode, crcode )
+ cncid = c_ncopn(cfilename(1:ilen), crwmode, crcode )
 
  rcode = crcode 
  ncid  = cncid
@@ -142,7 +148,7 @@
 
  Character(LEN=(LEN(dimname)+1)) :: cdimname
  Integer                         :: ilen
- Integer(KIND=C_INT)             :: cncid, cdimlen, cndimid, crcode
+ Integer(C_INT)                  :: cncid, cdimlen, cndimid, crcode
 
  cncid   = ncid
  cdimlen = dimlen
@@ -154,7 +160,7 @@
 
  cdimname = addCNullChar(dimname, ilen)
  
- cndimid = c_ncddef(cncid, cdimname(1:ilen+1), cdimlen, crcode )
+ cndimid = c_ncddef(cncid, cdimname(1:ilen), cdimlen, crcode )
  
  rcode  = crcode 
  ndimid = cndimid
@@ -175,7 +181,7 @@
 
  Character(LEN=(LEN(dimname)+1)) :: cdimname
  Integer                         :: ilen
- Integer(KIND=C_INT)             :: cncid, crcode, cndimid
+ Integer(C_INT)                  :: cncid, crcode, cndimid
 
  cncid   = ncid
  cndimid = 0
@@ -186,7 +192,7 @@
 
  cdimname = addCNullChar(dimname, ilen)
  
- cndimid = c_ncdid(cncid, cdimname(1:ilen+1), crcode )
+ cndimid = c_ncdid(cncid, cdimname(1:ilen), crcode )
 
  rcode  = crcode 
  ndimid = cndimid
@@ -195,7 +201,6 @@
 ! ------------------------------- ncvdef -------------------------------------- 
  Function ncvdef(ncid, varname, vartype, nvdims, vdims, rcode) RESULT(nvarid)
 
- USE netcdf_nc_interfaces, ONLY : NC_MAX_DIMS
  USE netcdf_fortv2_c_interfaces
 
  Implicit NONE
@@ -209,8 +214,10 @@
 
  Character(LEN=(LEN(varname)+1)) :: cvarname
  Integer                         :: ilen
- Integer(KIND=C_INT)             :: cncid, crcode, cnvdims, cvartype, cnvarid
- Integer(KIND=C_INT)             :: cvdims(NC_MAX_DIMS)
+ Integer(C_INT)                  :: cncid, crcode, cnvdims, cvartype, cnvarid
+ Type(C_PTR)                     :: cvdimsptr
+
+ Integer(C_INT), ALLOCATABLE, TARGET :: cvdims(:)
 
  cncid    = ncid
  cnvdims  = nvdims 
@@ -225,17 +232,22 @@
  cvarname = addCNullChar(varname, ilen)
  
  ! mimic f2c_dimids
+ cvdimsptr = C_NULL_PTR
 
- cvdims = 0
  If (nvdims > 0) Then
+   ALLOCATE(cvdims(nvdims))
    cvdims(1:nvdims) = vdims(nvdims:1:-1) - 1
- EndIf
-
- cnvarid = c_ncvdef(cncid, cvarname(1:ilen+1), cvartype, &
-                    cnvdims, cvdims, crcode )
+   cvdimsptr = C_LOC(cvdims)
+ EndIf 
+  
+ cnvarid = c_ncvdef(cncid, cvarname(1:ilen), cvartype, &
+                    cnvdims, cvdimsptr, crcode )
 
  rcode  = crcode 
  nvarid = cnvarid
+
+ cvdimsptr = C_NULL_PTR
+ If (ALLOCATED(cvdims)) DEALLOCATE(cvdims)
 
  End Function ncvdef
 ! ------------------------------- ncvid --------------------------------------- 
@@ -253,7 +265,7 @@
 
  Character(LEN=(LEN(varname)+1)) :: cvarname
  Integer                         :: ilen
- Integer(KIND=C_INT)             :: cncid, crcode, cnvarid
+ Integer(C_INT)                  :: cncid, crcode, cnvarid
 
  cncid   = ncid
  crcode  = 0
@@ -265,7 +277,7 @@
 
  cvarname = addCNullChar(varname, ilen)
  
- cnvarid = c_ncvid(cncid, cvarname(1:ilen+1), crcode)
+ cnvarid = c_ncvid(cncid, cvarname(1:ilen), crcode)
 
  rcode  = crcode 
  nvarid = cnvarid
@@ -283,7 +295,7 @@
 
  Integer              :: nvarlen
 
- Integer(KIND=C_INT) :: crcode, cnvarlen, cdtype
+ Integer(C_INT) :: crcode, cnvarlen, cdtype
 
  cdtype   = datatype
  crcode   = 0
@@ -307,7 +319,7 @@
  Integer, Intent(IN)  :: ncid 
  Integer, Intent(OUT) :: rcode
 
- Integer(KIND=C_INT) :: crcode, cncid
+ Integer(C_INT) :: crcode, cncid
 
  cncid   = ncid
  crcode  = 0
@@ -328,7 +340,7 @@
  Integer, Intent(IN)  :: ncid 
  Integer, Intent(OUT) :: rcode
 
- Integer(KIND=C_INT) :: crcode, cncid
+ Integer(C_INT) :: crcode, cncid
 
  cncid   = ncid
  crcode  = 0
@@ -349,7 +361,7 @@
  Integer, Intent(IN)  :: ncid 
  Integer, Intent(OUT) :: rcode
 
- Integer(KIND=C_INT) :: crcode, cncid
+ Integer(C_INT) :: crcode, cncid
 
  cncid   = ncid
  crcode  = 0
@@ -370,7 +382,7 @@
  Integer, Intent(IN)  :: ncid 
  Integer, Intent(OUT) :: ndims, nvars, natts, recdim, rcode
 
- Integer(KIND=C_INT) :: crcode, cncid, cndims, cnvars, cnatts, crecdim
+ Integer(C_INT) :: crcode, cncid, cndims, cnvars, cnatts, crecdim
 
  cncid   = ncid
  crcode  = 0
@@ -406,7 +418,7 @@
  Integer, Intent(IN)  :: ncid 
  Integer, Intent(OUT) :: rcode
 
- Integer(KIND=C_INT) :: crcode, cncid
+ Integer(C_INT) :: crcode, cncid
 
  cncid   = ncid
  crcode  = 0
@@ -427,7 +439,7 @@
  Integer, Intent(IN)  :: ncid 
  Integer, Intent(OUT) :: rcode
 
- Integer(KIND=C_INT) :: crcode, cncid
+ Integer(C_INT) :: crcode, cncid
 
  cncid   = ncid
  crcode  = 0
@@ -450,7 +462,7 @@
  Character(LEN=*), Intent(OUT) :: dimname
  Integer,          Intent(OUT) :: dimlen, rcode
 
- Integer(KIND=C_INT)            :: cncid, crcode, cdimlen, cdimid
+ Integer(C_INT)                 :: cncid, crcode, cdimlen, cdimid
  Character(LEN=(NC_MAX_NAME+1)) :: cdimname
  Integer                        :: ilen
 
@@ -468,8 +480,8 @@
 
  dimname = stripCNullChar(cdimname, ilen)
  
- dimlen          = cdimlen
- rcode           = crcode
+ dimlen = cdimlen
+ rcode  = crcode
 
  End Subroutine ncdinq
 ! ------------------------------- ncdren -------------------------------------- 
@@ -484,7 +496,7 @@
  Integer,          Intent(OUT) :: rcode
 
  Character(LEN=(LEN(dimname)+1)) :: cdimname
- Integer(KIND=C_INT)             :: cncid, crcode, cdimid
+ Integer(C_INT)                  :: cncid, crcode, cdimid
  Integer                         :: ilen
 
  cncid  = ncid
@@ -496,7 +508,7 @@
 
  cdimname = addCNullChar(dimname, ilen)
  
- Call c_ncdren(cncid, cdimid, cdimname(1:ilen+1), crcode)
+ Call c_ncdren(cncid, cdimid, cdimname(1:ilen), crcode)
 
  rcode = crcode 
 
@@ -505,7 +517,7 @@
  Subroutine ncvinq(ncid, varid, varname, vartype, nvdims, vdims, &
                    nvatts, rcode)
 
- USE netcdf_nc_interfaces, ONLY: NC_MAX_DIMS, NC_MAX_NAME
+ USE netcdf_nc_interfaces, ONLY: NC_MAX_NAME
  USE netcdf_fortv2_c_interfaces
 
  Implicit NONE
@@ -515,30 +527,37 @@
  Integer,          Intent(OUT)   :: vartype, nvdims, nvatts, rcode
  Integer,          Intent(INOUT) :: vdims(*)
 
- Integer(KIND=C_INT)          :: cncid, crcode, cvarid, cvartype, cnvdims, &
-                                 cnvatts
- Integer(KIND=C_INT)          :: cvdims(NC_MAX_DIMS)
+ Integer(C_INT)               :: cncid, crcode, cvarid, cvartype, cnvdims, &
+                                 cnvatts, cstat1
  Character(LEN=NC_MAX_NAME+1) :: cvarname
  Integer                      :: ilen
+
+ Integer(C_INT), ALLOCATABLE :: cvdims(:)
 
  cncid    = ncid
  cvarid   = varid - 1
  crcode   = 0
  rcode    = 0
- cvdims   = 0
- cvdims   = 0
  vartype  = 0
  nvdims   = 0
  nvatts   = 0
  cnvdims  = 0
- cvdims   = 0
  cnvatts  = 0
  cvartype = 0
  cvarname = REPEAT(" ", LEN(cvarname))
- ilen = LEN(varname)
+ ilen     = LEN(varname)
 
- Call c_ncvinq(cncid, cvarid, cvarname, cvartype, cnvdims, cvdims, cnvatts, &
-               crcode)      
+ cstat1 = nc_inq_varndims(cncid, cvarid, cnvdims)
+ rcode = cstat1
+
+ If (cnvdims > 0) Then
+   ALLOCATE(cvdims(cnvdims))
+ Else
+   ALLOCATE(cvdims(1))
+ EndIf
+ 
+ Call c_ncvinq(cncid, cvarid, cvarname, cvartype, cnvdims, cvdims,  &
+             cnvatts, crcode)      
 
  nvdims  = cnvdims
  vartype = cvartype
@@ -556,11 +575,14 @@
    vdims(1:nvdims) = cvdims(nvdims:1:-1) + 1
  End If
 
+
+ If (ALLOCATED(cvdims)) DEALLOCATE(cvdims)
+
  End Subroutine ncvinq
 ! ------------------------------- ncvpt1 -------------------------------------- 
  Subroutine ncvpt1(ncid, varid, mindex, values, rcode) 
 
- USE netcdf_nc_interfaces, ONLY: NC_MAX_DIMS, NC_NOERR, nc_inq_varndims
+ USE netcdf_nc_interfaces, ONLY: NC_NOERR, nc_inq_varndims
  USE netcdf_fortv2_c_interfaces
 
  Implicit NONE
@@ -570,17 +592,16 @@
  Character(KIND=C_CHAR), Intent(IN), TARGET  :: values(*)
  Integer,                Intent(OUT)         :: rcode
 
- Integer(KIND=C_INT)            :: cncid, crcode, cvarid, cstatus, cndims
- Integer(KIND=C_SIZE_T), TARGET :: cmindex(NC_MAX_DIMS)
- Type(C_PTR)                    :: cmindexptr
- Type(C_PTR)                    :: cvaluesptr
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, crcode, cvarid, cstatus, cndims
+ Type(C_PTR)    :: cmindexptr, cvaluesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cmindex(:)
 
  cncid   = ncid
  cvarid  = varid - 1
  crcode  = 0
  rcode   = 0
- cmindex = 0
  cndims  = 0
  ndims   = 0
 
@@ -591,9 +612,10 @@
  
  If (cstatus == NC_NOERR) Then ! mimic f2c_coords in C code
    If (ndims > 0) Then
+     ALLOCATE(cmindex(ndims))
      cmindex(1:ndims) = mindex(ndims:1:-1) - 1
+     cmindexptr       = C_LOC(cmindex)
    Endif
-   cmindexptr = C_LOC(cmindex)
  Endif
  
  cvaluesptr = C_LOC(values)
@@ -602,11 +624,17 @@
 
  rcode = crcode
 
+! Make sure there are no dangling pointers and allocated values
+ 
+ cvaluesptr = C_NULL_PTR
+ cmindexptr = C_NULL_PTR
+ If (ALLOCATED(cmindex)) DEALLOCATE(cmindex)
+  
  End Subroutine ncvpt1
 ! ------------------------------- ncvp1c -------------------------------------- 
  Subroutine ncvp1c(ncid, varid, mindex, strings, rcode) 
 
- USE netcdf_nc_interfaces, ONLY: NC_MAX_DIMS, NC_NOERR, nc_inq_varndims
+ USE netcdf_nc_interfaces, ONLY: NC_NOERR, nc_inq_varndims
  USE netcdf_fortv2_c_interfaces
 
  Implicit NONE
@@ -616,61 +644,66 @@
  Character(LEN=*), Intent(IN)  :: strings
  Integer,          Intent(OUT) :: rcode
 
- Integer(KIND=C_INT)            :: cncid, crcode, cvarid, cstatus, cndims
- Integer(KIND=C_SIZE_T), TARGET :: cmindex(NC_MAX_DIMS)
- Type(C_PTR)                    :: cmindexptr
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, crcode, cvarid, cstatus, cndims
+ Type(C_PTR)    :: cmindexptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cmindex(:)
 
  cncid   = ncid
  cvarid  = varid - 1
  crcode  = 0
  rcode   = 0
- cmindex = 0
  cndims  = 0
  ndims   = 0
 
  cstatus = nc_inq_varndims(cncid, cvarid, cndims)
 
  cmindexptr = C_NULL_PTR
- ndims     = cndims 
+ ndims      = cndims 
 
  If (cstatus == NC_NOERR) Then ! mimic f2c_coords in C code
    If (ndims > 0) Then
+     ALLOCATE(cmindex(ndims))
      cmindex(1:ndims) = mindex(ndims:1:-1) - 1
+     cmindexptr       = C_LOC(cmindex)
    Endif
-   cmindexptr = C_LOC(cmindex)
  Endif
 
  Call c_ncvp1c(cncid, cvarid, cmindexptr, strings, crcode)
 
  rcode = crcode
 
+! Make sure there are no dangling pointers and allocated values
+ 
+ cmindexptr  = C_NULL_PTR
+ If (ALLOCATED(cmindex)) DEALLOCATE(cmindex)
+  
  End Subroutine ncvp1c
 ! ------------------------------- ncvpt --------------------------------------- 
  Subroutine ncvpt(ncid, varid, start, counts, values, rcode) 
 
- USE netcdf_nc_interfaces, ONLY: NC_MAX_DIMS, NC_NOERR, nc_inq_varndims
+ USE netcdf_nc_interfaces, ONLY: NC_NOERR, nc_inq_varndims
  USE netcdf_fortv2_c_interfaces
 
  Implicit NONE
 
- Integer,                Intent(IN)          :: ncid, varid
- Integer,                Intent(IN)          :: start(*), counts(*)
- Character(KIND=C_CHAR), Intent(IN), TARGET  :: values(*)
- Integer,                Intent(OUT)         :: rcode
+ Integer,                Intent(IN)         :: ncid, varid
+ Integer,                Intent(IN)         :: start(*), counts(*)
+ Character(KIND=C_CHAR), Intent(IN), TARGET :: values(*)
+ Integer,                Intent(OUT)        :: rcode
 
- Integer(KIND=C_INT)            :: cncid, crcode, cvarid, cstatus, cndims
- Integer(KIND=C_SIZE_T), TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Type(C_PTR)                    :: cstartptr, ccountsptr
- Type(C_PTR)                    :: cvaluesptr
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, crcode, cvarid, cstatus, cndims
+ Type(C_PTR)    :: cstartptr, ccountsptr
+ Type(C_PTR)    :: cvaluesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
 
  cncid   = ncid
  cvarid  = varid - 1
  crcode  = 0
  rcode   = 0
- cstart  = 0
- ccounts = 0
  cndims  = 0
  ndims   = 0
 
@@ -682,11 +715,13 @@
 
  If (cstatus == NC_NOERR) Then ! mimic f2c_coords, etc. in C code
    If (ndims > 0) Then
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
      cstart(1:ndims)  = start(ndims:1:-1) - 1
      ccounts(1:ndims) = counts(ndims:1:-1)
+     cstartptr        = C_LOC(cstart)
+     ccountsptr       = C_LOC(ccounts) 
    Endif
-   cstartptr  = C_LOC(cstart)
-   ccountsptr = C_LOC(ccounts) 
  Endif
 
  cvaluesptr = C_LOC(values)
@@ -695,11 +730,19 @@
 
  rcode = crcode
 
+! Make sure there are no dangling pointers or allocated values
+
+ cstartptr  = C_NULL_PTR
+ ccountsptr = C_NULL_PTR
+ cvaluesptr = C_NULL_PTR
+ If (ALLOCATED(ccounts)) DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))  DEALLOCATE(cstart)
+
  End Subroutine ncvpt
 ! ------------------------------- ncvptc--------------------------------------- 
  Subroutine ncvptc(ncid, varid, start, counts, strings, lenstr, rcode) 
 
- USE netcdf_nc_interfaces, ONLY: NC_MAX_DIMS, NC_NOERR, nc_inq_varndims
+ USE netcdf_nc_interfaces, ONLY: NC_NOERR, nc_inq_varndims
  USE netcdf_fortv2_c_interfaces
 
  Implicit NONE
@@ -709,19 +752,17 @@
  Character(LEN=*), Intent(INOUT) :: strings
  Integer,          Intent(OUT)   :: rcode
 
- Integer(KIND=C_INT)            :: cncid, crcode, cvarid, cstatus, cndims, &
-                                   clenstr
- Integer(KIND=C_SIZE_T), TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Type(C_PTR)                    :: cstartptr, ccountsptr
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, crcode, cvarid, cstatus, cndims, clenstr 
+ Type(C_PTR)    :: cstartptr, ccountsptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
 
  cncid   = ncid
  cvarid  = varid - 1
  clenstr = lenstr
  crcode  = 0
  rcode   = 0
- cstart  = 0
- ccounts = 0
  cndims  = 0
  ndims   = 0
 
@@ -733,11 +774,13 @@
  
  If (cstatus == NC_NOERR) Then ! mimic f2c_coords, etc. in C code
    If (ndims > 0) Then
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
      cstart(1:ndims)  = start(ndims:1:-1) - 1
      ccounts(1:ndims) = counts(ndims:1:-1)
+     cstartptr        = C_LOC(cstart)
+     ccountsptr       = C_LOC(ccounts)
    Endif
-   cstartptr  = C_LOC(cstart)
-   ccountsptr = C_LOC(ccounts)
  Endif
 
  Call c_ncvptc(cncid, cvarid, cstartptr, ccountsptr, strings(1:lenstr),&
@@ -745,12 +788,19 @@
 
  rcode = crcode
 
+! Make sure there are no dangling pointers or allocated values
+
+ cstartptr  = C_NULL_PTR
+ ccountsptr = C_NULL_PTR
+ If (ALLOCATED(ccounts)) DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))  DEALLOCATE(cstart)
+
  End Subroutine ncvptc
 ! ------------------------------- ncvptg -------------------------------------- 
  Subroutine ncvptg(ncid, varid, start, counts, strides, imap, values, &
                    rcode) 
 
- USE netcdf_nc_interfaces, ONLY: NC_MAX_DIMS, NC_NOERR, nc_inq_varndims
+ USE netcdf_nc_interfaces, ONLY: NC_NOERR, nc_inq_varndims
  USE netcdf_fortv2_c_interfaces
 
  Implicit NONE
@@ -761,58 +811,74 @@
  Character(KIND=C_CHAR), Intent(IN), TARGET  :: values(*)
  Integer,                Intent(OUT)         :: rcode
 
- Integer(KIND=C_INT)               :: cncid, crcode, cvarid, cstatus, cndims
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS), cimap(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cimapptr, &
-                                      cstridesptr
- Type(C_PTR)                       :: cvaluesptr
- Integer                           :: ndims, inullp
+ Integer(C_INT) :: cncid, crcode, cvarid, cstatus, cndims
+ Type(C_PTR)    :: cstartptr, ccountsptr, cimapptr, cstridesptr 
+ Type(C_PTR)    :: cvaluesptr
+ Integer        :: ndims, inullp
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:), cimap(:)
 
  cncid   = ncid
  cvarid  = varid - 1
  crcode  = 0
  rcode   = 0
- cstart  = 0
- ccounts = 0
  cndims  = 0
  ndims   = 0
  inullp  = 0
 
- Call convert_v2_imap(cncid, cvarid, imap, cimap, inullp)
- 
  cstatus = nc_inq_varndims(cncid, cvarid, cndims)
 
+ If (cndims > 0) Then
+   ALLOCATE(cimap(cndims)) 
+ Else
+   ALLOCATE(cimap(1))
+ EndIf
+
+ Call convert_v2_imap(cncid, cvarid, imap, cimap, inullp)
+ 
  ndims       = cndims 
  cstartptr   = C_NULL_PTR
  ccountsptr  = C_NULL_PTR
  cstridesptr = C_NULL_PTR
  cimapptr    = C_LOC(cimap)
  If (inullp /= 0) cimapptr = C_NULL_PTR
- 
- If (cstatus == NC_NOERR) Then ! mimic f2c_coords, etc. in C code
-   If (ndims > 0) Then
-     cstart(1:ndims)   = start(ndims:1:-1) - 1
-     ccounts(1:ndims)  = counts(ndims:1:-1)
-     cstrides(1:ndims) = strides(ndims:1:-1) - 1
-   Endif
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
+ If (ndims > 0) Then
+   ALLOCATE(cstart(ndims))
+   ALLOCATE(ccounts(ndims))
+   ALLOCATE(cstrides(ndims))
+   cstart(1:ndims)   = start(ndims:1:-1) - 1
+   ccounts(1:ndims)  = counts(ndims:1:-1)
+   cstrides(1:ndims) = strides(ndims:1:-1)
+   cstartptr         = C_LOC(cstart)
+   ccountsptr        = C_LOC(ccounts)
+   cstridesptr       = C_LOC(cstrides)
  Endif
 
  cvaluesptr = C_LOC(values)
 
  Call c_ncvptg(cncid, cvarid, cstartptr, ccountsptr, cstridesptr, &
                cimapptr, cvaluesptr, crcode)
-
+ 
  rcode = crcode
+
+! Make sure there are no dangling pointers or allocated values
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ cvaluesptr  = C_NULL_PTR
+ cimapptr    = C_NULL_PTR
+ If (ALLOCATED(cimap))    DEALLOCATE(cimap)
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Subroutine ncvptg
 ! ------------------------------- ncvpgc -------------------------------------- 
  Subroutine ncvpgc(ncid, varid, start, counts, strides, imap, string, rcode) 
 
- USE netcdf_nc_interfaces, ONLY: NC_MAX_DIMS, NC_NOERR, nc_inq_varndims
+ USE netcdf_nc_interfaces, ONLY: NC_NOERR, nc_inq_varndims
  USE netcdf_fortv2_c_interfaces
 
  Implicit NONE
@@ -822,27 +888,30 @@
  Character(LEN=*), Intent(IN)  :: string
  Integer,          Intent(OUT) :: rcode
 
- Integer(KIND=C_INT)               :: cncid, crcode, cvarid, cstatus, cndims
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS), cimap(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr, &
-                                      cimapptr
- Integer                           :: ndims, inullp
+ Integer(C_INT) :: cncid, crcode, cvarid, cstatus, cndims
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr, cimapptr 
+ Integer        :: ndims, inullp
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:), cimap(:)
 
  cncid   = ncid
  cvarid  = varid - 1
  crcode  = 0
  rcode   = 0
- cstart  = 0
- ccounts = 0
  cndims  = 0
  ndims   = 0
  inullp  = 0
 
- Call convert_v2_imap(cncid, cvarid, imap, cimap, inullp)
-
  cstatus = nc_inq_varndims(cncid, cvarid, cndims)
 
+ If (cndims > 0) Then
+  ALLOCATE(cimap(cndims))
+ Else
+  ALLOCATE(cimap(1))
+ EndIf
+
+ Call convert_v2_imap(cncid, cvarid, imap, cimap, inullp)
  ndims       = cndims 
  cstartptr   = C_NULL_PTR
  ccountsptr  = C_NULL_PTR
@@ -850,15 +919,16 @@
  cimapptr    = C_LOC(cimap)
  If (inullp /= 0) cimapptr = C_NULL_PTR
 
- If (cstatus == NC_NOERR) Then ! mimic f2c_coords, etc. in C code
-   If (ndims > 0) Then
-     cstart(1:ndims)   = start(ndims:1:-1) - 1
-     ccounts(1:ndims)  = counts(ndims:1:-1)
-     cstrides(1:ndims) = strides(ndims:1:-1) - 1
-   Endif
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
+ If (ndims > 0) Then
+   ALLOCATE(cstart(ndims))
+   ALLOCATE(ccounts(ndims))
+   ALLOCATE(cstrides(ndims))
+   cstart(1:ndims)   = start(ndims:1:-1) - 1
+   ccounts(1:ndims)  = counts(ndims:1:-1)
+   cstrides(1:ndims) = strides(ndims:1:-1)
+   cstartptr         = C_LOC(cstart)
+   ccountsptr        = C_LOC(ccounts)
+   cstridesptr       = C_LOC(cstrides)
  Endif
 
  Call c_ncvpgc(cncid, cvarid, cstartptr, ccountsptr, cstridesptr, &
@@ -866,11 +936,23 @@
 
  rcode = crcode
 
+
+! Make sure there are no dangling pointers or allocated values
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ cimapptr    = C_NULL_PTR
+ If (ALLOCATED(cimap))    DEALLOCATE(cimap)
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
+
  End Subroutine ncvpgc
 ! ------------------------------- ncvgt1 -------------------------------------- 
  Subroutine ncvgt1(ncid, varid, mindex, values, rcode) 
 
- USE netcdf_nc_interfaces, ONLY: NC_MAX_DIMS, NC_NOERR, nc_inq_varndims
+ USE netcdf_nc_interfaces, ONLY: NC_NOERR, nc_inq_varndims
  USE netcdf_fortv2_c_interfaces
 
  Implicit NONE
@@ -880,16 +962,16 @@
  Character(KIND=C_CHAR), Intent(OUT) :: values(*)
  Integer,                Intent(OUT) :: rcode
 
- Integer(KIND=C_INT)            :: cncid, crcode, cvarid, cstatus, cndims
- Integer(KIND=C_SIZE_T), TARGET :: cmindex(NC_MAX_DIMS)
- Type(C_PTR)                    :: cmindexptr
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, crcode, cvarid, cstatus, cndims
+ Type(C_PTR)    :: cmindexptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cmindex(:)
 
  cncid   = ncid
  cvarid  = varid - 1
  crcode  = 0
  rcode   = 0
- cmindex = 0
  cndims  = 0
  ndims   = 0
 
@@ -900,20 +982,26 @@
  
  If (cstatus == NC_NOERR) Then ! mimic f2c_coords in C code
    If (ndims > 0) Then
+     ALLOCATE(cmindex(ndims))
      cmindex(1:ndims) = mindex(ndims:1:-1) - 1
+     cmindexptr       = C_LOC(cmindex)
    Endif
-   cmindexptr = C_LOC(cmindex)
  Endif
 
  Call c_ncvgt1(cncid, cvarid, cmindexptr, values, crcode)
 
  rcode = crcode
 
+! Make sure there are no dangling pointers and allocated values
+ 
+ cmindexptr  = C_NULL_PTR
+ If (ALLOCATED(cmindex)) DEALLOCATE(cmindex)
+  
  End Subroutine ncvgt1
 ! ------------------------------- ncvg1c -------------------------------------- 
  Subroutine ncvg1c(ncid, varid, mindex, string, rcode) 
 
- USE netcdf_nc_interfaces, ONLY: NC_MAX_DIMS, NC_NOERR, nc_inq_varndims
+ USE netcdf_nc_interfaces, ONLY: NC_NOERR, nc_inq_varndims
  USE netcdf_fortv2_c_interfaces
 
  Implicit NONE
@@ -923,16 +1011,16 @@
  Character(LEN=*), Intent(INOUT) :: string
  Integer,          Intent(OUT)   :: rcode
 
- Integer(KIND=C_INT)            :: cncid, crcode, cvarid, cstatus, cndims
- Integer(KIND=C_SIZE_T), TARGET :: cmindex(NC_MAX_DIMS)
- Type(C_PTR)                    :: cmindexptr
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, crcode, cvarid, cstatus, cndims
+ Type(C_PTR)    :: cmindexptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cmindex(:)
 
  cncid   = ncid
  cvarid  = varid - 1
  crcode  = 0
  rcode   = 0
- cmindex = 0
  cndims  = 0
  ndims   = 0
 
@@ -943,20 +1031,26 @@
  
  If (cstatus == NC_NOERR) Then ! mimic f2c_coords in C code
    If (ndims > 0) Then
+     ALLOCATE(cmindex(ndims))
      cmindex(1:ndims) = mindex(ndims:1:-1) - 1
+     cmindexptr       = C_LOC(cmindex)
    Endif
-   cmindexptr = C_LOC(cmindex)
  Endif
 
  Call c_ncvg1c(cncid, cvarid, cmindexptr, string, crcode)
 
  rcode = crcode
 
+! Make sure there are no dangling pointers and allocated values
+ 
+ cmindexptr  = C_NULL_PTR
+ If (ALLOCATED(cmindex)) DEALLOCATE(cmindex)
+  
  End Subroutine ncvg1c
 ! ------------------------------- ncvgt --------------------------------------- 
  Subroutine ncvgt(ncid, varid, start, counts, values, rcode) 
 
- USE netcdf_nc_interfaces, ONLY: NC_MAX_DIMS, NC_NOERR, nc_inq_varndims
+ USE netcdf_nc_interfaces, ONLY: NC_NOERR, nc_inq_varndims
  USE netcdf_fortv2_c_interfaces
 
  Implicit NONE
@@ -966,17 +1060,16 @@
  Character(KIND=C_CHAR), Intent(OUT) :: values(*)
  Integer,                Intent(OUT) :: rcode
 
- Integer(KIND=C_INT)            :: cncid, crcode, cvarid, cstatus, cndims
- Integer(KIND=C_SIZE_T), TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Type(C_PTR)                    :: cstartptr, ccountsptr
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, crcode, cvarid, cstatus, cndims
+ Type(C_PTR)    :: cstartptr, ccountsptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
 
  cncid   = ncid
  cvarid  = varid - 1
  crcode  = 0
  rcode   = 0
- cstart  = 0
- ccounts = 0
  cndims  = 0
  ndims   = 0
 
@@ -988,22 +1081,31 @@
  
  If (cstatus == NC_NOERR) Then ! mimic f2c_coords, etc. in C code
    If (ndims > 0) Then
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
      cstart(1:ndims)  = start(ndims:1:-1) - 1
      ccounts(1:ndims) = counts(ndims:1:-1)
+     cstartptr        = C_LOC(cstart)
+     ccountsptr       = C_LOC(ccounts)
    Endif
-   cstartptr  = C_LOC(cstart)
-   ccountsptr = C_LOC(ccounts)
  Endif
 
  Call c_ncvgt(cncid, cvarid, cstartptr, ccountsptr, values, crcode)
 
  rcode = crcode
 
+! Make sure there are no dangling pointers or allocated values
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
+
  End Subroutine ncvgt
 ! ------------------------------- ncvgtc -------------------------------------- 
  Subroutine ncvgtc(ncid, varid, start, counts, string, lenstr, rcode) 
 
- USE netcdf_nc_interfaces, ONLY: NC_MAX_DIMS, NC_NOERR, nc_inq_varndims
+ USE netcdf_nc_interfaces, ONLY: NC_NOERR, nc_inq_varndims
  USE netcdf_fortv2_c_interfaces
 
  Implicit NONE
@@ -1013,20 +1115,19 @@
  Character(LEN=*), Intent(INOUT) :: string
  Integer,          Intent(OUT)   :: rcode
 
- Integer(KIND=C_INT)            :: cncid, crcode, cvarid, cstatus, cndims, &
-                                   clenstr
- Integer(KIND=C_SIZE_T), TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Type(C_PTR)                    :: cstartptr, ccountsptr
- Character(LEN=lenstr+1)        :: cstring
- Integer                        :: ndims, slen
+ Integer(C_INT)          :: cncid, crcode, cvarid, cstatus, cndims, &
+                            clenstr
+ Type(C_PTR)             :: cstartptr, ccountsptr
+ Character(LEN=lenstr+1) :: cstring
+ Integer                 :: ndims, slen
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
 
  cncid   = ncid
  cvarid  = varid - 1
  clenstr = lenstr
  crcode  = 0
  rcode   = 0
- cstart  = 0
- ccounts = 0
  cndims  = 0
  ndims   = 0
  string  = REPEAT(" ", LEN(string))
@@ -1040,11 +1141,13 @@
  
  If (cstatus == NC_NOERR) Then ! mimic f2c_coords, etc. in C code
    If (ndims > 0) Then
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
      cstart(1:ndims)  = start(ndims:1:-1) - 1
      ccounts(1:ndims) = counts(ndims:1:-1)
+     cstartptr        = C_LOC(cstart)
+     ccountsptr       = C_LOC(ccounts)
    Endif
-   cstartptr  = C_LOC(cstart)
-   ccountsptr = C_LOC(ccounts)
  Endif
 
  Call c_ncvgtc(cncid, cvarid, cstartptr, ccountsptr, cstring, clenstr, crcode)
@@ -1058,12 +1161,19 @@
 
  rcode = crcode
 
+! Make sure there are no dangling pointers or allocated values
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
+
  End Subroutine ncvgtc
 ! ------------------------------- ncvgtg -------------------------------------- 
  Subroutine ncvgtg(ncid, varid, start, counts, strides, imap, values, &
                    rcode) 
 
- USE netcdf_nc_interfaces, ONLY: NC_MAX_DIMS, NC_NOERR, nc_inq_varndims
+ USE netcdf_nc_interfaces, ONLY: NC_NOERR, nc_inq_varndims
  USE netcdf_fortv2_c_interfaces
 
  Implicit NONE
@@ -1073,41 +1183,46 @@
  Character(KIND=C_CHAR), Intent(OUT) :: values(*)
  Integer,                Intent(OUT) :: rcode
 
- Integer(KIND=C_INT)               :: cncid, crcode, cvarid, cstatus, cndims
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS), cimap(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cimapptr, &
-                                      cstridesptr
- Integer                           :: ndims, inullp
+ Integer(C_INT) :: cncid, crcode, cvarid, cstatus, cndims
+ Type(C_PTR)    :: cstartptr, ccountsptr, cimapptr, cstridesptr 
+ Integer        :: ndims, inullp
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:), cimap(:)
 
  cncid   = ncid
  cvarid  = varid - 1
  crcode  = 0
  rcode   = 0
- cstart  = 0
- ccounts = 0
  cndims  = 0
  inullp  = 0
 
- Call convert_v2_imap(cncid, cvarid, imap, cimap, inullp)
  cstatus = nc_inq_varndims(cncid, cvarid, cndims)
+ If (cndims > 0) Then
+   ALLOCATE(cimap(cndims))
+ Else
+   ALLOCATE(cimap(1))
+ EndIf
+ 
+ Call convert_v2_imap(cncid, cvarid, imap, cimap, inullp)
 
  cstartptr   = C_NULL_PTR
  ccountsptr  = C_NULL_PTR
  cstridesptr = C_NULL_PTR
  cimapptr    = C_LOC(cimap)
  ndims       = cndims 
- If (inullp /= 0) cimapptr = C_NULL_PTR
 
- If (cstatus == NC_NOERR) Then ! mimic f2c_coords, etc. in C code
-   If (ndims > 0) Then
-     cstart(1:ndims)   = start(ndims:1:-1) - 1
-     ccounts(1:ndims)  = counts(ndims:1:-1)
-     cstrides(1:ndims) = strides(ndims:1:-1) - 1
-   Endif
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
+ If (inullp /= 0) cimapptr = C_NULL_PTR
+ If (ndims > 0) Then
+   ALLOCATE(cstart(ndims))
+   ALLOCATE(ccounts(ndims))
+   ALLOCATE(cstrides(ndims))
+   cstart(1:ndims)   = start(ndims:1:-1) - 1
+   ccounts(1:ndims)  = counts(ndims:1:-1)
+   cstrides(1:ndims) = strides(ndims:1:-1)
+   cstartptr         = C_LOC(cstart)
+   ccountsptr        = C_LOC(ccounts)
+   cstridesptr       = C_LOC(cstrides)
  Endif
 
  Call c_ncvgtg(cncid, cvarid, cstartptr, ccountsptr, cstridesptr, &
@@ -1115,11 +1230,22 @@
 
  rcode = crcode
 
+! Make sure there are no dangling pointers or allocated values
+
+ cstartptr    = C_NULL_PTR
+ ccountsptr   = C_NULL_PTR
+ cstridesptr  = C_NULL_PTR
+ cimapptr     = C_NULL_PTR
+ If (ALLOCATED(cimap))    DEALLOCATE(cimap)
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
+
  End Subroutine ncvgtg
 ! ------------------------------- ncvggc -------------------------------------- 
  Subroutine ncvggc(ncid, varid, start, counts, strides, imap, string, rcode) 
 
- USE netcdf_nc_interfaces, ONLY: NC_MAX_DIMS, NC_NOERR, nc_inq_varndims
+ USE netcdf_nc_interfaces, ONLY:  NC_NOERR, nc_inq_varndims
  USE netcdf_fortv2_c_interfaces
 
  Implicit NONE
@@ -1129,13 +1255,14 @@
  Character(LEN=*), Intent(INOUT) :: string
  Integer,          Intent(OUT)   :: rcode
 
- Integer(KIND=C_INT)               :: cncid, crcode, cvarid, cstatus, cndims
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS), cimap(NC_MAX_DIMS)
- Character(LEN=(LEN(string)+1))    :: cstring
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr, &
-                                      cimapptr
- Integer                           :: ndims, inullp,slen
+ Integer(C_INT)                 :: cncid, crcode, cvarid, cstatus, cndims
+ Character(LEN=(LEN(string)+1)) :: cstring
+ Type(C_PTR)                    :: cstartptr, ccountsptr, cstridesptr, &
+                                   cimapptr
+ Integer                        :: ndims, inullp,slen
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:), cimap(:)
 
  cncid   = ncid
  cvarid  = varid - 1
@@ -1149,26 +1276,32 @@
  string  = REPEAT(" ", LEN(string))
  cstring = REPEAT(" ", LEN(cstring)) 
 
- Call convert_v2_imap(cncid, cvarid, imap, cimap, inullp)
-
  cstatus = nc_inq_varndims(cncid, cvarid, cndims)
 
+ If (cndims > 0) Then
+   ALLOCATE(cimap(cndims))
+ Else
+   ALLOCATE(cimap(1))
+ EndIf
+
+ Call convert_v2_imap(cncid, cvarid, imap, cimap, inullp)
  cstartptr   = C_NULL_PTR
  ccountsptr  = C_NULL_PTR
  cstridesptr = C_NULL_PTR
  cimapptr    = C_LOC(cimap)
  ndims       = cndims 
+ 
  If (inullp /= 0) cimapptr = C_NULL_PTR
-
- If (cstatus == NC_NOERR) Then ! mimic f2c_coords, etc. in C code
-   If (ndims > 0) Then
-     cstart(1:ndims)   = start(ndims:1:-1) - 1
-     ccounts(1:ndims)  = counts(ndims:1:-1)
-     cstrides(1:ndims) = strides(ndims:1:-1) - 1
-   Endif
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
+ If (ndims > 0) Then
+   ALLOCATE(cstart(ndims))
+   ALLOCATE(ccounts(ndims))
+   ALLOCATE(cstrides(ndims))
+   cstart(1:ndims)   = start(ndims:1:-1) - 1
+   ccounts(1:ndims)  = counts(ndims:1:-1)
+   cstrides(1:ndims) = strides(ndims:1:-1)
+   cstartptr         = C_LOC(cstart)
+   ccountsptr        = C_LOC(ccounts)
+   cstridesptr       = C_LOC(cstrides)
  Endif
 
  Call c_ncvggc(cncid, cvarid, cstartptr, ccountsptr, cstridesptr, &
@@ -1178,6 +1311,17 @@
  string(1:slen) = cstring(1:slen)
 
  rcode = crcode
+
+! Make sure there are no dangling pointers or allocated values
+
+ cstartptr    = C_NULL_PTR
+ ccountsptr   = C_NULL_PTR
+ cstridesptr  = C_NULL_PTR
+ cimapptr     = C_NULL_PTR
+ If (ALLOCATED(cimap))    DEALLOCATE(cimap)
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Subroutine ncvggc
 !-------------------------------- ncvren --------------------------------------
@@ -1192,7 +1336,7 @@
  Integer,          Intent(OUT) :: rcode
 
  Character(LEN=(LEN(newnam)+1)) :: cnewnam
- Integer(KIND=C_INT)            :: cncid, cvarid, crcode
+ Integer(C_INT)                 :: cncid, cvarid, crcode
  Integer                        :: ilen
 
  cncid  = ncid
@@ -1203,7 +1347,7 @@
 
  cnewnam = addCNullChar(newnam, ilen)
  
- Call c_ncvren(cncid, cvarid, cnewnam(1:ilen+1), crcode )
+ Call c_ncvren(cncid, cvarid, cnewnam(1:ilen), crcode )
 
  rcode = crcode 
 
@@ -1215,13 +1359,13 @@
 
  Implicit NONE
 
- Character(LEN=*),       Intent(IN)          :: attnam
- Integer,                Intent(IN)          :: ncid, varid, attype, attlen
- Character(KIND=C_CHAR), Intent(IN), TARGET  :: value(*)
- Integer,                Intent(OUT)         :: rcode
+ Character(LEN=*),       Intent(IN)         :: attnam
+ Integer,                Intent(IN)         :: ncid, varid, attype, attlen
+ Character(KIND=C_CHAR), Intent(IN), TARGET :: value(*)
+ Integer,                Intent(OUT)        :: rcode
 
- Integer(KIND=C_INT)            :: cncid, cvarid, cattype, crcode
- Integer(KIND=C_SIZE_T)         :: cattlen
+ Integer(C_INT)                 :: cncid, cvarid, cattype, crcode
+ Integer(C_SIZE_T)              :: cattlen
  Type(C_PTR)                    :: cvalueptr
  Character(LEN=(LEN(attnam)+1)) :: cattnam
  Integer                        :: ilen
@@ -1238,7 +1382,7 @@
  
  cvalueptr = C_LOC(value)
  
- Call c_ncapt(cncid, cvarid, cattnam(1:ilen+1), cattype, &
+ Call c_ncapt(cncid, cvarid, cattnam(1:ilen), cattype, &
               cattlen, cvalueptr, crcode )
 
  rcode = crcode 
@@ -1256,8 +1400,8 @@
  Character(LEN=*), Intent(IN)  :: string 
  Integer,          Intent(OUT) :: rcode
 
- Integer(KIND=C_INT)            :: cncid, cvarid, cattype, crcode
- Integer(KIND=C_SIZE_T)         :: clenstr
+ Integer(C_INT)                 :: cncid, cvarid, cattype, crcode
+ Integer(C_SIZE_T)              :: clenstr
  Character(LEN=(LEN(attnam)+1)) :: cattnam
  Integer                        :: ilen
 
@@ -1271,7 +1415,7 @@
 
  cattnam = addCNullChar(attnam, ilen)
  
- Call c_ncaptc(cncid, cvarid, cattnam(1:ilen+1), cattype, &
+ Call c_ncaptc(cncid, cvarid, cattnam(1:ilen), cattype, &
                clenstr, string, crcode )
 
  rcode = crcode 
@@ -1288,7 +1432,7 @@
  Integer,          Intent(IN)  :: ncid, varid
  Integer,          Intent(OUT) :: attype, attlen, rcode
 
- Integer(KIND=C_INT)            :: cncid, cvarid, cattype, crcode, cattlen
+ Integer(C_INT)                 :: cncid, cvarid, cattype, crcode, cattlen
  Character(LEN=(LEN(attnam)+1)) :: cattnam
  Integer                        :: ilen
 
@@ -1302,7 +1446,7 @@
 
  cattnam = addCNullChar(attnam, ilen)
 
- Call c_ncainq(cncid, cvarid, cattnam(1:ilen+1), cattype, &
+ Call c_ncainq(cncid, cvarid, cattnam(1:ilen), cattype, &
              cattlen, crcode )
 
  attype = cattype
@@ -1322,7 +1466,7 @@
  Character(KIND=C_CHAR), Intent(OUT) :: values(*)
  Integer,                Intent(OUT) :: rcode
 
- Integer(KIND=C_INT)            :: cncid, cvarid, crcode
+ Integer(C_INT)                 :: cncid, cvarid, crcode
  Character(LEN=(LEN(attnam)+1)) :: cattnam
  Integer                        :: ilen
 
@@ -1334,7 +1478,7 @@
 
  cattnam = addCNullChar(attnam, ilen)
  
- Call c_ncagt(cncid, cvarid, cattnam(1:ilen+1), values, crcode)
+ Call c_ncagt(cncid, cvarid, cattnam(1:ilen), values, crcode)
 
  rcode = crcode
 
@@ -1351,7 +1495,7 @@
  Character(LEN=*), Intent(INOUT) :: string 
  Integer,          Intent(OUT)   :: rcode
 
- Integer(KIND=C_INT)            :: cncid, cvarid, crcode
+ Integer(C_INT)                 :: cncid, cvarid, crcode
  Character(LEN=(LEN(attnam)+1)) :: cattnam
  Character(LEN=(lenstr+1))      :: cstring
  Integer                        :: ilen
@@ -1366,7 +1510,7 @@
 
  cattnam = addCNullChar(attnam, ilen)
  
- Call c_ncagtc(cncid, cvarid, cattnam(1:ilen+1), cstring, lenstr, &
+ Call c_ncagtc(cncid, cvarid, cattnam(1:ilen), cstring, lenstr, &
                crcode)
 
  string(1:lenstr) = cstring(1:lenstr)
@@ -1385,7 +1529,7 @@
  Integer,          Intent(IN)  :: ncid, varid, outcdf, outvar
  Integer,          Intent(OUT) :: rcode
 
- Integer(KIND=C_INT)            :: cncid, cvarid, coutcdf, coutvar, crcode
+ Integer(C_INT)                 :: cncid, cvarid, coutcdf, coutvar, crcode
  Character(LEN=(LEN(attnam)+1)) :: cattnam
  Integer                        :: ilen
 
@@ -1399,7 +1543,7 @@
 
  cattnam = addCNullChar(attnam, ilen)
  
- Call c_ncacpy(cncid, cvarid, cattnam(1:ilen+1), coutcdf, &
+ Call c_ncacpy(cncid, cvarid, cattnam(1:ilen), coutcdf, &
                coutvar, crcode)
 
  rcode = crcode
@@ -1418,7 +1562,7 @@
  Integer,          Intent(OUT)   :: rcode
 
  Integer                      :: ilen
- Integer(KIND=C_INT)          :: cncid, cvarid, cattnum, crcode
+ Integer(C_INT)               :: cncid, cvarid, cattnum, crcode
  Character(LEN=NC_MAX_NAME+1) :: cattnam
 
  cncid = ncid
@@ -1448,7 +1592,7 @@
  Integer,          Intent(IN)  :: ncid, varid
  Integer,          Intent(OUT) :: rcode
 
- Integer(KIND=C_INT)            :: cncid, cvarid, crcode
+ Integer(C_INT)                 :: cncid, cvarid, crcode
  Character(LEN=(LEN(attnam)+1)) :: cattnam
  Character(LEN=(LEN(newnam)+1)) :: cnewnam
  Integer                        :: ilen, ilen2
@@ -1463,7 +1607,7 @@
  
  cnewnam = addCNullChar(newnam, ilen2)
  
- Call c_ncaren(cncid, cvarid, cattnam(1:ilen+1), cnewnam(1:ilen2+1), crcode) 
+ Call c_ncaren(cncid, cvarid, cattnam(1:ilen), cnewnam(1:ilen2+1), crcode) 
 
  rcode = crcode
 
@@ -1479,7 +1623,7 @@
  Integer,          Intent(IN)  :: ncid, varid
  Integer,          Intent(OUT) :: rcode
 
- Integer(KIND=C_INT)            :: cncid, cvarid, crcode
+ Integer(C_INT)                 :: cncid, cvarid, crcode
  Character(LEN=(LEN(attnam)+1)) :: cattnam
  Integer                        :: ilen
 
@@ -1491,7 +1635,7 @@
 
  cattnam = addCNullChar(attnam, ilen)
  
- Call c_ncadel(cncid, cvarid, cattnam(1:ilen+1),crcode)
+ Call c_ncadel(cncid, cvarid, cattnam(1:ilen),crcode)
 
  rcode = crcode
 
@@ -1508,7 +1652,7 @@
 
  Integer              :: currentmode
 
- Integer(KIND=C_INT) :: cncid, cfillmode, crcode, cstatus  
+ Integer(C_INT) :: cncid, cfillmode, crcode, cstatus  
 
  cncid     = ncid
  cfillmode = fillmode

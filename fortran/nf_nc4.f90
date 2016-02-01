@@ -27,7 +27,11 @@
 ! Version 4.- April 2010 - Based on NetCDF 4.1.1 release
 ! Version 5.- Aug.  2013 - Added nf_rename_grp to align with netCDF-C 4.3.1
 ! Version 6.- Sep.  2013 - Changed fill routines to support different types
-! Version 7.- May   2014 - Ensure return error status checked from C API calls          
+! Version 7.- May   2014 - Ensure return error status checked from C API calls
+! Version 8.- Jan.  2016 - General code cleanup. Replaced automatic arrays
+!                          sized with NC_MAX_DIMS with allocatable arrays.
+!                          Changed name processing to reflect change in
+!                          addCNullChar
  
 !-------------------------------- nf_create_par -------------------------------
  Function nf_create_par (path, cmode, comm, info, ncid) RESULT(status)
@@ -44,7 +48,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: ccmode, ccomm, cinfo, cncid, cstatus
+ Integer(C_INT)               :: ccmode, ccomm, cinfo, cncid, cstatus
  Character(LEN=(LEN(path)+1)) :: cpath
  Integer                      :: ie
 
@@ -54,7 +58,7 @@
  cncid  = 0
  cpath  = addCNullChar(path, ie) ! add a C Null char and strip trailing blanks
 
- cstatus = nc_create_par_fortran(cpath(1:ie+1), ccmode, ccomm, cinfo, cncid)
+ cstatus = nc_create_par_fortran(cpath(1:ie), ccmode, ccomm, cinfo, cncid)
 
  If (cstatus == NC_NOERR) Then
     ncid = cncid
@@ -77,7 +81,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cmode, ccomm, cinfo, cncid, cstatus
+ Integer(C_INT)               :: cmode, ccomm, cinfo, cncid, cstatus
  Character(LEN=(LEN(path)+1)) :: cpath
  Integer                      :: ie
 
@@ -87,7 +91,7 @@
  cncid = 0
  cpath = addCNullChar(path, ie)
 
- cstatus = nc_open_par_fortran(cpath(1:ie+1), cmode, ccomm, cinfo, cncid)
+ cstatus = nc_open_par_fortran(cpath(1:ie), cmode, ccomm, cinfo, cncid)
 
  If (cstatus == NC_NOERR) Then
    ncid = cncid
@@ -98,7 +102,7 @@
 !-------------------------------- nf_var_par_access -------------------------
  Function nf_var_par_access( ncid, varid, iaccess) RESULT (status)
 
-! set variable access
+! set parallel variable access
 
  USE netcdf4_nc_interfaces
 
@@ -108,7 +112,7 @@
 
  Integer             :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid, caccess, cstatus
+ Integer(C_INT) :: cncid, cvarid, caccess, cstatus
 
  cncid   = ncid
  cvarid  = varid - 1
@@ -134,7 +138,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)        :: cncid, cgroupid, cstatus
+ Integer(C_INT)             :: cncid, cgroupid, cstatus
  Character(LEN=LEN(name)+1) :: cname
  Integer                    :: ie
 
@@ -143,7 +147,7 @@
  cname    = REPEAT(" ",LEN(cname))
  cname    = addCNullChar(name, ie)
 
- cstatus = nc_inq_ncid(cncid, cname(1:ie+1), cgroupid)
+ cstatus = nc_inq_ncid(cncid, cname(1:ie), cgroupid)
 
  If (cstatus == NC_NOERR) Then
     groupid = cgroupid
@@ -163,22 +167,42 @@
  Integer, Intent(IN)    :: ncid
  Integer, Intent(INOUT) :: ncids(*)
  Integer, Intent(OUT)   :: numgrps
+
  Integer                :: status
 
- Integer(KIND=C_INT)    :: cncid, cnumgrps, cstatus
- Integer(KIND=C_INT)    :: cncids(NC_MAX_DIMS)
+ Integer(C_INT) :: cncid, cnumgrps, cstatus, cstatus1
+
+ Integer(C_INT), ALLOCATABLE :: cncids(:)
 
  cncid    = ncid
  cnumgrps = 0
  ncids(1) = 0
- 
- cstatus = nc_inq_grps(cncid, cnumgrps, cncids)
+ numgrps  = 0
 
- If (cstatus == NC_NOERR) Then
-    numgrps = cnumgrps
-    ncids(1:numgrps) = cncids(1:numgrps)
+! Get cnumgrps first using utility from nc_lib.c which is not part
+! of netCDF C.
+
+ cstatus1 = nc_inq_numgrps(cncid, cnumgrps)
+
+ If (cnumgrps > 0) Then 
+   ALLOCATE(cncids(cnumgrps))
+ Else
+   ALLOCATE(cncids(1))
  EndIf
+
+ cncids = 0
+ 
+ cstatus  = nc_inq_grps(cncid, cnumgrps, cncids)
+ If (cstatus == NC_NOERR) Then
+   numgrps = cnumgrps
+   If (numgrps > 0) Then
+      ncids(1:numgrps) = cncids(1:numgrps)
+   EndIf
+ EndIf
+
  status  = cstatus
+
+ If (ALLOCATED(cncids)) DEALLOCATE (cncids)
 
  End Function nf_inq_grps
 !-------------------------------- nf_inq_grpname ------------------------------
@@ -195,7 +219,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)        :: cncid, cstatus
+ Integer(C_INT)             :: cncid, cstatus
  Character(LEN=NC_MAX_NAME) :: cname
  Integer                    :: nlen
 
@@ -227,8 +251,8 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)        :: cncid, cstatus
- Integer(KIND=C_SIZE_T)     :: clen
+ Integer(C_INT)             :: cncid, cstatus
+ Integer(C_SIZE_T)          :: clen
  Character(LEN=LEN(name)+1) :: cname
  Integer                    :: nl
 
@@ -260,8 +284,8 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT)    :: cncid, cstatus
- Integer(KIND=C_SIZE_T) :: clen
+ Integer(C_INT)    :: cncid, cstatus
+ Integer(C_SIZE_T) :: clen
 
  cncid  = ncid
  
@@ -288,7 +312,7 @@
 
  Integer                :: status
 
- Integer(KIND=C_INT) :: cncid, cparent_ncid, cstatus
+ Integer(C_INT) :: cncid, cparent_ncid, cstatus
 
  cncid  = ncid
 
@@ -315,7 +339,7 @@
 
  Integer                         :: status
 
- Integer(KIND=C_INT)              :: cncid, cstatus, cparent_ncid
+ Integer(C_INT)                   :: cncid, cstatus, cparent_ncid
  Character(LEN=(LEN(grp_name)+1)) :: cgrp_name
  Integer                          :: ie
 
@@ -323,7 +347,7 @@
  cgrp_name = addCNullChar(grp_name, ie)
  cncid     = ncid
 
- cstatus = nc_inq_grp_ncid(cncid, cgrp_name(1:ie+1), cparent_ncid)
+ cstatus = nc_inq_grp_ncid(cncid, cgrp_name(1:ie), cparent_ncid)
 
  If (cstatus == NC_NOERR) Then
     parent_ncid = cparent_ncid
@@ -346,17 +370,15 @@
 
  Integer                         :: status
 
- Integer(KIND=C_INT)          :: cncid, cstatus, cgrp_ncid
+ Integer(C_INT)               :: cncid, cstatus, cgrp_ncid
  Character(LEN=(LEN(name)+1)) :: cgrp_name
  Integer                      :: ie
-
-! Test for C Null character in path and strip trailing blanks
 
  cncid     = ncid
  cgrp_name = REPEAT(" ",LEN(cgrp_name))
  cgrp_name = addCNullChar(name, ie)
 
- cstatus = nc_inq_grp_full_ncid(cncid, cgrp_name(1:ie+1), cgrp_ncid)
+ cstatus = nc_inq_grp_full_ncid(cncid, cgrp_name(1:ie), cgrp_ncid)
 
  If (cstatus == NC_NOERR) Then
     grp_ncid = cgrp_ncid
@@ -379,7 +401,7 @@
 
  Integer                :: status
 
- Integer(KIND=C_INT) :: cncid, cnvars, cstatus
+ Integer(C_INT) :: cncid, cnvars, cstatus
  
  cncid     = ncid
  varids(1) = 0
@@ -407,7 +429,7 @@
 
  Integer                :: status
 
- Integer(KIND=C_INT) :: cncid, cndims, cparent, cstatus
+ Integer(C_INT) :: cncid, cndims, cparent, cstatus
 
  cncid     = ncid
  dimids(1) = 0
@@ -435,26 +457,41 @@
 
  Integer                :: status
 
- Integer(KIND=C_INT) :: cncid, cntypes, cstatus
- Integer(KIND=C_INT) :: ctypeids(NC_MAX_DIMS)
+ Integer(C_INT) :: cncid, cntypes, cstatus, cstatus1
+
+ Integer(C_INT), ALLOCATABLE :: ctypeids(:)
 
  cncid      = ncid
- ctypeids   = 0
  typeids(1) = 0
- 
- cstatus = nc_inq_typeids(cncid, cntypes, ctypeids)
 
- If (cstatus == NC_NOERR) Then
-    ntypes            = cntypes
-    typeids(1:ntypes) = ctypeids(1:ntypes)
+ cstatus1 = 0
+ cstatus1 = nc_inq_numtypes(cncid, cntypes)
+
+ If (cntypes > 0) Then
+   ALLOCATE(ctypeids(cntypes))
+ Else
+   ALLOCATE(ctypeids(1))
  EndIf
+
+ ctypeids = 0
+
+ cstatus = nc_inq_typeids(cncid, cntypes, ctypeids)
+ If (cstatus == NC_NOERR) Then
+   ntypes            = cntypes
+   If (ntypes > 0) Then
+     typeids(1:ntypes) = ctypeids(1:ntypes)
+   EndIf
+ EndIf
+
  status  = cstatus
+
+ If(ALLOCATED(ctypeids)) DEALLOCATE(ctypeids)
 
  End Function nf_inq_typeids
 !-------------------------------- nf_inq_typeid -------------------------------
  Function nf_inq_typeid(ncid, name, typeid) RESULT (status)
 
-! inquire typeid for name 
+! inquire typeid for given name 
 
  USE netcdf4_nc_interfaces
 
@@ -466,7 +503,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)        :: cncid, ctypeid, cstatus
+ Integer(C_INT)             :: cncid, ctypeid, cstatus
  Character(LEN=LEN(name)+1) :: cname
  Integer                    :: ie
 
@@ -475,7 +512,7 @@
  cname    = REPEAT(" ",LEN(cname))
  cname    = addCNullChar(name, ie)
 
- cstatus = nc_inq_typeid(cncid, cname(1:ie+1), ctypeid)
+ cstatus = nc_inq_typeid(cncid, cname(1:ie), ctypeid)
 
  If (cstatus == NC_NOERR) Then
     typeid = ctypeid
@@ -498,7 +535,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cnew_ncid, cstatus
+ Integer(C_INT)               :: cncid, cnew_ncid, cstatus
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -506,7 +543,7 @@
  cname = REPEAT(" ",LEN(cname))
  cname = addCNullChar(name, ie)
 
- cstatus = nc_def_grp(cncid, cname(1:ie+1), cnew_ncid)
+ cstatus = nc_def_grp(cncid, cname(1:ie), cnew_ncid)
 
  If (cstatus == NC_NOERR) Then
     new_ncid = cnew_ncid 
@@ -528,7 +565,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cgrpid, cstatus
+ Integer(C_INT)               :: cgrpid, cstatus
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -536,7 +573,7 @@
  cname  = REPEAT(" ",LEN(cname))
  cname  = addCNullChar(name, ie)
 
- cstatus = nc_rename_grp(cgrpid, cname(1:ie+1))
+ cstatus = nc_rename_grp(cgrpid, cname(1:ie))
 
  status   = cstatus
 
@@ -544,7 +581,7 @@
 !-------------------------------- nf_def_compound -----------------------------
  Function nf_def_compound( ncid, isize, name, typeid) RESULT (status)
 
-! define new group given name 
+! define a compound variable given name and size 
 
  USE netcdf4_nc_interfaces
 
@@ -556,8 +593,8 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, ctypeid, cstatus
- Integer(KIND=C_SIZE_T)       :: csize
+ Integer(C_INT)               :: cncid, ctypeid, cstatus
+ Integer(C_SIZE_T)            :: csize
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -566,11 +603,12 @@
  cname = REPEAT(" ",LEN(cname))
  cname = addCNullChar(name, ie)
 
- cstatus = nc_def_compound(cncid, csize, cname(1:ie+1), ctypeid)
+ cstatus = nc_def_compound(cncid, csize, cname(1:ie), ctypeid)
 
  If (cstatus == NC_NOERR) Then
     typeid = ctypeid
  EndIf
+ 
  status = cstatus
 
  End Function nf_def_compound
@@ -578,7 +616,7 @@
  Function nf_insert_compound( ncid, xtype, name, offset, field_typeid) &
                               RESULT (status)
 
-! define new group given name 
+! Insert compound name offset field_typeid etc 
 
  USE netcdf4_nc_interfaces
 
@@ -589,8 +627,8 @@
 
  Integer                      :: status
 
- Integer(KIND=C_INT)          :: cncid, cxtype, ctypeid, cstatus
- Integer(KIND=C_SIZE_T)       :: coffset
+ Integer(C_INT)               :: cncid, cxtype, ctypeid, cstatus
+ Integer(C_SIZE_T)            :: coffset
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -601,7 +639,7 @@
  cname   = REPEAT(" ",LEN(cname))
  cname   = addCNullChar(name, ie)
 
- cstatus = nc_insert_compound(cncid, cxtype, cname(1:ie+1), &
+ cstatus = nc_insert_compound(cncid, cxtype, cname(1:ie), &
                               coffset, ctypeid)
 
  status = cstatus
@@ -611,7 +649,7 @@
  Function nf_insert_array_compound( ncid, xtype, name, offset, field_typeid, &
                                     ndims, dim_sizes) RESULT (status)
 
-! define new group given name 
+! Insert name type fieldid and dim_sizes array into compound 
 
  USE netcdf4_nc_interfaces
 
@@ -623,8 +661,8 @@
 
  Integer                         :: status
 
- Integer(KIND=C_INT)          :: cncid, cxtype, ctypeid, cndims, cstatus
- Integer(KIND=C_SIZE_T)       :: coffset
+ Integer(C_INT)               :: cncid, cxtype, ctypeid, cndims, cstatus
+ Integer(C_SIZE_T)            :: coffset
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -636,7 +674,7 @@
  cname   = REPEAT(" ",LEN(cname))
  cname   = addCNullChar(name, ie)
 
- cstatus = nc_insert_array_compound_f(cncid, cxtype, cname(1:ie+1), &
+ cstatus = nc_insert_array_compound_f(cncid, cxtype, cname(1:ie), &
                                       coffset, ctypeid, cndims, dim_sizes)
 
  status = cstatus
@@ -645,7 +683,7 @@
 !-------------------------------- nf_inq_type ---------------------------------
  Function nf_inq_type( ncid, xtype, name, isize) RESULT (status)
 
-! define new group given name 
+! Inquire type size for given name and type
 
  USE netcdf4_nc_interfaces
 
@@ -657,8 +695,8 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cxtype, cstatus
- Integer(KIND=C_SIZE_T)       :: csize
+ Integer(C_INT)               :: cncid, cxtype, cstatus
+ Integer(C_SIZE_T)            :: csize
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -667,7 +705,7 @@
  cname  = REPEAT(" ",LEN(cname))
  cname  = addCNullChar(name, ie)
 
- cstatus = nc_inq_type(cncid, cxtype, cname(1:ie+1), csize)
+ cstatus = nc_inq_type(cncid, cxtype, cname(1:ie), csize)
 
  If (cstatus == NC_NOERR) Then
     isize  = csize
@@ -690,8 +728,8 @@
 
  Integer                         :: status
 
- Integer(KIND=C_INT)          :: cncid, cxtype, cstatus
- Integer(KIND=C_SIZE_T)       :: csize, cnfieldsp
+ Integer(C_INT)               :: cncid, cxtype, cstatus
+ Integer(C_SIZE_T)            :: csize, cnfieldsp
  Character(LEN=NC_MAX_NAME+1) :: cname
  Integer                      :: nlen
 
@@ -704,7 +742,6 @@
  cstatus = nc_inq_compound(cncid, cxtype, cname, csize, cnfieldsp)
 
  If (cstatus == NC_NOERR) Then
-    ! Test for C Null character in path and strip trailing blanks
     name       = stripCNullChar(cname, nlen)
     isize      = csize
     nfields    = cnfieldsp
@@ -726,7 +763,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cxtype, cstatus
+ Integer(C_INT)               :: cncid, cxtype, cstatus
  Character(LEN=NC_MAX_NAME+1) :: cname
  Integer                      :: nlen
 
@@ -758,8 +795,8 @@
 
  Integer                :: status
 
- Integer(KIND=C_INT)    :: cncid, cxtype, cstatus
- Integer(KIND=C_SIZE_T) :: csize
+ Integer(C_INT)    :: cncid, cxtype, cstatus
+ Integer(C_SIZE_T) :: csize
 
  cncid  = ncid
  cxtype = xtype
@@ -769,13 +806,14 @@
  If (cstatus == NC_NOERR) Then
     isize  = csize
  EndIf
+
  status = cstatus
 
  End Function nf_inq_compound_size
 !-------------------------------- nf_inq_compound_nfields ----------------------
  Function nf_inq_compound_nfields( ncid, xtype, nfields) RESULT (status)
 
-! return size compound given ncid, xtype
+! return number of fields for compound 
 
  USE netcdf4_nc_interfaces
 
@@ -786,8 +824,8 @@
 
  Integer                :: status
 
- Integer(KIND=C_INT)    :: cncid, cxtype, cstatus
- Integer(KIND=C_SIZE_T) :: cnfields
+ Integer(C_INT)    :: cncid, cxtype, cstatus
+ Integer(C_SIZE_T) :: cnfields
 
  cncid  = ncid
  cxtype = xtype
@@ -797,6 +835,7 @@
  If (cstatus == NC_NOERR) Then
     nfields = cnfields
  EndIf
+
  status  = cstatus
 
  End Function nf_inq_compound_nfields
@@ -804,7 +843,7 @@
  Function nf_inq_compound_field( ncid, xtype, fieldid, name, offset, &
                                 field_typeid, ndims, dim_sizes) RESULT (status)
 
-! inquire compound name 
+! inquire compound field info. Use Fortran specific version of C interface
 
  USE netcdf4_nc_interfaces
 
@@ -817,12 +856,13 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cxtype, cfieldid, cfield_typeid, &
-                                 cndims, cstatus
- Integer(KIND=C_INT)          :: cdim_sizes(NC_MAX_DIMS)
- Integer(KIND=C_SIZE_T)       :: coffset
+ Integer(C_INT)               :: cncid, cxtype, cfieldid, cfield_typeid, &
+                                 cndims, cstatus, cstatus1
+ Integer(C_SIZE_T)            :: coffset
  Character(LEN=NC_MAX_NAME+1) :: cname
  Integer                      :: nlen
+
+ Integer(C_INT), ALLOCATABLE :: cdim_sizes(:)
 
  cncid    = ncid
  cxtype   = xtype
@@ -830,18 +870,33 @@
  nlen     = LEN(name)
  name     = REPEAT(" ",LEN(name))
  cname    = REPEAT(" ",LEN(cname))
- 
+ dim_sizes(1) = 0
+
+ cstatus1 = nc_inq_compound_field_ndims(cncid, cxtype, cfieldid, cndims)
+
+ If (cndims > 0) Then
+   ALLOCATE(cdim_sizes(cndims))
+ Else
+   ALLOCATE(cdim_sizes(1))
+ EndIf
+
+ cdim_sizes = 0
+
  cstatus = nc_inq_compound_field_f(cncid, cxtype, cfieldid, cname, coffset, &
                                    cfield_typeid, cndims, cdim_sizes)
-
  If (cstatus == NC_NOERR) Then
-    name               = stripCNullChar(cname, nlen)
-    offset             = coffset
-    field_typeid       = cfield_typeid
-    ndims              = cndims
-    dim_sizes(1:ndims) = cdim_sizes(1:ndims)
+   name               = stripCNullChar(cname, nlen)
+   offset             = coffset
+   field_typeid       = cfield_typeid
+   ndims              = cndims
+   If (ndims > 0) Then
+     dim_sizes(1:ndims) = cdim_sizes(1:ndims)
+   EndIf
  EndIf
+
  status = cstatus
+
+ If (ALLOCATED(cdim_sizes)) DEALLOCATE(cdim_sizes)
 
  End Function nf_inq_compound_field
 !-------------------------------- nf_inq_compound_fieldname -------------------
@@ -858,7 +913,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cxtype, cfieldid, cstatus
+ Integer(C_INT)               :: cncid, cxtype, cfieldid, cstatus
  Character(LEN=NC_MAX_NAME+1) :: cname
  Integer                      :: nlen
 
@@ -874,13 +929,14 @@
  If (cstatus == NC_NOERR) Then
     name = stripCNullChar(cname, nlen)
  EndIf
+
  status = cstatus
 
  End Function nf_inq_compound_fieldname
 !-------------------------------- nf_inq_compound_fieldindex ------------------
  Function nf_inq_compound_fieldindex( ncid, xtype, name, fieldid) RESULT (status)
 
-! define new group given name 
+! inquire compound field index id 
 
  USE netcdf4_nc_interfaces
 
@@ -892,7 +948,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cxtype, cfieldid, cstatus
+ Integer(C_INT)               :: cncid, cxtype, cfieldid, cstatus
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -901,11 +957,12 @@
  cname  = REPEAT(" ",LEN(cname))
  cname  = addCNullChar(name, ie)
 
- cstatus = nc_inq_compound_fieldindex(cncid, cxtype, cname(1:ie+1), cfieldid)
+ cstatus = nc_inq_compound_fieldindex(cncid, cxtype, cname(1:ie), cfieldid)
 
  If (cstatus == NC_NOERR) Then
     fieldid = cfieldid + 1
  EndIf
+
  status  = cstatus
 
  End Function nf_inq_compound_fieldindex
@@ -924,8 +981,8 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT)    :: cncid, cxtype, cfieldid, cstatus
- Integer(KIND=C_SIZE_T) :: coffset
+ Integer(C_INT)    :: cncid, cxtype, cfieldid, cstatus
+ Integer(C_SIZE_T) :: coffset
 
  cncid    = ncid
  cxtype   = xtype
@@ -936,6 +993,7 @@
  If (cstatus == NC_NOERR) Then
     offset = coffset
  EndIf
+
  status = cstatus
 
  End Function nf_inq_compound_fieldoffset
@@ -943,7 +1001,7 @@
  Function nf_inq_compound_fieldtype( ncid, xtype, fieldid, field_typeid) &
                                     RESULT (status)
 
-! define new group given name 
+! inquire compound field typeid 
 
  USE netcdf4_nc_interfaces
 
@@ -954,7 +1012,7 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT) :: cncid, cxtype, cfieldid, cfield_typeid, cstatus
+ Integer(C_INT) :: cncid, cxtype, cfieldid, cfield_typeid, cstatus
 
  cncid    = ncid
  cxtype   = xtype
@@ -965,13 +1023,14 @@
  If (cstatus == NC_NOERR) Then
     field_typeid = cfield_typeid
  EndIf
+
  status  = cstatus
 
  End Function nf_inq_compound_fieldtype
 !-------------------------------- nf_inq_compound_fieldndims ------------------
  Function nf_inq_compound_fieldndims( ncid, xtype, fieldid, ndims) RESULT (status)
 
-! define new group given name 
+! Inquire compound field dim_size ndims 
 
  USE netcdf4_nc_interfaces
 
@@ -982,7 +1041,7 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT) :: cncid, cxtype, cfieldid, cndims, cstatus
+ Integer(C_INT) :: cncid, cxtype, cfieldid, cndims, cstatus
 
  cncid    = ncid
  cxtype   = xtype
@@ -993,6 +1052,7 @@
  If (cstatus == NC_NOERR) Then
     ndims = cndims 
  EndIf
+
  status = cstatus
 
  End Function nf_inq_compound_fieldndims
@@ -1011,7 +1071,7 @@
 
  Integer                :: status
 
- Integer(KIND=C_INT) :: cncid, cxtype, cfieldid, cstatus 
+ Integer(C_INT) :: cncid, cxtype, cfieldid, cstatus 
 
  cncid    = ncid
  cxtype   = xtype
@@ -1037,7 +1097,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cxtype, cbase_typeid, cstatus
+ Integer(C_INT)               :: cncid, cxtype, cbase_typeid, cstatus
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -1047,11 +1107,12 @@
  cname        = REPEAT(" ",LEN(cname))
  cname        = addCNullChar(name, ie)
 
- cstatus = nc_def_vlen(cncid, cname(1:ie+1), cbase_typeid, cxtype)
+ cstatus = nc_def_vlen(cncid, cname(1:ie), cbase_typeid, cxtype)
 
  If (cstatus == NC_NOERR) Then
     xtype  = cxtype
  EndIf
+
  status = cstatus
 
  End Function nf_def_vlen
@@ -1070,8 +1131,8 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cxtype, cbase_type, cstatus
- Integer(KIND=C_SIZE_T)       :: cdatum_size
+ Integer(C_INT)               :: cncid, cxtype, cbase_type, cstatus
+ Integer(C_SIZE_T)            :: cdatum_size
  Character(LEN=NC_MAX_NAME+1) :: cname
  Integer                      :: nlen
 
@@ -1088,6 +1149,7 @@
     datum_size = cdatum_size 
     base_type  = cbase_type 
  EndIf
+
  status = cstatus
 
  End Function nf_inq_vlen
@@ -1108,8 +1170,8 @@
 
  Integer                         :: status
 
- Integer(KIND=C_INT)          :: cncid, cxtype, cbase_type, cclass, cstatus
- Integer(KIND=C_SIZE_T)       :: csize, cnfields
+ Integer(C_INT)               :: cncid, cxtype, cbase_type, cclass, cstatus
+ Integer(C_SIZE_T)            :: csize, cnfields
  Character(LEN=NC_MAX_NAME+1) :: cname
  Integer                      :: nlen
 
@@ -1124,20 +1186,20 @@
                            cclass)
 
  If (cstatus == NC_NOERR) Then
-    ! Test for C Null character in path and strip trailing blanks
     name       = stripCNullChar(cname, nlen)
     isize      = csize
     nfields    = cnfields
     iclass     = cclass
     base_type  = cbase_type
  EndIf
+
  status = cstatus
 
  End Function nf_inq_user_type
 !-------------------------------- nf_def_enum ---------------------------------
  Function nf_def_enum( ncid, base_typeid, name, typeid) RESULT (status)
 
-! define new group given name 
+! define an enumerator typeid 
 
  USE netcdf4_nc_interfaces
 
@@ -1149,7 +1211,7 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cbase_typeid, ctypeid, cstatus
+ Integer(C_INT)               :: cncid, cbase_typeid, ctypeid, cstatus
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -1158,11 +1220,12 @@
  cname        = REPEAT(" ",LEN(cname))
  cname        = addCNullChar(name, ie)
 
- cstatus = nc_def_enum(cncid, cbase_typeid, cname(1:ie+1), ctypeid)
+ cstatus = nc_def_enum(cncid, cbase_typeid, cname(1:ie), ctypeid)
 
  If (cstatus == NC_NOERR) Then
     typeid = ctypeid
  EndIf
+
  status = cstatus
 
  End Function nf_def_enum
@@ -1185,7 +1248,7 @@
 
  Integer                                    :: status
 
- Integer(KIND=C_INT)          :: cncid, cxtype, cstatus
+ Integer(C_INT)               :: cncid, cxtype, cstatus
  Type(C_PTR)                  :: cvalueptr
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
@@ -1197,7 +1260,7 @@
 
  cvalueptr = C_LOC(value)
 
- cstatus = nc_insert_enum(cncid, cxtype, cname(1:ie+1), cvalueptr)
+ cstatus = nc_insert_enum(cncid, cxtype, cname(1:ie), cvalueptr)
 
  status = cstatus
 
@@ -1218,8 +1281,8 @@
 
  Integer                         :: status
 
- Integer(KIND=C_INT)          :: cncid, cxtype, c_base_nf_type, cstatus
- Integer(KIND=C_SIZE_T)       :: c_base_size, c_num_members
+ Integer(C_INT)               :: cncid, cxtype, c_base_nf_type, cstatus
+ Integer(C_SIZE_T)            :: c_base_size, c_num_members
  Character(LEN=NC_MAX_NAME+1) :: cname
  Integer                      :: nlen
 
@@ -1233,12 +1296,12 @@
                         c_num_members)
 
  If (cstatus == NC_NOERR) Then
-    ! Test for C Null character in path and strip trailing blanks
     name         = stripCNullChar(cname, nlen)
     base_nf_type = c_base_nf_type
     base_size    = c_base_size
     num_members  = c_num_members
  EndIf
+
  status = cstatus
 
  End Function nf_inq_enum
@@ -1260,7 +1323,7 @@
 
  Integer                             :: status
 
- Integer(KIND=C_INT)          :: cncid, cxtype, cidx, cstatus
+ Integer(C_INT)               :: cncid, cxtype, cidx, cstatus
  Character(LEN=NC_MAX_NAME+1) :: cname
  Integer                      :: nlen
 
@@ -1274,9 +1337,9 @@
  cstatus = nc_inq_enum_member(cncid, cxtype, cidx, cname, value)
 
  If (cstatus == NC_NOERR) Then
-    ! Test for C Null character in path and strip trailing blanks
     name = stripCNullChar(cname, nlen)
  EndIf
+
  status = cstatus
 
  End Function nf_inq_enum_member
@@ -1294,8 +1357,8 @@
 
  Integer                         :: status
 
- Integer(KIND=C_INT)          :: cncid, cxtype, cstatus
- Integer(KIND=C_LONG_LONG)    :: cvalue  
+ Integer(C_INT)               :: cncid, cxtype, cstatus
+ Integer(C_LONG_LONG)         :: cvalue  
  Character(LEN=NC_MAX_NAME+1) :: cname
  Integer                      :: nlen
 
@@ -1309,16 +1372,16 @@
  cstatus = nc_inq_enum_ident(cncid, cxtype, cvalue, cname)
 
  If (cstatus == NC_NOERR) Then
-    ! Test for C Null character in path and strip trailing blanks
     name = stripCNullChar(cname, nlen)
  EndIf
+
  status = cstatus
 
  End Function nf_inq_enum_ident
 !-------------------------------- nf_def_opaque -------------------------------
  Function nf_def_opaque( ncid, isize, name, xtype) RESULT (status)
 
-! define new group given name 
+! define opaque type info
 
  USE netcdf4_nc_interfaces
 
@@ -1330,8 +1393,8 @@
 
  Integer                       :: status
 
- Integer(KIND=C_INT)          :: cncid, cxtype, cstatus
- Integer(KIND=C_SIZE_T)       :: csize
+ Integer(C_INT)               :: cncid, cxtype, cstatus
+ Integer(C_SIZE_T)            :: csize
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -1341,17 +1404,19 @@
  cname  = REPEAT(" ",LEN(cname))
  cname  = addCNullChar(name, ie)
 
- cstatus = nc_def_opaque(cncid, csize, cname(1:ie+1), cxtype)
+ cstatus = nc_def_opaque(cncid, csize, cname(1:ie), cxtype)
 
  If (cstatus == NC_NOERR) Then
     xtype  = cxtype 
  EndIf
+
  status = cstatus
 
  End Function nf_def_opaque
 !-------------------------------- nf_inq_opaque -------------------------------
  Function nf_inq_opaque( ncid, xtype, name, isize) RESULT (status)
 
+! Inquire about opaque type info
 
  USE netcdf4_nc_interfaces
 
@@ -1363,8 +1428,8 @@
 
  Integer                         :: status
 
- Integer(KIND=C_INT)          :: cncid, cxtype, cstatus
- Integer(KIND=C_SIZE_T)       :: csize
+ Integer(C_INT)               :: cncid, cxtype, cstatus
+ Integer(C_SIZE_T)            :: csize
  Character(LEN=NC_MAX_NAME+1) :: cname
  Integer                      :: nlen
 
@@ -1377,10 +1442,10 @@
  cstatus = nc_inq_opaque(cncid, cxtype, cname, csize)
 
  If (cstatus == NC_NOERR) Then
-    ! Test for C Null character in path and strip trailing blanks
     name   = stripCNullChar(cname, nlen)
     isize  = csize
  EndIf
+
  status = cstatus
 
  End Function nf_inq_opaque
@@ -1399,11 +1464,12 @@
 
  Integer                :: status
 
- Integer(KIND=C_INT)         :: cncid, cvarid, ccontiguous, cstat1, cstatus, &
-                                cndims
- Integer(KIND=C_INT), TARGET :: cchunksizes(NC_MAX_DIMS)
- Type(C_PTR)                 :: cchunksizeptr
- Integer                     :: i, ndims
+ Integer(C_INT) :: cncid, cvarid, ccontiguous, cstat1, cstatus, &
+                   cndims
+ Type(C_PTR)    :: cchunksizeptr
+ Integer        :: i, ndims
+
+ Integer(C_INT), ALLOCATABLE, TARGET :: cchunksizes(:)
 
  cncid       = ncid
  cvarid      = varid-1
@@ -1415,15 +1481,21 @@
  cchunksizeptr = C_NULL_PTR
 
  If (cstat1 == NC_NOERR) Then
-   If (ndims > 0) Then 
+   If (ndims > 0) Then
+     ALLOCATE(cchunksizes(ndims))
      cchunksizes(1:ndims) = chunksizes(ndims:1:-1)
+     cchunksizeptr        = C_LOC(cchunksizes)
    EndIf
-   cchunksizeptr = C_LOC(cchunksizes)
  EndIf
 
  cstatus = nc_def_var_chunking_ints(cncid, cvarid, ccontiguous, cchunksizeptr)
 
  status = cstatus
+
+! Make sure there are no dangling pointers or allocated arrays
+
+  cchunksizeptr = C_NULL_PTR
+  If (ALLOCATED(cchunksizes)) DEALLOCATE(cchunksizes)
 
  End Function nf_def_var_chunking
 !-------------------------------- nf_inq_var_chunking -------------------------
@@ -1441,28 +1513,40 @@
 
  Integer                :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid, ccontiguous, cstatus, cstat1, cndims
- Integer(KIND=C_INT) :: cchunksizes(NC_MAX_DIMS)
- Integer             :: ndims
+ Integer(C_INT) :: cncid, cvarid, ccontiguous, cstatus, cstat1, cndims
+ Integer        :: ndims
+
+ Integer(C_INT), ALLOCATABLE :: cchunksizes(:)
 
  cncid         = ncid
  cvarid        = varid-1
  chunksizes(1) = 0
-
- cstatus = nc_inq_var_chunking_ints(cncid, cvarid, ccontiguous, cchunksizes) 
+ contiguous    = 0
 
  cstat1  = nc_inq_varndims(cncid, cvarid, cndims)
+ status  = cstat1
 
+ If (cndims > 0) Then 
+   ALLOCATE(cchunksizes(cndims))
+ Else
+   ALLOCATE(cchunksizes(1))
+ EndIf 
+
+ cchunksizes = 0
+
+ cstatus = nc_inq_var_chunking_ints(cncid, cvarid, ccontiguous, &
+                                    cchunksizes) 
  ndims = cndims
-
- If (cstat1 == NC_NOERR) Then
+ If (cstatus == NC_NOERR) Then
    If (ndims > 0) Then
      chunksizes(ndims:1:-1) = cchunksizes(1:ndims)
    EndIf
- EndIf 
-   
- contiguous = ccontiguous
+   contiguous = ccontiguous
+ EndIf
+
  status     = cstatus
+
+ If (ALLOCATED(cchunksizes)) DEALLOCATE(cchunksizes)
 
  End Function nf_inq_var_chunking
 !-------------------------------- nf_def_var_deflate --------------------------
@@ -1479,8 +1563,8 @@
 
  Integer             :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid, cshuffle, cdeflate, cdeflate_level, &
-                        cstatus
+ Integer(C_INT) :: cncid, cvarid, cshuffle, cdeflate, cdeflate_level, &
+                   cstatus
 
  cncid          = ncid
  cvarid         = varid-1
@@ -1489,7 +1573,6 @@
  cdeflate_level = deflate_level
 
  cstatus = nc_def_var_deflate(cncid, cvarid, cshuffle, cdeflate, cdeflate_level) 
-
  status = cstatus
 
  End Function nf_def_var_deflate
@@ -1508,8 +1591,8 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid, cshuffle, cdeflate, cdeflate_level, &
-                        cstatus
+ Integer(C_INT) :: cncid, cvarid, cshuffle, cdeflate, cdeflate_level, &
+                   cstatus
 
  cncid  = ncid
  cvarid = varid-1
@@ -1521,6 +1604,7 @@
     deflate       = cdeflate
     deflate_level = cdeflate_level
  EndIf
+
  status = cstatus
  
  End Function nf_inq_var_deflate
@@ -1550,6 +1634,7 @@
     options_mask     = coptions_mask
     pixels_per_block = cpixels_per_block
  EndIf
+
  status = cstatus
 
  End Function nf_inq_var_szip
@@ -1567,7 +1652,7 @@
 
  Integer             :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid, cfletcher32, cstatus
+ Integer(C_INT) :: cncid, cvarid, cfletcher32, cstatus
 
  cncid       = ncid
  cvarid      = varid-1
@@ -1592,7 +1677,7 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid, cfletcher32, cstatus
+ Integer(C_INT) :: cncid, cvarid, cfletcher32, cstatus
 
  cncid  = ncid
  cvarid = varid-1
@@ -1620,8 +1705,8 @@
 
  Integer                                    :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid, cno_fill, cstatus
- Type(C_PTR)         :: cfill_value_p
+ Integer(C_INT) :: cncid, cvarid, cno_fill, cstatus
+ Type(C_PTR)    :: cfill_value_p
 
  cncid    = ncid
  cvarid   = varid-1
@@ -1649,7 +1734,7 @@
 
  Integer                               :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid, cno_fill, cstatus
+ Integer(C_INT) :: cncid, cvarid, cno_fill, cstatus
 
  cncid  = ncid
  cvarid = varid-1
@@ -1659,6 +1744,7 @@
  If (cstatus == NC_NOERR) Then
     no_fill = cno_fill 
  EndIf
+
  status  = cstatus
 
  End Function nf_inq_var_fill
@@ -1675,7 +1761,7 @@
 
  Integer             :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid, cendiann, cstatus
+ Integer(C_INT) :: cncid, cvarid, cendiann, cstatus
 
  cncid    = ncid
  cvarid   = varid-1
@@ -1700,7 +1786,7 @@
 
  Integer              :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid, cendiann, cstatus
+ Integer(C_INT) :: cncid, cvarid, cendiann, cstatus
 
  cncid  = ncid
  cvarid = varid-1
@@ -1710,6 +1796,7 @@
  If (cstatus == NC_NOERR) Then
     endiann = cendiann
  EndIf
+
  status  = cstatus
 
  End Function nf_inq_var_endian
@@ -1729,9 +1816,8 @@
 
  Integer                                    :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid, cstatus, cxtype
-
- Integer(KIND=C_SIZE_T)       :: cnlen
+ Integer(C_INT)               :: cncid, cvarid, cstatus, cxtype
+ Integer(C_SIZE_T)            :: cnlen
  Type(C_PTR)                  :: cvalueptr
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
@@ -1744,7 +1830,7 @@
  cname     = REPEAT(" ",LEN(cname))
  cname     = addCNullChar(name, ie)
 
- cstatus = nc_put_att(cncid, cvarid, cname(1:ie+1), cxtype, cnlen, cvalueptr)
+ cstatus = nc_put_att(cncid, cvarid, cname(1:ie), cxtype, cnlen, cvalueptr)
 
  status = cstatus
 
@@ -1766,7 +1852,7 @@
 
  Integer                               :: status
 
- Integer(KIND=C_INT)          :: cncid, cvarid, cstatus
+ Integer(C_INT)               :: cncid, cvarid, cstatus
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
@@ -1775,7 +1861,7 @@
  cname  = REPEAT(" ",LEN(cname))
  cname = addCNullChar(name, ie)
 
- cstatus = nc_get_att(cncid, cvarid, cname(1:ie+1), value)
+ cstatus = nc_get_att(cncid, cvarid, cname(1:ie), value)
 
  status = cstatus
 
@@ -1801,9 +1887,9 @@
 
  Integer                                       :: status
 
- Integer(KIND=C_INT)    :: cncid, cxtype, cstatus
- Integer(KIND=C_SIZE_T) :: cnlen
- Type(C_PTR)            :: cvalueptr
+ Integer(C_INT)    :: cncid, cxtype, cstatus
+ Integer(C_SIZE_T) :: cnlen
+ Type(C_PTR)       :: cvalueptr
 
  cncid     = ncid
  cxtype    = xtype
@@ -1837,8 +1923,8 @@
 
  Integer                                       :: status
 
- Integer(KIND=C_INT)    :: cncid, cxtype, cstatus
- Integer(KIND=C_SIZE_T) :: cnlen
+ Integer(C_INT)    :: cncid, cxtype, cstatus
+ Integer(C_SIZE_T) :: cnlen
 
  cncid  = ncid
  cxtype = xtype
@@ -1849,6 +1935,7 @@
  If (cstatus == NC_NOERR) Then
     nlen = cnlen 
  EndIf
+
  status = cstatus
 
  End Function nf_get_vlen_element
@@ -1951,8 +2038,8 @@ End Function nf_free_string
 
  Integer                                    :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid,  cstatus
- Type(C_PTR)         :: cvaluesptr
+ Integer(C_INT) :: cncid, cvarid,  cstatus
+ Type(C_PTR)    :: cvaluesptr
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract 1 to get C varid
@@ -1981,7 +2068,7 @@ End Function nf_free_string
 
  Integer                               :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid,  cstatus
+ Integer(C_INT) :: cncid, cvarid,  cstatus
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract 1 to get C varid
@@ -2004,21 +2091,21 @@ End Function nf_free_string
 
  Implicit NONE
 
- Integer,           Intent(IN) :: ncid, varid
- Integer,           Intent(IN) :: ndex(*)
- Integer(KIND=IK8), Intent(IN) :: ival
+ Integer,      Intent(IN) :: ncid, varid
+ Integer,      Intent(IN) :: ndex(*)
+ Integer(IK8), Intent(IN) :: ival
 
- Integer                       :: status
+ Integer                  :: status
 
- Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
- Integer(KIND=C_LONG_LONG)      :: cival
- Type(C_PTR)                    :: cndexptr
- Integer                        :: ndims
+ Integer(C_INT)       :: cncid, cvarid, cndims, cstat1, cstatus
+ Integer(C_LONG_LONG) :: cival
+ Type(C_PTR)          :: cndexptr
+ Integer              :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cndex(:)
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract one to get C varid
- cndex  = 0
  cival  = ival
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
@@ -2027,15 +2114,21 @@ End Function nf_free_string
  ndims    = cndims
 
  If (cstat1 == NC_NOERR) Then
-   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     cndex(1:ndims) = ndex(ndims:1:-1)-1
+   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index
+     ALLOCATE(cndex(ndims)) 
+     cndex(1:ndims) = ndex(ndims:1:-1) - 1
+     cndexptr       = C_LOC(cndex)
    EndIf
-   cndexptr = C_LOC(cndex)
  EndIf
 
  cstatus = nc_put_var1_longlong(cncid, cvarid, cndexptr, cival)
 
  status = cstatus
+
+! Make sure there are no dangling pointers and allocated values
+
+ cndexptr = C_NULL_PTR
+ If (ALLOCATED(cndex)) DEALLOCATE(cndex)
 
  End Function nf_put_var1_int64
 !--------------------------------- nf_put_vara_int64 --------------------------
@@ -2047,21 +2140,20 @@ End Function nf_free_string
 
  Implicit NONE
 
- Integer,           Intent(IN) :: ncid, varid
- Integer,           Intent(IN) :: start(*), counts(*)
- Integer(KIND=IK8), Intent(IN) :: ivals(*)
+ Integer,      Intent(IN) :: ncid, varid
+ Integer,      Intent(IN) :: start(*), counts(*)
+ Integer(IK8), Intent(IN) :: ivals(*)
 
- Integer                       :: status
+ Integer                  :: status
 
- Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T), TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Type(C_PTR)                    :: cstartptr, ccountsptr
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
 
  cncid   = ncid
  cvarid  = varid - 1 ! Subtract 1 to get C varid
- cstart  = 0
- ccounts = 0
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -2071,16 +2163,25 @@ End Function nf_free_string
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! flip array order for C and subtract 1 from start
-     cstart(1:ndims)  = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     cstart(1:ndims)  = start(ndims:1:-1) - 1
      ccounts(1:ndims) = counts(ndims:1:-1)
+     cstartptr        = C_LOC(cstart)
+     ccountsptr       = C_LOC(ccounts)
    EndIf
-   cstartptr  = C_LOC(cstart)
-   ccountsptr = C_LOC(ccounts)
  EndIf
 
  cstatus = nc_put_vara_longlong(cncid, cvarid, cstartptr, ccountsptr, ivals)
 
  status = cstatus
+
+! Make sure there are no dangling pointers or allocated values
+
+ cstartptr  = C_NULL_PTR
+ ccountsptr = C_NULL_PTR
+ If (ALLOCATED(ccounts)) DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))  DEALLOCATE(cstart)
 
  End Function nf_put_vara_int64
 !--------------------------------- nf_put_vars_int64 --------------------------
@@ -2093,23 +2194,21 @@ End Function nf_free_string
 
  Implicit NONE
 
- Integer,           Intent(IN) :: ncid, varid
- Integer,           Intent(IN) :: start(*), counts(*), strides(*)
- Integer(KIND=IK8), Intent(IN) :: ivals(*)
+ Integer,      Intent(IN) :: ncid, varid
+ Integer,      Intent(IN) :: start(*), counts(*), strides(*)
+ Integer(IK8), Intent(IN) :: ivals(*)
 
- Integer                       :: status
+ Integer                  :: status
 
- Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr
- Integer                           :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:)
 
  cncid    = ncid
  cvarid   = varid - 1 ! Subtract 1 to get C varid
- cstart   = 0
- ccounts  = 0
- cstrides = 1
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -2120,19 +2219,31 @@ End Function nf_free_string
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
-     cstart(1:ndims)   = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
      ccounts(1:ndims)  = counts(ndims:1:-1)
      cstrides(1:ndims) = strides(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
    EndIf
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
  EndIf
 
  cstatus = nc_put_vars_longlong(cncid, cvarid, cstartptr, ccountsptr, &
                                 cstridesptr, ivals)
 
  status = cstatus
+
+! Make sure there are no dangling pointers or allocated values
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Function nf_put_vars_int64
 
@@ -2146,25 +2257,21 @@ End Function nf_free_string
 
  Implicit NONE
 
- Integer,           Intent(IN) :: ncid, varid
- Integer,           Intent(IN) :: start(*), counts(*), strides(*), maps(*)
- Integer(KIND=IK8), Intent(IN) :: ivals(*)
+ Integer,      Intent(IN) :: ncid, varid
+ Integer,      Intent(IN) :: start(*), counts(*), strides(*), maps(*)
+ Integer(IK8), Intent(IN) :: ivals(*)
 
- Integer                       :: status
+ Integer                  :: status
 
- Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS), cmaps(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr, &
-                                      cmapsptr
- Integer                           :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr, cmapsptr 
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:), cmaps(:)
 
  cncid    = ncid
  cvarid   = varid -1 ! Subtract 1 to get C varid
- cstart   = 0
- ccounts  = 0
- cstrides = 1
- cmaps    = 0
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -2176,21 +2283,36 @@ End Function nf_free_string
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
-     cstart(1:ndims)   = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     ALLOCATE(cmaps(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
      ccounts(1:ndims)  = counts(ndims:1:-1)
      cstrides(1:ndims) = strides(ndims:1:-1)
      cmaps(1:ndims)    = maps(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
+     cmapsptr          = C_LOC(cmaps)
    EndIf
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
-   cmapsptr    = C_LOC(cmaps)
  EndIf
 
  cstatus = nc_put_varm_longlong(cncid, cvarid, cstartptr, ccountsptr, &
                                 cstridesptr, cmapsptr, ivals)
 
  status = cstatus
+
+! Make sure there are no dangling pointers or allocated values
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ cmapsptr    = C_NULL_PTR
+ If (ALLOCATED(cmaps))    DEALLOCATE(cmaps)
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Function nf_put_varm_int64
 !--------------------------------- nf_put_var_int64 --------------------------
@@ -2202,12 +2324,12 @@ End Function nf_free_string
 
  Implicit NONE
 
- Integer,           Intent(IN) :: ncid, varid
- Integer(KIND=IK8), Intent(IN) :: ivals(*)
+ Integer,      Intent(IN) :: ncid, varid
+ Integer(IK8), Intent(IN) :: ivals(*)
 
  Integer                       :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid,  cstatus
+ Integer(C_INT) :: cncid, cvarid,  cstatus
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract 1 to get C varid
@@ -2226,21 +2348,21 @@ End Function nf_free_string
 
  Implicit NONE
 
- Integer,           Intent(IN)  :: ncid, varid
- Integer,           Intent(IN)  :: ndex(*)
- Integer(KIND=IK8), Intent(OUT) :: ival
+ Integer,      Intent(IN)  :: ncid, varid
+ Integer,      Intent(IN)  :: ndex(*)
+ Integer(IK8), Intent(OUT) :: ival
 
- Integer                        :: status
+ Integer                   :: status
 
- Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T), TARGET :: cndex(NC_MAX_DIMS)
- Integer(KIND=C_LONG_LONG)      :: cival
- Type(C_PTR)                    :: cndexptr
- Integer                        :: ndims
+ Integer(C_INT)       :: cncid, cvarid, cndims, cstat1, cstatus
+ Integer(C_LONG_LONG) :: cival
+ Type(C_PTR)          :: cndexptr
+ Integer              :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cndex(:)
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract one to get C varid
- cndex  = 0
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -2249,15 +2371,21 @@ End Function nf_free_string
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     cndex(1:ndims) = ndex(ndims:1:-1)-1
+     ALLOCATE(cndex(ndims)) 
+     cndex(1:ndims) = ndex(ndims:1:-1) - 1
+     cndexptr       = C_LOC(cndex)
    EndIf
-   cndexptr = C_LOC(cndex)
  EndIf
 
  cstatus = nc_get_var1_longlong(cncid, cvarid, cndexptr, cival)
 
  ival   = cival
  status = cstatus
+
+! Make sure there are no dangling pointers and allocated values
+
+ cndexptr = C_NULL_PTR
+ If (ALLOCATED(cndex)) DEALLOCATE(cndex)
 
  End Function nf_get_var1_int64
 !--------------------------------- nf_get_vara_int -------------------------
@@ -2269,21 +2397,20 @@ End Function nf_free_string
 
  Implicit NONE
 
- Integer,           Intent(IN)  :: ncid, varid
- Integer,           Intent(IN)  :: start(*), counts(*)
- Integer(KIND=IK8), Intent(OUT) :: ivals(*)
+ Integer,      Intent(IN)  :: ncid, varid
+ Integer,      Intent(IN)  :: start(*), counts(*)
+ Integer(IK8), Intent(OUT) :: ivals(*)
 
- Integer                        :: status
+ Integer                   :: status
 
- Integer(KIND=C_INT)            :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T), TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Type(C_PTR)                    :: cstartptr, ccountsptr
- Integer                        :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
 
  cncid   = ncid
  cvarid  = varid - 1 ! Subtract 1 to get C varid
- cstart  = 0
- ccounts = 0
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -2293,16 +2420,25 @@ End Function nf_free_string
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! flip array order for C and subtract 1 from start
-     cstart(1:ndims)  = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     cstart(1:ndims)  = start(ndims:1:-1) - 1
      ccounts(1:ndims) = counts(ndims:1:-1)
+     cstartptr        = C_LOC(cstart)
+     ccountsptr       = C_LOC(ccounts)
    EndIf
-   cstartptr  = C_LOC(cstart)
-   ccountsptr = C_LOC(ccounts)
  EndIf
 
  cstatus = nc_get_vara_longlong(cncid, cvarid, cstartptr, ccountsptr, ivals)
 
  status = cstatus
+
+! Make sure there are no dangling pointers or allocated values
+
+ cstartptr  = C_NULL_PTR
+ ccountsptr = C_NULL_PTR
+ If (ALLOCATED(ccounts)) DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))  DEALLOCATE(cstart)
 
  End Function nf_get_vara_int64
 
@@ -2316,23 +2452,21 @@ End Function nf_free_string
 
  Implicit NONE
 
- Integer,           Intent(IN)  :: ncid, varid
- Integer,           Intent(IN)  :: start(*), counts(*), strides(*)
- Integer(KIND=IK8), Intent(OUT) :: ivals(*)
+ Integer,      Intent(IN)  :: ncid, varid
+ Integer,      Intent(IN)  :: start(*), counts(*), strides(*)
+ Integer(IK8), Intent(OUT) :: ivals(*)
 
- Integer                        :: status
+ Integer                   :: status
 
- Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr
- Integer                           :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:)
 
  cncid    = ncid
  cvarid   = varid - 1 ! Subtract 1 to get C varid
- cstart   = 0
- ccounts  = 0
- cstrides = 1
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -2343,18 +2477,30 @@ End Function nf_free_string
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
-     cstart(1:ndims)   = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
      ccounts(1:ndims)  = counts(ndims:1:-1)
      cstrides(1:ndims) = strides(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
    EndIf
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
  EndIf
 
  cstatus = nc_get_vars_longlong(cncid, cvarid, cstartptr, ccountsptr, &
                                 cstridesptr, ivals)
  status = cstatus
+
+! Make sure there are no dangling pointers or allocated values
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Function nf_get_vars_int64
 !--------------------------------- nf_get_varm_int64 -------------------------
@@ -2367,25 +2513,21 @@ End Function nf_free_string
 
  Implicit NONE
 
- Integer,           Intent(IN)  :: ncid, varid
- Integer,           Intent(IN)  :: start(*), counts(*), strides(*), maps(*)
- Integer(KIND=IK8), Intent(OUT) :: ivals(*)
+ Integer,      Intent(IN)  :: ncid, varid
+ Integer,      Intent(IN)  :: start(*), counts(*), strides(*), maps(*)
+ Integer(IK8), Intent(OUT) :: ivals(*)
 
  Integer                        :: status
 
- Integer(KIND=C_INT)               :: cncid, cvarid, cndims, cstat1, cstatus
- Integer(KIND=C_SIZE_T),    TARGET :: cstart(NC_MAX_DIMS), ccounts(NC_MAX_DIMS)
- Integer(KIND=C_PTRDIFF_T), TARGET :: cstrides(NC_MAX_DIMS), cmaps(NC_MAX_DIMS)
- Type(C_PTR)                       :: cstartptr, ccountsptr, cstridesptr, &
-                                      cmapsptr
- Integer                           :: ndims
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr, cmapsptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:), cmaps(:)
 
  cncid    = ncid
  cvarid   = varid -1 ! Subtract 1 to get C varid
- cstart   = 0
- ccounts  = 0
- cstrides = 1
- cmaps    = 0
 
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
@@ -2397,21 +2539,36 @@ End Function nf_free_string
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
-     cstart(1:ndims)   = start(ndims:1:-1)-1
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     ALLOCATE(cmaps(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
      ccounts(1:ndims)  = counts(ndims:1:-1)
      cstrides(1:ndims) = strides(ndims:1:-1)
      cmaps(1:ndims)    = maps(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
+     cmapsptr          = C_LOC(cmaps)
    EndIf
-   cstartptr   = C_LOC(cstart)
-   ccountsptr  = C_LOC(ccounts)
-   cstridesptr = C_LOC(cstrides)
-   cmapsptr    = C_LOC(cmaps)
  EndIf
 
  cstatus = nc_get_varm_longlong(cncid, cvarid, cstartptr, ccountsptr, &
                                 cstridesptr, cmapsptr, ivals)
 
  status = cstatus
+
+! Make sure there are no dangling pointers or allocated values
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ cmapsptr    = C_NULL_PTR
+ If (ALLOCATED(cmaps))    DEALLOCATE(cmaps)
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Function nf_get_varm_int64
 !--------------------------------- nf_get_var_int64 --------------------------
@@ -2423,12 +2580,12 @@ End Function nf_free_string
 
  Implicit NONE
 
- Integer,           Intent(IN)  :: ncid, varid
- Integer(KIND=IK8), Intent(OUT) :: ivals(*)
+ Integer,      Intent(IN)  :: ncid, varid
+ Integer(IK8), Intent(OUT) :: ivals(*)
 
- Integer                        :: status
+ Integer                   :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid,  cstatus
+ Integer(C_INT) :: cncid, cvarid,  cstatus
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract 1 to get C varid
@@ -2453,7 +2610,7 @@ End Function nf_free_string
 
  Integer             :: status
 
- Integer(KIND=C_INT) :: cchunk_size, cnelems, cpreemption, cstatus
+ Integer(C_INT) :: cchunk_size, cnelems, cpreemption, cstatus
 
  cchunk_size = chunk_size
  cnelems     = nelems
@@ -2479,7 +2636,7 @@ End Function nf_free_string
 
  Integer                :: status
 
- Integer(KIND=C_INT) :: cchunk_size, cnelems, cpreemption, cstatus
+ Integer(C_INT) :: cchunk_size, cnelems, cpreemption, cstatus
 
  cstatus = nc_get_chunk_cache_ints(cchunk_size, cnelems, cpreemption)
 
@@ -2505,8 +2662,8 @@ End Function nf_free_string
 
  Integer             :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid, cchunk_size, cnelems, cpreemption, &
-                        cstatus
+ Integer(C_INT) :: cncid, cvarid, cchunk_size, cnelems, cpreemption, &
+                   cstatus
 
  cncid       = ncid
  cvarid      = varid-1
@@ -2535,8 +2692,8 @@ End Function nf_free_string
 
  Integer                :: status
 
- Integer(KIND=C_INT) :: cncid, cvarid, cchunk_size, cnelems, cpreemption, &
-                        cstatus
+ Integer(C_INT) :: cncid, cvarid, cchunk_size, cnelems, cpreemption, &
+                   cstatus
 
  cncid  = ncid
  cvarid = varid-1
