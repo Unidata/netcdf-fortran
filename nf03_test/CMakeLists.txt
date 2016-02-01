@@ -23,7 +23,7 @@ SET(nf03_test_SOURCES module_tests.F90 f03lib_f_interfaces.f90 test03_get.F test
 
 IF(USE_NETCDF4)
   LIST(APPEND check_PROGRAMS f03tst_vars f03tst_vars2 f03tst_vars3 f03tst_vars4 f03tst_vars5
-    f03tst_vars6 f03tst_types f03tst_types2 f03tst_types3 f03tst_groups)
+    f03tst_vars6 f03tst_open_mem f03tst_types f03tst_types2 f03tst_types3 f03tst_groups)
   SET(f03tst_types_SOURCES module_tests.F90 f03tst_types.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
   SET(f03tst_types2_SOURCES module_tests.F90 f03tst_types2.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
   SET(f03tst_types3_SOURCES module_tests.F90 f03tst_types3.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
