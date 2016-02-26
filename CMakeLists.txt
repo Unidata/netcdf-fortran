@@ -291,7 +291,7 @@ MACRO(print_conf_summary)
   MESSAGE(STATUS "\tBuilding Shared Libraries:\t" ${BUILD_SHARED_LIBS})
   MESSAGE(STATUS "\tBuilding netCDF-4:\t\t" ${ENABLE_NETCDF4})
   MESSAGE(STATUS "\tBuilding DAP Support:\t\t" ${ENABLE_DAP})
-
+  MESSAGE(STATUS "\tLogging Support:\t\t" ${STATUS_LOGGING})
   IF(STATUS_PNETCDF)
     MESSAGE(STATUS "\tUsing pnetcdf:\t\t\t" ${STATUS_PNETCDF})
   ENDIF(STATUS_PNETCDF)
@@ -360,8 +360,6 @@ ENDMACRO()
 #Add custom CMake Module
 SET (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules/"
   CACHE INTERNAL "Location of our custom CMake modules.")
-
-SET(USE_LOGGING "ON")
 
 #####
 # Some utility macros/scripts.
@@ -453,6 +451,11 @@ CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nc_use_parallel_enabled "" BUILD_PARALL
 # Set some status messages for the summary.
 ##
 
+SET(STATUS_LOGGING OFF)
+IF(USE_LOGGING)
+  SET(STATUS_LOGGING ON)
+ENDIF()
+
 SET(STATUS_PARALLEL OFF)
 IF(BUILD_PARALLEL)
   SET(STATUS_PARALLEL ON)
@@ -520,12 +523,6 @@ OPTION(ENABLE_FORTRAN_TYPE_CHECKS
 
 # Toggle whether or not to run tests.
 OPTION(ENABLE_TESTS "Enable netcdf-fortran tests." ON)
-
-# Support old version-2 API for backward compatibility
-SET (ENABLE_LOGGING "ON")
-IF(ENABLE_LOGGING)
-  SET(USE_LOGGING ON CACHE BOOL "")
-ENDIF()
 
 # Set the default fortran builds; default is to build f03
 SET(BUILD_F90 "ON")

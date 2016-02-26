@@ -1,7 +1,8 @@
+#ifdef LOGGING
 ! Function to turn on logging
 
 ! Written by: Richard Weed, Ph.D.
-!             Center for Advanced Vehicular Systems 
+!             Center for Advanced Vehicular Systems
 !             Mississippi State University
 !             rweed@cavs.msstate.edu
 
@@ -50,3 +51,5 @@ End Interface
  status = cstatus
 
 End Function nf_set_log_level
+
+#endif
