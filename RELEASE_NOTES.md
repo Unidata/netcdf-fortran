@@ -8,6 +8,7 @@ Entries are in reverse chronological order (most recent first).
 
 ## 4.4.4 Under Development
 
+* Corrected an issue where cmake-based builds specifying `USE_LOGGING` were not seeing expected behavior.  The issue was reported, and subsequently fixed, by Neil Carlson at Los Alamos Nat'l Laboratory. See [Github Pull Request #44](https://github.com/Unidata/netcdf-fortran/pull/44) for more information.
 * Integrated improvements provided by Richard Weed.  For a *complete* list of modifications, see the file `docs/netcdf_fortran_4.4.2dev_notes_RW.pdf`.  **It is highly detailed and worth reading!**
 
     The highlights of the improvements are as follows:
