@@ -1,5 +1,3 @@
-#ifdef LOGGING
-
 ! Function to turn on logging
 
 ! Written by: Richard Weed, Ph.D.
@@ -52,5 +50,3 @@ End Interface
  status = cstatus
 
 End Function nf_set_log_level
-
-#endif
