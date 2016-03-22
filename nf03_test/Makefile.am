@@ -95,7 +95,7 @@ endif # USE_NETCDF4
 
 
 # This is the fortran v2 test. It depends on the utilities being built
-# to generate it's input file.
+# to generate i's input file.
 if BUILD_V2
 check_PROGRAMS += f03test
 TESTS += f03test
@@ -115,7 +115,8 @@ test: check
 # Did the user build the V2 F77 API? If so, run this test.
 if BUILD_V2
 check_PROGRAMS += tst03_f77_v2
+tst03_f77_v2_SOURCES = module_tests.F90 tst03_f77_v2.F handle_err.F
 TESTS += tst03_f77_v2
 CLEANFILES += tst_f77_v2.nc temp.tmp
-tst03_f77_v2_SOURCES = module_tests.F90 tst03_f77_v2.F
+
 endif # BUILD_V2
