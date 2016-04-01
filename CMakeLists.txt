@@ -10,7 +10,10 @@ cmake_minimum_required(VERSION 2.8.9)
 
 #Project Name for netCDF-Fortran
 PROJECT (NC4F Fortran C)
-set(PACKAGE "netcdf-fortran" CACHE STRING "")
+SET(NC4F_CTEST_PROJECT_NAME "netcdf-fortran")
+
+set(PACKAGE "${NC4F_CTEST_PROJECT_NAME}" CACHE STRING "")
+
 #Project Version
 SET(NC4F_VERSION_MAJOR 4)
 SET(NC4F_VERSION_MINOR 4)
@@ -603,9 +606,8 @@ ENDIF()
 ###
 
 # Set CDash-related options.
-SET(NC_CTEST_PROJECT_NAME "netcdf-fortran" CACHE STRING "Project Name for CTest-based testing purposes.")
-SET(NC_CTEST_DROP_SITE "my.cdash.org" CACHE STRING "Dashboard location for CTest-based testing purposes.")
-SET(NC_CTEST_DROP_LOC_PREFIX "" CACHE STRING "Prefix for Dashboard location on remote server when using CTest-based testing.")
+SET(NC4F_CTEST_DROP_SITE "my.cdash.org" CACHE STRING "Dashboard location for CTest-based testing purposes.")
+SET(NC4F_CTEST_DROP_LOC_PREFIX "" CACHE STRING "Prefix for Dashboard location on remote server when using CTest-based testing.")
 
 # Generate CTestConfig file from template.
 CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/CTestConfig.cmake.in"
