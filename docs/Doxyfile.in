@@ -762,6 +762,8 @@ INPUT                  = @abs_top_srcdir@/RELEASE_NOTES.md \
                          @abs_top_srcdir@/docs/netcdf-f90.md \
                          @abs_top_srcdir@/docs/netcdf-f90-sec1.md \
                          @abs_top_srcdir@/docs/netcdf-f90-sec2.md \
+                         @abs_top_srcdir@/docs/netcdf-f90-sec3.md \
+                         @abs_top_srcdir@/docs/netcdf-f90-sec4.md \
                          @abs_top_srcdir@/fortran \
                          @abs_top_srcdir@/libsrc
 

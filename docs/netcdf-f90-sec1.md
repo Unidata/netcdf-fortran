@@ -26,7 +26,7 @@ represent arbitrary sequences of other statements. Full parameter lists
 are described in later chapters.
 
 1.1 Creating a NetCDF Dataset {#f90-creating-a-netcdf-dataset}
------------------------------
+=====================
 
 Here is a typical sequence of netCDF calls used to create a new netCDF
 dataset:
@@ -84,7 +84,7 @@ flag is set, changes to attribute values or changes made in define mode
 are not written out until NF90\_SYNC or NF90\_CLOSE is called.
 
 1.2 Reading a NetCDF Dataset with Known Names {#f90-reading-a-netcdf-dataset-with-known-names}
----------------------------------------------
+=====================
 Here we consider the case where you know the names of not only the
 netCDF datasets, but also the names of their dimensions, variables, and
 attributes. (Otherwise you would have to do "inquire" calls.) The order
@@ -126,7 +126,7 @@ Finally, the netCDF dataset is closed with NF90\_CLOSE. There is no need
 to close a dataset open only for reading.
 
 1.3 Reading a netCDF Dataset with Unknown Names {#f90-reading-a-netcdf-dataset-with-unknown-names}
------------------------------------------------
+=====================
 
 It is possible to write programs (e.g., generic software) which do such
 things as processing every variable, without needing to know in advance
@@ -197,7 +197,7 @@ be accessed by calling NF90\_GET\_VAR.
 
 
 1.4 Writing Data in an Existing NetCDF Dataset {#f90-writing-data-in-an-existing-netcdf-dataset}
-----------------------------------------------
+=====================
 
 With write access to an existing netCDF dataset, you can overwrite data
 values in existing variables or append more data to record variables
@@ -257,7 +257,7 @@ has been written by calling NF90\_CLOSE before program termination.
 Otherwise, modifications to the dataset may be lost.
 
 1.5 Adding New Dimensions, Variables, Attributes {#f90-adding-new-dimensions-variables-attributes}
-------------------------------------------------
+=====================
 
 An existing netCDF dataset can be extensively altered. New dimensions,
 variables, and attributes can be added or existing ones renamed, and
@@ -321,7 +321,7 @@ NF90\_SYNC before the next access.
 
 
 1.6 Error Handling {#f90-error-handling}
-------------------
+=====================
 
 The netCDF library provides the facilities needed to handle errors in a
 flexible way. Each netCDF function returns an integer status value. If
@@ -342,8 +342,7 @@ resulting write error will still be reflected in the returned status
 value.
 
 1.7 Compiling and Linking with the NetCDF Library {#f90-compiling-and-linking-with-the-netcdf-library}
--------------------------------------------------
-
+-------------------------------------------------=====================
 Details of how to compile and link a program that uses the netCDF C or
 Fortran interfaces differ, depending on the operating system, the
 available compilers, and where the netCDF library and include files are
@@ -362,7 +361,7 @@ usually with the -I flag.
 
 
 
-f90 -c -I/usr/local/include mymodule.f90
+    f90 -c -I/usr/local/include mymodule.f90
 
 
 
@@ -386,7 +385,7 @@ If installed as a shared library, link, using something like:
 
 
 
-f90 -o myprogram myprogram.o -L/usr/local/lib -lnetcdff
+    f90 -o myprogram myprogram.o -L/usr/local/lib -lnetcdff
 
 
 
@@ -398,7 +397,7 @@ depending on how the C library was built. For example:
 
 
 
-f90 -o myprogram myprogram.o -L/usr/local/lib -lnetcdff -lnetcdf
+    f90 -o myprogram myprogram.o -L/usr/local/lib -lnetcdff -lnetcdf
 
 
 
@@ -417,7 +416,7 @@ Fortran program in one step:
 
 
 
-f90 myprogram.f90 -o myprogram `nf-config --fflags --flibs`
+    f90 myprogram.f90 -o myprogram `nf-config --fflags --flibs`
 
 
 
@@ -432,8 +431,8 @@ pkg-config:
 
 
 
-export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
-f90 myprogram.f90 -o myprogram `pkg-config --cflags --libs netcdf-fortran`
+    export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+    f90 myprogram.f90 -o myprogram `pkg-config --cflags --libs netcdf-fortran`
 
 
 

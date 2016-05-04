@@ -71,7 +71,7 @@ available in the appropriate include file for each language binding.
 
 
 
-### Usage
+## Usage
 
 
 
@@ -88,14 +88,14 @@ available in the appropriate include file for each language binding.
 :   An error status that might have been returned from a previous call
     to some netCDF function.
 
-### Errors
+## Errors
 
 If you provide an invalid integer error status that does not correspond
 to any netCDF error message or or to any system error message (as
 understood by the system strerror function), NF90\_STRERROR returns a
 string indicating that there is no such error status.
 
-### Example
+## Example
 
 Here is an example of a simple error handling function that uses
 NF90\_STRERROR to print the error message corresponding to the netCDF
@@ -124,7 +124,7 @@ of the netCDF library, and when it was built.
 
 
 
-### Usage
+## Usage
 
 
 
@@ -138,13 +138,13 @@ of the netCDF library, and when it was built.
 
 
 
-### Errors
+## Errors
 
 This function takes no arguments, and returns no error status.
 
 
 
-### Example
+## Example
 
 Here is an example using nf90\_inq\_libvers to print the version of the
 netCDF library with which the program is linked:
@@ -174,7 +174,7 @@ with the same name and whether access to the dataset is shared.
 
 
 
-### Usage
+## Usage
 
 
 
@@ -304,7 +304,7 @@ The following optional arguments allow additional performance tuning.
 
 
 
-### Errors
+## Errors
 
 NF90\_CREATE returns the value NF90\_NOERR if no errors occurred.
 Possible causes of errors include:
@@ -319,7 +319,7 @@ Possible causes of errors include:
 
 
 
-### Example
+## Example
 
 In this example we create a netCDF dataset named foo.nc; we want the
 dataset to be created in the current directory only if a dataset with
@@ -340,11 +340,11 @@ that name does not already exist:
 
 
 2.6 NF90_OPEN {#f90-nf90_open}
---------------
+=========================
 
 The function NF90\_OPEN opens an existing netCDF dataset for access.
 
-### Usage
+## Usage
 
 
 
@@ -447,7 +447,7 @@ The following optional argument allows additional performance tuning.
 
 
 
-### Errors
+## Errors
 
 NF90\_OPEN returns the value NF90\_NOERR if no errors occurred.
 Otherwise, the returned status indicates an error. Possible causes of
@@ -456,7 +456,7 @@ errors include:
 -   The specified netCDF dataset does not exist.
 -   A meaningless mode was specified.
 
-### Example
+## Example
 
 Here is an example using NF90\_OPEN to open an existing netCDF dataset
 named foo.nc for read-only, non-shared access:
@@ -474,7 +474,7 @@ named foo.nc for read-only, non-shared access:
 
 
 
-### Example
+## Example
 
 Here is an example using NF90\_OPEN to open an existing netCDF dataset
 for parallel I/O access. (Note the use of the comm and info parameters).
@@ -495,7 +495,7 @@ This example is from test program nf\_test/f90tst\_parallel.f90.
 
 
 2.7 NF90_REDEF {#f90-nf90_redef}
----------------
+=========================
 
 
 
@@ -505,7 +505,7 @@ attributes can be deleted.
 
 
 
-### Usage
+## Usage
 
 
 
@@ -523,7 +523,7 @@ attributes can be deleted.
 
 
 
-### Errors
+## Errors
 
 NF90\_REDEF returns the value NF90\_NOERR if no errors occurred.
 Otherwise, the returned status indicates an error. Possible causes of
@@ -535,7 +535,7 @@ errors include:
 
 
 
-### Example
+## Example
 
 Here is an example using NF90\_REDEF to open an existing netCDF dataset
 named foo.nc and put it into define mode:
@@ -557,7 +557,7 @@ named foo.nc and put it into define mode:
 
 
 2.8 NF90_ENDDEF {#f90-nf90_enddef}
-----------------
+=========================
 
 
 
@@ -565,7 +565,7 @@ The function NF90\_ENDDEF takes an open netCDF dataset out of define
 mode. The changes made to the netCDF dataset while it was in define mode
 are checked and committed to disk if no problems occurred. Non-record
 variables may be initialized to a "fill value" as well (see section
-[NF90\_SET\_FILL](#NF90_005fSET_005fFILL)). The netCDF dataset is then
+[NF90_SET_FILL](#NF90_005fSET_005fFILL)). The netCDF dataset is then
 placed in data mode, so variable data can be read or written.
 
 This call may involve copying data under some circumstances. For a more
@@ -573,7 +573,7 @@ extensive discussion See [File Structure and
 Performance](netcdf.html#File-Structure-and-Performance) in NetCDF Users
 Guide.
 
-### Usage
+## Usage
 
 
 
@@ -636,7 +636,7 @@ the align parameter. The default value for both v\_align and r\_align is
 :   The alignment of the beginning of the data section for variables
     which have an unlimited dimension (record variables).
 
-### Errors
+## Errors
 
 NF90\_ENDDEF returns the value NF90\_NOERR if no errors occurred.
 Otherwise, the returned status indicates an error. Possible causes of
@@ -647,7 +647,7 @@ errors include:
 -   The size of one or more variables exceed the size constraints for
     whichever variant of the file format is in use).
 
-### Example
+## Example
 
 Here is an example using NF90\_ENDDEF to finish the definitions of a new
 netCDF dataset named foo.nc and put it into data mode:
@@ -671,7 +671,7 @@ netCDF dataset named foo.nc and put it into data mode:
 
 
 2.9 NF90_CLOSE {#f90-nf90_close}
----------------
+=========================
 
 The function NF90\_CLOSE closes an open netCDF dataset. If the dataset
 is in define mode, NF90\_ENDDEF will be called before closing. (In this
@@ -683,7 +683,7 @@ created.
 
 
 
-### Usage
+## Usage
 
 
 
@@ -701,7 +701,7 @@ created.
 
 
 
-### Errors
+## Errors
 
 NF90\_CLOSE returns the value NF90\_NOERR if no errors occurred.
 Otherwise, the returned status indicates an error. Possible causes of
@@ -713,7 +713,7 @@ errors include:
 
 
 
-### Example
+## Example
 
 Here is an example using NF90\_CLOSE to finish the definitions of a new
 netCDF dataset named foo.nc and release its netCDF ID:
@@ -748,7 +748,7 @@ returns the (rarely needed) format version.
 No I/O is performed when NF90\_INQUIRE is called, since the required
 information is available in memory for each open netCDF dataset.
 
-### Usage
+## Usage
 
 
 
@@ -797,7 +797,7 @@ information is available in memory for each open netCDF dataset.
 
 
 
-### Errors
+## Errors
 
 Function NF90\_INQUIRE returns the value NF90\_NOERR if no errors
 occurred. Otherwise, the returned status indicates an error. Possible
@@ -805,7 +805,7 @@ causes of errors include:
 
 -   The specified netCDF ID does not refer to an open netCDF dataset.
 
-### Example
+## Example
 
 Here is an example using NF90\_INQUIRE to find out about a netCDF
 dataset named foo.nc:
@@ -830,7 +830,7 @@ dataset named foo.nc:
 
 
 2.11 NF90_SYNC {#f90-nf90_sync}
----------------
+=========================
 
 
 
@@ -893,7 +893,7 @@ Data is automatically synchronized to disk when a netCDF dataset is
 closed, or whenever you leave define mode.
 
 
-### Usage
+## Usage
 
 
 
@@ -911,7 +911,7 @@ closed, or whenever you leave define mode.
 
 
 
-### Errors
+## Errors
 
 NF90\_SYNC returns the value NF90\_NOERR if no errors occurred.
 Otherwise, the returned status indicates an error. Possible causes of
@@ -922,7 +922,7 @@ errors include:
 
 
 
-### Example
+## Example
 
 Here is an example using NF90\_SYNC to synchronize the disk writes of a
 netCDF dataset named foo.nc:
@@ -946,7 +946,7 @@ netCDF dataset named foo.nc:
 
 
 2.12 NF90_ABORT {#f90-nf90_abort}
-----------------
+=========================
 
 
 
@@ -961,7 +961,7 @@ the dataset is closed.
 
 
 
-### Usage
+## Usage
 
 
 
@@ -979,7 +979,7 @@ the dataset is closed.
 
 
 
-### Errors
+## Errors
 
 NF90\_ABORT returns the value NF90\_NOERR if no errors occurred.
 Otherwise, the returned status indicates an error. Possible causes of
@@ -991,7 +991,7 @@ errors include:
 
 
 
-### Example
+## Example
 
 Here is an example using NF90\_ABORT to back out of redefinitions of a
 dataset named foo.nc:
@@ -1022,7 +1022,7 @@ dataset named foo.nc:
 
 
 2.13 NF90_SET_FILL {#f90-nf90_set_fill}
---------------------
+=========================
 
 
 
@@ -1083,7 +1083,7 @@ feature.
 
 
 
-### Usage
+## Usage
 
 
 
@@ -1112,7 +1112,7 @@ feature.
 
 
 
-### Errors
+## Errors
 
 NF90\_SET\_FILL returns the value NF90\_NOERR if no errors occurred.
 Otherwise, the returned status indicates an error. Possible causes of
@@ -1123,7 +1123,7 @@ errors include:
     read-only access.
 -   The fill mode argument is neither NF90\_NOFILL nor NF90\_FILL..
 
-### Example
+## Example
 
 Here is an example using NF90\_SET\_FILL to set nofill mode for
 subsequent writes of a netCDF dataset named foo.nc:
