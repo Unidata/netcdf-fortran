@@ -1,21 +1,8 @@
 
-1. Use of the NetCDF Library {#f90-use-of-the-netcdf-library}
+1 Use of the NetCDF Library {#f90-use-of-the-netcdf-library}
 =====================
 
 [TOC]
-
-You can use the netCDF library without knowing about all of the netCDF
-interface. If you are creating a netCDF dataset, only a handful of
-routines are required to define the necessary dimensions, variables, and
-attributes, and to write the data to the netCDF dataset. (Even less are
-needed if you use the ncgen utility to create the dataset before running
-a program using netCDF library calls to write data. See
-[ncgen](netcdf.html#ncgen) in NetCDF Users Guide.) Similarly, if you are
-writing software to access data stored in a particular netCDF object,
-only a small subset of the netCDF library is required to open the netCDF
-dataset and access the data. Authors of generic applications that access
-arbitrary netCDF datasets need to be familiar with more of the netCDF
-library.
 
 In this chapter we provide templates of common sequences of netCDF calls
 needed for common uses. For clarity we present only the names of
@@ -31,7 +18,7 @@ are described in later chapters.
 Here is a typical sequence of netCDF calls used to create a new netCDF
 dataset:
 
-
+~~~~.fortran
 
 
      NF90_CREATE           ! create netCDF dataset: enter define mode
@@ -48,7 +35,7 @@ dataset:
           ...
      NF90_CLOSE            ! close: save new netCDF dataset
 
-
+~~~~
 
 
 Only one call is needed to create a netCDF dataset, at which point you
@@ -91,6 +78,8 @@ attributes. (Otherwise you would have to do "inquire" calls.) The order
 of typical C calls to read data from those variables in a netCDF dataset
 is:
 
+~~~~.fortran
+
 
 
 
@@ -107,6 +96,8 @@ is:
      NF90_CLOSE              ! close netCDF dataset
 
 
+
+~~~~
 
 
 First, a single call opens the netCDF dataset, given the dataset name,
@@ -140,6 +131,7 @@ The following template illustrates how they are used:
 
 
 
+~~~~.fortran
 
      NF90_OPEN                 ! open existing netCDF dataset
        ...
@@ -160,6 +152,7 @@ The following template illustrates how they are used:
      NF90_CLOSE                ! close netCDF dataset
 
 
+~~~~
 
 
 As in the previous example, a single call opens the existing netCDF
@@ -215,6 +208,7 @@ overwrite some existing values and add some new records to record
 variables in an existing netCDF dataset with known variable names:
 
 
+~~~~.fortran
 
 
      NF90_OPEN             ! open existing netCDF dataset
@@ -229,6 +223,7 @@ variables in an existing netCDF dataset with known variable names:
 
 
 
+~~~~
 
 A netCDF dataset is first opened by the NF90\_OPEN call. This call puts
 the open dataset in data mode, which means existing data values can be
@@ -266,6 +261,7 @@ attributes can be renamed. The following code template lists a typical
 sequence of calls to add new netCDF components to an existing dataset:
 
 
+~~~~.fortran
 
 
      NF90_OPEN             ! open existing netCDF dataset
@@ -285,6 +281,7 @@ sequence of calls to add new netCDF components to an existing dataset:
      NF90_CLOSE            ! close netCDF dataset
 
 
+~~~~
 
 
 A netCDF dataset is first opened by the NF90\_OPEN call. This call puts
@@ -342,7 +339,7 @@ resulting write error will still be reflected in the returned status
 value.
 
 1.7 Compiling and Linking with the NetCDF Library {#f90-compiling-and-linking-with-the-netcdf-library}
--------------------------------------------------=====================
+=====================
 Details of how to compile and link a program that uses the netCDF C or
 Fortran interfaces differ, depending on the operating system, the
 available compilers, and where the netCDF library and include files are
@@ -361,7 +358,7 @@ usually with the -I flag.
 
 
 
-    f90 -c -I/usr/local/include mymodule.f90
+    $ f90 -c -I/usr/local/include mymodule.f90
 
 
 
@@ -385,7 +382,7 @@ If installed as a shared library, link, using something like:
 
 
 
-    f90 -o myprogram myprogram.o -L/usr/local/lib -lnetcdff
+    $ f90 -o myprogram myprogram.o -L/usr/local/lib -lnetcdff
 
 
 
@@ -397,7 +394,7 @@ depending on how the C library was built. For example:
 
 
 
-    f90 -o myprogram myprogram.o -L/usr/local/lib -lnetcdff -lnetcdf
+    $ f90 -o myprogram myprogram.o -L/usr/local/lib -lnetcdff -lnetcdf
 
 
 
@@ -416,7 +413,7 @@ Fortran program in one step:
 
 
 
-    f90 myprogram.f90 -o myprogram `nf-config --fflags --flibs`
+    $ f90 myprogram.f90 -o myprogram `nf-config --fflags --flibs`
 
 
 
@@ -431,8 +428,8 @@ pkg-config:
 
 
 
-    export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
-    f90 myprogram.f90 -o myprogram `pkg-config --cflags --libs netcdf-fortran`
+    $ export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig
+    $ f90 myprogram.f90 -o myprogram `pkg-config --cflags --libs netcdf-fortran`
 
 
 

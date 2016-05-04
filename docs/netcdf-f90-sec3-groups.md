@@ -40,6 +40,7 @@ of the named group.
 ## Usage
 
 
+~~~~.fortran
 
 
   function nf90_inq_ncid(ncid, name, grp_ncid)
@@ -49,6 +50,7 @@ of the named group.
     integer :: nf90_inq_ncid
 
 
+~~~~
 
 
 `NCID`
@@ -112,6 +114,7 @@ array of their ncids.
 
 ## Usage
 
+~~~~.fortran
 
 
 
@@ -123,6 +126,7 @@ array of their ncids.
 
 
 
+~~~~
 
 `NCID`
 
@@ -180,6 +184,7 @@ Find all varids for a location.
 ## Usage
 
 
+~~~~.fortran
 
 
   function nf90_inq_varids(ncid, nvars, varids)
@@ -189,6 +194,7 @@ Find all varids for a location.
     integer :: nf90_inq_varids
 
 
+~~~~
 
 
 `NCID`
@@ -248,6 +254,7 @@ any of its parents.
 ## Usage
 
 
+~~~~.fortran
 
 
   function nf90_inq_dimids(ncid, ndims, dimids, include_parents)
@@ -258,6 +265,7 @@ any of its parents.
     integer :: nf90_inq_dimids
 
 
+~~~~
 
 
 `NCID`
@@ -274,9 +282,7 @@ any of its parents.
 
 :   An array of ints when the dimids of the visible dimensions will
     be stashed. Use nf90\_inq\_ndims to find out how many dims are
-    visible from this group. (see section [Get Information about a
-    Variable from Its ID:
-    NF90_INQUIRE_VARIABLE](#NF90_005fINQUIRE_005fVARIABLE)).
+    visible from this group. (see section [Get Information about a Variable from Its ID: NF90_INQUIRE_VARIABLE](#f90-get-information-about-a-variable-from-its-id-nf90_inquire_variable) ).
 
 `INCLUDE_PARENTS`
 
@@ -325,6 +331,7 @@ length 1.)
 ## Usage
 
 
+~~~~.fortran
 
 
   function nf90_inq_grpname_len(ncid, len)
@@ -334,6 +341,7 @@ length 1.)
   end function nf90_inq_grpname_len
 
 
+~~~~
 
 
 `NCID`
@@ -389,7 +397,7 @@ The name provided by this function is relative to the parent group. For
 a full path name for the group is, with all parent groups included,
 separated with a forward slash (as in Unix directory names) See section
 [Find a Group’s Full Name:
-NF90_INQ_GRPNAME_FULL](#NF90_005fINQ_005fGRPNAME_005fFULL).
+NF90_INQ_GRPNAME_FULL](#f90-find-a-groups-full-name-nf90_inq_grpname_full).
 
 
 
@@ -397,6 +405,7 @@ NF90_INQ_GRPNAME_FULL](#NF90_005fINQ_005fGRPNAME_005fFULL).
 
 
 
+~~~~.fortran
 
   function nf90_inq_grpname(ncid, name)
     integer, intent(in) :: ncid
@@ -404,6 +413,7 @@ NF90_INQ_GRPNAME_FULL](#NF90_005fINQ_005fGRPNAME_005fFULL).
     integer :: nf90_inq_grpname
 
 
+~~~~
 
 
 `NCID`
@@ -460,7 +470,7 @@ The name provided by this function is a full path name for the group is,
 with all parent groups included, separated with a forward slash (as in
 Unix directory names). For a name relative to the parent group See
 section [Find a Group’s Name:
-NF90_INQ_GRPNAME](#NF90_005fINQ_005fGRPNAME).
+NF90_INQ_GRPNAME](#f90-find-a-groups-name-nf90_inq_grpname).
 
 To find the length of the full name See section [Find the Length of a
 Group’s Full Name:
@@ -471,6 +481,7 @@ NF90_INQ_GRPNAME_LEN](#NF90_005fINQ_005fGRPNAME_005fLEN).
 ## Usage
 
 
+~~~~.fortran
 
 
   function nf90_inq_grpname_full(ncid, len, name)
@@ -480,6 +491,7 @@ NF90_INQ_GRPNAME_LEN](#NF90_005fINQ_005fGRPNAME_005fLEN).
     integer :: nf90_inq_grpname_full
 
 
+~~~~
 
 
 `NCID`
@@ -530,11 +542,13 @@ NF90_INQ_GRPNAME_LEN](#NF90_005fINQ_005fGRPNAME_005fLEN).
 This example is from test program nf\_test/f90tst\_grps.f90.
 
 
+~~~~.fortran
 
 
   call check(nf90_inq_grpname_full(grpid1, len, name_in))
   if (name_in .ne. grp1_full_name) stop 62
 
+~~~~
 
 
 
@@ -552,6 +566,7 @@ error (since the root group h has no parent.)
 
 ## Usage
 
+~~~~.fortran
 
 
 
@@ -561,6 +576,7 @@ error (since the root group h has no parent.)
     integer :: nf90_inq_grp_parent
 
 
+~~~~
 
 
 `NCID`
@@ -616,6 +632,7 @@ Given a group name an an ncid, find the ncid of the group id.
 ## Usage
 
 
+~~~~.fortran
 
 
   function nf90_inq_grp_ncid(ncid, name, grpid)
@@ -627,6 +644,7 @@ Given a group name an an ncid, find the ncid of the group id.
     nf90_inq_grp_ncid = nf_inq_grp_ncid(ncid, name, grpid)
   end function nf90_inq_grp_ncid
 
+~~~~
 
 
 
@@ -689,6 +707,7 @@ The following return codes may be returned by this function.
 This example is from test program nf\_test/f90tst\_grps.f90.
 
 
+~~~~.fortran
 
 
   ! Get the group ids for the newly reopened file.
@@ -698,6 +717,7 @@ This example is from test program nf\_test/f90tst\_grps.f90.
   call check(nf90_inq_grp_ncid(grpid3, GRP4_NAME, grpid4))
 
 
+~~~~
 
 
 3.10 Find a Group by its Fully-qualified Name: NF90_INQ_GRP_FULL_NCID {#f90-find-a-group-by-its-fully-qualified-name-nf90_inq_grp_full_ncid}
@@ -710,6 +730,7 @@ group id.
 ## Usage
 
 
+~~~~.fortran
 
 
   function nf90_inq_grpname_full(ncid, len, name)
@@ -722,6 +743,7 @@ group id.
   end function nf90_inq_grpname_full
 
 
+~~~~
 
 
 `NCID`
@@ -782,6 +804,7 @@ The following return codes may be returned by this function.
 This example is from test program nf\_test/tstf90\_grps.f90.
 
 
+~~~~.fortran
 
 
   ! Check for the groups with full group names.
@@ -789,6 +812,7 @@ This example is from test program nf\_test/tstf90\_grps.f90.
   call check(nf90_inq_grp_full_ncid(ncid, grp1_full_name, grpid1))
 
 
+~~~~
 
 
 3.11 Create a New Group: NF90_DEF_GRP {#f90-create-a-new-group-nf90_def_grp}
@@ -803,6 +827,7 @@ Create a group. Its location id is returned in new\_ncid.
 ## Usage
 
 
+~~~~.fortran
 
 
   function nf90_def_grp(parent_ncid, name, new_ncid)
@@ -813,6 +838,7 @@ Create a group. Its location id is returned in new\_ncid.
 
 
 
+~~~~
 
 `PARENT_NCID`
 
@@ -881,6 +907,7 @@ Create a group. Its location id is returned in new\_ncid.
 ## Example
 
 
+~~~~.fortran
 
 
 C     Create the netCDF file.
@@ -892,3 +919,5 @@ C     Create a group and a subgroup.
       if (retval .ne. nf90_noerr) call handle_err(retval)
       retval = nf90_def_grp(grpid, sub_group_name, sub_grpid)
       if (retval .ne. nf90_noerr) call handle_err(retval)
+
+~~~~

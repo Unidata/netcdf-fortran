@@ -56,7 +56,7 @@ defined for each netCDF dataset.
 ## Usage
 
 
-
+~~~~.fortran
 
  function nf90_def_dim(ncid, name, len, dimid)
    integer,             intent( in) :: ncid
@@ -65,7 +65,7 @@ defined for each netCDF dataset.
    integer,             intent(out) :: dimid
    integer                          :: nf90_def_dim
 
-
+~~~~
 
 
 `ncid`
@@ -111,7 +111,7 @@ of length 18 and a unlimited dimension named rec in a new netCDF dataset
 named foo.nc:
 
 
-
+~~~~.fortran
 
  use netcdf
  implicit none
@@ -125,7 +125,7 @@ named foo.nc:
  status = nf90_def_dim(ncid, "Record", nf90_unlimited, RecordDimID)
  if (status /= nf90_noerr) call handle_err(status)
 
-
+~~~~
 
 
 
@@ -144,7 +144,7 @@ ID between 1 and ndims.
 ## Usage
 
 
-
+~~~~.fortran
 
  function nf90_inq_dimid(ncid, name, dimid)
    integer,             intent( in) :: ncid
@@ -152,6 +152,7 @@ ID between 1 and ndims.
    integer,             intent(out) :: dimid
    integer                          :: nf90_inq_dimid
 
+~~~~
 
 
 
@@ -188,7 +189,7 @@ of a dimension named lat, assumed to have been defined previously in an
 existing netCDF dataset named foo.nc:
 
 
-
+~~~~.fortran
 
  use netcdf
  implicit none
@@ -200,7 +201,7 @@ existing netCDF dataset named foo.nc:
  status = nf90_inq_dimid(ncid, "Lat", LatDimID)
  if (status /= nf90_noerr) call handle_err(status)
 
-
+~~~~
 
 
 4.4 NF90_INQUIRE_DIMENSION {#f90-nf90_inquire_dimension}
@@ -217,7 +218,7 @@ dimension, if any, is the number of records written so far.
 ## Usage
 
 
-
+~~~~.fortran
 
  function nf90_inquire_dimension(ncid, dimid, name, len)
    integer,                       intent( in) :: ncid, dimid
@@ -225,6 +226,7 @@ dimension, if any, is the number of records written so far.
    integer,             optional, intent(out) :: len
    integer                                    :: nf90_inquire_dimension
 
+~~~~
 
 
 
@@ -269,7 +271,7 @@ dimension named lat, and the name and current maximum length of the
 unlimited dimension for an existing netCDF dataset named foo.nc:
 
 
-
+~~~~.fortran
 
  use netcdf
  implicit none
@@ -293,7 +295,7 @@ unlimited dimension for an existing netCDF dataset named foo.nc:
                                  name = RecordDimName, len = Records)
  if (status /= nf90_noerr) call handle_err(status)
 
-
+~~~~
 
 
 
@@ -312,7 +314,7 @@ to have the same name as another dimension.
 ## Usage
 
 
-
+~~~~.fortran
 
  function nf90_rename_dim(ncid, dimid, name)
    integer,             intent( in) :: ncid
@@ -320,6 +322,7 @@ to have the same name as another dimension.
    integer,             intent( in) :: dimid
    integer                          :: nf90_rename_dim
 
+~~~~
 
 
 
@@ -358,24 +361,26 @@ Here is an example using NF90\_RENAME\_DIM to rename the dimension lat
 to latitude in an existing netCDF dataset named foo.nc:
 
 
+~~~~~~.fortran
 
+use netcdf
+implicit none
+integer :: ncid, status, LatDimID
+...
+status = nf90_open("foo.nc", nf90_write, ncid)
+if (status /= nf90_noerr) call handle_err(status)
+...
+! Put in define mode so we can rename the dimension
+status = nf90_redef(ncid)
+if (status /= nf90_noerr) call handle_err(status)
+! Get the dimension ID for "Lat"...
+status = nf90_inq_dimid(ncid, "Lat", LatDimID)
+if (status /= nf90_noerr) call handle_err(status)
+! ... and change the name to "Latitude".
+status = nf90_rename_dim(ncid, LatDimID, "Latitude")
+if (status /= nf90_noerr) call handle_err(status)
+! Leave define mode
+status = nf90_enddef(ncid)
+if (status /= nf90_noerr) call handle_err(status)
 
- use netcdf
- implicit none
- integer :: ncid, status, LatDimID
- ...
- status = nf90_open("foo.nc", nf90_write, ncid)
- if (status /= nf90_noerr) call handle_err(status)
- ...
- ! Put in define mode so we can rename the dimension
- status = nf90_redef(ncid)
- if (status /= nf90_noerr) call handle_err(status)
- ! Get the dimension ID for "Lat"...
- status = nf90_inq_dimid(ncid, "Lat", LatDimID)
- if (status /= nf90_noerr) call handle_err(status)
- ! ... and change the name to "Latitude".
- status = nf90_rename_dim(ncid, LatDimID, "Latitude")
- if (status /= nf90_noerr) call handle_err(status)
- ! Leave define mode
- status = nf90_enddef(ncid)
- if (status /= nf90_noerr) call handle_err(status)
+~~~~~~

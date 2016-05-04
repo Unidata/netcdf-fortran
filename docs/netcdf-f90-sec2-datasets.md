@@ -74,12 +74,14 @@ available in the appropriate include file for each language binding.
 ## Usage
 
 
+~~~~.fortran
 
 
  function nf90_strerror(ncerr)
    integer, intent( in) :: ncerr
    character(len = 80)  :: nf90_strerror
 
+~~~~
 
 
 
@@ -102,6 +104,7 @@ NF90\_STRERROR to print the error message corresponding to the netCDF
 error status returned from any netCDF function call and then exit:
 
 
+~~~~.fortran
 
 
  subroutine handle_err(status)
@@ -115,6 +118,7 @@ error status returned from any netCDF function call and then exit:
 
 
 
+~~~~
 
 2.4 Get netCDF library version: NF90_INQ_LIBVERS {#f90-get-netcdf-library-version-nf90_inq_libvers}
 =========================
@@ -129,12 +133,14 @@ of the netCDF library, and when it was built.
 
 
 
+~~~~.fortran
 
  function nf90_inq_libvers()
    character(len = 80) :: nf90_inq_libvers
 
 
 
+~~~~
 
 
 
@@ -151,9 +157,10 @@ netCDF library with which the program is linked:
 
 
 
+~~~~.fortran
+print *, trim(nf90_inq_libvers())
 
- print *, trim(nf90_inq_libvers())
-
+~~~~
 
 
 
@@ -178,6 +185,7 @@ with the same name and whether access to the dataset is shared.
 
 
 
+~~~~.fortran
 
   function nf90_create(path, cmode, ncid, initialsize, bufrsize, cache_size, &
        cache_nelems, cache_preemption, comm, info)
@@ -193,6 +201,7 @@ with the same name and whether access to the dataset is shared.
     integer :: nf90_create
 
 
+~~~~
 
 
 `path`
@@ -327,6 +336,7 @@ that name does not already exist:
 
 
 
+~~~~.fortran
 
  use netcdf
  implicit none
@@ -336,6 +346,7 @@ that name does not already exist:
  if (status /= nf90_noerr) call handle_err(status)
 
 
+~~~~
 
 
 
@@ -347,6 +358,7 @@ The function NF90\_OPEN opens an existing netCDF dataset for access.
 ## Usage
 
 
+~~~~.fortran
 
 
   function nf90_open(path, mode, ncid, bufrsize, cache_size, cache_nelems, &
@@ -362,6 +374,7 @@ The function NF90\_OPEN opens an existing netCDF dataset for access.
     integer :: nf90_open
 
 
+~~~~
 
 
 `path`
@@ -462,6 +475,7 @@ Here is an example using NF90\_OPEN to open an existing netCDF dataset
 named foo.nc for read-only, non-shared access:
 
 
+~~~~.fortran
 
 
  use netcdf
@@ -472,6 +486,7 @@ named foo.nc for read-only, non-shared access:
  if (status /= nf90_noerr) call handle_err(status)
 
 
+~~~~
 
 
 ## Example
@@ -481,6 +496,7 @@ for parallel I/O access. (Note the use of the comm and info parameters).
 This example is from test program nf\_test/f90tst\_parallel.f90.
 
 
+~~~~.fortran
 
 
  use netcdf
@@ -493,6 +509,7 @@ This example is from test program nf\_test/f90tst\_parallel.f90.
 
 
 
+~~~~
 
 2.7 NF90_REDEF {#f90-nf90_redef}
 =========================
@@ -508,6 +525,7 @@ attributes can be deleted.
 ## Usage
 
 
+~~~~.fortran
 
 
  function nf90_redef(ncid)
@@ -516,6 +534,7 @@ attributes can be deleted.
 
 
 
+~~~~
 
 `ncid`
 
@@ -542,6 +561,7 @@ named foo.nc and put it into define mode:
 
 
 
+~~~~.fortran
 
  use netcdf
  implicit none
@@ -555,6 +575,7 @@ named foo.nc and put it into define mode:
 
 
 
+~~~~
 
 2.8 NF90_ENDDEF {#f90-nf90_enddef}
 =========================
@@ -576,6 +597,7 @@ Guide.
 ## Usage
 
 
+~~~~.fortran
 
 
  function nf90_enddef(ncid, h_minfree, v_align, v_minfree, r_align)
@@ -583,6 +605,7 @@ Guide.
    integer, optional, intent( in) :: h_minfree, v_align, v_minfree, r_align
    integer                        :: nf90_enddef
 
+~~~~
 
 
 
@@ -654,6 +677,7 @@ netCDF dataset named foo.nc and put it into data mode:
 
 
 
+~~~~.fortran
 
  use netcdf
  implicit none
@@ -666,6 +690,7 @@ netCDF dataset named foo.nc and put it into data mode:
  if (status /= nf90_noerr) call handle_err(status)
 
 
+~~~~
 
 
 
@@ -687,12 +712,14 @@ created.
 
 
 
+~~~~.fortran
 
  function nf90_close(ncid)
    integer, intent( in) :: ncid
    integer              :: nf90_close
 
 
+~~~~
 
 
 `ncid`
@@ -719,6 +746,7 @@ Here is an example using NF90\_CLOSE to finish the definitions of a new
 netCDF dataset named foo.nc and release its netCDF ID:
 
 
+~~~~.fortran
 
 
  use netcdf
@@ -731,6 +759,7 @@ netCDF dataset named foo.nc and release its netCDF ID:
  status = nf90_close(ncid)
  if (status /= nf90_noerr) call handle_err(status)
 
+~~~~
 
 
 
@@ -751,6 +780,7 @@ information is available in memory for each open netCDF dataset.
 ## Usage
 
 
+~~~~.fortran
 
 
  function nf90_inquire(ncid, nDimensions, nVariables, nAttributes, &
@@ -763,6 +793,7 @@ information is available in memory for each open netCDF dataset.
 
 
 
+~~~~
 
 `ncid`
 
@@ -811,6 +842,7 @@ Here is an example using NF90\_INQUIRE to find out about a netCDF
 dataset named foo.nc:
 
 
+~~~~.fortran
 
 
  use netcdf
@@ -827,6 +859,7 @@ dataset named foo.nc:
  if (status /= nf90_noerr) call handle_err(status)
 
 
+~~~~
 
 
 2.11 NF90_SYNC {#f90-nf90_sync}
@@ -896,6 +929,7 @@ closed, or whenever you leave define mode.
 ## Usage
 
 
+~~~~.fortran
 
 
  function nf90_sync(ncid)
@@ -904,6 +938,7 @@ closed, or whenever you leave define mode.
 
 
 
+~~~~
 
 `ncid`
 
@@ -929,6 +964,7 @@ netCDF dataset named foo.nc:
 
 
 
+~~~~.fortran
 
  use netcdf
  implicit none
@@ -943,6 +979,7 @@ netCDF dataset named foo.nc:
  if (status /= nf90_noerr) call handle_err(status)
 
 
+~~~~
 
 
 2.12 NF90_ABORT {#f90-nf90_abort}
@@ -964,6 +1001,7 @@ the dataset is closed.
 ## Usage
 
 
+~~~~.fortran
 
 
  function nf90_abort(ncid)
@@ -971,6 +1009,7 @@ the dataset is closed.
    integer              :: nf90_abort
 
 
+~~~~
 
 
 `ncid`
@@ -997,6 +1036,7 @@ Here is an example using NF90\_ABORT to back out of redefinitions of a
 dataset named foo.nc:
 
 
+~~~~.fortran
 
 
  use netcdf
@@ -1018,6 +1058,7 @@ dataset named foo.nc:
 ...
 
 
+~~~~
 
 
 
@@ -1086,6 +1127,7 @@ feature.
 ## Usage
 
 
+~~~~.fortran
 
 
  function nf90_set_fill(ncid, fillmode, old_mode)
@@ -1095,6 +1137,7 @@ feature.
 
 
 
+~~~~
 
 `ncid`
 
@@ -1129,6 +1172,7 @@ Here is an example using NF90\_SET\_FILL to set nofill mode for
 subsequent writes of a netCDF dataset named foo.nc:
 
 
+~~~~.fortran
 
 
  use netcdf
@@ -1145,3 +1189,5 @@ subsequent writes of a netCDF dataset named foo.nc:
  ...
  !  Write data with no prefilling
  ...
+
+~~~~

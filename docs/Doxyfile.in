@@ -760,10 +760,13 @@ INPUT                  = @abs_top_srcdir@/RELEASE_NOTES.md \
 						                         @abs_top_srcdir@/fortran \
 						                               @abs_top_srcdir@/docs/netcdf-f77.md \
                          @abs_top_srcdir@/docs/netcdf-f90.md \
-                         @abs_top_srcdir@/docs/netcdf-f90-sec1.md \
-                         @abs_top_srcdir@/docs/netcdf-f90-sec2.md \
-                         @abs_top_srcdir@/docs/netcdf-f90-sec3.md \
-                         @abs_top_srcdir@/docs/netcdf-f90-sec4.md \
+                         @abs_top_srcdir@/docs/netcdf-f90-sec1-usage.md \
+                         @abs_top_srcdir@/docs/netcdf-f90-sec2-datasets.md \
+                         @abs_top_srcdir@/docs/netcdf-f90-sec3-groups.md \
+                         @abs_top_srcdir@/docs/netcdf-f90-sec4-dimensions.md \
+                         @abs_top_srcdir@/docs/netcdf-f90-sec5-user_defined_types.md \
+                         @abs_top_srcdir@/docs/netcdf-f90-sec6-variables.md \
+                         @abs_top_srcdir@/docs/netcdf-f90-sec7-attributes.md \
                          @abs_top_srcdir@/fortran \
                          @abs_top_srcdir@/libsrc
 
