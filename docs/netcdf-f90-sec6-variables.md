@@ -51,21 +51,21 @@ Operations supported on variables are:
 
 
 6.2 Language Types Corresponding to netCDF external data types {#f90-language-types-corresponding-to-netcdf-external-data-types}
---------------------------------------------------------------
+===========
 
 The following table gives the netCDF external data types and the
 corresponding type constants for defining variables in the FORTRAN
 interface:
 
-  -------- ---------------------- ------
-  Type     FORTRAN API Mnemonic   Bits
-  byte     NF90\_BYTE             8
-  char     NF90\_CHAR             8
-  short    NF90\_SHORT            16
-  int      NF90\_INT              32
-  float    NF90\_FLOAT            32
-  double   NF90\_DOUBLE           64
-  -------- ---------------------- ------
+Type   |  FORTRAN API Mnemonic |  Bits
+-------| ----------------------| ------
+byte   |  NF90_BYTE           |  8
+char   |  NF90_CHAR           |  8
+short  |  NF90_SHORT          |  16
+int    |  NF90_INT            |  32
+float  |  NF90_FLOAT          |  32
+double |  NF90_DOUBLE         |  64
+
 
 The first column gives the netCDF external data type, which is the same
 as the CDL data type. The next column gives the corresponding Fortran 90
@@ -80,7 +80,7 @@ library.
 
 
 6.3 Create a Variable: `NF90_DEF_VAR` {#f90-create-a-variable-nf90_def_var}
--------------------------------------
+===========
 
 
 
@@ -108,9 +108,10 @@ in a netCDF-4/HDF5 file.
 
 
 
-### Usage
+## Usage
 
 
+~~~~.fortran
 
 
  function nf90_def_var(ncid, name, xtype, dimids, varid, contiguous, &
@@ -131,6 +132,7 @@ in a netCDF-4/HDF5 file.
 
 
 
+~~~~
 
 `ncid`
 
@@ -243,7 +245,7 @@ in a netCDF-4/HDF5 file.
 
 
 
-### Return Codes
+## Return Codes
 
 NF90\_DEF\_VAR returns the value NF90\_NOERR if no errors occurred.
 Otherwise, the returned status indicates an error.
@@ -293,6 +295,7 @@ dataset named foo.nc:
 
 
 
+~~~~.fortran
 
  use netcdf
  implicit none
@@ -317,12 +320,14 @@ dataset named foo.nc:
  if(status /= nf90_NoErr) call handle_error(status)
 
 
+~~~~
 
 
 In the following example, from nf\_test/f90tst\_vars2.f90, chunking,
 checksums, and endianness control are all used in a netCDF-4/HDF5 file.
 
 
+~~~~.fortran
 
 
   ! Create the netCDF file.
@@ -343,10 +348,11 @@ checksums, and endianness control are all used in a netCDF-4/HDF5 file.
   call check(nf90_def_var(ncid, VAR4_NAME, NF90_INT, x_dimid, varid4, contiguous = .TRUE.))
 
 
+~~~~
 
 
 6.4 Define Fill Parameters for a Variable: `nf90_def_var_fill` {#f90-define-fill-parameters-for-a-variable-nf90_def_var_fill}
---------------------------------------------------------------
+===========
 
 
 
@@ -358,13 +364,15 @@ NF90\_ENDDEF is called.
 
 
 
-### Usage
+## Usage
 
 
 
+~~~~.fortran
 
 NF90_DEF_VAR_FILL(INTEGER NCID, INTEGER VARID, INTEGER NO_FILL, FILL_VALUE);
 
+~~~~
 
 
 
@@ -396,7 +404,7 @@ NF90_DEF_VAR_FILL(INTEGER NCID, INTEGER VARID, INTEGER NO_FILL, FILL_VALUE);
 
 
 
-### Return Codes
+## Return Codes
 
 `NF90_NOERR`
 
@@ -434,11 +442,11 @@ NF90_DEF_VAR_FILL(INTEGER NCID, INTEGER VARID, INTEGER NO_FILL, FILL_VALUE);
 
 
 
-### Example
+## Example
 
 
 6.5 Learn About Fill Parameters for a Variable: `NF90_INQ_VAR_FILL` {#f90-learn-about-fill-parameters-for-a-variable-nf90_inq_var_fill}
--------------------------------------------------------------------
+===========
 
 
 
@@ -447,13 +455,15 @@ variable in a netCDF-4 file.
 
 
 
-### Usage
+## Usage
 
 
 
+~~~~.fortran
 
 NF90_INQ_VAR_FILL(INTEGER NCID, INTEGER VARID, INTEGER NO_FILL, FILL_VALUE)
 
+~~~~
 
 
 
@@ -477,7 +487,7 @@ NF90_INQ_VAR_FILL(INTEGER NCID, INTEGER VARID, INTEGER NO_FILL, FILL_VALUE)
 
 
 
-### Return Codes
+## Return Codes
 
 `NF90_NOERR`
 
@@ -497,9 +507,10 @@ NF90_INQ_VAR_FILL(INTEGER NCID, INTEGER VARID, INTEGER NO_FILL, FILL_VALUE)
 
 
 
-### Example
+## Example
 
 6.6 Get Information about a Variable from Its ID: NF90_INQUIRE_VARIABLE {#f90-get-information-about-a-variable-from-its-id-nf90_inquire_variable}
+===========
 
 NF90\_INQUIRE\_VARIABLE returns information about a netCDF variable
 given its ID. Information about a variable includes its name, type,
@@ -513,9 +524,10 @@ netCDF-4/HDF5 file.
 
 
 
-### Usage
+## Usage
 
 
+~~~~.fortran
 
 
   function nf90_inquire_variable(ncid, varid, name, xtype, ndims, dimids, nAtts, &
@@ -534,6 +546,7 @@ netCDF-4/HDF5 file.
 
 
 
+~~~~
 
 `ncid`
 
@@ -613,12 +626,13 @@ errors include:
 
 
 
-### Example
+## Example
 
 Here is an example using NF90\_INQ\_VAR to find out about a variable
 named rh in an existing netCDF dataset named foo.nc:
 
 
+~~~~.fortran
 
 
     use netcdf
@@ -639,10 +653,11 @@ named rh in an existing netCDF dataset named foo.nc:
  if(status /= nf90_NoErr) call handle_err(status)
 
 
+~~~~
 
 
 6.7 Get the ID of a variable from the name: NF90_INQ_VARID {#f90-get-the-id-of-a-variable-from-the-name-nf90_inq_varid}
-------------------------------------------------------------
+===========
 
 
 
@@ -650,9 +665,10 @@ Given the name of a varaible, nf90\_inq\_varid finds the variable ID.
 
 
 
-### Usage
+## Usage
 
 
+~~~~.fortran
 
 
   function nf90_inq_varid(ncid, name, varid)
@@ -662,6 +678,7 @@ Given the name of a varaible, nf90\_inq\_varid finds the variable ID.
     integer :: nf90_inq_varid
 
 
+~~~~
 
 
 `ncid`
@@ -686,13 +703,14 @@ errors include:
 
 
 
-### Example
+## Example
 
 Here is an example using NF90\_INQ\_VARID to find out about a variable
 named rh in an existing netCDF dataset named foo.nc:
 
 
 
+~~~~.fortran
 
     use netcdf
     implicit none
@@ -713,10 +731,11 @@ named rh in an existing netCDF dataset named foo.nc:
 
 
 
+~~~~
 
 
 6.8 Writing Data Values: NF90_PUT_VAR {#f90-writing-data-values-nf90_put_var}
----------------------------------------
+===========
 
 
 
@@ -750,6 +769,7 @@ dimension.
 
 
 
+~~~~.fortran
 
  function nf90_put_var(ncid, varid, values, start, count, stride, map)
    integer,                         intent( in) :: ncid, varid
@@ -759,6 +779,7 @@ dimension.
    integer                                      :: nf90_put_var
 
 
+~~~~
 
 
 `ncid`
@@ -835,7 +856,7 @@ dimension.
 
 
 
-### Errors
+## Errors
 
 NF90\_PUT\_VAR1\_ type returns the value NF90\_NOERR if no errors
 occurred. Otherwise, the returned status indicates an error. Possible
@@ -853,7 +874,7 @@ causes of errors include:
 
 
 
-### Example
+## Example
 
 Here is an example using NF90\_PUT\_VAR to set the (4,3,2) element of
 the variable named rh to 0.5 in an existing netCDF dataset named foo.nc.
@@ -864,6 +885,7 @@ second time value:
 
 
 
+~~~~.fortran
 
  use netcdf
  implicit none
@@ -878,6 +900,7 @@ second time value:
  if(status /= nf90_NoErr) call handle_err(status)
 
 
+~~~~
 
 
 In this example we use NF90\_PUT\_VAR to add or change all the values of
@@ -889,6 +912,7 @@ a temporary array of data values which is the same shape as the netCDF
 variable.
 
 
+~~~~.fortran
 
 
  use netcdf
@@ -923,6 +947,7 @@ variable.
  if(status /= nf90_NoErr) call handle_err(status)
 
 
+~~~~
 
 
 Here is an example using NF90\_PUT\_VAR to add or change a section of
@@ -934,6 +959,7 @@ values at the last time.
 
 
 
+~~~~.fortran
 
  use netcdf
  implicit none
@@ -955,6 +981,7 @@ values at the last time.
  if(status /= nf90_NoErr) call handle_err(status)
 
 
+~~~~
 
 
 Here is an example of using NF90\_PUT\_VAR to write every other point of
@@ -962,6 +989,7 @@ a netCDF variable named rh having dimensions (6, 4).
 
 
 
+~~~~.fortran
 
  use netcdf
  implicit none
@@ -982,12 +1010,14 @@ a netCDF variable named rh having dimensions (6, 4).
  if(status /= nf90_NoErr) call handle_err(status)
 
 
+~~~~
 
 
 The following map vector shows the default mapping between a 2x3x4
 netCDF variable and an internal array of the same shape:
 
 
+~~~~.fortran
 
 
  real,    dimension(2, 3, 4):: a  ! same shape as netCDF variable
@@ -999,6 +1029,7 @@ netCDF variable and an internal array of the same shape:
                      ! most slowly varying        6 (= map(2)*3)
 
 
+~~~~
 
 
 Using the map vector above obtains the same result as simply not passing
@@ -1008,6 +1039,7 @@ Here is an example of using nf90\_put\_var to write a netCDF variable
 named rh whose dimensions are the transpose of the Fortran 90 array:
 
 
+~~~~.fortran
 
 
  use netcdf
@@ -1029,6 +1061,7 @@ named rh whose dimensions are the transpose of the Fortran 90 array:
  if(status /= nf90_NoErr) call handle_err(status)
 
 
+~~~~
 
 
 The same effect can be obtained more simply using Fortran 90 intrinsic
@@ -1036,6 +1069,7 @@ functions:
 
 
 
+~~~~.fortran
 
  use netcdf
  implicit none
@@ -1054,11 +1088,12 @@ functions:
  if(status /= nf90_NoErr) call handle_err(status)
 
 
+~~~~
 
 
 
 6.9 Reading Data Values: NF90_GET_VAR {#f90-reading-data-values-nf90_get_var}
----------------------------------------
+===========
 
 
 
@@ -1092,10 +1127,11 @@ model flag) will read from an NF90\_INT64
 
 
 
-### Usage
+## Usage
 
 
 
+~~~~.fortran
 
  function nf90_get_var(ncid, varid, values, start, count, stride, map)
    integer,                         intent( in) :: ncid, varid
@@ -1105,6 +1141,7 @@ model flag) will read from an NF90\_INT64
    integer                                      :: nf90_get_var
 
 
+~~~~
 
 
 `ncid`
@@ -1181,7 +1218,7 @@ model flag) will read from an NF90\_INT64
 
 
 
-### Errors
+## Errors
 
 NF90\_GET\_VAR returns the value NF90\_NOERR if no errors occurred.
 Otherwise, the returned status indicates an error. Possible causes of
@@ -1203,7 +1240,7 @@ assume, more data will be read than you expect!)
 
 
 
-### Example
+## Example
 
 Here is an example using NF90\_GET\_VAR to read the (4,3,2) element of
 the variable named rh from an existing netCDF dataset named foo.nc. For
@@ -1214,6 +1251,7 @@ second time value:
 
 
 
+~~~~.fortran
 
  use netcdf
  implicit none
@@ -1229,6 +1267,7 @@ second time value:
  if(status /= nf90_NoErr) call handle_err(status)
 
 
+~~~~
 
 
 In this example we use NF90\_GET\_VAR to read all the values of the
@@ -1281,6 +1320,7 @@ lat values, and three time values, and that we want to replace all the
 values at the last time.
 
 
+~~~~.fortran
 
 
  use netcdf
@@ -1302,12 +1342,14 @@ values at the last time.
  if(status /= nf90_NoErr) call handle_err(status)
 
 
+~~~~
 
 
 Here is an example of using NF90\_GET\_VAR to read every other point of
 a netCDF variable named rh having dimensions (6, 4).
 
 
+~~~~.fortran
 
 
  use netcdf
@@ -1330,11 +1372,13 @@ a netCDF variable named rh having dimensions (6, 4).
 
 
 
+~~~~
 
 The following map vector shows the default mapping between a 2x3x4
 netCDF variable and an internal array of the same shape:
 
 
+~~~~.fortran
 
 
  real,    dimension(2, 3, 4):: a  ! same shape as netCDF variable
@@ -1348,6 +1392,8 @@ netCDF variable and an internal array of the same shape:
 
 
 
+~~~~
+
 Using the map vector above obtains the same result as simply not passing
 a map vector at all.
 
@@ -1356,6 +1402,7 @@ named rh whose dimensions are the transpose of the Fortran 90 array:
 
 
 
+~~~~.fortran
 
  use netcdf
  implicit none
@@ -1376,12 +1423,14 @@ named rh whose dimensions are the transpose of the Fortran 90 array:
  if(status /= nf90_NoErr) call handle_err(status)
 
 
+~~~~
 
 
 The same effect can be obtained more simply, though using more memory,
 using Fortran 90 intrinsic functions:
 
 
+~~~~.fortran
 
 
  use netcdf
@@ -1403,12 +1452,13 @@ using Fortran 90 intrinsic functions:
  rhValues(:, :) = transpose(tempValues)
 
 
+~~~~
 
 
 
 
 6.10 Reading and Writing Character String Values {#f90-reading-and-writing-character-string-values}
-------------------------------------------------
+===========
 
 Character strings are not a primitive netCDF external data type under
 the classic netCDF data model, in part because FORTRAN does not support
@@ -1472,6 +1522,7 @@ array variables:
 
 
 
+~~~~.fortran
 
  use netcdf
  implicit none
@@ -1501,10 +1552,11 @@ array variables:
  if(status /= nf90_NoErr) call handle_err(status)
 
 
+~~~~
 
 
 6.11 Fill Values {#f90-fill-values}
-----------------
+===========
 
 What happens when you try to read a value that was never written in an
 open netCDF dataset? You might expect that this should always be an
@@ -1548,7 +1600,7 @@ larger type cannot be represented in the smaller type.
 
 
 6.12 NF90_RENAME_VAR {#f90-nf90_rename_var}
-----------------------
+===========
 
 
 
@@ -1559,16 +1611,18 @@ have the name of any existing variable.
 
 
 
-### Usage
+## Usage
 
 
 
+~~~~.fortran
 
  function nf90_rename_var(ncid, varid, newname)
    integer,             intent( in) :: ncid, varid
    character (len = *), intent( in) :: newname
    integer                          :: nf90_rename_var
 
+~~~~
 
 
 
@@ -1586,7 +1640,7 @@ have the name of any existing variable.
 
 
 
-### Errors
+## Errors
 
 NF90\_RENAME\_VAR returns the value NF90\_NOERR if no errors occurred.
 Otherwise, the returned status indicates an error. Possible causes of
@@ -1598,12 +1652,13 @@ errors include:
 
 
 
-### Example
+## Example
 
 Here is an example using NF90\_RENAME\_VAR to rename the variable rh to
 rel\_hum in an existing netCDF dataset named foo.nc:
 
 
+~~~~.fortran
 
 
  use netcdf
@@ -1624,10 +1679,11 @@ rel\_hum in an existing netCDF dataset named foo.nc:
 
 
 
+~~~~
 
 
 6.13 Change between Collective and Independent Parallel Access: NF90_VAR_PAR_ACCESS {#f90-change-between-collective-and-independent-parallel-access-nf90_var_par_access}
---------------
+===========
 
 
 
@@ -1659,10 +1715,11 @@ the file.
 
 
 
-### Usage
+## Usage
 
 
 
+~~~~.fortran
 
   function nf90_var_par_access(ncid, varid, access)
     integer, intent(in) :: ncid
@@ -1671,6 +1728,7 @@ the file.
     integer :: nf90_var_par_access
   end function nf90_var_par_access
 
+~~~~
 
 
 
@@ -1691,8 +1749,7 @@ the file.
 
 
 
-Return Values {#f90-return-values}
--------------
+## Return Values
 
 `NF90_NOERR`
 
@@ -1708,7 +1765,7 @@ Return Values {#f90-return-values}
 
 
 
-### Example
+## Example
 
 This example comes from test program nf\_test/f90tst\_parallel.f90. For
 this test to be run, netCDF must have been built with a parallel-enabled
@@ -1717,6 +1774,7 @@ netcdf.
 
 
 
+~~~~.fortran
 
   ! Reopen the file.
   call handle_err(nf90_open(FILE_NAME, nf90_nowrite, ncid, comm = MPI_COMM_WORLD, &
@@ -1728,3 +1786,5 @@ netcdf.
 
   ! Read this processor's data.
   call handle_err(nf90_get_var(ncid, varid, data_in, start = start, count = count))
+
+~~~~

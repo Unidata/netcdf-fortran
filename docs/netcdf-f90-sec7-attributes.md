@@ -4,7 +4,7 @@
 [TOC]
 
 7.1 Attributes Introduction {#f90-attributes-introduction}
----------------------------
+============
 
 Attributes may be associated with each netCDF variable to specify such
 properties as units, special values, maximum and minimum valid values,
@@ -49,7 +49,7 @@ Operations supported on attributes are:
 
 
 7.2 Create an Attribute: NF90_PUT_ATT {#f90-create-an-attribute-nf90_put_att}
----------------------------------------
+============
 
 
 
@@ -60,7 +60,7 @@ netCDF dataset must be in define mode.
 
 
 
-### Usage
+## Usage
 
 Although it’s possible to create attributes of all types, text and
 double attributes are adequate for most purposes.
@@ -106,7 +106,7 @@ double attributes are adequate for most purposes.
 
 
 
-### Errors
+## Errors
 
 NF90\_PUT\_ATT returns the value NF90\_NOERR if no errors occurred.
 Otherwise, the returned status indicates an error. Possible causes of
@@ -124,7 +124,7 @@ errors include:
 
 
 
-### Example
+## Example
 
 Here is an example using NF90\_PUT\_ATT to add a variable attribute
 named valid\_range for a netCDF variable named rh and a global attribute
@@ -161,7 +161,7 @@ named title to an existing netCDF dataset named foo.nc:
 
 
 7.3 Get Information about an Attribute: NF90_INQUIRE_ATTRIBUTE and NF90_INQ_ATTNAME {#f90-get-information-about-an-attribute-nf90_inquire_attribute-and-nf90_inq_attname}
----------------
+============
 
 
 
@@ -181,7 +181,7 @@ an attribute ID.
 
 
 
-### Usage
+## Usage
 
 
 
@@ -240,7 +240,7 @@ an attribute ID.
 
 
 
-### Errors
+## Errors
 
 Each function returns the value NF90\_NOERR if no errors occurred.
 Otherwise, the returned status indicates an error. Possible causes of
@@ -255,7 +255,7 @@ errors include:
 
 
 
-### Example
+## Example
 
 Here is an example using NF90\_INQUIRE\_ATTRIBUTE to inquire about the
 lengths of an attribute named valid\_range for a netCDF variable named
@@ -289,7 +289,7 @@ named foo.nc:
 
 
 7.4 Get Attribute’s Values: NF90_GET_ATT {#f90-get-attributes-values-nf90_get_att}
-------------------------------------------
+============
 
 
 
@@ -298,7 +298,7 @@ its variable ID and name.
 
 
 
-### Usage
+## Usage
 
 
 
@@ -343,7 +343,7 @@ its variable ID and name.
 
 
 
-### Errors
+## Errors
 
 NF90\_GET\_ATT\_ type returns the value NF90\_NOERR if no errors
 occurred. Otherwise, the returned status indicates an error. Possible
@@ -357,7 +357,7 @@ causes of errors include:
 
 
 
-### Example
+## Example
 
 Here is an example using NF90\_GET\_ATT to determine the values of an
 attribute named valid\_range for a netCDF variable named rh and a global
@@ -407,7 +407,7 @@ sure we have enough space to store them:
 
 
 7.5 Copy Attribute from One NetCDF to Another: NF90_COPY_ATT {#f90-copy-attribute-from-one-netcdf-to-another-nf90_copy_att}
---------------------------------------------------------------
+============
 
 
 
@@ -424,7 +424,7 @@ attempted.)
 
 
 
-### Usage
+## Usage
 
 
 
@@ -469,7 +469,7 @@ attempted.)
 
 
 
-### Errors
+## Errors
 
 NF90\_COPY\_ATT returns the value NF90\_NOERR if no errors occurred.
 Otherwise, the returned status indicates an error. Possible causes of
@@ -485,7 +485,7 @@ errors include:
 
 
 
-### Example
+## Example
 
 Here is an example using NF90\_COPY\_ATT to copy the variable attribute
 units from the variable rh in an existing netCDF dataset named foo.nc to
@@ -524,7 +524,7 @@ units attribute:
 
 
 7.6 Rename an Attribute: NF90_RENAME_ATT {#f90-rename-an-attribute-nf90_rename_att}
-------------------------------------------
+============
 
 
 
@@ -535,7 +535,7 @@ another attribute of the same variable.
 
 
 
-### Usage
+## Usage
 
 
 
@@ -569,7 +569,7 @@ another attribute of the same variable.
 
 
 
-### Errors
+## Errors
 
 NF90\_RENAME\_ATT returns the value NF90\_NOERR if no errors occurred.
 Otherwise, the returned status indicates an error. Possible causes of
@@ -585,7 +585,7 @@ errors include:
 
 
 
-### Example
+## Example
 
 Here is an example using NF90\_RENAME\_ATT to rename the variable
 attribute units to Units for a variable rh in an existing netCDF dataset
@@ -613,7 +613,7 @@ named foo.nc:
 
 
 7.7 NF90_DEL_ATT {#f90-nf90_del_att}
-------------------
+============
 
 
 
@@ -622,7 +622,7 @@ netCDF dataset. The netCDF dataset must be in define mode.
 
 
 
-### Usage
+## Usage
 
 
 
@@ -650,7 +650,7 @@ netCDF dataset. The netCDF dataset must be in define mode.
 
 
 
-### Errors
+## Errors
 
 NF90\_DEL\_ATT returns the value NF90\_NOERR if no errors occurred.
 Otherwise, the returned status indicates an error. Possible causes of
@@ -663,7 +663,7 @@ errors include:
 
 
 
-### Example
+## Example
 
 Here is an example using NF90\_DEL\_ATT to delete the variable attribute
 Units for a variable rh in an existing netCDF dataset named foo.nc:

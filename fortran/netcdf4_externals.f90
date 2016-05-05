@@ -2,7 +2,7 @@
 ! Copyright 2006, UCAR
 ! $Id: netcdf4_externals.f90,v 1.21 2010/01/20 13:06:15 ed Exp $
 
-  ! Extra netCDF-4 functions 
+  ! Extra netCDF-4 functions
 
   integer, external :: nf_create_par, nf_open_par, nf_var_par_access, &
        nf_inq_ncid, nf_inq_grps, nf_inq_grpname, nf_inq_grpname_full, &
@@ -28,5 +28,3 @@
        nf_get_var_int64, nf_get_chunk_cache, nf_set_chunk_cache, &
        nf_inq_var_szip, nf_free_vlens, nf_free_string, &
        nf_set_var_chunk_cache, nf_get_var_chunk_cache, nf_rename_grp
-
-  

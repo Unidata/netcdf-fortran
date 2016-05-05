@@ -32,12 +32,9 @@ functions described in this section. They may learn about user defined
 types by using the NF90\_INQ\_ functions defined in this section.
 
 Once types are constructed, define variables of the new type with
-NF90\_DEF\_VAR (see section [Create a Variable:
-`NF90_DEF_VAR`](#NF90_005fDEF_005fVAR)). Write to them with
-NF90\_PUT\_VAR (see section [Writing Data Values:
-NF90\_PUT\_VAR](#NF90_005fPUT_005fVAR)). Read data of user-defined type
-with NF90\_GET\_VAR (see section [Reading Data Values:
-NF90\_GET\_VAR](#NF90_005fGET_005fVAR)).
+NF90\_DEF\_VAR (see section [Create a Variable: `NF90_DEF_VAR`](#NF90_005fDEF_005fVAR)). Write to them with
+NF90\_PUT\_VAR (see section [Writing Data Values: `NF90_PUT_VAR`](#NF90_005fPUT_005fVAR)). Read data of user-defined type
+with NF90\_GET\_VAR (see section [Reading Data Values: `NF90_GET_VAR`](#NF90_005fGET_005fVAR)).
 
 Create attributes of the new type with NF90\_PUT\_ATT (see section
 [Create an Attribute: NF90\_PUT\_ATT](#NF90_005fPUT_005fATT)). Read
@@ -46,7 +43,7 @@ Attribute’s Values: NF90\_GET\_ATT](#NF90_005fGET_005fATT)).
 
 
 5.2 Learn the IDs of All Types in Group: NF90_INQ_TYPEIDS {#f90-learn-the-ids-of-all-types-in-group-nf90_inq_typeids}
------------------------------------------------------------
+=========================
 
 
 
@@ -54,10 +51,11 @@ Learn the number of types defined in a group, and their IDs.
 
 
 
-### Usage
+## Usage
 
 
 
+~~~~.fortran
 
   function nf90_inq_typeids(ncid, ntypes, typeids)
     integer, intent(in) :: ncid
@@ -67,6 +65,7 @@ Learn the number of types defined in a group, and their IDs.
 
 
 
+~~~~
 
 `NCID`
 
@@ -84,7 +83,7 @@ Learn the number of types defined in a group, and their IDs.
 
 
 
-### Errors
+## Errors
 
 `NF90_NOERR`
 
@@ -96,11 +95,11 @@ Learn the number of types defined in a group, and their IDs.
 
 
 
-### Example
+## Example
 
 
 5.3 Find a Typeid from Group and Name: nf90_inq_typeid {#f90-find-a-typeid-from-group-and-name-nf90_inq_typeid}
---------------------------------------------------------
+=========================
 
 
 
@@ -110,14 +109,16 @@ found, the entire file is searched.
 
 
 
-### Usage
+## Usage
 
 
 
 
+~~~~.fortran
 int nf90_inq_typeid(int ncid, char *name, nf90_type *typeidp);
 
 
+~~~~
 
 
 `ncid`
@@ -150,12 +151,11 @@ int nf90_inq_typeid(int ncid, char *name, nf90_type *typeidp);
 
 
 
-### Example
+## Example
 
 
 5.4 Learn About a User Defined Type: NF90_INQ_TYPE {#f90-learn-about-a-user-defined-type-nf90_inq_type}
-----------------------------------------------------
-
+=========================
 
 
 Given an ncid and a typeid, get the information about a type. This
@@ -167,8 +167,9 @@ Defined Type: NF90\_INQ\_USER\_TYPE](#NF90_005fINQ_005fUSER_005fTYPE).
 
 
 
-### Usage
+## Usage
 
+~~~~.fortran
 
 
 
@@ -181,6 +182,7 @@ Defined Type: NF90\_INQ\_USER\_TYPE](#NF90_005fINQ_005fUSER_005fTYPE).
 
 
 
+~~~~
 
 `NCID`
 
@@ -208,7 +210,7 @@ Defined Type: NF90\_INQ\_USER\_TYPE](#NF90_005fINQ_005fUSER_005fTYPE).
 
 
 
-### Return Codes
+## Return Codes
 
 
 `NF90_NOERR`
@@ -242,11 +244,11 @@ Defined Type: NF90\_INQ\_USER\_TYPE](#NF90_005fINQ_005fUSER_005fTYPE).
 
 
 
-### Example
+## Example
 
 
 5.5 Learn About a User Defined Type: NF90_INQ_USER_TYPE {#f90-learn-about-a-user-defined-type-nf90_inq_user_type}
-----------------------------------------------------------
+=========================
 
 Given an ncid and a typeid, get the information about a user defined
 type. This function will work on any user defined type, whether
@@ -254,10 +256,11 @@ compound, opaque, enumeration, or variable length array.
 
 
 
-### Usage
+## Usage
 
 
 
+~~~~.fortran
 
   function nf90_inq_user_type(ncid, xtype, name, size, base_typeid, nfields, class)
     integer, intent(in) :: ncid
@@ -268,9 +271,7 @@ compound, opaque, enumeration, or variable length array.
     integer, intent(out) :: nfields
     integer, intent(out) :: class
     integer :: nf90_inq_user_type
-
-
-
+~~~~
 
 `NCID`
 
@@ -307,7 +308,7 @@ compound, opaque, enumeration, or variable length array.
 
 
 
-### Errors
+## Errors
 
 `NF90_NOERR`
 
@@ -327,9 +328,9 @@ compound, opaque, enumeration, or variable length array.
 
 
 
-### Example
+## Example
 
-### 5.5.1 Set a Variable Length Array with NF90_PUT_VLEN_ELEMENT {#f90-set-a-variable-length-array-with-nf90_put_vlen_element}
+## 5.5.1 Set a Variable Length Array with NF90_PUT_VLEN_ELEMENT {#f90-set-a-variable-length-array-with-nf90_put_vlen_element}
 
 
 
@@ -338,9 +339,10 @@ VLEN. That is, this sets the data in one variable length array.
 
 
 
-#### Usage
+### Usage
 
 
+~~~~.fortran
 
 
 INTEGER FUNCTION NF90_PUT_VLEN_ELEMENT(INTEGER NCID, INTEGER XTYPE,
@@ -348,6 +350,7 @@ INTEGER FUNCTION NF90_PUT_VLEN_ELEMENT(INTEGER NCID, INTEGER XTYPE,
 
 
 
+~~~~
 
 `NCID`
 
@@ -371,7 +374,7 @@ INTEGER FUNCTION NF90_PUT_VLEN_ELEMENT(INTEGER NCID, INTEGER XTYPE,
 
 
 
-#### Errors
+### Errors
 
 `NF90_NOERR`
 
@@ -391,12 +394,13 @@ INTEGER FUNCTION NF90_PUT_VLEN_ELEMENT(INTEGER NCID, INTEGER XTYPE,
 
 
 
-#### Example
+### Example
 
 This example is from nf90\_test/ftst\_vars4.F.
 
 
 
+~~~~.fortran
 
 C     Set up the vlen with this helper function, since F90 can't deal
 C     with pointers.
@@ -406,9 +410,10 @@ C     with pointers.
 
 
 
+~~~~
 
 
-### 5.5.2 Set a Variable Length Array with NF90_GET_VLEN_ELEMENT {#f90-set-a-variable-length-array-with-nf90_get_vlen_element}
+## 5.5.2 Set a Variable Length Array with NF90_GET_VLEN_ELEMENT {#f90-set-a-variable-length-array-with-nf90_get_vlen_element}
 
 
 
@@ -417,15 +422,17 @@ VLEN. That is, this sets the data in one variable length array.
 
 
 
-#### Usage
+### Usage
 
 
 
+~~~~.fortran
 
 INTEGER FUNCTION NF90_GET_VLEN_ELEMENT(INTEGER NCID, INTEGER XTYPE,
         CHARACTER*(*) VLEN_ELEMENT, INTEGER LEN, DATA)
 
 
+~~~~
 
 
 `NCID`
@@ -451,7 +458,7 @@ INTEGER FUNCTION NF90_GET_VLEN_ELEMENT(INTEGER NCID, INTEGER XTYPE,
 
 
 
-#### Errors
+### Errors
 
 `NF90_NOERR`
 
@@ -471,11 +478,11 @@ INTEGER FUNCTION NF90_GET_VLEN_ELEMENT(INTEGER NCID, INTEGER XTYPE,
 
 
 
-#### Example
+### Example
 
 
 5.6 Compound Types Introduction {#f90-compound-types-introduction}
--------------------------------
+=========================
 
 
 
@@ -500,7 +507,7 @@ C compiler which compiled netCDF would store the structure.
 The use of compound types introduces challenges and portability issues
 for Fortran users.
 
-### 5.6.1 Creating a Compound Type: NF90_DEF_COMPOUND {#f90-creating-a-compound-type-nf90_def_compound}
+## 5.6.1 Creating a Compound Type: NF90_DEF_COMPOUND {#f90-creating-a-compound-type-nf90_def_compound}
 
 
 
@@ -523,12 +530,11 @@ Fortran users may use character buffers to read and write compound
 types. User are invited to try classic Fortran features such as the
 equivilence and the common block statment.
 
-
-
 ### Usage
 
 
 
+~~~~.fortran
 
   function nf90_def_compound(ncid, size, name, typeid)
     integer, intent(in) :: ncid
@@ -537,6 +543,7 @@ equivilence and the common block statment.
     integer, intent(out) :: typeid
     integer :: nf90_def_compound
 
+~~~~
 
 
 
@@ -610,7 +617,7 @@ equivilence and the common block statment.
 
 ### Example
 
-### 5.6.2 Inserting a Field into a Compound Type: NF90_INSERT_COMPOUND {#f90-inserting-a-field-into-a-compound-type-nf90_insert_compound}
+## 5.6.2 Inserting a Field into a Compound Type: NF90_INSERT_COMPOUND {#f90-inserting-a-field-into-a-compound-type-nf90_insert_compound}
 
 
 
@@ -618,10 +625,11 @@ Insert a named field into a compound type.
 
 
 
-#### Usage
+### Usage
 
 
 
+~~~~.fortran
 
   function nf90_insert_compound(ncid, xtype, name, offset, field_typeid)
     integer, intent(in) :: ncid
@@ -632,6 +640,7 @@ Insert a named field into a compound type.
     integer :: nf90_insert_compound
 
 
+~~~~
 
 
 `TYPEID`
@@ -654,7 +663,7 @@ Insert a named field into a compound type.
 
 
 
-#### Errors
+### Errors
 
 `NF90_NOERR`
 
@@ -700,13 +709,13 @@ Insert a named field into a compound type.
 
 
 
-#### Example
+### Example
 
 
 
 
 
-### 5.6.3 Inserting an Array Field into a Compound Type: NF90_INSERT_ARRAY_COMPOUND {#f90-inserting-an-array-field-into-a-compound-type-nf90_insert_array_compound}
+## 5.6.3 Inserting an Array Field into a Compound Type: NF90_INSERT_ARRAY_COMPOUND {#f90-inserting-an-array-field-into-a-compound-type-nf90_insert_array_compound}
 
 
 
@@ -714,10 +723,11 @@ Insert a named array field into a compound type.
 
 
 
-#### Usage
+### Usage
 
 
 
+~~~~.fortran
 
   function nf90_insert_array_compound(ncid, xtype, name, offset, field_typeid, &
        ndims, dim_sizes)
@@ -732,6 +742,7 @@ Insert a named array field into a compound type.
 
 
 
+~~~~
 
 `NCID`
 
@@ -766,7 +777,7 @@ Insert a named array field into a compound type.
 
 
 
-#### Errors
+### Errors
 
 `NF90_NOERR`
 
@@ -819,9 +830,9 @@ Insert a named array field into a compound type.
 
 
 
-#### Example
+### Example
 
-### 5.6.4 Learn About a Compound Type: NF90_INQ_COMPOUND {#f90-learn-about-a-compound-type-nf90_inq_compound}
+## 5.6.4 Learn About a Compound Type: NF90_INQ_COMPOUND {#f90-learn-about-a-compound-type-nf90_inq_compound}
 
 
 
@@ -833,9 +844,10 @@ fields.
 
 
 
-#### Usage
+### Usage
 
 
+~~~~.fortran
 
 
   function nf90_inq_compound(ncid, xtype, name, size, nfields)
@@ -866,6 +878,7 @@ fields.
 
 
 
+~~~~
 
 `NCID`
 
@@ -891,7 +904,7 @@ fields.
 
 
 
-#### Return Codes
+### Return Codes
 
 `NF90_NOERR`
 
@@ -924,9 +937,9 @@ fields.
 
 
 
-#### Example
+### Example
 
-### 5.6.5 Learn About a Field of a Compound Type: NF90_INQ_COMPOUND_FIELD {#f90-learn-about-a-field-of-a-compound-type-nf90_inq_compound_field}
+## 5.6.5 Learn About a Field of a Compound Type: NF90_INQ_COMPOUND_FIELD {#f90-learn-about-a-field-of-a-compound-type-nf90_inq_compound_field}
 
 
 
@@ -934,9 +947,10 @@ Get information about one of the fields of a compound type.
 
 
 
-#### Usage
+### Usage
 
 
+~~~~.fortran
 
 
   function nf90_inq_compound_field(ncid, xtype, fieldid, name, offset, &
@@ -994,6 +1008,7 @@ Get information about one of the fields of a compound type.
     integer :: nf90_inq_cmp_fielddim_sizes
 
 
+~~~~
 
 
 `NCID`
@@ -1032,7 +1047,7 @@ Get information about one of the fields of a compound type.
 
 
 
-#### Errors
+### Errors
 
 `NF90_NOERR`
 
@@ -1048,10 +1063,10 @@ Get information about one of the fields of a compound type.
 
 
 
-#### Example
+### Example
 
 5.7 Variable Length Array Introduction {#f90-variable-length-array-introduction}
---------------------------------------
+=========================
 
 
 
@@ -1085,14 +1100,7 @@ Compression is permitted but may not be effective for VLEN data, because
 the compression is applied to the nc\_vlen\_t structures, rather than
 the actual data.
 
-  ------------------------------------- ---- --
-  [5.7.1 Define a Variable Length Array (VLEN): NF90\_DEF\_VLEN](#NF90_005fDEF_005fVLEN)                          
-  [5.7.2 Learning about a Variable Length Array (VLEN) Type: NF90\_INQ\_VLEN](#NF90_005fINQ_005fVLEN)             
-  [5.7.3 Releasing Memory for a Variable Length Array (VLEN) Type: NF90\_FREE\_VLEN](#NF90_005fFREE_005fVLEN)     
-  ------------------------------------- ---- --
-
-
-### 5.7.1 Define a Variable Length Array (VLEN): NF90_DEF_VLEN {#f90-define-a-variable-length-array-vlen-nf90_def_vlen}
+## 5.7.1 Define a Variable Length Array (VLEN): NF90_DEF_VLEN {#f90-define-a-variable-length-array-vlen-nf90_def_vlen}
 
 
 
@@ -1100,9 +1108,10 @@ Use this function to define a variable length array type.
 
 
 
-#### Usage
+### Usage
 
 
+~~~~.fortran
 
 
   function nf90_def_vlen(ncid, name, base_typeid, xtypeid)
@@ -1113,6 +1122,7 @@ Use this function to define a variable length array type.
     integer :: nf90_def_vlen
 
 
+~~~~
 
 
 `NCID`
@@ -1135,7 +1145,7 @@ Use this function to define a variable length array type.
 
 
 
-#### Errors
+### Errors
 
 `NF90_NOERR`
 
@@ -1171,9 +1181,9 @@ Use this function to define a variable length array type.
 
 
 
-#### Example
+### Example
 
-### 5.7.2 Learning about a Variable Length Array (VLEN) Type: NF90_INQ_VLEN {#f90-learning-about-a-variable-length-array-vlen-type-nf90_inq_vlen}
+## 5.7.2 Learning about a Variable Length Array (VLEN) Type: NF90_INQ_VLEN {#f90-learning-about-a-variable-length-array-vlen-type-nf90_inq_vlen}
 
 
 
@@ -1181,9 +1191,10 @@ Use this type to learn about a vlen.
 
 
 
-#### Usage
+### Usage
 
 
+~~~~.fortran
 
 
   function nf90_inq_vlen(ncid, xtype, name, datum_size, base_nc_type)
@@ -1195,6 +1206,7 @@ Use this type to learn about a vlen.
     integer :: nf90_inq_vlen
 
 
+~~~~
 
 
 `NCID`
@@ -1242,10 +1254,10 @@ Use this type to learn about a vlen.
 
 
 
-#### Example
+### Example
 
 
-### 5.7.3 Releasing Memory for a Variable Length Array (VLEN) Type: NF90_FREE_VLEN {#f90-releasing-memory-for-a-variable-length-array-vlen-type-nf90_free_vlen}
+## 5.7.3 Releasing Memory for a Variable Length Array (VLEN) Type: NF90_FREE_VLEN {#f90-releasing-memory-for-a-variable-length-array-vlen-type-nf90_free_vlen}
 
 
 
@@ -1261,9 +1273,10 @@ for deallocating that memory.
 
 
 
-#### Usage
+### Usage
 
 
+~~~~.fortran
 
 
   function nf90_free_vlen(vl)
@@ -1272,6 +1285,7 @@ for deallocating that memory.
   end function nf90_free_vlen
 
 
+~~~~
 
 
 `VL`
@@ -1280,7 +1294,7 @@ for deallocating that memory.
 
 
 
-#### Errors
+### Errors
 
 `NF90_NOERR`
 
@@ -1292,11 +1306,11 @@ for deallocating that memory.
 
 
 
-#### Example
+### Example
 
 
 5.8 Opaque Type Introduction {#f90-opaque-type-introduction}
-----------------------------
+=========================
 
 
 
@@ -1313,7 +1327,7 @@ NF90\_DEF\_OPAQUE](#NF90_005fDEF_005fOPAQUE). If encountering an enum
 type in a new data file, use [Learn About an Opaque Type:
 NF90\_INQ\_OPAQUE](#NF90_005fINQ_005fOPAQUE) to learn its name and size.
 
-#### 5.8.1 Creating Opaque Types: NF90_DEF_OPAQUE {#f90-creating-opaque-types-nf90_def_opaque}
+## 5.8.1 Creating Opaque Types: NF90_DEF_OPAQUE {#f90-creating-opaque-types-nf90_def_opaque}
 
 
 
@@ -1321,10 +1335,11 @@ Create an opaque type. Provide a size and a name.
 
 
 
-#### Usage
+### Usage
 
 
 
+~~~~.fortran
 
   function nf90_def_opaque(ncid, size, name, xtype)
     integer, intent(in) :: ncid
@@ -1334,6 +1349,7 @@ Create an opaque type. Provide a size and a name.
     integer :: nf90_def_opaque
 
 
+~~~~
 
 
 `NCID`
@@ -1357,7 +1373,7 @@ Create an opaque type. Provide a size and a name.
 
 
 
-#### Errors
+### Errors
 
 `NF90_NOERR`
 
@@ -1377,9 +1393,9 @@ Create an opaque type. Provide a size and a name.
 
 
 
-#### Example
+### Example
 
-### 5.8.2 Learn About an Opaque Type: NF90_INQ_OPAQUE {#f90-learn-about-an-opaque-type-nf90_inq_opaque}
+## 5.8.2 Learn About an Opaque Type: NF90_INQ_OPAQUE {#f90-learn-about-an-opaque-type-nf90_inq_opaque}
 
 
 
@@ -1387,10 +1403,11 @@ Given a typeid, get the information about an opaque type.
 
 
 
-#### Usage
+### Usage
 
 
 
+~~~~.fortran
 
   function nf90_inq_opaque(ncid, xtype, name, size)
     integer, intent(in) :: ncid
@@ -1401,6 +1418,7 @@ Given a typeid, get the information about an opaque type.
 
 
 
+~~~~
 
 `NCID`
 
@@ -1422,7 +1440,7 @@ Given a typeid, get the information about an opaque type.
 
 
 
-#### Errors
+### Errors
 
 `NF90_NOERR`
 
@@ -1442,10 +1460,10 @@ Given a typeid, get the information about an opaque type.
 
 
 
-#### Example
+### Example
 
 5.9 Enum Type Introduction {#f90-enum-type-introduction}
---------------------------
+=========================
 
 
 
@@ -1453,7 +1471,7 @@ NetCDF-4 added support for the enum type. This is not supported in
 classic or 64-bit offset files.
 
 
-### 5.9.1 Creating a Enum Type: NF90_DEF_ENUM {#f90-creating-a-enum-type-nf90_def_enum}
+## 5.9.1 Creating a Enum Type: NF90_DEF_ENUM {#f90-creating-a-enum-type-nf90_def_enum}
 
 
 
@@ -1466,10 +1484,11 @@ once for each value you wish to make part of the enumeration.
 
 
 
-#### Usage
+### Usage
 
 
 
+~~~~.fortran
 
   function nf90_def_enum(ncid, base_typeid, name, typeid)
     integer, intent(in) :: ncid
@@ -1479,6 +1498,7 @@ once for each value you wish to make part of the enumeration.
     integer :: nf90_def_enum
 
 
+~~~~
 
 
 `NCID`
@@ -1501,7 +1521,7 @@ once for each value you wish to make part of the enumeration.
 
 
 
-#### Errors
+### Errors
 
 `NF90_NOERR`
 
@@ -1551,11 +1571,11 @@ once for each value you wish to make part of the enumeration.
 
 
 
-#### Example
+### Example
 
 
 
-### 5.9.2 Inserting a Field into a Enum Type: NF90_INSERT_ENUM {#f90-inserting-a-field-into-a-enum-type-nf90_insert_enum}
+## 5.9.2 Inserting a Field into a Enum Type: NF90_INSERT_ENUM {#f90-inserting-a-field-into-a-enum-type-nf90_insert_enum}
 
 
 
@@ -1563,10 +1583,11 @@ Insert a named member into a enum type.
 
 
 
-#### Usage
+### Usage
 
 
 
+~~~~.fortran
 
   function nf90_insert_enum(ncid, xtype, name, value)
     integer, intent(in) :: ncid
@@ -1576,6 +1597,7 @@ Insert a named member into a enum type.
     integer :: nf90_insert_enum
 
 
+~~~~
 
 
 `NCID`
@@ -1597,7 +1619,7 @@ Insert a named member into a enum type.
 
 
 
-#### Errors
+### Errors
 
 `NF90_NOERR`
 
@@ -1642,9 +1664,9 @@ Insert a named member into a enum type.
 
 
 
-#### Example
+### Example
 
-### 5.9.3 Learn About a Enum Type: NF90_INQ_ENUM {#f90-learn-about-a-enum-type-nf90_inq_enum}
+## 5.9.3 Learn About a Enum Type: NF90_INQ_ENUM {#f90-learn-about-a-enum-type-nf90_inq_enum}
 
 
 
@@ -1652,9 +1674,10 @@ Get information about a user-defined enumeration type.
 
 
 
-#### Usage
+### Usage
 
 
+~~~~.fortran
 
 
   function nf90_inq_enum(ncid, xtype, name, base_nc_type, base_size, num_members)
@@ -1668,6 +1691,7 @@ Get information about a user-defined enumeration type.
 
 
 
+~~~~
 
 `NCID`
 
@@ -1699,7 +1723,7 @@ Get information about a user-defined enumeration type.
 
 
 
-#### Errors
+### Errors
 
 `NF90_NOERR`
 
@@ -1715,10 +1739,10 @@ Get information about a user-defined enumeration type.
 
 
 
-#### Example
+### Example
 
 
-### 5.9.4 Learn the Name of a Enum Type: nf90_inq_enum_member {#f90-learn-the-name-of-a-enum-type-nf90_inq_enum_member}
+## 5.9.4 Learn the Name of a Enum Type: nf90_inq_enum_member {#f90-learn-the-name-of-a-enum-type-nf90_inq_enum_member}
 
 
 
@@ -1726,11 +1750,12 @@ Get information about a member of an enum type.
 
 
 
-#### Usage
+### Usage
 
 
 
 
+~~~~.fortran
   function nf90_inq_enum_member(ncid, xtype, idx, name, value)
     integer, intent(in) :: ncid
     integer, intent(in) :: xtype
@@ -1739,6 +1764,7 @@ Get information about a member of an enum type.
     integer, intent(in) :: value
     integer :: nf90_inq_enum_member
 
+~~~~
 
 
 
@@ -1765,7 +1791,7 @@ Get information about a member of an enum type.
 
 
 
-#### Errors
+### Errors
 
 `NF90_NOERR`
 
@@ -1781,11 +1807,11 @@ Get information about a member of an enum type.
 
 
 
-#### Example
+### Example
 
 
 
-### 5.9.5 Learn the Name of a Enum Type: NF90_INQ_ENUM_IDENT {#f90-learn-the-name-of-a-enum-type-nf90_inq_enum_ident}
+## 5.9.5 Learn the Name of a Enum Type: NF90_INQ_ENUM_IDENT {#f90-learn-the-name-of-a-enum-type-nf90_inq_enum_ident}
 
 
 
@@ -1796,10 +1822,11 @@ index of the member, you use the value of the member.
 
 
 
-#### Usage
+### Usage
 
 
 
+~~~~.fortran
 
   function nf90_inq_enum_ident(ncid, xtype, value, idx)
     integer, intent(in) :: ncid
@@ -1809,6 +1836,7 @@ index of the member, you use the value of the member.
     integer :: nf90_inq_enum_ident
 
 
+~~~~
 
 
 `NCID`
@@ -1830,8 +1858,8 @@ index of the member, you use the value of the member.
 
 
 
-Return Code {#f90-return-code}
------------
+### Return Code
+
 
 `NF90_NOERR`
 
@@ -1851,4 +1879,4 @@ Return Code {#f90-return-code}
 
 
 
-#### Example
+### Example
