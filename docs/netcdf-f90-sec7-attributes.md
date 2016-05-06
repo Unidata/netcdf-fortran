@@ -66,6 +66,7 @@ Although it’s possible to create attributes of all types, text and
 double attributes are adequate for most purposes.
 
 
+~~~~.fortran
 
 
  function nf90_put_att(ncid, varid, name, values)
@@ -76,6 +77,7 @@ double attributes are adequate for most purposes.
    integer                         :: nf90_put_att
 
 
+~~~~
 
 
 `ncid`
@@ -131,6 +133,7 @@ named valid\_range for a netCDF variable named rh and a global attribute
 named title to an existing netCDF dataset named foo.nc:
 
 
+~~~~.fortran
 
 
  use netcdf
@@ -158,6 +161,7 @@ named title to an existing netCDF dataset named foo.nc:
 
 
 
+~~~~
 
 
 7.3 Get Information about an Attribute: NF90_INQUIRE_ATTRIBUTE and NF90_INQ_ATTNAME {#f90-get-information-about-an-attribute-nf90_inquire_attribute-and-nf90_inq_attname}
@@ -185,6 +189,7 @@ an attribute ID.
 
 
 
+~~~~.fortran
 
  function nf90_inquire_attribute(ncid, varid, name, xtype, len, attnum)
    integer,             intent( in)           :: ncid, varid
@@ -197,6 +202,7 @@ an attribute ID.
    integer                          :: nf90_inq_attname
 
 
+~~~~
 
 
 `ncid`
@@ -264,6 +270,7 @@ named foo.nc:
 
 
 
+~~~~.fortran
 
  use netcdf
  implicit none
@@ -287,6 +294,7 @@ named foo.nc:
 
 
 
+~~~~
 
 7.4 Get Attribute’s Values: NF90_GET_ATT {#f90-get-attributes-values-nf90_get_att}
 ============
@@ -302,6 +310,7 @@ its variable ID and name.
 
 
 
+~~~~.fortran
 
  function nf90_get_att(ncid, varid, name, values)
    integer,            intent( in) :: ncid, varid
@@ -312,6 +321,7 @@ its variable ID and name.
 
 
 
+~~~~
 
 `ncid`
 
@@ -345,6 +355,8 @@ its variable ID and name.
 
 ## Errors
 
+~~~~.fortran
+
 NF90\_GET\_ATT\_ type returns the value NF90\_NOERR if no errors
 occurred. Otherwise, the returned status indicates an error. Possible
 causes of errors include:
@@ -355,6 +367,7 @@ causes of errors include:
 -   One or more of the attribute values are out of the range of values
     representable by the desired type.
 
+~~~~
 
 
 ## Example
@@ -367,6 +380,7 @@ returned, so we first inquire about the length of the attributes to make
 sure we have enough space to store them:
 
 
+~~~~.fortran
 
 
  use netcdf
@@ -403,6 +417,7 @@ sure we have enough space to store them:
  if (status /= nf90_noerr) call handle_err(status)
 
 
+~~~~
 
 
 
@@ -426,8 +441,7 @@ attempted.)
 
 ## Usage
 
-
-
+~~~~.fortran
 
  function nf90_copy_att(ncid_in, varid_in, name, ncid_out, varid_out)
    integer,             intent( in) :: ncid_in,  varid_in
@@ -437,6 +451,8 @@ attempted.)
 
 
 
+
+~~~~
 
 `ncid_in`
 
@@ -494,6 +510,7 @@ assuming that the variable avgrh already exists, but does not yet have a
 units attribute:
 
 
+~~~~.fortran
 
 
  use netcdf
@@ -522,6 +539,7 @@ units attribute:
 
 
 
+~~~~
 
 7.6 Rename an Attribute: NF90_RENAME_ATT {#f90-rename-an-attribute-nf90_rename_att}
 ============
@@ -538,6 +556,7 @@ another attribute of the same variable.
 ## Usage
 
 
+~~~~.fortran
 
 
  function nf90_rename_att(ncid, varid, curname, newname)
@@ -547,6 +566,8 @@ another attribute of the same variable.
 
 
 
+
+~~~~
 
 `ncid`
 
@@ -591,8 +612,7 @@ Here is an example using NF90\_RENAME\_ATT to rename the variable
 attribute units to Units for a variable rh in an existing netCDF dataset
 named foo.nc:
 
-
-
+~~~~.fortran
 
  use netcdf
  implicit none
@@ -610,6 +630,7 @@ named foo.nc:
  if (status /= nf90_noerr) call handle_err(status)
 
 
+~~~~
 
 
 7.7 NF90_DEL_ATT {#f90-nf90_del_att}
@@ -625,6 +646,7 @@ netCDF dataset. The netCDF dataset must be in define mode.
 ## Usage
 
 
+~~~~.fortran
 
 
  function nf90_del_att(ncid, varid, name)
@@ -632,6 +654,7 @@ netCDF dataset. The netCDF dataset must be in define mode.
    character (len = *), intent( in) :: name
    integer                          :: nf90_del_att
 
+~~~~
 
 
 
@@ -670,6 +693,7 @@ Units for a variable rh in an existing netCDF dataset named foo.nc:
 
 
 
+~~~~.fortran
 
  use netcdf
  implicit none
@@ -689,3 +713,5 @@ Units for a variable rh in an existing netCDF dataset named foo.nc:
  if (status /= nf90_noerr) call handle_err(status)
  status = nf90_enddef(ncid)
  if (status /= nf90_noerr) call handle_err(status)
+
+~~~~

@@ -3,7 +3,7 @@ Unidata NetCDF Fortran Library
 
 [![Build Status](https://travis-ci.org/Unidata/netcdf-fortran.svg?branch=master)](https://travis-ci.org/Unidata/netcdf-fortran)
 
-Overview 
+Overview
 --------
 
 
@@ -11,7 +11,7 @@ The Unidata network Common Data Form (netCDF) is an interface for scientific dat
 
 NetCDF files are self-describing, network-transparent, directly accessible, and extendible.  `Self-describing` means that a netCDF file includes information about the data it contains.  `Network-transparent` means that a netCDF file is represented in a form that can be accessed by computers with different ways of storing integers, characters, and floating-point numbers.  `Direct-access` means that a small subset of a large dataset may be accessed efficiently, without first reading through all the preceding data.  `Extendible` means that data can be appended to a netCDF dataset without copying it or redefining its structure.
 
-NetCDF is useful for supporting access to diverse kinds of scientific data in heterogeneous networking environments and for writing application software that does not depend on application-specific formats.  For information about a variety of analysis and display packages that have been developed to analyze and display data in netCDF form, see 
+NetCDF is useful for supporting access to diverse kinds of scientific data in heterogeneous networking environments and for writing application software that does not depend on application-specific formats.  For information about a variety of analysis and display packages that have been developed to analyze and display data in netCDF form, see
 
 * http://www.unidata.ucar.edu/netcdf/software.html
 
@@ -24,7 +24,7 @@ Getting NetCDF
 
 You can obtain a copy of the latest released versions of netCDF software from
 
-* http://github.com/Unidata/netcdf-c 
+* http://github.com/Unidata/netcdf-c
 * http://github.com/Unidata/netcdf-fortran
 * http://github.com/Unidata/netcdf-cxx4
 * http://github.com/Unidata/netcdf4-python
@@ -40,10 +40,9 @@ To install this package, please see the file INSTALL in the distribution, or the
 Additional Documentation
 ------------------------
 
-The netCDF-3 C and FORTRAN-77 interfaces are documented in man(1) pages at
+The netCDF-3 C and FORTRAN-77 interfaces are documented at
 
-* http://www.unidata.ucar.edu/netcdf/docs/netcdf-man-3.html
-* http://www.unidata.ucar.edu/netcdf/docs/netcdf-man-3f.html 
+* http://www.unidata.ucar.edu/netcdf/documentation/historic/
 
 User's Guides are also available in several forms from the same location.
 
