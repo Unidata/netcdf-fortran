@@ -472,12 +472,6 @@ Unix directory names). For a name relative to the parent group See
 section [Find a Group’s Name:
 NF90_INQ_GRPNAME](#f90-find-a-groups-name-nf90_inq_grpname).
 
-To find the length of the full name See section [Find the Length of a
-Group’s Full Name:
-NF90_INQ_GRPNAME_LEN](#NF90_005fINQ_005fGRPNAME_005fLEN).
-
-
-
 ## Usage
 
 

@@ -1,8 +1,6 @@
 Unidata NetCDF Fortran Library
 ========================================
 
-[![Build Status](https://travis-ci.org/Unidata/netcdf-fortran.svg?branch=master)](https://travis-ci.org/Unidata/netcdf-fortran)
-
 Overview
 --------
 
@@ -18,6 +16,15 @@ NetCDF is useful for supporting access to diverse kinds of scientific data in he
 For more information about netCDF, see the netCDF Web page at
 
 * http://www.unidata.ucar.edu/netcdf/
+
+### Code Status
+
+NetCDF-Fortran uses [Travis-CI](http://travis-ci.org) for continuous integration testing. This helps to ensure that developer changes do not break the netCDF-Fortran code base.
+
+Continuous Integration Testing Suite | Status
+---------------- | -----------
+Travis-CI  |  <IMG SRC="https://travis-ci.org/Unidata/netcdf-fortran.svg?branch=master"/>
+
 
 Getting NetCDF
 --------------
