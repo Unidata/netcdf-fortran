@@ -40,9 +40,9 @@ Copyright and licensing information can be found here, as well as in the COPYRIG
 
 * http://www.unidata.ucar.edu/software/netcdf/copyright.html
 
-To install this package, please see the file INSTALL in the distribution, or the (usually more up-to-date) document:
+To install this package, please see the document:
 
-* http://www.unidata.ucar.edu/netcdf/docs/netcdf-fortran-install.html
+* http://www.unidata.ucar.edu/software/netcdf/docs/building_netcdf_fortran.html
 
 Additional Documentation
 ------------------------
