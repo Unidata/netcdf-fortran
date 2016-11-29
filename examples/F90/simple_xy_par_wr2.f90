@@ -91,7 +91,7 @@ program simple_xy_par_wr
   dimids = (/ y_dimid, x_dimid, t_dimid /)
 
   ! define the chunk size (1 along unlimited time dimension)
-  chunk_size = (/p , 1, 1 /)
+  chunk_size = (/ p, 1, 1 /)
 
   ! Define the variable. The type of the variable in this case is
   ! NF90_INT (4-byte integer).
@@ -106,12 +106,12 @@ program simple_xy_par_wr
   start = (/ 1, my_rank + 1, 1/)
   count = (/ p, 1, 1 /)
 
-  ! force independent write (does not help, however)
-  call check(nf90_var_par_access(ncid, varid, nf90_independent))
+  ! Unlimited dimensions require collective writes
+  call check(nf90_var_par_access(ncid, varid, nf90_collective))
 
-  ! Do NOT write to first process (test independent writes)
-  ! this works fine if all processes take part of the write (comment out the if() statement below)
-  if (my_rank.ne.0) &
+  ! The unlimited axis prevents independent write tests
+  ! Re-enable the rank test if independent writes are used in the future
+  !if (my_rank.ne.0) &
   call check(nf90_put_var(ncid, varid, data_out, start = start, &
        count = count))
 
