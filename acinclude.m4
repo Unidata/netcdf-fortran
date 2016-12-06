@@ -350,6 +350,7 @@ EOF
     for ctype in $2; do
 	AC_MSG_CHECKING(if Fortran \"$1\" is C \"$ctype\")
 	cat >conftest.c <<EOF
+            #include <stdlib.h>
 	    void $FCALLSCSUB(values)
 		$ctype values[[4]];
 	    {
