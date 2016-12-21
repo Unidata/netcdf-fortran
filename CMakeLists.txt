@@ -398,8 +398,10 @@ ENDMACRO()
 OPTION(LARGE_FILE_TESTS "Run large file tests, which are slow and take lots of disk." OFF)
 OPTION(BUILD_BENCHMARKS "Run F90 I/O Benchmarks" OFF)
 OPTION(TEST_WITH_VALGRIND "Run extra tests with valgrind" OFF)
-OPTION(TEST_PARALLEL "Run parallel I/O tests for F90 and F77" OFF)
-IF(TEST_PARALLEL)
+OPTION(ENABLE_PARALLEL_TESTS "Run parallel I/O tests for F90 and F77" OFF)
+
+IF(ENABLE_PARALLEL_TESTS)
+  SET(TEST_PARALLEL ON)
   SET(STATUS_PARALLEL ON)
 ENDIF()
 

@@ -2,9 +2,9 @@ SET(example_F90_tests simple_xy_wr simple_xy_rd sfc_pres_temp_wr sfc_pres_temp_r
 SET(example_F90_tests_source "")
 
 IF(TEST_PARALLEL)
-  build_bin_test(simple_xy_par_wr.f90)
-  build_bin_test(simple_xy_par_rd.f90)
-  build_bin_test(simple_xy_par_wr2.f90)
+  build_bin_test(simple_xy_par_wr .f90)
+  build_bin_test(simple_xy_par_rd .f90)
+  build_bin_test(simple_xy_par_wr2 .f90)
   add_sh_test(F90_tests run_f90_par_examples)
 ENDIF(TEST_PARALLEL)
 
