@@ -1,6 +1,12 @@
 SET(example_F90_tests simple_xy_wr simple_xy_rd sfc_pres_temp_wr sfc_pres_temp_rd pres_temp_4D_wr pres_temp_4D_rd)
 SET(example_F90_tests_source "")
 
+##
+# Copy over shell scripts
+##
+FILE(GLOB COPY_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.sh)
+FILE(COPY ${COPY_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)
+
 IF(TEST_PARALLEL)
   build_bin_test(simple_xy_par_wr .f90)
   build_bin_test(simple_xy_par_rd .f90)
