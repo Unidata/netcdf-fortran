@@ -75,7 +75,6 @@ ENDIF()
 FIND_PACKAGE(Doxygen)
 FIND_PROGRAM(NC_DOT NAMES dot)
 
-
 # For CMAKE_INSTALL_LIBDIR
 INCLUDE(GNUInstallDirs)
 
@@ -240,17 +239,6 @@ MACRO(add_bin_env_test prefix F)
   ADD_TEST(${prefix}_${F} bash "-c" "TOPSRCDIR=${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
   IF(MSVC)
     SET_PROPERTY(TARGET ${prefix}_${F} PROPERTY FOLDER "tests")
-  ENDIF()
-ENDMACRO()
-
-# Build a binary used by a script, but don't make a test out of it.
-MACRO(build_bin_test F)
-  ADD_EXECUTABLE(${F} ${F}.c)
-  TARGET_LINK_LIBRARIES(${F} netcdff)
-  IF(MSVC)
-    SET_TARGET_PROPERTIES(${F}
-      PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"
-      )
   ENDIF()
 ENDMACRO()
 
@@ -439,12 +427,93 @@ ENDIF()
 # End 'seek out dependent libraries'
 ###
 
+###
+# Check for various header files
+###
+CHECK_INCLUDE_FILE("alloca.h"  HAVE_ALLOCA_H)
+CHECK_INCLUDE_FILE("malloc.h"    HAVE_MALLOC_H)
+CHECK_INCLUDE_FILE("ctype.h"   HAVE_CTYPE_H)
+CHECK_INCLUDE_FILE("dirent.h"  HAVE_DIRENT_H)
+CHECK_INCLUDE_FILE("dlfcn.h"   HAVE_DLFCN_H)
+CHECK_INCLUDE_FILE("errno.h"   HAVE_ERRNO_H)
+CHECK_INCLUDE_FILE("fcntl.h"   HAVE_FCNTL_H)
+CHECK_INCLUDE_FILE("getopt.h"  HAVE_GETOPT_H)
+CHECK_INCLUDE_FILE("stdbool.h"   HAVE_STDBOOL_H)
+CHECK_INCLUDE_FILE("locale.h"  HAVE_LOCAL_H)
+CHECK_INCLUDE_FILE("stdint.h"  HAVE_STDINT_H)
+CHECK_INCLUDE_FILE("stdio.h"   HAVE_STDIO_H)
+CHECK_INCLUDE_FILE("stdlib.h"  HAVE_STDLIB_H)
+CHECK_INCLUDE_FILE("stdarg.h"    HAVE_STDARG_H)
+CHECK_INCLUDE_FILE("strings.h"   HAVE_STRINGS_H)
+CHECK_INCLUDE_FILE("signal.h"    HAVE_SIGNAL_H)
+CHECK_INCLUDE_FILE("sys/dir.h"   HAVE_SYS_DIR_H)
+CHECK_INCLUDE_FILE("sys/ndir.h"  HAVE_SYS_NDIR_H)
+CHECK_INCLUDE_FILE("sys/param.h" HAVE_SYS_PARAM_H)
+CHECK_INCLUDE_FILE("sys/stat.h"  HAVE_SYS_STAT_H)
+CHECK_INCLUDE_FILE("sys/time.h"  HAVE_SYS_TIME_H)
+CHECK_INCLUDE_FILE("sys/types.h" HAVE_SYS_TYPES_H)
+CHECK_INCLUDE_FILE("sys/wait.h"  HAVE_SYS_WAIT_H)
+CHECK_INCLUDE_FILE("sys/resource.h" HAVE_SYS_RESOURCE_H)
+CHECK_INCLUDE_FILE("fcntl.h"  HAVE_FCNTL_H)
+CHECK_INCLUDE_FILE("inttypes.h"  HAVE_INTTYPES_H)
+CHECK_INCLUDE_FILE("pstdint.h"  HAVE_PSTDINT_H)
+CHECK_INCLUDE_FILE("endian.h" HAVE_ENDIAN_H)
+CHECK_INCLUDE_FILE("BaseTsd.h"  HAVE_BASETSD_H)
+CHECK_INCLUDE_FILE("stddef.h"   HAVE_STDDEF_H)
 
+
+###
+# End Check for various system header files.
+###
+
+###
+# Type checks
+###
+CHECK_TYPE_SIZE("void*"     SIZEOF_VOIDSTAR)
+CHECK_TYPE_SIZE("char"      SIZEOF_CHAR)
+CHECK_TYPE_SIZE("double"    SIZEOF_DOUBLE)
+CHECK_TYPE_SIZE("float"     SIZEOF_FLOAT)
+CHECK_TYPE_SIZE("int"       SIZEOF_INT)
+CHECK_TYPE_SIZE("long"      SIZEOF_LONG)
+CHECK_TYPE_SIZE("long long" SIZEOF_LONG_LONG)
+CHECK_TYPE_SIZE("off_t"     SIZEOF_OFF_T)
+CHECK_TYPE_SIZE("off64_t"   SIZEOF_OFF64_T)
+CHECK_TYPE_SIZE("short"     SIZEOF_SHORT)
+CHECK_TYPE_SIZE("size_t"    SIZEOF_SIZE_T)
+CHECK_TYPE_SIZE("ssize_t"   SIZEOF_SSIZE_T)
+# __int64 is used on Windows for large file support.
+CHECK_TYPE_SIZE("__int64"   SIZEOF___INT_64)
+CHECK_TYPE_SIZE("uchar"     SIZEOF_UCHAR)
+CHECK_TYPE_SIZE("int64_t"   SIZEOF_INT64_T)
+CHECK_TYPE_SIZE("uint64_t"  SIZEOF_UINT64_T)
+
+# On windows systems, we redefine off_t as __int64
+# to enable LFS. This is true on 32 and 64 bit system.s
+# We must redefine SIZEOF_OFF_T to match.
+IF(MSVC AND SIZEOF___INT_64)
+  SET(SIZEOF_OFF_T  ${SIZEOF___INT_64})
+ENDIF()
+
+IF(SIZEOF_SSIZE_T)
+  SET(HAVE_SSIZE_T 1)
+ELSE()
+  CHECK_TYPE_SIZE("SSIZE_T" SIZEOF_SSIZE_T)
+  IF(SIZEOF_SSIZE_T)
+    SET(HAVE_SSIZE_T 1)
+  ENDIF()
+ENDIF()
+
+
+###
+# End type checks
+###
 
 ###
 # TODO: Replace these with automatically-determined
 # checks, like in configure.ac.
 ###
+
+CHECK_FUNCTION_EXISTS(alloca HAVE_ALLOCA)
 
 CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nc_def_opaque "" USE_NETCDF4)
 CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nccreate "" USE_NETCDF_V2)
@@ -452,6 +521,10 @@ CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nc_set_log_level "" USE_LOGGING)
 CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} oc_open "" BUILD_DAP)
 CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nc_use_parallel_enabled "" BUILD_PARALLEL)
 
+IF(BUILD_PARALLEL)
+SET(NC_USE_PARALLEL_ENABLED TRUE)
+CHECK_INCLUDE_FILE("mpif.h" HAVE_MPIF_H)
+ENDIF(BUILD_PARALLEL)
 ##
 # Set some status messages for the summary.
 ##

@@ -4,165 +4,165 @@
 #cmakedefine CRAY_STACKSEG_END
 
 /* Define to 1 if using `alloca.c'. */
-#cmakedefine C_ALLOCA
+#cmakedefine C_ALLOCA 1
 
 /* set this only when building a DLL under MinGW */
-#cmakedefine DLL_NETCDF
+#cmakedefine DLL_NETCDF 1
 
 /* if true, run extra tests which may not work yet */
-#cmakedefine EXTRA_TESTS
+#cmakedefine EXTRA_TESTS 1
 
 /* Define to 1 if you have `alloca', as a function or macro. */
-#cmakedefine HAVE_ALLOCA
+#cmakedefine HAVE_ALLOCA 1
 
 /* Define to 1 if you have <alloca.h> and it should be used (not on Ultrix).
    */
-#cmakedefine HAVE_ALLOCA_H
+#cmakedefine HAVE_ALLOCA_H 1
 
 /* Define to 1 if you have the <ctype.h> header file. */
-#cmakedefine HAVE_CTYPE_H
+#cmakedefine HAVE_CTYPE_H 1
 
 /* Define to 1 if you have the <dirent.h> header file, and it defines `DIR'.
    */
-#cmakedefine HAVE_DIRENT_H
+#cmakedefine HAVE_DIRENT_H 1
 
 /* Define to 1 if you have the <dlfcn.h> header file. */
-#cmakedefine HAVE_DLFCN_H
+#cmakedefine HAVE_DLFCN_H 1
 
 /* Define to 1 if you don't have `vprintf' but do have `_doprnt.' */
-#cmakedefine HAVE_DOPRNT
+#cmakedefine HAVE_DOPRNT 1
 
 /* Define to 1 if you have the <errno.h> header file. */
-#cmakedefine HAVE_ERRNO_H
+#cmakedefine HAVE_ERRNO_H 1
 
 /* if true, use Fortran 2008 ISO_FORTRAN_ENV additions */
-#cmakedefine HAVE_F2008
+#cmakedefine HAVE_F2008 1
 
 /* Define to 1 if you have the <fcntl.h> header file. */
-#cmakedefine HAVE_FCNTL_H
+#cmakedefine HAVE_FCNTL_H 1
 
 /* Define to 1 if you have the <getopt.h> header file. */
-#cmakedefine HAVE_GETOPT_H
+#cmakedefine HAVE_GETOPT_H 1
 
 /* Define to 1 if you have the <inttypes.h> header file. */
-#cmakedefine HAVE_INTTYPES_H
+#cmakedefine HAVE_INTTYPES_H 1
 
 /* Define to 1 if you have the <locale.h> header file. */
-#cmakedefine HAVE_LOCALE_H
+#cmakedefine HAVE_LOCALE_H 1
 
 /* Define to 1 if the system has the type `longlong'. */
-#cmakedefine HAVE_LONGLONG
+#cmakedefine HAVE_LONGLONG 1
 
 /* Define to 1 if you have the <malloc.h> header file. */
-#cmakedefine HAVE_MALLOC_H
+#cmakedefine HAVE_MALLOC_H 1
 
 /* Define to 1 if you have the <memory.h> header file. */
-#cmakedefine HAVE_MEMORY_H
+#cmakedefine HAVE_MEMORY_H 1
 
 /* Define to 1 if you have the `nccreate' function. */
-#cmakedefine HAVE_NCCREATE
+#cmakedefine HAVE_NCCREATE 1
 
 /* Define to 1 if you have the `nc_def_opaque' function. */
-#cmakedefine HAVE_NC_DEF_OPAQUE
+#cmakedefine HAVE_NC_DEF_OPAQUE 1
 
 /* Define to 1 if you have the `nc_set_log_level' function. */
-#cmakedefine HAVE_NC_SET_LOG_LEVEL
+#cmakedefine HAVE_NC_SET_LOG_LEVEL 1
 
 /* Define to 1 if you have the `nc_use_parallel_enabled' function. */
-#cmakedefine HAVE_NC_USE_PARALLEL_ENABLED
+#cmakedefine HAVE_NC_USE_PARALLEL_ENABLED 1
 
 /* Define to 1 if you have the <ndir.h> header file, and it defines `DIR'. */
-#cmakedefine HAVE_NDIR_H
+#cmakedefine HAVE_NDIR_H 1
 
 /* Define to 1 if you have the <netcdf.h> header file. */
-#cmakedefine HAVE_NETCDF_H
+#cmakedefine HAVE_NETCDF_H 1
 
 /* Define to 1 if you have the `oc_open' function. */
-#cmakedefine HAVE_OC_OPEN
+#cmakedefine HAVE_OC_OPEN 1
 
 /* Define to 1 if the system has the type `ptrdiff_t'. */
-#cmakedefine HAVE_PTRDIFF_T
+#cmakedefine HAVE_PTRDIFF_T 1
 
 /* Define to 1 if the system has the type `ssize_t'. */
-#cmakedefine HAVE_SSIZE_T
+#cmakedefine HAVE_SSIZE_T 1
 
 /* Define to 1 if you have the <stdarg.h> header file. */
-#cmakedefine HAVE_STDARG_H
+#cmakedefine HAVE_STDARG_H 1
 
 /* Define to 1 if stdbool.h conforms to C99. */
-#cmakedefine HAVE_STDBOOL_H
+#cmakedefine HAVE_STDBOOL_H 1
 
 /* Define to 1 if you have the <stdint.h> header file. */
-#cmakedefine HAVE_STDINT_H
+#cmakedefine HAVE_STDINT_H 1
 
 /* Define to 1 if you have the <stdio.h> header file. */
-#cmakedefine HAVE_STDIO_H
+#cmakedefine HAVE_STDIO_H 1
 
 /* Define to 1 if you have the <stdlib.h> header file. */
-#cmakedefine HAVE_STDLIB_H
+#cmakedefine HAVE_STDLIB_H 1
 
 /* Define to 1 if you have the <strings.h> header file. */
-#cmakedefine HAVE_STRINGS_H
+#cmakedefine HAVE_STRINGS_H 1
 
 /* Define to 1 if you have the <string.h> header file. */
-#cmakedefine HAVE_STRING_H
+#cmakedefine HAVE_STRING_H 1
 
 /* Define to 1 if you have the <sys/dir.h> header file, and it defines `DIR'.
    */
-#cmakedefine HAVE_SYS_DIR_H
+#cmakedefine HAVE_SYS_DIR_H 1
 
 /* Define to 1 if you have the <sys/ndir.h> header file, and it defines `DIR'.
    */
-#cmakedefine HAVE_SYS_NDIR_H
+#cmakedefine HAVE_SYS_NDIR_H 1
 
 /* Define to 1 if you have the <sys/param.h> header file. */
-#cmakedefine HAVE_SYS_PARAM_H
+#cmakedefine HAVE_SYS_PARAM_H 1
 
 /* Define to 1 if you have the <sys/resource.h> header file. */
-#cmakedefine HAVE_SYS_RESOURCE_H
+#cmakedefine HAVE_SYS_RESOURCE_H 1
 
 /* Define to 1 if you have the <sys/stat.h> header file. */
-#cmakedefine HAVE_SYS_STAT_H
+#cmakedefine HAVE_SYS_STAT_H 1
 
 /* Define to 1 if you have the <sys/time.h> header file. */
-#cmakedefine HAVE_SYS_TIME_H
+#cmakedefine HAVE_SYS_TIME_H 1
 
 /* Define to 1 if you have the <sys/types.h> header file. */
-#cmakedefine HAVE_SYS_TYPES_H
+#cmakedefine HAVE_SYS_TYPES_H 1
 
 /* Define to 1 if you have <sys/wait.h> that is POSIX.1 compatible. */
-#cmakedefine HAVE_SYS_WAIT_H
+#cmakedefine HAVE_SYS_WAIT_H 1
 
 /* if true, Fortran compiler supports TS29113 extension */
-#cmakedefine HAVE_TS29113_SUPPORT
+#cmakedefine HAVE_TS29113_SUPPORT 1
 
 /* Define to 1 if the system has the type `uchar'. */
-#cmakedefine HAVE_UCHAR
+#cmakedefine HAVE_UCHAR 1
 
 /* Define to 1 if you have the <unistd.h> header file. */
-#cmakedefine HAVE_UNISTD_H
+#cmakedefine HAVE_UNISTD_H 1
 
 /* Define to 1 if you have the `vprintf' function. */
-#cmakedefine HAVE_VPRINTF
+#cmakedefine HAVE_VPRINTF 1
 
 /* Define to 1 if the system has the type `_Bool'. */
-#cmakedefine HAVE__BOOL
+#cmakedefine HAVE__BOOL 1
 
 /* do large file tests */
-#cmakedefine LARGE_FILE_TESTS
+#cmakedefine LARGE_FILE_TESTS 1
 
 /* Define to the sub-directory in which libtool stores uninstalled libraries.
    */
-#cmakedefine LT_OBJDIR
+#cmakedefine LT_OBJDIR 1
 
 /* Define to 1 if your C compiler doesn't accept -c and -o together. */
-#cmakedefine NO_MINUS_C_MINUS_O
+#cmakedefine NO_MINUS_C_MINUS_O 1
 
 /* no stdlib.h */
-#cmakedefine NO_STDLIB_H
+#cmakedefine NO_STDLIB_H 1
 
 /* no sys_types.h */
-#cmakedefine NO_SYS_TYPES_H
+#cmakedefine NO_SYS_TYPES_H 1
 
 /* Name of package */
 #cmakedefine PACKAGE
