@@ -186,25 +186,25 @@
 #cmakedefine PACKAGE_VERSION
 
 /* The size of `double', as computed by sizeof. */
-#cmakedefine SIZEOF_DOUBLE
+#cmakedefine SIZEOF_DOUBLE ${SIZEOF_DOUBLE}
 
 /* The size of `float', as computed by sizeof. */
-#cmakedefine SIZEOF_FLOAT
+#cmakedefine SIZEOF_FLOAT ${SIZEOF_FLOAT}
 
 /* The size of `int', as computed by sizeof. */
-#cmakedefine SIZEOF_INT
+#cmakedefine SIZEOF_INT ${SIZEOF_INT}
 
 /* The size of `long', as computed by sizeof. */
-#cmakedefine SIZEOF_LONG
+#cmakedefine SIZEOF_LONG ${SIZEOF_LONG}
 
 /* The size of `off_t', as computed by sizeof. */
-#cmakedefine SIZEOF_OFF_T
+#cmakedefine SIZEOF_OFF_T ${SIZEOF_OFF_T}
 
 /* The size of `short', as computed by sizeof. */
-#cmakedefine SIZEOF_SHORT
+#cmakedefine SIZEOF_SHORT ${SIZEOF_SHORT}
 
 /* The size of `size_t', as computed by sizeof. */
-#cmakedefine SIZEOF_SIZE_T
+#cmakedefine SIZEOF_SIZE_T ${SIZEOF_SIZE_T}
 
 /* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be
