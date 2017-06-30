@@ -12,10 +12,6 @@ program f90tst_vars_vlen
    implicit none
    include 'netcdf.inc'
 
-   ! Use this reference file from which to get sizeof(nc_vlen_t)
-   character*(*) REFFILE
-   parameter (REFFILE='ref_f90tst_vars_vlen.nc')
-
    ! This is the name of the data file we will create.
    character*(*) FILE_NAME
    parameter (FILE_NAME='f90tst_vars_vlen.nc')
@@ -41,8 +37,8 @@ program f90tst_vars_vlen
    parameter (vlen_len = 5)
    integer data1(vlen_len), data1_in(vlen_len)
 
-   ! Default the sizeof(nc_vlen_t)
-   integer VLENSIZE
+   ! sizeof(nc_vlen_t): computed
+   integer SIZEOF_NCVLEN_T
 
    ! These must be big enough to hold the struct nc_vlen_t in netcdf.h.
    integer, dimension(:), allocatable :: vlen
@@ -54,31 +50,6 @@ program f90tst_vars_vlen
    print *, ''
    print *,'*** Testing VLEN types.'
 
-   ! default sizeof(nc_vlen_t)
-   VLENSIZE = 8
-
-   retval = nf_open(REFFILE, NF_NOWRITE, ncid)
-   if (retval .eq. nf_noerr) then
-       ! Since the file exists, use it to get the actual sizeof(nc_vlen_t)
-       tmp = getvlensize(ncid)
-       VLENSIZE = tmp
-       retval = nf_close(ncid)
-       if (retval .ne. nf_noerr) call handle_err(retval)
-       print *, 'computed sizeof(nc_vlen_t) = ', VLENSIZE
-   else
-       print *, 'Reference file not found: ', REFFILE    
-   endif
-	
-   print *, 'Using sizeof(nc_vlen_t) = ', VLENSIZE
-
-   ! Allocate vlen and vlen_in based on VLENSIZE
-   allocate( vlen(VLENSIZE) )
-   allocate( vlen_in(VLENSIZE) )
-
-   do x = 1, vlen_len
-      data1(x) = x
-   end do
-
    ! Create the netCDF file.
    retval = nf_create(FILE_NAME, NF_NETCDF4, ncid)
    if (retval .ne. nf_noerr) call handle_err(retval)
@@ -87,12 +58,19 @@ program f90tst_vars_vlen
    retval = nf_def_vlen(ncid, vlen_type_name, nf_int, vlen_typeid)
    if (retval .ne. nf_noerr) call handle_err(retval)
 
-   ! Now get the size of the created vlen as verification
+   ! Now get the size of the created vlen for later use
    tmp = getvlensize(ncid)
-   ! Verify the sizeof(nc_vlen_t)
-   if (tmp .ne. VLENSIZE) then
-     print *, 'sizeof(nc_vlen_t) mismatch. VLENSIZE=', VLENSIZE, ' should be ', tmp
-   endif
+   print *, 'sizeof(nc_vlen_t) = ', tmp
+   SIZEOF_NCVLEN_T = tmp
+
+   ! Allocate vlen and vlen_in based on SIZEOF_NCVLEN_T
+   allocate( vlen(SIZEOF_NCVLEN_T) )
+   allocate( vlen_in(SIZEOF_NCVLEN_T) )
+
+   ! Fill in the data to write
+   do x = 1, vlen_len
+      data1(x) = x
+   end do
 
    ! Set up the vlen with this helper function, since F77 can't deal
    ! with pointers.
@@ -120,7 +98,7 @@ program f90tst_vars_vlen
         base_type, nfields, class)
    if (retval .ne. nf_noerr) call handle_err(retval)
    if (type_name(1:len(vlen_type_name)) .ne. vlen_type_name .or. &
-         type_size .ne. VLENSIZE .or. base_type .ne. nf_int .or. &
+         type_size .ne. SIZEOF_NCVLEN_T .or. base_type .ne. nf_int .or. &
          nfields .ne. 0 .or. class .ne. nf_vlen) stop 3
 
    ! Use nf_inq_vlen and make sure we get the same answers as we did
@@ -128,7 +106,7 @@ program f90tst_vars_vlen
    retval = nf_inq_vlen(ncid, typeids(1), type_name, base_size, base_type)
    if (retval .ne. nf_noerr) call handle_err(retval)
    if (type_name(1:len(vlen_type_name)) .ne. vlen_type_name .or. &
-        base_type .ne. nf_int .or. base_size .ne. VLENSIZE) stop 4
+        base_type .ne. nf_int .or. base_size .ne. SIZEOF_NCVLEN_T) stop 4
 
    ! Read the vlen attribute.
    retval = nf_get_att(ncid, NF_GLOBAL, 'att1', vlen_in)
