@@ -65,6 +65,8 @@ program f90tst_vars_vlen
        retval = nf_close(ncid)
        if (retval .ne. nf_noerr) call handle_err(retval)
        print *, 'computed sizeof(nc_vlen_t) = ', VLENSIZE
+   else
+       print *, 'Reference file not found: ', REFFILE    
    endif
 	
    print *, 'Using sizeof(nc_vlen_t) = ', VLENSIZE
