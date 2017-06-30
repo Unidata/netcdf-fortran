@@ -191,7 +191,7 @@ ENDFOREACH()
 # test_get.F and test_put.f need to be distributed, so that the user
 # need not have m4. fills.nc is used by test program ftest.
 SET (EXTRA_DIST test_get.F test_put.F fills.cdl create_fills.sh
-  run_f90_par_test.sh run_f77_par_test.sh ref_fills.nc)
+  run_f90_par_test.sh run_f77_par_test.sh ref_fills.nc ref_f90tst_vars_vlen.nc)
 
 # Cleaning up files created during the process.
 SET (CLEANFILES scratch.nc test.nc copy.nc fills.nc tst_*.nc ftst_*.nc f90tst_*.nc)
