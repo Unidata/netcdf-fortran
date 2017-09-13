@@ -2,8 +2,6 @@
 # The configure file got these by testing an F77 program, invoking
 # UD_FORTRAN_TYPES defined in acinclude.m4. 
 
-#NOTE: this code is included by both pnetcdf AND netcdf-fortran.  Make sure to test both if you change it.
-
 # check sizes of C types
 check_type_size(int SIZEOF_INT)
 check_type_size(long SIZEOF_LONG)

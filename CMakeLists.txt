@@ -607,7 +607,7 @@ endif()
 IF(USE_NETCDF_V2)
   SET(BUILD_V2 ON CACHE BOOL "")
 ENDIF()
-# Turn this on by default when it's working
+
 OPTION(ENABLE_FORTRAN_TYPE_CHECKS
   "Determine Fortran types corresponding to netCDF types" ON)
 
