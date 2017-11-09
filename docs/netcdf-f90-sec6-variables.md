@@ -661,7 +661,7 @@ named rh in an existing netCDF dataset named foo.nc:
 
 
 
-Given the name of a varaible, nf90\_inq\_varid finds the variable ID.
+Given the name of a variable, nf90\_inq\_varid finds the variable ID.
 
 
 
