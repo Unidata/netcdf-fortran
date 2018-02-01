@@ -1,0 +1,188 @@
+\hypertarget{netcdf__file_8f90}{}\section{netcdf\+\_\+file.\+f90 File Reference}
+\label{netcdf__file_8f90}\index{netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}}
+\subsection*{Functions/\+Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+character(len=80) function \hyperlink{netcdf__file_8f90_ad94c17f0f0468c40a76d919695e264bf}{nf90\+\_\+inq\+\_\+libvers} ()
+\item 
+character(len=80) function \hyperlink{netcdf__file_8f90_aa6681acb041e6d3ae5c83c1646039729}{nf90\+\_\+strerror} (ncerr)
+\item 
+integer function \hyperlink{netcdf__file_8f90_a3312742f3f4f3beeb13f3cda85229298}{nf90\+\_\+inq\+\_\+base\+\_\+pe} (ncid, pe)
+\item 
+integer function \hyperlink{netcdf__file_8f90_afd3d1288b0bff0c6d7efc465935f981b}{nf90\+\_\+set\+\_\+base\+\_\+pe} (ncid, pe)
+\item 
+integer function \hyperlink{netcdf__file_8f90_a52b7705229d04e51dd782c6bdc5e7aad}{nf90\+\_\+create\+\_\+mp} (path, cmode, initalsz, basepe, chunksizehint, ncid)
+\item 
+integer function \hyperlink{netcdf__file_8f90_a6d4993d0bc8de0c617071f6527f7dedf}{nf90\+\_\+open\+\_\+mp} (path, mode, basepe, chunksizeint, ncid)
+\item 
+integer function \hyperlink{netcdf__file_8f90_a5857d0f422d90038aa5a748893f0d7fc}{nf90\+\_\+set\+\_\+fill} (ncid, fillmode, old\+\_\+mode)
+\item 
+integer function \hyperlink{netcdf__file_8f90_ae3b9855ad30a9b042a7211ca0eb7eb3b}{nf90\+\_\+redef} (ncid)
+\item 
+integer function \hyperlink{netcdf__file_8f90_a76e8ac5f28d4098c6e8a79edae2879c7}{nf90\+\_\+enddef} (ncid, h\+\_\+minfree, v\+\_\+align, v\+\_\+minfree, r\+\_\+align)
+\item 
+integer function \hyperlink{netcdf__file_8f90_a033641c2ed47b960ec72f0606b848c74}{nf90\+\_\+sync} (ncid)
+\item 
+integer function \hyperlink{netcdf__file_8f90_a8ddf15ef17bbc5ef354b36af29b25767}{nf90\+\_\+abort} (ncid)
+\item 
+integer function \hyperlink{netcdf__file_8f90_afea3d4176b7ecfdce13fe3ba08a59a2c}{nf90\+\_\+close} (ncid)
+\item 
+integer function \hyperlink{netcdf__file_8f90_a98182625d66975384a518ce43f3a3f5f}{nf90\+\_\+delete} (name)
+\item 
+integer function \hyperlink{netcdf__file_8f90_a60932835dd9715d8f50025ed2ff40fec}{nf90\+\_\+inquire} (ncid, n\+Dimensions, n\+Variables, n\+Attributes, unlimited\+Dim\+Id, format\+Num)
+\item 
+integer function \hyperlink{netcdf__file_8f90_a20c77c8b0e9009b480ea0e8cf314c23f}{nf90\+\_\+inq\+\_\+path} (ncid, pathlen, path)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function/\+Subroutine Documentation}
+\mbox{\Hypertarget{netcdf__file_8f90_a8ddf15ef17bbc5ef354b36af29b25767}\label{netcdf__file_8f90_a8ddf15ef17bbc5ef354b36af29b25767}} 
+\index{netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}!nf90\+\_\+abort@{nf90\+\_\+abort}}
+\index{nf90\+\_\+abort@{nf90\+\_\+abort}!netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+abort()}{nf90\_abort()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+abort (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid }\end{DoxyParamCaption})}
+
+
+
+Definition at line 103 of file netcdf\+\_\+file.\+f90.
+
+\mbox{\Hypertarget{netcdf__file_8f90_afea3d4176b7ecfdce13fe3ba08a59a2c}\label{netcdf__file_8f90_afea3d4176b7ecfdce13fe3ba08a59a2c}} 
+\index{netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}!nf90\+\_\+close@{nf90\+\_\+close}}
+\index{nf90\+\_\+close@{nf90\+\_\+close}!netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+close()}{nf90\_close()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+close (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid }\end{DoxyParamCaption})}
+
+
+
+Definition at line 110 of file netcdf\+\_\+file.\+f90.
+
+\mbox{\Hypertarget{netcdf__file_8f90_a52b7705229d04e51dd782c6bdc5e7aad}\label{netcdf__file_8f90_a52b7705229d04e51dd782c6bdc5e7aad}} 
+\index{netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}!nf90\+\_\+create\+\_\+mp@{nf90\+\_\+create\+\_\+mp}}
+\index{nf90\+\_\+create\+\_\+mp@{nf90\+\_\+create\+\_\+mp}!netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+create\+\_\+mp()}{nf90\_create\_mp()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+create\+\_\+mp (\begin{DoxyParamCaption}\item[{character (len = $\ast$), intent(in)}]{path,  }\item[{integer, intent(in)}]{cmode,  }\item[{integer, intent(in)}]{initalsz,  }\item[{integer, intent(in)}]{basepe,  }\item[{integer, intent(in)}]{chunksizehint,  }\item[{integer, intent(out)}]{ncid }\end{DoxyParamCaption})}
+
+
+
+Definition at line 41 of file netcdf\+\_\+file.\+f90.
+
+\mbox{\Hypertarget{netcdf__file_8f90_a98182625d66975384a518ce43f3a3f5f}\label{netcdf__file_8f90_a98182625d66975384a518ce43f3a3f5f}} 
+\index{netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}!nf90\+\_\+delete@{nf90\+\_\+delete}}
+\index{nf90\+\_\+delete@{nf90\+\_\+delete}!netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+delete()}{nf90\_delete()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+delete (\begin{DoxyParamCaption}\item[{character(len = $\ast$), intent(in)}]{name }\end{DoxyParamCaption})}
+
+
+
+Definition at line 117 of file netcdf\+\_\+file.\+f90.
+
+\mbox{\Hypertarget{netcdf__file_8f90_a76e8ac5f28d4098c6e8a79edae2879c7}\label{netcdf__file_8f90_a76e8ac5f28d4098c6e8a79edae2879c7}} 
+\index{netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}!nf90\+\_\+enddef@{nf90\+\_\+enddef}}
+\index{nf90\+\_\+enddef@{nf90\+\_\+enddef}!netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+enddef()}{nf90\_enddef()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+enddef (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in), optional}]{h\+\_\+minfree,  }\item[{integer, intent(in), optional}]{v\+\_\+align,  }\item[{integer, intent(in), optional}]{v\+\_\+minfree,  }\item[{integer, intent(in), optional}]{r\+\_\+align }\end{DoxyParamCaption})}
+
+
+
+Definition at line 74 of file netcdf\+\_\+file.\+f90.
+
+\mbox{\Hypertarget{netcdf__file_8f90_a3312742f3f4f3beeb13f3cda85229298}\label{netcdf__file_8f90_a3312742f3f4f3beeb13f3cda85229298}} 
+\index{netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}!nf90\+\_\+inq\+\_\+base\+\_\+pe@{nf90\+\_\+inq\+\_\+base\+\_\+pe}}
+\index{nf90\+\_\+inq\+\_\+base\+\_\+pe@{nf90\+\_\+inq\+\_\+base\+\_\+pe}!netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+inq\+\_\+base\+\_\+pe()}{nf90\_inq\_base\_pe()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+inq\+\_\+base\+\_\+pe (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(out)}]{pe }\end{DoxyParamCaption})}
+
+
+
+Definition at line 26 of file netcdf\+\_\+file.\+f90.
+
+\mbox{\Hypertarget{netcdf__file_8f90_ad94c17f0f0468c40a76d919695e264bf}\label{netcdf__file_8f90_ad94c17f0f0468c40a76d919695e264bf}} 
+\index{netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}!nf90\+\_\+inq\+\_\+libvers@{nf90\+\_\+inq\+\_\+libvers}}
+\index{nf90\+\_\+inq\+\_\+libvers@{nf90\+\_\+inq\+\_\+libvers}!netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+inq\+\_\+libvers()}{nf90\_inq\_libvers()}}
+{\footnotesize\ttfamily character(len = 80) function nf90\+\_\+inq\+\_\+libvers (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 10 of file netcdf\+\_\+file.\+f90.
+
+\mbox{\Hypertarget{netcdf__file_8f90_a20c77c8b0e9009b480ea0e8cf314c23f}\label{netcdf__file_8f90_a20c77c8b0e9009b480ea0e8cf314c23f}} 
+\index{netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}!nf90\+\_\+inq\+\_\+path@{nf90\+\_\+inq\+\_\+path}}
+\index{nf90\+\_\+inq\+\_\+path@{nf90\+\_\+inq\+\_\+path}!netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+inq\+\_\+path()}{nf90\_inq\_path()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+inq\+\_\+path (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(inout)}]{pathlen,  }\item[{character(len = $\ast$), intent(inout)}]{path }\end{DoxyParamCaption})}
+
+
+
+Definition at line 145 of file netcdf\+\_\+file.\+f90.
+
+\mbox{\Hypertarget{netcdf__file_8f90_a60932835dd9715d8f50025ed2ff40fec}\label{netcdf__file_8f90_a60932835dd9715d8f50025ed2ff40fec}} 
+\index{netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}!nf90\+\_\+inquire@{nf90\+\_\+inquire}}
+\index{nf90\+\_\+inquire@{nf90\+\_\+inquire}!netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+inquire()}{nf90\_inquire()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+inquire (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(out), optional}]{n\+Dimensions,  }\item[{integer, intent(out), optional}]{n\+Variables,  }\item[{integer, intent(out), optional}]{n\+Attributes,  }\item[{integer, intent(out), optional}]{unlimited\+Dim\+Id,  }\item[{integer, intent(out), optional}]{format\+Num }\end{DoxyParamCaption})}
+
+
+
+Definition at line 127 of file netcdf\+\_\+file.\+f90.
+
+\mbox{\Hypertarget{netcdf__file_8f90_a6d4993d0bc8de0c617071f6527f7dedf}\label{netcdf__file_8f90_a6d4993d0bc8de0c617071f6527f7dedf}} 
+\index{netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}!nf90\+\_\+open\+\_\+mp@{nf90\+\_\+open\+\_\+mp}}
+\index{nf90\+\_\+open\+\_\+mp@{nf90\+\_\+open\+\_\+mp}!netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+open\+\_\+mp()}{nf90\_open\_mp()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+open\+\_\+mp (\begin{DoxyParamCaption}\item[{character (len = $\ast$), intent(in)}]{path,  }\item[{integer, intent(in)}]{mode,  }\item[{integer, intent(in)}]{basepe,  }\item[{integer, intent(in)}]{chunksizeint,  }\item[{integer, intent(out)}]{ncid }\end{DoxyParamCaption})}
+
+
+
+Definition at line 50 of file netcdf\+\_\+file.\+f90.
+
+\mbox{\Hypertarget{netcdf__file_8f90_ae3b9855ad30a9b042a7211ca0eb7eb3b}\label{netcdf__file_8f90_ae3b9855ad30a9b042a7211ca0eb7eb3b}} 
+\index{netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}!nf90\+\_\+redef@{nf90\+\_\+redef}}
+\index{nf90\+\_\+redef@{nf90\+\_\+redef}!netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+redef()}{nf90\_redef()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+redef (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid }\end{DoxyParamCaption})}
+
+
+
+Definition at line 67 of file netcdf\+\_\+file.\+f90.
+
+\mbox{\Hypertarget{netcdf__file_8f90_afd3d1288b0bff0c6d7efc465935f981b}\label{netcdf__file_8f90_afd3d1288b0bff0c6d7efc465935f981b}} 
+\index{netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}!nf90\+\_\+set\+\_\+base\+\_\+pe@{nf90\+\_\+set\+\_\+base\+\_\+pe}}
+\index{nf90\+\_\+set\+\_\+base\+\_\+pe@{nf90\+\_\+set\+\_\+base\+\_\+pe}!netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+set\+\_\+base\+\_\+pe()}{nf90\_set\_base\_pe()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+set\+\_\+base\+\_\+pe (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{pe }\end{DoxyParamCaption})}
+
+
+
+Definition at line 34 of file netcdf\+\_\+file.\+f90.
+
+\mbox{\Hypertarget{netcdf__file_8f90_a5857d0f422d90038aa5a748893f0d7fc}\label{netcdf__file_8f90_a5857d0f422d90038aa5a748893f0d7fc}} 
+\index{netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}!nf90\+\_\+set\+\_\+fill@{nf90\+\_\+set\+\_\+fill}}
+\index{nf90\+\_\+set\+\_\+fill@{nf90\+\_\+set\+\_\+fill}!netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+set\+\_\+fill()}{nf90\_set\_fill()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+set\+\_\+fill (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{fillmode,  }\item[{integer, intent(out)}]{old\+\_\+mode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 59 of file netcdf\+\_\+file.\+f90.
+
+\mbox{\Hypertarget{netcdf__file_8f90_aa6681acb041e6d3ae5c83c1646039729}\label{netcdf__file_8f90_aa6681acb041e6d3ae5c83c1646039729}} 
+\index{netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}!nf90\+\_\+strerror@{nf90\+\_\+strerror}}
+\index{nf90\+\_\+strerror@{nf90\+\_\+strerror}!netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+strerror()}{nf90\_strerror()}}
+{\footnotesize\ttfamily character(len = 80) function nf90\+\_\+strerror (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncerr }\end{DoxyParamCaption})}
+
+
+
+Definition at line 16 of file netcdf\+\_\+file.\+f90.
+
+\mbox{\Hypertarget{netcdf__file_8f90_a033641c2ed47b960ec72f0606b848c74}\label{netcdf__file_8f90_a033641c2ed47b960ec72f0606b848c74}} 
+\index{netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}!nf90\+\_\+sync@{nf90\+\_\+sync}}
+\index{nf90\+\_\+sync@{nf90\+\_\+sync}!netcdf\+\_\+file.\+f90@{netcdf\+\_\+file.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+sync()}{nf90\_sync()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+sync (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid }\end{DoxyParamCaption})}
+
+
+
+Definition at line 96 of file netcdf\+\_\+file.\+f90.
+

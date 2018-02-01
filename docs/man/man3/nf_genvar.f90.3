@@ -1,0 +1,87 @@
+.TH "nf_genvar.f90" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+nf_genvar.f90
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "integer function \fBnf_def_var\fP (ncid, name, xtype, nvdims, vdims, varid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_varndims\fP (ncid, varid, vndims)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_var\fP (ncid, varid, name, xtype, ndims, dimids, natts)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_vardimid\fP (ncid, varid, dimids)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_varid\fP (ncid, name, varid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_varname\fP (ncid, varid, name)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_vartype\fP (ncid, varid, xtype)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_varnatts\fP (ncid, varid, nvatts)"
+.br
+.ti -1c
+.RI "integer function \fBnf_rename_var\fP (ncid, varid, name)"
+.br
+.ti -1c
+.RI "integer function \fBnf_copy_var\fP (ncid_in, varid, ncid_out)"
+.br
+.in -1c
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "integer function nf_copy_var (integer, intent(in) ncid_in, integer, intent(in) varid, integer, intent(in) ncid_out)"
+
+.PP
+Definition at line 402 of file nf_genvar\&.f90\&.
+.SS "integer function nf_def_var (integer, intent(in) ncid, character(len=*), intent(in) name, integer, intent(in) xtype, integer, intent(in) nvdims, integer, dimension(*), intent(in) vdims, integer, intent(out) varid)"
+
+.PP
+Definition at line 36 of file nf_genvar\&.f90\&.
+.SS "integer function nf_inq_var (integer, intent(in) ncid, integer, intent(in) varid, character(len=*), intent(out) name, integer, intent(out) xtype, integer, intent(out) ndims, integer, dimension(*), intent(out) dimids, integer, intent(out) natts)"
+
+.PP
+Definition at line 119 of file nf_genvar\&.f90\&.
+.SS "integer function nf_inq_vardimid (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(out) dimids)"
+
+.PP
+Definition at line 192 of file nf_genvar\&.f90\&.
+.SS "integer function nf_inq_varid (integer, intent(in) ncid, character(len=*), intent(in) name, integer, intent(out) varid)"
+
+.PP
+Definition at line 246 of file nf_genvar\&.f90\&.
+.SS "integer function nf_inq_varname (integer, intent(in) ncid, integer, intent(in) varid, character(len=*), intent(out) name)"
+
+.PP
+Definition at line 279 of file nf_genvar\&.f90\&.
+.SS "integer function nf_inq_varnatts (integer, intent(in) ncid, integer, intent(in) varid, integer, intent(out) nvatts)"
+
+.PP
+Definition at line 344 of file nf_genvar\&.f90\&.
+.SS "integer function nf_inq_varndims (integer, intent(in) ncid, integer, intent(in) varid, integer, intent(out) vndims)"
+
+.PP
+Definition at line 91 of file nf_genvar\&.f90\&.
+.SS "integer function nf_inq_vartype (integer, intent(in) ncid, integer, intent(in) varid, integer, intent(out) xtype)"
+
+.PP
+Definition at line 316 of file nf_genvar\&.f90\&.
+.SS "integer function nf_rename_var (integer, intent(in) ncid, integer, intent(in) varid, character(len=*), intent(in) name)"
+
+.PP
+Definition at line 372 of file nf_genvar\&.f90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for NetCDF-Fortran from the source code\&.

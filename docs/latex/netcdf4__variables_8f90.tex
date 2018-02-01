@@ -1,0 +1,92 @@
+\hypertarget{netcdf4__variables_8f90}{}\section{netcdf4\+\_\+variables.\+f90 File Reference}
+\label{netcdf4__variables_8f90}\index{netcdf4\+\_\+variables.\+f90@{netcdf4\+\_\+variables.\+f90}}
+\subsection*{Functions/\+Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+integer function \hyperlink{netcdf4__variables_8f90_ab4e65fef4873720b23fc10d39d167def}{nf90\+\_\+def\+\_\+var\+\_\+scalar} (ncid, name, xtype, varid)
+\item 
+integer function \hyperlink{netcdf4__variables_8f90_aa7b97046fe9b36f359781ddb7f6ea5c7}{nf90\+\_\+def\+\_\+var\+\_\+onedim} (ncid, name, xtype, dimids, varid, contiguous, chunksizes, deflate\+\_\+level, shuffle, fletcher32, endianness, cache\+\_\+size, cache\+\_\+nelems, cache\+\_\+preemption)
+\item 
+integer function \hyperlink{netcdf4__variables_8f90_ad5483fb35ddc06477ba6c9160944a14f}{nf90\+\_\+def\+\_\+var\+\_\+manydims} (ncid, name, xtype, dimids, varid, contiguous, chunksizes, deflate\+\_\+level, shuffle, fletcher32, endianness, cache\+\_\+size, cache\+\_\+nelems, cache\+\_\+preemption)
+\item 
+integer function \hyperlink{netcdf4__variables_8f90_ad13ff0a76f836cb953fb402637edca20}{nf90\+\_\+inq\+\_\+varid} (ncid, name, varid)
+\item 
+integer function \hyperlink{netcdf4__variables_8f90_a90ad028a51b07010140805455e456d31}{nf90\+\_\+set\+\_\+var\+\_\+chunk\+\_\+cache} (ncid, varid, size, nelems, preemption)
+\item 
+integer function \hyperlink{netcdf4__variables_8f90_a799c6c4419388a7a6317d7661499fa0e}{nf90\+\_\+inquire\+\_\+variable} (ncid, varid, name, xtype, ndims, dimids, n\+Atts, contiguous, chunksizes, deflate\+\_\+level, shuffle, fletcher32, endianness, cache\+\_\+size, cache\+\_\+nelems, cache\+\_\+preemption)
+\item 
+integer function \hyperlink{netcdf4__variables_8f90_aa3779419b3894a821cca28e761077b2c}{nf90\+\_\+rename\+\_\+var} (ncid, varid, newname)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function/\+Subroutine Documentation}
+\mbox{\Hypertarget{netcdf4__variables_8f90_ad5483fb35ddc06477ba6c9160944a14f}\label{netcdf4__variables_8f90_ad5483fb35ddc06477ba6c9160944a14f}} 
+\index{netcdf4\+\_\+variables.\+f90@{netcdf4\+\_\+variables.\+f90}!nf90\+\_\+def\+\_\+var\+\_\+manydims@{nf90\+\_\+def\+\_\+var\+\_\+manydims}}
+\index{nf90\+\_\+def\+\_\+var\+\_\+manydims@{nf90\+\_\+def\+\_\+var\+\_\+manydims}!netcdf4\+\_\+variables.\+f90@{netcdf4\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+def\+\_\+var\+\_\+manydims()}{nf90\_def\_var\_manydims()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+def\+\_\+var\+\_\+manydims (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{character (len = $\ast$), intent(in)}]{name,  }\item[{integer, intent(in)}]{xtype,  }\item[{integer, dimension(\+:), intent(in)}]{dimids,  }\item[{integer, intent(out)}]{varid,  }\item[{logical, intent(in), optional}]{contiguous,  }\item[{integer, dimension(\+:), intent(in), optional}]{chunksizes,  }\item[{integer, intent(in), optional}]{deflate\+\_\+level,  }\item[{logical, intent(in), optional}]{shuffle,  }\item[{logical, intent(in), optional}]{fletcher32,  }\item[{integer, intent(in), optional}]{endianness,  }\item[{integer, intent(in), optional}]{cache\+\_\+size,  }\item[{integer, intent(in), optional}]{cache\+\_\+nelems,  }\item[{integer, intent(in), optional}]{cache\+\_\+preemption }\end{DoxyParamCaption})}
+
+
+
+Definition at line 131 of file netcdf4\+\_\+variables.\+f90.
+
+\mbox{\Hypertarget{netcdf4__variables_8f90_aa7b97046fe9b36f359781ddb7f6ea5c7}\label{netcdf4__variables_8f90_aa7b97046fe9b36f359781ddb7f6ea5c7}} 
+\index{netcdf4\+\_\+variables.\+f90@{netcdf4\+\_\+variables.\+f90}!nf90\+\_\+def\+\_\+var\+\_\+onedim@{nf90\+\_\+def\+\_\+var\+\_\+onedim}}
+\index{nf90\+\_\+def\+\_\+var\+\_\+onedim@{nf90\+\_\+def\+\_\+var\+\_\+onedim}!netcdf4\+\_\+variables.\+f90@{netcdf4\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+def\+\_\+var\+\_\+onedim()}{nf90\_def\_var\_onedim()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+def\+\_\+var\+\_\+onedim (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{character (len = $\ast$), intent(in)}]{name,  }\item[{integer, intent(in)}]{xtype,  }\item[{integer, intent(in)}]{dimids,  }\item[{integer, intent(out)}]{varid,  }\item[{logical, intent(in), optional}]{contiguous,  }\item[{integer, intent(in), optional}]{chunksizes,  }\item[{integer, intent(in), optional}]{deflate\+\_\+level,  }\item[{logical, intent(in), optional}]{shuffle,  }\item[{logical, intent(in), optional}]{fletcher32,  }\item[{integer, intent(in), optional}]{endianness,  }\item[{integer, intent(in), optional}]{cache\+\_\+size,  }\item[{integer, intent(in), optional}]{cache\+\_\+nelems,  }\item[{integer, intent(in), optional}]{cache\+\_\+preemption }\end{DoxyParamCaption})}
+
+
+
+Definition at line 23 of file netcdf4\+\_\+variables.\+f90.
+
+\mbox{\Hypertarget{netcdf4__variables_8f90_ab4e65fef4873720b23fc10d39d167def}\label{netcdf4__variables_8f90_ab4e65fef4873720b23fc10d39d167def}} 
+\index{netcdf4\+\_\+variables.\+f90@{netcdf4\+\_\+variables.\+f90}!nf90\+\_\+def\+\_\+var\+\_\+scalar@{nf90\+\_\+def\+\_\+var\+\_\+scalar}}
+\index{nf90\+\_\+def\+\_\+var\+\_\+scalar@{nf90\+\_\+def\+\_\+var\+\_\+scalar}!netcdf4\+\_\+variables.\+f90@{netcdf4\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+def\+\_\+var\+\_\+scalar()}{nf90\_def\_var\_scalar()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+def\+\_\+var\+\_\+scalar (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{character (len = $\ast$), intent(in)}]{name,  }\item[{integer, intent(in)}]{xtype,  }\item[{integer, intent(out)}]{varid }\end{DoxyParamCaption})}
+
+
+
+Definition at line 5 of file netcdf4\+\_\+variables.\+f90.
+
+\mbox{\Hypertarget{netcdf4__variables_8f90_ad13ff0a76f836cb953fb402637edca20}\label{netcdf4__variables_8f90_ad13ff0a76f836cb953fb402637edca20}} 
+\index{netcdf4\+\_\+variables.\+f90@{netcdf4\+\_\+variables.\+f90}!nf90\+\_\+inq\+\_\+varid@{nf90\+\_\+inq\+\_\+varid}}
+\index{nf90\+\_\+inq\+\_\+varid@{nf90\+\_\+inq\+\_\+varid}!netcdf4\+\_\+variables.\+f90@{netcdf4\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+inq\+\_\+varid()}{nf90\_inq\_varid()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+inq\+\_\+varid (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{character (len = $\ast$), intent(in)}]{name,  }\item[{integer, intent(out)}]{varid }\end{DoxyParamCaption})}
+
+
+
+Definition at line 245 of file netcdf4\+\_\+variables.\+f90.
+
+\mbox{\Hypertarget{netcdf4__variables_8f90_a799c6c4419388a7a6317d7661499fa0e}\label{netcdf4__variables_8f90_a799c6c4419388a7a6317d7661499fa0e}} 
+\index{netcdf4\+\_\+variables.\+f90@{netcdf4\+\_\+variables.\+f90}!nf90\+\_\+inquire\+\_\+variable@{nf90\+\_\+inquire\+\_\+variable}}
+\index{nf90\+\_\+inquire\+\_\+variable@{nf90\+\_\+inquire\+\_\+variable}!netcdf4\+\_\+variables.\+f90@{netcdf4\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+inquire\+\_\+variable()}{nf90\_inquire\_variable()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+inquire\+\_\+variable (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character (len = $\ast$), intent(out), optional}]{name,  }\item[{integer, intent(out), optional}]{xtype,  }\item[{integer, intent(out), optional}]{ndims,  }\item[{integer, dimension(\+:), intent(out), optional}]{dimids,  }\item[{integer, intent(out), optional}]{n\+Atts,  }\item[{logical, intent(out), optional}]{contiguous,  }\item[{integer, dimension(\+:), intent(out), optional}]{chunksizes,  }\item[{integer, intent(out), optional}]{deflate\+\_\+level,  }\item[{logical, intent(out), optional}]{shuffle,  }\item[{logical, intent(out), optional}]{fletcher32,  }\item[{integer, intent(out), optional}]{endianness,  }\item[{integer, intent(out), optional}]{cache\+\_\+size,  }\item[{integer, intent(out), optional}]{cache\+\_\+nelems,  }\item[{integer, intent(out), optional}]{cache\+\_\+preemption }\end{DoxyParamCaption})}
+
+
+
+Definition at line 268 of file netcdf4\+\_\+variables.\+f90.
+
+\mbox{\Hypertarget{netcdf4__variables_8f90_aa3779419b3894a821cca28e761077b2c}\label{netcdf4__variables_8f90_aa3779419b3894a821cca28e761077b2c}} 
+\index{netcdf4\+\_\+variables.\+f90@{netcdf4\+\_\+variables.\+f90}!nf90\+\_\+rename\+\_\+var@{nf90\+\_\+rename\+\_\+var}}
+\index{nf90\+\_\+rename\+\_\+var@{nf90\+\_\+rename\+\_\+var}!netcdf4\+\_\+variables.\+f90@{netcdf4\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+rename\+\_\+var()}{nf90\_rename\_var()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+rename\+\_\+var (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character (len = $\ast$), intent(in)}]{newname }\end{DoxyParamCaption})}
+
+
+
+Definition at line 354 of file netcdf4\+\_\+variables.\+f90.
+
+\mbox{\Hypertarget{netcdf4__variables_8f90_a90ad028a51b07010140805455e456d31}\label{netcdf4__variables_8f90_a90ad028a51b07010140805455e456d31}} 
+\index{netcdf4\+\_\+variables.\+f90@{netcdf4\+\_\+variables.\+f90}!nf90\+\_\+set\+\_\+var\+\_\+chunk\+\_\+cache@{nf90\+\_\+set\+\_\+var\+\_\+chunk\+\_\+cache}}
+\index{nf90\+\_\+set\+\_\+var\+\_\+chunk\+\_\+cache@{nf90\+\_\+set\+\_\+var\+\_\+chunk\+\_\+cache}!netcdf4\+\_\+variables.\+f90@{netcdf4\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+set\+\_\+var\+\_\+chunk\+\_\+cache()}{nf90\_set\_var\_chunk\_cache()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+set\+\_\+var\+\_\+chunk\+\_\+cache (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, intent(in)}]{size,  }\item[{integer, intent(in)}]{nelems,  }\item[{integer, intent(in)}]{preemption }\end{DoxyParamCaption})}
+
+
+
+Definition at line 256 of file netcdf4\+\_\+variables.\+f90.
+

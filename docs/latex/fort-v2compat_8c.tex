@@ -1,0 +1,759 @@
+\hypertarget{fort-v2compat_8c}{}\section{fort-\/v2compat.c File Reference}
+\label{fort-v2compat_8c}\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+{\ttfamily \#include $<$config.\+h$>$}\newline
+{\ttfamily \#include $<$ctype.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}netcdf.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}nfconfig.\+inc\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}ncfortran.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}fort-\/lib.\+h\char`\"{}}\newline
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{fort-v2compat_8c_ad34fd007826863dc1084c1c893ce5934}{N\+C\+O\+P\+TS}~F\+I\+N\+T2\+C\+I\+NT	/$\ast$ Input, net\+C\+DF options argument $\ast$/
+\item 
+\#define \hyperlink{fort-v2compat_8c_ad28923cfdb7eaecc17fef3711c74befc}{P\+N\+C\+O\+P\+TS}~P\+C\+I\+N\+T2\+F\+I\+NT	/$\ast$ Output, net\+C\+DF options argument $\ast$/
+\item 
+\#define \hyperlink{fort-v2compat_8c_abd5253773c995afc2eed8dee4a76a552}{C\+L\+O\+B\+M\+O\+DE}~F\+I\+N\+T2\+C\+I\+NT	/$\ast$ Input, clobber-\/mode argument $\ast$/
+\item 
+\#define \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}~P\+C\+I\+N\+T2\+F\+I\+NT	/$\ast$ Output, return-\/code argument $\ast$/
+\item 
+\#define \hyperlink{fort-v2compat_8c_a36ab2e26d67d11b7bfcb8843dc4bfb43}{R\+W\+M\+O\+DE}~F\+I\+N\+T2\+C\+I\+NT	/$\ast$ Input, read-\/write mode argument $\ast$/
+\item 
+\#define \hyperlink{fort-v2compat_8c_a794de1e244ded083e471dd00db1329b1}{D\+I\+M\+L\+EN}~F\+I\+N\+T2\+C\+I\+NT	/$\ast$ Input, dimension-\/length argument $\ast$/
+\item 
+\#define \hyperlink{fort-v2compat_8c_a966419668dc6e6f3e34bc743e56397a6}{P\+D\+I\+M\+L\+EN}~P\+C\+I\+N\+T2\+F\+I\+NT	/$\ast$ Output, dimension-\/length argument $\ast$/
+\item 
+\#define \hyperlink{fort-v2compat_8c_afcbdb4ceefc87947c1f6254df71bdb36}{L\+E\+N\+S\+TR}~F\+I\+N\+T2\+C\+I\+NT	/$\ast$ Input, string-\/length argument $\ast$/
+\item 
+\#define \hyperlink{fort-v2compat_8c_a5274f0ce0562c9ab9da4004e7d85d738}{A\+T\+T\+L\+EN}~F\+I\+N\+T2\+C\+I\+NT	/$\ast$ Input, attribute length argument $\ast$/
+\item 
+\#define \hyperlink{fort-v2compat_8c_abba4da455082c98d8b81b6d70ff498de}{P\+A\+T\+T\+L\+EN}~P\+C\+I\+N\+T2\+F\+I\+NT	/$\ast$ Output, attribute length argument $\ast$/
+\item 
+\#define \hyperlink{fort-v2compat_8c_ac16ba8d3e41c763cb6b4cb86343afd7c}{F\+I\+L\+L\+M\+O\+DE}~F\+I\+N\+T2\+C\+I\+NT	/$\ast$ Input, fill-\/mode argument $\ast$/
+\item 
+\#define \hyperlink{fort-v2compat_8c_a096ac034b77abc298f6bbd4972cd764f}{V2\+I\+M\+A\+P\+\_\+cf\+I\+NT}(N,  A,  B,  X,  Y,  Z)~\hyperlink{cfortran_8h_af4cefaca6d372320e8ae4276f72f3210}{D\+O\+U\+B\+L\+E\+\_\+cf\+I\+NT}(N,A,B,X,Y,Z)
+\item 
+\#define \hyperlink{fort-v2compat_8c_ac0311e2d4d244d1b662101115c69e3f5}{V2\+I\+M\+A\+P\+V\+V\+V\+V\+V\+V\+V\+\_\+cf\+T\+Y\+PE}~\hyperlink{ncfortran_8h_a0fd3f9e9fc30661142a1fb549af678e7}{N\+F\+\_\+\+I\+N\+T\+E\+G\+ER}
+\item 
+\#define \hyperlink{fort-v2compat_8c_a630377bcd05264463957043895a222be}{V2\+I\+M\+A\+P\+\_\+cf\+S\+TR}(N,  T,  A,  B,  C,  D,  E)~\hyperlink{cfortran_8h_ae5cd5aa262ffbc853d773293d00e4323}{\+\_\+}(C\+F\+A\+R\+GS,N)(T,V2\+I\+M\+AP,A,B,C,D,E)
+\item 
+\#define \hyperlink{fort-v2compat_8c_a87c7d454c2b4994cc79732ada66b2043}{V2\+I\+M\+A\+P\+\_\+cfH}(S,  U,  B)
+\item 
+\#define \hyperlink{fort-v2compat_8c_a1a93fb03e7683298bac9051269b200e7}{V2\+I\+M\+A\+P\+\_\+cfQ}(B)~ptrdiff\+\_\+t B\mbox{[}M\+A\+X\+\_\+\+N\+C\+\_\+\+D\+I\+MS\mbox{]};
+\item 
+\#define \hyperlink{fort-v2compat_8c_af30c5da58198e42fb61f784fc3ddfb3b}{V2\+I\+M\+A\+P\+\_\+cfT}(M,  I,  A,  B,  D)~\hyperlink{nf__v2compat_8c_a75a49e271d39db2186743d5deef88f7a}{f2c\+\_\+v2imap}($\ast$fncid, $\ast$fvarid-\/1, A, B)
+\item 
+\#define \hyperlink{fort-v2compat_8c_a87950246076603a36f8d6ed1a5b4892b}{V2\+I\+M\+A\+P\+\_\+cfR}(A,  B,  D)
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+static ptrdiff\+\_\+t $\ast$ \hyperlink{fort-v2compat_8c_a0c06fd2f546418d0ed6fcfdc21340157}{f2c\+\_\+v2imap} (int ncid, int varid, const int $\ast$fimap, ptrdiff\+\_\+t $\ast$cimap)
+\begin{DoxyCompactList}\small\item\em Convert a Version 2 Fortran I\+M\+AP vector into a Version 3 C imap vector. \end{DoxyCompactList}\item 
+static size\+\_\+t \hyperlink{fort-v2compat_8c_aa8270ec7619e957c0db032b4eb46c910}{dimprod} (const size\+\_\+t $\ast$count, int rank)
+\item 
+static void \hyperlink{fort-v2compat_8c_ab008e5bfc98a80ca25189628e76e3ebf}{c\+\_\+ncpopt} (int val)
+\item 
+\hyperlink{fort-v2compat_8c_a53850b774513b597f2d9080a0869f01a}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B1} (\hyperlink{nf__v2compat_8c_a94488ba6a21805a4d1f6f8e6c0c41c5e}{c\+\_\+ncpopt}, N\+C\+P\+O\+PT, \hyperlink{nf__fortv2_8f90_aa99b1352748c769427ead3bfaf123fff}{ncpopt}, \hyperlink{fort-v2compat_8c_ad34fd007826863dc1084c1c893ce5934}{N\+C\+O\+P\+TS})
+\item 
+\hyperlink{fort-v2compat_8c_ae3a654f180e14021674a31a166b7d6a8}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B1} (\hyperlink{nf__v2compat_8c_aac642849eafe9806b7b660bbe5c50cd1}{c\+\_\+ncgopt}, N\+C\+G\+O\+PT, \hyperlink{nf__fortv2_8f90_a4fe1ac0350a63230cc17e880d496efa3}{ncgopt}, \hyperlink{fort-v2compat_8c_ad28923cfdb7eaecc17fef3711c74befc}{P\+N\+C\+O\+P\+TS})
+\item 
+\hyperlink{fort-v2compat_8c_a3da73ae9b802d64c18e850a7320091a7}{F\+C\+A\+L\+L\+S\+C\+F\+U\+N3} (\hyperlink{ncfortran_8h_aec6fe8ae8c73cf5133d4ed64f86ff028}{N\+F\+\_\+\+I\+NT}, \hyperlink{nf__v2compat_8c_af9a99cd260c5779074591f8e55582d26}{c\+\_\+nccre}, N\+C\+C\+RE, \hyperlink{nf__fortv2_8f90_a395384eea56bdad4a53b55df6d6e78d2}{nccre}, S\+T\+R\+I\+NG, \hyperlink{fort-v2compat_8c_abd5253773c995afc2eed8dee4a76a552}{C\+L\+O\+B\+M\+O\+DE}, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a2b3527c7932d252430e05f13777cfe55}{F\+C\+A\+L\+L\+S\+C\+F\+U\+N3} (\hyperlink{ncfortran_8h_aec6fe8ae8c73cf5133d4ed64f86ff028}{N\+F\+\_\+\+I\+NT}, \hyperlink{nf__v2compat_8c_a3144811f2328f7e62be2e0e4484aab43}{c\+\_\+ncopn}, N\+C\+O\+PN, \hyperlink{nf__fortv2_8f90_a43dce57f3c98cba43a7394b48ecd3184}{ncopn}, S\+T\+R\+I\+NG, \hyperlink{fort-v2compat_8c_a36ab2e26d67d11b7bfcb8843dc4bfb43}{R\+W\+M\+O\+DE}, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_ad5956b6f21e33272ade6d259159190d3}{F\+C\+A\+L\+L\+S\+C\+F\+U\+N4} (\hyperlink{ncfortran_8h_aec6fe8ae8c73cf5133d4ed64f86ff028}{N\+F\+\_\+\+I\+NT}, \hyperlink{nf__v2compat_8c_af79c1df7fa3f1a225cfc0a15bf6b7091}{c\+\_\+ncddef}, N\+C\+D\+D\+EF, \hyperlink{nf__fortv2_8f90_a78171f3b2ee4a6763e764c357d57836e}{ncddef}, N\+C\+ID, S\+T\+R\+I\+NG, \hyperlink{fort-v2compat_8c_a794de1e244ded083e471dd00db1329b1}{D\+I\+M\+L\+EN}, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_ae30afb7b813bb704e26a17d97d6f38e2}{F\+C\+A\+L\+L\+S\+C\+F\+U\+N3} (\hyperlink{ncfortran_8h_aec6fe8ae8c73cf5133d4ed64f86ff028}{N\+F\+\_\+\+I\+NT}, \hyperlink{nf__v2compat_8c_a2703871d71535d87576288d6b0bd5727}{c\+\_\+ncdid}, N\+C\+D\+ID, \hyperlink{nf__fortv2_8f90_ac39b06f8d9b6ca78ff6073608ac25115}{ncdid}, N\+C\+ID, S\+T\+R\+I\+NG, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a1ae6a5d3202cf2c8d9c3f38c9345b089}{F\+C\+A\+L\+L\+S\+C\+F\+U\+N6} (\hyperlink{ncfortran_8h_aec6fe8ae8c73cf5133d4ed64f86ff028}{N\+F\+\_\+\+I\+NT}, \hyperlink{nf__v2compat_8c_af8aa6c4a5fcc46f128d3c947b7a9b568}{c\+\_\+ncvdef}, N\+C\+V\+D\+EF, \hyperlink{nf__fortv2_8f90_a7121e237ce771e26edb350028c22f37c}{ncvdef}, N\+C\+ID, S\+T\+R\+I\+NG, T\+Y\+PE, N\+D\+I\+MS, D\+I\+M\+I\+DS, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_ac5ab32a0784330630289e8d13c10f79e}{F\+C\+A\+L\+L\+S\+C\+F\+U\+N3} (\hyperlink{ncfortran_8h_aec6fe8ae8c73cf5133d4ed64f86ff028}{N\+F\+\_\+\+I\+NT}, \hyperlink{nf__v2compat_8c_a9f5d347c65de290ab045b062ac4366f7}{c\+\_\+ncvid}, N\+C\+V\+ID, \hyperlink{nf__fortv2_8f90_aea3eb70885317451ef241b6feacb8893}{ncvid}, N\+C\+ID, S\+T\+R\+I\+NG, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_ae1d820f1518e8d3f5c4a8dd91022a400}{F\+C\+A\+L\+L\+S\+C\+F\+U\+N2} (\hyperlink{ncfortran_8h_aec6fe8ae8c73cf5133d4ed64f86ff028}{N\+F\+\_\+\+I\+NT}, \hyperlink{nf__v2compat_8c_a7271eb972e4ecfa16690991d83c24b2f}{c\+\_\+nctlen}, N\+C\+T\+L\+EN, \hyperlink{nf__fortv2_8f90_aa66c92465ffab79785ec2fcda51321c1}{nctlen}, T\+Y\+PE, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a070281e62436c1160f0aac8a216371df}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2} (\hyperlink{nf__v2compat_8c_ac9314266e433d48e369f2247d3f8a918}{c\+\_\+ncclos}, N\+C\+C\+L\+OS, \hyperlink{nf__fortv2_8f90_a03f16672189e09514f5df0a9d72e6859}{ncclos}, N\+C\+ID, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a61c7c11d7478cfdb88af026f76f1f998}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2} (\hyperlink{nf__v2compat_8c_a655af79e1ecf926fcfeb94536220fe6a}{c\+\_\+ncredf}, N\+C\+R\+E\+DF, \hyperlink{nf__fortv2_8f90_a162a5ab1076c10c2228e36ee9ff00677}{ncredf}, N\+C\+ID, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a094afaf83de5e83ec91adc5b2f9f4a65}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2} (\hyperlink{nf__v2compat_8c_afbb2553120ff113b73c14b2701f139ac}{c\+\_\+ncendf}, N\+C\+E\+N\+DF, \hyperlink{nf__fortv2_8f90_a0397fd550c269ff18340d1786e34d6f6}{ncendf}, N\+C\+ID, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a905e10e257cb6288009a8bc13e715973}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6} (\hyperlink{nf__v2compat_8c_a6ae63c66ba7a2b29c3808485b4aea1d6}{c\+\_\+ncinq}, N\+C\+I\+NQ, \hyperlink{nf__fortv2_8f90_aeb39546c2eeb1bc23ac957a2388fc56b}{ncinq}, N\+C\+ID, \hyperlink{ncfortran_8h_a1e5068f5fb9f0e8cc1f30a297226ab7d}{P\+N\+D\+I\+MS}, \hyperlink{ncfortran_8h_ac02eff2a4b97f9cf065ac0709876af97}{P\+N\+V\+A\+RS}, \hyperlink{ncfortran_8h_a36a5825a51824435de6731632e2aa61c}{P\+N\+A\+T\+TS}, P\+D\+I\+M\+ID, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_abb8acf453dc1ee7705dcece3874a7125}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2} (\hyperlink{nf__v2compat_8c_a63dd616a411f60543435c9b07db52bb5}{c\+\_\+ncsnc}, N\+C\+S\+NC, \hyperlink{nf__fortv2_8f90_a64e09d2a2a1ccf7e9052b111a169c2b9}{ncsnc}, N\+C\+ID, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a5807dd6314185593914b654086682d73}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2} (\hyperlink{nf__v2compat_8c_a59f52ed3a2ef5478df2530ae211501e8}{c\+\_\+ncabor}, N\+C\+A\+B\+OR, \hyperlink{nf__fortv2_8f90_a0e25c674ad6b99068e8c95d7f34f3c8e}{ncabor}, N\+C\+ID, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a12ee5114ed329211614492afea1a67a9}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5} (\hyperlink{nf__v2compat_8c_a9bb20b1a81299cccacc6a3116f17b55a}{c\+\_\+ncdinq}, N\+C\+D\+I\+NQ, \hyperlink{nf__fortv2_8f90_a6ee036c798e7436b1d962c7dfc8a6957}{ncdinq}, N\+C\+ID, \hyperlink{ncfortran_8h_affac6052df8e434d04708ecc3986d215}{D\+I\+M\+ID}, P\+S\+T\+R\+I\+NG, \hyperlink{fort-v2compat_8c_a966419668dc6e6f3e34bc743e56397a6}{P\+D\+I\+M\+L\+EN}, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_ac24148f7e8193ab62ab0eb344b99c56a}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B4} (\hyperlink{nf__v2compat_8c_a8dc48f9e3a4048402e8f86f26d4fed20}{c\+\_\+ncdren}, N\+C\+D\+R\+EN, \hyperlink{nf__fortv2_8f90_ade22791003f60c336b970147d68ceae3}{ncdren}, N\+C\+ID, \hyperlink{ncfortran_8h_affac6052df8e434d04708ecc3986d215}{D\+I\+M\+ID}, S\+T\+R\+I\+NG, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a0892717e2482b175ac5d0da166cbe6e9}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8} (\hyperlink{nf__v2compat_8c_a8fc2cc586a6874bbf28afd044e4f929c}{c\+\_\+ncvinq}, N\+C\+V\+I\+NQ, \hyperlink{nf__fortv2_8f90_a58c204fe024e1315e38a953ffc8bb3c9}{ncvinq}, N\+C\+ID, V\+A\+R\+ID, P\+S\+T\+R\+I\+NG, P\+T\+Y\+PE, \hyperlink{ncfortran_8h_a1e5068f5fb9f0e8cc1f30a297226ab7d}{P\+N\+D\+I\+MS}, P\+D\+I\+M\+I\+DS, \hyperlink{ncfortran_8h_a36a5825a51824435de6731632e2aa61c}{P\+N\+A\+T\+TS}, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a682aab2eac9878efe2fa07d8c24ac6f0}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5} (\hyperlink{nf__v2compat_8c_ad869819911f33dfb9cf47f60647d59f4}{c\+\_\+ncvpt1}, N\+C\+V\+P\+T1, \hyperlink{nf__fortv2_8f90_a193fa468237c9fe5b4c4182a49ae0030}{ncvpt1}, N\+C\+ID, V\+A\+R\+ID, C\+O\+O\+R\+DS, P\+V\+O\+ID, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a107f17c85f547d1a82b7add74d35fc59}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5} (\hyperlink{nf__v2compat_8c_ab52acaf18740d16c37e45ebe900ef853}{c\+\_\+ncvp1c}, N\+C\+V\+P1C, \hyperlink{nf__fortv2_8f90_ae86fd9a6227f59f53db68f523802428c}{ncvp1c}, N\+C\+ID, V\+A\+R\+ID, C\+O\+O\+R\+DS, C\+B\+UF, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_acbc5b23349d9fffa6fbf7205138dac99}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6} (\hyperlink{nf__v2compat_8c_a103ae6935428dfecde0657594a2206f6}{c\+\_\+ncvpt}, N\+C\+V\+PT, \hyperlink{nf__fortv2_8f90_a0e80dc4b1c7ad7772f48f31480a61237}{ncvpt}, N\+C\+ID, V\+A\+R\+ID, C\+O\+O\+R\+DS, C\+O\+U\+N\+TS, P\+V\+O\+ID, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_ad88c75187e19db15b1e57408f25ff0db}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B7} (\hyperlink{nf__v2compat_8c_add9961f97a96ff8a834bdc8da533ef4e}{c\+\_\+ncvptc}, N\+C\+V\+P\+TC, \hyperlink{nf__fortv2_8f90_a6c95aa587ee368266d7727735158957f}{ncvptc}, N\+C\+ID, V\+A\+R\+ID, C\+O\+O\+R\+DS, C\+O\+U\+N\+TS, C\+B\+UF, \hyperlink{fort-v2compat_8c_afcbdb4ceefc87947c1f6254df71bdb36}{L\+E\+N\+S\+TR}, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a4177d74ae5060c854615b1608a7af245}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8} (\hyperlink{nf__v2compat_8c_a9cf8e2715d16ffc4410f608b4ed941aa}{c\+\_\+ncvptg}, N\+C\+V\+P\+TG, \hyperlink{nf__fortv2_8f90_aacf3b20901c252480d87dc327cf6a9f5}{ncvptg}, N\+C\+ID, V\+A\+R\+ID, C\+O\+O\+R\+DS, C\+O\+U\+N\+TS, S\+T\+R\+I\+D\+ES, V2\+I\+M\+AP, P\+V\+O\+ID, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a44a9e409e1a63a04a605944785188ca7}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8} (\hyperlink{nf__v2compat_8c_af792c7a0a9b873fa9b56ee0f17112b99}{c\+\_\+ncvpgc}, N\+C\+V\+P\+GC, \hyperlink{nf__fortv2_8f90_ae593f10084ce6b3ed716b1dcf87d6618}{ncvpgc}, N\+C\+ID, V\+A\+R\+ID, C\+O\+O\+R\+DS, C\+O\+U\+N\+TS, S\+T\+R\+I\+D\+ES, V2\+I\+M\+AP, C\+B\+UF, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_aef8c75bdc8a1f1c314a308850b6a181f}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5} (\hyperlink{nf__v2compat_8c_a3cfcd4ee8ba5397ab91260bc46f4ded9}{c\+\_\+ncvgt1}, N\+C\+V\+G\+T1, \hyperlink{nf__fortv2_8f90_a6c63eb6533f6fd980258f9ded00cf4e1}{ncvgt1}, N\+C\+ID, V\+A\+R\+ID, C\+O\+O\+R\+DS, P\+V\+O\+ID, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a2839404407c4a0e04c3444d0529c7ab8}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5} (\hyperlink{nf__v2compat_8c_a0b558cfe78f0df371d4150519b9c5650}{c\+\_\+ncvg1c}, N\+C\+V\+G1C, \hyperlink{nf__fortv2_8f90_ab8326c1d1a7aa3142428092a708f6a10}{ncvg1c}, N\+C\+ID, V\+A\+R\+ID, C\+O\+O\+R\+DS, C\+B\+UF, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a9a398103d54bd402c86b46616569ef30}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6} (\hyperlink{nf__v2compat_8c_ae39e340aeaf256362639b1d87d4a870b}{c\+\_\+ncvgt}, N\+C\+V\+GT, \hyperlink{nf__fortv2_8f90_a376e4bb1238c7da316b25b32d34608f7}{ncvgt}, N\+C\+ID, V\+A\+R\+ID, C\+O\+O\+R\+DS, C\+O\+U\+N\+TS, P\+V\+O\+ID, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a46ec598b1b68f552a6a9886330e8e9fb}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B7} (\hyperlink{nf__v2compat_8c_a665567929170d07d23a7dad0eea4bea6}{c\+\_\+ncvgtc}, N\+C\+V\+G\+TC, \hyperlink{nf__fortv2_8f90_a81ac17ea93b907a54fc2557bf3ace40a}{ncvgtc}, N\+C\+ID, V\+A\+R\+ID, C\+O\+O\+R\+DS, C\+O\+U\+N\+TS, C\+B\+UF, \hyperlink{fort-v2compat_8c_afcbdb4ceefc87947c1f6254df71bdb36}{L\+E\+N\+S\+TR}, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a305ee7c600c6085063a961e9926b8c40}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8} (\hyperlink{nf__v2compat_8c_aa58c98f7f3a1bbc8e80d0ff3fce13190}{c\+\_\+ncvgtg}, N\+C\+V\+G\+TG, \hyperlink{nf__fortv2_8f90_ae0fbe2588278893dcab19ab604767a7d}{ncvgtg}, N\+C\+ID, V\+A\+R\+ID, C\+O\+O\+R\+DS, C\+O\+U\+N\+TS, S\+T\+R\+I\+D\+ES, V2\+I\+M\+AP, P\+V\+O\+ID, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a6f4f22a1bac85a6b575ccb6725a30b4c}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8} (\hyperlink{nf__v2compat_8c_a63f13eb2d14b6e465c7011f39762c745}{c\+\_\+ncvggc}, N\+C\+V\+G\+GC, \hyperlink{nf__fortv2_8f90_aa02cb955f7bb1ae0f370492cfaae7b6f}{ncvggc}, N\+C\+ID, V\+A\+R\+ID, C\+O\+O\+R\+DS, C\+O\+U\+N\+TS, S\+T\+R\+I\+D\+ES, V2\+I\+M\+AP, C\+B\+UF, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a557291686562f07d1ddc65b343dac894}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B4} (\hyperlink{nf__v2compat_8c_a3f3248eb07164659e5e4abcd5cf336d1}{c\+\_\+ncvren}, N\+C\+V\+R\+EN, \hyperlink{nf__fortv2_8f90_a8de81d99a1275d61dabb79e14a84c1f6}{ncvren}, N\+C\+ID, V\+A\+R\+ID, S\+T\+R\+I\+NG, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a25aa8639f820d413d9c263a8a29f162b}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B7} (\hyperlink{nf__v2compat_8c_a15af034ea9165af45a02315b3320dab1}{c\+\_\+ncapt}, N\+C\+A\+PT, \hyperlink{nf__fortv2_8f90_a7572a6d6e1628e2868cef69a3d147c38}{ncapt}, N\+C\+ID, V\+A\+R\+ID, S\+T\+R\+I\+NG, T\+Y\+PE, C\+O\+U\+NT, P\+V\+O\+ID, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a6584fce06fb0b25e58067f361f19bc73}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B7} (\hyperlink{nf__v2compat_8c_aed57d7a73cd3e59ce0a99597aa180e7b}{c\+\_\+ncaptc}, N\+C\+A\+P\+TC, \hyperlink{nf__fortv2_8f90_a525301fbfb8b1e885e1531ed31e16565}{ncaptc}, N\+C\+ID, V\+A\+R\+ID, S\+T\+R\+I\+NG, T\+Y\+PE, C\+O\+U\+NT, C\+B\+UF, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a085b44bd926969302b555c1263702ae0}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6} (\hyperlink{nf__v2compat_8c_ae2fadfcdf2633389b29b14f4bf7e62b2}{c\+\_\+ncainq}, N\+C\+A\+I\+NQ, \hyperlink{nf__fortv2_8f90_a7b0621bf96d56601f68c18da4ff2e759}{ncainq}, N\+C\+ID, V\+A\+R\+ID, S\+T\+R\+I\+NG, P\+T\+Y\+PE, \hyperlink{fort-v2compat_8c_abba4da455082c98d8b81b6d70ff498de}{P\+A\+T\+T\+L\+EN}, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a8926daf7c832748512514c9a4f754a12}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5} (\hyperlink{nf__v2compat_8c_a35655edb0fac8162f977d59dd904adf2}{c\+\_\+ncagt}, N\+C\+A\+GT, \hyperlink{nf__fortv2_8f90_a12c954aa7ec21768adf357a69850aa8e}{ncagt}, N\+C\+ID, V\+A\+R\+ID, S\+T\+R\+I\+NG, P\+V\+O\+ID, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_ac622f0104673733887ae0c1af938f237}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6} (\hyperlink{nf__v2compat_8c_af2970c38a778d0445024e98efe3ae008}{c\+\_\+ncagtc}, N\+C\+A\+G\+TC, \hyperlink{nf__fortv2_8f90_acdffb4e9e53796cfadcf86a802a159b3}{ncagtc}, N\+C\+ID, V\+A\+R\+ID, S\+T\+R\+I\+NG, C\+B\+UF, \hyperlink{fort-v2compat_8c_a5274f0ce0562c9ab9da4004e7d85d738}{A\+T\+T\+L\+EN}, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a344033c85730782d2917dbe854fe83ac}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6} (\hyperlink{nf__v2compat_8c_a3130c6d2dee74a8b7bdfc7dc72e5bdf4}{c\+\_\+ncacpy}, N\+C\+A\+C\+PY, \hyperlink{nf__fortv2_8f90_a251a629393e35281e714774eddea2551}{ncacpy}, \hyperlink{ncfortran_8h_a77bc5b6e6321a310e41121867f2e999e}{N\+C\+I\+D1}, V\+A\+R\+I\+D1, S\+T\+R\+I\+NG, \hyperlink{ncfortran_8h_afc3f5dd7cd297678e0066bb7e2d3fcb4}{N\+C\+I\+D2}, V\+A\+R\+I\+D2, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_a8bd30481b6c02713c36110489bc583c3}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5} (\hyperlink{nf__v2compat_8c_aeeeb1daf5d2fbc85f3d7135d723e6198}{c\+\_\+ncanam}, N\+C\+A\+N\+AM, \hyperlink{nf__fortv2_8f90_abd5c8126f5ad1171b3944262956899b0}{ncanam}, N\+C\+ID, V\+A\+R\+ID, \hyperlink{ncfortran_8h_a01d1fad6578e98ab92205f3da4b446dc}{A\+T\+T\+ID}, P\+S\+T\+R\+I\+NG, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_ae0df920cf268e71f8e48aca0a84b25c7}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5} (\hyperlink{nf__v2compat_8c_acaa8977afd889e7c438d59b542effb29}{c\+\_\+ncaren}, N\+C\+A\+R\+EN, \hyperlink{nf__fortv2_8f90_ab82f351050b86a1f5c96a8ef0f5fd46c}{ncaren}, N\+C\+ID, V\+A\+R\+ID, S\+T\+R\+I\+NG, S\+T\+R\+I\+NG, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\item 
+\hyperlink{fort-v2compat_8c_ac6de05a02619ce68727ecc66fcc1bd1d}{F\+C\+A\+L\+L\+S\+C\+S\+U\+B4} (\hyperlink{nf__v2compat_8c_a7bd0c5f885c4efae5a33518503d4b5df}{c\+\_\+ncadel}, N\+C\+A\+D\+EL, \hyperlink{nf__fortv2_8f90_aca410e210247338c8c44f4cd02aacdec}{ncadel}, N\+C\+ID, V\+A\+R\+ID, S\+T\+R\+I\+NG, \hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE})
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{fort-v2compat_8c_a5274f0ce0562c9ab9da4004e7d85d738}\label{fort-v2compat_8c_a5274f0ce0562c9ab9da4004e7d85d738}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!A\+T\+T\+L\+EN@{A\+T\+T\+L\+EN}}
+\index{A\+T\+T\+L\+EN@{A\+T\+T\+L\+EN}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{A\+T\+T\+L\+EN}{ATTLEN}}
+{\footnotesize\ttfamily \#define A\+T\+T\+L\+EN~F\+I\+N\+T2\+C\+I\+NT	/$\ast$ Input, attribute length argument $\ast$/}
+
+
+
+Definition at line 54 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_abd5253773c995afc2eed8dee4a76a552}\label{fort-v2compat_8c_abd5253773c995afc2eed8dee4a76a552}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!C\+L\+O\+B\+M\+O\+DE@{C\+L\+O\+B\+M\+O\+DE}}
+\index{C\+L\+O\+B\+M\+O\+DE@{C\+L\+O\+B\+M\+O\+DE}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{C\+L\+O\+B\+M\+O\+DE}{CLOBMODE}}
+{\footnotesize\ttfamily \#define C\+L\+O\+B\+M\+O\+DE~F\+I\+N\+T2\+C\+I\+NT	/$\ast$ Input, clobber-\/mode argument $\ast$/}
+
+
+
+Definition at line 48 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a794de1e244ded083e471dd00db1329b1}\label{fort-v2compat_8c_a794de1e244ded083e471dd00db1329b1}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!D\+I\+M\+L\+EN@{D\+I\+M\+L\+EN}}
+\index{D\+I\+M\+L\+EN@{D\+I\+M\+L\+EN}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{D\+I\+M\+L\+EN}{DIMLEN}}
+{\footnotesize\ttfamily \#define D\+I\+M\+L\+EN~F\+I\+N\+T2\+C\+I\+NT	/$\ast$ Input, dimension-\/length argument $\ast$/}
+
+
+
+Definition at line 51 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_ac16ba8d3e41c763cb6b4cb86343afd7c}\label{fort-v2compat_8c_ac16ba8d3e41c763cb6b4cb86343afd7c}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+I\+L\+L\+M\+O\+DE@{F\+I\+L\+L\+M\+O\+DE}}
+\index{F\+I\+L\+L\+M\+O\+DE@{F\+I\+L\+L\+M\+O\+DE}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+I\+L\+L\+M\+O\+DE}{FILLMODE}}
+{\footnotesize\ttfamily \#define F\+I\+L\+L\+M\+O\+DE~F\+I\+N\+T2\+C\+I\+NT	/$\ast$ Input, fill-\/mode argument $\ast$/}
+
+
+
+Definition at line 56 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_afcbdb4ceefc87947c1f6254df71bdb36}\label{fort-v2compat_8c_afcbdb4ceefc87947c1f6254df71bdb36}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!L\+E\+N\+S\+TR@{L\+E\+N\+S\+TR}}
+\index{L\+E\+N\+S\+TR@{L\+E\+N\+S\+TR}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{L\+E\+N\+S\+TR}{LENSTR}}
+{\footnotesize\ttfamily \#define L\+E\+N\+S\+TR~F\+I\+N\+T2\+C\+I\+NT	/$\ast$ Input, string-\/length argument $\ast$/}
+
+
+
+Definition at line 53 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_ad34fd007826863dc1084c1c893ce5934}\label{fort-v2compat_8c_ad34fd007826863dc1084c1c893ce5934}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!N\+C\+O\+P\+TS@{N\+C\+O\+P\+TS}}
+\index{N\+C\+O\+P\+TS@{N\+C\+O\+P\+TS}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{N\+C\+O\+P\+TS}{NCOPTS}}
+{\footnotesize\ttfamily \#define N\+C\+O\+P\+TS~F\+I\+N\+T2\+C\+I\+NT	/$\ast$ Input, net\+C\+DF options argument $\ast$/}
+
+
+
+Definition at line 46 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_abba4da455082c98d8b81b6d70ff498de}\label{fort-v2compat_8c_abba4da455082c98d8b81b6d70ff498de}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!P\+A\+T\+T\+L\+EN@{P\+A\+T\+T\+L\+EN}}
+\index{P\+A\+T\+T\+L\+EN@{P\+A\+T\+T\+L\+EN}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{P\+A\+T\+T\+L\+EN}{PATTLEN}}
+{\footnotesize\ttfamily \#define P\+A\+T\+T\+L\+EN~P\+C\+I\+N\+T2\+F\+I\+NT	/$\ast$ Output, attribute length argument $\ast$/}
+
+
+
+Definition at line 55 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a966419668dc6e6f3e34bc743e56397a6}\label{fort-v2compat_8c_a966419668dc6e6f3e34bc743e56397a6}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!P\+D\+I\+M\+L\+EN@{P\+D\+I\+M\+L\+EN}}
+\index{P\+D\+I\+M\+L\+EN@{P\+D\+I\+M\+L\+EN}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{P\+D\+I\+M\+L\+EN}{PDIMLEN}}
+{\footnotesize\ttfamily \#define P\+D\+I\+M\+L\+EN~P\+C\+I\+N\+T2\+F\+I\+NT	/$\ast$ Output, dimension-\/length argument $\ast$/}
+
+
+
+Definition at line 52 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_ad28923cfdb7eaecc17fef3711c74befc}\label{fort-v2compat_8c_ad28923cfdb7eaecc17fef3711c74befc}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!P\+N\+C\+O\+P\+TS@{P\+N\+C\+O\+P\+TS}}
+\index{P\+N\+C\+O\+P\+TS@{P\+N\+C\+O\+P\+TS}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{P\+N\+C\+O\+P\+TS}{PNCOPTS}}
+{\footnotesize\ttfamily \#define P\+N\+C\+O\+P\+TS~P\+C\+I\+N\+T2\+F\+I\+NT	/$\ast$ Output, net\+C\+DF options argument $\ast$/}
+
+
+
+Definition at line 47 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}\label{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!P\+R\+C\+O\+DE@{P\+R\+C\+O\+DE}}
+\index{P\+R\+C\+O\+DE@{P\+R\+C\+O\+DE}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{P\+R\+C\+O\+DE}{PRCODE}}
+{\footnotesize\ttfamily \#define P\+R\+C\+O\+DE~P\+C\+I\+N\+T2\+F\+I\+NT	/$\ast$ Output, return-\/code argument $\ast$/}
+
+
+
+Definition at line 49 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a36ab2e26d67d11b7bfcb8843dc4bfb43}\label{fort-v2compat_8c_a36ab2e26d67d11b7bfcb8843dc4bfb43}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!R\+W\+M\+O\+DE@{R\+W\+M\+O\+DE}}
+\index{R\+W\+M\+O\+DE@{R\+W\+M\+O\+DE}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{R\+W\+M\+O\+DE}{RWMODE}}
+{\footnotesize\ttfamily \#define R\+W\+M\+O\+DE~F\+I\+N\+T2\+C\+I\+NT	/$\ast$ Input, read-\/write mode argument $\ast$/}
+
+
+
+Definition at line 50 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a87c7d454c2b4994cc79732ada66b2043}\label{fort-v2compat_8c_a87c7d454c2b4994cc79732ada66b2043}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!V2\+I\+M\+A\+P\+\_\+cfH@{V2\+I\+M\+A\+P\+\_\+cfH}}
+\index{V2\+I\+M\+A\+P\+\_\+cfH@{V2\+I\+M\+A\+P\+\_\+cfH}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{V2\+I\+M\+A\+P\+\_\+cfH}{V2IMAP\_cfH}}
+{\footnotesize\ttfamily \#define V2\+I\+M\+A\+P\+\_\+cfH(\begin{DoxyParamCaption}\item[{}]{S,  }\item[{}]{U,  }\item[{}]{B }\end{DoxyParamCaption})}
+
+
+
+Definition at line 61 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a096ac034b77abc298f6bbd4972cd764f}\label{fort-v2compat_8c_a096ac034b77abc298f6bbd4972cd764f}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!V2\+I\+M\+A\+P\+\_\+cf\+I\+NT@{V2\+I\+M\+A\+P\+\_\+cf\+I\+NT}}
+\index{V2\+I\+M\+A\+P\+\_\+cf\+I\+NT@{V2\+I\+M\+A\+P\+\_\+cf\+I\+NT}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{V2\+I\+M\+A\+P\+\_\+cf\+I\+NT}{V2IMAP\_cfINT}}
+{\footnotesize\ttfamily \#define V2\+I\+M\+A\+P\+\_\+cf\+I\+NT(\begin{DoxyParamCaption}\item[{}]{N,  }\item[{}]{A,  }\item[{}]{B,  }\item[{}]{X,  }\item[{}]{Y,  }\item[{}]{Z }\end{DoxyParamCaption})~\hyperlink{cfortran_8h_af4cefaca6d372320e8ae4276f72f3210}{D\+O\+U\+B\+L\+E\+\_\+cf\+I\+NT}(N,A,B,X,Y,Z)}
+
+
+
+Definition at line 58 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a1a93fb03e7683298bac9051269b200e7}\label{fort-v2compat_8c_a1a93fb03e7683298bac9051269b200e7}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!V2\+I\+M\+A\+P\+\_\+cfQ@{V2\+I\+M\+A\+P\+\_\+cfQ}}
+\index{V2\+I\+M\+A\+P\+\_\+cfQ@{V2\+I\+M\+A\+P\+\_\+cfQ}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{V2\+I\+M\+A\+P\+\_\+cfQ}{V2IMAP\_cfQ}}
+{\footnotesize\ttfamily \#define V2\+I\+M\+A\+P\+\_\+cfQ(\begin{DoxyParamCaption}\item[{}]{B }\end{DoxyParamCaption})~ptrdiff\+\_\+t B\mbox{[}M\+A\+X\+\_\+\+N\+C\+\_\+\+D\+I\+MS\mbox{]};}
+
+
+
+Definition at line 62 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a87950246076603a36f8d6ed1a5b4892b}\label{fort-v2compat_8c_a87950246076603a36f8d6ed1a5b4892b}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!V2\+I\+M\+A\+P\+\_\+cfR@{V2\+I\+M\+A\+P\+\_\+cfR}}
+\index{V2\+I\+M\+A\+P\+\_\+cfR@{V2\+I\+M\+A\+P\+\_\+cfR}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{V2\+I\+M\+A\+P\+\_\+cfR}{V2IMAP\_cfR}}
+{\footnotesize\ttfamily \#define V2\+I\+M\+A\+P\+\_\+cfR(\begin{DoxyParamCaption}\item[{}]{A,  }\item[{}]{B,  }\item[{}]{D }\end{DoxyParamCaption})}
+
+
+
+Definition at line 64 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a630377bcd05264463957043895a222be}\label{fort-v2compat_8c_a630377bcd05264463957043895a222be}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!V2\+I\+M\+A\+P\+\_\+cf\+S\+TR@{V2\+I\+M\+A\+P\+\_\+cf\+S\+TR}}
+\index{V2\+I\+M\+A\+P\+\_\+cf\+S\+TR@{V2\+I\+M\+A\+P\+\_\+cf\+S\+TR}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{V2\+I\+M\+A\+P\+\_\+cf\+S\+TR}{V2IMAP\_cfSTR}}
+{\footnotesize\ttfamily \#define V2\+I\+M\+A\+P\+\_\+cf\+S\+TR(\begin{DoxyParamCaption}\item[{}]{N,  }\item[{}]{T,  }\item[{}]{A,  }\item[{}]{B,  }\item[{}]{C,  }\item[{}]{D,  }\item[{}]{E }\end{DoxyParamCaption})~\hyperlink{cfortran_8h_ae5cd5aa262ffbc853d773293d00e4323}{\+\_\+}(C\+F\+A\+R\+GS,N)(T,V2\+I\+M\+AP,A,B,C,D,E)}
+
+
+
+Definition at line 60 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_af30c5da58198e42fb61f784fc3ddfb3b}\label{fort-v2compat_8c_af30c5da58198e42fb61f784fc3ddfb3b}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!V2\+I\+M\+A\+P\+\_\+cfT@{V2\+I\+M\+A\+P\+\_\+cfT}}
+\index{V2\+I\+M\+A\+P\+\_\+cfT@{V2\+I\+M\+A\+P\+\_\+cfT}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{V2\+I\+M\+A\+P\+\_\+cfT}{V2IMAP\_cfT}}
+{\footnotesize\ttfamily \#define V2\+I\+M\+A\+P\+\_\+cfT(\begin{DoxyParamCaption}\item[{}]{M,  }\item[{}]{I,  }\item[{}]{A,  }\item[{}]{B,  }\item[{}]{D }\end{DoxyParamCaption})~\hyperlink{nf__v2compat_8c_a75a49e271d39db2186743d5deef88f7a}{f2c\+\_\+v2imap}($\ast$fncid, $\ast$fvarid-\/1, A, B)}
+
+
+
+Definition at line 63 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_ac0311e2d4d244d1b662101115c69e3f5}\label{fort-v2compat_8c_ac0311e2d4d244d1b662101115c69e3f5}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!V2\+I\+M\+A\+P\+V\+V\+V\+V\+V\+V\+V\+\_\+cf\+T\+Y\+PE@{V2\+I\+M\+A\+P\+V\+V\+V\+V\+V\+V\+V\+\_\+cf\+T\+Y\+PE}}
+\index{V2\+I\+M\+A\+P\+V\+V\+V\+V\+V\+V\+V\+\_\+cf\+T\+Y\+PE@{V2\+I\+M\+A\+P\+V\+V\+V\+V\+V\+V\+V\+\_\+cf\+T\+Y\+PE}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{V2\+I\+M\+A\+P\+V\+V\+V\+V\+V\+V\+V\+\_\+cf\+T\+Y\+PE}{V2IMAPVVVVVVV\_cfTYPE}}
+{\footnotesize\ttfamily \#define V2\+I\+M\+A\+P\+V\+V\+V\+V\+V\+V\+V\+\_\+cf\+T\+Y\+PE~\hyperlink{ncfortran_8h_a0fd3f9e9fc30661142a1fb549af678e7}{N\+F\+\_\+\+I\+N\+T\+E\+G\+ER}}
+
+
+
+Definition at line 59 of file fort-\/v2compat.\+c.
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{fort-v2compat_8c_ab008e5bfc98a80ca25189628e76e3ebf}\label{fort-v2compat_8c_ab008e5bfc98a80ca25189628e76e3ebf}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!c\+\_\+ncpopt@{c\+\_\+ncpopt}}
+\index{c\+\_\+ncpopt@{c\+\_\+ncpopt}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncpopt()}{c\_ncpopt()}}
+{\footnotesize\ttfamily static void c\+\_\+ncpopt (\begin{DoxyParamCaption}\item[{int}]{val }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 196 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_aa8270ec7619e957c0db032b4eb46c910}\label{fort-v2compat_8c_aa8270ec7619e957c0db032b4eb46c910}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!dimprod@{dimprod}}
+\index{dimprod@{dimprod}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{dimprod()}{dimprod()}}
+{\footnotesize\ttfamily static size\+\_\+t dimprod (\begin{DoxyParamCaption}\item[{const size\+\_\+t $\ast$}]{count,  }\item[{int}]{rank }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 180 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a0c06fd2f546418d0ed6fcfdc21340157}\label{fort-v2compat_8c_a0c06fd2f546418d0ed6fcfdc21340157}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!f2c\+\_\+v2imap@{f2c\+\_\+v2imap}}
+\index{f2c\+\_\+v2imap@{f2c\+\_\+v2imap}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{f2c\+\_\+v2imap()}{f2c\_v2imap()}}
+{\footnotesize\ttfamily static ptrdiff\+\_\+t$\ast$ f2c\+\_\+v2imap (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const int $\ast$}]{fimap,  }\item[{ptrdiff\+\_\+t $\ast$}]{cimap }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Convert a Version 2 Fortran I\+M\+AP vector into a Version 3 C imap vector. 
+
+
+
+Definition at line 71 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_ae1d820f1518e8d3f5c4a8dd91022a400}\label{fort-v2compat_8c_ae1d820f1518e8d3f5c4a8dd91022a400}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+F\+U\+N2@{F\+C\+A\+L\+L\+S\+C\+F\+U\+N2}}
+\index{F\+C\+A\+L\+L\+S\+C\+F\+U\+N2@{F\+C\+A\+L\+L\+S\+C\+F\+U\+N2}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+F\+U\+N2()}{FCALLSCFUN2()}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+F\+U\+N2 (\begin{DoxyParamCaption}\item[{\hyperlink{ncfortran_8h_aec6fe8ae8c73cf5133d4ed64f86ff028}{N\+F\+\_\+\+I\+NT}}]{,  }\item[{\hyperlink{nf__v2compat_8c_a7271eb972e4ecfa16690991d83c24b2f}{c\+\_\+nctlen}}]{,  }\item[{N\+C\+T\+L\+EN}]{,  }\item[{\hyperlink{nf__fortv2_8f90_aa66c92465ffab79785ec2fcda51321c1}{nctlen}}]{,  }\item[{T\+Y\+PE}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 446 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a3da73ae9b802d64c18e850a7320091a7}\label{fort-v2compat_8c_a3da73ae9b802d64c18e850a7320091a7}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+F\+U\+N3@{F\+C\+A\+L\+L\+S\+C\+F\+U\+N3}}
+\index{F\+C\+A\+L\+L\+S\+C\+F\+U\+N3@{F\+C\+A\+L\+L\+S\+C\+F\+U\+N3}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+F\+U\+N3()}{FCALLSCFUN3()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+F\+U\+N3 (\begin{DoxyParamCaption}\item[{\hyperlink{ncfortran_8h_aec6fe8ae8c73cf5133d4ed64f86ff028}{N\+F\+\_\+\+I\+NT}}]{,  }\item[{\hyperlink{nf__v2compat_8c_af9a99cd260c5779074591f8e55582d26}{c\+\_\+nccre}}]{,  }\item[{N\+C\+C\+RE}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a395384eea56bdad4a53b55df6d6e78d2}{nccre}}]{,  }\item[{S\+T\+R\+I\+NG}]{,  }\item[{\hyperlink{fort-v2compat_8c_abd5253773c995afc2eed8dee4a76a552}{C\+L\+O\+B\+M\+O\+DE}}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 256 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a2b3527c7932d252430e05f13777cfe55}\label{fort-v2compat_8c_a2b3527c7932d252430e05f13777cfe55}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+F\+U\+N3@{F\+C\+A\+L\+L\+S\+C\+F\+U\+N3}}
+\index{F\+C\+A\+L\+L\+S\+C\+F\+U\+N3@{F\+C\+A\+L\+L\+S\+C\+F\+U\+N3}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+F\+U\+N3()}{FCALLSCFUN3()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+F\+U\+N3 (\begin{DoxyParamCaption}\item[{\hyperlink{ncfortran_8h_aec6fe8ae8c73cf5133d4ed64f86ff028}{N\+F\+\_\+\+I\+NT}}]{,  }\item[{\hyperlink{nf__v2compat_8c_a3144811f2328f7e62be2e0e4484aab43}{c\+\_\+ncopn}}]{,  }\item[{N\+C\+O\+PN}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a43dce57f3c98cba43a7394b48ecd3184}{ncopn}}]{,  }\item[{S\+T\+R\+I\+NG}]{,  }\item[{\hyperlink{fort-v2compat_8c_a36ab2e26d67d11b7bfcb8843dc4bfb43}{R\+W\+M\+O\+DE}}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 303 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_ae30afb7b813bb704e26a17d97d6f38e2}\label{fort-v2compat_8c_ae30afb7b813bb704e26a17d97d6f38e2}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+F\+U\+N3@{F\+C\+A\+L\+L\+S\+C\+F\+U\+N3}}
+\index{F\+C\+A\+L\+L\+S\+C\+F\+U\+N3@{F\+C\+A\+L\+L\+S\+C\+F\+U\+N3}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+F\+U\+N3()}{FCALLSCFUN3()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+F\+U\+N3 (\begin{DoxyParamCaption}\item[{\hyperlink{ncfortran_8h_aec6fe8ae8c73cf5133d4ed64f86ff028}{N\+F\+\_\+\+I\+NT}}]{,  }\item[{\hyperlink{nf__v2compat_8c_a2703871d71535d87576288d6b0bd5727}{c\+\_\+ncdid}}]{,  }\item[{N\+C\+D\+ID}]{,  }\item[{\hyperlink{nf__fortv2_8f90_ac39b06f8d9b6ca78ff6073608ac25115}{ncdid}}]{,  }\item[{N\+C\+ID}]{,  }\item[{S\+T\+R\+I\+NG}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 360 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_ac5ab32a0784330630289e8d13c10f79e}\label{fort-v2compat_8c_ac5ab32a0784330630289e8d13c10f79e}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+F\+U\+N3@{F\+C\+A\+L\+L\+S\+C\+F\+U\+N3}}
+\index{F\+C\+A\+L\+L\+S\+C\+F\+U\+N3@{F\+C\+A\+L\+L\+S\+C\+F\+U\+N3}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+F\+U\+N3()}{FCALLSCFUN3()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+F\+U\+N3 (\begin{DoxyParamCaption}\item[{\hyperlink{ncfortran_8h_aec6fe8ae8c73cf5133d4ed64f86ff028}{N\+F\+\_\+\+I\+NT}}]{,  }\item[{\hyperlink{nf__v2compat_8c_a9f5d347c65de290ab045b062ac4366f7}{c\+\_\+ncvid}}]{,  }\item[{N\+C\+V\+ID}]{,  }\item[{\hyperlink{nf__fortv2_8f90_aea3eb70885317451ef241b6feacb8893}{ncvid}}]{,  }\item[{N\+C\+ID}]{,  }\item[{S\+T\+R\+I\+NG}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 423 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_ad5956b6f21e33272ade6d259159190d3}\label{fort-v2compat_8c_ad5956b6f21e33272ade6d259159190d3}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+F\+U\+N4@{F\+C\+A\+L\+L\+S\+C\+F\+U\+N4}}
+\index{F\+C\+A\+L\+L\+S\+C\+F\+U\+N4@{F\+C\+A\+L\+L\+S\+C\+F\+U\+N4}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+F\+U\+N4()}{FCALLSCFUN4()}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+F\+U\+N4 (\begin{DoxyParamCaption}\item[{\hyperlink{ncfortran_8h_aec6fe8ae8c73cf5133d4ed64f86ff028}{N\+F\+\_\+\+I\+NT}}]{,  }\item[{\hyperlink{nf__v2compat_8c_af79c1df7fa3f1a225cfc0a15bf6b7091}{c\+\_\+ncddef}}]{,  }\item[{N\+C\+D\+D\+EF}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a78171f3b2ee4a6763e764c357d57836e}{ncddef}}]{,  }\item[{N\+C\+ID}]{,  }\item[{S\+T\+R\+I\+NG}]{,  }\item[{\hyperlink{fort-v2compat_8c_a794de1e244ded083e471dd00db1329b1}{D\+I\+M\+L\+EN}}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 332 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a1ae6a5d3202cf2c8d9c3f38c9345b089}\label{fort-v2compat_8c_a1ae6a5d3202cf2c8d9c3f38c9345b089}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+F\+U\+N6@{F\+C\+A\+L\+L\+S\+C\+F\+U\+N6}}
+\index{F\+C\+A\+L\+L\+S\+C\+F\+U\+N6@{F\+C\+A\+L\+L\+S\+C\+F\+U\+N6}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+F\+U\+N6()}{FCALLSCFUN6()}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+F\+U\+N6 (\begin{DoxyParamCaption}\item[{\hyperlink{ncfortran_8h_aec6fe8ae8c73cf5133d4ed64f86ff028}{N\+F\+\_\+\+I\+NT}}]{,  }\item[{\hyperlink{nf__v2compat_8c_af8aa6c4a5fcc46f128d3c947b7a9b568}{c\+\_\+ncvdef}}]{,  }\item[{N\+C\+V\+D\+EF}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a7121e237ce771e26edb350028c22f37c}{ncvdef}}]{,  }\item[{N\+C\+ID}]{,  }\item[{S\+T\+R\+I\+NG}]{,  }\item[{T\+Y\+PE}]{,  }\item[{N\+D\+I\+MS}]{,  }\item[{D\+I\+M\+I\+DS}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 395 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a53850b774513b597f2d9080a0869f01a}\label{fort-v2compat_8c_a53850b774513b597f2d9080a0869f01a}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B1@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B1}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B1@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B1}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B1()}{FCALLSCSUB1()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B1 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_a94488ba6a21805a4d1f6f8e6c0c41c5e}{c\+\_\+ncpopt}}]{,  }\item[{N\+C\+P\+O\+PT}]{,  }\item[{\hyperlink{nf__fortv2_8f90_aa99b1352748c769427ead3bfaf123fff}{ncpopt}}]{,  }\item[{\hyperlink{fort-v2compat_8c_ad34fd007826863dc1084c1c893ce5934}{N\+C\+O\+P\+TS}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 204 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_ae3a654f180e14021674a31a166b7d6a8}\label{fort-v2compat_8c_ae3a654f180e14021674a31a166b7d6a8}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B1@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B1}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B1@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B1}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B1()}{FCALLSCSUB1()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B1 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_aac642849eafe9806b7b660bbe5c50cd1}{c\+\_\+ncgopt}}]{,  }\item[{N\+C\+G\+O\+PT}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a4fe1ac0350a63230cc17e880d496efa3}{ncgopt}}]{,  }\item[{\hyperlink{fort-v2compat_8c_ad28923cfdb7eaecc17fef3711c74befc}{P\+N\+C\+O\+P\+TS}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 220 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a070281e62436c1160f0aac8a216371df}\label{fort-v2compat_8c_a070281e62436c1160f0aac8a216371df}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B2@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2()}{FCALLSCSUB2()}\hspace{0.1cm}{\footnotesize\ttfamily [1/5]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B2 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_ac9314266e433d48e369f2247d3f8a918}{c\+\_\+ncclos}}]{,  }\item[{N\+C\+C\+L\+OS}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a03f16672189e09514f5df0a9d72e6859}{ncclos}}]{,  }\item[{N\+C\+ID}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 465 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a61c7c11d7478cfdb88af026f76f1f998}\label{fort-v2compat_8c_a61c7c11d7478cfdb88af026f76f1f998}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B2@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2()}{FCALLSCSUB2()}\hspace{0.1cm}{\footnotesize\ttfamily [2/5]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B2 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_a655af79e1ecf926fcfeb94536220fe6a}{c\+\_\+ncredf}}]{,  }\item[{N\+C\+R\+E\+DF}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a162a5ab1076c10c2228e36ee9ff00677}{ncredf}}]{,  }\item[{N\+C\+ID}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 484 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a094afaf83de5e83ec91adc5b2f9f4a65}\label{fort-v2compat_8c_a094afaf83de5e83ec91adc5b2f9f4a65}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B2@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2()}{FCALLSCSUB2()}\hspace{0.1cm}{\footnotesize\ttfamily [3/5]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B2 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_afbb2553120ff113b73c14b2701f139ac}{c\+\_\+ncendf}}]{,  }\item[{N\+C\+E\+N\+DF}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a0397fd550c269ff18340d1786e34d6f6}{ncendf}}]{,  }\item[{N\+C\+ID}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 503 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_abb8acf453dc1ee7705dcece3874a7125}\label{fort-v2compat_8c_abb8acf453dc1ee7705dcece3874a7125}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B2@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2()}{FCALLSCSUB2()}\hspace{0.1cm}{\footnotesize\ttfamily [4/5]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B2 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_a63dd616a411f60543435c9b07db52bb5}{c\+\_\+ncsnc}}]{,  }\item[{N\+C\+S\+NC}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a64e09d2a2a1ccf7e9052b111a169c2b9}{ncsnc}}]{,  }\item[{N\+C\+ID}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 546 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a5807dd6314185593914b654086682d73}\label{fort-v2compat_8c_a5807dd6314185593914b654086682d73}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B2@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B2()}{FCALLSCSUB2()}\hspace{0.1cm}{\footnotesize\ttfamily [5/5]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B2 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_a59f52ed3a2ef5478df2530ae211501e8}{c\+\_\+ncabor}}]{,  }\item[{N\+C\+A\+B\+OR}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a0e25c674ad6b99068e8c95d7f34f3c8e}{ncabor}}]{,  }\item[{N\+C\+ID}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 567 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_ac24148f7e8193ab62ab0eb344b99c56a}\label{fort-v2compat_8c_ac24148f7e8193ab62ab0eb344b99c56a}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B4@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B4}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B4@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B4}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B4()}{FCALLSCSUB4()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B4 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_a8dc48f9e3a4048402e8f86f26d4fed20}{c\+\_\+ncdren}}]{,  }\item[{N\+C\+D\+R\+EN}]{,  }\item[{\hyperlink{nf__fortv2_8f90_ade22791003f60c336b970147d68ceae3}{ncdren}}]{,  }\item[{N\+C\+ID}]{,  }\item[{\hyperlink{ncfortran_8h_affac6052df8e434d04708ecc3986d215}{D\+I\+M\+ID}}]{,  }\item[{S\+T\+R\+I\+NG}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 616 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a557291686562f07d1ddc65b343dac894}\label{fort-v2compat_8c_a557291686562f07d1ddc65b343dac894}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B4@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B4}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B4@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B4}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B4()}{FCALLSCSUB4()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B4 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_a3f3248eb07164659e5e4abcd5cf336d1}{c\+\_\+ncvren}}]{,  }\item[{N\+C\+V\+R\+EN}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a8de81d99a1275d61dabb79e14a84c1f6}{ncvren}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{S\+T\+R\+I\+NG}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1548 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_ac6de05a02619ce68727ecc66fcc1bd1d}\label{fort-v2compat_8c_ac6de05a02619ce68727ecc66fcc1bd1d}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B4@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B4}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B4@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B4}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B4()}{FCALLSCSUB4()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B4 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_a7bd0c5f885c4efae5a33518503d4b5df}{c\+\_\+ncadel}}]{,  }\item[{N\+C\+A\+D\+EL}]{,  }\item[{\hyperlink{nf__fortv2_8f90_aca410e210247338c8c44f4cd02aacdec}{ncadel}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{S\+T\+R\+I\+NG}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1938 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a12ee5114ed329211614492afea1a67a9}\label{fort-v2compat_8c_a12ee5114ed329211614492afea1a67a9}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B5@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5()}{FCALLSCSUB5()}\hspace{0.1cm}{\footnotesize\ttfamily [1/8]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B5 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_a9bb20b1a81299cccacc6a3116f17b55a}{c\+\_\+ncdinq}}]{,  }\item[{N\+C\+D\+I\+NQ}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a6ee036c798e7436b1d962c7dfc8a6957}{ncdinq}}]{,  }\item[{N\+C\+ID}]{,  }\item[{\hyperlink{ncfortran_8h_affac6052df8e434d04708ecc3986d215}{D\+I\+M\+ID}}]{,  }\item[{P\+S\+T\+R\+I\+NG}]{,  }\item[{\hyperlink{fort-v2compat_8c_a966419668dc6e6f3e34bc743e56397a6}{P\+D\+I\+M\+L\+EN}}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 595 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a682aab2eac9878efe2fa07d8c24ac6f0}\label{fort-v2compat_8c_a682aab2eac9878efe2fa07d8c24ac6f0}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B5@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5()}{FCALLSCSUB5()}\hspace{0.1cm}{\footnotesize\ttfamily [2/8]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B5 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_ad869819911f33dfb9cf47f60647d59f4}{c\+\_\+ncvpt1}}]{,  }\item[{N\+C\+V\+P\+T1}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a193fa468237c9fe5b4c4182a49ae0030}{ncvpt1}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{C\+O\+O\+R\+DS}]{,  }\item[{P\+V\+O\+ID}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 735 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a107f17c85f547d1a82b7add74d35fc59}\label{fort-v2compat_8c_a107f17c85f547d1a82b7add74d35fc59}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B5@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5()}{FCALLSCSUB5()}\hspace{0.1cm}{\footnotesize\ttfamily [3/8]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B5 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_ab52acaf18740d16c37e45ebe900ef853}{c\+\_\+ncvp1c}}]{,  }\item[{N\+C\+V\+P1C}]{,  }\item[{\hyperlink{nf__fortv2_8f90_ae86fd9a6227f59f53db68f523802428c}{ncvp1c}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{C\+O\+O\+R\+DS}]{,  }\item[{C\+B\+UF}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 771 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_aef8c75bdc8a1f1c314a308850b6a181f}\label{fort-v2compat_8c_aef8c75bdc8a1f1c314a308850b6a181f}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B5@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5()}{FCALLSCSUB5()}\hspace{0.1cm}{\footnotesize\ttfamily [4/8]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B5 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_a3cfcd4ee8ba5397ab91260bc46f4ded9}{c\+\_\+ncvgt1}}]{,  }\item[{N\+C\+V\+G\+T1}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a6c63eb6533f6fd980258f9ded00cf4e1}{ncvgt1}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{C\+O\+O\+R\+DS}]{,  }\item[{P\+V\+O\+ID}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1176 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a2839404407c4a0e04c3444d0529c7ab8}\label{fort-v2compat_8c_a2839404407c4a0e04c3444d0529c7ab8}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B5@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5()}{FCALLSCSUB5()}\hspace{0.1cm}{\footnotesize\ttfamily [5/8]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B5 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_a0b558cfe78f0df371d4150519b9c5650}{c\+\_\+ncvg1c}}]{,  }\item[{N\+C\+V\+G1C}]{,  }\item[{\hyperlink{nf__fortv2_8f90_ab8326c1d1a7aa3142428092a708f6a10}{ncvg1c}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{C\+O\+O\+R\+DS}]{,  }\item[{C\+B\+UF}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1220 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a8926daf7c832748512514c9a4f754a12}\label{fort-v2compat_8c_a8926daf7c832748512514c9a4f754a12}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B5@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5()}{FCALLSCSUB5()}\hspace{0.1cm}{\footnotesize\ttfamily [6/8]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B5 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_a35655edb0fac8162f977d59dd904adf2}{c\+\_\+ncagt}}]{,  }\item[{N\+C\+A\+GT}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a12c954aa7ec21768adf357a69850aa8e}{ncagt}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{S\+T\+R\+I\+NG}]{,  }\item[{P\+V\+O\+ID}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1793 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a8bd30481b6c02713c36110489bc583c3}\label{fort-v2compat_8c_a8bd30481b6c02713c36110489bc583c3}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B5@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5()}{FCALLSCSUB5()}\hspace{0.1cm}{\footnotesize\ttfamily [7/8]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B5 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_aeeeb1daf5d2fbc85f3d7135d723e6198}{c\+\_\+ncanam}}]{,  }\item[{N\+C\+A\+N\+AM}]{,  }\item[{\hyperlink{nf__fortv2_8f90_abd5c8126f5ad1171b3944262956899b0}{ncanam}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{\hyperlink{ncfortran_8h_a01d1fad6578e98ab92205f3da4b446dc}{A\+T\+T\+ID}}]{,  }\item[{P\+S\+T\+R\+I\+NG}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1895 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_ae0df920cf268e71f8e48aca0a84b25c7}\label{fort-v2compat_8c_ae0df920cf268e71f8e48aca0a84b25c7}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B5@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B5()}{FCALLSCSUB5()}\hspace{0.1cm}{\footnotesize\ttfamily [8/8]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B5 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_acaa8977afd889e7c438d59b542effb29}{c\+\_\+ncaren}}]{,  }\item[{N\+C\+A\+R\+EN}]{,  }\item[{\hyperlink{nf__fortv2_8f90_ab82f351050b86a1f5c96a8ef0f5fd46c}{ncaren}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{S\+T\+R\+I\+NG}]{,  }\item[{S\+T\+R\+I\+NG}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1917 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a905e10e257cb6288009a8bc13e715973}\label{fort-v2compat_8c_a905e10e257cb6288009a8bc13e715973}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B6@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6()}{FCALLSCSUB6()}\hspace{0.1cm}{\footnotesize\ttfamily [1/6]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B6 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_a6ae63c66ba7a2b29c3808485b4aea1d6}{c\+\_\+ncinq}}]{,  }\item[{N\+C\+I\+NQ}]{,  }\item[{\hyperlink{nf__fortv2_8f90_aeb39546c2eeb1bc23ac957a2388fc56b}{ncinq}}]{,  }\item[{N\+C\+ID}]{,  }\item[{\hyperlink{ncfortran_8h_a1e5068f5fb9f0e8cc1f30a297226ab7d}{P\+N\+D\+I\+MS}}]{,  }\item[{\hyperlink{ncfortran_8h_ac02eff2a4b97f9cf065ac0709876af97}{P\+N\+V\+A\+RS}}]{,  }\item[{\hyperlink{ncfortran_8h_a36a5825a51824435de6731632e2aa61c}{P\+N\+A\+T\+TS}}]{,  }\item[{P\+D\+I\+M\+ID}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 526 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_acbc5b23349d9fffa6fbf7205138dac99}\label{fort-v2compat_8c_acbc5b23349d9fffa6fbf7205138dac99}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B6@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6()}{FCALLSCSUB6()}\hspace{0.1cm}{\footnotesize\ttfamily [2/6]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B6 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_a103ae6935428dfecde0657594a2206f6}{c\+\_\+ncvpt}}]{,  }\item[{N\+C\+V\+PT}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a0e80dc4b1c7ad7772f48f31480a61237}{ncvpt}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{C\+O\+O\+R\+DS}]{,  }\item[{C\+O\+U\+N\+TS}]{,  }\item[{P\+V\+O\+ID}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 867 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a9a398103d54bd402c86b46616569ef30}\label{fort-v2compat_8c_a9a398103d54bd402c86b46616569ef30}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B6@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6()}{FCALLSCSUB6()}\hspace{0.1cm}{\footnotesize\ttfamily [3/6]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B6 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_ae39e340aeaf256362639b1d87d4a870b}{c\+\_\+ncvgt}}]{,  }\item[{N\+C\+V\+GT}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a376e4bb1238c7da316b25b32d34608f7}{ncvgt}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{C\+O\+O\+R\+DS}]{,  }\item[{C\+O\+U\+N\+TS}]{,  }\item[{P\+V\+O\+ID}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1316 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a085b44bd926969302b555c1263702ae0}\label{fort-v2compat_8c_a085b44bd926969302b555c1263702ae0}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B6@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6()}{FCALLSCSUB6()}\hspace{0.1cm}{\footnotesize\ttfamily [4/6]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B6 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_ae2fadfcdf2633389b29b14f4bf7e62b2}{c\+\_\+ncainq}}]{,  }\item[{N\+C\+A\+I\+NQ}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a7b0621bf96d56601f68c18da4ff2e759}{ncainq}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{S\+T\+R\+I\+NG}]{,  }\item[{P\+T\+Y\+PE}]{,  }\item[{\hyperlink{fort-v2compat_8c_abba4da455082c98d8b81b6d70ff498de}{P\+A\+T\+T\+L\+EN}}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1700 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_ac622f0104673733887ae0c1af938f237}\label{fort-v2compat_8c_ac622f0104673733887ae0c1af938f237}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B6@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6()}{FCALLSCSUB6()}\hspace{0.1cm}{\footnotesize\ttfamily [5/6]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B6 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_af2970c38a778d0445024e98efe3ae008}{c\+\_\+ncagtc}}]{,  }\item[{N\+C\+A\+G\+TC}]{,  }\item[{\hyperlink{nf__fortv2_8f90_acdffb4e9e53796cfadcf86a802a159b3}{ncagtc}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{S\+T\+R\+I\+NG}]{,  }\item[{C\+B\+UF}]{,  }\item[{\hyperlink{fort-v2compat_8c_a5274f0ce0562c9ab9da4004e7d85d738}{A\+T\+T\+L\+EN}}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1848 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a344033c85730782d2917dbe854fe83ac}\label{fort-v2compat_8c_a344033c85730782d2917dbe854fe83ac}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B6@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B6()}{FCALLSCSUB6()}\hspace{0.1cm}{\footnotesize\ttfamily [6/6]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B6 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_a3130c6d2dee74a8b7bdfc7dc72e5bdf4}{c\+\_\+ncacpy}}]{,  }\item[{N\+C\+A\+C\+PY}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a251a629393e35281e714774eddea2551}{ncacpy}}]{,  }\item[{\hyperlink{ncfortran_8h_a77bc5b6e6321a310e41121867f2e999e}{N\+C\+I\+D1}}]{,  }\item[{V\+A\+R\+I\+D1}]{,  }\item[{S\+T\+R\+I\+NG}]{,  }\item[{\hyperlink{ncfortran_8h_afc3f5dd7cd297678e0066bb7e2d3fcb4}{N\+C\+I\+D2}}]{,  }\item[{V\+A\+R\+I\+D2}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1872 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_ad88c75187e19db15b1e57408f25ff0db}\label{fort-v2compat_8c_ad88c75187e19db15b1e57408f25ff0db}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B7@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B7}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B7@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B7}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B7()}{FCALLSCSUB7()}\hspace{0.1cm}{\footnotesize\ttfamily [1/4]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B7 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_add9961f97a96ff8a834bdc8da533ef4e}{c\+\_\+ncvptc}}]{,  }\item[{N\+C\+V\+P\+TC}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a6c95aa587ee368266d7727735158957f}{ncvptc}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{C\+O\+O\+R\+DS}]{,  }\item[{C\+O\+U\+N\+TS}]{,  }\item[{C\+B\+UF}]{,  }\item[{\hyperlink{fort-v2compat_8c_afcbdb4ceefc87947c1f6254df71bdb36}{L\+E\+N\+S\+TR}}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 918 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a46ec598b1b68f552a6a9886330e8e9fb}\label{fort-v2compat_8c_a46ec598b1b68f552a6a9886330e8e9fb}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B7@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B7}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B7@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B7}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B7()}{FCALLSCSUB7()}\hspace{0.1cm}{\footnotesize\ttfamily [2/4]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B7 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_a665567929170d07d23a7dad0eea4bea6}{c\+\_\+ncvgtc}}]{,  }\item[{N\+C\+V\+G\+TC}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a81ac17ea93b907a54fc2557bf3ace40a}{ncvgtc}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{C\+O\+O\+R\+DS}]{,  }\item[{C\+O\+U\+N\+TS}]{,  }\item[{C\+B\+UF}]{,  }\item[{\hyperlink{fort-v2compat_8c_afcbdb4ceefc87947c1f6254df71bdb36}{L\+E\+N\+S\+TR}}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1365 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a25aa8639f820d413d9c263a8a29f162b}\label{fort-v2compat_8c_a25aa8639f820d413d9c263a8a29f162b}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B7@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B7}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B7@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B7}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B7()}{FCALLSCSUB7()}\hspace{0.1cm}{\footnotesize\ttfamily [3/4]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B7 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_a15af034ea9165af45a02315b3320dab1}{c\+\_\+ncapt}}]{,  }\item[{N\+C\+A\+PT}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a7572a6d6e1628e2868cef69a3d147c38}{ncapt}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{S\+T\+R\+I\+NG}]{,  }\item[{T\+Y\+PE}]{,  }\item[{C\+O\+U\+NT}]{,  }\item[{P\+V\+O\+ID}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1640 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a6584fce06fb0b25e58067f361f19bc73}\label{fort-v2compat_8c_a6584fce06fb0b25e58067f361f19bc73}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B7@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B7}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B7@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B7}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B7()}{FCALLSCSUB7()}\hspace{0.1cm}{\footnotesize\ttfamily [4/4]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B7 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_aed57d7a73cd3e59ce0a99597aa180e7b}{c\+\_\+ncaptc}}]{,  }\item[{N\+C\+A\+P\+TC}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a525301fbfb8b1e885e1531ed31e16565}{ncaptc}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{S\+T\+R\+I\+NG}]{,  }\item[{T\+Y\+PE}]{,  }\item[{C\+O\+U\+NT}]{,  }\item[{C\+B\+UF}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1675 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a0892717e2482b175ac5d0da166cbe6e9}\label{fort-v2compat_8c_a0892717e2482b175ac5d0da166cbe6e9}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B8@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8()}{FCALLSCSUB8()}\hspace{0.1cm}{\footnotesize\ttfamily [1/5]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B8 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_a8fc2cc586a6874bbf28afd044e4f929c}{c\+\_\+ncvinq}}]{,  }\item[{N\+C\+V\+I\+NQ}]{,  }\item[{\hyperlink{nf__fortv2_8f90_a58c204fe024e1315e38a953ffc8bb3c9}{ncvinq}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{P\+S\+T\+R\+I\+NG}]{,  }\item[{P\+T\+Y\+PE}]{,  }\item[{\hyperlink{ncfortran_8h_a1e5068f5fb9f0e8cc1f30a297226ab7d}{P\+N\+D\+I\+MS}}]{,  }\item[{P\+D\+I\+M\+I\+DS}]{,  }\item[{\hyperlink{ncfortran_8h_a36a5825a51824435de6731632e2aa61c}{P\+N\+A\+T\+TS}}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 642 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a4177d74ae5060c854615b1608a7af245}\label{fort-v2compat_8c_a4177d74ae5060c854615b1608a7af245}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B8@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8()}{FCALLSCSUB8()}\hspace{0.1cm}{\footnotesize\ttfamily [2/5]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B8 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_a9cf8e2715d16ffc4410f608b4ed941aa}{c\+\_\+ncvptg}}]{,  }\item[{N\+C\+V\+P\+TG}]{,  }\item[{\hyperlink{nf__fortv2_8f90_aacf3b20901c252480d87dc327cf6a9f5}{ncvptg}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{C\+O\+O\+R\+DS}]{,  }\item[{C\+O\+U\+N\+TS}]{,  }\item[{S\+T\+R\+I\+D\+ES}]{,  }\item[{V2\+I\+M\+AP}]{,  }\item[{P\+V\+O\+ID}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1031 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a44a9e409e1a63a04a605944785188ca7}\label{fort-v2compat_8c_a44a9e409e1a63a04a605944785188ca7}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B8@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8()}{FCALLSCSUB8()}\hspace{0.1cm}{\footnotesize\ttfamily [3/5]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B8 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_af792c7a0a9b873fa9b56ee0f17112b99}{c\+\_\+ncvpgc}}]{,  }\item[{N\+C\+V\+P\+GC}]{,  }\item[{\hyperlink{nf__fortv2_8f90_ae593f10084ce6b3ed716b1dcf87d6618}{ncvpgc}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{C\+O\+O\+R\+DS}]{,  }\item[{C\+O\+U\+N\+TS}]{,  }\item[{S\+T\+R\+I\+D\+ES}]{,  }\item[{V2\+I\+M\+AP}]{,  }\item[{C\+B\+UF}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1082 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a305ee7c600c6085063a961e9926b8c40}\label{fort-v2compat_8c_a305ee7c600c6085063a961e9926b8c40}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B8@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8()}{FCALLSCSUB8()}\hspace{0.1cm}{\footnotesize\ttfamily [4/5]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B8 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_aa58c98f7f3a1bbc8e80d0ff3fce13190}{c\+\_\+ncvgtg}}]{,  }\item[{N\+C\+V\+G\+TG}]{,  }\item[{\hyperlink{nf__fortv2_8f90_ae0fbe2588278893dcab19ab604767a7d}{ncvgtg}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{C\+O\+O\+R\+DS}]{,  }\item[{C\+O\+U\+N\+TS}]{,  }\item[{S\+T\+R\+I\+D\+ES}]{,  }\item[{V2\+I\+M\+AP}]{,  }\item[{P\+V\+O\+ID}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1477 of file fort-\/v2compat.\+c.
+
+\mbox{\Hypertarget{fort-v2compat_8c_a6f4f22a1bac85a6b575ccb6725a30b4c}\label{fort-v2compat_8c_a6f4f22a1bac85a6b575ccb6725a30b4c}} 
+\index{fort-\/v2compat.\+c@{fort-\/v2compat.\+c}!F\+C\+A\+L\+L\+S\+C\+S\+U\+B8@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8}}
+\index{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8@{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8}!fort-\/v2compat.\+c@{fort-\/v2compat.\+c}}
+\subsubsection{\texorpdfstring{F\+C\+A\+L\+L\+S\+C\+S\+U\+B8()}{FCALLSCSUB8()}\hspace{0.1cm}{\footnotesize\ttfamily [5/5]}}
+{\footnotesize\ttfamily F\+C\+A\+L\+L\+S\+C\+S\+U\+B8 (\begin{DoxyParamCaption}\item[{\hyperlink{nf__v2compat_8c_a63f13eb2d14b6e465c7011f39762c745}{c\+\_\+ncvggc}}]{,  }\item[{N\+C\+V\+G\+GC}]{,  }\item[{\hyperlink{nf__fortv2_8f90_aa02cb955f7bb1ae0f370492cfaae7b6f}{ncvggc}}]{,  }\item[{N\+C\+ID}]{,  }\item[{V\+A\+R\+ID}]{,  }\item[{C\+O\+O\+R\+DS}]{,  }\item[{C\+O\+U\+N\+TS}]{,  }\item[{S\+T\+R\+I\+D\+ES}]{,  }\item[{V2\+I\+M\+AP}]{,  }\item[{C\+B\+UF}]{,  }\item[{\hyperlink{fort-v2compat_8c_ae2352f39cbd25bcaf1bedbbb12db73fe}{P\+R\+C\+O\+DE}}]{ }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1527 of file fort-\/v2compat.\+c.
+

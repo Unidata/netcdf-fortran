@@ -1,0 +1,494 @@
+.TH "netcdf_nf_interfaces" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+netcdf_nf_interfaces
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "interface \fBnf90_open_mem\fP"
+.br
+.ti -1c
+.RI "interface \fBnf__create\fP"
+.br
+.ti -1c
+.RI "interface \fBnf__create_mp\fP"
+.br
+.ti -1c
+.RI "interface \fBnf__enddef\fP"
+.br
+.ti -1c
+.RI "interface \fBnf__open\fP"
+.br
+.ti -1c
+.RI "interface \fBnf__open_mp\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_abort\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_close\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_copy_att\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_copy_var\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_create\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_def_dim\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_def_var\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_del_att\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_delete\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_delete_mp\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_enddef\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_att_double\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_att_int\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_att_int1\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_att_int2\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_att_real\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_att_text\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_var1_double\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_var1_int\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_var1_int1\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_var1_int2\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_var1_real\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_var1_text\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_var_double\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_var_int\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_var_int1\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_var_int2\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_var_real\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_var_text\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_vara_double\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_vara_int\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_vara_int1\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_vara_int2\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_vara_real\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_vara_text\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_varm_double\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_varm_int\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_varm_int1\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_varm_int2\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_varm_real\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_varm_text\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_vars_double\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_vars_int\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_vars_int1\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_vars_int2\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_vars_real\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_get_vars_text\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_att\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_attid\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_attlen\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_attname\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_atttype\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_base_pe\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_dim\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_dimid\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_dimlen\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_dimname\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_format\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_libvers\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_natts\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_ndims\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_nvars\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_path\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_unlimdim\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_var\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_vardimid\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_varid\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_varname\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_varnatts\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_varndims\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_inq_vartype\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_issyserr\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_open\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_att_double\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_att_int\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_att_int1\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_att_int2\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_att_real\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_att_text\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_var1_double\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_var1_int\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_var1_int1\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_var1_int2\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_var1_real\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_var1_text\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_var_double\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_var_int\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_var_int1\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_var_int2\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_var_real\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_var_text\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_vara_double\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_vara_int\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_vara_int1\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_vara_int2\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_vara_real\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_vara_text\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_varm_double\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_varm_int\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_varm_int1\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_varm_int2\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_varm_real\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_varm_text\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_vars_double\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_vars_int\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_vars_int1\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_vars_int2\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_vars_real\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_put_vars_text\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_redef\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_rename_att\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_rename_dim\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_rename_var\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_set_base_pe\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_set_default_format\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_set_fill\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_strerror\fP"
+.br
+.ti -1c
+.RI "interface \fBnf_sync\fP"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "integer, external \fBnf_put_var1\fP"
+.br
+.ti -1c
+.RI "integer, external \fBnf_get_var1\fP"
+.br
+.ti -1c
+.RI "integer, external \fBnf_put_vars\fP"
+.br
+.ti -1c
+.RI "integer, external \fBnf_get_vars\fP"
+.br
+.ti -1c
+.RI "integer, external \fBnf_put_vara\fP"
+.br
+.ti -1c
+.RI "integer, external \fBnf_get_vara\fP"
+.br
+.ti -1c
+.RI "integer, external \fBnccre\fP"
+.br
+.ti -1c
+.RI "integer, external \fBncopn\fP"
+.br
+.ti -1c
+.RI "integer, external \fBncddef\fP"
+.br
+.ti -1c
+.RI "integer, external \fBncdid\fP"
+.br
+.ti -1c
+.RI "integer, external \fBncvdef\fP"
+.br
+.ti -1c
+.RI "integer, external \fBncvid\fP"
+.br
+.ti -1c
+.RI "integer, external \fBnctlen\fP"
+.br
+.ti -1c
+.RI "integer, external \fBncsfil\fP"
+.br
+.in -1c
+.SH "Variable Documentation"
+.PP 
+.SS "integer, external netcdf_nf_interfaces::nccre"
+
+.PP
+Definition at line 1668 of file module_netcdf_nf_interfaces\&.F90\&.
+.SS "integer, external netcdf_nf_interfaces::ncddef"
+
+.PP
+Definition at line 1670 of file module_netcdf_nf_interfaces\&.F90\&.
+.SS "integer, external netcdf_nf_interfaces::ncdid"
+
+.PP
+Definition at line 1671 of file module_netcdf_nf_interfaces\&.F90\&.
+.SS "integer, external netcdf_nf_interfaces::ncopn"
+
+.PP
+Definition at line 1669 of file module_netcdf_nf_interfaces\&.F90\&.
+.SS "integer, external netcdf_nf_interfaces::ncsfil"
+
+.PP
+Definition at line 1675 of file module_netcdf_nf_interfaces\&.F90\&.
+.SS "integer, external netcdf_nf_interfaces::nctlen"
+
+.PP
+Definition at line 1674 of file module_netcdf_nf_interfaces\&.F90\&.
+.SS "integer, external netcdf_nf_interfaces::ncvdef"
+
+.PP
+Definition at line 1672 of file module_netcdf_nf_interfaces\&.F90\&.
+.SS "integer, external netcdf_nf_interfaces::ncvid"
+
+.PP
+Definition at line 1673 of file module_netcdf_nf_interfaces\&.F90\&.
+.SS "integer, external netcdf_nf_interfaces::nf_get_var1"
+
+.PP
+Definition at line 1659 of file module_netcdf_nf_interfaces\&.F90\&.
+.SS "integer, external netcdf_nf_interfaces::nf_get_vara"
+
+.PP
+Definition at line 1663 of file module_netcdf_nf_interfaces\&.F90\&.
+.SS "integer, external netcdf_nf_interfaces::nf_get_vars"
+
+.PP
+Definition at line 1661 of file module_netcdf_nf_interfaces\&.F90\&.
+.SS "integer, external netcdf_nf_interfaces::nf_put_var1"
+
+.PP
+Definition at line 1658 of file module_netcdf_nf_interfaces\&.F90\&.
+.SS "integer, external netcdf_nf_interfaces::nf_put_vara"
+
+.PP
+Definition at line 1662 of file module_netcdf_nf_interfaces\&.F90\&.
+.SS "integer, external netcdf_nf_interfaces::nf_put_vars"
+
+.PP
+Definition at line 1660 of file module_netcdf_nf_interfaces\&.F90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for NetCDF-Fortran from the source code\&.

@@ -1,0 +1,121 @@
+\hypertarget{netcdf__f_8h}{}\section{netcdf\+\_\+f.\+h File Reference}
+\label{netcdf__f_8h}\index{netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}}
+{\ttfamily \#include $<$netcdf.\+h$>$}\newline
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+E\+X\+T\+E\+R\+NL int \hyperlink{netcdf__f_8h_a77b1df809f4207f4146cc708387ebb90}{nc\+\_\+inq\+\_\+var\+\_\+chunking\+\_\+ints} (int ncid, int varid, int $\ast$contiguousp, int $\ast$chunksizesp)
+\item 
+E\+X\+T\+E\+R\+NL int \hyperlink{netcdf__f_8h_a938d48eb46e557fcf2f06dd09bc11340}{nc\+\_\+def\+\_\+var\+\_\+chunking\+\_\+ints} (int ncid, int varid, int contiguous, int $\ast$chunksizesp)
+\item 
+E\+X\+T\+E\+R\+NL int \hyperlink{netcdf__f_8h_a54c35f9c93fd1f37b2c1f328da5946b2}{nc\+\_\+open\+\_\+par\+\_\+fortran} (const char $\ast$path, int mode, int comm, int info, int $\ast$ncidp)
+\item 
+E\+X\+T\+E\+R\+NL int \hyperlink{netcdf__f_8h_ad3b981c1f6028f86f656662572ef6e6d}{nc\+\_\+create\+\_\+par\+\_\+fortran} (const char $\ast$path, int cmode, int comm, int info, int $\ast$ncidp)
+\item 
+E\+X\+T\+E\+R\+NL int \hyperlink{netcdf__f_8h_a132073c3e220f230e4142f5a225066d2}{nc\+\_\+set\+\_\+chunk\+\_\+cache\+\_\+ints} (int size, int nelems, int preemption)
+\item 
+E\+X\+T\+E\+R\+NL int \hyperlink{netcdf__f_8h_a9728a30aae569910126cd2d1bfe3968a}{nc\+\_\+get\+\_\+chunk\+\_\+cache\+\_\+ints} (int $\ast$sizep, int $\ast$nelemsp, int $\ast$preemptionp)
+\item 
+E\+X\+T\+E\+R\+NL int \hyperlink{netcdf__f_8h_a3fc60e6e7250539b356c986f0c0af0de}{nc\+\_\+set\+\_\+var\+\_\+chunk\+\_\+cache\+\_\+ints} (int ncid, int varid, int size, int nelems, int preemption)
+\item 
+E\+X\+T\+E\+R\+NL int \hyperlink{netcdf__f_8h_a583961c2d2eb9402ada1a5414e0cb991}{nc\+\_\+get\+\_\+var\+\_\+chunk\+\_\+cache\+\_\+ints} (int ncid, int varid, int $\ast$sizep, int $\ast$nelemsp, int $\ast$preemptionp)
+\item 
+E\+X\+T\+E\+R\+NL int \hyperlink{netcdf__f_8h_af5866b3dc8aa57cff7d29d7c879e9e4f}{nc\+\_\+inq\+\_\+varids\+\_\+f} (int ncid, int $\ast$nvars, int $\ast$fvarids)
+\item 
+E\+X\+T\+E\+R\+NL int \hyperlink{netcdf__f_8h_a4290da001055c538b0753f021cfe3b53}{nc\+\_\+inq\+\_\+dimids\+\_\+f} (int ncid, int $\ast$ndims, int $\ast$fdimids, int parent)
+\item 
+E\+X\+T\+E\+R\+NL int \hyperlink{netcdf__f_8h_aa1f760fcfe94404d16891cdfcc9463d8}{nc\+\_\+insert\+\_\+array\+\_\+compound\+\_\+f} (int ncid, int typeid, char $\ast$name, size\+\_\+t offset, nc\+\_\+type field\+\_\+typeid, int ndims, int $\ast$dim\+\_\+sizesp)
+\item 
+E\+X\+T\+E\+R\+NL int \hyperlink{netcdf__f_8h_a42797cfb64cc969ae8c03b65207e7e85}{nc\+\_\+inq\+\_\+compound\+\_\+field\+\_\+f} (int ncid, nc\+\_\+type xtype, int fieldid, char $\ast$name, size\+\_\+t $\ast$offsetp, nc\+\_\+type $\ast$field\+\_\+typeidp, int $\ast$ndimsp, int $\ast$dim\+\_\+sizesp)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{netcdf__f_8h_ad3b981c1f6028f86f656662572ef6e6d}\label{netcdf__f_8h_ad3b981c1f6028f86f656662572ef6e6d}} 
+\index{netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}!nc\+\_\+create\+\_\+par\+\_\+fortran@{nc\+\_\+create\+\_\+par\+\_\+fortran}}
+\index{nc\+\_\+create\+\_\+par\+\_\+fortran@{nc\+\_\+create\+\_\+par\+\_\+fortran}!netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}}
+\subsubsection{\texorpdfstring{nc\+\_\+create\+\_\+par\+\_\+fortran()}{nc\_create\_par\_fortran()}}
+{\footnotesize\ttfamily E\+X\+T\+E\+R\+NL int nc\+\_\+create\+\_\+par\+\_\+fortran (\begin{DoxyParamCaption}\item[{const char $\ast$}]{path,  }\item[{int}]{cmode,  }\item[{int}]{comm,  }\item[{int}]{info,  }\item[{int $\ast$}]{ncidp }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{netcdf__f_8h_a938d48eb46e557fcf2f06dd09bc11340}\label{netcdf__f_8h_a938d48eb46e557fcf2f06dd09bc11340}} 
+\index{netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}!nc\+\_\+def\+\_\+var\+\_\+chunking\+\_\+ints@{nc\+\_\+def\+\_\+var\+\_\+chunking\+\_\+ints}}
+\index{nc\+\_\+def\+\_\+var\+\_\+chunking\+\_\+ints@{nc\+\_\+def\+\_\+var\+\_\+chunking\+\_\+ints}!netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}}
+\subsubsection{\texorpdfstring{nc\+\_\+def\+\_\+var\+\_\+chunking\+\_\+ints()}{nc\_def\_var\_chunking\_ints()}}
+{\footnotesize\ttfamily E\+X\+T\+E\+R\+NL int nc\+\_\+def\+\_\+var\+\_\+chunking\+\_\+ints (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{int}]{contiguous,  }\item[{int $\ast$}]{chunksizesp }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{netcdf__f_8h_a9728a30aae569910126cd2d1bfe3968a}\label{netcdf__f_8h_a9728a30aae569910126cd2d1bfe3968a}} 
+\index{netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}!nc\+\_\+get\+\_\+chunk\+\_\+cache\+\_\+ints@{nc\+\_\+get\+\_\+chunk\+\_\+cache\+\_\+ints}}
+\index{nc\+\_\+get\+\_\+chunk\+\_\+cache\+\_\+ints@{nc\+\_\+get\+\_\+chunk\+\_\+cache\+\_\+ints}!netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}}
+\subsubsection{\texorpdfstring{nc\+\_\+get\+\_\+chunk\+\_\+cache\+\_\+ints()}{nc\_get\_chunk\_cache\_ints()}}
+{\footnotesize\ttfamily E\+X\+T\+E\+R\+NL int nc\+\_\+get\+\_\+chunk\+\_\+cache\+\_\+ints (\begin{DoxyParamCaption}\item[{int $\ast$}]{sizep,  }\item[{int $\ast$}]{nelemsp,  }\item[{int $\ast$}]{preemptionp }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{netcdf__f_8h_a583961c2d2eb9402ada1a5414e0cb991}\label{netcdf__f_8h_a583961c2d2eb9402ada1a5414e0cb991}} 
+\index{netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}!nc\+\_\+get\+\_\+var\+\_\+chunk\+\_\+cache\+\_\+ints@{nc\+\_\+get\+\_\+var\+\_\+chunk\+\_\+cache\+\_\+ints}}
+\index{nc\+\_\+get\+\_\+var\+\_\+chunk\+\_\+cache\+\_\+ints@{nc\+\_\+get\+\_\+var\+\_\+chunk\+\_\+cache\+\_\+ints}!netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}}
+\subsubsection{\texorpdfstring{nc\+\_\+get\+\_\+var\+\_\+chunk\+\_\+cache\+\_\+ints()}{nc\_get\_var\_chunk\_cache\_ints()}}
+{\footnotesize\ttfamily E\+X\+T\+E\+R\+NL int nc\+\_\+get\+\_\+var\+\_\+chunk\+\_\+cache\+\_\+ints (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{int $\ast$}]{sizep,  }\item[{int $\ast$}]{nelemsp,  }\item[{int $\ast$}]{preemptionp }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{netcdf__f_8h_a42797cfb64cc969ae8c03b65207e7e85}\label{netcdf__f_8h_a42797cfb64cc969ae8c03b65207e7e85}} 
+\index{netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}!nc\+\_\+inq\+\_\+compound\+\_\+field\+\_\+f@{nc\+\_\+inq\+\_\+compound\+\_\+field\+\_\+f}}
+\index{nc\+\_\+inq\+\_\+compound\+\_\+field\+\_\+f@{nc\+\_\+inq\+\_\+compound\+\_\+field\+\_\+f}!netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}}
+\subsubsection{\texorpdfstring{nc\+\_\+inq\+\_\+compound\+\_\+field\+\_\+f()}{nc\_inq\_compound\_field\_f()}}
+{\footnotesize\ttfamily E\+X\+T\+E\+R\+NL int nc\+\_\+inq\+\_\+compound\+\_\+field\+\_\+f (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{nc\+\_\+type}]{xtype,  }\item[{int}]{fieldid,  }\item[{char $\ast$}]{name,  }\item[{size\+\_\+t $\ast$}]{offsetp,  }\item[{nc\+\_\+type $\ast$}]{field\+\_\+typeidp,  }\item[{int $\ast$}]{ndimsp,  }\item[{int $\ast$}]{dim\+\_\+sizesp }\end{DoxyParamCaption})}
+
+
+
+Definition at line 244 of file fort-\/lib.\+c.
+
+\mbox{\Hypertarget{netcdf__f_8h_a4290da001055c538b0753f021cfe3b53}\label{netcdf__f_8h_a4290da001055c538b0753f021cfe3b53}} 
+\index{netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}!nc\+\_\+inq\+\_\+dimids\+\_\+f@{nc\+\_\+inq\+\_\+dimids\+\_\+f}}
+\index{nc\+\_\+inq\+\_\+dimids\+\_\+f@{nc\+\_\+inq\+\_\+dimids\+\_\+f}!netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}}
+\subsubsection{\texorpdfstring{nc\+\_\+inq\+\_\+dimids\+\_\+f()}{nc\_inq\_dimids\_f()}}
+{\footnotesize\ttfamily E\+X\+T\+E\+R\+NL int nc\+\_\+inq\+\_\+dimids\+\_\+f (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int $\ast$}]{ndims,  }\item[{int $\ast$}]{fdimids,  }\item[{int}]{parent }\end{DoxyParamCaption})}
+
+
+
+Definition at line 188 of file fort-\/lib.\+c.
+
+\mbox{\Hypertarget{netcdf__f_8h_a77b1df809f4207f4146cc708387ebb90}\label{netcdf__f_8h_a77b1df809f4207f4146cc708387ebb90}} 
+\index{netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}!nc\+\_\+inq\+\_\+var\+\_\+chunking\+\_\+ints@{nc\+\_\+inq\+\_\+var\+\_\+chunking\+\_\+ints}}
+\index{nc\+\_\+inq\+\_\+var\+\_\+chunking\+\_\+ints@{nc\+\_\+inq\+\_\+var\+\_\+chunking\+\_\+ints}!netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}}
+\subsubsection{\texorpdfstring{nc\+\_\+inq\+\_\+var\+\_\+chunking\+\_\+ints()}{nc\_inq\_var\_chunking\_ints()}}
+{\footnotesize\ttfamily E\+X\+T\+E\+R\+NL int nc\+\_\+inq\+\_\+var\+\_\+chunking\+\_\+ints (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{int $\ast$}]{contiguousp,  }\item[{int $\ast$}]{chunksizesp }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{netcdf__f_8h_af5866b3dc8aa57cff7d29d7c879e9e4f}\label{netcdf__f_8h_af5866b3dc8aa57cff7d29d7c879e9e4f}} 
+\index{netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}!nc\+\_\+inq\+\_\+varids\+\_\+f@{nc\+\_\+inq\+\_\+varids\+\_\+f}}
+\index{nc\+\_\+inq\+\_\+varids\+\_\+f@{nc\+\_\+inq\+\_\+varids\+\_\+f}!netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}}
+\subsubsection{\texorpdfstring{nc\+\_\+inq\+\_\+varids\+\_\+f()}{nc\_inq\_varids\_f()}}
+{\footnotesize\ttfamily E\+X\+T\+E\+R\+NL int nc\+\_\+inq\+\_\+varids\+\_\+f (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int $\ast$}]{nvars,  }\item[{int $\ast$}]{fvarids }\end{DoxyParamCaption})}
+
+
+
+Definition at line 159 of file fort-\/lib.\+c.
+
+\mbox{\Hypertarget{netcdf__f_8h_aa1f760fcfe94404d16891cdfcc9463d8}\label{netcdf__f_8h_aa1f760fcfe94404d16891cdfcc9463d8}} 
+\index{netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}!nc\+\_\+insert\+\_\+array\+\_\+compound\+\_\+f@{nc\+\_\+insert\+\_\+array\+\_\+compound\+\_\+f}}
+\index{nc\+\_\+insert\+\_\+array\+\_\+compound\+\_\+f@{nc\+\_\+insert\+\_\+array\+\_\+compound\+\_\+f}!netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}}
+\subsubsection{\texorpdfstring{nc\+\_\+insert\+\_\+array\+\_\+compound\+\_\+f()}{nc\_insert\_array\_compound\_f()}}
+{\footnotesize\ttfamily E\+X\+T\+E\+R\+NL int nc\+\_\+insert\+\_\+array\+\_\+compound\+\_\+f (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{typeid,  }\item[{char $\ast$}]{name,  }\item[{size\+\_\+t}]{offset,  }\item[{nc\+\_\+type}]{field\+\_\+typeid,  }\item[{int}]{ndims,  }\item[{int $\ast$}]{dim\+\_\+sizesp }\end{DoxyParamCaption})}
+
+
+
+Definition at line 216 of file fort-\/lib.\+c.
+
+\mbox{\Hypertarget{netcdf__f_8h_a54c35f9c93fd1f37b2c1f328da5946b2}\label{netcdf__f_8h_a54c35f9c93fd1f37b2c1f328da5946b2}} 
+\index{netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}!nc\+\_\+open\+\_\+par\+\_\+fortran@{nc\+\_\+open\+\_\+par\+\_\+fortran}}
+\index{nc\+\_\+open\+\_\+par\+\_\+fortran@{nc\+\_\+open\+\_\+par\+\_\+fortran}!netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}}
+\subsubsection{\texorpdfstring{nc\+\_\+open\+\_\+par\+\_\+fortran()}{nc\_open\_par\_fortran()}}
+{\footnotesize\ttfamily E\+X\+T\+E\+R\+NL int nc\+\_\+open\+\_\+par\+\_\+fortran (\begin{DoxyParamCaption}\item[{const char $\ast$}]{path,  }\item[{int}]{mode,  }\item[{int}]{comm,  }\item[{int}]{info,  }\item[{int $\ast$}]{ncidp }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{netcdf__f_8h_a132073c3e220f230e4142f5a225066d2}\label{netcdf__f_8h_a132073c3e220f230e4142f5a225066d2}} 
+\index{netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}!nc\+\_\+set\+\_\+chunk\+\_\+cache\+\_\+ints@{nc\+\_\+set\+\_\+chunk\+\_\+cache\+\_\+ints}}
+\index{nc\+\_\+set\+\_\+chunk\+\_\+cache\+\_\+ints@{nc\+\_\+set\+\_\+chunk\+\_\+cache\+\_\+ints}!netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}}
+\subsubsection{\texorpdfstring{nc\+\_\+set\+\_\+chunk\+\_\+cache\+\_\+ints()}{nc\_set\_chunk\_cache\_ints()}}
+{\footnotesize\ttfamily E\+X\+T\+E\+R\+NL int nc\+\_\+set\+\_\+chunk\+\_\+cache\+\_\+ints (\begin{DoxyParamCaption}\item[{int}]{size,  }\item[{int}]{nelems,  }\item[{int}]{preemption }\end{DoxyParamCaption})}
+
+\mbox{\Hypertarget{netcdf__f_8h_a3fc60e6e7250539b356c986f0c0af0de}\label{netcdf__f_8h_a3fc60e6e7250539b356c986f0c0af0de}} 
+\index{netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}!nc\+\_\+set\+\_\+var\+\_\+chunk\+\_\+cache\+\_\+ints@{nc\+\_\+set\+\_\+var\+\_\+chunk\+\_\+cache\+\_\+ints}}
+\index{nc\+\_\+set\+\_\+var\+\_\+chunk\+\_\+cache\+\_\+ints@{nc\+\_\+set\+\_\+var\+\_\+chunk\+\_\+cache\+\_\+ints}!netcdf\+\_\+f.\+h@{netcdf\+\_\+f.\+h}}
+\subsubsection{\texorpdfstring{nc\+\_\+set\+\_\+var\+\_\+chunk\+\_\+cache\+\_\+ints()}{nc\_set\_var\_chunk\_cache\_ints()}}
+{\footnotesize\ttfamily E\+X\+T\+E\+R\+NL int nc\+\_\+set\+\_\+var\+\_\+chunk\+\_\+cache\+\_\+ints (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{int}]{size,  }\item[{int}]{nelems,  }\item[{int}]{preemption }\end{DoxyParamCaption})}
+

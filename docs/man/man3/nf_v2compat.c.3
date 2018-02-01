@@ -1,0 +1,356 @@
+.TH "nf_v2compat.c" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+nf_v2compat.c
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <config\&.h>\fP
+.br
+\fC#include <ctype\&.h>\fP
+.br
+\fC#include <string\&.h>\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include 'netcdf\&.h'\fP
+.br
+\fC#include 'nfconfig\&.inc'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBNC_CLASSIC_MODEL\fP   0"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "size_t \fBv2data_size\fP (nc_type datatype)"
+.br
+.ti -1c
+.RI "ptrdiff_t * \fBf2c_v2imap\fP (int ncid, int varid, const int *fimap, ptrdiff_t *cimap)"
+.br
+.RI "Convert a Version 2 Fortran IMAP vector into a Version 3 C imap vector\&. "
+.ti -1c
+.RI "static size_t \fBdimprod\fP (const size_t *count, int rank)"
+.br
+.ti -1c
+.RI "void \fBc_ncpopt\fP (int val)"
+.br
+.ti -1c
+.RI "void \fBc_ncgopt\fP (int *val)"
+.br
+.ti -1c
+.RI "int \fBc_nccre\fP (const char *pathname, int clobmode, int *rcode)"
+.br
+.ti -1c
+.RI "int \fBc_ncopn\fP (const char *pathname, int rwmode, int *rcode)"
+.br
+.ti -1c
+.RI "int \fBc_ncddef\fP (int ncid, const char *dimname, int dimlen, int *rcode)"
+.br
+.ti -1c
+.RI "int \fBc_ncdid\fP (int ncid, const char *dimname, int *rcode)"
+.br
+.ti -1c
+.RI "int \fBc_ncvdef\fP (int ncid, const char *varname, nc_type datatype, int ndims, int *dimids, int *rcode)"
+.br
+.ti -1c
+.RI "int \fBc_ncvid\fP (int ncid, const char *varname, int *rcode)"
+.br
+.ti -1c
+.RI "int \fBc_nctlen\fP (nc_type datatype, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncclos\fP (int ncid, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncredf\fP (int ncid, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncendf\fP (int ncid, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncinq\fP (int ncid, int *indims, int *invars, int *inatts, int *irecdim, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncsnc\fP (int ncid, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncabor\fP (int ncid, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncdinq\fP (int ncid, int dimid, char *dimname, int *size, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncdren\fP (int ncid, int dimid, const char *dimname, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncvinq\fP (int ncid, int varid, char *varname, nc_type *datatype, int *indims, int *dimarray, int *inatts, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncvpt1\fP (int ncid, int varid, const size_t *indices, const void *value, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncvp1c\fP (int ncid, int varid, const size_t *indices, const char *value, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncvpt\fP (int ncid, int varid, const size_t *start, const size_t *count, const void *value, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncvptc\fP (int ncid, int varid, const size_t *start, const size_t *count, const char *value, int lenstr, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncvptg\fP (int ncid, int varid, const size_t *start, const size_t *count, const ptrdiff_t *strides, const ptrdiff_t *imap, const void *value, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncvpgc\fP (int ncid, int varid, const size_t *start, const size_t *count, const ptrdiff_t *strides, const ptrdiff_t *imap, const char *value, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncvgt1\fP (int ncid, int varid, const size_t *indices, void *value, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncvg1c\fP (int ncid, int varid, const size_t *indices, char *value, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncvgt\fP (int ncid, int varid, const size_t *start, const size_t *count, void *value, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncvgtc\fP (int ncid, int varid, const size_t *start, const size_t *count, char *value, int lenstr, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncvgtg\fP (int ncid, int varid, const size_t *start, const size_t *count, const ptrdiff_t *strides, const ptrdiff_t *imap, void *value, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncvggc\fP (int ncid, int varid, const size_t *start, const size_t *count, const ptrdiff_t *strides, const ptrdiff_t *imap, char *value, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncvren\fP (int ncid, int varid, const char *varname, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncapt\fP (int ncid, int varid, const char *attname, nc_type datatype, size_t attlen, const void *value, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncaptc\fP (int ncid, int varid, const char *attname, nc_type datatype, size_t attlen, const char *value, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncainq\fP (int ncid, int varid, const char *attname, nc_type *datatype, int *attlen, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncagt\fP (int ncid, int varid, const char *attname, void *value, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncagtc\fP (int ncid, int varid, const char *attname, char *value, int attlen, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncacpy\fP (int inncid, int invarid, const char *attname, int outncid, int outvarid, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncanam\fP (int ncid, int varid, int attnum, char *attname, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncaren\fP (int ncid, int varid, const char *attname, const char *newname, int *rcode)"
+.br
+.ti -1c
+.RI "void \fBc_ncadel\fP (int ncid, int varid, const char *attname, int *rcode)"
+.br
+.ti -1c
+.RI "int \fBc_ncsfil\fP (int ncid, int fillmode, int *rcode)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define NC_CLASSIC_MODEL   0"
+
+.PP
+Definition at line 57 of file nf_v2compat\&.c\&.
+.SH "Function Documentation"
+.PP 
+.SS "void c_ncabor (int ncid, int * rcode)"
+
+.PP
+Definition at line 563 of file nf_v2compat\&.c\&.
+.SS "void c_ncacpy (int inncid, int invarid, const char * attname, int outncid, int outvarid, int * rcode)"
+
+.PP
+Definition at line 1755 of file nf_v2compat\&.c\&.
+.SS "void c_ncadel (int ncid, int varid, const char * attname, int * rcode)"
+
+.PP
+Definition at line 1809 of file nf_v2compat\&.c\&.
+.SS "void c_ncagt (int ncid, int varid, const char * attname, void * value, int * rcode)"
+
+.PP
+Definition at line 1617 of file nf_v2compat\&.c\&.
+.SS "void c_ncagtc (int ncid, int varid, const char * attname, char * value, int attlen, int * rcode)"
+
+.PP
+Definition at line 1706 of file nf_v2compat\&.c\&.
+.SS "void c_ncainq (int ncid, int varid, const char * attname, nc_type * datatype, int * attlen, int * rcode)"
+
+.PP
+Definition at line 1598 of file nf_v2compat\&.c\&.
+.SS "void c_ncanam (int ncid, int varid, int attnum, char * attname, int * rcode)"
+
+.PP
+Definition at line 1775 of file nf_v2compat\&.c\&.
+.SS "void c_ncapt (int ncid, int varid, const char * attname, nc_type datatype, size_t attlen, const void * value, int * rcode)"
+
+.PP
+Definition at line 1481 of file nf_v2compat\&.c\&.
+.SS "void c_ncaptc (int ncid, int varid, const char * attname, nc_type datatype, size_t attlen, const char * value, int * rcode)"
+
+.PP
+Definition at line 1567 of file nf_v2compat\&.c\&.
+.SS "void c_ncaren (int ncid, int varid, const char * attname, const char * newname, int * rcode)"
+
+.PP
+Definition at line 1792 of file nf_v2compat\&.c\&.
+.SS "void c_ncclos (int ncid, int * rcode)"
+
+.PP
+Definition at line 486 of file nf_v2compat\&.c\&.
+.SS "int c_nccre (const char * pathname, int clobmode, int * rcode)"
+
+.PP
+Definition at line 289 of file nf_v2compat\&.c\&.
+.SS "int c_ncddef (int ncid, const char * dimname, int dimlen, int * rcode)"
+
+.PP
+Definition at line 364 of file nf_v2compat\&.c\&.
+.SS "int c_ncdid (int ncid, const char * dimname, int * rcode)"
+
+.PP
+Definition at line 389 of file nf_v2compat\&.c\&.
+.SS "void c_ncdinq (int ncid, int dimid, char * dimname, int * size, int * rcode)"
+
+.PP
+Definition at line 578 of file nf_v2compat\&.c\&.
+.SS "void c_ncdren (int ncid, int dimid, const char * dimname, int * rcode)"
+
+.PP
+Definition at line 601 of file nf_v2compat\&.c\&.
+.SS "void c_ncendf (int ncid, int * rcode)"
+
+.PP
+Definition at line 514 of file nf_v2compat\&.c\&.
+.SS "void c_ncgopt (int * val)"
+
+.PP
+Definition at line 275 of file nf_v2compat\&.c\&.
+.SS "void c_ncinq (int ncid, int * indims, int * invars, int * inatts, int * irecdim, int * rcode)"
+
+.PP
+Definition at line 528 of file nf_v2compat\&.c\&.
+.SS "int c_ncopn (const char * pathname, int rwmode, int * rcode)"
+
+.PP
+Definition at line 321 of file nf_v2compat\&.c\&.
+.SS "void c_ncpopt (int val)"
+
+.PP
+Definition at line 264 of file nf_v2compat\&.c\&.
+.SS "void c_ncredf (int ncid, int * rcode)"
+
+.PP
+Definition at line 500 of file nf_v2compat\&.c\&.
+.SS "int c_ncsfil (int ncid, int fillmode, int * rcode)"
+
+.PP
+Definition at line 1825 of file nf_v2compat\&.c\&.
+.SS "void c_ncsnc (int ncid, int * rcode)"
+
+.PP
+Definition at line 547 of file nf_v2compat\&.c\&.
+.SS "int c_nctlen (nc_type datatype, int * rcode)"
+
+.PP
+Definition at line 468 of file nf_v2compat\&.c\&.
+.SS "int c_ncvdef (int ncid, const char * varname, nc_type datatype, int ndims, int * dimids, int * rcode)"
+
+.PP
+Definition at line 412 of file nf_v2compat\&.c\&.
+.SS "void c_ncvg1c (int ncid, int varid, const size_t * indices, char * value, int * rcode)"
+
+.PP
+Definition at line 1139 of file nf_v2compat\&.c\&.
+.SS "void c_ncvggc (int ncid, int varid, const size_t * start, const size_t * count, const ptrdiff_t * strides, const ptrdiff_t * imap, char * value, int * rcode)"
+
+.PP
+Definition at line 1420 of file nf_v2compat\&.c\&.
+.SS "void c_ncvgt (int ncid, int varid, const size_t * start, const size_t * count, void * value, int * rcode)"
+
+.PP
+Definition at line 1178 of file nf_v2compat\&.c\&.
+.SS "void c_ncvgt1 (int ncid, int varid, const size_t * indices, void * value, int * rcode)"
+
+.PP
+Definition at line 1049 of file nf_v2compat\&.c\&.
+.SS "void c_ncvgtc (int ncid, int varid, const size_t * start, const size_t * count, char * value, int lenstr, int * rcode)"
+
+.PP
+Definition at line 1268 of file nf_v2compat\&.c\&.
+.SS "void c_ncvgtg (int ncid, int varid, const size_t * start, const size_t * count, const ptrdiff_t * strides, const ptrdiff_t * imap, void * value, int * rcode)"
+
+.PP
+Definition at line 1313 of file nf_v2compat\&.c\&.
+.SS "int c_ncvid (int ncid, const char * varname, int * rcode)"
+
+.PP
+Definition at line 444 of file nf_v2compat\&.c\&.
+.SS "void c_ncvinq (int ncid, int varid, char * varname, nc_type * datatype, int * indims, int * dimarray, int * inatts, int * rcode)"
+
+.PP
+Definition at line 618 of file nf_v2compat\&.c\&.
+.SS "void c_ncvp1c (int ncid, int varid, const size_t * indices, const char * value, int * rcode)"
+
+.PP
+Definition at line 727 of file nf_v2compat\&.c\&.
+.SS "void c_ncvpgc (int ncid, int varid, const size_t * start, const size_t * count, const ptrdiff_t * strides, const ptrdiff_t * imap, const char * value, int * rcode)"
+
+.PP
+Definition at line 1004 of file nf_v2compat\&.c\&.
+.SS "void c_ncvpt (int ncid, int varid, const size_t * start, const size_t * count, const void * value, int * rcode)"
+
+.PP
+Definition at line 759 of file nf_v2compat\&.c\&.
+.SS "void c_ncvpt1 (int ncid, int varid, const size_t * indices, const void * value, int * rcode)"
+
+.PP
+Definition at line 639 of file nf_v2compat\&.c\&.
+.SS "void c_ncvptc (int ncid, int varid, const size_t * start, const size_t * count, const char * value, int lenstr, int * rcode)"
+
+.PP
+Definition at line 849 of file nf_v2compat\&.c\&.
+.SS "void c_ncvptg (int ncid, int varid, const size_t * start, const size_t * count, const ptrdiff_t * strides, const ptrdiff_t * imap, const void * value, int * rcode)"
+
+.PP
+Definition at line 896 of file nf_v2compat\&.c\&.
+.SS "void c_ncvren (int ncid, int varid, const char * varname, int * rcode)"
+
+.PP
+Definition at line 1464 of file nf_v2compat\&.c\&.
+.SS "static size_t dimprod (const size_t * count, int rank)\fC [static]\fP"
+
+.PP
+Definition at line 248 of file nf_v2compat\&.c\&.
+.SS "ptrdiff_t* f2c_v2imap (int ncid, int varid, const int * fimap, ptrdiff_t * cimap)"
+
+.PP
+Convert a Version 2 Fortran IMAP vector into a Version 3 C imap vector\&. 
+.PP
+Definition at line 139 of file nf_v2compat\&.c\&.
+.SS "size_t v2data_size (nc_type datatype)"
+
+.PP
+Definition at line 77 of file nf_v2compat\&.c\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for NetCDF-Fortran from the source code\&.

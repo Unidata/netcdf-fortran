@@ -1,0 +1,157 @@
+.TH "nf_control.F90" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+nf_control.F90
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "integer function \fBnf_create\fP (path, cmode, ncid)"
+.br
+.ti -1c
+.RI "function \fBnf__create\fP (path, cmode, initialsz, chunksizehintp, ncid)"
+.br
+.ti -1c
+.RI "function \fBnf__create_mp\fP (path, cmode, initialsz, basepe, chunksizehintp, ncid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_open\fP (path, mode, ncid)"
+.br
+.ti -1c
+.RI "integer function \fBnf__open\fP (path, mode, chunksizehintp, ncid)"
+.br
+.ti -1c
+.RI "integer function \fBnf__open_mp\fP (path, mode, basepe, chunksizehintp, ncid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_open_mem\fP (path, mode, size, memory, ncid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_path\fP (ncid, pathlen, path)"
+.br
+.ti -1c
+.RI "integer function \fBnf_set_fill\fP (ncid, fillmode, old_mode)"
+.br
+.ti -1c
+.RI "integer function \fBnf_set_default_format\fP (newform, old_format)"
+.br
+.ti -1c
+.RI "integer function \fBnf_redef\fP (ncid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_enddef\fP (ncid)"
+.br
+.ti -1c
+.RI "function \fBnf__enddef\fP (ncid, h_minfree, v_align, v_minfree, r_align)"
+.br
+.ti -1c
+.RI "integer function \fBnf_sync\fP (ncid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_abort\fP (ncid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_close\fP (ncid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_delete\fP (path)"
+.br
+.ti -1c
+.RI "integer function \fBnf_delete_mp\fP (path, pe)"
+.br
+.ti -1c
+.RI "integer function \fBnf_set_base_pe\fP (ncid, pe)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_base_pe\fP (ncid, pe)"
+.br
+.in -1c
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "function nf__create (character(len=*), intent(in) path, integer, intent(in) cmode, integer, intent(in) initialsz, integer, intent(in) chunksizehintp, integer, intent(out) ncid)"
+
+.PP
+Definition at line 81 of file nf_control\&.F90\&.
+.SS "function nf__create_mp (character(len=*), intent(in) path, integer, intent(in) cmode, integer, intent(in) initialsz, integer, intent(in) basepe, integer, intent(in) chunksizehintp, integer, intent(out) ncid)"
+
+.PP
+Definition at line 123 of file nf_control\&.F90\&.
+.SS "function nf__enddef (integer, intent(in) ncid, integer, intent(in) h_minfree, integer, intent(in) v_align, integer, intent(in) v_minfree, integer, intent(in) r_align)"
+
+.PP
+Definition at line 459 of file nf_control\&.F90\&.
+.SS "integer function nf__open (character(len=*), intent(in) path, integer, intent(in) mode, integer, intent(in) chunksizehintp, integer, intent(inout) ncid)"
+
+.PP
+Definition at line 199 of file nf_control\&.F90\&.
+.SS "integer function nf__open_mp (character(len=*), intent(in) path, integer, intent(in) mode, integer, intent(in) basepe, integer, intent(in) chunksizehintp, integer, intent(inout) ncid)"
+
+.PP
+Definition at line 238 of file nf_control\&.F90\&.
+.SS "integer function nf_abort (integer, intent(in) ncid)"
+
+.PP
+Definition at line 504 of file nf_control\&.F90\&.
+.SS "integer function nf_close (integer, intent(in) ncid)"
+
+.PP
+Definition at line 526 of file nf_control\&.F90\&.
+.SS "integer function nf_create (character(len=*), intent(in) path, integer, intent(in) cmode, integer, intent(out) ncid)"
+
+.PP
+Definition at line 37 of file nf_control\&.F90\&.
+.SS "integer function nf_delete (character(len=*), intent(in) path)"
+
+.PP
+Definition at line 548 of file nf_control\&.F90\&.
+.SS "integer function nf_delete_mp (character(len=*), intent(in) path, integer, intent(in) pe)"
+
+.PP
+Definition at line 574 of file nf_control\&.F90\&.
+.SS "integer function nf_enddef (integer, intent(in) ncid)"
+
+.PP
+Definition at line 431 of file nf_control\&.F90\&.
+.SS "integer function nf_inq_base_pe (integer, intent(in) ncid, integer, intent(out) pe)"
+
+.PP
+Definition at line 627 of file nf_control\&.F90\&.
+.SS "integer function nf_inq_path (integer, intent(in) ncid, integer, intent(inout) pathlen, character(len=*), intent(inout) path)"
+
+.PP
+Definition at line 321 of file nf_control\&.F90\&.
+.SS "integer function nf_open (character(len=*), intent(in) path, integer, intent(in) mode, integer, intent(inout) ncid)"
+
+.PP
+Definition at line 163 of file nf_control\&.F90\&.
+.SS "integer function nf_open_mem (character(len=*), intent(in) path, integer, intent(in) mode, integer, intent(in) size, character(kind=c_char), dimension(*), intent(in), target memory, integer, intent(inout) ncid)"
+
+.PP
+Definition at line 283 of file nf_control\&.F90\&.
+.SS "integer function nf_redef (integer, intent(in) ncid)"
+
+.PP
+Definition at line 409 of file nf_control\&.F90\&.
+.SS "integer function nf_set_base_pe (integer, intent(in) ncid, integer, intent(in) pe)"
+
+.PP
+Definition at line 604 of file nf_control\&.F90\&.
+.SS "integer function nf_set_default_format (integer, intent(in) newform, integer, intent(out) old_format)"
+
+.PP
+Definition at line 382 of file nf_control\&.F90\&.
+.SS "integer function nf_set_fill (integer, intent(in) ncid, integer, intent(in) fillmode, integer, intent(out) old_mode)"
+
+.PP
+Definition at line 354 of file nf_control\&.F90\&.
+.SS "integer function nf_sync (integer, intent(in) ncid)"
+
+.PP
+Definition at line 482 of file nf_control\&.F90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for NetCDF-Fortran from the source code\&.

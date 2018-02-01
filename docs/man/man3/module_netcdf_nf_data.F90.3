@@ -1,0 +1,484 @@
+.TH "module_netcdf_nf_data.F90" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+module_netcdf_nf_data.F90
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'nfconfig\&.inc'\fP
+.br
+
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "module \fBnetcdf_nf_data\fP"
+.br
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_nat\fP = NC_NAT"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_byte\fP = NC_BYTE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_int1\fP = NF_BYTE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_char\fP = NC_CHAR"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_short\fP = NC_SHORT"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_int2\fP = NF_SHORT"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_int\fP = NC_INT"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_float\fP = NC_FLOAT"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_real\fP = NF_FLOAT"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_double\fP = NC_DOUBLE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_fill_char\fP = IACHAR(NC_FILL_CHAR)"
+.br
+.ti -1c
+.RI "integer(ik1), parameter \fBnetcdf_nf_data::nf_fill_byte\fP = NC_FILL_BYTE"
+.br
+.ti -1c
+.RI "integer(ik2), parameter \fBnetcdf_nf_data::nf_fill_short\fP = NC_FILL_SHORT"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_fill_int\fP = NC_FILL_INT"
+.br
+.ti -1c
+.RI "real(rk4), parameter \fBnetcdf_nf_data::nf_fill_float\fP = NC_FILL_FLOAT"
+.br
+.ti -1c
+.RI "real(rk4), parameter \fBnetcdf_nf_data::nf_fill_real\fP = NF_FILL_FLOAT"
+.br
+.ti -1c
+.RI "real(rk4), parameter \fBnetcdf_nf_data::nf_fill_real4\fP = NF_FILL_FLOAT"
+.br
+.ti -1c
+.RI "real(rk8), parameter \fBnetcdf_nf_data::nf_fill_double\fP = NC_FILL_DOUBLE"
+.br
+.ti -1c
+.RI "real(rk8), parameter \fBnetcdf_nf_data::nf_fill_real8\fP = NF_FILL_DOUBLE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_nowrite\fP = NC_NOWRITE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_write\fP = NC_WRITE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_clobber\fP = NC_CLOBBER"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_noclobber\fP = NC_NOCLOBBER"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_fill\fP = NC_FILL"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_nofill\fP = NC_NOFILL"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_lock\fP = NC_LOCK"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_share\fP = NC_SHARE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_strict_nc3\fP = NC_STRICT_NC3"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_64bit_offset\fP = NC_64BIT_OFFSET"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_sizehint_default\fP = NC_SIZEHINT_DEFAULT"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_align_chunk\fP = NC_ALIGN_CHUNK"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_format_classic\fP = NC_FORMAT_CLASSIC"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_format_64bit\fP = NC_FORMAT_64BIT"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_diskless\fP = NC_DISKLESS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_mmap\fP = NC_MMAP"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_inmemory\fP = NC_INMEMORY"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_unlimited\fP = NC_UNLIMITED"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_global\fP = NC_GLOBAL"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_max_dims\fP = NC_MAX_DIMS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_max_attrs\fP = NC_MAX_ATTRS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_max_vars\fP = NC_MAX_VARS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_max_name\fP = NC_MAX_NAME"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_max_var_dims\fP = NC_MAX_DIMS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_noerr\fP = NC_NOERR"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf2_err\fP = NC2_ERR"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_syserr\fP = NC_SYSERR"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_exdr\fP = NC_EXDR"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_ebadid\fP = NC_EBADID"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_ebfile\fP = NC_EBFILE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_eexist\fP = NC_EEXIST"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_einval\fP = NC_EINVAL"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_eperm\fP = NC_EPERM"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_enotindefine\fP = NC_ENOTINDEFINE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_eindefine\fP = NC_EINDEFINE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_einvalcoords\fP = NC_EINVALCOORDS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_emaxdims\fP = NC_EMAXDIMS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_enameinuse\fP = NC_ENAMEINUSE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_enotatt\fP = NC_ENOTATT"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_emaxatts\fP = NC_EMAXATTS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_ebadtype\fP = NC_EBADTYPE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_ebaddim\fP = NC_EBADDIM"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_eunlimpos\fP = NC_EUNLIMPOS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_emaxvars\fP = NC_EMAXVARS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_enotvar\fP = NC_ENOTVAR"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_eglobal\fP = NC_EGLOBAL"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_enotnc\fP = NC_ENOTNC"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_ests\fP = NC_ESTS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_emaxname\fP = NC_EMAXNAME"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_eunlimit\fP = NC_EUNLIMIT"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_enorecvars\fP = NC_ENORECVARS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_echar\fP = NC_ECHAR"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_eedge\fP = NC_EEDGE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_estride\fP = NC_ESTRIDE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_ebadname\fP = NC_EBADNAME"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_erange\fP = NC_ERANGE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_enomem\fP = NC_ENOMEM"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_evarsize\fP = NC_EVARSIZE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_edimsize\fP = NC_EDIMSIZE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_etrunc\fP = NC_ETRUNC"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_eaxistype\fP = NC_EAXISTYPE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_edap\fP = NC_EDAP"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_ecurl\fP = NC_ECURL"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_eio\fP = NC_EIO"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_enodata\fP = NC_ENODATA"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_edapsvc\fP = NC_EDAPSVC"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_edas\fP = NC_EDAS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_edds\fP = NC_EDDS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_edatadds\fP = NC_EDATADDS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_edapurl\fP = NC_EDAPURL"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_edapconstraint\fP = NC_EDAPCONSTRAINT"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_etranslation\fP = NC_ETRANSLATION"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_fatal\fP = NC_FATAL"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nf_verbose\fP = NC_VERBOSE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncbyte\fP = NF_BYTE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncchar\fP = NF_CHAR"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncshort\fP = NF_SHORT"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nclong\fP = \fBNF_INT\fP"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncfloat\fP = NF_FLOAT"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncdouble\fP = NF_DOUBLE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncrdwr\fP = NF_WRITE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nccreate\fP = 2"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncexcl\fP = 4"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncindef\fP = 8"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncnsync\fP = 16"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nchsync\fP = 32"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncndirty\fP = 64"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nchdirty\fP = 128"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncfill\fP = NF_FILL"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncnofill\fP = NF_NOFILL"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nclink\fP = 32768"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncnowrit\fP = NF_NOWRITE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncwrite\fP = NF_WRITE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncclob\fP = NF_CLOBBER"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncnoclob\fP = NF_NOCLOBBER"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncunlim\fP = NF_UNLIMITED"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncglobal\fP = NF_GLOBAL"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::maxncop\fP = 64"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::maxncdim\fP = NF_MAX_DIMS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::maxncatt\fP = NF_MAX_ATTRS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::maxncvar\fP = NF_MAX_VARS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::maxncnam\fP = NF_MAX_NAME"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::maxvdims\fP = MAXNCDIM"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncnoerr\fP = NF_NOERR"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncebadid\fP = NF_EBADID"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncenfile\fP = \-31"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nceexist\fP = NF_EEXIST"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nceinval\fP = NF_EINVAL"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nceperm\fP = NF_EPERM"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncenotin\fP = NF_ENOTINDEFINE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nceindef\fP = NF_EINDEFINE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncecoord\fP = NF_EINVALCOORDS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncemaxds\fP = NF_EMAXDIMS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncename\fP = NF_ENAMEINUSE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncemaxat\fP = NF_EMAXATTS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncebadty\fP = NF_EBADTYPE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncebadd\fP = NF_EBADDIM"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nceunlim\fP = NF_EUNLIMPOS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncemaxvs\fP = NF_EMAXVARS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncenotvr\fP = NF_ENOTVAR"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::nceglob\fP = NF_EGLOBAL"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncnotnc\fP = NF_ENOTNC"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncestc\fP = NF_ESTS"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncentool\fP = NF_EMAXNAME"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncfoobar\fP = 32"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncsyserr\fP = NF_SYSERR"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncfatal\fP = NF_FATAL"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::ncverbos\fP = NF_VERBOSE"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::filchar\fP = NF_FILL_CHAR"
+.br
+.ti -1c
+.RI "integer(ik1), parameter \fBnetcdf_nf_data::filbyte\fP = NF_FILL_BYTE"
+.br
+.ti -1c
+.RI "integer(ik2), parameter \fBnetcdf_nf_data::filshort\fP = NF_FILL_SHORT"
+.br
+.ti -1c
+.RI "integer, parameter \fBnetcdf_nf_data::fillong\fP = NF_FILL_INT"
+.br
+.ti -1c
+.RI "real(rk4), parameter \fBnetcdf_nf_data::filfloat\fP = NF_FILL_FLOAT"
+.br
+.ti -1c
+.RI "real(rk8), parameter \fBnetcdf_nf_data::fildoub\fP = NF_FILL_DOUBLE"
+.br
+.in -1c
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for NetCDF-Fortran from the source code\&.

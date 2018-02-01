@@ -1,0 +1,114 @@
+.TH "fort-lib.c" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+fort-lib.c
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <config\&.h>\fP
+.br
+\fC#include <stddef\&.h>\fP
+.br
+\fC#include <errno\&.h>\fP
+.br
+\fC#include 'netcdf\&.h'\fP
+.br
+\fC#include 'ncfortran\&.h'\fP
+.br
+\fC#include 'fort\-lib\&.h'\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "EXTERNL \fBNF_INTEGER\fP * \fBc2f_dimids\fP (int ncid, int varid, const int *cdimids, \fBNF_INTEGER\fP *fdimids)"
+.br
+.ti -1c
+.RI "EXTERNL int * \fBf2c_dimids\fP (int ndims, const \fBNF_INTEGER\fP *fdimids, int *cdimids)"
+.br
+.ti -1c
+.RI "EXTERNL \fBNF_INTEGER\fP * \fBc2f_chunksizes\fP (int ncid, int varid, const int *cchunksizes, \fBNF_INTEGER\fP *fchunksizes)"
+.br
+.ti -1c
+.RI "EXTERNL int * \fBf2c_chunksizes\fP (int ncid, int varid, const \fBNF_INTEGER\fP *fchunksizes, int *cchunksizes)"
+.br
+.ti -1c
+.RI "EXTERNL size_t * \fBf2c_coords\fP (int ncid, int varid, const \fBNF_INTEGER\fP *fcoords, size_t *ccoords)"
+.br
+.ti -1c
+.RI "EXTERNL size_t * \fBf2c_counts\fP (int ncid, int varid, const \fBNF_INTEGER\fP *fcounts, size_t *ccounts)"
+.br
+.ti -1c
+.RI "EXTERNL ptrdiff_t * \fBf2c_strides\fP (int ncid, int varid, const \fBNF_INTEGER\fP *fstrides, ptrdiff_t *cstrides)"
+.br
+.ti -1c
+.RI "EXTERNL ptrdiff_t * \fBf2c_maps\fP (int ncid, int varid, const \fBNF_INTEGER\fP *fmaps, ptrdiff_t *cmaps)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_varids_f\fP (int ncid, int *nvars, int *fvarids)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_dimids_f\fP (int ncid, int *ndims, int *fdimids, int parent)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_insert_array_compound_f\fP (int ncid, int typeid, char *name, size_t offset, nc_type field_typeid, int ndims, int *dim_sizesp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_compound_field_f\fP (int ncid, nc_type xtype, int fieldid, char *name, size_t *offsetp, nc_type *field_typeidp, int *ndimsp, int *dim_sizesp)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "EXTERNL \fBNF_INTEGER\fP* c2f_chunksizes (int ncid, int varid, const int * cchunksizes, \fBNF_INTEGER\fP * fchunksizes)"
+
+.PP
+Definition at line 52 of file fort\-lib\&.c\&.
+.SS "EXTERNL \fBNF_INTEGER\fP* c2f_dimids (int ncid, int varid, const int * cdimids, \fBNF_INTEGER\fP * fdimids)"
+
+.PP
+Definition at line 22 of file fort\-lib\&.c\&.
+.SS "EXTERNL int* f2c_chunksizes (int ncid, int varid, const \fBNF_INTEGER\fP * fchunksizes, int * cchunksizes)"
+
+.PP
+Definition at line 68 of file fort\-lib\&.c\&.
+.SS "EXTERNL size_t* f2c_coords (int ncid, int varid, const \fBNF_INTEGER\fP * fcoords, size_t * ccoords)"
+
+.PP
+Definition at line 86 of file fort\-lib\&.c\&.
+.SS "EXTERNL size_t* f2c_counts (int ncid, int varid, const \fBNF_INTEGER\fP * fcounts, size_t * ccounts)"
+
+.PP
+Definition at line 106 of file fort\-lib\&.c\&.
+.SS "EXTERNL int* f2c_dimids (int ndims, const \fBNF_INTEGER\fP * fdimids, int * cdimids)"
+
+.PP
+Definition at line 40 of file fort\-lib\&.c\&.
+.SS "EXTERNL ptrdiff_t* f2c_maps (int ncid, int varid, const \fBNF_INTEGER\fP * fmaps, ptrdiff_t * cmaps)"
+
+.PP
+Definition at line 148 of file fort\-lib\&.c\&.
+.SS "EXTERNL ptrdiff_t* f2c_strides (int ncid, int varid, const \fBNF_INTEGER\fP * fstrides, ptrdiff_t * cstrides)"
+
+.PP
+Definition at line 128 of file fort\-lib\&.c\&.
+.SS "EXTERNL int nc_inq_compound_field_f (int ncid, nc_type xtype, int fieldid, char * name, size_t * offsetp, nc_type * field_typeidp, int * ndimsp, int * dim_sizesp)"
+
+.PP
+Definition at line 244 of file fort\-lib\&.c\&.
+.SS "EXTERNL int nc_inq_dimids_f (int ncid, int * ndims, int * fdimids, int parent)"
+
+.PP
+Definition at line 188 of file fort\-lib\&.c\&.
+.SS "EXTERNL int nc_inq_varids_f (int ncid, int * nvars, int * fvarids)"
+
+.PP
+Definition at line 159 of file fort\-lib\&.c\&.
+.SS "EXTERNL int nc_insert_array_compound_f (int ncid, int typeid, char * name, size_t offset, nc_type field_typeid, int ndims, int * dim_sizesp)"
+
+.PP
+Definition at line 216 of file fort\-lib\&.c\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for NetCDF-Fortran from the source code\&.

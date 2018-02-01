@@ -1,0 +1,472 @@
+.TH "fort-v2compat.c" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+fort-v2compat.c
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <config\&.h>\fP
+.br
+\fC#include <ctype\&.h>\fP
+.br
+\fC#include <string\&.h>\fP
+.br
+\fC#include <stdlib\&.h>\fP
+.br
+\fC#include <stdio\&.h>\fP
+.br
+\fC#include 'netcdf\&.h'\fP
+.br
+\fC#include 'nfconfig\&.inc'\fP
+.br
+\fC#include 'ncfortran\&.h'\fP
+.br
+\fC#include 'fort\-lib\&.h'\fP
+.br
+
+.SS "Macros"
+
+.in +1c
+.ti -1c
+.RI "#define \fBNCOPTS\fP   FINT2CINT	/* Input, netCDF options argument */"
+.br
+.ti -1c
+.RI "#define \fBPNCOPTS\fP   PCINT2FINT	/* Output, netCDF options argument */"
+.br
+.ti -1c
+.RI "#define \fBCLOBMODE\fP   FINT2CINT	/* Input, clobber\-mode argument */"
+.br
+.ti -1c
+.RI "#define \fBPRCODE\fP   PCINT2FINT	/* Output, return\-code argument */"
+.br
+.ti -1c
+.RI "#define \fBRWMODE\fP   FINT2CINT	/* Input, read\-write mode argument */"
+.br
+.ti -1c
+.RI "#define \fBDIMLEN\fP   FINT2CINT	/* Input, dimension\-length argument */"
+.br
+.ti -1c
+.RI "#define \fBPDIMLEN\fP   PCINT2FINT	/* Output, dimension\-length argument */"
+.br
+.ti -1c
+.RI "#define \fBLENSTR\fP   FINT2CINT	/* Input, string\-length argument */"
+.br
+.ti -1c
+.RI "#define \fBATTLEN\fP   FINT2CINT	/* Input, attribute length argument */"
+.br
+.ti -1c
+.RI "#define \fBPATTLEN\fP   PCINT2FINT	/* Output, attribute length argument */"
+.br
+.ti -1c
+.RI "#define \fBFILLMODE\fP   FINT2CINT	/* Input, fill\-mode argument */"
+.br
+.ti -1c
+.RI "#define \fBV2IMAP_cfINT\fP(N,  A,  B,  X,  Y,  Z)   \fBDOUBLE_cfINT\fP(N,A,B,X,Y,Z)"
+.br
+.ti -1c
+.RI "#define \fBV2IMAPVVVVVVV_cfTYPE\fP   \fBNF_INTEGER\fP"
+.br
+.ti -1c
+.RI "#define \fBV2IMAP_cfSTR\fP(N,  T,  A,  B,  C,  D,  E)   \fB_\fP(CFARGS,N)(T,V2IMAP,A,B,C,D,E)"
+.br
+.ti -1c
+.RI "#define \fBV2IMAP_cfH\fP(S,  U,  B)"
+.br
+.ti -1c
+.RI "#define \fBV2IMAP_cfQ\fP(B)   ptrdiff_t B[MAX_NC_DIMS];"
+.br
+.ti -1c
+.RI "#define \fBV2IMAP_cfT\fP(M,  I,  A,  B,  D)   \fBf2c_v2imap\fP(*fncid, *fvarid\-1, A, B)"
+.br
+.ti -1c
+.RI "#define \fBV2IMAP_cfR\fP(A,  B,  D)"
+.br
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "static ptrdiff_t * \fBf2c_v2imap\fP (int ncid, int varid, const int *fimap, ptrdiff_t *cimap)"
+.br
+.RI "Convert a Version 2 Fortran IMAP vector into a Version 3 C imap vector\&. "
+.ti -1c
+.RI "static size_t \fBdimprod\fP (const size_t *count, int rank)"
+.br
+.ti -1c
+.RI "static void \fBc_ncpopt\fP (int val)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB1\fP (\fBc_ncpopt\fP, NCPOPT, \fBncpopt\fP, \fBNCOPTS\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB1\fP (\fBc_ncgopt\fP, NCGOPT, \fBncgopt\fP, \fBPNCOPTS\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCFUN3\fP (\fBNF_INT\fP, \fBc_nccre\fP, NCCRE, \fBnccre\fP, STRING, \fBCLOBMODE\fP, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCFUN3\fP (\fBNF_INT\fP, \fBc_ncopn\fP, NCOPN, \fBncopn\fP, STRING, \fBRWMODE\fP, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCFUN4\fP (\fBNF_INT\fP, \fBc_ncddef\fP, NCDDEF, \fBncddef\fP, NCID, STRING, \fBDIMLEN\fP, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCFUN3\fP (\fBNF_INT\fP, \fBc_ncdid\fP, NCDID, \fBncdid\fP, NCID, STRING, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCFUN6\fP (\fBNF_INT\fP, \fBc_ncvdef\fP, NCVDEF, \fBncvdef\fP, NCID, STRING, TYPE, NDIMS, DIMIDS, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCFUN3\fP (\fBNF_INT\fP, \fBc_ncvid\fP, NCVID, \fBncvid\fP, NCID, STRING, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCFUN2\fP (\fBNF_INT\fP, \fBc_nctlen\fP, NCTLEN, \fBnctlen\fP, TYPE, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB2\fP (\fBc_ncclos\fP, NCCLOS, \fBncclos\fP, NCID, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB2\fP (\fBc_ncredf\fP, NCREDF, \fBncredf\fP, NCID, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB2\fP (\fBc_ncendf\fP, NCENDF, \fBncendf\fP, NCID, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB6\fP (\fBc_ncinq\fP, NCINQ, \fBncinq\fP, NCID, \fBPNDIMS\fP, \fBPNVARS\fP, \fBPNATTS\fP, PDIMID, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB2\fP (\fBc_ncsnc\fP, NCSNC, \fBncsnc\fP, NCID, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB2\fP (\fBc_ncabor\fP, NCABOR, \fBncabor\fP, NCID, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB5\fP (\fBc_ncdinq\fP, NCDINQ, \fBncdinq\fP, NCID, \fBDIMID\fP, PSTRING, \fBPDIMLEN\fP, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB4\fP (\fBc_ncdren\fP, NCDREN, \fBncdren\fP, NCID, \fBDIMID\fP, STRING, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB8\fP (\fBc_ncvinq\fP, NCVINQ, \fBncvinq\fP, NCID, VARID, PSTRING, PTYPE, \fBPNDIMS\fP, PDIMIDS, \fBPNATTS\fP, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB5\fP (\fBc_ncvpt1\fP, NCVPT1, \fBncvpt1\fP, NCID, VARID, COORDS, PVOID, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB5\fP (\fBc_ncvp1c\fP, NCVP1C, \fBncvp1c\fP, NCID, VARID, COORDS, CBUF, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB6\fP (\fBc_ncvpt\fP, NCVPT, \fBncvpt\fP, NCID, VARID, COORDS, COUNTS, PVOID, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB7\fP (\fBc_ncvptc\fP, NCVPTC, \fBncvptc\fP, NCID, VARID, COORDS, COUNTS, CBUF, \fBLENSTR\fP, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB8\fP (\fBc_ncvptg\fP, NCVPTG, \fBncvptg\fP, NCID, VARID, COORDS, COUNTS, STRIDES, V2IMAP, PVOID, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB8\fP (\fBc_ncvpgc\fP, NCVPGC, \fBncvpgc\fP, NCID, VARID, COORDS, COUNTS, STRIDES, V2IMAP, CBUF, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB5\fP (\fBc_ncvgt1\fP, NCVGT1, \fBncvgt1\fP, NCID, VARID, COORDS, PVOID, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB5\fP (\fBc_ncvg1c\fP, NCVG1C, \fBncvg1c\fP, NCID, VARID, COORDS, CBUF, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB6\fP (\fBc_ncvgt\fP, NCVGT, \fBncvgt\fP, NCID, VARID, COORDS, COUNTS, PVOID, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB7\fP (\fBc_ncvgtc\fP, NCVGTC, \fBncvgtc\fP, NCID, VARID, COORDS, COUNTS, CBUF, \fBLENSTR\fP, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB8\fP (\fBc_ncvgtg\fP, NCVGTG, \fBncvgtg\fP, NCID, VARID, COORDS, COUNTS, STRIDES, V2IMAP, PVOID, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB8\fP (\fBc_ncvggc\fP, NCVGGC, \fBncvggc\fP, NCID, VARID, COORDS, COUNTS, STRIDES, V2IMAP, CBUF, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB4\fP (\fBc_ncvren\fP, NCVREN, \fBncvren\fP, NCID, VARID, STRING, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB7\fP (\fBc_ncapt\fP, NCAPT, \fBncapt\fP, NCID, VARID, STRING, TYPE, COUNT, PVOID, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB7\fP (\fBc_ncaptc\fP, NCAPTC, \fBncaptc\fP, NCID, VARID, STRING, TYPE, COUNT, CBUF, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB6\fP (\fBc_ncainq\fP, NCAINQ, \fBncainq\fP, NCID, VARID, STRING, PTYPE, \fBPATTLEN\fP, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB5\fP (\fBc_ncagt\fP, NCAGT, \fBncagt\fP, NCID, VARID, STRING, PVOID, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB6\fP (\fBc_ncagtc\fP, NCAGTC, \fBncagtc\fP, NCID, VARID, STRING, CBUF, \fBATTLEN\fP, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB6\fP (\fBc_ncacpy\fP, NCACPY, \fBncacpy\fP, \fBNCID1\fP, VARID1, STRING, \fBNCID2\fP, VARID2, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB5\fP (\fBc_ncanam\fP, NCANAM, \fBncanam\fP, NCID, VARID, \fBATTID\fP, PSTRING, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB5\fP (\fBc_ncaren\fP, NCAREN, \fBncaren\fP, NCID, VARID, STRING, STRING, \fBPRCODE\fP)"
+.br
+.ti -1c
+.RI "\fBFCALLSCSUB4\fP (\fBc_ncadel\fP, NCADEL, \fBncadel\fP, NCID, VARID, STRING, \fBPRCODE\fP)"
+.br
+.in -1c
+.SH "Macro Definition Documentation"
+.PP 
+.SS "#define ATTLEN   FINT2CINT	/* Input, attribute length argument */"
+
+.PP
+Definition at line 54 of file fort\-v2compat\&.c\&.
+.SS "#define CLOBMODE   FINT2CINT	/* Input, clobber\-mode argument */"
+
+.PP
+Definition at line 48 of file fort\-v2compat\&.c\&.
+.SS "#define DIMLEN   FINT2CINT	/* Input, dimension\-length argument */"
+
+.PP
+Definition at line 51 of file fort\-v2compat\&.c\&.
+.SS "#define FILLMODE   FINT2CINT	/* Input, fill\-mode argument */"
+
+.PP
+Definition at line 56 of file fort\-v2compat\&.c\&.
+.SS "#define LENSTR   FINT2CINT	/* Input, string\-length argument */"
+
+.PP
+Definition at line 53 of file fort\-v2compat\&.c\&.
+.SS "#define NCOPTS   FINT2CINT	/* Input, netCDF options argument */"
+
+.PP
+Definition at line 46 of file fort\-v2compat\&.c\&.
+.SS "#define PATTLEN   PCINT2FINT	/* Output, attribute length argument */"
+
+.PP
+Definition at line 55 of file fort\-v2compat\&.c\&.
+.SS "#define PDIMLEN   PCINT2FINT	/* Output, dimension\-length argument */"
+
+.PP
+Definition at line 52 of file fort\-v2compat\&.c\&.
+.SS "#define PNCOPTS   PCINT2FINT	/* Output, netCDF options argument */"
+
+.PP
+Definition at line 47 of file fort\-v2compat\&.c\&.
+.SS "#define PRCODE   PCINT2FINT	/* Output, return\-code argument */"
+
+.PP
+Definition at line 49 of file fort\-v2compat\&.c\&.
+.SS "#define RWMODE   FINT2CINT	/* Input, read\-write mode argument */"
+
+.PP
+Definition at line 50 of file fort\-v2compat\&.c\&.
+.SS "#define V2IMAP_cfH(S, U, B)"
+
+.PP
+Definition at line 61 of file fort\-v2compat\&.c\&.
+.SS "#define V2IMAP_cfINT(N, A, B, X, Y, Z)   \fBDOUBLE_cfINT\fP(N,A,B,X,Y,Z)"
+
+.PP
+Definition at line 58 of file fort\-v2compat\&.c\&.
+.SS "#define V2IMAP_cfQ(B)   ptrdiff_t B[MAX_NC_DIMS];"
+
+.PP
+Definition at line 62 of file fort\-v2compat\&.c\&.
+.SS "#define V2IMAP_cfR(A, B, D)"
+
+.PP
+Definition at line 64 of file fort\-v2compat\&.c\&.
+.SS "#define V2IMAP_cfSTR(N, T, A, B, C, D, E)   \fB_\fP(CFARGS,N)(T,V2IMAP,A,B,C,D,E)"
+
+.PP
+Definition at line 60 of file fort\-v2compat\&.c\&.
+.SS "#define V2IMAP_cfT(M, I, A, B, D)   \fBf2c_v2imap\fP(*fncid, *fvarid\-1, A, B)"
+
+.PP
+Definition at line 63 of file fort\-v2compat\&.c\&.
+.SS "#define V2IMAPVVVVVVV_cfTYPE   \fBNF_INTEGER\fP"
+
+.PP
+Definition at line 59 of file fort\-v2compat\&.c\&.
+.SH "Function Documentation"
+.PP 
+.SS "static void c_ncpopt (int val)\fC [static]\fP"
+
+.PP
+Definition at line 196 of file fort\-v2compat\&.c\&.
+.SS "static size_t dimprod (const size_t * count, int rank)\fC [static]\fP"
+
+.PP
+Definition at line 180 of file fort\-v2compat\&.c\&.
+.SS "static ptrdiff_t* f2c_v2imap (int ncid, int varid, const int * fimap, ptrdiff_t * cimap)\fC [static]\fP"
+
+.PP
+Convert a Version 2 Fortran IMAP vector into a Version 3 C imap vector\&. 
+.PP
+Definition at line 71 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCFUN2 (\fBNF_INT\fP, \fBc_nctlen\fP, NCTLEN, \fBnctlen\fP, TYPE, \fBPRCODE\fP)"
+
+.PP
+Definition at line 446 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCFUN3 (\fBNF_INT\fP, \fBc_nccre\fP, NCCRE, \fBnccre\fP, STRING, \fBCLOBMODE\fP, \fBPRCODE\fP)"
+
+.PP
+Definition at line 256 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCFUN3 (\fBNF_INT\fP, \fBc_ncopn\fP, NCOPN, \fBncopn\fP, STRING, \fBRWMODE\fP, \fBPRCODE\fP)"
+
+.PP
+Definition at line 303 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCFUN3 (\fBNF_INT\fP, \fBc_ncdid\fP, NCDID, \fBncdid\fP, NCID, STRING, \fBPRCODE\fP)"
+
+.PP
+Definition at line 360 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCFUN3 (\fBNF_INT\fP, \fBc_ncvid\fP, NCVID, \fBncvid\fP, NCID, STRING, \fBPRCODE\fP)"
+
+.PP
+Definition at line 423 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCFUN4 (\fBNF_INT\fP, \fBc_ncddef\fP, NCDDEF, \fBncddef\fP, NCID, STRING, \fBDIMLEN\fP, \fBPRCODE\fP)"
+
+.PP
+Definition at line 332 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCFUN6 (\fBNF_INT\fP, \fBc_ncvdef\fP, NCVDEF, \fBncvdef\fP, NCID, STRING, TYPE, NDIMS, DIMIDS, \fBPRCODE\fP)"
+
+.PP
+Definition at line 395 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB1 (\fBc_ncpopt\fP, NCPOPT, \fBncpopt\fP, \fBNCOPTS\fP)"
+
+.PP
+Definition at line 204 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB1 (\fBc_ncgopt\fP, NCGOPT, \fBncgopt\fP, \fBPNCOPTS\fP)"
+
+.PP
+Definition at line 220 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB2 (\fBc_ncclos\fP, NCCLOS, \fBncclos\fP, NCID, \fBPRCODE\fP)"
+
+.PP
+Definition at line 465 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB2 (\fBc_ncredf\fP, NCREDF, \fBncredf\fP, NCID, \fBPRCODE\fP)"
+
+.PP
+Definition at line 484 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB2 (\fBc_ncendf\fP, NCENDF, \fBncendf\fP, NCID, \fBPRCODE\fP)"
+
+.PP
+Definition at line 503 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB2 (\fBc_ncsnc\fP, NCSNC, \fBncsnc\fP, NCID, \fBPRCODE\fP)"
+
+.PP
+Definition at line 546 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB2 (\fBc_ncabor\fP, NCABOR, \fBncabor\fP, NCID, \fBPRCODE\fP)"
+
+.PP
+Definition at line 567 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB4 (\fBc_ncdren\fP, NCDREN, \fBncdren\fP, NCID, \fBDIMID\fP, STRING, \fBPRCODE\fP)"
+
+.PP
+Definition at line 616 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB4 (\fBc_ncvren\fP, NCVREN, \fBncvren\fP, NCID, VARID, STRING, \fBPRCODE\fP)"
+
+.PP
+Definition at line 1548 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB4 (\fBc_ncadel\fP, NCADEL, \fBncadel\fP, NCID, VARID, STRING, \fBPRCODE\fP)"
+
+.PP
+Definition at line 1938 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB5 (\fBc_ncdinq\fP, NCDINQ, \fBncdinq\fP, NCID, \fBDIMID\fP, PSTRING, \fBPDIMLEN\fP, \fBPRCODE\fP)"
+
+.PP
+Definition at line 595 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB5 (\fBc_ncvpt1\fP, NCVPT1, \fBncvpt1\fP, NCID, VARID, COORDS, PVOID, \fBPRCODE\fP)"
+
+.PP
+Definition at line 735 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB5 (\fBc_ncvp1c\fP, NCVP1C, \fBncvp1c\fP, NCID, VARID, COORDS, CBUF, \fBPRCODE\fP)"
+
+.PP
+Definition at line 771 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB5 (\fBc_ncvgt1\fP, NCVGT1, \fBncvgt1\fP, NCID, VARID, COORDS, PVOID, \fBPRCODE\fP)"
+
+.PP
+Definition at line 1176 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB5 (\fBc_ncvg1c\fP, NCVG1C, \fBncvg1c\fP, NCID, VARID, COORDS, CBUF, \fBPRCODE\fP)"
+
+.PP
+Definition at line 1220 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB5 (\fBc_ncagt\fP, NCAGT, \fBncagt\fP, NCID, VARID, STRING, PVOID, \fBPRCODE\fP)"
+
+.PP
+Definition at line 1793 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB5 (\fBc_ncanam\fP, NCANAM, \fBncanam\fP, NCID, VARID, \fBATTID\fP, PSTRING, \fBPRCODE\fP)"
+
+.PP
+Definition at line 1895 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB5 (\fBc_ncaren\fP, NCAREN, \fBncaren\fP, NCID, VARID, STRING, STRING, \fBPRCODE\fP)"
+
+.PP
+Definition at line 1917 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB6 (\fBc_ncinq\fP, NCINQ, \fBncinq\fP, NCID, \fBPNDIMS\fP, \fBPNVARS\fP, \fBPNATTS\fP, PDIMID, \fBPRCODE\fP)"
+
+.PP
+Definition at line 526 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB6 (\fBc_ncvpt\fP, NCVPT, \fBncvpt\fP, NCID, VARID, COORDS, COUNTS, PVOID, \fBPRCODE\fP)"
+
+.PP
+Definition at line 867 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB6 (\fBc_ncvgt\fP, NCVGT, \fBncvgt\fP, NCID, VARID, COORDS, COUNTS, PVOID, \fBPRCODE\fP)"
+
+.PP
+Definition at line 1316 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB6 (\fBc_ncainq\fP, NCAINQ, \fBncainq\fP, NCID, VARID, STRING, PTYPE, \fBPATTLEN\fP, \fBPRCODE\fP)"
+
+.PP
+Definition at line 1700 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB6 (\fBc_ncagtc\fP, NCAGTC, \fBncagtc\fP, NCID, VARID, STRING, CBUF, \fBATTLEN\fP, \fBPRCODE\fP)"
+
+.PP
+Definition at line 1848 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB6 (\fBc_ncacpy\fP, NCACPY, \fBncacpy\fP, \fBNCID1\fP, VARID1, STRING, \fBNCID2\fP, VARID2, \fBPRCODE\fP)"
+
+.PP
+Definition at line 1872 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB7 (\fBc_ncvptc\fP, NCVPTC, \fBncvptc\fP, NCID, VARID, COORDS, COUNTS, CBUF, \fBLENSTR\fP, \fBPRCODE\fP)"
+
+.PP
+Definition at line 918 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB7 (\fBc_ncvgtc\fP, NCVGTC, \fBncvgtc\fP, NCID, VARID, COORDS, COUNTS, CBUF, \fBLENSTR\fP, \fBPRCODE\fP)"
+
+.PP
+Definition at line 1365 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB7 (\fBc_ncapt\fP, NCAPT, \fBncapt\fP, NCID, VARID, STRING, TYPE, COUNT, PVOID, \fBPRCODE\fP)"
+
+.PP
+Definition at line 1640 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB7 (\fBc_ncaptc\fP, NCAPTC, \fBncaptc\fP, NCID, VARID, STRING, TYPE, COUNT, CBUF, \fBPRCODE\fP)"
+
+.PP
+Definition at line 1675 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB8 (\fBc_ncvinq\fP, NCVINQ, \fBncvinq\fP, NCID, VARID, PSTRING, PTYPE, \fBPNDIMS\fP, PDIMIDS, \fBPNATTS\fP, \fBPRCODE\fP)"
+
+.PP
+Definition at line 642 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB8 (\fBc_ncvptg\fP, NCVPTG, \fBncvptg\fP, NCID, VARID, COORDS, COUNTS, STRIDES, V2IMAP, PVOID, \fBPRCODE\fP)"
+
+.PP
+Definition at line 1031 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB8 (\fBc_ncvpgc\fP, NCVPGC, \fBncvpgc\fP, NCID, VARID, COORDS, COUNTS, STRIDES, V2IMAP, CBUF, \fBPRCODE\fP)"
+
+.PP
+Definition at line 1082 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB8 (\fBc_ncvgtg\fP, NCVGTG, \fBncvgtg\fP, NCID, VARID, COORDS, COUNTS, STRIDES, V2IMAP, PVOID, \fBPRCODE\fP)"
+
+.PP
+Definition at line 1477 of file fort\-v2compat\&.c\&.
+.SS "FCALLSCSUB8 (\fBc_ncvggc\fP, NCVGGC, \fBncvggc\fP, NCID, VARID, COORDS, COUNTS, STRIDES, V2IMAP, CBUF, \fBPRCODE\fP)"
+
+.PP
+Definition at line 1527 of file fort\-v2compat\&.c\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for NetCDF-Fortran from the source code\&.

@@ -1,0 +1,31 @@
+.TH "netcdf4_file.f90" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+netcdf4_file.f90
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "integer function \fBnf90_open\fP (path, mode, ncid, chunksize, cache_size, cache_nelems, cache_preemption, comm, info)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_create\fP (path, cmode, ncid, initialsize, chunksize, cache_size, cache_nelems, cache_preemption, comm, info)"
+.br
+.in -1c
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "integer function nf90_create (character (len = *), intent(in) path, integer, intent(in) cmode, integer, intent(out) ncid, integer, intent(in), optional initialsize, integer, intent(inout), optional chunksize, integer, intent(in), optional cache_size, integer, intent(in), optional cache_nelems, integer, intent(in), optional cache_preemption, integer, intent(in), optional comm, integer, intent(in), optional info)"
+
+.PP
+Definition at line 79 of file netcdf4_file\&.f90\&.
+.SS "integer function nf90_open (character (len = *), intent(in) path, integer, intent(in) mode, integer, intent(out) ncid, integer, intent(inout), optional chunksize, integer, intent(in), optional cache_size, integer, intent(in), optional cache_nelems, real, intent(in), optional cache_preemption, integer, intent(in), optional comm, integer, intent(in), optional info)"
+
+.PP
+Definition at line 10 of file netcdf4_file\&.f90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for NetCDF-Fortran from the source code\&.

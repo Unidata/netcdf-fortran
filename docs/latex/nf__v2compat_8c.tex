@@ -1,0 +1,565 @@
+\hypertarget{nf__v2compat_8c}{}\section{nf\+\_\+v2compat.\+c File Reference}
+\label{nf__v2compat_8c}\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+{\ttfamily \#include $<$config.\+h$>$}\newline
+{\ttfamily \#include $<$ctype.\+h$>$}\newline
+{\ttfamily \#include $<$string.\+h$>$}\newline
+{\ttfamily \#include $<$stdlib.\+h$>$}\newline
+{\ttfamily \#include $<$stdio.\+h$>$}\newline
+{\ttfamily \#include \char`\"{}netcdf.\+h\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}nfconfig.\+inc\char`\"{}}\newline
+\subsection*{Macros}
+\begin{DoxyCompactItemize}
+\item 
+\#define \hyperlink{nf__v2compat_8c_ab9a31832f7e9398dde93fb679e00b8a2}{N\+C\+\_\+\+C\+L\+A\+S\+S\+I\+C\+\_\+\+M\+O\+D\+EL}~0
+\end{DoxyCompactItemize}
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+size\+\_\+t \hyperlink{nf__v2compat_8c_a5a20662bf05411952a63c7eed56823d2}{v2data\+\_\+size} (nc\+\_\+type datatype)
+\item 
+ptrdiff\+\_\+t $\ast$ \hyperlink{nf__v2compat_8c_a75a49e271d39db2186743d5deef88f7a}{f2c\+\_\+v2imap} (int ncid, int varid, const int $\ast$fimap, ptrdiff\+\_\+t $\ast$cimap)
+\begin{DoxyCompactList}\small\item\em Convert a Version 2 Fortran I\+M\+AP vector into a Version 3 C imap vector. \end{DoxyCompactList}\item 
+static size\+\_\+t \hyperlink{nf__v2compat_8c_aa8270ec7619e957c0db032b4eb46c910}{dimprod} (const size\+\_\+t $\ast$count, int rank)
+\item 
+void \hyperlink{nf__v2compat_8c_a94488ba6a21805a4d1f6f8e6c0c41c5e}{c\+\_\+ncpopt} (int val)
+\item 
+void \hyperlink{nf__v2compat_8c_aac642849eafe9806b7b660bbe5c50cd1}{c\+\_\+ncgopt} (int $\ast$val)
+\item 
+int \hyperlink{nf__v2compat_8c_af9a99cd260c5779074591f8e55582d26}{c\+\_\+nccre} (const char $\ast$pathname, int clobmode, int $\ast$rcode)
+\item 
+int \hyperlink{nf__v2compat_8c_a3144811f2328f7e62be2e0e4484aab43}{c\+\_\+ncopn} (const char $\ast$pathname, int rwmode, int $\ast$rcode)
+\item 
+int \hyperlink{nf__v2compat_8c_af79c1df7fa3f1a225cfc0a15bf6b7091}{c\+\_\+ncddef} (int ncid, const char $\ast$dimname, int dimlen, int $\ast$rcode)
+\item 
+int \hyperlink{nf__v2compat_8c_a2703871d71535d87576288d6b0bd5727}{c\+\_\+ncdid} (int ncid, const char $\ast$dimname, int $\ast$rcode)
+\item 
+int \hyperlink{nf__v2compat_8c_af8aa6c4a5fcc46f128d3c947b7a9b568}{c\+\_\+ncvdef} (int ncid, const char $\ast$varname, nc\+\_\+type datatype, int ndims, int $\ast$dimids, int $\ast$rcode)
+\item 
+int \hyperlink{nf__v2compat_8c_a9f5d347c65de290ab045b062ac4366f7}{c\+\_\+ncvid} (int ncid, const char $\ast$varname, int $\ast$rcode)
+\item 
+int \hyperlink{nf__v2compat_8c_a7271eb972e4ecfa16690991d83c24b2f}{c\+\_\+nctlen} (nc\+\_\+type datatype, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_ac9314266e433d48e369f2247d3f8a918}{c\+\_\+ncclos} (int ncid, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_a655af79e1ecf926fcfeb94536220fe6a}{c\+\_\+ncredf} (int ncid, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_afbb2553120ff113b73c14b2701f139ac}{c\+\_\+ncendf} (int ncid, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_a6ae63c66ba7a2b29c3808485b4aea1d6}{c\+\_\+ncinq} (int ncid, int $\ast$indims, int $\ast$invars, int $\ast$inatts, int $\ast$irecdim, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_a63dd616a411f60543435c9b07db52bb5}{c\+\_\+ncsnc} (int ncid, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_a59f52ed3a2ef5478df2530ae211501e8}{c\+\_\+ncabor} (int ncid, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_a9bb20b1a81299cccacc6a3116f17b55a}{c\+\_\+ncdinq} (int ncid, int dimid, char $\ast$dimname, int $\ast$size, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_a8dc48f9e3a4048402e8f86f26d4fed20}{c\+\_\+ncdren} (int ncid, int dimid, const char $\ast$dimname, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_a8fc2cc586a6874bbf28afd044e4f929c}{c\+\_\+ncvinq} (int ncid, int varid, char $\ast$varname, nc\+\_\+type $\ast$datatype, int $\ast$indims, int $\ast$dimarray, int $\ast$inatts, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_ad869819911f33dfb9cf47f60647d59f4}{c\+\_\+ncvpt1} (int ncid, int varid, const size\+\_\+t $\ast$indices, const void $\ast$value, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_ab52acaf18740d16c37e45ebe900ef853}{c\+\_\+ncvp1c} (int ncid, int varid, const size\+\_\+t $\ast$indices, const char $\ast$value, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_a103ae6935428dfecde0657594a2206f6}{c\+\_\+ncvpt} (int ncid, int varid, const size\+\_\+t $\ast$start, const size\+\_\+t $\ast$count, const void $\ast$value, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_add9961f97a96ff8a834bdc8da533ef4e}{c\+\_\+ncvptc} (int ncid, int varid, const size\+\_\+t $\ast$start, const size\+\_\+t $\ast$count, const char $\ast$value, int lenstr, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_a9cf8e2715d16ffc4410f608b4ed941aa}{c\+\_\+ncvptg} (int ncid, int varid, const size\+\_\+t $\ast$start, const size\+\_\+t $\ast$count, const ptrdiff\+\_\+t $\ast$strides, const ptrdiff\+\_\+t $\ast$imap, const void $\ast$value, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_af792c7a0a9b873fa9b56ee0f17112b99}{c\+\_\+ncvpgc} (int ncid, int varid, const size\+\_\+t $\ast$start, const size\+\_\+t $\ast$count, const ptrdiff\+\_\+t $\ast$strides, const ptrdiff\+\_\+t $\ast$imap, const char $\ast$value, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_a3cfcd4ee8ba5397ab91260bc46f4ded9}{c\+\_\+ncvgt1} (int ncid, int varid, const size\+\_\+t $\ast$indices, void $\ast$value, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_a0b558cfe78f0df371d4150519b9c5650}{c\+\_\+ncvg1c} (int ncid, int varid, const size\+\_\+t $\ast$indices, char $\ast$value, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_ae39e340aeaf256362639b1d87d4a870b}{c\+\_\+ncvgt} (int ncid, int varid, const size\+\_\+t $\ast$start, const size\+\_\+t $\ast$count, void $\ast$value, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_a665567929170d07d23a7dad0eea4bea6}{c\+\_\+ncvgtc} (int ncid, int varid, const size\+\_\+t $\ast$start, const size\+\_\+t $\ast$count, char $\ast$value, int lenstr, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_aa58c98f7f3a1bbc8e80d0ff3fce13190}{c\+\_\+ncvgtg} (int ncid, int varid, const size\+\_\+t $\ast$start, const size\+\_\+t $\ast$count, const ptrdiff\+\_\+t $\ast$strides, const ptrdiff\+\_\+t $\ast$imap, void $\ast$value, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_a63f13eb2d14b6e465c7011f39762c745}{c\+\_\+ncvggc} (int ncid, int varid, const size\+\_\+t $\ast$start, const size\+\_\+t $\ast$count, const ptrdiff\+\_\+t $\ast$strides, const ptrdiff\+\_\+t $\ast$imap, char $\ast$value, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_a3f3248eb07164659e5e4abcd5cf336d1}{c\+\_\+ncvren} (int ncid, int varid, const char $\ast$varname, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_a15af034ea9165af45a02315b3320dab1}{c\+\_\+ncapt} (int ncid, int varid, const char $\ast$attname, nc\+\_\+type datatype, size\+\_\+t attlen, const void $\ast$value, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_aed57d7a73cd3e59ce0a99597aa180e7b}{c\+\_\+ncaptc} (int ncid, int varid, const char $\ast$attname, nc\+\_\+type datatype, size\+\_\+t attlen, const char $\ast$value, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_ae2fadfcdf2633389b29b14f4bf7e62b2}{c\+\_\+ncainq} (int ncid, int varid, const char $\ast$attname, nc\+\_\+type $\ast$datatype, int $\ast$attlen, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_a35655edb0fac8162f977d59dd904adf2}{c\+\_\+ncagt} (int ncid, int varid, const char $\ast$attname, void $\ast$value, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_af2970c38a778d0445024e98efe3ae008}{c\+\_\+ncagtc} (int ncid, int varid, const char $\ast$attname, char $\ast$value, int attlen, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_a3130c6d2dee74a8b7bdfc7dc72e5bdf4}{c\+\_\+ncacpy} (int inncid, int invarid, const char $\ast$attname, int outncid, int outvarid, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_aeeeb1daf5d2fbc85f3d7135d723e6198}{c\+\_\+ncanam} (int ncid, int varid, int attnum, char $\ast$attname, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_acaa8977afd889e7c438d59b542effb29}{c\+\_\+ncaren} (int ncid, int varid, const char $\ast$attname, const char $\ast$newname, int $\ast$rcode)
+\item 
+void \hyperlink{nf__v2compat_8c_a7bd0c5f885c4efae5a33518503d4b5df}{c\+\_\+ncadel} (int ncid, int varid, const char $\ast$attname, int $\ast$rcode)
+\item 
+int \hyperlink{nf__v2compat_8c_ac0dd64500eb9f4bace95a20d8ffa5242}{c\+\_\+ncsfil} (int ncid, int fillmode, int $\ast$rcode)
+\end{DoxyCompactItemize}
+
+
+\subsection{Macro Definition Documentation}
+\mbox{\Hypertarget{nf__v2compat_8c_ab9a31832f7e9398dde93fb679e00b8a2}\label{nf__v2compat_8c_ab9a31832f7e9398dde93fb679e00b8a2}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!N\+C\+\_\+\+C\+L\+A\+S\+S\+I\+C\+\_\+\+M\+O\+D\+EL@{N\+C\+\_\+\+C\+L\+A\+S\+S\+I\+C\+\_\+\+M\+O\+D\+EL}}
+\index{N\+C\+\_\+\+C\+L\+A\+S\+S\+I\+C\+\_\+\+M\+O\+D\+EL@{N\+C\+\_\+\+C\+L\+A\+S\+S\+I\+C\+\_\+\+M\+O\+D\+EL}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{N\+C\+\_\+\+C\+L\+A\+S\+S\+I\+C\+\_\+\+M\+O\+D\+EL}{NC\_CLASSIC\_MODEL}}
+{\footnotesize\ttfamily \#define N\+C\+\_\+\+C\+L\+A\+S\+S\+I\+C\+\_\+\+M\+O\+D\+EL~0}
+
+
+
+Definition at line 57 of file nf\+\_\+v2compat.\+c.
+
+
+
+\subsection{Function Documentation}
+\mbox{\Hypertarget{nf__v2compat_8c_a59f52ed3a2ef5478df2530ae211501e8}\label{nf__v2compat_8c_a59f52ed3a2ef5478df2530ae211501e8}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncabor@{c\+\_\+ncabor}}
+\index{c\+\_\+ncabor@{c\+\_\+ncabor}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncabor()}{c\_ncabor()}}
+{\footnotesize\ttfamily void c\+\_\+ncabor (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 563 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a3130c6d2dee74a8b7bdfc7dc72e5bdf4}\label{nf__v2compat_8c_a3130c6d2dee74a8b7bdfc7dc72e5bdf4}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncacpy@{c\+\_\+ncacpy}}
+\index{c\+\_\+ncacpy@{c\+\_\+ncacpy}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncacpy()}{c\_ncacpy()}}
+{\footnotesize\ttfamily void c\+\_\+ncacpy (\begin{DoxyParamCaption}\item[{int}]{inncid,  }\item[{int}]{invarid,  }\item[{const char $\ast$}]{attname,  }\item[{int}]{outncid,  }\item[{int}]{outvarid,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1755 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a7bd0c5f885c4efae5a33518503d4b5df}\label{nf__v2compat_8c_a7bd0c5f885c4efae5a33518503d4b5df}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncadel@{c\+\_\+ncadel}}
+\index{c\+\_\+ncadel@{c\+\_\+ncadel}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncadel()}{c\_ncadel()}}
+{\footnotesize\ttfamily void c\+\_\+ncadel (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const char $\ast$}]{attname,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1809 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a35655edb0fac8162f977d59dd904adf2}\label{nf__v2compat_8c_a35655edb0fac8162f977d59dd904adf2}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncagt@{c\+\_\+ncagt}}
+\index{c\+\_\+ncagt@{c\+\_\+ncagt}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncagt()}{c\_ncagt()}}
+{\footnotesize\ttfamily void c\+\_\+ncagt (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const char $\ast$}]{attname,  }\item[{void $\ast$}]{value,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1617 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_af2970c38a778d0445024e98efe3ae008}\label{nf__v2compat_8c_af2970c38a778d0445024e98efe3ae008}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncagtc@{c\+\_\+ncagtc}}
+\index{c\+\_\+ncagtc@{c\+\_\+ncagtc}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncagtc()}{c\_ncagtc()}}
+{\footnotesize\ttfamily void c\+\_\+ncagtc (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const char $\ast$}]{attname,  }\item[{char $\ast$}]{value,  }\item[{int}]{attlen,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1706 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_ae2fadfcdf2633389b29b14f4bf7e62b2}\label{nf__v2compat_8c_ae2fadfcdf2633389b29b14f4bf7e62b2}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncainq@{c\+\_\+ncainq}}
+\index{c\+\_\+ncainq@{c\+\_\+ncainq}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncainq()}{c\_ncainq()}}
+{\footnotesize\ttfamily void c\+\_\+ncainq (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const char $\ast$}]{attname,  }\item[{nc\+\_\+type $\ast$}]{datatype,  }\item[{int $\ast$}]{attlen,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1598 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_aeeeb1daf5d2fbc85f3d7135d723e6198}\label{nf__v2compat_8c_aeeeb1daf5d2fbc85f3d7135d723e6198}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncanam@{c\+\_\+ncanam}}
+\index{c\+\_\+ncanam@{c\+\_\+ncanam}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncanam()}{c\_ncanam()}}
+{\footnotesize\ttfamily void c\+\_\+ncanam (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{int}]{attnum,  }\item[{char $\ast$}]{attname,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1775 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a15af034ea9165af45a02315b3320dab1}\label{nf__v2compat_8c_a15af034ea9165af45a02315b3320dab1}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncapt@{c\+\_\+ncapt}}
+\index{c\+\_\+ncapt@{c\+\_\+ncapt}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncapt()}{c\_ncapt()}}
+{\footnotesize\ttfamily void c\+\_\+ncapt (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const char $\ast$}]{attname,  }\item[{nc\+\_\+type}]{datatype,  }\item[{size\+\_\+t}]{attlen,  }\item[{const void $\ast$}]{value,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1481 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_aed57d7a73cd3e59ce0a99597aa180e7b}\label{nf__v2compat_8c_aed57d7a73cd3e59ce0a99597aa180e7b}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncaptc@{c\+\_\+ncaptc}}
+\index{c\+\_\+ncaptc@{c\+\_\+ncaptc}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncaptc()}{c\_ncaptc()}}
+{\footnotesize\ttfamily void c\+\_\+ncaptc (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const char $\ast$}]{attname,  }\item[{nc\+\_\+type}]{datatype,  }\item[{size\+\_\+t}]{attlen,  }\item[{const char $\ast$}]{value,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1567 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_acaa8977afd889e7c438d59b542effb29}\label{nf__v2compat_8c_acaa8977afd889e7c438d59b542effb29}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncaren@{c\+\_\+ncaren}}
+\index{c\+\_\+ncaren@{c\+\_\+ncaren}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncaren()}{c\_ncaren()}}
+{\footnotesize\ttfamily void c\+\_\+ncaren (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const char $\ast$}]{attname,  }\item[{const char $\ast$}]{newname,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1792 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_ac9314266e433d48e369f2247d3f8a918}\label{nf__v2compat_8c_ac9314266e433d48e369f2247d3f8a918}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncclos@{c\+\_\+ncclos}}
+\index{c\+\_\+ncclos@{c\+\_\+ncclos}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncclos()}{c\_ncclos()}}
+{\footnotesize\ttfamily void c\+\_\+ncclos (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 486 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_af9a99cd260c5779074591f8e55582d26}\label{nf__v2compat_8c_af9a99cd260c5779074591f8e55582d26}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+nccre@{c\+\_\+nccre}}
+\index{c\+\_\+nccre@{c\+\_\+nccre}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+nccre()}{c\_nccre()}}
+{\footnotesize\ttfamily int c\+\_\+nccre (\begin{DoxyParamCaption}\item[{const char $\ast$}]{pathname,  }\item[{int}]{clobmode,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 289 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_af79c1df7fa3f1a225cfc0a15bf6b7091}\label{nf__v2compat_8c_af79c1df7fa3f1a225cfc0a15bf6b7091}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncddef@{c\+\_\+ncddef}}
+\index{c\+\_\+ncddef@{c\+\_\+ncddef}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncddef()}{c\_ncddef()}}
+{\footnotesize\ttfamily int c\+\_\+ncddef (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{const char $\ast$}]{dimname,  }\item[{int}]{dimlen,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 364 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a2703871d71535d87576288d6b0bd5727}\label{nf__v2compat_8c_a2703871d71535d87576288d6b0bd5727}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncdid@{c\+\_\+ncdid}}
+\index{c\+\_\+ncdid@{c\+\_\+ncdid}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncdid()}{c\_ncdid()}}
+{\footnotesize\ttfamily int c\+\_\+ncdid (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{const char $\ast$}]{dimname,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 389 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a9bb20b1a81299cccacc6a3116f17b55a}\label{nf__v2compat_8c_a9bb20b1a81299cccacc6a3116f17b55a}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncdinq@{c\+\_\+ncdinq}}
+\index{c\+\_\+ncdinq@{c\+\_\+ncdinq}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncdinq()}{c\_ncdinq()}}
+{\footnotesize\ttfamily void c\+\_\+ncdinq (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{dimid,  }\item[{char $\ast$}]{dimname,  }\item[{int $\ast$}]{size,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 578 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a8dc48f9e3a4048402e8f86f26d4fed20}\label{nf__v2compat_8c_a8dc48f9e3a4048402e8f86f26d4fed20}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncdren@{c\+\_\+ncdren}}
+\index{c\+\_\+ncdren@{c\+\_\+ncdren}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncdren()}{c\_ncdren()}}
+{\footnotesize\ttfamily void c\+\_\+ncdren (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{dimid,  }\item[{const char $\ast$}]{dimname,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 601 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_afbb2553120ff113b73c14b2701f139ac}\label{nf__v2compat_8c_afbb2553120ff113b73c14b2701f139ac}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncendf@{c\+\_\+ncendf}}
+\index{c\+\_\+ncendf@{c\+\_\+ncendf}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncendf()}{c\_ncendf()}}
+{\footnotesize\ttfamily void c\+\_\+ncendf (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 514 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_aac642849eafe9806b7b660bbe5c50cd1}\label{nf__v2compat_8c_aac642849eafe9806b7b660bbe5c50cd1}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncgopt@{c\+\_\+ncgopt}}
+\index{c\+\_\+ncgopt@{c\+\_\+ncgopt}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncgopt()}{c\_ncgopt()}}
+{\footnotesize\ttfamily void c\+\_\+ncgopt (\begin{DoxyParamCaption}\item[{int $\ast$}]{val }\end{DoxyParamCaption})}
+
+
+
+Definition at line 275 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a6ae63c66ba7a2b29c3808485b4aea1d6}\label{nf__v2compat_8c_a6ae63c66ba7a2b29c3808485b4aea1d6}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncinq@{c\+\_\+ncinq}}
+\index{c\+\_\+ncinq@{c\+\_\+ncinq}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncinq()}{c\_ncinq()}}
+{\footnotesize\ttfamily void c\+\_\+ncinq (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int $\ast$}]{indims,  }\item[{int $\ast$}]{invars,  }\item[{int $\ast$}]{inatts,  }\item[{int $\ast$}]{irecdim,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 528 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a3144811f2328f7e62be2e0e4484aab43}\label{nf__v2compat_8c_a3144811f2328f7e62be2e0e4484aab43}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncopn@{c\+\_\+ncopn}}
+\index{c\+\_\+ncopn@{c\+\_\+ncopn}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncopn()}{c\_ncopn()}}
+{\footnotesize\ttfamily int c\+\_\+ncopn (\begin{DoxyParamCaption}\item[{const char $\ast$}]{pathname,  }\item[{int}]{rwmode,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 321 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a94488ba6a21805a4d1f6f8e6c0c41c5e}\label{nf__v2compat_8c_a94488ba6a21805a4d1f6f8e6c0c41c5e}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncpopt@{c\+\_\+ncpopt}}
+\index{c\+\_\+ncpopt@{c\+\_\+ncpopt}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncpopt()}{c\_ncpopt()}}
+{\footnotesize\ttfamily void c\+\_\+ncpopt (\begin{DoxyParamCaption}\item[{int}]{val }\end{DoxyParamCaption})}
+
+
+
+Definition at line 264 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a655af79e1ecf926fcfeb94536220fe6a}\label{nf__v2compat_8c_a655af79e1ecf926fcfeb94536220fe6a}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncredf@{c\+\_\+ncredf}}
+\index{c\+\_\+ncredf@{c\+\_\+ncredf}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncredf()}{c\_ncredf()}}
+{\footnotesize\ttfamily void c\+\_\+ncredf (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 500 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_ac0dd64500eb9f4bace95a20d8ffa5242}\label{nf__v2compat_8c_ac0dd64500eb9f4bace95a20d8ffa5242}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncsfil@{c\+\_\+ncsfil}}
+\index{c\+\_\+ncsfil@{c\+\_\+ncsfil}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncsfil()}{c\_ncsfil()}}
+{\footnotesize\ttfamily int c\+\_\+ncsfil (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{fillmode,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1825 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a63dd616a411f60543435c9b07db52bb5}\label{nf__v2compat_8c_a63dd616a411f60543435c9b07db52bb5}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncsnc@{c\+\_\+ncsnc}}
+\index{c\+\_\+ncsnc@{c\+\_\+ncsnc}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncsnc()}{c\_ncsnc()}}
+{\footnotesize\ttfamily void c\+\_\+ncsnc (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 547 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a7271eb972e4ecfa16690991d83c24b2f}\label{nf__v2compat_8c_a7271eb972e4ecfa16690991d83c24b2f}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+nctlen@{c\+\_\+nctlen}}
+\index{c\+\_\+nctlen@{c\+\_\+nctlen}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+nctlen()}{c\_nctlen()}}
+{\footnotesize\ttfamily int c\+\_\+nctlen (\begin{DoxyParamCaption}\item[{nc\+\_\+type}]{datatype,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 468 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_af8aa6c4a5fcc46f128d3c947b7a9b568}\label{nf__v2compat_8c_af8aa6c4a5fcc46f128d3c947b7a9b568}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncvdef@{c\+\_\+ncvdef}}
+\index{c\+\_\+ncvdef@{c\+\_\+ncvdef}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncvdef()}{c\_ncvdef()}}
+{\footnotesize\ttfamily int c\+\_\+ncvdef (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{const char $\ast$}]{varname,  }\item[{nc\+\_\+type}]{datatype,  }\item[{int}]{ndims,  }\item[{int $\ast$}]{dimids,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 412 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a0b558cfe78f0df371d4150519b9c5650}\label{nf__v2compat_8c_a0b558cfe78f0df371d4150519b9c5650}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncvg1c@{c\+\_\+ncvg1c}}
+\index{c\+\_\+ncvg1c@{c\+\_\+ncvg1c}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncvg1c()}{c\_ncvg1c()}}
+{\footnotesize\ttfamily void c\+\_\+ncvg1c (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const size\+\_\+t $\ast$}]{indices,  }\item[{char $\ast$}]{value,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1139 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a63f13eb2d14b6e465c7011f39762c745}\label{nf__v2compat_8c_a63f13eb2d14b6e465c7011f39762c745}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncvggc@{c\+\_\+ncvggc}}
+\index{c\+\_\+ncvggc@{c\+\_\+ncvggc}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncvggc()}{c\_ncvggc()}}
+{\footnotesize\ttfamily void c\+\_\+ncvggc (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const size\+\_\+t $\ast$}]{start,  }\item[{const size\+\_\+t $\ast$}]{count,  }\item[{const ptrdiff\+\_\+t $\ast$}]{strides,  }\item[{const ptrdiff\+\_\+t $\ast$}]{imap,  }\item[{char $\ast$}]{value,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1420 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_ae39e340aeaf256362639b1d87d4a870b}\label{nf__v2compat_8c_ae39e340aeaf256362639b1d87d4a870b}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncvgt@{c\+\_\+ncvgt}}
+\index{c\+\_\+ncvgt@{c\+\_\+ncvgt}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncvgt()}{c\_ncvgt()}}
+{\footnotesize\ttfamily void c\+\_\+ncvgt (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const size\+\_\+t $\ast$}]{start,  }\item[{const size\+\_\+t $\ast$}]{count,  }\item[{void $\ast$}]{value,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1178 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a3cfcd4ee8ba5397ab91260bc46f4ded9}\label{nf__v2compat_8c_a3cfcd4ee8ba5397ab91260bc46f4ded9}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncvgt1@{c\+\_\+ncvgt1}}
+\index{c\+\_\+ncvgt1@{c\+\_\+ncvgt1}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncvgt1()}{c\_ncvgt1()}}
+{\footnotesize\ttfamily void c\+\_\+ncvgt1 (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const size\+\_\+t $\ast$}]{indices,  }\item[{void $\ast$}]{value,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1049 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a665567929170d07d23a7dad0eea4bea6}\label{nf__v2compat_8c_a665567929170d07d23a7dad0eea4bea6}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncvgtc@{c\+\_\+ncvgtc}}
+\index{c\+\_\+ncvgtc@{c\+\_\+ncvgtc}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncvgtc()}{c\_ncvgtc()}}
+{\footnotesize\ttfamily void c\+\_\+ncvgtc (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const size\+\_\+t $\ast$}]{start,  }\item[{const size\+\_\+t $\ast$}]{count,  }\item[{char $\ast$}]{value,  }\item[{int}]{lenstr,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1268 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_aa58c98f7f3a1bbc8e80d0ff3fce13190}\label{nf__v2compat_8c_aa58c98f7f3a1bbc8e80d0ff3fce13190}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncvgtg@{c\+\_\+ncvgtg}}
+\index{c\+\_\+ncvgtg@{c\+\_\+ncvgtg}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncvgtg()}{c\_ncvgtg()}}
+{\footnotesize\ttfamily void c\+\_\+ncvgtg (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const size\+\_\+t $\ast$}]{start,  }\item[{const size\+\_\+t $\ast$}]{count,  }\item[{const ptrdiff\+\_\+t $\ast$}]{strides,  }\item[{const ptrdiff\+\_\+t $\ast$}]{imap,  }\item[{void $\ast$}]{value,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1313 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a9f5d347c65de290ab045b062ac4366f7}\label{nf__v2compat_8c_a9f5d347c65de290ab045b062ac4366f7}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncvid@{c\+\_\+ncvid}}
+\index{c\+\_\+ncvid@{c\+\_\+ncvid}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncvid()}{c\_ncvid()}}
+{\footnotesize\ttfamily int c\+\_\+ncvid (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{const char $\ast$}]{varname,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 444 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a8fc2cc586a6874bbf28afd044e4f929c}\label{nf__v2compat_8c_a8fc2cc586a6874bbf28afd044e4f929c}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncvinq@{c\+\_\+ncvinq}}
+\index{c\+\_\+ncvinq@{c\+\_\+ncvinq}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncvinq()}{c\_ncvinq()}}
+{\footnotesize\ttfamily void c\+\_\+ncvinq (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{char $\ast$}]{varname,  }\item[{nc\+\_\+type $\ast$}]{datatype,  }\item[{int $\ast$}]{indims,  }\item[{int $\ast$}]{dimarray,  }\item[{int $\ast$}]{inatts,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 618 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_ab52acaf18740d16c37e45ebe900ef853}\label{nf__v2compat_8c_ab52acaf18740d16c37e45ebe900ef853}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncvp1c@{c\+\_\+ncvp1c}}
+\index{c\+\_\+ncvp1c@{c\+\_\+ncvp1c}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncvp1c()}{c\_ncvp1c()}}
+{\footnotesize\ttfamily void c\+\_\+ncvp1c (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const size\+\_\+t $\ast$}]{indices,  }\item[{const char $\ast$}]{value,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 727 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_af792c7a0a9b873fa9b56ee0f17112b99}\label{nf__v2compat_8c_af792c7a0a9b873fa9b56ee0f17112b99}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncvpgc@{c\+\_\+ncvpgc}}
+\index{c\+\_\+ncvpgc@{c\+\_\+ncvpgc}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncvpgc()}{c\_ncvpgc()}}
+{\footnotesize\ttfamily void c\+\_\+ncvpgc (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const size\+\_\+t $\ast$}]{start,  }\item[{const size\+\_\+t $\ast$}]{count,  }\item[{const ptrdiff\+\_\+t $\ast$}]{strides,  }\item[{const ptrdiff\+\_\+t $\ast$}]{imap,  }\item[{const char $\ast$}]{value,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1004 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a103ae6935428dfecde0657594a2206f6}\label{nf__v2compat_8c_a103ae6935428dfecde0657594a2206f6}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncvpt@{c\+\_\+ncvpt}}
+\index{c\+\_\+ncvpt@{c\+\_\+ncvpt}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncvpt()}{c\_ncvpt()}}
+{\footnotesize\ttfamily void c\+\_\+ncvpt (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const size\+\_\+t $\ast$}]{start,  }\item[{const size\+\_\+t $\ast$}]{count,  }\item[{const void $\ast$}]{value,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 759 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_ad869819911f33dfb9cf47f60647d59f4}\label{nf__v2compat_8c_ad869819911f33dfb9cf47f60647d59f4}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncvpt1@{c\+\_\+ncvpt1}}
+\index{c\+\_\+ncvpt1@{c\+\_\+ncvpt1}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncvpt1()}{c\_ncvpt1()}}
+{\footnotesize\ttfamily void c\+\_\+ncvpt1 (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const size\+\_\+t $\ast$}]{indices,  }\item[{const void $\ast$}]{value,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 639 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_add9961f97a96ff8a834bdc8da533ef4e}\label{nf__v2compat_8c_add9961f97a96ff8a834bdc8da533ef4e}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncvptc@{c\+\_\+ncvptc}}
+\index{c\+\_\+ncvptc@{c\+\_\+ncvptc}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncvptc()}{c\_ncvptc()}}
+{\footnotesize\ttfamily void c\+\_\+ncvptc (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const size\+\_\+t $\ast$}]{start,  }\item[{const size\+\_\+t $\ast$}]{count,  }\item[{const char $\ast$}]{value,  }\item[{int}]{lenstr,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 849 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a9cf8e2715d16ffc4410f608b4ed941aa}\label{nf__v2compat_8c_a9cf8e2715d16ffc4410f608b4ed941aa}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncvptg@{c\+\_\+ncvptg}}
+\index{c\+\_\+ncvptg@{c\+\_\+ncvptg}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncvptg()}{c\_ncvptg()}}
+{\footnotesize\ttfamily void c\+\_\+ncvptg (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const size\+\_\+t $\ast$}]{start,  }\item[{const size\+\_\+t $\ast$}]{count,  }\item[{const ptrdiff\+\_\+t $\ast$}]{strides,  }\item[{const ptrdiff\+\_\+t $\ast$}]{imap,  }\item[{const void $\ast$}]{value,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 896 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a3f3248eb07164659e5e4abcd5cf336d1}\label{nf__v2compat_8c_a3f3248eb07164659e5e4abcd5cf336d1}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!c\+\_\+ncvren@{c\+\_\+ncvren}}
+\index{c\+\_\+ncvren@{c\+\_\+ncvren}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{c\+\_\+ncvren()}{c\_ncvren()}}
+{\footnotesize\ttfamily void c\+\_\+ncvren (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const char $\ast$}]{varname,  }\item[{int $\ast$}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1464 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_aa8270ec7619e957c0db032b4eb46c910}\label{nf__v2compat_8c_aa8270ec7619e957c0db032b4eb46c910}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!dimprod@{dimprod}}
+\index{dimprod@{dimprod}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{dimprod()}{dimprod()}}
+{\footnotesize\ttfamily static size\+\_\+t dimprod (\begin{DoxyParamCaption}\item[{const size\+\_\+t $\ast$}]{count,  }\item[{int}]{rank }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Definition at line 248 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a75a49e271d39db2186743d5deef88f7a}\label{nf__v2compat_8c_a75a49e271d39db2186743d5deef88f7a}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!f2c\+\_\+v2imap@{f2c\+\_\+v2imap}}
+\index{f2c\+\_\+v2imap@{f2c\+\_\+v2imap}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{f2c\+\_\+v2imap()}{f2c\_v2imap()}}
+{\footnotesize\ttfamily ptrdiff\+\_\+t$\ast$ f2c\+\_\+v2imap (\begin{DoxyParamCaption}\item[{int}]{ncid,  }\item[{int}]{varid,  }\item[{const int $\ast$}]{fimap,  }\item[{ptrdiff\+\_\+t $\ast$}]{cimap }\end{DoxyParamCaption})}
+
+
+
+Convert a Version 2 Fortran I\+M\+AP vector into a Version 3 C imap vector. 
+
+
+
+Definition at line 139 of file nf\+\_\+v2compat.\+c.
+
+\mbox{\Hypertarget{nf__v2compat_8c_a5a20662bf05411952a63c7eed56823d2}\label{nf__v2compat_8c_a5a20662bf05411952a63c7eed56823d2}} 
+\index{nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}!v2data\+\_\+size@{v2data\+\_\+size}}
+\index{v2data\+\_\+size@{v2data\+\_\+size}!nf\+\_\+v2compat.\+c@{nf\+\_\+v2compat.\+c}}
+\subsubsection{\texorpdfstring{v2data\+\_\+size()}{v2data\_size()}}
+{\footnotesize\ttfamily size\+\_\+t v2data\+\_\+size (\begin{DoxyParamCaption}\item[{nc\+\_\+type}]{datatype }\end{DoxyParamCaption})}
+
+
+
+Definition at line 77 of file nf\+\_\+v2compat.\+c.
+

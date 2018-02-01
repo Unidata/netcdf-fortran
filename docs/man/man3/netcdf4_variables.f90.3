@@ -1,0 +1,66 @@
+.TH "netcdf4_variables.f90" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+netcdf4_variables.f90
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "integer function \fBnf90_def_var_scalar\fP (ncid, name, xtype, varid)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_def_var_onedim\fP (ncid, name, xtype, dimids, varid, contiguous, chunksizes, deflate_level, shuffle, fletcher32, endianness, cache_size, cache_nelems, cache_preemption)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_def_var_manydims\fP (ncid, name, xtype, dimids, varid, contiguous, chunksizes, deflate_level, shuffle, fletcher32, endianness, cache_size, cache_nelems, cache_preemption)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_inq_varid\fP (ncid, name, varid)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_set_var_chunk_cache\fP (ncid, varid, size, nelems, preemption)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_inquire_variable\fP (ncid, varid, name, xtype, ndims, dimids, nAtts, contiguous, chunksizes, deflate_level, shuffle, fletcher32, endianness, cache_size, cache_nelems, cache_preemption)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_rename_var\fP (ncid, varid, newname)"
+.br
+.in -1c
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "integer function nf90_def_var_manydims (integer, intent(in) ncid, character (len = *), intent(in) name, integer, intent(in) xtype, integer, dimension(:), intent(in) dimids, integer, intent(out) varid, logical, intent(in), optional contiguous, integer, dimension(:), intent(in), optional chunksizes, integer, intent(in), optional deflate_level, logical, intent(in), optional shuffle, logical, intent(in), optional fletcher32, integer, intent(in), optional endianness, integer, intent(in), optional cache_size, integer, intent(in), optional cache_nelems, integer, intent(in), optional cache_preemption)"
+
+.PP
+Definition at line 131 of file netcdf4_variables\&.f90\&.
+.SS "integer function nf90_def_var_onedim (integer, intent(in) ncid, character (len = *), intent(in) name, integer, intent(in) xtype, integer, intent(in) dimids, integer, intent(out) varid, logical, intent(in), optional contiguous, integer, intent(in), optional chunksizes, integer, intent(in), optional deflate_level, logical, intent(in), optional shuffle, logical, intent(in), optional fletcher32, integer, intent(in), optional endianness, integer, intent(in), optional cache_size, integer, intent(in), optional cache_nelems, integer, intent(in), optional cache_preemption)"
+
+.PP
+Definition at line 23 of file netcdf4_variables\&.f90\&.
+.SS "integer function nf90_def_var_scalar (integer, intent(in) ncid, character (len = *), intent(in) name, integer, intent(in) xtype, integer, intent(out) varid)"
+
+.PP
+Definition at line 5 of file netcdf4_variables\&.f90\&.
+.SS "integer function nf90_inq_varid (integer, intent(in) ncid, character (len = *), intent(in) name, integer, intent(out) varid)"
+
+.PP
+Definition at line 245 of file netcdf4_variables\&.f90\&.
+.SS "integer function nf90_inquire_variable (integer, intent(in) ncid, integer, intent(in) varid, character (len = *), intent(out), optional name, integer, intent(out), optional xtype, integer, intent(out), optional ndims, integer, dimension(:), intent(out), optional dimids, integer, intent(out), optional nAtts, logical, intent(out), optional contiguous, integer, dimension(:), intent(out), optional chunksizes, integer, intent(out), optional deflate_level, logical, intent(out), optional shuffle, logical, intent(out), optional fletcher32, integer, intent(out), optional endianness, integer, intent(out), optional cache_size, integer, intent(out), optional cache_nelems, integer, intent(out), optional cache_preemption)"
+
+.PP
+Definition at line 268 of file netcdf4_variables\&.f90\&.
+.SS "integer function nf90_rename_var (integer, intent(in) ncid, integer, intent(in) varid, character (len = *), intent(in) newname)"
+
+.PP
+Definition at line 354 of file netcdf4_variables\&.f90\&.
+.SS "integer function nf90_set_var_chunk_cache (integer, intent(in) ncid, integer, intent(in) varid, integer, intent(in) size, integer, intent(in) nelems, integer, intent(in) preemption)"
+
+.PP
+Definition at line 256 of file netcdf4_variables\&.f90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for NetCDF-Fortran from the source code\&.

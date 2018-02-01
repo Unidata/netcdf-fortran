@@ -1,0 +1,88 @@
+.TH "netcdf_f.h" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+netcdf_f.h
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <netcdf\&.h>\fP
+.br
+
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_var_chunking_ints\fP (int ncid, int varid, int *contiguousp, int *chunksizesp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_def_var_chunking_ints\fP (int ncid, int varid, int contiguous, int *chunksizesp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_open_par_fortran\fP (const char *path, int mode, int comm, int info, int *ncidp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_create_par_fortran\fP (const char *path, int cmode, int comm, int info, int *ncidp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_set_chunk_cache_ints\fP (int size, int nelems, int preemption)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_chunk_cache_ints\fP (int *sizep, int *nelemsp, int *preemptionp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_set_var_chunk_cache_ints\fP (int ncid, int varid, int size, int nelems, int preemption)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_get_var_chunk_cache_ints\fP (int ncid, int varid, int *sizep, int *nelemsp, int *preemptionp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_varids_f\fP (int ncid, int *nvars, int *fvarids)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_dimids_f\fP (int ncid, int *ndims, int *fdimids, int parent)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_insert_array_compound_f\fP (int ncid, int typeid, char *name, size_t offset, nc_type field_typeid, int ndims, int *dim_sizesp)"
+.br
+.ti -1c
+.RI "EXTERNL int \fBnc_inq_compound_field_f\fP (int ncid, nc_type xtype, int fieldid, char *name, size_t *offsetp, nc_type *field_typeidp, int *ndimsp, int *dim_sizesp)"
+.br
+.in -1c
+.SH "Function Documentation"
+.PP 
+.SS "EXTERNL int nc_create_par_fortran (const char * path, int cmode, int comm, int info, int * ncidp)"
+
+.SS "EXTERNL int nc_def_var_chunking_ints (int ncid, int varid, int contiguous, int * chunksizesp)"
+
+.SS "EXTERNL int nc_get_chunk_cache_ints (int * sizep, int * nelemsp, int * preemptionp)"
+
+.SS "EXTERNL int nc_get_var_chunk_cache_ints (int ncid, int varid, int * sizep, int * nelemsp, int * preemptionp)"
+
+.SS "EXTERNL int nc_inq_compound_field_f (int ncid, nc_type xtype, int fieldid, char * name, size_t * offsetp, nc_type * field_typeidp, int * ndimsp, int * dim_sizesp)"
+
+.PP
+Definition at line 244 of file fort\-lib\&.c\&.
+.SS "EXTERNL int nc_inq_dimids_f (int ncid, int * ndims, int * fdimids, int parent)"
+
+.PP
+Definition at line 188 of file fort\-lib\&.c\&.
+.SS "EXTERNL int nc_inq_var_chunking_ints (int ncid, int varid, int * contiguousp, int * chunksizesp)"
+
+.SS "EXTERNL int nc_inq_varids_f (int ncid, int * nvars, int * fvarids)"
+
+.PP
+Definition at line 159 of file fort\-lib\&.c\&.
+.SS "EXTERNL int nc_insert_array_compound_f (int ncid, int typeid, char * name, size_t offset, nc_type field_typeid, int ndims, int * dim_sizesp)"
+
+.PP
+Definition at line 216 of file fort\-lib\&.c\&.
+.SS "EXTERNL int nc_open_par_fortran (const char * path, int mode, int comm, int info, int * ncidp)"
+
+.SS "EXTERNL int nc_set_chunk_cache_ints (int size, int nelems, int preemption)"
+
+.SS "EXTERNL int nc_set_var_chunk_cache_ints (int ncid, int varid, int size, int nelems, int preemption)"
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for NetCDF-Fortran from the source code\&.

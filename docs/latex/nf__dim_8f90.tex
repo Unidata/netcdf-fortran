@@ -1,0 +1,80 @@
+\hypertarget{nf__dim_8f90}{}\section{nf\+\_\+dim.\+f90 File Reference}
+\label{nf__dim_8f90}\index{nf\+\_\+dim.\+f90@{nf\+\_\+dim.\+f90}}
+\subsection*{Functions/\+Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+integer function \hyperlink{nf__dim_8f90_a7240ef1f2f77f9384e89d6fbb7efa2e4}{nf\+\_\+def\+\_\+dim} (ncid, name, dlen, dimid)
+\item 
+integer function \hyperlink{nf__dim_8f90_acc7d09ee1f217ff454bf44e513c96cfa}{nf\+\_\+inq\+\_\+dim} (ncid, dimid, name, dlen)
+\item 
+integer function \hyperlink{nf__dim_8f90_a13052e9476061a38bbc565fddce6af46}{nf\+\_\+inq\+\_\+dimid} (ncid, name, dimid)
+\item 
+integer function \hyperlink{nf__dim_8f90_a59a9fd1ab9aac41ed35c4f41c18e5568}{nf\+\_\+inq\+\_\+dimlen} (ncid, dimid, dlen)
+\item 
+integer function \hyperlink{nf__dim_8f90_a6904228d7ca66bd37d8f8728881ee73c}{nf\+\_\+inq\+\_\+dimname} (ncid, dimid, name)
+\item 
+integer function \hyperlink{nf__dim_8f90_a4aeb7c8253e9a2d1e5ea12fbf700c5f4}{nf\+\_\+rename\+\_\+dim} (ncid, dimid, name)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function/\+Subroutine Documentation}
+\mbox{\Hypertarget{nf__dim_8f90_a7240ef1f2f77f9384e89d6fbb7efa2e4}\label{nf__dim_8f90_a7240ef1f2f77f9384e89d6fbb7efa2e4}} 
+\index{nf\+\_\+dim.\+f90@{nf\+\_\+dim.\+f90}!nf\+\_\+def\+\_\+dim@{nf\+\_\+def\+\_\+dim}}
+\index{nf\+\_\+def\+\_\+dim@{nf\+\_\+def\+\_\+dim}!nf\+\_\+dim.\+f90@{nf\+\_\+dim.\+f90}}
+\subsubsection{\texorpdfstring{nf\+\_\+def\+\_\+dim()}{nf\_def\_dim()}}
+{\footnotesize\ttfamily integer function nf\+\_\+def\+\_\+dim (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{character(len=$\ast$), intent(in)}]{name,  }\item[{integer, intent(in)}]{dlen,  }\item[{integer, intent(out)}]{dimid }\end{DoxyParamCaption})}
+
+
+
+Definition at line 35 of file nf\+\_\+dim.\+f90.
+
+\mbox{\Hypertarget{nf__dim_8f90_acc7d09ee1f217ff454bf44e513c96cfa}\label{nf__dim_8f90_acc7d09ee1f217ff454bf44e513c96cfa}} 
+\index{nf\+\_\+dim.\+f90@{nf\+\_\+dim.\+f90}!nf\+\_\+inq\+\_\+dim@{nf\+\_\+inq\+\_\+dim}}
+\index{nf\+\_\+inq\+\_\+dim@{nf\+\_\+inq\+\_\+dim}!nf\+\_\+dim.\+f90@{nf\+\_\+dim.\+f90}}
+\subsubsection{\texorpdfstring{nf\+\_\+inq\+\_\+dim()}{nf\_inq\_dim()}}
+{\footnotesize\ttfamily integer function nf\+\_\+inq\+\_\+dim (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{dimid,  }\item[{character(len=$\ast$), intent(out)}]{name,  }\item[{integer, intent(out)}]{dlen }\end{DoxyParamCaption})}
+
+
+
+Definition at line 76 of file nf\+\_\+dim.\+f90.
+
+\mbox{\Hypertarget{nf__dim_8f90_a13052e9476061a38bbc565fddce6af46}\label{nf__dim_8f90_a13052e9476061a38bbc565fddce6af46}} 
+\index{nf\+\_\+dim.\+f90@{nf\+\_\+dim.\+f90}!nf\+\_\+inq\+\_\+dimid@{nf\+\_\+inq\+\_\+dimid}}
+\index{nf\+\_\+inq\+\_\+dimid@{nf\+\_\+inq\+\_\+dimid}!nf\+\_\+dim.\+f90@{nf\+\_\+dim.\+f90}}
+\subsubsection{\texorpdfstring{nf\+\_\+inq\+\_\+dimid()}{nf\_inq\_dimid()}}
+{\footnotesize\ttfamily integer function nf\+\_\+inq\+\_\+dimid (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{character(len=$\ast$), intent(in)}]{name,  }\item[{integer, intent(out)}]{dimid }\end{DoxyParamCaption})}
+
+
+
+Definition at line 115 of file nf\+\_\+dim.\+f90.
+
+\mbox{\Hypertarget{nf__dim_8f90_a59a9fd1ab9aac41ed35c4f41c18e5568}\label{nf__dim_8f90_a59a9fd1ab9aac41ed35c4f41c18e5568}} 
+\index{nf\+\_\+dim.\+f90@{nf\+\_\+dim.\+f90}!nf\+\_\+inq\+\_\+dimlen@{nf\+\_\+inq\+\_\+dimlen}}
+\index{nf\+\_\+inq\+\_\+dimlen@{nf\+\_\+inq\+\_\+dimlen}!nf\+\_\+dim.\+f90@{nf\+\_\+dim.\+f90}}
+\subsubsection{\texorpdfstring{nf\+\_\+inq\+\_\+dimlen()}{nf\_inq\_dimlen()}}
+{\footnotesize\ttfamily integer function nf\+\_\+inq\+\_\+dimlen (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{dimid,  }\item[{integer, intent(out)}]{dlen }\end{DoxyParamCaption})}
+
+
+
+Definition at line 154 of file nf\+\_\+dim.\+f90.
+
+\mbox{\Hypertarget{nf__dim_8f90_a6904228d7ca66bd37d8f8728881ee73c}\label{nf__dim_8f90_a6904228d7ca66bd37d8f8728881ee73c}} 
+\index{nf\+\_\+dim.\+f90@{nf\+\_\+dim.\+f90}!nf\+\_\+inq\+\_\+dimname@{nf\+\_\+inq\+\_\+dimname}}
+\index{nf\+\_\+inq\+\_\+dimname@{nf\+\_\+inq\+\_\+dimname}!nf\+\_\+dim.\+f90@{nf\+\_\+dim.\+f90}}
+\subsubsection{\texorpdfstring{nf\+\_\+inq\+\_\+dimname()}{nf\_inq\_dimname()}}
+{\footnotesize\ttfamily integer function nf\+\_\+inq\+\_\+dimname (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{dimid,  }\item[{character(len=$\ast$), intent(out)}]{name }\end{DoxyParamCaption})}
+
+
+
+Definition at line 183 of file nf\+\_\+dim.\+f90.
+
+\mbox{\Hypertarget{nf__dim_8f90_a4aeb7c8253e9a2d1e5ea12fbf700c5f4}\label{nf__dim_8f90_a4aeb7c8253e9a2d1e5ea12fbf700c5f4}} 
+\index{nf\+\_\+dim.\+f90@{nf\+\_\+dim.\+f90}!nf\+\_\+rename\+\_\+dim@{nf\+\_\+rename\+\_\+dim}}
+\index{nf\+\_\+rename\+\_\+dim@{nf\+\_\+rename\+\_\+dim}!nf\+\_\+dim.\+f90@{nf\+\_\+dim.\+f90}}
+\subsubsection{\texorpdfstring{nf\+\_\+rename\+\_\+dim()}{nf\_rename\_dim()}}
+{\footnotesize\ttfamily integer function nf\+\_\+rename\+\_\+dim (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{dimid,  }\item[{character(len=$\ast$), intent(in)}]{name }\end{DoxyParamCaption})}
+
+
+
+Definition at line 219 of file nf\+\_\+dim.\+f90.
+

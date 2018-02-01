@@ -1,0 +1,33 @@
+.TH "netcdf_nc_interfaces::nc_strerror" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+netcdf_nc_interfaces::nc_strerror \- Begin explicit interfaces for base nc_ functions\&.  
+
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "type(c_ptr) function \fBnc_strerror\fP (ncerr)"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Begin explicit interfaces for base nc_ functions\&. 
+
+Note that some interfaces expect data to be passed as C_PTR type variables\&. These data are arrays that could have a NULL pointer passed instead of the array\&. All strings are passed as C_CHAR interoperable strings\&. Most data in put routines that map to a void pointer in C are passed as a Type(C_PTR) value\&. Data from get routine that pass as a void pointer in C are passed as a C_CHAR string\&. 
+.PP
+Definition at line 67 of file module_netcdf_nc_interfaces\&.f90\&.
+.SH "Constructor & Destructor Documentation"
+.PP 
+.SS "type(c_ptr) function netcdf_nc_interfaces::nc_strerror::nc_strerror (integer(c_int), value ncerr)"
+
+.PP
+Definition at line 68 of file module_netcdf_nc_interfaces\&.f90\&.
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for NetCDF-Fortran from the source code\&.

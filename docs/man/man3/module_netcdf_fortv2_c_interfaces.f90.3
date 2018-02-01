@@ -1,0 +1,155 @@
+.TH "module_netcdf_fortv2_c_interfaces.f90" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+module_netcdf_fortv2_c_interfaces.f90
+.SH SYNOPSIS
+.br
+.PP
+.SS "Data Types"
+
+.in +1c
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncpopt\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncgopt\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_nccre\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncopn\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncddef\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncdid\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncvdef\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncvid\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_nctlen\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncclos\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncredf\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncendf\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncinq\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncsnc\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncabor\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncdinq\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncdren\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncvinq\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncvpt1\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncvp1c\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncvpt\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncvptc\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncvptg\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncvpgc\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncvgt1\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncvg1c\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncvgt\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncvgtc\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncvgtg\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncvggc\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncvren\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncapt\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncaptc\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncainq\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncagt\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncagtc\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncacpy\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncanam\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncaren\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncadel\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::c_ncsfil\fP"
+.br
+.ti -1c
+.RI "interface \fBnetcdf_fortv2_c_interfaces::v2data_size\fP"
+.br
+.in -1c
+.SS "Modules"
+
+.in +1c
+.ti -1c
+.RI "module \fBnetcdf_fortv2_c_interfaces\fP"
+.br
+.in -1c
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBnetcdf_fortv2_c_interfaces::convert_v2_imap\fP (cncid, cvarid, fmap, cmap, inullp)"
+.br
+.in -1c
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for NetCDF-Fortran from the source code\&.

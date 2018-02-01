@@ -1,0 +1,129 @@
+.TH "netcdf4_eightbyte.f90" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+netcdf4_eightbyte.f90
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "integer function \fBnf90_put_var_1d_eightbyteint\fP (ncid, varid, values, start, count, stride, map)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_put_var_2d_eightbyteint\fP (ncid, varid, values, start, count, stride, map)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_put_var_3d_eightbyteint\fP (ncid, varid, values, start, count, stride, map)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_put_var_4d_eightbyteint\fP (ncid, varid, values, start, count, stride, map)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_put_var_5d_eightbyteint\fP (ncid, varid, values, start, count, stride, map)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_put_var_6d_eightbyteint\fP (ncid, varid, values, start, count, stride, map)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_put_var_7d_eightbyteint\fP (ncid, varid, values, start, count, stride, map)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_get_var_1d_eightbyteint\fP (ncid, varid, values, start, count, stride, map)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_get_var_2d_eightbyteint\fP (ncid, varid, values, start, count, stride, map)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_get_var_3d_eightbyteint\fP (ncid, varid, values, start, count, stride, map)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_get_var_4d_eightbyteint\fP (ncid, varid, values, start, count, stride, map)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_get_var_5d_eightbyteint\fP (ncid, varid, values, start, count, stride, map)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_get_var_6d_eightbyteint\fP (ncid, varid, values, start, count, stride, map)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_get_var_7d_eightbyteint\fP (ncid, varid, values, start, count, stride, map)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_put_var_eightbyteint\fP (ncid, varid, values, start)"
+.br
+.ti -1c
+.RI "integer function \fBnf90_get_var_eightbyteint\fP (ncid, varid, values, start)"
+.br
+.in -1c
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "integer function nf90_get_var_1d_eightbyteint (integer, intent(in) ncid, integer, intent(in) varid, integer (kind = eightbyteint), dimension(:), intent(out) values, integer, dimension(:), intent(in), optional start, integer, dimension(:), intent(in), optional count, integer, dimension(:), intent(in), optional stride, integer, dimension(:), intent(in), optional map)"
+
+.PP
+Definition at line 365 of file netcdf4_eightbyte\&.f90\&.
+.SS "integer function nf90_get_var_2d_eightbyteint (integer, intent(in) ncid, integer, intent(in) varid, integer (kind = eightbyteint), dimension(:, :), intent(out) values, integer, dimension(:), intent(in), optional start, integer, dimension(:), intent(in), optional count, integer, dimension(:), intent(in), optional stride, integer, dimension(:), intent(in), optional map)"
+
+.PP
+Definition at line 421 of file netcdf4_eightbyte\&.f90\&.
+.SS "integer function nf90_get_var_3d_eightbyteint (integer, intent(in) ncid, integer, intent(in) varid, integer (kind = eightbyteint), dimension(:, :, :), intent(out) values, integer, dimension(:), intent(in), optional start, integer, dimension(:), intent(in), optional count, integer, dimension(:), intent(in), optional stride, integer, dimension(:), intent(in), optional map)"
+
+.PP
+Definition at line 477 of file netcdf4_eightbyte\&.f90\&.
+.SS "integer function nf90_get_var_4d_eightbyteint (integer, intent(in) ncid, integer, intent(in) varid, integer (kind = eightbyteint), dimension(:, :, :, :), intent(out) values, integer, dimension(:), intent(in), optional start, integer, dimension(:), intent(in), optional count, integer, dimension(:), intent(in), optional stride, integer, dimension(:), intent(in), optional map)"
+
+.PP
+Definition at line 533 of file netcdf4_eightbyte\&.f90\&.
+.SS "integer function nf90_get_var_5d_eightbyteint (integer, intent(in) ncid, integer, intent(in) varid, integer (kind = eightbyteint), dimension(:, :, :, :, :), intent(out) values, integer, dimension(:), intent(in), optional start, integer, dimension(:), intent(in), optional count, integer, dimension(:), intent(in), optional stride, integer, dimension(:), intent(in), optional map)"
+
+.PP
+Definition at line 589 of file netcdf4_eightbyte\&.f90\&.
+.SS "integer function nf90_get_var_6d_eightbyteint (integer, intent(in) ncid, integer, intent(in) varid, integer (kind = eightbyteint), dimension(:, :, :, :, :, :), intent(out) values, integer, dimension(:), intent(in), optional start, integer, dimension(:), intent(in), optional count, integer, dimension(:), intent(in), optional stride, integer, dimension(:), intent(in), optional map)"
+
+.PP
+Definition at line 645 of file netcdf4_eightbyte\&.f90\&.
+.SS "integer function nf90_get_var_7d_eightbyteint (integer, intent(in) ncid, integer, intent(in) varid, integer (kind = eightbyteint), dimension(:, :, :, :, :, :, :), intent(out) values, integer, dimension(:), intent(in), optional start, integer, dimension(:), intent(in), optional count, integer, dimension(:), intent(in), optional stride, integer, dimension(:), intent(in), optional map)"
+
+.PP
+Definition at line 701 of file netcdf4_eightbyte\&.f90\&.
+.SS "integer function nf90_get_var_eightbyteint (integer, intent(in) ncid, integer, intent(in) varid, integer (kind = eightbyteint), intent(out) values, integer, dimension(:), intent(in), optional start)"
+
+.PP
+Definition at line 782 of file netcdf4_eightbyte\&.f90\&.
+.SS "integer function nf90_put_var_1d_eightbyteint (integer, intent(in) ncid, integer, intent(in) varid, integer (kind = eightbyteint), dimension(:), intent(in) values, integer, dimension(:), intent(in), optional start, integer, dimension(:), intent(in), optional count, integer, dimension(:), intent(in), optional stride, integer, dimension(:), intent(in), optional map)"
+
+.PP
+Definition at line 2 of file netcdf4_eightbyte\&.f90\&.
+.SS "integer function nf90_put_var_2d_eightbyteint (integer, intent(in) ncid, integer, intent(in) varid, integer (kind = eightbyteint), dimension(:, :), intent(in) values, integer, dimension(:), intent(in), optional start, integer, dimension(:), intent(in), optional count, integer, dimension(:), intent(in), optional stride, integer, dimension(:), intent(in), optional map)"
+
+.PP
+Definition at line 52 of file netcdf4_eightbyte\&.f90\&.
+.SS "integer function nf90_put_var_3d_eightbyteint (integer, intent(in) ncid, integer, intent(in) varid, integer (kind = eightbyteint), dimension(:, :, :), intent(in) values, integer, dimension(:), intent(in), optional start, integer, dimension(:), intent(in), optional count, integer, dimension(:), intent(in), optional stride, integer, dimension(:), intent(in), optional map)"
+
+.PP
+Definition at line 105 of file netcdf4_eightbyte\&.f90\&.
+.SS "integer function nf90_put_var_4d_eightbyteint (integer, intent(in) ncid, integer, intent(in) varid, integer (kind = eightbyteint), dimension(:, :, :, :), intent(in) values, integer, dimension(:), intent(in), optional start, integer, dimension(:), intent(in), optional count, integer, dimension(:), intent(in), optional stride, integer, dimension(:), intent(in), optional map)"
+
+.PP
+Definition at line 157 of file netcdf4_eightbyte\&.f90\&.
+.SS "integer function nf90_put_var_5d_eightbyteint (integer, intent(in) ncid, integer, intent(in) varid, integer (kind = eightbyteint), dimension(:, :, :, :, :), intent(in) values, integer, dimension(:), intent(in), optional start, integer, dimension(:), intent(in), optional count, integer, dimension(:), intent(in), optional stride, integer, dimension(:), intent(in), optional map)"
+
+.PP
+Definition at line 209 of file netcdf4_eightbyte\&.f90\&.
+.SS "integer function nf90_put_var_6d_eightbyteint (integer, intent(in) ncid, integer, intent(in) varid, integer (kind = eightbyteint), dimension(:, :, :, :, :, :), intent(in) values, integer, dimension(:), intent(in), optional start, integer, dimension(:), intent(in), optional count, integer, dimension(:), intent(in), optional stride, integer, dimension(:), intent(in), optional map)"
+
+.PP
+Definition at line 261 of file netcdf4_eightbyte\&.f90\&.
+.SS "integer function nf90_put_var_7d_eightbyteint (integer, intent(in) ncid, integer, intent(in) varid, integer (kind = eightbyteint), dimension(:, :, :, :, :, :, :), intent(in) values, integer, dimension(:), intent(in), optional start, integer, dimension(:), intent(in), optional count, integer, dimension(:), intent(in), optional stride, integer, dimension(:), intent(in), optional map)"
+
+.PP
+Definition at line 313 of file netcdf4_eightbyte\&.f90\&.
+.SS "integer function nf90_put_var_eightbyteint (integer, intent(in) ncid, integer, intent(in) varid, integer (kind = eightbyteint), intent(in) values, integer, dimension(:), intent(in), optional start)"
+
+.PP
+Definition at line 758 of file netcdf4_eightbyte\&.f90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for NetCDF-Fortran from the source code\&.

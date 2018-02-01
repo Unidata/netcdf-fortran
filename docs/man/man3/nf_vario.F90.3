@@ -1,0 +1,118 @@
+.TH "nf_vario.F90" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+nf_vario.F90
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'nfconfig\&.inc'\fP
+.br
+
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "integer function \fBnf_put_var_text\fP (ncid, varid, text)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_var_text_a\fP (ncid, varid, text)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_var_int1\fP (ncid, varid, i1vals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_var_int2\fP (ncid, varid, i2vals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_var_int\fP (ncid, varid, ivals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_var_real\fP (ncid, varid, rvals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_var_double\fP (ncid, varid, dvals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_var_text\fP (ncid, varid, text)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_var_text_a\fP (ncid, varid, text)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_var_int1\fP (ncid, varid, i1vals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_var_int2\fP (ncid, varid, i2vals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_var_int\fP (ncid, varid, ivals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_var_real\fP (ncid, varid, rvals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_var_double\fP (ncid, varid, dvals)"
+.br
+.in -1c
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "integer function nf_get_var_double (integer, intent(in) ncid, integer, intent(in) varid, real(rk8), dimension(*), intent(out) dvals)"
+
+.PP
+Definition at line 411 of file nf_vario\&.F90\&.
+.SS "integer function nf_get_var_int (integer, intent(in) ncid, integer, intent(in) varid, integer(nfint), dimension(*), intent(out) ivals)"
+
+.PP
+Definition at line 355 of file nf_vario\&.F90\&.
+.SS "integer function nf_get_var_int1 (integer, intent(in) ncid, integer, intent(in) varid, integer(nfint1), dimension(*), intent(out) i1vals)"
+
+.PP
+Definition at line 283 of file nf_vario\&.F90\&.
+.SS "integer function nf_get_var_int2 (integer, intent(in) ncid, integer, intent(in) varid, integer(nfint2), dimension(*), intent(out) i2vals)"
+
+.PP
+Definition at line 320 of file nf_vario\&.F90\&.
+.SS "integer function nf_get_var_real (integer, intent(in) ncid, integer, intent(in) varid, real(nfreal), dimension(*), intent(out) rvals)"
+
+.PP
+Definition at line 383 of file nf_vario\&.F90\&.
+.SS "integer function nf_get_var_text (integer, intent(in) ncid, integer, intent(in) varid, character(len=*), intent(out) text)"
+
+.PP
+Definition at line 234 of file nf_vario\&.F90\&.
+.SS "integer function nf_get_var_text_a (integer, intent(in) ncid, integer, intent(in) varid, character(len=1), dimension(*), intent(out) text)"
+
+.PP
+Definition at line 259 of file nf_vario\&.F90\&.
+.SS "integer function nf_put_var_double (integer, intent(in) ncid, integer, intent(in) varid, real(rk8), dimension(*), intent(in) dvals)"
+
+.PP
+Definition at line 210 of file nf_vario\&.F90\&.
+.SS "integer function nf_put_var_int (integer, intent(in) ncid, integer, intent(in) varid, integer(nfint), dimension(*), intent(in) ivals)"
+
+.PP
+Definition at line 154 of file nf_vario\&.F90\&.
+.SS "integer function nf_put_var_int1 (integer, intent(in) ncid, integer, intent(in) varid, integer(nfint1), dimension(*), intent(in) i1vals)"
+
+.PP
+Definition at line 82 of file nf_vario\&.F90\&.
+.SS "integer function nf_put_var_int2 (integer, intent(in) ncid, integer, intent(in) varid, integer(nfint2), dimension(*), intent(in) i2vals)"
+
+.PP
+Definition at line 119 of file nf_vario\&.F90\&.
+.SS "integer function nf_put_var_real (integer, intent(in) ncid, integer, intent(in) varid, real(nfreal), dimension(*), intent(in) rvals)"
+
+.PP
+Definition at line 182 of file nf_vario\&.F90\&.
+.SS "integer function nf_put_var_text (integer, intent(in) ncid, integer, intent(in) varid, character(len=*), intent(in) text)"
+
+.PP
+Definition at line 34 of file nf_vario\&.F90\&.
+.SS "integer function nf_put_var_text_a (integer, intent(in) ncid, integer, intent(in) varid, character(len=1), dimension(*), intent(in) text)"
+
+.PP
+Definition at line 58 of file nf_vario\&.F90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for NetCDF-Fortran from the source code\&.

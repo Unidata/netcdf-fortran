@@ -1,0 +1,668 @@
+.TH "f90_groups" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+f90_groups3 Groups 
+ \- NetCDF-4 added support for hierarchical groups within netCDF datasets\&.
+.PP
+Groups are identified with a ncid, which identifies both the open file, and the group within that file\&. When a file is opened with NF90_OPEN or NF90_CREATE, the ncid for the root group of that file is provided\&. Using that as a starting point, users can add new groups, or list and navigate existing groups\&.
+.PP
+All netCDF calls take a ncid which determines where the call will take its action\&. For example, the NF90_DEF_VAR function takes a ncid as its first parameter\&. It will create a variable in whichever group its ncid refers to\&. Use the root ncid provided by NF90_CREATE or NF90_OPEN to create a variable in the root group\&. Or use NF90_DEF_GRP to create a group and use its ncid to define a variable in the new group\&.
+.PP
+Variable are only visible in the group in which they are defined\&. The same applies to attributes\&. “Global” attributes are defined in whichever group is refered to by the ncid\&.
+.PP
+Dimensions are visible in their groups, and all child groups\&.
+.PP
+Group operations are only permitted on netCDF-4 files - that is, files created with the HDF5 flag in nf90_create\&. (see section \fCNF90_CREATE\fP)\&. Groups are not compatible with the netCDF classic data model, so files created with the NF90_CLASSIC_MODEL file cannot contain groups (except the root group)\&.
+.SH "3\&.1 Find a Group ID: NF90_INQ_NCID "
+.PP
+Given an ncid and group name (NULL or '' gets root group), return ncid of the named group\&.
+.PP
+.SS "Usage"
+.PP
+.PP
+.nf
+function nf90_inq_ncid(ncid, name, grp_ncid)
+  integer, intent(in) :: ncid
+  character (len = *), intent(in) :: name
+  integer, intent(out) :: grp_ncid
+  integer :: nf90_inq_ncid
+.fi
+.PP
+.PP
+\fCNCID\fP
+.PP
+: The group id for this operation\&.
+.PP
+\fCNAME\fP
+.PP
+: A character array that holds the name of the desired group\&. Must be less then NF90_MAX_NAME\&.
+.PP
+\fCGRPID\fP
+.PP
+: The ID of the group will go here\&.
+.PP
+.SS "Errors"
+.PP
+\fCNF90_NOERR\fP
+.PP
+: No error\&.
+.PP
+\fCNF90_EBADID\fP
+.PP
+: Bad group id\&.
+.PP
+\fCNF90_ENOTNC4\fP
+.PP
+: Attempting a netCDF-4 operation on a netCDF-3 file\&. NetCDF-4 operations can only be performed on files defined with a create mode which includes flag HDF5\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_ESTRICTNC3\fP
+.PP
+: This file was created with the strict netcdf-3 flag, therefore netcdf-4 operations are not allowed\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_EHDFERR\fP
+.PP
+: An error was reported by the HDF5 layer\&.
+.PP
+.SS "Example"
+.PP
+This example is from nf90_test/ftst_groups\&.F\&.
+.SH "3\&.2 Get a List of Groups in a Group: NF90_INQ_GRPS "
+.PP
+Given a location id, return the number of groups it contains, and an array of their ncids\&.
+.PP
+.SS "Usage"
+.PP
+.PP
+.nf
+function nf90_inq_grps(ncid, numgrps, ncids)
+  integer, intent(in) :: ncid
+  integer, intent(out) :: numgrps
+  integer, intent(out) :: ncids
+  integer :: nf90_inq_grps
+.fi
+.PP
+.PP
+\fCNCID\fP
+.PP
+: The group id for this operation\&.
+.PP
+\fCNUMGRPS\fP
+.PP
+: An integer which will get number of groups in this group\&.
+.PP
+\fCNCIDS\fP
+.PP
+: An array of ints which will receive the IDs of all the groups in this group\&.
+.PP
+.SS "Errors"
+.PP
+\fCNF90_NOERR\fP
+.PP
+: No error\&.
+.PP
+\fCNF90_EBADID\fP
+.PP
+: Bad group id\&.
+.PP
+\fCNF90_ENOTNC4\fP
+.PP
+: Attempting a netCDF-4 operation on a netCDF-3 file\&. NetCDF-4 operations can only be performed on files defined with a create mode which includes flag HDF5\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_ESTRICTNC3\fP
+.PP
+: This file was created with the strict netcdf-3 flag, therefore netcdf-4 operations are not allowed\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_EHDFERR\fP
+.PP
+: An error was reported by the HDF5 layer\&.
+.PP
+.SS "Example"
+.SH "3\&.3 Find all the Variables in a Group: NF90_INQ_VARIDS "
+.PP
+Find all varids for a location\&.
+.PP
+.SS "Usage"
+.PP
+.PP
+.nf
+function nf90_inq_varids(ncid, nvars, varids)
+  integer, intent(in) :: ncid
+  integer, intent(out) :: nvars
+  integer, intent(out) :: varids
+  integer :: nf90_inq_varids
+.fi
+.PP
+.PP
+\fCNCID\fP
+.PP
+: The group id for this operation\&.
+.PP
+\fCVARIDS\fP
+.PP
+: An already allocated array to store the list of varids\&. Use nf90_inq_nvars to find out how many variables there are\&. (see section \fCGet Information about a Variable from Its ID: NF90_INQUIRE_VARIABLE\fP)\&.
+.PP
+.SS "Errors"
+.PP
+\fCNF90_NOERR\fP
+.PP
+: No error\&.
+.PP
+\fCNF90_EBADID\fP
+.PP
+: Bad group id\&.
+.PP
+\fCNF90_ENOTNC4\fP
+.PP
+: Attempting a netCDF-4 operation on a netCDF-3 file\&. NetCDF-4 operations can only be performed on files defined with a create mode which includes flag HDF5\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_ESTRICTNC3\fP
+.PP
+: This file was created with the strict netcdf-3 flag, therefore netcdf-4 operations are not allowed\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_EHDFERR\fP
+.PP
+: An error was reported by the HDF5 layer\&.
+.PP
+.SS "Example"
+.SH "3\&.4 Find all Dimensions Visible in a Group: NF90_INQ_DIMIDS "
+.PP
+Find all dimids for a location\&. This finds all dimensions in a group, or any of its parents\&.
+.PP
+.SS "Usage"
+.PP
+.PP
+.nf
+function nf90_inq_dimids(ncid, ndims, dimids, include_parents)
+  integer, intent(in) :: ncid
+  integer, intent(out) :: ndims
+  integer, intent(out) :: dimids
+  integer, intent(out) :: include_parents
+  integer :: nf90_inq_dimids
+.fi
+.PP
+.PP
+\fCNCID\fP
+.PP
+: The group id for this operation\&.
+.PP
+\fCNDIMS\fP
+.PP
+: Returned number of dimensions for this location\&. If include_parents is non-zero, number of dimensions visible from this group, which includes dimensions in parent groups\&.
+.PP
+\fCDIMIDS\fP
+.PP
+: An array of ints when the dimids of the visible dimensions will be stashed\&. Use nf90_inq_ndims to find out how many dims are visible from this group\&. (see section \fCGet Information about a Variable from Its ID: NF90_INQUIRE_VARIABLE\fP )\&.
+.PP
+\fCINCLUDE_PARENTS\fP
+.PP
+: If zero, only the group specified by NCID will be searched for dimensions\&. Otherwise parent groups will be searched too\&.
+.PP
+.SS "Errors"
+.PP
+\fCNF90_NOERR\fP
+.PP
+: No error\&.
+.PP
+\fCNF90_EBADID\fP
+.PP
+: Bad group id\&.
+.PP
+\fCNF90_ENOTNC4\fP
+.PP
+: Attempting a netCDF-4 operation on a netCDF-3 file\&. NetCDF-4 operations can only be performed on files defined with a create mode which includes flag HDF5\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_ESTRICTNC3\fP
+.PP
+: This file was created with the strict netcdf-3 flag, therefore netcdf-4 operations are not allowed\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_EHDFERR\fP
+.PP
+: An error was reported by the HDF5 layer\&.
+.PP
+.SS "Example"
+.SH "3\&.5 Find the Length of a Group’s Full Name: NF90_INQ_GRPNAME_LEN "
+.PP
+Given ncid, find length of the full name\&. (Root group is named '/', with length 1\&.)
+.PP
+.SS "Usage"
+.PP
+.PP
+.nf
+function nf90_inq_grpname_len(ncid, len)
+  integer, intent(in) :: ncid
+  integer, intent(out) :: len
+  integer :: nf90_inq_grpname_len
+end function nf90_inq_grpname_len
+.fi
+.PP
+.PP
+\fCNCID\fP
+.PP
+: The group id for this operation\&.
+.PP
+\fCLEN\fP
+.PP
+: An integer where the length will be placed\&.
+.PP
+.SS "Errors"
+.PP
+\fCNF90_NOERR\fP
+.PP
+: No error\&.
+.PP
+\fCNF90_EBADID\fP
+.PP
+: Bad group id\&.
+.PP
+\fCNF90_ENOTNC4\fP
+.PP
+: Attempting a netCDF-4 operation on a netCDF-3 file\&. NetCDF-4 operations can only be performed on files defined with a create mode which includes flag HDF5\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_ESTRICTNC3\fP
+.PP
+: This file was created with the strict netcdf-3 flag, therefore netcdf-4 operations are not allowed\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_EHDFERR\fP
+.PP
+: An error was reported by the HDF5 layer\&.
+.PP
+.SS "Example"
+.SH "3\&.6 Find a Group’s Name: NF90_INQ_GRPNAME "
+.PP
+Given ncid, find relative name of group\&. (Root group is named '/')\&.
+.PP
+The name provided by this function is relative to the parent group\&. For a full path name for the group is, with all parent groups included, separated with a forward slash (as in Unix directory names) See section \fCFind a Group’s Full Name: NF90_INQ_GRPNAME_FULL\fP\&.
+.PP
+.SS "Usage"
+.PP
+.PP
+.nf
+function nf90_inq_grpname(ncid, name)
+  integer, intent(in) :: ncid
+  character (len = *), intent(out) :: name
+  integer :: nf90_inq_grpname
+.fi
+.PP
+.PP
+\fCNCID\fP
+.PP
+: The group id for this operation\&.
+.PP
+\fCNAME\fP
+.PP
+: The name of the group will be copied to this character array\&. The name will be less than NF90_MAX_NAME in length\&.
+.PP
+.SS "Errors"
+.PP
+\fCNF90_NOERR\fP
+.PP
+: No error\&.
+.PP
+\fCNF90_EBADID\fP
+.PP
+: Bad group id\&.
+.PP
+\fCNF90_ENOTNC4\fP
+.PP
+: Attempting a netCDF-4 operation on a netCDF-3 file\&. NetCDF-4 operations can only be performed on files defined with a create mode which includes flag HDF5\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_ESTRICTNC3\fP
+.PP
+: This file was created with the strict netcdf-3 flag, therefore netcdf-4 operations are not allowed\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_EHDFERR\fP
+.PP
+: An error was reported by the HDF5 layer\&.
+.PP
+.SS "Example"
+.SH "3\&.7 Find a Group’s Full Name: NF90_INQ_GRPNAME_FULL "
+.PP
+Given ncid, find complete name of group\&. (Root group is named '/')\&.
+.PP
+The name provided by this function is a full path name for the group is, with all parent groups included, separated with a forward slash (as in Unix directory names)\&. For a name relative to the parent group See section \fCFind a Group’s Name: NF90_INQ_GRPNAME\fP\&.
+.PP
+.SS "Usage"
+.PP
+.PP
+.nf
+function nf90_inq_grpname_full(ncid, len, name)
+  integer, intent(in) :: ncid
+  integer, intent(out) :: len
+  character (len = *), intent(out) :: name
+  integer :: nf90_inq_grpname_full
+.fi
+.PP
+.PP
+\fCNCID\fP
+.PP
+: The group id for this operation\&.
+.PP
+\fCLEN\fP
+.PP
+: The length of the full group name will go here\&.
+.PP
+\fCNAME\fP
+.PP
+: The name of the group will be copied to this character array\&.
+.PP
+.SS "Errors"
+.PP
+\fCNF90_NOERR\fP
+.PP
+: No error\&.
+.PP
+\fCNF90_EBADID\fP
+.PP
+: Bad group id\&.
+.PP
+\fCNF90_ENOTNC4\fP
+.PP
+: Attempting a netCDF-4 operation on a netCDF-3 file\&. NetCDF-4 operations can only be performed on files defined with a create mode which includes flag HDF5\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_ESTRICTNC3\fP
+.PP
+: This file was created with the strict netcdf-3 flag, therefore netcdf-4 operations are not allowed\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_EHDFERR\fP
+.PP
+: An error was reported by the HDF5 layer\&.
+.PP
+.SS "Example"
+.PP
+This example is from test program nf_test/f90tst_grps\&.f90\&.
+.PP
+.PP
+.nf
+call check(nf90_inq_grpname_full(grpid1, len, name_in))
+if (name_in \&.ne\&. grp1_full_name) stop 62
+.fi
+.PP
+.SH "3\&.8 Find a Group’s Parent: NF90_INQ_GRP_PARENT "
+.PP
+Given ncid, find the ncid of the parent group\&.
+.PP
+When used with the root group, this function returns the NF90_ENOGRP error (since the root group h has no parent\&.)
+.PP
+.SS "Usage"
+.PP
+.PP
+.nf
+function nf90_inq_grp_parent(ncid, parent_ncid)
+  integer, intent(in) :: ncid
+  integer, intent(out) :: parent_ncid
+  integer :: nf90_inq_grp_parent
+.fi
+.PP
+.PP
+\fCNCID\fP
+.PP
+: The group id\&.
+.PP
+\fCPARENT_NCID\fP
+.PP
+: The ncid of the parent group will be copied here\&.
+.PP
+.SS "Errors"
+.PP
+\fCNF90_NOERR\fP
+.PP
+: No error\&.
+.PP
+\fCNF90_EBADID\fP
+.PP
+: Bad group id\&.
+.PP
+\fCNF90_ENOGRP\fP
+.PP
+: No parent group found (i\&.e\&. this is the root group)\&.
+.PP
+\fCNF90_ENOTNC4\fP
+.PP
+: Attempting a netCDF-4 operation on a netCDF-3 file\&. NetCDF-4 operations can only be performed on files defined with a create mode which includes flag HDF5\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_ESTRICTNC3\fP
+.PP
+: This file was created with the strict netcdf-3 flag, therefore netcdf-4 operations are not allowed\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_EHDFERR\fP
+.PP
+: An error was reported by the HDF5 layer\&.
+.PP
+.SS "Example"
+.SH "3\&.9 Find a Group by Name: NF90_INQ_GRP_NCID "
+.PP
+Given a group name an an ncid, find the ncid of the group id\&.
+.PP
+.SS "Usage"
+.PP
+.PP
+.nf
+function nf90_inq_grp_ncid(ncid, name, grpid)
+  integer, intent(in) :: ncid
+  character (len = *), intent(in) :: name
+  integer, intent(out) :: grpid
+  integer :: nf90_inq_grp_ncid
+
+  nf90_inq_grp_ncid = nf_inq_grp_ncid(ncid, name, grpid)
+end function nf90_inq_grp_ncid
+.fi
+.PP
+.PP
+\fCNCID\fP
+.PP
+: The group id to look in\&.
+.PP
+\fCGRP_NAME\fP
+.PP
+: The name of the group that should be found\&.
+.PP
+\fCGRP_NCID\fP
+.PP
+: This will get the group id, if it is found\&.
+.PP
+.SS "Return Codes"
+.PP
+The following return codes may be returned by this function\&.
+.PP
+\fCNF90_NOERR\fP
+.PP
+: No error\&.
+.PP
+\fCNF90_EBADID\fP
+.PP
+: Bad group id\&.
+.PP
+\fCNF90_EINVAL\fP
+.PP
+: No name provided or name longer than NF90_MAX_NAME\&.
+.PP
+\fCNF90_ENOGRP\fP
+.PP
+: Named group not found\&.
+.PP
+\fCNF90_ENOTNC4\fP
+.PP
+: Attempting a netCDF-4 operation on a netCDF-3 file\&. NetCDF-4 operations can only be performed on files defined with a create mode which includes flag HDF5\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_ESTRICTNC3\fP
+.PP
+: This file was created with the strict netcdf-3 flag, therefore netcdf-4 operations are not allowed\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_EHDFERR\fP
+.PP
+: An error was reported by the HDF5 layer\&.
+.PP
+.SS "Example"
+.PP
+This example is from test program nf_test/f90tst_grps\&.f90\&.
+.PP
+.PP
+.nf
+! Get the group ids for the newly reopened file\&.
+call check(nf90_inq_grp_ncid(ncid, GRP1_NAME, grpid1))
+call check(nf90_inq_grp_ncid(grpid1, GRP2_NAME, grpid2))
+call check(nf90_inq_grp_ncid(grpid2, GRP3_NAME, grpid3))
+call check(nf90_inq_grp_ncid(grpid3, GRP4_NAME, grpid4))
+.fi
+.PP
+.SH "3\&.10 Find a Group by its Fully-qualified Name: NF90_INQ_GRP_FULL_NCID "
+.PP
+Given a fully qualified group name an an ncid, find the ncid of the group id\&.
+.PP
+.SS "Usage"
+.PP
+.PP
+.nf
+function nf90_inq_grpname_full(ncid, len, name)
+  integer, intent(in) :: ncid
+  integer, intent(out) :: len
+  character (len = *), intent(out) :: name
+  integer :: nf90_inq_grpname_full
+
+  nf90_inq_grpname_full = nf_inq_grpname_full(ncid, len, name)
+end function nf90_inq_grpname_full
+.fi
+.PP
+.PP
+\fCNCID\fP
+.PP
+: The group id to look in\&.
+.PP
+\fCFULL_NAME\fP
+.PP
+: The fully-qualified group name\&.
+.PP
+\fCGRP_NCID\fP
+.PP
+: This will get the group id, if it is found\&.
+.PP
+.SS "Return Codes"
+.PP
+The following return codes may be returned by this function\&.
+.PP
+\fCNF90_NOERR\fP
+.PP
+: No error\&.
+.PP
+\fCNF90_EBADID\fP
+.PP
+: Bad group id\&.
+.PP
+\fCNF90_EINVAL\fP
+.PP
+: No name provided or name longer than NF90_MAX_NAME\&.
+.PP
+\fCNF90_ENOGRP\fP
+.PP
+: Named group not found\&.
+.PP
+\fCNF90_ENOTNC4\fP
+.PP
+: Attempting a netCDF-4 operation on a netCDF-3 file\&. NetCDF-4 operations can only be performed on files defined with a create mode which includes flag HDF5\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_ESTRICTNC3\fP
+.PP
+: This file was created with the strict netcdf-3 flag, therefore netcdf-4 operations are not allowed\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_EHDFERR\fP
+.PP
+: An error was reported by the HDF5 layer\&.
+.PP
+.SS "Example"
+.PP
+This example is from test program nf_test/tstf90_grps\&.f90\&.
+.PP
+.PP
+.nf
+! Check for the groups with full group names\&.
+write(grp1_full_name, '(AA)') '/', grp1_name
+call check(nf90_inq_grp_full_ncid(ncid, grp1_full_name, grpid1))
+.fi
+.PP
+.SH "3\&.11 Create a New Group: NF90_DEF_GRP "
+.PP
+Create a group\&. Its location id is returned in new_ncid\&.
+.PP
+.SS "Usage"
+.PP
+.PP
+.nf
+function nf90_def_grp(parent_ncid, name, new_ncid)
+  integer, intent(in) :: parent_ncid
+  character (len = *), intent(in) :: name
+  integer, intent(out) :: new_ncid
+  integer :: nf90_def_grp
+.fi
+.PP
+.PP
+\fCPARENT_NCID\fP
+.PP
+: The group id of the parent group\&.
+.PP
+\fCNAME\fP
+.PP
+: The name of the new group, which must be different from the name of any variable within the same parent group\&.
+.PP
+\fCNEW_NCID\fP
+.PP
+: The ncid of the new group will be placed there\&.
+.PP
+.SS "Errors"
+.PP
+\fCNF90_NOERR\fP
+.PP
+: No error\&.
+.PP
+\fCNF90_EBADID\fP
+.PP
+: Bad group id\&.
+.PP
+\fCNF90_ENAMEINUSE\fP
+.PP
+: That name is in use\&. Group names must be unique within a group\&.
+.PP
+\fCNF90_EMAXNAME\fP
+.PP
+: Name exceed max length NF90_MAX_NAME\&.
+.PP
+\fCNF90_EBADNAME\fP
+.PP
+: Name contains illegal characters\&.
+.PP
+\fCNF90_ENOTNC4\fP
+.PP
+: Attempting a netCDF-4 operation on a netCDF-3 file\&. NetCDF-4 operations can only be performed on files defined with a create mode which includes flag HDF5\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_ESTRICTNC3\fP
+.PP
+: This file was created with the strict netcdf-3 flag, therefore netcdf-4 operations are not allowed\&. (see section \fCNF90_OPEN\fP)\&.
+.PP
+\fCNF90_EHDFERR\fP
+.PP
+: An error was reported by the HDF5 layer\&.
+.PP
+\fCNF90_EPERM\fP
+.PP
+: Attempt to write to a read-only file\&.
+.PP
+\fCNF90_ENOTINDEFINE\fP
+.PP
+: Not in define mode\&.
+.PP
+.SS "Example"
+.PP
+.PP
+.nf
+C     Create the netCDF file\&.
+      retval = nf90_create(file_name, nf90_netcdf4, ncid)
+      if (retval \&.ne\&. nf90_noerr) call handle_err(retval)
+
+C     Create a group and a subgroup\&.
+      retval = nf90_def_grp(ncid, group_name, grpid)
+      if (retval \&.ne\&. nf90_noerr) call handle_err(retval)
+      retval = nf90_def_grp(grpid, sub_group_name, sub_grpid)
+      if (retval \&.ne\&. nf90_noerr) call handle_err(retval)
+.fi
+.PP
+ 

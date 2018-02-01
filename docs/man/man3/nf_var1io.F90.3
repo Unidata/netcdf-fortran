@@ -1,0 +1,118 @@
+.TH "nf_var1io.F90" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+nf_var1io.F90
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'nfconfig\&.inc'\fP
+.br
+
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "integer function \fBnf_put_var1_text\fP (ncid, varid, ndex, chval)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_var1_int1\fP (ncid, varid, ndex, ival)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_var1_int2\fP (ncid, varid, ndex, ival)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_var1_int\fP (ncid, varid, ndex, ival)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_var1_real\fP (ncid, varid, ndex, rval)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_var1_double\fP (ncid, varid, ndex, dval)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_var1\fP (ncid, varid, ndex, values)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_var1_text\fP (ncid, varid, ndex, chval)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_var1_int1\fP (ncid, varid, ndex, ival)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_var1_int2\fP (ncid, varid, ndex, ival)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_var1_int\fP (ncid, varid, ndex, ival)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_var1_real\fP (ncid, varid, ndex, rval)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_var1_double\fP (ncid, varid, ndex, dval)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_var1\fP (ncid, varid, ndex, values)"
+.br
+.in -1c
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "integer function nf_get_var1 (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) ndex, character(kind=c_char), dimension(*), intent(out), target values)"
+
+.PP
+Definition at line 733 of file nf_var1io\&.F90\&.
+.SS "integer function nf_get_var1_double (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) ndex, real(rk8), intent(out) dval)"
+
+.PP
+Definition at line 686 of file nf_var1io\&.F90\&.
+.SS "integer function nf_get_var1_int (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) ndex, integer, intent(out) ival)"
+
+.PP
+Definition at line 582 of file nf_var1io\&.F90\&.
+.SS "integer function nf_get_var1_int1 (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) ndex, integer(nfint1), intent(out) ival)"
+
+.PP
+Definition at line 460 of file nf_var1io\&.F90\&.
+.SS "integer function nf_get_var1_int2 (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) ndex, integer(nfint2), intent(out) ival)"
+
+.PP
+Definition at line 522 of file nf_var1io\&.F90\&.
+.SS "integer function nf_get_var1_real (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) ndex, real(nfreal), intent(out) rval)"
+
+.PP
+Definition at line 635 of file nf_var1io\&.F90\&.
+.SS "integer function nf_get_var1_text (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) ndex, character(len=1), intent(out) chval)"
+
+.PP
+Definition at line 412 of file nf_var1io\&.F90\&.
+.SS "integer function nf_put_var1 (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) ndex, character(kind=c_char), dimension(*), intent(in), target values)"
+
+.PP
+Definition at line 356 of file nf_var1io\&.F90\&.
+.SS "integer function nf_put_var1_double (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) ndex, real(rk8), intent(in) dval)"
+
+.PP
+Definition at line 309 of file nf_var1io\&.F90\&.
+.SS "integer function nf_put_var1_int (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) ndex, integer(nfint), intent(in) ival)"
+
+.PP
+Definition at line 205 of file nf_var1io\&.F90\&.
+.SS "integer function nf_put_var1_int1 (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) ndex, integer(nfint1), intent(in) ival)"
+
+.PP
+Definition at line 83 of file nf_var1io\&.F90\&.
+.SS "integer function nf_put_var1_int2 (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) ndex, integer(nfint2), intent(in) ival)"
+
+.PP
+Definition at line 145 of file nf_var1io\&.F90\&.
+.SS "integer function nf_put_var1_real (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) ndex, real(nfreal), intent(in) rval)"
+
+.PP
+Definition at line 258 of file nf_var1io\&.F90\&.
+.SS "integer function nf_put_var1_text (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) ndex, character(len=1), intent(in) chval)"
+
+.PP
+Definition at line 36 of file nf_var1io\&.F90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for NetCDF-Fortran from the source code\&.

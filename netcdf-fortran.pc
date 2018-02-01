@@ -1,0 +1,15 @@
+prefix=/usr/local
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+ccompiler=gcc
+fcompiler=gfortran
+
+Name: netcdf-fortran
+Description: NetCDF Client Library for Fortran
+URL: http://www.unidata.ucar.edu/netcdf
+Version: 4.5.0-development
+Requires.private: netcdf > 4.1.1
+Libs: -L${libdir} -lnetcdff
+Libs.private: -L${libdir} -lnetcdff -lnetcdf
+Cflags: -I${includedir}

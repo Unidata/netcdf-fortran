@@ -1,0 +1,291 @@
+.TH "f90_dimensions" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+f90_dimensions4 Dimensions 
+ \- 
+.SH "4\&.1 Dimensions Introduction "
+.PP
+Dimensions for a netCDF dataset are defined when it is created, while the netCDF dataset is in define mode\&. Additional dimensions may be added later by reentering define mode\&. A netCDF dimension has a name and a length\&. At most one dimension in a netCDF dataset can have the unlimited length, which means variables using this dimension can grow along this dimension\&.
+.PP
+There is a suggested limit (512) to the number of dimensions that can be defined in a single netCDF dataset\&. The limit is the value of the constant NF90_MAX_DIMS\&. The purpose of the limit is to make writing generic applications simpler\&. They need only provide an array of NF90_MAX_DIMS dimensions to handle any netCDF dataset\&. The implementation of the netCDF library does not enforce this advisory maximum, so it is possible to use more dimensions, if necessary, but netCDF utilities that assume the advisory maximums may not be able to handle the resulting netCDF datasets\&.
+.PP
+Ordinarily, the name and length of a dimension are fixed when the dimension is first defined\&. The name may be changed later, but the length of a dimension (other than the unlimited dimension) cannot be changed without copying all the data to a new netCDF dataset with a redefined dimension length\&.
+.PP
+A netCDF dimension in an open netCDF dataset is referred to by a small integer called a dimension ID\&. In the Fortran 90 interface, dimension IDs are 1, 2, 3, \&.\&.\&., in the order in which the dimensions were defined\&.
+.PP
+Operations supported on dimensions are:
+.PP
+.IP "\(bu" 2
+Create a dimension, given its name and length\&.
+.IP "\(bu" 2
+Get a dimension ID from its name\&.
+.IP "\(bu" 2
+Get a dimension’s name and length from its ID\&.
+.IP "\(bu" 2
+Rename a dimension\&.
+.PP
+.SH "4\&.2 NF90_DEF_DIM "
+.PP
+The function NF90_DEF_DIM adds a new dimension to an open netCDF dataset in define mode\&. It returns (as an argument) a dimension ID, given the netCDF ID, the dimension name, and the dimension length\&. At most one unlimited length dimension, called the record dimension, may be defined for each netCDF dataset\&.
+.PP
+.SS "Usage"
+.PP
+.PP
+.nf
+function nf90_def_dim(ncid, name, len, dimid)
+  integer,             intent( in) :: ncid
+  character (len = *), intent( in) :: name
+  integer,             intent( in) :: len
+  integer,             intent(out) :: dimid
+  integer                          :: nf90_def_dim
+.fi
+.PP
+.PP
+\fCncid\fP
+.PP
+: NetCDF ID, from a previous call to NF90_OPEN or NF90_CREATE\&.
+.PP
+\fCname\fP
+.PP
+: Dimension name\&.
+.PP
+\fClen\fP
+.PP
+: Length of dimension; that is, number of values for this dimension as an index to variables that use it\&. This should be either a positive integer or the predefined constant NF90_UNLIMITED\&.
+.PP
+\fCdimid\fP
+.PP
+: Returned dimension ID\&.
+.PP
+.SS "Errors"
+.PP
+NF90_DEF_DIM returns the value NF90_NOERR if no errors occurred\&. Otherwise, the returned status indicates an error\&. Possible causes of errors include:
+.PP
+.IP "\(bu" 2
+The netCDF dataset is not in definition mode\&.
+.IP "\(bu" 2
+The specified dimension name is the name of another existing dimension\&.
+.IP "\(bu" 2
+The specified length is not greater than zero\&.
+.IP "\(bu" 2
+The specified length is unlimited, but there is already an unlimited length dimension defined for this netCDF dataset\&.
+.IP "\(bu" 2
+The specified netCDF ID does not refer to an open netCDF dataset\&.
+.PP
+.PP
+.SS "Example"
+.PP
+Here is an example using NF90_DEF_DIM to create a dimension named lat of length 18 and a unlimited dimension named rec in a new netCDF dataset named foo\&.nc:
+.PP
+.PP
+.nf
+use netcdf
+implicit none
+integer :: ncid, status, latdimid, recorddimid
+\&.\&.\&.
+status = nf90_create("foo\&.nc", nf90_noclobber, ncid)
+if (status /= nf90_noerr) call handle_err(status)
+\&.\&.\&.
+status = nf90_def_dim(ncid, "Lat", 18, latdimid)
+if (status /= nf90_noerr) call handle_err(status)
+status = nf90_def_dim(ncid, "Record", nf90_unlimited, recorddimid)
+if (status /= nf90_noerr) call handle_err(status)
+.fi
+.PP
+.SH "4\&.3 NF90_INQ_DIMID "
+.PP
+The function NF90_INQ_DIMID returns (as an argument) the ID of a netCDF dimension, given the name of the dimension\&. If ndims is the number of dimensions defined for a netCDF dataset, each dimension has an ID between 1 and ndims\&.
+.PP
+.SS "Usage"
+.PP
+.PP
+.nf
+function nf90_inq_dimid(ncid, name, dimid)
+  integer,             intent( in) :: ncid
+  character (len = *), intent( in) :: name
+  integer,             intent(out) :: dimid
+  integer                          :: nf90_inq_dimid
+.fi
+.PP
+.PP
+\fCncid\fP
+.PP
+: NetCDF ID, from a previous call to NF90_OPEN or NF90_CREATE\&.
+.PP
+\fCname\fP
+.PP
+: Dimension name\&.
+.PP
+\fCdimid\fP
+.PP
+: Returned dimension ID\&.
+.PP
+.SS "Errors"
+.PP
+NF90_INQ_DIMID returns the value NF90_NOERR if no errors occurred\&. Otherwise, the returned status indicates an error\&. Possible causes of errors include:
+.PP
+.IP "\(bu" 2
+The name that was specified is not the name of a dimension in the netCDF dataset\&.
+.IP "\(bu" 2
+The specified netCDF ID does not refer to an open netCDF dataset\&.
+.PP
+.PP
+.SS "Example"
+.PP
+Here is an example using NF90_INQ_DIMID to determine the dimension ID of a dimension named lat, assumed to have been defined previously in an existing netCDF dataset named foo\&.nc:
+.PP
+.PP
+.nf
+use netcdf
+implicit none
+integer :: ncid, status, latdimid
+\&.\&.\&.
+status = nf90_open("foo\&.nc", nf90_nowrite, ncid)
+if (status /= nf90_noerr) call handle_err(status)
+\&.\&.\&.
+status = nf90_inq_dimid(ncid, "Lat", latdimid)
+if (status /= nf90_noerr) call handle_err(status)
+.fi
+.PP
+.SH "4\&.4 NF90_INQUIRE_DIMENSION "
+.PP
+This function information about a netCDF dimension\&. Information about a dimension includes its name and its length\&. The length for the unlimited dimension, if any, is the number of records written so far\&.
+.PP
+.SS "Usage"
+.PP
+.PP
+.nf
+function nf90_inquire_dimension(ncid, dimid, name, len)
+  integer,                       intent( in) :: ncid, dimid
+  character (len = *), optional, intent(out) :: name
+  integer,             optional, intent(out) :: len
+  integer                                    :: nf90_inquire_dimension
+.fi
+.PP
+.PP
+\fCncid\fP
+.PP
+: NetCDF ID, from a previous call to NF90_OPEN or NF90_CREATE\&.
+.PP
+\fCdimid\fP
+.PP
+: Dimension ID, from a previous call to NF90_INQ_DIMID or NF90_DEF_DIM\&.
+.PP
+\fCname\fP
+.PP
+: Returned dimension name\&. The caller must allocate space for the returned name\&. The maximum possible length, in characters, of a dimension name is given by the predefined constant NF90_MAX_NAME\&.
+.PP
+\fClen\fP
+.PP
+: Returned length of dimension\&. For the unlimited dimension, this is the current maximum value used for writing any variables with this dimension, that is the maximum record number\&.
+.PP
+.SS "Errors"
+.PP
+These functions return the value NF90_NOERR if no errors occurred\&. Otherwise, the returned status indicates an error\&. Possible causes of errors include:
+.PP
+.IP "\(bu" 2
+The dimension ID is invalid for the specified netCDF dataset\&.
+.IP "\(bu" 2
+The specified netCDF ID does not refer to an open netCDF dataset\&.
+.PP
+.PP
+.SS "Example"
+.PP
+Here is an example using NF90_INQ_DIM to determine the length of a dimension named lat, and the name and current maximum length of the unlimited dimension for an existing netCDF dataset named foo\&.nc:
+.PP
+.PP
+.nf
+use netcdf
+implicit none
+integer :: ncid, status, latdimid, recorddimid
+integer :: nlats, nrecords
+character(len = nf90_max_name) :: recorddimname
+\&.\&.\&.
+status = nf90_open("foo\&.nc", nf90_nowrite, ncid)
+if (status /= nf90_noerr) call handle_err(status)
+! Get ID of unlimited dimension
+status = nf90_inquire(ncid, unlimiteddimid = recorddimid)
+if (status /= nf90_noerr) call handle_err(status)
+\&.\&.\&.
+status = nf90_inq_dimid(ncid, "Lat", latdimid)
+if (status /= nf90_noerr) call handle_err(status)
+! How many values of "lat" are there?
+status = nf90_inquire_dimension(ncid, latdimid, len = nlats)
+if (status /= nf90_noerr) call handle_err(status)
+! What is the name of the unlimited dimension, how many records are there?
+status = nf90_inquire_dimension(ncid, recorddimid, &
+                                name = recorddimname, len = records)
+if (status /= nf90_noerr) call handle_err(status)
+.fi
+.PP
+.SH "4\&.5 NF90_RENAME_DIM "
+.PP
+The function NF90_RENAME_DIM renames an existing dimension in a netCDF dataset open for writing\&. If the new name is longer than the old name, the netCDF dataset must be in define mode\&. You cannot rename a dimension to have the same name as another dimension\&.
+.PP
+.SS "Usage"
+.PP
+.PP
+.nf
+function nf90_rename_dim(ncid, dimid, name)
+  integer,             intent( in) :: ncid
+  character (len = *), intent( in) :: name
+  integer,             intent( in) :: dimid
+  integer                          :: nf90_rename_dim
+.fi
+.PP
+.PP
+\fCncid\fP
+.PP
+: NetCDF ID, from a previous call to NF90_OPEN or NF90_CREATE\&.
+.PP
+\fCdimid\fP
+.PP
+: Dimension ID, from a previous call to NF90_INQ_DIMID or NF90_DEF_DIM\&.
+.PP
+\fCname\fP
+.PP
+: New dimension name\&.
+.PP
+.SS "Errors"
+.PP
+NF90_RENAME_DIM returns the value NF90_NOERR if no errors occurred\&. Otherwise, the returned status indicates an error\&. Possible causes of errors include:
+.PP
+.IP "\(bu" 2
+The new name is the name of another dimension\&.
+.IP "\(bu" 2
+The dimension ID is invalid for the specified netCDF dataset\&.
+.IP "\(bu" 2
+The specified netCDF ID does not refer to an open netCDF dataset\&.
+.IP "\(bu" 2
+The new name is longer than the old name and the netCDF dataset is not in define mode\&.
+.PP
+.PP
+.SS "Example"
+.PP
+Here is an example using NF90_RENAME_DIM to rename the dimension lat to latitude in an existing netCDF dataset named foo\&.nc:
+.PP
+.PP
+.nf
+use netcdf
+implicit none
+integer :: ncid, status, latdimid
+\&.\&.\&.
+status = nf90_open("foo\&.nc", nf90_write, ncid)
+if (status /= nf90_noerr) call handle_err(status)
+\&.\&.\&.
+! Put in define mode so we can rename the dimension
+status = nf90_redef(ncid)
+if (status /= nf90_noerr) call handle_err(status)
+! Get the dimension ID for "Lat"\&.\&.\&.
+status = nf90_inq_dimid(ncid, "Lat", latdimid)
+if (status /= nf90_noerr) call handle_err(status)
+! \&.\&.\&. and change the name to "Latitude"\&.
+status = nf90_rename_dim(ncid, latdimid, "Latitude")
+if (status /= nf90_noerr) call handle_err(status)
+! Leave define mode
+status = nf90_enddef(ncid)
+if (status /= nf90_noerr) call handle_err(status)
+.fi
+.PP
+ 

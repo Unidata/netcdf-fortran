@@ -1,0 +1,118 @@
+.TH "nf_varmio.F90" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+nf_varmio.F90
+.SH SYNOPSIS
+.br
+.PP
+\fC#include 'nfconfig\&.inc'\fP
+.br
+
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "integer function \fBnf_put_varm_text\fP (ncid, varid, start, counts, strides, maps, text)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_varm_text_a\fP (ncid, varid, start, counts, strides, maps, text)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_varm_int1\fP (ncid, varid, start, counts, strides, maps, i1vals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_varm_int2\fP (ncid, varid, start, counts, strides, maps, i2vals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_varm_int\fP (ncid, varid, start, counts, strides, maps, ivals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_varm_real\fP (ncid, varid, start, counts, strides, maps, rvals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_varm_double\fP (ncid, varid, start, counts, strides, maps, dvals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_varm_text\fP (ncid, varid, start, counts, strides, maps, text)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_varm_text_a\fP (ncid, varid, start, counts, strides, maps, text)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_varm_int1\fP (ncid, varid, start, counts, strides, maps, i1vals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_varm_int2\fP (ncid, varid, start, counts, strides, maps, i2vals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_varm_int\fP (ncid, varid, start, counts, strides, maps, ivals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_varm_real\fP (ncid, varid, start, counts, strides, maps, rvals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_varm_double\fP (ncid, varid, start, counts, strides, maps, dvals)"
+.br
+.in -1c
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "integer function nf_get_varm_double (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer, dimension(*), intent(in) maps, real(rk8), dimension(*), intent(out) dvals)"
+
+.PP
+Definition at line 1003 of file nf_varmio\&.F90\&.
+.SS "integer function nf_get_varm_int (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer, dimension(*), intent(in) maps, integer(nfint), dimension(*), intent(out) ivals)"
+
+.PP
+Definition at line 857 of file nf_varmio\&.F90\&.
+.SS "integer function nf_get_varm_int1 (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer, dimension(*), intent(in) maps, integer(nfint1), dimension(*), intent(out) i1vals)"
+
+.PP
+Definition at line 692 of file nf_varmio\&.F90\&.
+.SS "integer function nf_get_varm_int2 (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer, dimension(*), intent(in) maps, integer(nfint2), dimension(*), intent(out) i2vals)"
+
+.PP
+Definition at line 776 of file nf_varmio\&.F90\&.
+.SS "integer function nf_get_varm_real (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer, dimension(*), intent(in) maps, real(nfreal), dimension(*), intent(out) rvals)"
+
+.PP
+Definition at line 930 of file nf_varmio\&.F90\&.
+.SS "integer function nf_get_varm_text (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer, dimension(*), intent(in) maps, character(len=*), intent(out) text)"
+
+.PP
+Definition at line 555 of file nf_varmio\&.F90\&.
+.SS "integer function nf_get_varm_text_a (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer, dimension(*), intent(in) maps, character(len=1), dimension(*), intent(out) text)"
+
+.PP
+Definition at line 624 of file nf_varmio\&.F90\&.
+.SS "integer function nf_put_varm_double (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer, dimension(*), intent(in) maps, real(rk8), dimension(*), intent(in) dvals)"
+
+.PP
+Definition at line 487 of file nf_varmio\&.F90\&.
+.SS "integer function nf_put_varm_int (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer, dimension(*), intent(in) maps, integer(nfint), dimension(*), intent(in) ivals)"
+
+.PP
+Definition at line 341 of file nf_varmio\&.F90\&.
+.SS "integer function nf_put_varm_int1 (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer, dimension(*), intent(in) maps, integer(nfint1), dimension(*), intent(in) i1vals)"
+
+.PP
+Definition at line 176 of file nf_varmio\&.F90\&.
+.SS "integer function nf_put_varm_int2 (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer, dimension(*), intent(in) maps, integer(nfint2), dimension(*), intent(in) i2vals)"
+
+.PP
+Definition at line 260 of file nf_varmio\&.F90\&.
+.SS "integer function nf_put_varm_real (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer, dimension(*), intent(in) maps, real(nfreal), dimension(*), intent(in) rvals)"
+
+.PP
+Definition at line 414 of file nf_varmio\&.F90\&.
+.SS "integer function nf_put_varm_text (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer, dimension(*), intent(in) maps, character(len=*), intent(in) text)"
+
+.PP
+Definition at line 40 of file nf_varmio\&.F90\&.
+.SS "integer function nf_put_varm_text_a (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer, dimension(*), intent(in) maps, character(len=1), dimension(*), intent(in) text)"
+
+.PP
+Definition at line 108 of file nf_varmio\&.F90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for NetCDF-Fortran from the source code\&.

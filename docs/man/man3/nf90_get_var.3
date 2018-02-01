@@ -1,0 +1,301 @@
+.TH "nf90_get_var" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+nf90_get_var
+.SH SYNOPSIS
+.br
+.PP
+.SS "Public Member Functions"
+
+.in +1c
+.ti -1c
+.RI "\fBnf90_get_var_text\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_onebyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_twobyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_fourbyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_eightbyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_fourbytereal\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_eightbytereal\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_1d_text\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_1d_onebyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_1d_twobyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_1d_fourbyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_1d_eightbyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_1d_fourbytereal\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_1d_eightbytereal\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_2d_text\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_2d_onebyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_2d_twobyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_2d_fourbyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_2d_eightbyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_2d_fourbytereal\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_2d_eightbytereal\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_3d_text\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_3d_onebyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_3d_twobyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_3d_fourbyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_3d_eightbyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_3d_fourbytereal\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_3d_eightbytereal\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_4d_text\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_4d_onebyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_4d_twobyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_4d_fourbyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_4d_eightbyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_4d_fourbytereal\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_4d_eightbytereal\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_5d_text\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_5d_onebyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_5d_twobyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_5d_fourbyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_5d_eightbyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_5d_fourbytereal\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_5d_eightbytereal\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_6d_text\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_6d_onebyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_6d_twobyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_6d_fourbyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_6d_eightbyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_6d_fourbytereal\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_6d_eightbytereal\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_7d_text\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_7d_onebyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_7d_twobyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_7d_fourbyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_7d_eightbyteint\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_7d_fourbytereal\fP"
+.br
+.ti -1c
+.RI "\fBnf90_get_var_7d_eightbytereal\fP"
+.br
+.in -1c
+.SH "Detailed Description"
+.PP 
+Definition at line 62 of file netcdf_overloads\&.f90\&.
+.SH "Member Function/Subroutine Documentation"
+.PP 
+.SS "nf90_get_var::nf90_get_var_1d_eightbyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_1d_eightbytereal ()"
+
+.SS "nf90_get_var::nf90_get_var_1d_fourbyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_1d_fourbytereal ()"
+
+.SS "nf90_get_var::nf90_get_var_1d_onebyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_1d_text ()"
+
+.SS "nf90_get_var::nf90_get_var_1d_twobyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_2d_eightbyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_2d_eightbytereal ()"
+
+.SS "nf90_get_var::nf90_get_var_2d_fourbyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_2d_fourbytereal ()"
+
+.SS "nf90_get_var::nf90_get_var_2d_onebyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_2d_text ()"
+
+.SS "nf90_get_var::nf90_get_var_2d_twobyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_3d_eightbyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_3d_eightbytereal ()"
+
+.SS "nf90_get_var::nf90_get_var_3d_fourbyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_3d_fourbytereal ()"
+
+.SS "nf90_get_var::nf90_get_var_3d_onebyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_3d_text ()"
+
+.SS "nf90_get_var::nf90_get_var_3d_twobyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_4d_eightbyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_4d_eightbytereal ()"
+
+.SS "nf90_get_var::nf90_get_var_4d_fourbyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_4d_fourbytereal ()"
+
+.SS "nf90_get_var::nf90_get_var_4d_onebyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_4d_text ()"
+
+.SS "nf90_get_var::nf90_get_var_4d_twobyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_5d_eightbyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_5d_eightbytereal ()"
+
+.SS "nf90_get_var::nf90_get_var_5d_fourbyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_5d_fourbytereal ()"
+
+.SS "nf90_get_var::nf90_get_var_5d_onebyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_5d_text ()"
+
+.SS "nf90_get_var::nf90_get_var_5d_twobyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_6d_eightbyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_6d_eightbytereal ()"
+
+.SS "nf90_get_var::nf90_get_var_6d_fourbyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_6d_fourbytereal ()"
+
+.SS "nf90_get_var::nf90_get_var_6d_onebyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_6d_text ()"
+
+.SS "nf90_get_var::nf90_get_var_6d_twobyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_7d_eightbyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_7d_eightbytereal ()"
+
+.SS "nf90_get_var::nf90_get_var_7d_fourbyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_7d_fourbytereal ()"
+
+.SS "nf90_get_var::nf90_get_var_7d_onebyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_7d_text ()"
+
+.SS "nf90_get_var::nf90_get_var_7d_twobyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_eightbyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_eightbytereal ()"
+
+.SS "nf90_get_var::nf90_get_var_fourbyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_fourbytereal ()"
+
+.SS "nf90_get_var::nf90_get_var_onebyteint ()"
+
+.SS "nf90_get_var::nf90_get_var_text ()"
+
+.SS "nf90_get_var::nf90_get_var_twobyteint ()"
+
+
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for NetCDF-Fortran from the source code\&.

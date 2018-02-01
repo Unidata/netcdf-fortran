@@ -1,0 +1,128 @@
+\hypertarget{nf__genvar_8f90}{}\section{nf\+\_\+genvar.\+f90 File Reference}
+\label{nf__genvar_8f90}\index{nf\+\_\+genvar.\+f90@{nf\+\_\+genvar.\+f90}}
+\subsection*{Functions/\+Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+integer function \hyperlink{nf__genvar_8f90_a21a4b1381e03b1ab8477687723bdfb4b}{nf\+\_\+def\+\_\+var} (ncid, name, xtype, nvdims, vdims, varid)
+\item 
+integer function \hyperlink{nf__genvar_8f90_ad20e90a6eea21b7ca37b64e492258a9a}{nf\+\_\+inq\+\_\+varndims} (ncid, varid, vndims)
+\item 
+integer function \hyperlink{nf__genvar_8f90_a8e440dd17d73bef324eac899de92b297}{nf\+\_\+inq\+\_\+var} (ncid, varid, name, xtype, ndims, dimids, natts)
+\item 
+integer function \hyperlink{nf__genvar_8f90_a0272c24bf5b50b1e7e0972937967ae0b}{nf\+\_\+inq\+\_\+vardimid} (ncid, varid, dimids)
+\item 
+integer function \hyperlink{nf__genvar_8f90_ac66a3256fad322f32801ecddd81a58db}{nf\+\_\+inq\+\_\+varid} (ncid, name, varid)
+\item 
+integer function \hyperlink{nf__genvar_8f90_ae62acb4cf6e11df12ff2ebb541325de3}{nf\+\_\+inq\+\_\+varname} (ncid, varid, name)
+\item 
+integer function \hyperlink{nf__genvar_8f90_a3bf29346233ca9243a8dc0341919c068}{nf\+\_\+inq\+\_\+vartype} (ncid, varid, xtype)
+\item 
+integer function \hyperlink{nf__genvar_8f90_a7f285e7d982a38d549d68ae233859d67}{nf\+\_\+inq\+\_\+varnatts} (ncid, varid, nvatts)
+\item 
+integer function \hyperlink{nf__genvar_8f90_a0415c842d5919fc1f205cfd9b535c734}{nf\+\_\+rename\+\_\+var} (ncid, varid, name)
+\item 
+integer function \hyperlink{nf__genvar_8f90_ac71cbb4a76b0144764e542c8350b733c}{nf\+\_\+copy\+\_\+var} (ncid\+\_\+in, varid, ncid\+\_\+out)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function/\+Subroutine Documentation}
+\mbox{\Hypertarget{nf__genvar_8f90_ac71cbb4a76b0144764e542c8350b733c}\label{nf__genvar_8f90_ac71cbb4a76b0144764e542c8350b733c}} 
+\index{nf\+\_\+genvar.\+f90@{nf\+\_\+genvar.\+f90}!nf\+\_\+copy\+\_\+var@{nf\+\_\+copy\+\_\+var}}
+\index{nf\+\_\+copy\+\_\+var@{nf\+\_\+copy\+\_\+var}!nf\+\_\+genvar.\+f90@{nf\+\_\+genvar.\+f90}}
+\subsubsection{\texorpdfstring{nf\+\_\+copy\+\_\+var()}{nf\_copy\_var()}}
+{\footnotesize\ttfamily integer function nf\+\_\+copy\+\_\+var (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid\+\_\+in,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, intent(in)}]{ncid\+\_\+out }\end{DoxyParamCaption})}
+
+
+
+Definition at line 402 of file nf\+\_\+genvar.\+f90.
+
+\mbox{\Hypertarget{nf__genvar_8f90_a21a4b1381e03b1ab8477687723bdfb4b}\label{nf__genvar_8f90_a21a4b1381e03b1ab8477687723bdfb4b}} 
+\index{nf\+\_\+genvar.\+f90@{nf\+\_\+genvar.\+f90}!nf\+\_\+def\+\_\+var@{nf\+\_\+def\+\_\+var}}
+\index{nf\+\_\+def\+\_\+var@{nf\+\_\+def\+\_\+var}!nf\+\_\+genvar.\+f90@{nf\+\_\+genvar.\+f90}}
+\subsubsection{\texorpdfstring{nf\+\_\+def\+\_\+var()}{nf\_def\_var()}}
+{\footnotesize\ttfamily integer function nf\+\_\+def\+\_\+var (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{character(len=$\ast$), intent(in)}]{name,  }\item[{integer, intent(in)}]{xtype,  }\item[{integer, intent(in)}]{nvdims,  }\item[{integer, dimension($\ast$), intent(in)}]{vdims,  }\item[{integer, intent(out)}]{varid }\end{DoxyParamCaption})}
+
+
+
+Definition at line 36 of file nf\+\_\+genvar.\+f90.
+
+\mbox{\Hypertarget{nf__genvar_8f90_a8e440dd17d73bef324eac899de92b297}\label{nf__genvar_8f90_a8e440dd17d73bef324eac899de92b297}} 
+\index{nf\+\_\+genvar.\+f90@{nf\+\_\+genvar.\+f90}!nf\+\_\+inq\+\_\+var@{nf\+\_\+inq\+\_\+var}}
+\index{nf\+\_\+inq\+\_\+var@{nf\+\_\+inq\+\_\+var}!nf\+\_\+genvar.\+f90@{nf\+\_\+genvar.\+f90}}
+\subsubsection{\texorpdfstring{nf\+\_\+inq\+\_\+var()}{nf\_inq\_var()}}
+{\footnotesize\ttfamily integer function nf\+\_\+inq\+\_\+var (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character(len=$\ast$), intent(out)}]{name,  }\item[{integer, intent(out)}]{xtype,  }\item[{integer, intent(out)}]{ndims,  }\item[{integer, dimension($\ast$), intent(out)}]{dimids,  }\item[{integer, intent(out)}]{natts }\end{DoxyParamCaption})}
+
+
+
+Definition at line 119 of file nf\+\_\+genvar.\+f90.
+
+\mbox{\Hypertarget{nf__genvar_8f90_a0272c24bf5b50b1e7e0972937967ae0b}\label{nf__genvar_8f90_a0272c24bf5b50b1e7e0972937967ae0b}} 
+\index{nf\+\_\+genvar.\+f90@{nf\+\_\+genvar.\+f90}!nf\+\_\+inq\+\_\+vardimid@{nf\+\_\+inq\+\_\+vardimid}}
+\index{nf\+\_\+inq\+\_\+vardimid@{nf\+\_\+inq\+\_\+vardimid}!nf\+\_\+genvar.\+f90@{nf\+\_\+genvar.\+f90}}
+\subsubsection{\texorpdfstring{nf\+\_\+inq\+\_\+vardimid()}{nf\_inq\_vardimid()}}
+{\footnotesize\ttfamily integer function nf\+\_\+inq\+\_\+vardimid (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(out)}]{dimids }\end{DoxyParamCaption})}
+
+
+
+Definition at line 192 of file nf\+\_\+genvar.\+f90.
+
+\mbox{\Hypertarget{nf__genvar_8f90_ac66a3256fad322f32801ecddd81a58db}\label{nf__genvar_8f90_ac66a3256fad322f32801ecddd81a58db}} 
+\index{nf\+\_\+genvar.\+f90@{nf\+\_\+genvar.\+f90}!nf\+\_\+inq\+\_\+varid@{nf\+\_\+inq\+\_\+varid}}
+\index{nf\+\_\+inq\+\_\+varid@{nf\+\_\+inq\+\_\+varid}!nf\+\_\+genvar.\+f90@{nf\+\_\+genvar.\+f90}}
+\subsubsection{\texorpdfstring{nf\+\_\+inq\+\_\+varid()}{nf\_inq\_varid()}}
+{\footnotesize\ttfamily integer function nf\+\_\+inq\+\_\+varid (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{character(len=$\ast$), intent(in)}]{name,  }\item[{integer, intent(out)}]{varid }\end{DoxyParamCaption})}
+
+
+
+Definition at line 246 of file nf\+\_\+genvar.\+f90.
+
+\mbox{\Hypertarget{nf__genvar_8f90_ae62acb4cf6e11df12ff2ebb541325de3}\label{nf__genvar_8f90_ae62acb4cf6e11df12ff2ebb541325de3}} 
+\index{nf\+\_\+genvar.\+f90@{nf\+\_\+genvar.\+f90}!nf\+\_\+inq\+\_\+varname@{nf\+\_\+inq\+\_\+varname}}
+\index{nf\+\_\+inq\+\_\+varname@{nf\+\_\+inq\+\_\+varname}!nf\+\_\+genvar.\+f90@{nf\+\_\+genvar.\+f90}}
+\subsubsection{\texorpdfstring{nf\+\_\+inq\+\_\+varname()}{nf\_inq\_varname()}}
+{\footnotesize\ttfamily integer function nf\+\_\+inq\+\_\+varname (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character(len=$\ast$), intent(out)}]{name }\end{DoxyParamCaption})}
+
+
+
+Definition at line 279 of file nf\+\_\+genvar.\+f90.
+
+\mbox{\Hypertarget{nf__genvar_8f90_a7f285e7d982a38d549d68ae233859d67}\label{nf__genvar_8f90_a7f285e7d982a38d549d68ae233859d67}} 
+\index{nf\+\_\+genvar.\+f90@{nf\+\_\+genvar.\+f90}!nf\+\_\+inq\+\_\+varnatts@{nf\+\_\+inq\+\_\+varnatts}}
+\index{nf\+\_\+inq\+\_\+varnatts@{nf\+\_\+inq\+\_\+varnatts}!nf\+\_\+genvar.\+f90@{nf\+\_\+genvar.\+f90}}
+\subsubsection{\texorpdfstring{nf\+\_\+inq\+\_\+varnatts()}{nf\_inq\_varnatts()}}
+{\footnotesize\ttfamily integer function nf\+\_\+inq\+\_\+varnatts (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, intent(out)}]{nvatts }\end{DoxyParamCaption})}
+
+
+
+Definition at line 344 of file nf\+\_\+genvar.\+f90.
+
+\mbox{\Hypertarget{nf__genvar_8f90_ad20e90a6eea21b7ca37b64e492258a9a}\label{nf__genvar_8f90_ad20e90a6eea21b7ca37b64e492258a9a}} 
+\index{nf\+\_\+genvar.\+f90@{nf\+\_\+genvar.\+f90}!nf\+\_\+inq\+\_\+varndims@{nf\+\_\+inq\+\_\+varndims}}
+\index{nf\+\_\+inq\+\_\+varndims@{nf\+\_\+inq\+\_\+varndims}!nf\+\_\+genvar.\+f90@{nf\+\_\+genvar.\+f90}}
+\subsubsection{\texorpdfstring{nf\+\_\+inq\+\_\+varndims()}{nf\_inq\_varndims()}}
+{\footnotesize\ttfamily integer function nf\+\_\+inq\+\_\+varndims (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, intent(out)}]{vndims }\end{DoxyParamCaption})}
+
+
+
+Definition at line 91 of file nf\+\_\+genvar.\+f90.
+
+\mbox{\Hypertarget{nf__genvar_8f90_a3bf29346233ca9243a8dc0341919c068}\label{nf__genvar_8f90_a3bf29346233ca9243a8dc0341919c068}} 
+\index{nf\+\_\+genvar.\+f90@{nf\+\_\+genvar.\+f90}!nf\+\_\+inq\+\_\+vartype@{nf\+\_\+inq\+\_\+vartype}}
+\index{nf\+\_\+inq\+\_\+vartype@{nf\+\_\+inq\+\_\+vartype}!nf\+\_\+genvar.\+f90@{nf\+\_\+genvar.\+f90}}
+\subsubsection{\texorpdfstring{nf\+\_\+inq\+\_\+vartype()}{nf\_inq\_vartype()}}
+{\footnotesize\ttfamily integer function nf\+\_\+inq\+\_\+vartype (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, intent(out)}]{xtype }\end{DoxyParamCaption})}
+
+
+
+Definition at line 316 of file nf\+\_\+genvar.\+f90.
+
+\mbox{\Hypertarget{nf__genvar_8f90_a0415c842d5919fc1f205cfd9b535c734}\label{nf__genvar_8f90_a0415c842d5919fc1f205cfd9b535c734}} 
+\index{nf\+\_\+genvar.\+f90@{nf\+\_\+genvar.\+f90}!nf\+\_\+rename\+\_\+var@{nf\+\_\+rename\+\_\+var}}
+\index{nf\+\_\+rename\+\_\+var@{nf\+\_\+rename\+\_\+var}!nf\+\_\+genvar.\+f90@{nf\+\_\+genvar.\+f90}}
+\subsubsection{\texorpdfstring{nf\+\_\+rename\+\_\+var()}{nf\_rename\_var()}}
+{\footnotesize\ttfamily integer function nf\+\_\+rename\+\_\+var (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character(len=$\ast$), intent(in)}]{name }\end{DoxyParamCaption})}
+
+
+
+Definition at line 372 of file nf\+\_\+genvar.\+f90.
+

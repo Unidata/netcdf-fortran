@@ -1,0 +1,200 @@
+\hypertarget{netcdf__text__variables_8f90}{}\section{netcdf\+\_\+text\+\_\+variables.\+f90 File Reference}
+\label{netcdf__text__variables_8f90}\index{netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}}
+\subsection*{Functions/\+Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+integer function \hyperlink{netcdf__text__variables_8f90_a3c866ab5a35489ce0d9797838aec5b2c}{nf90\+\_\+put\+\_\+var\+\_\+text} (ncid, varid, values, start, count, stride, map)
+\item 
+integer function \hyperlink{netcdf__text__variables_8f90_acc3d60da31f80b17d7fd5e06d4290a43}{nf90\+\_\+get\+\_\+var\+\_\+text} (ncid, varid, values, start, count, stride, map)
+\item 
+integer function \hyperlink{netcdf__text__variables_8f90_ad41d9ea76e7347555a238de5afd425e8}{nf90\+\_\+put\+\_\+var\+\_\+1d\+\_\+text} (ncid, varid, values, start, count, stride, map)
+\item 
+integer function \hyperlink{netcdf__text__variables_8f90_abeb77c7100cff6d00ee5eb0912a8696c}{nf90\+\_\+put\+\_\+var\+\_\+2d\+\_\+text} (ncid, varid, values, start, count, stride, map)
+\item 
+integer function \hyperlink{netcdf__text__variables_8f90_a6b41034b62da58c313e15328cb551488}{nf90\+\_\+put\+\_\+var\+\_\+3d\+\_\+text} (ncid, varid, values, start, count, stride, map)
+\item 
+integer function \hyperlink{netcdf__text__variables_8f90_a61fb43bb62849e0fa471b9c6dbe45f4f}{nf90\+\_\+put\+\_\+var\+\_\+4d\+\_\+text} (ncid, varid, values, start, count, stride, map)
+\item 
+integer function \hyperlink{netcdf__text__variables_8f90_a229342530494b303bb44f2f5f8fb85c8}{nf90\+\_\+put\+\_\+var\+\_\+5d\+\_\+text} (ncid, varid, values, start, count, stride, map)
+\item 
+integer function \hyperlink{netcdf__text__variables_8f90_a563af472ff0a6b2ead693e554c761029}{nf90\+\_\+put\+\_\+var\+\_\+6d\+\_\+text} (ncid, varid, values, start, count, stride, map)
+\item 
+integer function \hyperlink{netcdf__text__variables_8f90_a0cb3056fbb252e562bc9601f86162b93}{nf90\+\_\+put\+\_\+var\+\_\+7d\+\_\+text} (ncid, varid, values, start, count, stride, map)
+\item 
+integer function \hyperlink{netcdf__text__variables_8f90_a263170f14221147b1c729de049e43cab}{nf90\+\_\+get\+\_\+var\+\_\+1d\+\_\+text} (ncid, varid, values, start, count, stride, map)
+\item 
+integer function \hyperlink{netcdf__text__variables_8f90_a89e4c64b6b65d29cfa998387d381452c}{nf90\+\_\+get\+\_\+var\+\_\+2d\+\_\+text} (ncid, varid, values, start, count, stride, map)
+\item 
+integer function \hyperlink{netcdf__text__variables_8f90_ac1af6b101c3f3b575dc171548abed217}{nf90\+\_\+get\+\_\+var\+\_\+3d\+\_\+text} (ncid, varid, values, start, count, stride, map)
+\item 
+integer function \hyperlink{netcdf__text__variables_8f90_ac969f9a8af11404d2568b7431e6a175d}{nf90\+\_\+get\+\_\+var\+\_\+4d\+\_\+text} (ncid, varid, values, start, count, stride, map)
+\item 
+integer function \hyperlink{netcdf__text__variables_8f90_a2a34081d2ab49f288ff045399e59e0e3}{nf90\+\_\+get\+\_\+var\+\_\+5d\+\_\+text} (ncid, varid, values, start, count, stride, map)
+\item 
+integer function \hyperlink{netcdf__text__variables_8f90_aa66c41c62185789bb5e8994a5370c57f}{nf90\+\_\+get\+\_\+var\+\_\+6d\+\_\+text} (ncid, varid, values, start, count, stride, map)
+\item 
+integer function \hyperlink{netcdf__text__variables_8f90_a0f635c51a727d97eb7edf3784159ff5c}{nf90\+\_\+get\+\_\+var\+\_\+7d\+\_\+text} (ncid, varid, values, start, count, stride, map)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function/\+Subroutine Documentation}
+\mbox{\Hypertarget{netcdf__text__variables_8f90_a263170f14221147b1c729de049e43cab}\label{netcdf__text__variables_8f90_a263170f14221147b1c729de049e43cab}} 
+\index{netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}!nf90\+\_\+get\+\_\+var\+\_\+1d\+\_\+text@{nf90\+\_\+get\+\_\+var\+\_\+1d\+\_\+text}}
+\index{nf90\+\_\+get\+\_\+var\+\_\+1d\+\_\+text@{nf90\+\_\+get\+\_\+var\+\_\+1d\+\_\+text}!netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+get\+\_\+var\+\_\+1d\+\_\+text()}{nf90\_get\_var\_1d\_text()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+get\+\_\+var\+\_\+1d\+\_\+text (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character (len = $\ast$), dimension(\+:), intent(out)}]{values,  }\item[{integer, dimension(\+:), intent(in), optional}]{start,  }\item[{integer, dimension(\+:), intent(in), optional}]{count,  }\item[{integer, dimension(\+:), intent(in), optional}]{stride,  }\item[{integer, dimension(\+:), intent(in), optional}]{map }\end{DoxyParamCaption})}
+
+
+
+Definition at line 269 of file netcdf\+\_\+text\+\_\+variables.\+f90.
+
+\mbox{\Hypertarget{netcdf__text__variables_8f90_a89e4c64b6b65d29cfa998387d381452c}\label{netcdf__text__variables_8f90_a89e4c64b6b65d29cfa998387d381452c}} 
+\index{netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}!nf90\+\_\+get\+\_\+var\+\_\+2d\+\_\+text@{nf90\+\_\+get\+\_\+var\+\_\+2d\+\_\+text}}
+\index{nf90\+\_\+get\+\_\+var\+\_\+2d\+\_\+text@{nf90\+\_\+get\+\_\+var\+\_\+2d\+\_\+text}!netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+get\+\_\+var\+\_\+2d\+\_\+text()}{nf90\_get\_var\_2d\_text()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+get\+\_\+var\+\_\+2d\+\_\+text (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character (len = $\ast$), dimension(\+:, \+:), intent(out)}]{values,  }\item[{integer, dimension(\+:), intent(in), optional}]{start,  }\item[{integer, dimension(\+:), intent(in), optional}]{count,  }\item[{integer, dimension(\+:), intent(in), optional}]{stride,  }\item[{integer, dimension(\+:), intent(in), optional}]{map }\end{DoxyParamCaption})}
+
+
+
+Definition at line 301 of file netcdf\+\_\+text\+\_\+variables.\+f90.
+
+\mbox{\Hypertarget{netcdf__text__variables_8f90_ac1af6b101c3f3b575dc171548abed217}\label{netcdf__text__variables_8f90_ac1af6b101c3f3b575dc171548abed217}} 
+\index{netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}!nf90\+\_\+get\+\_\+var\+\_\+3d\+\_\+text@{nf90\+\_\+get\+\_\+var\+\_\+3d\+\_\+text}}
+\index{nf90\+\_\+get\+\_\+var\+\_\+3d\+\_\+text@{nf90\+\_\+get\+\_\+var\+\_\+3d\+\_\+text}!netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+get\+\_\+var\+\_\+3d\+\_\+text()}{nf90\_get\_var\_3d\_text()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+get\+\_\+var\+\_\+3d\+\_\+text (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character (len = $\ast$), dimension(\+:, \+:, \+:), intent(out)}]{values,  }\item[{integer, dimension(\+:), intent(in), optional}]{start,  }\item[{integer, dimension(\+:), intent(in), optional}]{count,  }\item[{integer, dimension(\+:), intent(in), optional}]{stride,  }\item[{integer, dimension(\+:), intent(in), optional}]{map }\end{DoxyParamCaption})}
+
+
+
+Definition at line 333 of file netcdf\+\_\+text\+\_\+variables.\+f90.
+
+\mbox{\Hypertarget{netcdf__text__variables_8f90_ac969f9a8af11404d2568b7431e6a175d}\label{netcdf__text__variables_8f90_ac969f9a8af11404d2568b7431e6a175d}} 
+\index{netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}!nf90\+\_\+get\+\_\+var\+\_\+4d\+\_\+text@{nf90\+\_\+get\+\_\+var\+\_\+4d\+\_\+text}}
+\index{nf90\+\_\+get\+\_\+var\+\_\+4d\+\_\+text@{nf90\+\_\+get\+\_\+var\+\_\+4d\+\_\+text}!netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+get\+\_\+var\+\_\+4d\+\_\+text()}{nf90\_get\_var\_4d\_text()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+get\+\_\+var\+\_\+4d\+\_\+text (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character (len = $\ast$), dimension(\+:, \+:, \+:, \+:), intent(out)}]{values,  }\item[{integer, dimension(\+:), intent(in), optional}]{start,  }\item[{integer, dimension(\+:), intent(in), optional}]{count,  }\item[{integer, dimension(\+:), intent(in), optional}]{stride,  }\item[{integer, dimension(\+:), intent(in), optional}]{map }\end{DoxyParamCaption})}
+
+
+
+Definition at line 365 of file netcdf\+\_\+text\+\_\+variables.\+f90.
+
+\mbox{\Hypertarget{netcdf__text__variables_8f90_a2a34081d2ab49f288ff045399e59e0e3}\label{netcdf__text__variables_8f90_a2a34081d2ab49f288ff045399e59e0e3}} 
+\index{netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}!nf90\+\_\+get\+\_\+var\+\_\+5d\+\_\+text@{nf90\+\_\+get\+\_\+var\+\_\+5d\+\_\+text}}
+\index{nf90\+\_\+get\+\_\+var\+\_\+5d\+\_\+text@{nf90\+\_\+get\+\_\+var\+\_\+5d\+\_\+text}!netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+get\+\_\+var\+\_\+5d\+\_\+text()}{nf90\_get\_var\_5d\_text()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+get\+\_\+var\+\_\+5d\+\_\+text (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character (len = $\ast$), dimension(\+:, \+:, \+:, \+:, \+:), intent(out)}]{values,  }\item[{integer, dimension(\+:), intent(in), optional}]{start,  }\item[{integer, dimension(\+:), intent(in), optional}]{count,  }\item[{integer, dimension(\+:), intent(in), optional}]{stride,  }\item[{integer, dimension(\+:), intent(in), optional}]{map }\end{DoxyParamCaption})}
+
+
+
+Definition at line 397 of file netcdf\+\_\+text\+\_\+variables.\+f90.
+
+\mbox{\Hypertarget{netcdf__text__variables_8f90_aa66c41c62185789bb5e8994a5370c57f}\label{netcdf__text__variables_8f90_aa66c41c62185789bb5e8994a5370c57f}} 
+\index{netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}!nf90\+\_\+get\+\_\+var\+\_\+6d\+\_\+text@{nf90\+\_\+get\+\_\+var\+\_\+6d\+\_\+text}}
+\index{nf90\+\_\+get\+\_\+var\+\_\+6d\+\_\+text@{nf90\+\_\+get\+\_\+var\+\_\+6d\+\_\+text}!netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+get\+\_\+var\+\_\+6d\+\_\+text()}{nf90\_get\_var\_6d\_text()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+get\+\_\+var\+\_\+6d\+\_\+text (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character (len = $\ast$), dimension(\+:, \+:, \+:, \+:, \+:, \+:), intent(out)}]{values,  }\item[{integer, dimension(\+:), intent(in), optional}]{start,  }\item[{integer, dimension(\+:), intent(in), optional}]{count,  }\item[{integer, dimension(\+:), intent(in), optional}]{stride,  }\item[{integer, dimension(\+:), intent(in), optional}]{map }\end{DoxyParamCaption})}
+
+
+
+Definition at line 429 of file netcdf\+\_\+text\+\_\+variables.\+f90.
+
+\mbox{\Hypertarget{netcdf__text__variables_8f90_a0f635c51a727d97eb7edf3784159ff5c}\label{netcdf__text__variables_8f90_a0f635c51a727d97eb7edf3784159ff5c}} 
+\index{netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}!nf90\+\_\+get\+\_\+var\+\_\+7d\+\_\+text@{nf90\+\_\+get\+\_\+var\+\_\+7d\+\_\+text}}
+\index{nf90\+\_\+get\+\_\+var\+\_\+7d\+\_\+text@{nf90\+\_\+get\+\_\+var\+\_\+7d\+\_\+text}!netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+get\+\_\+var\+\_\+7d\+\_\+text()}{nf90\_get\_var\_7d\_text()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+get\+\_\+var\+\_\+7d\+\_\+text (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character (len = $\ast$), dimension(\+:, \+:, \+:, \+:, \+:, \+:, \+:), intent(out)}]{values,  }\item[{integer, dimension(\+:), intent(in), optional}]{start,  }\item[{integer, dimension(\+:), intent(in), optional}]{count,  }\item[{integer, dimension(\+:), intent(in), optional}]{stride,  }\item[{integer, dimension(\+:), intent(in), optional}]{map }\end{DoxyParamCaption})}
+
+
+
+Definition at line 461 of file netcdf\+\_\+text\+\_\+variables.\+f90.
+
+\mbox{\Hypertarget{netcdf__text__variables_8f90_acc3d60da31f80b17d7fd5e06d4290a43}\label{netcdf__text__variables_8f90_acc3d60da31f80b17d7fd5e06d4290a43}} 
+\index{netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}!nf90\+\_\+get\+\_\+var\+\_\+text@{nf90\+\_\+get\+\_\+var\+\_\+text}}
+\index{nf90\+\_\+get\+\_\+var\+\_\+text@{nf90\+\_\+get\+\_\+var\+\_\+text}!netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+get\+\_\+var\+\_\+text()}{nf90\_get\_var\_text()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+get\+\_\+var\+\_\+text (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character (len = $\ast$), intent(out)}]{values,  }\item[{integer, dimension(\+:), intent(in), optional}]{start,  }\item[{integer, dimension(\+:), intent(in), optional}]{count,  }\item[{integer, dimension(\+:), intent(in), optional}]{stride,  }\item[{integer, dimension(\+:), intent(in), optional}]{map }\end{DoxyParamCaption})}
+
+
+
+Definition at line 22 of file netcdf\+\_\+text\+\_\+variables.\+f90.
+
+\mbox{\Hypertarget{netcdf__text__variables_8f90_ad41d9ea76e7347555a238de5afd425e8}\label{netcdf__text__variables_8f90_ad41d9ea76e7347555a238de5afd425e8}} 
+\index{netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}!nf90\+\_\+put\+\_\+var\+\_\+1d\+\_\+text@{nf90\+\_\+put\+\_\+var\+\_\+1d\+\_\+text}}
+\index{nf90\+\_\+put\+\_\+var\+\_\+1d\+\_\+text@{nf90\+\_\+put\+\_\+var\+\_\+1d\+\_\+text}!netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+put\+\_\+var\+\_\+1d\+\_\+text()}{nf90\_put\_var\_1d\_text()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+put\+\_\+var\+\_\+1d\+\_\+text (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character (len = $\ast$), dimension(\+:), intent(in)}]{values,  }\item[{integer, dimension(\+:), intent(in), optional}]{start,  }\item[{integer, dimension(\+:), intent(in), optional}]{count,  }\item[{integer, dimension(\+:), intent(in), optional}]{stride,  }\item[{integer, dimension(\+:), intent(in), optional}]{map }\end{DoxyParamCaption})}
+
+
+
+Definition at line 45 of file netcdf\+\_\+text\+\_\+variables.\+f90.
+
+\mbox{\Hypertarget{netcdf__text__variables_8f90_abeb77c7100cff6d00ee5eb0912a8696c}\label{netcdf__text__variables_8f90_abeb77c7100cff6d00ee5eb0912a8696c}} 
+\index{netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}!nf90\+\_\+put\+\_\+var\+\_\+2d\+\_\+text@{nf90\+\_\+put\+\_\+var\+\_\+2d\+\_\+text}}
+\index{nf90\+\_\+put\+\_\+var\+\_\+2d\+\_\+text@{nf90\+\_\+put\+\_\+var\+\_\+2d\+\_\+text}!netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+put\+\_\+var\+\_\+2d\+\_\+text()}{nf90\_put\_var\_2d\_text()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+put\+\_\+var\+\_\+2d\+\_\+text (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character (len = $\ast$), dimension(\+:, \+:), intent(in)}]{values,  }\item[{integer, dimension(\+:), intent(in), optional}]{start,  }\item[{integer, dimension(\+:), intent(in), optional}]{count,  }\item[{integer, dimension(\+:), intent(in), optional}]{stride,  }\item[{integer, dimension(\+:), intent(in), optional}]{map }\end{DoxyParamCaption})}
+
+
+
+Definition at line 77 of file netcdf\+\_\+text\+\_\+variables.\+f90.
+
+\mbox{\Hypertarget{netcdf__text__variables_8f90_a6b41034b62da58c313e15328cb551488}\label{netcdf__text__variables_8f90_a6b41034b62da58c313e15328cb551488}} 
+\index{netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}!nf90\+\_\+put\+\_\+var\+\_\+3d\+\_\+text@{nf90\+\_\+put\+\_\+var\+\_\+3d\+\_\+text}}
+\index{nf90\+\_\+put\+\_\+var\+\_\+3d\+\_\+text@{nf90\+\_\+put\+\_\+var\+\_\+3d\+\_\+text}!netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+put\+\_\+var\+\_\+3d\+\_\+text()}{nf90\_put\_var\_3d\_text()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+put\+\_\+var\+\_\+3d\+\_\+text (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character (len = $\ast$), dimension(\+:, \+:, \+:), intent(in)}]{values,  }\item[{integer, dimension(\+:), intent(in), optional}]{start,  }\item[{integer, dimension(\+:), intent(in), optional}]{count,  }\item[{integer, dimension(\+:), intent(in), optional}]{stride,  }\item[{integer, dimension(\+:), intent(in), optional}]{map }\end{DoxyParamCaption})}
+
+
+
+Definition at line 109 of file netcdf\+\_\+text\+\_\+variables.\+f90.
+
+\mbox{\Hypertarget{netcdf__text__variables_8f90_a61fb43bb62849e0fa471b9c6dbe45f4f}\label{netcdf__text__variables_8f90_a61fb43bb62849e0fa471b9c6dbe45f4f}} 
+\index{netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}!nf90\+\_\+put\+\_\+var\+\_\+4d\+\_\+text@{nf90\+\_\+put\+\_\+var\+\_\+4d\+\_\+text}}
+\index{nf90\+\_\+put\+\_\+var\+\_\+4d\+\_\+text@{nf90\+\_\+put\+\_\+var\+\_\+4d\+\_\+text}!netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+put\+\_\+var\+\_\+4d\+\_\+text()}{nf90\_put\_var\_4d\_text()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+put\+\_\+var\+\_\+4d\+\_\+text (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character (len = $\ast$), dimension(\+:, \+:, \+:, \+:), intent(in)}]{values,  }\item[{integer, dimension(\+:), intent(in), optional}]{start,  }\item[{integer, dimension(\+:), intent(in), optional}]{count,  }\item[{integer, dimension(\+:), intent(in), optional}]{stride,  }\item[{integer, dimension(\+:), intent(in), optional}]{map }\end{DoxyParamCaption})}
+
+
+
+Definition at line 141 of file netcdf\+\_\+text\+\_\+variables.\+f90.
+
+\mbox{\Hypertarget{netcdf__text__variables_8f90_a229342530494b303bb44f2f5f8fb85c8}\label{netcdf__text__variables_8f90_a229342530494b303bb44f2f5f8fb85c8}} 
+\index{netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}!nf90\+\_\+put\+\_\+var\+\_\+5d\+\_\+text@{nf90\+\_\+put\+\_\+var\+\_\+5d\+\_\+text}}
+\index{nf90\+\_\+put\+\_\+var\+\_\+5d\+\_\+text@{nf90\+\_\+put\+\_\+var\+\_\+5d\+\_\+text}!netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+put\+\_\+var\+\_\+5d\+\_\+text()}{nf90\_put\_var\_5d\_text()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+put\+\_\+var\+\_\+5d\+\_\+text (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character (len = $\ast$), dimension(\+:, \+:, \+:, \+:, \+:), intent(in)}]{values,  }\item[{integer, dimension(\+:), intent(in), optional}]{start,  }\item[{integer, dimension(\+:), intent(in), optional}]{count,  }\item[{integer, dimension(\+:), intent(in), optional}]{stride,  }\item[{integer, dimension(\+:), intent(in), optional}]{map }\end{DoxyParamCaption})}
+
+
+
+Definition at line 173 of file netcdf\+\_\+text\+\_\+variables.\+f90.
+
+\mbox{\Hypertarget{netcdf__text__variables_8f90_a563af472ff0a6b2ead693e554c761029}\label{netcdf__text__variables_8f90_a563af472ff0a6b2ead693e554c761029}} 
+\index{netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}!nf90\+\_\+put\+\_\+var\+\_\+6d\+\_\+text@{nf90\+\_\+put\+\_\+var\+\_\+6d\+\_\+text}}
+\index{nf90\+\_\+put\+\_\+var\+\_\+6d\+\_\+text@{nf90\+\_\+put\+\_\+var\+\_\+6d\+\_\+text}!netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+put\+\_\+var\+\_\+6d\+\_\+text()}{nf90\_put\_var\_6d\_text()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+put\+\_\+var\+\_\+6d\+\_\+text (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character (len = $\ast$), dimension(\+:, \+:, \+:, \+:, \+:, \+:), intent(in)}]{values,  }\item[{integer, dimension(\+:), intent(in), optional}]{start,  }\item[{integer, dimension(\+:), intent(in), optional}]{count,  }\item[{integer, dimension(\+:), intent(in), optional}]{stride,  }\item[{integer, dimension(\+:), intent(in), optional}]{map }\end{DoxyParamCaption})}
+
+
+
+Definition at line 205 of file netcdf\+\_\+text\+\_\+variables.\+f90.
+
+\mbox{\Hypertarget{netcdf__text__variables_8f90_a0cb3056fbb252e562bc9601f86162b93}\label{netcdf__text__variables_8f90_a0cb3056fbb252e562bc9601f86162b93}} 
+\index{netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}!nf90\+\_\+put\+\_\+var\+\_\+7d\+\_\+text@{nf90\+\_\+put\+\_\+var\+\_\+7d\+\_\+text}}
+\index{nf90\+\_\+put\+\_\+var\+\_\+7d\+\_\+text@{nf90\+\_\+put\+\_\+var\+\_\+7d\+\_\+text}!netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+put\+\_\+var\+\_\+7d\+\_\+text()}{nf90\_put\_var\_7d\_text()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+put\+\_\+var\+\_\+7d\+\_\+text (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character (len = $\ast$), dimension(\+:, \+:, \+:, \+:, \+:, \+:, \+:), intent(in)}]{values,  }\item[{integer, dimension(\+:), intent(in), optional}]{start,  }\item[{integer, dimension(\+:), intent(in), optional}]{count,  }\item[{integer, dimension(\+:), intent(in), optional}]{stride,  }\item[{integer, dimension(\+:), intent(in), optional}]{map }\end{DoxyParamCaption})}
+
+
+
+Definition at line 237 of file netcdf\+\_\+text\+\_\+variables.\+f90.
+
+\mbox{\Hypertarget{netcdf__text__variables_8f90_a3c866ab5a35489ce0d9797838aec5b2c}\label{netcdf__text__variables_8f90_a3c866ab5a35489ce0d9797838aec5b2c}} 
+\index{netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}!nf90\+\_\+put\+\_\+var\+\_\+text@{nf90\+\_\+put\+\_\+var\+\_\+text}}
+\index{nf90\+\_\+put\+\_\+var\+\_\+text@{nf90\+\_\+put\+\_\+var\+\_\+text}!netcdf\+\_\+text\+\_\+variables.\+f90@{netcdf\+\_\+text\+\_\+variables.\+f90}}
+\subsubsection{\texorpdfstring{nf90\+\_\+put\+\_\+var\+\_\+text()}{nf90\_put\_var\_text()}}
+{\footnotesize\ttfamily integer function nf90\+\_\+put\+\_\+var\+\_\+text (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character (len = $\ast$), intent(in)}]{values,  }\item[{integer, dimension(\+:), intent(in), optional}]{start,  }\item[{integer, dimension(\+:), intent(in), optional}]{count,  }\item[{integer, dimension(\+:), intent(in), optional}]{stride,  }\item[{integer, dimension(\+:), intent(in), optional}]{map }\end{DoxyParamCaption})}
+
+
+
+Definition at line 2 of file netcdf\+\_\+text\+\_\+variables.\+f90.
+

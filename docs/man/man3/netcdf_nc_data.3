@@ -1,0 +1,1263 @@
+.TH "netcdf_nc_data" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+netcdf_nc_data
+.SH SYNOPSIS
+.br
+.PP
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "integer, parameter, private \fBreal32\fP = SELECTED_REAL_KIND(P=6, R=37)"
+.br
+.ti -1c
+.RI "integer, parameter, private \fBreal64\fP = SELECTED_REAL_KIND(P=13, R=307)"
+.br
+.ti -1c
+.RI "integer, parameter, private \fBint8\fP = SELECTED_INT_KIND( 2)"
+.br
+.ti -1c
+.RI "integer, parameter, private \fBint16\fP = SELECTED_INT_KIND( 4)"
+.br
+.ti -1c
+.RI "integer, parameter, private \fBint32\fP = SELECTED_INT_KIND( 9)"
+.br
+.ti -1c
+.RI "integer, parameter, private \fBint64\fP = SELECTED_INT_KIND(18)"
+.br
+.ti -1c
+.RI "integer, parameter \fBrk4\fP = REAL32"
+.br
+.ti -1c
+.RI "integer, parameter \fBrk8\fP = REAL64"
+.br
+.ti -1c
+.RI "integer, parameter \fBik1\fP = INT8"
+.br
+.ti -1c
+.RI "integer, parameter \fBik2\fP = INT16"
+.br
+.ti -1c
+.RI "integer, parameter \fBik4\fP = INT32"
+.br
+.ti -1c
+.RI "integer, parameter \fBik8\fP = INT64"
+.br
+.ti -1c
+.RI "integer, parameter \fBc_ptrdiff_t\fP = C_INT32_T"
+.br
+.ti -1c
+.RI "integer, parameter \fBcint1\fP = C_SIGNED_CHAR"
+.br
+.ti -1c
+.RI "integer, parameter \fBnfint1\fP = IK1"
+.br
+.ti -1c
+.RI "integer, parameter \fBcint2\fP = C_SHORT"
+.br
+.ti -1c
+.RI "integer, parameter \fBnfint2\fP = IK2"
+.br
+.ti -1c
+.RI "integer, parameter \fBcint\fP = C_LONG"
+.br
+.ti -1c
+.RI "integer, parameter \fBnfint\fP = IK8"
+.br
+.ti -1c
+.RI "integer, parameter \fBnfreal\fP = RK8"
+.br
+.ti -1c
+.RI "integer, parameter \fBc_enum\fP = KIND(dummy)"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_nat\fP = 0"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_byte\fP = 1"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_char\fP = 2"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_short\fP = 3"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_int\fP = 4"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_float\fP = 5"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_double\fP = 6"
+.br
+.ti -1c
+.RI "character(kind=c_char), parameter \fBnc_fill_char\fP = C_NULL_CHAR"
+.br
+.ti -1c
+.RI "integer(c_signed_char), parameter \fBnc_fill_byte\fP = \-127_C_SIGNED_CHAR"
+.br
+.ti -1c
+.RI "integer(c_short), parameter \fBnc_fill_short\fP = \-32767_C_SHORT"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_fill_int\fP = \-2147483647_C_INT"
+.br
+.ti -1c
+.RI "real(c_float), parameter \fBnc_fill_float\fP = 9\&.9692099683868690E+36"
+.br
+.ti -1c
+.RI "real(c_double), parameter \fBnc_fill_double\fP = 9\&.9692099683868690D+36"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_nowrite\fP = 0"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_write\fP = 1"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_clobber\fP = 0"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_noclobber\fP = 4"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_fill\fP = 0"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_nofill\fP = 256"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_lock\fP = 1024"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_share\fP = 2048"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_strict_nc3\fP = 8"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_64bit_offset\fP = 512"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_sizehint_default\fP = 0"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_align_chunk\fP = \-1"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_format_classic\fP = 1"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_format_64bit\fP = 2"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_diskless\fP = 8"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_mmap\fP = 16"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_inmemory\fP = 32768"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_unlimited\fP = 0"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_global\fP = 0"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_max_dims\fP = 1024"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_max_attrs\fP = 8192"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_max_vars\fP = 8192"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_max_name\fP = 256"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_max_var_dims\fP = NC_MAX_DIMS"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_noerr\fP = 0"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc2_err\fP = \-1"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_syserr\fP = \-31"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_exdr\fP = \-32"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_ebadid\fP = \-33"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_ebfile\fP = \-34"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_eexist\fP = \-35"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_einval\fP = \-36"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_eperm\fP = \-37"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_enotindefine\fP = \-38"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_eindefine\fP = \-39"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_einvalcoords\fP = \-40"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_emaxdims\fP = \-41"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_enameinuse\fP = \-42"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_enotatt\fP = \-43"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_emaxatts\fP = \-44"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_ebadtype\fP = \-45"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_ebaddim\fP = \-46"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_eunlimpos\fP = \-47"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_emaxvars\fP = \-48"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_enotvar\fP = \-49"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_eglobal\fP = \-50"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_enotnc\fP = \-51"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_ests\fP = \-52"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_emaxname\fP = \-53"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_eunlimit\fP = \-54"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_enorecvars\fP = \-55"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_echar\fP = \-56"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_eedge\fP = \-57"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_estride\fP = \-58"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_ebadname\fP = \-59"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_erange\fP = \-60"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_enomem\fP = \-61"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_evarsize\fP = \-62"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_edimsize\fP = \-63"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_etrunc\fP = \-64"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_eaxistype\fP = \-65"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_edap\fP = \-66"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_ecurl\fP = \-67"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_eio\fP = \-68"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_enodata\fP = \-69"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_edapsvc\fP = \-70"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_edas\fP = \-71"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_edds\fP = \-72"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_edatadds\fP = \-73"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_edapurl\fP = \-74"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_edapconstraint\fP = \-75"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_etranslation\fP = \-76"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_fatal\fP = 1"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_verbose\fP = 2"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_format_netcdf4\fP = 3"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_format_netcdf4_classic\fP = 4"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_netcdf4\fP = 4096"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_classic_model\fP = 256"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_long\fP = NC_INT"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_ubyte\fP = 7"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_ushort\fP = 8"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_uint\fP = 9"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_int64\fP = 10"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_uint64\fP = 11"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_string\fP = 12"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_vlen\fP = 13"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_opaque\fP = 14"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_enum\fP = 15"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_compound\fP = 16"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_fill_ubyte\fP = 255"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_fill_ushort\fP = 65535"
+.br
+.ti -1c
+.RI "integer(c_long_long), parameter \fBnc_fill_uint\fP = 4294967295_C_LONG_LONG"
+.br
+.ti -1c
+.RI "integer(c_long_long), parameter \fBnc_fill_int64\fP = \-9223372036854775806_C_LONG_LONG"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_chunk_seq\fP = 0"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_chunk_sub\fP = 1"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_chunk_sizes\fP = 2"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_endian_native\fP = 0"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_endian_little\fP = 1"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_endian_big\fP = 2"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_chunked\fP = 0"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_notcontiguous\fP = 0"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_contiguous\fP = 1"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_nochecksum\fP = 0"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_fletcher32\fP = 1"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_noshuffle\fP = 0"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_shuffle\fP = 1"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_independent\fP = 0"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_collective\fP = 1"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_mpiio\fP = 8192"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_mpiposix\fP = 16384"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_pnetcdf\fP = NC_MPIIO"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_szip_ec_option_mask\fP = 4"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_szip_nn_option_mask\fP = 32"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_ehdferr\fP = \-101"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_ecantread\fP = \-102"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_ecantwrite\fP = \-103"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_ecantcreate\fP = \-104"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_efilemeta\fP = \-105"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_edimmeta\fP = \-106"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_eattmeta\fP = \-107"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_evarmeta\fP = \-108"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_enocompound\fP = \-109"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_eattexists\fP = \-110"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_enotnc4\fP = \-111"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_estrictnc3\fP = \-112"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_enotnc3\fP = \-113"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_enopar\fP = \-114"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_eparinit\fP = \-115"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_ebadgrpid\fP = \-116"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_ebadtypid\fP = \-117"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_etypdefined\fP = \-118"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_ebadfield\fP = \-119"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_ebadclass\fP = \-120"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_emaptype\fP = \-121"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_elatefill\fP = \-122"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_elatedef\fP = \-123"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_edimscale\fP = \-124"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_enogrp\fP = \-125"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_estorage\fP = \-126"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_ebadchunk\fP = \-127"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_enotbuilt\fP = \-128"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_ediskless\fP = \-129"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_ecantextend\fP = \-130"
+.br
+.ti -1c
+.RI "integer(c_int), parameter \fBnc_empi\fP = \-131"
+.br
+.in -1c
+.SH "Variable Documentation"
+.PP 
+.SS "integer, parameter netcdf_nc_data::c_enum = KIND(dummy)"
+
+.PP
+Definition at line 179 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer parameter netcdf_nc_data::c_ptrdiff_t = C_INT32_T"
+
+.PP
+Definition at line 90 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer parameter netcdf_nc_data::cint = C_LONG"
+
+.PP
+Definition at line 147 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer parameter netcdf_nc_data::cint1 = C_SIGNED_CHAR"
+
+.PP
+Definition at line 109 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer parameter netcdf_nc_data::cint2 = C_SHORT"
+
+.PP
+Definition at line 128 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer, parameter netcdf_nc_data::ik1 = INT8"
+
+.PP
+Definition at line 75 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer, parameter netcdf_nc_data::ik2 = INT16"
+
+.PP
+Definition at line 76 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer, parameter netcdf_nc_data::ik4 = INT32"
+
+.PP
+Definition at line 77 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer, parameter netcdf_nc_data::ik8 = INT64"
+
+.PP
+Definition at line 78 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer, parameter, private netcdf_nc_data::int16 = SELECTED_INT_KIND( 4)\fC [private]\fP"
+
+.PP
+Definition at line 66 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer, parameter, private netcdf_nc_data::int32 = SELECTED_INT_KIND( 9)\fC [private]\fP"
+
+.PP
+Definition at line 67 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer, parameter, private netcdf_nc_data::int64 = SELECTED_INT_KIND(18)\fC [private]\fP"
+
+.PP
+Definition at line 68 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer, parameter, private netcdf_nc_data::int8 = SELECTED_INT_KIND( 2)\fC [private]\fP"
+
+.PP
+Definition at line 65 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc2_err = \-1"
+
+.PP
+Definition at line 245 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_64bit_offset = 512"
+
+.PP
+Definition at line 220 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_align_chunk = \-1"
+
+.PP
+Definition at line 222 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_byte = 1"
+
+.PP
+Definition at line 193 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_char = 2"
+
+.PP
+Definition at line 194 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_chunk_seq = 0"
+
+.PP
+Definition at line 333 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_chunk_sizes = 2"
+
+.PP
+Definition at line 335 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_chunk_sub = 1"
+
+.PP
+Definition at line 334 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_chunked = 0"
+
+.PP
+Definition at line 339 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_classic_model = 256"
+
+.PP
+Definition at line 308 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_clobber = 0"
+
+.PP
+Definition at line 213 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_collective = 1"
+
+.PP
+Definition at line 347 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_compound = 16"
+
+.PP
+Definition at line 322 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_contiguous = 1"
+
+.PP
+Definition at line 341 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_diskless = 8"
+
+.PP
+Definition at line 225 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_double = 6"
+
+.PP
+Definition at line 198 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_eattexists = \-110"
+
+.PP
+Definition at line 369 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_eattmeta = \-107"
+
+.PP
+Definition at line 366 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_eaxistype = \-65"
+
+.PP
+Definition at line 280 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_ebadchunk = \-127"
+
+.PP
+Definition at line 386 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_ebadclass = \-120"
+
+.PP
+Definition at line 379 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_ebaddim = \-46"
+
+.PP
+Definition at line 261 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_ebadfield = \-119"
+
+.PP
+Definition at line 378 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_ebadgrpid = \-116"
+
+.PP
+Definition at line 375 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_ebadid = \-33"
+
+.PP
+Definition at line 248 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_ebadname = \-59"
+
+.PP
+Definition at line 274 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_ebadtype = \-45"
+
+.PP
+Definition at line 260 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_ebadtypid = \-117"
+
+.PP
+Definition at line 376 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_ebfile = \-34"
+
+.PP
+Definition at line 249 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_ecantcreate = \-104"
+
+.PP
+Definition at line 363 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_ecantextend = \-130"
+
+.PP
+Definition at line 389 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_ecantread = \-102"
+
+.PP
+Definition at line 361 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_ecantwrite = \-103"
+
+.PP
+Definition at line 362 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_echar = \-56"
+
+.PP
+Definition at line 271 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_ecurl = \-67"
+
+.PP
+Definition at line 285 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_edap = \-66"
+
+.PP
+Definition at line 284 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_edapconstraint = \-75"
+
+.PP
+Definition at line 293 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_edapsvc = \-70"
+
+.PP
+Definition at line 288 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_edapurl = \-74"
+
+.PP
+Definition at line 292 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_edas = \-71"
+
+.PP
+Definition at line 289 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_edatadds = \-73"
+
+.PP
+Definition at line 291 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_edds = \-72"
+
+.PP
+Definition at line 290 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_edimmeta = \-106"
+
+.PP
+Definition at line 365 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_edimscale = \-124"
+
+.PP
+Definition at line 383 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_edimsize = \-63"
+
+.PP
+Definition at line 278 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_ediskless = \-129"
+
+.PP
+Definition at line 388 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_eedge = \-57"
+
+.PP
+Definition at line 272 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_eexist = \-35"
+
+.PP
+Definition at line 250 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_efilemeta = \-105"
+
+.PP
+Definition at line 364 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_eglobal = \-50"
+
+.PP
+Definition at line 265 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_ehdferr = \-101"
+
+.PP
+Definition at line 360 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_eindefine = \-39"
+
+.PP
+Definition at line 254 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_einval = \-36"
+
+.PP
+Definition at line 251 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_einvalcoords = \-40"
+
+.PP
+Definition at line 255 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_eio = \-68"
+
+.PP
+Definition at line 286 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_elatedef = \-123"
+
+.PP
+Definition at line 382 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_elatefill = \-122"
+
+.PP
+Definition at line 381 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_emaptype = \-121"
+
+.PP
+Definition at line 380 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_emaxatts = \-44"
+
+.PP
+Definition at line 259 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_emaxdims = \-41"
+
+.PP
+Definition at line 256 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_emaxname = \-53"
+
+.PP
+Definition at line 268 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_emaxvars = \-48"
+
+.PP
+Definition at line 263 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_empi = \-131"
+
+.PP
+Definition at line 390 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_enameinuse = \-42"
+
+.PP
+Definition at line 257 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_endian_big = 2"
+
+.PP
+Definition at line 338 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_endian_little = 1"
+
+.PP
+Definition at line 337 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_endian_native = 0"
+
+.PP
+Definition at line 336 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_enocompound = \-109"
+
+.PP
+Definition at line 368 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_enodata = \-69"
+
+.PP
+Definition at line 287 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_enogrp = \-125"
+
+.PP
+Definition at line 384 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_enomem = \-61"
+
+.PP
+Definition at line 276 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_enopar = \-114"
+
+.PP
+Definition at line 373 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_enorecvars = \-55"
+
+.PP
+Definition at line 270 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_enotatt = \-43"
+
+.PP
+Definition at line 258 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_enotbuilt = \-128"
+
+.PP
+Definition at line 387 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_enotindefine = \-38"
+
+.PP
+Definition at line 253 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_enotnc = \-51"
+
+.PP
+Definition at line 266 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_enotnc3 = \-113"
+
+.PP
+Definition at line 372 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_enotnc4 = \-111"
+
+.PP
+Definition at line 370 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_enotvar = \-49"
+
+.PP
+Definition at line 264 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_enum = 15"
+
+.PP
+Definition at line 321 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_eparinit = \-115"
+
+.PP
+Definition at line 374 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_eperm = \-37"
+
+.PP
+Definition at line 252 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_erange = \-60"
+
+.PP
+Definition at line 275 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_estorage = \-126"
+
+.PP
+Definition at line 385 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_estrictnc3 = \-112"
+
+.PP
+Definition at line 371 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_estride = \-58"
+
+.PP
+Definition at line 273 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_ests = \-52"
+
+.PP
+Definition at line 267 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_etranslation = \-76"
+
+.PP
+Definition at line 294 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_etrunc = \-64"
+
+.PP
+Definition at line 279 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_etypdefined = \-118"
+
+.PP
+Definition at line 377 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_eunlimit = \-54"
+
+.PP
+Definition at line 269 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_eunlimpos = \-47"
+
+.PP
+Definition at line 262 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_evarmeta = \-108"
+
+.PP
+Definition at line 367 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_evarsize = \-62"
+
+.PP
+Definition at line 277 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_exdr = \-32"
+
+.PP
+Definition at line 247 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_fatal = 1"
+
+.PP
+Definition at line 298 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_fill = 0"
+
+.PP
+Definition at line 215 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_signed_char), parameter netcdf_nc_data::nc_fill_byte = \-127_C_SIGNED_CHAR"
+
+.PP
+Definition at line 203 of file module_netcdf_nc_data\&.F90\&.
+.SS "character(kind=c_char), parameter netcdf_nc_data::nc_fill_char = C_NULL_CHAR"
+
+.PP
+Definition at line 202 of file module_netcdf_nc_data\&.F90\&.
+.SS "real(c_double), parameter netcdf_nc_data::nc_fill_double = 9\&.9692099683868690D+36"
+
+.PP
+Definition at line 207 of file module_netcdf_nc_data\&.F90\&.
+.SS "real(c_float), parameter netcdf_nc_data::nc_fill_float = 9\&.9692099683868690E+36"
+
+.PP
+Definition at line 206 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_fill_int = \-2147483647_C_INT"
+
+.PP
+Definition at line 205 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_long_long), parameter netcdf_nc_data::nc_fill_int64 = \-9223372036854775806_C_LONG_LONG"
+
+.PP
+Definition at line 329 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_short), parameter netcdf_nc_data::nc_fill_short = \-32767_C_SHORT"
+
+.PP
+Definition at line 204 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_fill_ubyte = 255"
+
+.PP
+Definition at line 326 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_long_long), parameter netcdf_nc_data::nc_fill_uint = 4294967295_C_LONG_LONG"
+
+.PP
+Definition at line 328 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_fill_ushort = 65535"
+
+.PP
+Definition at line 327 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_fletcher32 = 1"
+
+.PP
+Definition at line 343 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_float = 5"
+
+.PP
+Definition at line 197 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_format_64bit = 2"
+
+.PP
+Definition at line 224 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_format_classic = 1"
+
+.PP
+Definition at line 223 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_format_netcdf4 = 3"
+
+.PP
+Definition at line 305 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_format_netcdf4_classic = 4"
+
+.PP
+Definition at line 306 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_global = 0"
+
+.PP
+Definition at line 232 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_independent = 0"
+
+.PP
+Definition at line 346 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_inmemory = 32768"
+
+.PP
+Definition at line 227 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_int = 4"
+
+.PP
+Definition at line 196 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_int64 = 10"
+
+.PP
+Definition at line 316 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_lock = 1024"
+
+.PP
+Definition at line 217 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_long = NC_INT"
+
+.PP
+Definition at line 312 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_max_attrs = 8192"
+
+.PP
+Definition at line 237 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_max_dims = 1024"
+
+.PP
+Definition at line 236 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_max_name = 256"
+
+.PP
+Definition at line 239 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_max_var_dims = NC_MAX_DIMS"
+
+.PP
+Definition at line 240 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_max_vars = 8192"
+
+.PP
+Definition at line 238 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_mmap = 16"
+
+.PP
+Definition at line 226 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_mpiio = 8192"
+
+.PP
+Definition at line 351 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_mpiposix = 16384"
+
+.PP
+Definition at line 352 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_nat = 0"
+
+.PP
+Definition at line 192 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_netcdf4 = 4096"
+
+.PP
+Definition at line 307 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_nochecksum = 0"
+
+.PP
+Definition at line 342 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_noclobber = 4"
+
+.PP
+Definition at line 214 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_noerr = 0"
+
+.PP
+Definition at line 244 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_nofill = 256"
+
+.PP
+Definition at line 216 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_noshuffle = 0"
+
+.PP
+Definition at line 344 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_notcontiguous = 0"
+
+.PP
+Definition at line 340 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_nowrite = 0"
+
+.PP
+Definition at line 211 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_opaque = 14"
+
+.PP
+Definition at line 320 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_pnetcdf = NC_MPIIO"
+
+.PP
+Definition at line 353 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_share = 2048"
+
+.PP
+Definition at line 218 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_short = 3"
+
+.PP
+Definition at line 195 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_shuffle = 1"
+
+.PP
+Definition at line 345 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_sizehint_default = 0"
+
+.PP
+Definition at line 221 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_strict_nc3 = 8"
+
+.PP
+Definition at line 219 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_string = 12"
+
+.PP
+Definition at line 318 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_syserr = \-31"
+
+.PP
+Definition at line 246 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_szip_ec_option_mask = 4"
+
+.PP
+Definition at line 355 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_szip_nn_option_mask = 32"
+
+.PP
+Definition at line 356 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_ubyte = 7"
+
+.PP
+Definition at line 313 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_uint = 9"
+
+.PP
+Definition at line 315 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_uint64 = 11"
+
+.PP
+Definition at line 317 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_unlimited = 0"
+
+.PP
+Definition at line 231 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_ushort = 8"
+
+.PP
+Definition at line 314 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_verbose = 2"
+
+.PP
+Definition at line 299 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_vlen = 13"
+
+.PP
+Definition at line 319 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer(c_int), parameter netcdf_nc_data::nc_write = 1"
+
+.PP
+Definition at line 212 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer parameter netcdf_nc_data::nfint = IK8"
+
+.PP
+Definition at line 148 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer parameter netcdf_nc_data::nfint1 = IK1"
+
+.PP
+Definition at line 110 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer parameter netcdf_nc_data::nfint2 = IK2"
+
+.PP
+Definition at line 129 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer parameter netcdf_nc_data::nfreal = RK8"
+
+.PP
+Definition at line 159 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer, parameter, private netcdf_nc_data::real32 = SELECTED_REAL_KIND(P=6, R=37)\fC [private]\fP"
+
+.PP
+Definition at line 63 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer, parameter, private netcdf_nc_data::real64 = SELECTED_REAL_KIND(P=13, R=307)\fC [private]\fP"
+
+.PP
+Definition at line 64 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer, parameter netcdf_nc_data::rk4 = REAL32"
+
+.PP
+Definition at line 73 of file module_netcdf_nc_data\&.F90\&.
+.SS "integer, parameter netcdf_nc_data::rk8 = REAL64"
+
+.PP
+Definition at line 74 of file module_netcdf_nc_data\&.F90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for NetCDF-Fortran from the source code\&.

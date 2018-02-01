@@ -1,0 +1,59 @@
+.TH "nf_dim.f90" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+nf_dim.f90
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "integer function \fBnf_def_dim\fP (ncid, name, dlen, dimid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_dim\fP (ncid, dimid, name, dlen)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_dimid\fP (ncid, name, dimid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_dimlen\fP (ncid, dimid, dlen)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_dimname\fP (ncid, dimid, name)"
+.br
+.ti -1c
+.RI "integer function \fBnf_rename_dim\fP (ncid, dimid, name)"
+.br
+.in -1c
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "integer function nf_def_dim (integer, intent(in) ncid, character(len=*), intent(in) name, integer, intent(in) dlen, integer, intent(out) dimid)"
+
+.PP
+Definition at line 35 of file nf_dim\&.f90\&.
+.SS "integer function nf_inq_dim (integer, intent(in) ncid, integer, intent(in) dimid, character(len=*), intent(out) name, integer, intent(out) dlen)"
+
+.PP
+Definition at line 76 of file nf_dim\&.f90\&.
+.SS "integer function nf_inq_dimid (integer, intent(in) ncid, character(len=*), intent(in) name, integer, intent(out) dimid)"
+
+.PP
+Definition at line 115 of file nf_dim\&.f90\&.
+.SS "integer function nf_inq_dimlen (integer, intent(in) ncid, integer, intent(in) dimid, integer, intent(out) dlen)"
+
+.PP
+Definition at line 154 of file nf_dim\&.f90\&.
+.SS "integer function nf_inq_dimname (integer, intent(in) ncid, integer, intent(in) dimid, character(len=*), intent(out) name)"
+
+.PP
+Definition at line 183 of file nf_dim\&.f90\&.
+.SS "integer function nf_rename_dim (integer, intent(in) ncid, integer, intent(in) dimid, character(len=*), intent(in) name)"
+
+.PP
+Definition at line 219 of file nf_dim\&.f90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for NetCDF-Fortran from the source code\&.

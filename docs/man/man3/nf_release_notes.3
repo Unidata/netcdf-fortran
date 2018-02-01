@@ -1,0 +1,155 @@
+.TH "nf_release_notes" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+nf_release_notesRelease Notes 
+ \- Release notes file for the netcdf-fortran package\&.
+.PP
+This file contains a high-level description of this package's evolution\&. Entries are in reverse chronological order (most recent first)\&.
+.PP
+.SS "4\&.4\&.4 Released May 13, 2016"
+.PP
+.IP "\(bu" 2
+Corrected an issue where cmake-based builds specifying \fCUSE_LOGGING\fP were not seeing expected behavior\&. The issue was reported, and subsequently fixed, by Neil Carlson at Los Alamos Nat'l Laboratory\&. See \fCGithub Pull Request #44\fP for more information\&.
+.IP "\(bu" 2
+Integrated improvements provided by Richard Weed\&. For a \fIcomplete\fP list of modifications, see the file \fCdocs/netcdf_fortran_4\&.4\&.2dev_notes_RW\&.pdf\fP\&. \fBIt is highly detailed and worth reading!\fP
+.PP
+The highlights of the improvements are as follows:
+.IP "  \(bu" 4
+Explicit dependencies on \fCNC_MAX_DIM\fP constant for arrays has been removed and replaced with dynamically-allocated arrays\&.
+.IP "  \(bu" 4
+Support for \fCnc_open_mem()\fP in the C library, allowing for the creation of 'in memory' files\&.
+.IP "  \(bu" 4
+General clean up\&.
+.PP
+
+.PP
+.PP
+.SS "4\&.4\&.3 Released 2016-01-20"
+.PP
+.IP "\(bu" 2
+Corrected a bug which would return a false-positive in \fCnf_test\fP when using netCDF-C \fC4\&.4\&.0\fP\&.
+.IP "\(bu" 2
+Updated the \fCcfortran\&.doc\fP license document for the \fCcfortran\&.h\fP library\&. The most recent version was pulled from http://cfortran.sourceforge.net\&. The previous version did not reflect that the author had released cfortran under the LGPL\&. See \fCGithub Issue 27\fP for more information\&.
+.PP
+.PP
+.SS "4\&.4\&.2 Released 2015-02-02"
+.PP
+.IP "\(bu" 2
+Added infrastructure to support the new \fCnetcdf-c\fP option, \fCENABLE_REMOTE_FORTRAN_BOOTSTRAP\fP\&.
+.IP "\(bu" 2
+Incorporated changes submitted by Nico Schlomer which extends the cmake compatibility between \fCnetcdf-c\fP and \fCnetcdf-fortran\fP\&.
+.IP "\(bu" 2
+Incorporated a patch submitted by Thomas Jahns which fixed \fCFC\fP being unconditionally overwritten by \fCF77\fP when \fCFortran 90\fP was disabled\&.
+.PP
+.PP
+.SS "4\&.4\&.1 Released 2014-09-09"
+.PP
+.IP "\(bu" 2
+No significant changes from RC1\&.
+.PP
+.PP
+.SS "4\&.4\&.1-RC1 Released 2014-08-05"
+.PP
+.IP "\(bu" 2
+Added a new variable for cmake-based builds, \fCNC_EXTRA_DEPS\fP\&. Use this to specify additional dependencies when linking against a static \fCnetcdf-c\fP library, e\&.g\&.
+.PP
+.PP
+.PP
+.nf
+netcdf-fortran/build$ cmake \&.\&. -dnc_extra_deps="-lhdf5 -lhdf5_hl -lcurl"
+.fi
+.PP
+.PP
+.IP "\(bu" 2
+Fixed to build correctly with netCDF-3-only C library, for example C library configured with --disable-netcdf-4 (R\&. Weed)\&.
+.PP
+.PP
+.SS "4\&.4 Released 2014-07-08"
+.PP
+.IP "\(bu" 2
+For 32-bit platforms fixed integer fill parameters, initialized potentially unitialized variables, and provided some missing defaults (R\&. Weed)\&.
+.IP "\(bu" 2
+Fixed CMake builds on 32-bit platforms\&.
+.IP "\(bu" 2
+Added new \fCinq_path\fP and \fCrename_grps\fP functions analogous to corresponding C functions\&. Added associated tests (R\&. Weed)\&.
+.IP "\(bu" 2
+Added support for NF_MPIIO, \fCNF_MPIPOSIX\fP, \fCNF_PNETCDF\fP flags and \fCNF_FILL_UINT\fP\&. (R\&. Weed)
+.IP "\(bu" 2
+Fixed potential bug in attribute functions for integer values when Fortran \fCINTEGER*1\fP or \fCINTEGER*2\fP types are the same size as C long (R\&. Weed)\&.
+.IP "\(bu" 2
+Added test for compiler support of Fortran 2008 \fCISO_FORTRAN_ENV\fP additions and TS29113 standard extension\&.
+.IP "\(bu" 2
+Fixed \fCC_PTR_DIFF_T\fP issue reported by Orion Poplowski (R\&. Weed)\&.
+.PP
+.PP
+.SS "4\&.4-rc1 Released 2013-10-06"
+.PP
+.IP "\(bu" 2
+Added doxygen-generated documentation, using the \fC--enable-doxygen\fP and \fC-DENABLE_DOXYGEN\fP flags for autotools and cmake-based builds, respectively\&.
+.IP "\(bu" 2
+Added missing error codes for DAP and some netCDF-4 errors
+.IP "\(bu" 2
+Fixed some documentation for F77 API, added make rule for creating netcdf-f77 HTML files\&.
+.PP
+.PP
+.SS "4\&.4-beta5 Released 2013-08-27"
+.PP
+.IP "\(bu" 2
+Added configuration files to github distribution\&.
+.PP
+.PP
+.SS "4\&.4-beta4"
+.PP
+.IP "\(bu" 2
+Moved to GitHub from Subversion, the location of the new GitHub repository is at: http://github.com/Unidata/netCDF-Fortran
+.IP "\(bu" 2
+Parallel-build portability fixes, particularly for OpenMPI and gcc/gfortran-4\&.8\&.x on the Mac\&. Also added test from Reto Stöckli for NCF-250 bug, demonstrating it was fixed in previous commit\&.
+.IP "\(bu" 2
+Add support for NF_MPIIO, NF_MPIPOSIX, NF_PNETCDF, and NF_FILL_UINT in the data files\&.
+.IP "\(bu" 2
+Add support for nf_inq_path\&.
+.IP "\(bu" 2
+Add a pre-processor macro that can be used to bypass the home-brew C_PTRDIFF_T definition and use the standard one for compilers that support it\&.
+.IP "\(bu" 2
+Fix a potential bug in nf_attio to call the _long version of some puts/gets instead of the _int version\&. These were inside INT1_IS_C_LONG and INT2_IS_C_LONG ifdef blocks so they would have only showed up when those macros were true\&.
+.PP
+.PP
+.SS "4\&.4-beta3 Released 2012-12-07"
+.PP
+.IP "\(bu" 2
+Fixed bug that 'make -j check' fails, but 'make check' works fine\&.
+.IP "\(bu" 2
+Fixed build problems resulting from syncing with separate C distribution\&.
+.IP "\(bu" 2
+Synchronize with all changes made to version 4\&.2 since ts release\&.
+.PP
+.PP
+.SS "4\&.4-beta2 Released 2012-06-29"
+.PP
+.IP "\(bu" 2
+Made handling of --disable-f03 more transparent\&.
+.IP "\(bu" 2
+Fixed adding flags for parallel I/O for MPI from David Warren\&.
+.IP "\(bu" 2
+Removed all the old C code that's not needed for this separate distribution\&.
+.IP "\(bu" 2
+Inadvertently broke the build until syncing with C distribution in later beta release\&.
+.PP
+.PP
+.SS "4\&.4-beta1 Released 2012-03-02"
+.PP
+.IP "\(bu" 2
+\fCFortran 2003 Support\fP
+.PP
+Version 4\&.4 is the first release to support fortran 2003 and to use the ISO C Bindings available in fortran 2003 to replace the older C code wrappers\&.
+.PP
+Congratulations and thanks to Richard Weed at Mississippi State University, who is the author of new code\&.
+.PP
+See the file \fCREADME_F03_MODS\fP for a more complete description of the changes\&. Many changes to the build structure have been made at the same time as the new 2003 code has been inserted\&.
+.PP
+As part of the fortran 2003 refactor, the directory structure has been significantly modified\&. All the previous F90 C wrapper code has been moved to the 'libsrc' directory\&.
+.PP
+All of the fortran code has been moved to the 'fortran' directory\&. The directories names F77 and F90 have been removed\&. The most important consequence of this refactor is that pure Fortran77 compilers are no longer supported\&. It is assumed that the compiler supports at least Fortran 90 and also Fortran 77\&. If it also supports the ISO C Bindings, then the new 2003 code is used instead of the older C wrappers\&. 
+.PP
+

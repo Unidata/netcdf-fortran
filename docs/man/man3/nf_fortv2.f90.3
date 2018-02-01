@@ -1,0 +1,304 @@
+.TH "nf_fortv2.f90" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+nf_fortv2.f90
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "subroutine \fBncpopt\fP (ncopts)"
+.br
+.ti -1c
+.RI "subroutine \fBncgopt\fP (ncopts)"
+.br
+.ti -1c
+.RI "integer function \fBnccre\fP (filename, cmode, rcode)"
+.br
+.ti -1c
+.RI "integer function \fBncopn\fP (filename, rwmode, rcode)"
+.br
+.ti -1c
+.RI "integer function \fBncddef\fP (ncid, dimname, dimlen, rcode)"
+.br
+.ti -1c
+.RI "integer function \fBncdid\fP (ncid, dimname, rcode)"
+.br
+.ti -1c
+.RI "integer function \fBncvdef\fP (ncid, varname, vartype, nvdims, vdims, rcode)"
+.br
+.ti -1c
+.RI "integer function \fBncvid\fP (ncid, varname, rcode)"
+.br
+.ti -1c
+.RI "integer function \fBnctlen\fP (datatype, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncclos\fP (ncid, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncredf\fP (ncid, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncendf\fP (ncid, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncinq\fP (ncid, ndims, nvars, natts, recdim, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncsnc\fP (ncid, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncabor\fP (ncid, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncdinq\fP (ncid, dimid, dimname, dimlen, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncdren\fP (ncid, dimid, dimname, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncvinq\fP (ncid, varid, varname, vartype, nvdims, vdims, nvatts, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncvpt1\fP (ncid, varid, mindex, values, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncvp1c\fP (ncid, varid, mindex, strings, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncvpt\fP (ncid, varid, start, counts, values, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncvptc\fP (ncid, varid, start, counts, strings, lenstr, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncvptg\fP (ncid, varid, start, counts, strides, imap, values, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncvpgc\fP (ncid, varid, start, counts, strides, imap, string, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncvgt1\fP (ncid, varid, mindex, values, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncvg1c\fP (ncid, varid, mindex, string, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncvgt\fP (ncid, varid, start, counts, values, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncvgtc\fP (ncid, varid, start, counts, string, lenstr, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncvgtg\fP (ncid, varid, start, counts, strides, imap, values, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncvggc\fP (ncid, varid, start, counts, strides, imap, string, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncvren\fP (ncid, varid, newnam, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncapt\fP (ncid, varid, attnam, attype, attlen, value, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncaptc\fP (ncid, varid, attnam, attype, lenstr, string, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncainq\fP (ncid, varid, attnam, attype, attlen, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncagt\fP (ncid, varid, attnam, values, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncagtc\fP (ncid, varid, attnam, string, lenstr, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncacpy\fP (ncid, varid, attnam, outcdf, outvar, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncanam\fP (ncid, varid, attnum, attnam, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncaren\fP (ncid, varid, attnam, newnam, rcode)"
+.br
+.ti -1c
+.RI "subroutine \fBncadel\fP (ncid, varid, attnam, rcode)"
+.br
+.ti -1c
+.RI "integer function \fBncsfil\fP (ncid, fillmode, rcode)"
+.br
+.in -1c
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "subroutine ncabor (integer, intent(in) ncid, integer, intent(out) rcode)"
+
+.PP
+Definition at line 434 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncacpy (integer, intent(in) ncid, integer, intent(in) varid, character(len=*), intent(in) attnam, integer, intent(in) outcdf, integer, intent(in) outvar, integer, intent(out) rcode)"
+
+.PP
+Definition at line 1523 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncadel (integer, intent(in) ncid, integer, intent(in) varid, character(len=*), intent(in) attnam, integer, intent(out) rcode)"
+
+.PP
+Definition at line 1617 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncagt (integer, intent(in) ncid, integer, intent(in) varid, character(len=*), intent(in) attnam, character(kind=c_char), dimension(*), intent(out) values, integer, intent(out) rcode)"
+
+.PP
+Definition at line 1459 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncagtc (integer, intent(in) ncid, integer, intent(in) varid, character(len=*), intent(in) attnam, character(len=*), intent(inout) string, integer, intent(in) lenstr, integer, intent(out) rcode)"
+
+.PP
+Definition at line 1488 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncainq (integer, intent(in) ncid, integer, intent(in) varid, character(len=*), intent(in) attnam, integer, intent(out) attype, integer, intent(out) attlen, integer, intent(out) rcode)"
+
+.PP
+Definition at line 1426 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncanam (integer, intent(in) ncid, integer, intent(in) varid, integer, intent(in) attnum, character(len=*), intent(inout) attnam, integer, intent(out) rcode)"
+
+.PP
+Definition at line 1554 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncapt (integer, intent(in) ncid, integer, intent(in) varid, character(len=*), intent(in) attnam, integer, intent(in) attype, integer, intent(in) attlen, character(kind=c_char), dimension(*), intent(in), target value, integer, intent(out) rcode)"
+
+.PP
+Definition at line 1357 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncaptc (integer, intent(in) ncid, integer, intent(in) varid, character(len=*), intent(in) attnam, integer, intent(in) attype, integer, intent(in) lenstr, character(len=*), intent(in) string, integer, intent(out) rcode)"
+
+.PP
+Definition at line 1393 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncaren (integer, intent(in) ncid, integer, intent(in) varid, character(len=*), intent(in) attnam, character(len=*), intent(in) newnam, integer, intent(out) rcode)"
+
+.PP
+Definition at line 1586 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncclos (integer, intent(in) ncid, integer, intent(out) rcode)"
+
+.PP
+Definition at line 314 of file nf_fortv2\&.f90\&.
+.SS "integer function nccre (character(len=*), intent(in) filename, integer, intent(in) cmode, integer, intent(out) rcode)"
+
+.PP
+Definition at line 74 of file nf_fortv2\&.f90\&.
+.SS "integer function ncddef (integer, intent(in) ncid, character(len=*), intent(in) dimname, integer, intent(in) dimlen, integer, intent(out) rcode)"
+
+.PP
+Definition at line 138 of file nf_fortv2\&.f90\&.
+.SS "integer function ncdid (integer, intent(in) ncid, character(len=*), intent(in) dimname, integer, intent(out) rcode)"
+
+.PP
+Definition at line 171 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncdinq (integer, intent(in) ncid, integer, intent(in) dimid, character(len=*), intent(out) dimname, integer, intent(out) dimlen, integer, intent(out) rcode)"
+
+.PP
+Definition at line 455 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncdren (integer, intent(in) ncid, integer, intent(in) dimid, character(len=*), intent(in) dimname, integer, intent(out) rcode)"
+
+.PP
+Definition at line 489 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncendf (integer, intent(in) ncid, integer, intent(out) rcode)"
+
+.PP
+Definition at line 356 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncgopt (integer, intent(inout) ncopts)"
+
+.PP
+Definition at line 56 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncinq (integer, intent(in) ncid, integer, intent(out) ndims, integer, intent(out) nvars, integer, intent(out) natts, integer, intent(out) recdim, integer, intent(out) rcode)"
+
+.PP
+Definition at line 377 of file nf_fortv2\&.f90\&.
+.SS "integer function ncopn (character(len=*), intent(in) filename, integer, intent(in) rwmode, integer, intent(out) rcode)"
+
+.PP
+Definition at line 106 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncpopt (integer, intent(in) ncopts)"
+
+.PP
+Definition at line 40 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncredf (integer, intent(in) ncid, integer, intent(out) rcode)"
+
+.PP
+Definition at line 335 of file nf_fortv2\&.f90\&.
+.SS "integer function ncsfil (integer, intent(in) ncid, integer, intent(in) fillmode, integer, intent(out) rcode)"
+
+.PP
+Definition at line 1645 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncsnc (integer, intent(in) ncid, integer, intent(out) rcode)"
+
+.PP
+Definition at line 413 of file nf_fortv2\&.f90\&.
+.SS "integer function nctlen (integer, intent(in) datatype, integer, intent(out) rcode)"
+
+.PP
+Definition at line 288 of file nf_fortv2\&.f90\&.
+.SS "integer function ncvdef (integer, intent(in) ncid, character(len=*), intent(in) varname, integer, intent(in) vartype, integer, intent(in) nvdims, integer, dimension(*), intent(in) vdims, integer, intent(out) rcode)"
+
+.PP
+Definition at line 203 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncvg1c (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) mindex, character(len=*), intent(inout) string, integer, intent(out) rcode)"
+
+.PP
+Definition at line 1003 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncvggc (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer, dimension(*), intent(in) imap, character(len=*), intent(inout) string, integer, intent(out) rcode)"
+
+.PP
+Definition at line 1247 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncvgt (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, character(kind=c_char), dimension(*), intent(out) values, integer, intent(out) rcode)"
+
+.PP
+Definition at line 1052 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncvgt1 (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) mindex, character(kind=c_char), dimension(*), intent(out) values, integer, intent(out) rcode)"
+
+.PP
+Definition at line 954 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncvgtc (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, character(len=*), intent(inout) string, integer, intent(in) lenstr, integer, intent(out) rcode)"
+
+.PP
+Definition at line 1107 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncvgtg (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer, dimension(*), intent(in) imap, character(kind=c_char), dimension(*), intent(out) values, integer, intent(out) rcode)"
+
+.PP
+Definition at line 1175 of file nf_fortv2\&.f90\&.
+.SS "integer function ncvid (integer, intent(in) ncid, character(len=*), intent(in) varname, integer, intent(out) rcode)"
+
+.PP
+Definition at line 255 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncvinq (integer, intent(in) ncid, integer, intent(in) varid, character(len=*), intent(inout) varname, integer, intent(out) vartype, integer, intent(out) nvdims, integer, dimension(*), intent(inout) vdims, integer, intent(out) nvatts, integer, intent(out) rcode)"
+
+.PP
+Definition at line 519 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncvp1c (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) mindex, character(len=*), intent(in) strings, integer, intent(out) rcode)"
+
+.PP
+Definition at line 636 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncvpgc (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer, dimension(*), intent(in) imap, character(len=*), intent(in) string, integer, intent(out) rcode)"
+
+.PP
+Definition at line 880 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncvpt (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, character(kind=c_char), dimension(*), intent(in), target values, integer, intent(out) rcode)"
+
+.PP
+Definition at line 685 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncvpt1 (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) mindex, character(kind=c_char), dimension(*), intent(in), target values, integer, intent(out) rcode)"
+
+.PP
+Definition at line 584 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncvptc (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, character(len=*), intent(inout) strings, integer, intent(in) lenstr, integer, intent(out) rcode)"
+
+.PP
+Definition at line 744 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncvptg (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer, dimension(*), intent(in) imap, character(kind=c_char), dimension(*), intent(in), target values, integer, intent(out) rcode)"
+
+.PP
+Definition at line 802 of file nf_fortv2\&.f90\&.
+.SS "subroutine ncvren (integer, intent(in) ncid, integer, intent(in) varid, character(len=*), intent(in) newnam, integer, intent(out) rcode)"
+
+.PP
+Definition at line 1329 of file nf_fortv2\&.f90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for NetCDF-Fortran from the source code\&.

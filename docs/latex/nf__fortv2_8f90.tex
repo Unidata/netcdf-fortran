@@ -1,0 +1,500 @@
+\hypertarget{nf__fortv2_8f90}{}\section{nf\+\_\+fortv2.\+f90 File Reference}
+\label{nf__fortv2_8f90}\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsection*{Functions/\+Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_aa99b1352748c769427ead3bfaf123fff}{ncpopt} (ncopts)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_a4fe1ac0350a63230cc17e880d496efa3}{ncgopt} (ncopts)
+\item 
+integer function \hyperlink{nf__fortv2_8f90_a395384eea56bdad4a53b55df6d6e78d2}{nccre} (filename, cmode, rcode)
+\item 
+integer function \hyperlink{nf__fortv2_8f90_a43dce57f3c98cba43a7394b48ecd3184}{ncopn} (filename, rwmode, rcode)
+\item 
+integer function \hyperlink{nf__fortv2_8f90_a78171f3b2ee4a6763e764c357d57836e}{ncddef} (ncid, dimname, dimlen, rcode)
+\item 
+integer function \hyperlink{nf__fortv2_8f90_ac39b06f8d9b6ca78ff6073608ac25115}{ncdid} (ncid, dimname, rcode)
+\item 
+integer function \hyperlink{nf__fortv2_8f90_a7121e237ce771e26edb350028c22f37c}{ncvdef} (ncid, varname, vartype, nvdims, vdims, rcode)
+\item 
+integer function \hyperlink{nf__fortv2_8f90_aea3eb70885317451ef241b6feacb8893}{ncvid} (ncid, varname, rcode)
+\item 
+integer function \hyperlink{nf__fortv2_8f90_aa66c92465ffab79785ec2fcda51321c1}{nctlen} (datatype, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_a03f16672189e09514f5df0a9d72e6859}{ncclos} (ncid, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_a162a5ab1076c10c2228e36ee9ff00677}{ncredf} (ncid, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_a0397fd550c269ff18340d1786e34d6f6}{ncendf} (ncid, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_aeb39546c2eeb1bc23ac957a2388fc56b}{ncinq} (ncid, ndims, nvars, natts, recdim, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_a64e09d2a2a1ccf7e9052b111a169c2b9}{ncsnc} (ncid, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_a0e25c674ad6b99068e8c95d7f34f3c8e}{ncabor} (ncid, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_a6ee036c798e7436b1d962c7dfc8a6957}{ncdinq} (ncid, dimid, dimname, dimlen, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_ade22791003f60c336b970147d68ceae3}{ncdren} (ncid, dimid, dimname, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_a58c204fe024e1315e38a953ffc8bb3c9}{ncvinq} (ncid, varid, varname, vartype, nvdims, vdims, nvatts, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_a193fa468237c9fe5b4c4182a49ae0030}{ncvpt1} (ncid, varid, mindex, values, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_ae86fd9a6227f59f53db68f523802428c}{ncvp1c} (ncid, varid, mindex, strings, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_a0e80dc4b1c7ad7772f48f31480a61237}{ncvpt} (ncid, varid, start, counts, values, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_a6c95aa587ee368266d7727735158957f}{ncvptc} (ncid, varid, start, counts, strings, lenstr, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_aacf3b20901c252480d87dc327cf6a9f5}{ncvptg} (ncid, varid, start, counts, strides, imap, values, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_ae593f10084ce6b3ed716b1dcf87d6618}{ncvpgc} (ncid, varid, start, counts, strides, imap, string, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_a6c63eb6533f6fd980258f9ded00cf4e1}{ncvgt1} (ncid, varid, mindex, values, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_ab8326c1d1a7aa3142428092a708f6a10}{ncvg1c} (ncid, varid, mindex, string, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_a376e4bb1238c7da316b25b32d34608f7}{ncvgt} (ncid, varid, start, counts, values, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_a81ac17ea93b907a54fc2557bf3ace40a}{ncvgtc} (ncid, varid, start, counts, string, lenstr, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_ae0fbe2588278893dcab19ab604767a7d}{ncvgtg} (ncid, varid, start, counts, strides, imap, values, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_aa02cb955f7bb1ae0f370492cfaae7b6f}{ncvggc} (ncid, varid, start, counts, strides, imap, string, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_a8de81d99a1275d61dabb79e14a84c1f6}{ncvren} (ncid, varid, newnam, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_a7572a6d6e1628e2868cef69a3d147c38}{ncapt} (ncid, varid, attnam, attype, attlen, value, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_a525301fbfb8b1e885e1531ed31e16565}{ncaptc} (ncid, varid, attnam, attype, lenstr, string, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_a7b0621bf96d56601f68c18da4ff2e759}{ncainq} (ncid, varid, attnam, attype, attlen, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_a12c954aa7ec21768adf357a69850aa8e}{ncagt} (ncid, varid, attnam, values, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_acdffb4e9e53796cfadcf86a802a159b3}{ncagtc} (ncid, varid, attnam, string, lenstr, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_a251a629393e35281e714774eddea2551}{ncacpy} (ncid, varid, attnam, outcdf, outvar, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_abd5c8126f5ad1171b3944262956899b0}{ncanam} (ncid, varid, attnum, attnam, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_ab82f351050b86a1f5c96a8ef0f5fd46c}{ncaren} (ncid, varid, attnam, newnam, rcode)
+\item 
+subroutine \hyperlink{nf__fortv2_8f90_aca410e210247338c8c44f4cd02aacdec}{ncadel} (ncid, varid, attnam, rcode)
+\item 
+integer function \hyperlink{nf__fortv2_8f90_a2182af2d10b5f7be720d59d9c2214cfb}{ncsfil} (ncid, fillmode, rcode)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function/\+Subroutine Documentation}
+\mbox{\Hypertarget{nf__fortv2_8f90_a0e25c674ad6b99068e8c95d7f34f3c8e}\label{nf__fortv2_8f90_a0e25c674ad6b99068e8c95d7f34f3c8e}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncabor@{ncabor}}
+\index{ncabor@{ncabor}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncabor()}{ncabor()}}
+{\footnotesize\ttfamily subroutine ncabor (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 434 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a251a629393e35281e714774eddea2551}\label{nf__fortv2_8f90_a251a629393e35281e714774eddea2551}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncacpy@{ncacpy}}
+\index{ncacpy@{ncacpy}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncacpy()}{ncacpy()}}
+{\footnotesize\ttfamily subroutine ncacpy (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character(len=$\ast$), intent(in)}]{attnam,  }\item[{integer, intent(in)}]{outcdf,  }\item[{integer, intent(in)}]{outvar,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1523 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_aca410e210247338c8c44f4cd02aacdec}\label{nf__fortv2_8f90_aca410e210247338c8c44f4cd02aacdec}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncadel@{ncadel}}
+\index{ncadel@{ncadel}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncadel()}{ncadel()}}
+{\footnotesize\ttfamily subroutine ncadel (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character(len=$\ast$), intent(in)}]{attnam,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1617 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a12c954aa7ec21768adf357a69850aa8e}\label{nf__fortv2_8f90_a12c954aa7ec21768adf357a69850aa8e}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncagt@{ncagt}}
+\index{ncagt@{ncagt}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncagt()}{ncagt()}}
+{\footnotesize\ttfamily subroutine ncagt (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character(len=$\ast$), intent(in)}]{attnam,  }\item[{character(kind=c\+\_\+char), dimension($\ast$), intent(out)}]{values,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1459 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_acdffb4e9e53796cfadcf86a802a159b3}\label{nf__fortv2_8f90_acdffb4e9e53796cfadcf86a802a159b3}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncagtc@{ncagtc}}
+\index{ncagtc@{ncagtc}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncagtc()}{ncagtc()}}
+{\footnotesize\ttfamily subroutine ncagtc (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character(len=$\ast$), intent(in)}]{attnam,  }\item[{character(len=$\ast$), intent(inout)}]{string,  }\item[{integer, intent(in)}]{lenstr,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1488 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a7b0621bf96d56601f68c18da4ff2e759}\label{nf__fortv2_8f90_a7b0621bf96d56601f68c18da4ff2e759}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncainq@{ncainq}}
+\index{ncainq@{ncainq}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncainq()}{ncainq()}}
+{\footnotesize\ttfamily subroutine ncainq (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character(len=$\ast$), intent(in)}]{attnam,  }\item[{integer, intent(out)}]{attype,  }\item[{integer, intent(out)}]{attlen,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1426 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_abd5c8126f5ad1171b3944262956899b0}\label{nf__fortv2_8f90_abd5c8126f5ad1171b3944262956899b0}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncanam@{ncanam}}
+\index{ncanam@{ncanam}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncanam()}{ncanam()}}
+{\footnotesize\ttfamily subroutine ncanam (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, intent(in)}]{attnum,  }\item[{character(len=$\ast$), intent(inout)}]{attnam,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1554 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a7572a6d6e1628e2868cef69a3d147c38}\label{nf__fortv2_8f90_a7572a6d6e1628e2868cef69a3d147c38}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncapt@{ncapt}}
+\index{ncapt@{ncapt}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncapt()}{ncapt()}}
+{\footnotesize\ttfamily subroutine ncapt (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character(len=$\ast$), intent(in)}]{attnam,  }\item[{integer, intent(in)}]{attype,  }\item[{integer, intent(in)}]{attlen,  }\item[{character(kind=c\+\_\+char), dimension($\ast$), intent(in), target}]{value,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1357 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a525301fbfb8b1e885e1531ed31e16565}\label{nf__fortv2_8f90_a525301fbfb8b1e885e1531ed31e16565}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncaptc@{ncaptc}}
+\index{ncaptc@{ncaptc}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncaptc()}{ncaptc()}}
+{\footnotesize\ttfamily subroutine ncaptc (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character(len=$\ast$), intent(in)}]{attnam,  }\item[{integer, intent(in)}]{attype,  }\item[{integer, intent(in)}]{lenstr,  }\item[{character(len=$\ast$), intent(in)}]{string,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1393 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_ab82f351050b86a1f5c96a8ef0f5fd46c}\label{nf__fortv2_8f90_ab82f351050b86a1f5c96a8ef0f5fd46c}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncaren@{ncaren}}
+\index{ncaren@{ncaren}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncaren()}{ncaren()}}
+{\footnotesize\ttfamily subroutine ncaren (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character(len=$\ast$), intent(in)}]{attnam,  }\item[{character(len=$\ast$), intent(in)}]{newnam,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1586 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a03f16672189e09514f5df0a9d72e6859}\label{nf__fortv2_8f90_a03f16672189e09514f5df0a9d72e6859}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncclos@{ncclos}}
+\index{ncclos@{ncclos}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncclos()}{ncclos()}}
+{\footnotesize\ttfamily subroutine ncclos (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 314 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a395384eea56bdad4a53b55df6d6e78d2}\label{nf__fortv2_8f90_a395384eea56bdad4a53b55df6d6e78d2}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!nccre@{nccre}}
+\index{nccre@{nccre}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{nccre()}{nccre()}}
+{\footnotesize\ttfamily integer function nccre (\begin{DoxyParamCaption}\item[{character(len=$\ast$), intent(in)}]{filename,  }\item[{integer, intent(in)}]{cmode,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 74 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a78171f3b2ee4a6763e764c357d57836e}\label{nf__fortv2_8f90_a78171f3b2ee4a6763e764c357d57836e}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncddef@{ncddef}}
+\index{ncddef@{ncddef}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncddef()}{ncddef()}}
+{\footnotesize\ttfamily integer function ncddef (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{character(len=$\ast$), intent(in)}]{dimname,  }\item[{integer, intent(in)}]{dimlen,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 138 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_ac39b06f8d9b6ca78ff6073608ac25115}\label{nf__fortv2_8f90_ac39b06f8d9b6ca78ff6073608ac25115}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncdid@{ncdid}}
+\index{ncdid@{ncdid}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncdid()}{ncdid()}}
+{\footnotesize\ttfamily integer function ncdid (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{character(len=$\ast$), intent(in)}]{dimname,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 171 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a6ee036c798e7436b1d962c7dfc8a6957}\label{nf__fortv2_8f90_a6ee036c798e7436b1d962c7dfc8a6957}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncdinq@{ncdinq}}
+\index{ncdinq@{ncdinq}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncdinq()}{ncdinq()}}
+{\footnotesize\ttfamily subroutine ncdinq (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{dimid,  }\item[{character(len=$\ast$), intent(out)}]{dimname,  }\item[{integer, intent(out)}]{dimlen,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 455 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_ade22791003f60c336b970147d68ceae3}\label{nf__fortv2_8f90_ade22791003f60c336b970147d68ceae3}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncdren@{ncdren}}
+\index{ncdren@{ncdren}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncdren()}{ncdren()}}
+{\footnotesize\ttfamily subroutine ncdren (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{dimid,  }\item[{character(len=$\ast$), intent(in)}]{dimname,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 489 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a0397fd550c269ff18340d1786e34d6f6}\label{nf__fortv2_8f90_a0397fd550c269ff18340d1786e34d6f6}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncendf@{ncendf}}
+\index{ncendf@{ncendf}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncendf()}{ncendf()}}
+{\footnotesize\ttfamily subroutine ncendf (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 356 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a4fe1ac0350a63230cc17e880d496efa3}\label{nf__fortv2_8f90_a4fe1ac0350a63230cc17e880d496efa3}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncgopt@{ncgopt}}
+\index{ncgopt@{ncgopt}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncgopt()}{ncgopt()}}
+{\footnotesize\ttfamily subroutine ncgopt (\begin{DoxyParamCaption}\item[{integer, intent(inout)}]{ncopts }\end{DoxyParamCaption})}
+
+
+
+Definition at line 56 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_aeb39546c2eeb1bc23ac957a2388fc56b}\label{nf__fortv2_8f90_aeb39546c2eeb1bc23ac957a2388fc56b}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncinq@{ncinq}}
+\index{ncinq@{ncinq}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncinq()}{ncinq()}}
+{\footnotesize\ttfamily subroutine ncinq (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(out)}]{ndims,  }\item[{integer, intent(out)}]{nvars,  }\item[{integer, intent(out)}]{natts,  }\item[{integer, intent(out)}]{recdim,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 377 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a43dce57f3c98cba43a7394b48ecd3184}\label{nf__fortv2_8f90_a43dce57f3c98cba43a7394b48ecd3184}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncopn@{ncopn}}
+\index{ncopn@{ncopn}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncopn()}{ncopn()}}
+{\footnotesize\ttfamily integer function ncopn (\begin{DoxyParamCaption}\item[{character(len=$\ast$), intent(in)}]{filename,  }\item[{integer, intent(in)}]{rwmode,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 106 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_aa99b1352748c769427ead3bfaf123fff}\label{nf__fortv2_8f90_aa99b1352748c769427ead3bfaf123fff}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncpopt@{ncpopt}}
+\index{ncpopt@{ncpopt}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncpopt()}{ncpopt()}}
+{\footnotesize\ttfamily subroutine ncpopt (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncopts }\end{DoxyParamCaption})}
+
+
+
+Definition at line 40 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a162a5ab1076c10c2228e36ee9ff00677}\label{nf__fortv2_8f90_a162a5ab1076c10c2228e36ee9ff00677}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncredf@{ncredf}}
+\index{ncredf@{ncredf}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncredf()}{ncredf()}}
+{\footnotesize\ttfamily subroutine ncredf (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 335 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a2182af2d10b5f7be720d59d9c2214cfb}\label{nf__fortv2_8f90_a2182af2d10b5f7be720d59d9c2214cfb}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncsfil@{ncsfil}}
+\index{ncsfil@{ncsfil}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncsfil()}{ncsfil()}}
+{\footnotesize\ttfamily integer function ncsfil (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{fillmode,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1645 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a64e09d2a2a1ccf7e9052b111a169c2b9}\label{nf__fortv2_8f90_a64e09d2a2a1ccf7e9052b111a169c2b9}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncsnc@{ncsnc}}
+\index{ncsnc@{ncsnc}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncsnc()}{ncsnc()}}
+{\footnotesize\ttfamily subroutine ncsnc (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 413 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_aa66c92465ffab79785ec2fcda51321c1}\label{nf__fortv2_8f90_aa66c92465ffab79785ec2fcda51321c1}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!nctlen@{nctlen}}
+\index{nctlen@{nctlen}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{nctlen()}{nctlen()}}
+{\footnotesize\ttfamily integer function nctlen (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{datatype,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 288 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a7121e237ce771e26edb350028c22f37c}\label{nf__fortv2_8f90_a7121e237ce771e26edb350028c22f37c}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncvdef@{ncvdef}}
+\index{ncvdef@{ncvdef}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncvdef()}{ncvdef()}}
+{\footnotesize\ttfamily integer function ncvdef (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{character(len=$\ast$), intent(in)}]{varname,  }\item[{integer, intent(in)}]{vartype,  }\item[{integer, intent(in)}]{nvdims,  }\item[{integer, dimension($\ast$), intent(in)}]{vdims,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 203 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_ab8326c1d1a7aa3142428092a708f6a10}\label{nf__fortv2_8f90_ab8326c1d1a7aa3142428092a708f6a10}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncvg1c@{ncvg1c}}
+\index{ncvg1c@{ncvg1c}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncvg1c()}{ncvg1c()}}
+{\footnotesize\ttfamily subroutine ncvg1c (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{mindex,  }\item[{character(len=$\ast$), intent(inout)}]{string,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1003 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_aa02cb955f7bb1ae0f370492cfaae7b6f}\label{nf__fortv2_8f90_aa02cb955f7bb1ae0f370492cfaae7b6f}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncvggc@{ncvggc}}
+\index{ncvggc@{ncvggc}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncvggc()}{ncvggc()}}
+{\footnotesize\ttfamily subroutine ncvggc (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{integer, dimension($\ast$), intent(in)}]{strides,  }\item[{integer, dimension($\ast$), intent(in)}]{imap,  }\item[{character(len=$\ast$), intent(inout)}]{string,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1247 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a376e4bb1238c7da316b25b32d34608f7}\label{nf__fortv2_8f90_a376e4bb1238c7da316b25b32d34608f7}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncvgt@{ncvgt}}
+\index{ncvgt@{ncvgt}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncvgt()}{ncvgt()}}
+{\footnotesize\ttfamily subroutine ncvgt (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{character(kind=c\+\_\+char), dimension($\ast$), intent(out)}]{values,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1052 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a6c63eb6533f6fd980258f9ded00cf4e1}\label{nf__fortv2_8f90_a6c63eb6533f6fd980258f9ded00cf4e1}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncvgt1@{ncvgt1}}
+\index{ncvgt1@{ncvgt1}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncvgt1()}{ncvgt1()}}
+{\footnotesize\ttfamily subroutine ncvgt1 (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{mindex,  }\item[{character(kind=c\+\_\+char), dimension($\ast$), intent(out)}]{values,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 954 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a81ac17ea93b907a54fc2557bf3ace40a}\label{nf__fortv2_8f90_a81ac17ea93b907a54fc2557bf3ace40a}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncvgtc@{ncvgtc}}
+\index{ncvgtc@{ncvgtc}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncvgtc()}{ncvgtc()}}
+{\footnotesize\ttfamily subroutine ncvgtc (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{character(len=$\ast$), intent(inout)}]{string,  }\item[{integer, intent(in)}]{lenstr,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1107 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_ae0fbe2588278893dcab19ab604767a7d}\label{nf__fortv2_8f90_ae0fbe2588278893dcab19ab604767a7d}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncvgtg@{ncvgtg}}
+\index{ncvgtg@{ncvgtg}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncvgtg()}{ncvgtg()}}
+{\footnotesize\ttfamily subroutine ncvgtg (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{integer, dimension($\ast$), intent(in)}]{strides,  }\item[{integer, dimension($\ast$), intent(in)}]{imap,  }\item[{character(kind=c\+\_\+char), dimension($\ast$), intent(out)}]{values,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1175 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_aea3eb70885317451ef241b6feacb8893}\label{nf__fortv2_8f90_aea3eb70885317451ef241b6feacb8893}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncvid@{ncvid}}
+\index{ncvid@{ncvid}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncvid()}{ncvid()}}
+{\footnotesize\ttfamily integer function ncvid (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{character(len=$\ast$), intent(in)}]{varname,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 255 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a58c204fe024e1315e38a953ffc8bb3c9}\label{nf__fortv2_8f90_a58c204fe024e1315e38a953ffc8bb3c9}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncvinq@{ncvinq}}
+\index{ncvinq@{ncvinq}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncvinq()}{ncvinq()}}
+{\footnotesize\ttfamily subroutine ncvinq (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character(len=$\ast$), intent(inout)}]{varname,  }\item[{integer, intent(out)}]{vartype,  }\item[{integer, intent(out)}]{nvdims,  }\item[{integer, dimension($\ast$), intent(inout)}]{vdims,  }\item[{integer, intent(out)}]{nvatts,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 519 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_ae86fd9a6227f59f53db68f523802428c}\label{nf__fortv2_8f90_ae86fd9a6227f59f53db68f523802428c}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncvp1c@{ncvp1c}}
+\index{ncvp1c@{ncvp1c}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncvp1c()}{ncvp1c()}}
+{\footnotesize\ttfamily subroutine ncvp1c (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{mindex,  }\item[{character(len=$\ast$), intent(in)}]{strings,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 636 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_ae593f10084ce6b3ed716b1dcf87d6618}\label{nf__fortv2_8f90_ae593f10084ce6b3ed716b1dcf87d6618}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncvpgc@{ncvpgc}}
+\index{ncvpgc@{ncvpgc}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncvpgc()}{ncvpgc()}}
+{\footnotesize\ttfamily subroutine ncvpgc (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{integer, dimension($\ast$), intent(in)}]{strides,  }\item[{integer, dimension($\ast$), intent(in)}]{imap,  }\item[{character(len=$\ast$), intent(in)}]{string,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 880 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a0e80dc4b1c7ad7772f48f31480a61237}\label{nf__fortv2_8f90_a0e80dc4b1c7ad7772f48f31480a61237}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncvpt@{ncvpt}}
+\index{ncvpt@{ncvpt}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncvpt()}{ncvpt()}}
+{\footnotesize\ttfamily subroutine ncvpt (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{character(kind=c\+\_\+char), dimension($\ast$), intent(in), target}]{values,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 685 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a193fa468237c9fe5b4c4182a49ae0030}\label{nf__fortv2_8f90_a193fa468237c9fe5b4c4182a49ae0030}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncvpt1@{ncvpt1}}
+\index{ncvpt1@{ncvpt1}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncvpt1()}{ncvpt1()}}
+{\footnotesize\ttfamily subroutine ncvpt1 (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{mindex,  }\item[{character(kind=c\+\_\+char), dimension($\ast$), intent(in), target}]{values,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 584 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a6c95aa587ee368266d7727735158957f}\label{nf__fortv2_8f90_a6c95aa587ee368266d7727735158957f}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncvptc@{ncvptc}}
+\index{ncvptc@{ncvptc}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncvptc()}{ncvptc()}}
+{\footnotesize\ttfamily subroutine ncvptc (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{character(len=$\ast$), intent(inout)}]{strings,  }\item[{integer, intent(in)}]{lenstr,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 744 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_aacf3b20901c252480d87dc327cf6a9f5}\label{nf__fortv2_8f90_aacf3b20901c252480d87dc327cf6a9f5}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncvptg@{ncvptg}}
+\index{ncvptg@{ncvptg}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncvptg()}{ncvptg()}}
+{\footnotesize\ttfamily subroutine ncvptg (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{integer, dimension($\ast$), intent(in)}]{strides,  }\item[{integer, dimension($\ast$), intent(in)}]{imap,  }\item[{character(kind=c\+\_\+char), dimension($\ast$), intent(in), target}]{values,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 802 of file nf\+\_\+fortv2.\+f90.
+
+\mbox{\Hypertarget{nf__fortv2_8f90_a8de81d99a1275d61dabb79e14a84c1f6}\label{nf__fortv2_8f90_a8de81d99a1275d61dabb79e14a84c1f6}} 
+\index{nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}!ncvren@{ncvren}}
+\index{ncvren@{ncvren}!nf\+\_\+fortv2.\+f90@{nf\+\_\+fortv2.\+f90}}
+\subsubsection{\texorpdfstring{ncvren()}{ncvren()}}
+{\footnotesize\ttfamily subroutine ncvren (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{character(len=$\ast$), intent(in)}]{newnam,  }\item[{integer, intent(out)}]{rcode }\end{DoxyParamCaption})}
+
+
+
+Definition at line 1329 of file nf\+\_\+fortv2.\+f90.
+

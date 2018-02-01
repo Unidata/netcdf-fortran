@@ -1,0 +1,549 @@
+.TH "nf_nc4.f90" 3 "Wed Jan 17 2018" "Version 4.5.0-development" "NetCDF-Fortran" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+nf_nc4.f90
+.SH SYNOPSIS
+.br
+.PP
+.SS "Functions/Subroutines"
+
+.in +1c
+.ti -1c
+.RI "integer function \fBnf_create_par\fP (path, cmode, comm, info, ncid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_open_par\fP (path, mode, comm, info, ncid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_var_par_access\fP (ncid, varid, iaccess)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_ncid\fP (ncid, name, groupid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_grps\fP (ncid, numgrps, ncids)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_grpname\fP (ncid, name)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_grpname_full\fP (ncid, nlen, name)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_grpname_len\fP (ncid, nlen)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_grp_parent\fP (ncid, parent_ncid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_grp_ncid\fP (ncid, grp_name, parent_ncid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_grp_full_ncid\fP (ncid, name, grp_ncid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_varids\fP (ncid, nvars, varids)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_dimids\fP (ncid, ndims, dimids, parent)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_typeids\fP (ncid, ntypes, typeids)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_typeid\fP (ncid, name, typeid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_def_grp\fP (parent_ncid, name, new_ncid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_rename_grp\fP (grpid, name)"
+.br
+.ti -1c
+.RI "integer function \fBnf_def_compound\fP (ncid, isize, name, typeid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_insert_compound\fP (ncid, xtype, name, offset, field_typeid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_insert_array_compound\fP (ncid, xtype, name, offset, field_typeid, ndims, dim_sizes)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_type\fP (ncid, xtype, name, isize)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_compound\fP (ncid, xtype, name, isize, nfields)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_compound_name\fP (ncid, xtype, name)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_compound_size\fP (ncid, xtype, isize)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_compound_nfields\fP (ncid, xtype, nfields)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_compound_field\fP (ncid, xtype, fieldid, name, offset, field_typeid, ndims, dim_sizes)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_compound_fieldname\fP (ncid, xtype, fieldid, name)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_compound_fieldindex\fP (ncid, xtype, name, fieldid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_compound_fieldoffset\fP (ncid, xtype, fieldid, offset)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_compound_fieldtype\fP (ncid, xtype, fieldid, field_typeid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_compound_fieldndims\fP (ncid, xtype, fieldid, ndims)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_compound_fielddim_sizes\fP (ncid, xtype, fieldid, dim_sizes)"
+.br
+.ti -1c
+.RI "integer function \fBnf_def_vlen\fP (ncid, name, base_typeid, xtype)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_vlen\fP (ncid, xtype, name, datum_size, base_type)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_user_type\fP (ncid, xtype, name, isize, base_type, nfields, iclass)"
+.br
+.ti -1c
+.RI "integer function \fBnf_def_enum\fP (ncid, base_typeid, name, typeid)"
+.br
+.ti -1c
+.RI "integer function \fBnf_insert_enum\fP (ncid, xtype, name, value)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_enum\fP (ncid, xtype, name, base_nf_type, base_size, num_members)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_enum_member\fP (ncid, xtype, idx, name, value)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_enum_ident\fP (ncid, xtype, value, name)"
+.br
+.ti -1c
+.RI "integer function \fBnf_def_opaque\fP (ncid, isize, name, xtype)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_opaque\fP (ncid, xtype, name, isize)"
+.br
+.ti -1c
+.RI "integer function \fBnf_def_var_chunking\fP (ncid, varid, contiguous, chunksizes)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_var_chunking\fP (ncid, varid, contiguous, chunksizes)"
+.br
+.ti -1c
+.RI "integer function \fBnf_def_var_deflate\fP (ncid, varid, shuffle, deflate, deflate_level)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_var_deflate\fP (ncid, varid, shuffle, deflate, deflate_level)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_var_szip\fP (ncid, varid, options_mask, pixels_per_block)"
+.br
+.ti -1c
+.RI "integer function \fBnf_def_var_fletcher32\fP (ncid, varid, fletcher32)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_var_fletcher32\fP (ncid, varid, fletcher32)"
+.br
+.ti -1c
+.RI "integer function \fBnf_def_var_fill\fP (ncid, varid, no_fill, fill_value)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_var_fill\fP (ncid, varid, no_fill, fill_value)"
+.br
+.ti -1c
+.RI "integer function \fBnf_def_var_endian\fP (ncid, varid, endiann)"
+.br
+.ti -1c
+.RI "integer function \fBnf_inq_var_endian\fP (ncid, varid, endiann)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_att\fP (ncid, varid, name, xtype, nlen, value)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_att\fP (ncid, varid, name, value)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_vlen_element\fP (ncid, xtype, vlen_element, nlen, value)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_vlen_element\fP (ncid, xtype, vlen_element, nlen, value)"
+.br
+.ti -1c
+.RI "integer function \fBnf_free_vlen\fP (vl)"
+.br
+.ti -1c
+.RI "integer function \fBnf_free_vlens\fP (ilen, vl)"
+.br
+.ti -1c
+.RI "integer function \fBnf_free_string\fP (ilen, vl)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_var\fP (ncid, varid, values)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_var\fP (ncid, varid, values)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_var1_int64\fP (ncid, varid, ndex, ival)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_vara_int64\fP (ncid, varid, start, counts, ivals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_vars_int64\fP (ncid, varid, start, counts, strides, ivals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_varm_int64\fP (ncid, varid, start, counts, strides, maps, ivals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_put_var_int64\fP (ncid, varid, ivals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_var1_int64\fP (ncid, varid, ndex, ival)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_vara_int64\fP (ncid, varid, start, counts, ivals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_vars_int64\fP (ncid, varid, start, counts, strides, ivals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_varm_int64\fP (ncid, varid, start, counts, strides, maps, ivals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_var_int64\fP (ncid, varid, ivals)"
+.br
+.ti -1c
+.RI "integer function \fBnf_set_chunk_cache\fP (chunk_size, nelems, preemption)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_chunk_cache\fP (chunk_size, nelems, preemption)"
+.br
+.ti -1c
+.RI "integer function \fBnf_set_var_chunk_cache\fP (ncid, varid, chunk_size, nelems, preemption)"
+.br
+.ti -1c
+.RI "integer function \fBnf_get_var_chunk_cache\fP (ncid, varid, chunk_size, nelems, preemption)"
+.br
+.in -1c
+.SH "Function/Subroutine Documentation"
+.PP 
+.SS "integer function nf_create_par (character(len=*), intent(in) path, integer, intent(in) cmode, integer, intent(in) comm, integer, intent(in) info, integer, intent(out) ncid)"
+
+.PP
+Definition at line 38 of file nf_nc4\&.f90\&.
+.SS "integer function nf_def_compound (integer, intent(in) ncid, integer, intent(in) isize, character(len=*), intent(in) name, integer, intent(out) typeid)"
+
+.PP
+Definition at line 583 of file nf_nc4\&.f90\&.
+.SS "integer function nf_def_enum (integer, intent(in) ncid, integer, intent(in) base_typeid, character(len=*), intent(in) name, integer, intent(out) typeid)"
+
+.PP
+Definition at line 1201 of file nf_nc4\&.f90\&.
+.SS "integer function nf_def_grp (integer, intent(in) parent_ncid, character(len=*), intent(in) name, integer, intent(out) new_ncid)"
+
+.PP
+Definition at line 525 of file nf_nc4\&.f90\&.
+.SS "integer function nf_def_opaque (integer, intent(in) ncid, integer, intent(in) isize, character(len=*), intent(in) name, integer, intent(out) xtype)"
+
+.PP
+Definition at line 1383 of file nf_nc4\&.f90\&.
+.SS "integer function nf_def_var_chunking (integer, intent(in) ncid, integer, intent(in) varid, integer, intent(in) contiguous, integer, dimension(*), intent(inout) chunksizes)"
+
+.PP
+Definition at line 1455 of file nf_nc4\&.f90\&.
+.SS "integer function nf_def_var_deflate (integer, intent(in) ncid, integer, intent(in) varid, integer, intent(in) shuffle, integer, intent(in) deflate, integer, intent(in) deflate_level)"
+
+.PP
+Definition at line 1555 of file nf_nc4\&.f90\&.
+.SS "integer function nf_def_var_endian (integer, intent(in) ncid, integer, intent(in) varid, integer, intent(in) endiann)"
+
+.PP
+Definition at line 1753 of file nf_nc4\&.f90\&.
+.SS "integer function nf_def_var_fill (integer, intent(in) ncid, integer, intent(in) varid, integer, intent(in) no_fill, character(kind=c_char), dimension(*), intent(in), target fill_value)"
+
+.PP
+Definition at line 1696 of file nf_nc4\&.f90\&.
+.SS "integer function nf_def_var_fletcher32 (integer, intent(in) ncid, integer, intent(in) varid, integer, intent(in) fletcher32)"
+
+.PP
+Definition at line 1644 of file nf_nc4\&.f90\&.
+.SS "integer function nf_def_vlen (integer, intent(in) ncid, character(len=*), intent(in) name, integer, intent(in) base_typeid, integer, intent(out) xtype)"
+
+.PP
+Definition at line 1087 of file nf_nc4\&.f90\&.
+.SS "integer function nf_free_string (integer, intent(in) ilen, character(kind=c_char), dimension(*), intent(in), target vl)"
+
+.PP
+Definition at line 1997 of file nf_nc4\&.f90\&.
+.SS "integer function nf_free_vlen (character(kind=c_char), dimension(*), intent(in), target vl)"
+
+.PP
+Definition at line 1944 of file nf_nc4\&.f90\&.
+.SS "integer function nf_free_vlens (integer, intent(in) ilen, character(kind=c_char), dimension(*), intent(in), target vl)"
+
+.PP
+Definition at line 1969 of file nf_nc4\&.f90\&.
+.SS "integer function nf_get_att (integer, intent(in) ncid, integer, intent(in) varid, character(len=*), intent(in) name, character(kind=c_char), dimension(*), intent(inout) value)"
+
+.PP
+Definition at line 1840 of file nf_nc4\&.f90\&.
+.SS "integer function nf_get_chunk_cache (integer, intent(inout) chunk_size, integer, intent(inout) nelems, integer, intent(inout) preemption)"
+
+.PP
+Definition at line 2626 of file nf_nc4\&.f90\&.
+.SS "integer function nf_get_var (integer, intent(in) ncid, integer, intent(in) varid, character(kind=c_char), dimension(*), intent(inout) values)"
+
+.PP
+Definition at line 2056 of file nf_nc4\&.f90\&.
+.SS "integer function nf_get_var1_int64 (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) ndex, integer(ik8), intent(out) ival)"
+
+.PP
+Definition at line 2344 of file nf_nc4\&.f90\&.
+.SS "integer function nf_get_var_chunk_cache (integer, intent(in) ncid, integer, intent(in) varid, integer, intent(inout) chunk_size, integer, intent(inout) nelems, integer, intent(inout) preemption)"
+
+.PP
+Definition at line 2682 of file nf_nc4\&.f90\&.
+.SS "integer function nf_get_var_int64 (integer, intent(in) ncid, integer, intent(in) varid, integer(ik8), dimension(*), intent(out) ivals)"
+
+.PP
+Definition at line 2576 of file nf_nc4\&.f90\&.
+.SS "integer function nf_get_vara_int64 (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer(ik8), dimension(*), intent(out) ivals)"
+
+.PP
+Definition at line 2393 of file nf_nc4\&.f90\&.
+.SS "integer function nf_get_varm_int64 (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer, dimension(*), intent(in) maps, integer(ik8), dimension(*), intent(out) ivals)"
+
+.PP
+Definition at line 2509 of file nf_nc4\&.f90\&.
+.SS "integer function nf_get_vars_int64 (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer(ik8), dimension(*), intent(out) ivals)"
+
+.PP
+Definition at line 2448 of file nf_nc4\&.f90\&.
+.SS "integer function nf_get_vlen_element (integer, intent(in) ncid, integer, intent(in) xtype, character(len=*), intent(inout), target vlen_element, integer, intent(inout) nlen, character(kind=c_char), dimension(*), intent(inout) value)"
+
+.PP
+Definition at line 1907 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_compound (integer, intent(in) ncid, integer, intent(in) xtype, character(len=*), intent(inout) name, integer, intent(inout) isize, integer, intent(inout) nfields)"
+
+.PP
+Definition at line 718 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_compound_field (integer, intent(in) ncid, integer, intent(in) xtype, integer, intent(in) fieldid, character(len=*), intent(out) name, integer, intent(out) offset, integer, intent(out) field_typeid, integer, intent(out) ndims, integer, dimension(*), intent(out) dim_sizes)"
+
+.PP
+Definition at line 845 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_compound_fielddim_sizes (integer, intent(in) ncid, integer, intent(in) xtype, integer, intent(in) fieldid, integer, dimension(*), intent(inout) dim_sizes)"
+
+.PP
+Definition at line 1062 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_compound_fieldindex (integer, intent(in) ncid, integer, intent(in) xtype, character(len=*), intent(in) name, integer, intent(out) fieldid)"
+
+.PP
+Definition at line 938 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_compound_fieldname (integer, intent(in) ncid, integer, intent(in) xtype, integer, intent(in) fieldid, character(len=*), intent(out) name)"
+
+.PP
+Definition at line 904 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_compound_fieldndims (integer, intent(in) ncid, integer, intent(in) xtype, integer, intent(in) fieldid, integer, intent(out) ndims)"
+
+.PP
+Definition at line 1032 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_compound_fieldoffset (integer, intent(in) ncid, integer, intent(in) xtype, integer, intent(in) fieldid, integer, intent(out) offset)"
+
+.PP
+Definition at line 972 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_compound_fieldtype (integer, intent(in) ncid, integer, intent(in) xtype, integer, intent(in) fieldid, integer, intent(out) field_typeid)"
+
+.PP
+Definition at line 1003 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_compound_name (integer, intent(in) ncid, integer, intent(in) xtype, character(len=*), intent(out) name)"
+
+.PP
+Definition at line 754 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_compound_nfields (integer, intent(in) ncid, integer, intent(in) xtype, integer, intent(inout) nfields)"
+
+.PP
+Definition at line 815 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_compound_size (integer, intent(in) ncid, integer, intent(in) xtype, integer, intent(inout) isize)"
+
+.PP
+Definition at line 786 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_dimids (integer, intent(in) ncid, integer, intent(out) ndims, integer, dimension(*), intent(inout) dimids, integer, intent(in) parent)"
+
+.PP
+Definition at line 419 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_enum (integer, intent(in) ncid, integer, intent(in) xtype, character(len=*), intent(inout) name, integer, intent(inout) base_nf_type, integer, intent(inout) base_size, integer, intent(inout) num_members)"
+
+.PP
+Definition at line 1271 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_enum_ident (integer, intent(in) ncid, integer, intent(in) xtype, integer, intent(in) value, character(len=*), intent(inout) name)"
+
+.PP
+Definition at line 1348 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_enum_member (integer, intent(in) ncid, integer, intent(in) xtype, integer, intent(in) idx, character(len=*), intent(out) name, character(kind=c_char), dimension(*), intent(out) value)"
+
+.PP
+Definition at line 1310 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_grp_full_ncid (integer, intent(in) ncid, character(len=*), intent(inout) name, integer, intent(inout) grp_ncid)"
+
+.PP
+Definition at line 360 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_grp_ncid (integer, intent(in) ncid, character(len=*), intent(in) grp_name, integer, intent(inout) parent_ncid)"
+
+.PP
+Definition at line 329 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_grp_parent (integer, intent(in) ncid, integer, intent(inout) parent_ncid)"
+
+.PP
+Definition at line 303 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_grpname (integer, intent(in) ncid, character(len=*), intent(out) name)"
+
+.PP
+Definition at line 210 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_grpname_full (integer, intent(in) ncid, integer, intent(out) nlen, character(len=*), intent(out) name)"
+
+.PP
+Definition at line 241 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_grpname_len (integer, intent(in) ncid, integer, intent(out) nlen)"
+
+.PP
+Definition at line 275 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_grps (integer, intent(in) ncid, integer, intent(out) numgrps, integer, dimension(*), intent(inout) ncids)"
+
+.PP
+Definition at line 160 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_ncid (integer, intent(in) ncid, character(len=*), intent(in) name, integer, intent(out) groupid)"
+
+.PP
+Definition at line 128 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_opaque (integer, intent(in) ncid, integer, intent(in) xtype, character(len=*), intent(inout) name, integer, intent(out) isize)"
+
+.PP
+Definition at line 1418 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_type (integer, intent(in) ncid, integer, intent(in) xtype, character(len=*), intent(in) name, integer, intent(out) isize)"
+
+.PP
+Definition at line 685 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_typeid (integer, intent(in) ncid, character(len=*), intent(in) name, integer, intent(out) typeid)"
+
+.PP
+Definition at line 493 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_typeids (integer, intent(in) ncid, integer, intent(out) ntypes, integer, dimension(*), intent(inout) typeids)"
+
+.PP
+Definition at line 447 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_user_type (integer, intent(in) ncid, integer, intent(in) xtype, character(len=*), intent(inout) name, integer, intent(out) isize, integer, intent(out) base_type, integer, intent(out) nfields, integer, intent(out) iclass)"
+
+.PP
+Definition at line 1159 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_var_chunking (integer, intent(in) ncid, integer, intent(in) varid, integer, intent(inout) contiguous, integer, dimension(*), intent(inout) chunksizes)"
+
+.PP
+Definition at line 1503 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_var_deflate (integer, intent(in) ncid, integer, intent(in) varid, integer, intent(out) shuffle, integer, intent(out) deflate, integer, intent(out) deflate_level)"
+
+.PP
+Definition at line 1582 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_var_endian (integer, intent(in) ncid, integer, intent(in) varid, integer, intent(out) endiann)"
+
+.PP
+Definition at line 1777 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_var_fill (integer, intent(in) ncid, integer, intent(in) varid, integer, intent(out) no_fill, character(kind=c_char), dimension(*), intent(inout) fill_value)"
+
+.PP
+Definition at line 1724 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_var_fletcher32 (integer, intent(in) ncid, integer, intent(in) varid, integer, intent(out) fletcher32)"
+
+.PP
+Definition at line 1668 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_var_szip (integer, intent(in) ncid, integer, intent(in) varid, integer, intent(inout) options_mask, integer, intent(inout) pixels_per_block)"
+
+.PP
+Definition at line 1614 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_varids (integer, intent(in) ncid, integer, intent(out) nvars, integer, dimension(*), intent(inout) varids)"
+
+.PP
+Definition at line 391 of file nf_nc4\&.f90\&.
+.SS "integer function nf_inq_vlen (integer, intent(in) ncid, integer, intent(in) xtype, character(len=*), intent(out) name, integer, intent(out) datum_size, integer, intent(out) base_type)"
+
+.PP
+Definition at line 1121 of file nf_nc4\&.f90\&.
+.SS "integer function nf_insert_array_compound (integer, intent(in) ncid, integer, intent(in) xtype, character(len=*), intent(in) name, integer, intent(in) offset, integer, intent(in) field_typeid, integer, intent(in) ndims, integer, dimension(*), intent(inout) dim_sizes)"
+
+.PP
+Definition at line 651 of file nf_nc4\&.f90\&.
+.SS "integer function nf_insert_compound (integer, intent(in) ncid, integer, intent(in) xtype, character(len=*), intent(in) name, integer, intent(in) offset, integer, intent(in) field_typeid)"
+
+.PP
+Definition at line 618 of file nf_nc4\&.f90\&.
+.SS "integer function nf_insert_enum (integer, intent(in) ncid, integer, intent(in) xtype, character(len=*), intent(in) name, character(kind=c_char), dimension(*), intent(in), target value)"
+
+.PP
+Definition at line 1234 of file nf_nc4\&.f90\&.
+.SS "integer function nf_open_par (character(len=*), intent(in) path, integer, intent(in) mode, integer, intent(in) comm, integer, intent(in) info, integer, intent(out) ncid)"
+
+.PP
+Definition at line 71 of file nf_nc4\&.f90\&.
+.SS "integer function nf_put_att (integer, intent(in) ncid, integer, intent(in) varid, character(len=*), intent(in) name, integer, intent(in) xtype, integer, intent(in) nlen, character(kind=c_char), dimension(*), intent(in), target value)"
+
+.PP
+Definition at line 1805 of file nf_nc4\&.f90\&.
+.SS "integer function nf_put_var (integer, intent(in) ncid, integer, intent(in) varid, character(kind=c_char), dimension(*), intent(in), target values)"
+
+.PP
+Definition at line 2026 of file nf_nc4\&.f90\&.
+.SS "integer function nf_put_var1_int64 (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) ndex, integer(ik8), intent(in) ival)"
+
+.PP
+Definition at line 2083 of file nf_nc4\&.f90\&.
+.SS "integer function nf_put_var_int64 (integer, intent(in) ncid, integer, intent(in) varid, integer(ik8), dimension(*), intent(in) ivals)"
+
+.PP
+Definition at line 2320 of file nf_nc4\&.f90\&.
+.SS "integer function nf_put_vara_int64 (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer(ik8), dimension(*), intent(in) ivals)"
+
+.PP
+Definition at line 2136 of file nf_nc4\&.f90\&.
+.SS "integer function nf_put_varm_int64 (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer, dimension(*), intent(in) maps, integer(ik8), dimension(*), intent(in) ivals)"
+
+.PP
+Definition at line 2253 of file nf_nc4\&.f90\&.
+.SS "integer function nf_put_vars_int64 (integer, intent(in) ncid, integer, intent(in) varid, integer, dimension(*), intent(in) start, integer, dimension(*), intent(in) counts, integer, dimension(*), intent(in) strides, integer(ik8), dimension(*), intent(in) ivals)"
+
+.PP
+Definition at line 2190 of file nf_nc4\&.f90\&.
+.SS "integer function nf_put_vlen_element (integer, intent(in) ncid, integer, intent(in) xtype, character(kind=c_char), dimension(*), intent(inout) vlen_element, integer, intent(in) nlen, character(kind=c_char), dimension(*), intent(in), target value)"
+
+.PP
+Definition at line 1872 of file nf_nc4\&.f90\&.
+.SS "integer function nf_rename_grp (integer, intent(in) grpid, character(len=*), intent(in) name)"
+
+.PP
+Definition at line 556 of file nf_nc4\&.f90\&.
+.SS "integer function nf_set_chunk_cache (integer, intent(in) chunk_size, integer, intent(in) nelems, integer, intent(in) preemption)"
+
+.PP
+Definition at line 2600 of file nf_nc4\&.f90\&.
+.SS "integer function nf_set_var_chunk_cache (integer, intent(in) ncid, integer, intent(in) varid, integer, intent(in) chunk_size, integer, intent(in) nelems, integer, intent(in) preemption)"
+
+.PP
+Definition at line 2653 of file nf_nc4\&.f90\&.
+.SS "integer function nf_var_par_access (integer, intent(in) ncid, integer, intent(in) varid, integer, intent(in) iaccess)"
+
+.PP
+Definition at line 104 of file nf_nc4\&.f90\&.
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for NetCDF-Fortran from the source code\&.

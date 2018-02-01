@@ -1,0 +1,201 @@
+\hypertarget{nf__varaio_8F90}{}\section{nf\+\_\+varaio.\+F90 File Reference}
+\label{nf__varaio_8F90}\index{nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}}
+{\ttfamily \#include \char`\"{}nfconfig.\+inc\char`\"{}}\newline
+\subsection*{Functions/\+Subroutines}
+\begin{DoxyCompactItemize}
+\item 
+integer function \hyperlink{nf__varaio_8F90_a582dd86e95ea89b621ae3bdac16b0961}{nf\+\_\+put\+\_\+vara\+\_\+text} (ncid, varid, start, counts, text)
+\item 
+integer function \hyperlink{nf__varaio_8F90_a06ecd750696650b2ff2d1e8c5f7a9809}{nf\+\_\+put\+\_\+vara\+\_\+text\+\_\+a} (ncid, varid, start, counts, text)
+\item 
+integer function \hyperlink{nf__varaio_8F90_a2fbb5c5ffd0ed04601345f3eb7084193}{nf\+\_\+put\+\_\+vara\+\_\+int1} (ncid, varid, start, counts, i1vals)
+\item 
+integer function \hyperlink{nf__varaio_8F90_aa79663ed582deecc83cc5b00a4c68249}{nf\+\_\+put\+\_\+vara\+\_\+int2} (ncid, varid, start, counts, i2vals)
+\item 
+integer function \hyperlink{nf__varaio_8F90_a235e77681111d14023a2a4138544850c}{nf\+\_\+put\+\_\+vara\+\_\+int} (ncid, varid, start, counts, ivals)
+\item 
+integer function \hyperlink{nf__varaio_8F90_aa114940bfd72bbafd6c3fe900381a29a}{nf\+\_\+put\+\_\+vara\+\_\+real} (ncid, varid, start, counts, rvals)
+\item 
+function \hyperlink{nf__varaio_8F90_a5ff3341e2b0836cdc1c41206e1c39bb9}{nf\+\_\+put\+\_\+vara\+\_\+double} (ncid, varid, start, counts, dvals)
+\item 
+integer function \hyperlink{nf__varaio_8F90_abfdeb32ad7149e1e1664dd4234b780c8}{nf\+\_\+put\+\_\+vara} (ncid, varid, start, counts, values)
+\item 
+integer function \hyperlink{nf__varaio_8F90_ace29ec4368a5f1bf032b1b0516d28b04}{nf\+\_\+get\+\_\+vara\+\_\+text} (ncid, varid, start, counts, text)
+\item 
+integer function \hyperlink{nf__varaio_8F90_a65577db7879ba6687ddd5a803d0887c1}{nf\+\_\+get\+\_\+vara\+\_\+text\+\_\+a} (ncid, varid, start, counts, text)
+\item 
+integer function \hyperlink{nf__varaio_8F90_a3d9229b7979dae378c63dff2ac198cf6}{nf\+\_\+get\+\_\+vara\+\_\+int1} (ncid, varid, start, counts, i1vals)
+\item 
+integer function \hyperlink{nf__varaio_8F90_afcb9640178d83ea181103af7597be73f}{nf\+\_\+get\+\_\+vara\+\_\+int2} (ncid, varid, start, counts, i2vals)
+\item 
+integer function \hyperlink{nf__varaio_8F90_a84fa4e1adc7b124887866d37516049e3}{nf\+\_\+get\+\_\+vara\+\_\+int} (ncid, varid, start, counts, ivals)
+\item 
+integer function \hyperlink{nf__varaio_8F90_ad0cf70280990b3ae93c2ee54d2012dd3}{nf\+\_\+get\+\_\+vara\+\_\+real} (ncid, varid, start, counts, rvals)
+\item 
+function \hyperlink{nf__varaio_8F90_a642bebcbf3a83a4a2dcd251465321ce2}{nf\+\_\+get\+\_\+vara\+\_\+double} (ncid, varid, start, counts, dvals)
+\item 
+integer function \hyperlink{nf__varaio_8F90_adaa4c4ec0c081e834ab91a8b44f172b6}{nf\+\_\+get\+\_\+vara} (ncid, varid, start, counts, values)
+\end{DoxyCompactItemize}
+
+
+\subsection{Function/\+Subroutine Documentation}
+\mbox{\Hypertarget{nf__varaio_8F90_adaa4c4ec0c081e834ab91a8b44f172b6}\label{nf__varaio_8F90_adaa4c4ec0c081e834ab91a8b44f172b6}} 
+\index{nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}!nf\+\_\+get\+\_\+vara@{nf\+\_\+get\+\_\+vara}}
+\index{nf\+\_\+get\+\_\+vara@{nf\+\_\+get\+\_\+vara}!nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}}
+\subsubsection{\texorpdfstring{nf\+\_\+get\+\_\+vara()}{nf\_get\_vara()}}
+{\footnotesize\ttfamily integer function nf\+\_\+get\+\_\+vara (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{character(kind=c\+\_\+char), dimension($\ast$), intent(inout), target}]{values }\end{DoxyParamCaption})}
+
+
+
+Definition at line 903 of file nf\+\_\+varaio.\+F90.
+
+\mbox{\Hypertarget{nf__varaio_8F90_a642bebcbf3a83a4a2dcd251465321ce2}\label{nf__varaio_8F90_a642bebcbf3a83a4a2dcd251465321ce2}} 
+\index{nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}!nf\+\_\+get\+\_\+vara\+\_\+double@{nf\+\_\+get\+\_\+vara\+\_\+double}}
+\index{nf\+\_\+get\+\_\+vara\+\_\+double@{nf\+\_\+get\+\_\+vara\+\_\+double}!nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}}
+\subsubsection{\texorpdfstring{nf\+\_\+get\+\_\+vara\+\_\+double()}{nf\_get\_vara\_double()}}
+{\footnotesize\ttfamily function nf\+\_\+get\+\_\+vara\+\_\+double (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{real(rk8), dimension($\ast$), intent(out)}]{dvals }\end{DoxyParamCaption})}
+
+
+
+Definition at line 854 of file nf\+\_\+varaio.\+F90.
+
+\mbox{\Hypertarget{nf__varaio_8F90_a84fa4e1adc7b124887866d37516049e3}\label{nf__varaio_8F90_a84fa4e1adc7b124887866d37516049e3}} 
+\index{nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}!nf\+\_\+get\+\_\+vara\+\_\+int@{nf\+\_\+get\+\_\+vara\+\_\+int}}
+\index{nf\+\_\+get\+\_\+vara\+\_\+int@{nf\+\_\+get\+\_\+vara\+\_\+int}!nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}}
+\subsubsection{\texorpdfstring{nf\+\_\+get\+\_\+vara\+\_\+int()}{nf\_get\_vara\_int()}}
+{\footnotesize\ttfamily integer function nf\+\_\+get\+\_\+vara\+\_\+int (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{integer(nfint), dimension($\ast$), intent(out)}]{ivals }\end{DoxyParamCaption})}
+
+
+
+Definition at line 735 of file nf\+\_\+varaio.\+F90.
+
+\mbox{\Hypertarget{nf__varaio_8F90_a3d9229b7979dae378c63dff2ac198cf6}\label{nf__varaio_8F90_a3d9229b7979dae378c63dff2ac198cf6}} 
+\index{nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}!nf\+\_\+get\+\_\+vara\+\_\+int1@{nf\+\_\+get\+\_\+vara\+\_\+int1}}
+\index{nf\+\_\+get\+\_\+vara\+\_\+int1@{nf\+\_\+get\+\_\+vara\+\_\+int1}!nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}}
+\subsubsection{\texorpdfstring{nf\+\_\+get\+\_\+vara\+\_\+int1()}{nf\_get\_vara\_int1()}}
+{\footnotesize\ttfamily integer function nf\+\_\+get\+\_\+vara\+\_\+int1 (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{integer(nfint1), dimension($\ast$), intent(out)}]{i1vals }\end{DoxyParamCaption})}
+
+
+
+Definition at line 605 of file nf\+\_\+varaio.\+F90.
+
+\mbox{\Hypertarget{nf__varaio_8F90_afcb9640178d83ea181103af7597be73f}\label{nf__varaio_8F90_afcb9640178d83ea181103af7597be73f}} 
+\index{nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}!nf\+\_\+get\+\_\+vara\+\_\+int2@{nf\+\_\+get\+\_\+vara\+\_\+int2}}
+\index{nf\+\_\+get\+\_\+vara\+\_\+int2@{nf\+\_\+get\+\_\+vara\+\_\+int2}!nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}}
+\subsubsection{\texorpdfstring{nf\+\_\+get\+\_\+vara\+\_\+int2()}{nf\_get\_vara\_int2()}}
+{\footnotesize\ttfamily integer function nf\+\_\+get\+\_\+vara\+\_\+int2 (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{integer(nfint2), dimension($\ast$), intent(out)}]{i2vals }\end{DoxyParamCaption})}
+
+
+
+Definition at line 671 of file nf\+\_\+varaio.\+F90.
+
+\mbox{\Hypertarget{nf__varaio_8F90_ad0cf70280990b3ae93c2ee54d2012dd3}\label{nf__varaio_8F90_ad0cf70280990b3ae93c2ee54d2012dd3}} 
+\index{nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}!nf\+\_\+get\+\_\+vara\+\_\+real@{nf\+\_\+get\+\_\+vara\+\_\+real}}
+\index{nf\+\_\+get\+\_\+vara\+\_\+real@{nf\+\_\+get\+\_\+vara\+\_\+real}!nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}}
+\subsubsection{\texorpdfstring{nf\+\_\+get\+\_\+vara\+\_\+real()}{nf\_get\_vara\_real()}}
+{\footnotesize\ttfamily integer function nf\+\_\+get\+\_\+vara\+\_\+real (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{real(nfreal), dimension($\ast$), intent(out)}]{rvals }\end{DoxyParamCaption})}
+
+
+
+Definition at line 792 of file nf\+\_\+varaio.\+F90.
+
+\mbox{\Hypertarget{nf__varaio_8F90_ace29ec4368a5f1bf032b1b0516d28b04}\label{nf__varaio_8F90_ace29ec4368a5f1bf032b1b0516d28b04}} 
+\index{nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}!nf\+\_\+get\+\_\+vara\+\_\+text@{nf\+\_\+get\+\_\+vara\+\_\+text}}
+\index{nf\+\_\+get\+\_\+vara\+\_\+text@{nf\+\_\+get\+\_\+vara\+\_\+text}!nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}}
+\subsubsection{\texorpdfstring{nf\+\_\+get\+\_\+vara\+\_\+text()}{nf\_get\_vara\_text()}}
+{\footnotesize\ttfamily integer function nf\+\_\+get\+\_\+vara\+\_\+text (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{character(len=$\ast$), intent(out)}]{text }\end{DoxyParamCaption})}
+
+
+
+Definition at line 498 of file nf\+\_\+varaio.\+F90.
+
+\mbox{\Hypertarget{nf__varaio_8F90_a65577db7879ba6687ddd5a803d0887c1}\label{nf__varaio_8F90_a65577db7879ba6687ddd5a803d0887c1}} 
+\index{nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}!nf\+\_\+get\+\_\+vara\+\_\+text\+\_\+a@{nf\+\_\+get\+\_\+vara\+\_\+text\+\_\+a}}
+\index{nf\+\_\+get\+\_\+vara\+\_\+text\+\_\+a@{nf\+\_\+get\+\_\+vara\+\_\+text\+\_\+a}!nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}}
+\subsubsection{\texorpdfstring{nf\+\_\+get\+\_\+vara\+\_\+text\+\_\+a()}{nf\_get\_vara\_text\_a()}}
+{\footnotesize\ttfamily integer function nf\+\_\+get\+\_\+vara\+\_\+text\+\_\+a (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{character(len=1), dimension($\ast$), intent(out)}]{text }\end{DoxyParamCaption})}
+
+
+
+Definition at line 552 of file nf\+\_\+varaio.\+F90.
+
+\mbox{\Hypertarget{nf__varaio_8F90_abfdeb32ad7149e1e1664dd4234b780c8}\label{nf__varaio_8F90_abfdeb32ad7149e1e1664dd4234b780c8}} 
+\index{nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}!nf\+\_\+put\+\_\+vara@{nf\+\_\+put\+\_\+vara}}
+\index{nf\+\_\+put\+\_\+vara@{nf\+\_\+put\+\_\+vara}!nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}}
+\subsubsection{\texorpdfstring{nf\+\_\+put\+\_\+vara()}{nf\_put\_vara()}}
+{\footnotesize\ttfamily integer function nf\+\_\+put\+\_\+vara (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{character(kind=c\+\_\+char), dimension($\ast$), intent(in), target}]{values }\end{DoxyParamCaption})}
+
+
+
+Definition at line 441 of file nf\+\_\+varaio.\+F90.
+
+\mbox{\Hypertarget{nf__varaio_8F90_a5ff3341e2b0836cdc1c41206e1c39bb9}\label{nf__varaio_8F90_a5ff3341e2b0836cdc1c41206e1c39bb9}} 
+\index{nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}!nf\+\_\+put\+\_\+vara\+\_\+double@{nf\+\_\+put\+\_\+vara\+\_\+double}}
+\index{nf\+\_\+put\+\_\+vara\+\_\+double@{nf\+\_\+put\+\_\+vara\+\_\+double}!nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}}
+\subsubsection{\texorpdfstring{nf\+\_\+put\+\_\+vara\+\_\+double()}{nf\_put\_vara\_double()}}
+{\footnotesize\ttfamily function nf\+\_\+put\+\_\+vara\+\_\+double (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{real(rk8), dimension($\ast$), intent(in)}]{dvals }\end{DoxyParamCaption})}
+
+
+
+Definition at line 392 of file nf\+\_\+varaio.\+F90.
+
+\mbox{\Hypertarget{nf__varaio_8F90_a235e77681111d14023a2a4138544850c}\label{nf__varaio_8F90_a235e77681111d14023a2a4138544850c}} 
+\index{nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}!nf\+\_\+put\+\_\+vara\+\_\+int@{nf\+\_\+put\+\_\+vara\+\_\+int}}
+\index{nf\+\_\+put\+\_\+vara\+\_\+int@{nf\+\_\+put\+\_\+vara\+\_\+int}!nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}}
+\subsubsection{\texorpdfstring{nf\+\_\+put\+\_\+vara\+\_\+int()}{nf\_put\_vara\_int()}}
+{\footnotesize\ttfamily integer function nf\+\_\+put\+\_\+vara\+\_\+int (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{integer(nfint), dimension($\ast$), intent(in)}]{ivals }\end{DoxyParamCaption})}
+
+
+
+Definition at line 273 of file nf\+\_\+varaio.\+F90.
+
+\mbox{\Hypertarget{nf__varaio_8F90_a2fbb5c5ffd0ed04601345f3eb7084193}\label{nf__varaio_8F90_a2fbb5c5ffd0ed04601345f3eb7084193}} 
+\index{nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}!nf\+\_\+put\+\_\+vara\+\_\+int1@{nf\+\_\+put\+\_\+vara\+\_\+int1}}
+\index{nf\+\_\+put\+\_\+vara\+\_\+int1@{nf\+\_\+put\+\_\+vara\+\_\+int1}!nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}}
+\subsubsection{\texorpdfstring{nf\+\_\+put\+\_\+vara\+\_\+int1()}{nf\_put\_vara\_int1()}}
+{\footnotesize\ttfamily integer function nf\+\_\+put\+\_\+vara\+\_\+int1 (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{integer(nfint1), dimension($\ast$), intent(in)}]{i1vals }\end{DoxyParamCaption})}
+
+
+
+Definition at line 143 of file nf\+\_\+varaio.\+F90.
+
+\mbox{\Hypertarget{nf__varaio_8F90_aa79663ed582deecc83cc5b00a4c68249}\label{nf__varaio_8F90_aa79663ed582deecc83cc5b00a4c68249}} 
+\index{nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}!nf\+\_\+put\+\_\+vara\+\_\+int2@{nf\+\_\+put\+\_\+vara\+\_\+int2}}
+\index{nf\+\_\+put\+\_\+vara\+\_\+int2@{nf\+\_\+put\+\_\+vara\+\_\+int2}!nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}}
+\subsubsection{\texorpdfstring{nf\+\_\+put\+\_\+vara\+\_\+int2()}{nf\_put\_vara\_int2()}}
+{\footnotesize\ttfamily integer function nf\+\_\+put\+\_\+vara\+\_\+int2 (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{integer(nfint2), dimension($\ast$), intent(in)}]{i2vals }\end{DoxyParamCaption})}
+
+
+
+Definition at line 209 of file nf\+\_\+varaio.\+F90.
+
+\mbox{\Hypertarget{nf__varaio_8F90_aa114940bfd72bbafd6c3fe900381a29a}\label{nf__varaio_8F90_aa114940bfd72bbafd6c3fe900381a29a}} 
+\index{nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}!nf\+\_\+put\+\_\+vara\+\_\+real@{nf\+\_\+put\+\_\+vara\+\_\+real}}
+\index{nf\+\_\+put\+\_\+vara\+\_\+real@{nf\+\_\+put\+\_\+vara\+\_\+real}!nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}}
+\subsubsection{\texorpdfstring{nf\+\_\+put\+\_\+vara\+\_\+real()}{nf\_put\_vara\_real()}}
+{\footnotesize\ttfamily integer function nf\+\_\+put\+\_\+vara\+\_\+real (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{real(nfreal), dimension($\ast$), intent(in)}]{rvals }\end{DoxyParamCaption})}
+
+
+
+Definition at line 330 of file nf\+\_\+varaio.\+F90.
+
+\mbox{\Hypertarget{nf__varaio_8F90_a582dd86e95ea89b621ae3bdac16b0961}\label{nf__varaio_8F90_a582dd86e95ea89b621ae3bdac16b0961}} 
+\index{nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}!nf\+\_\+put\+\_\+vara\+\_\+text@{nf\+\_\+put\+\_\+vara\+\_\+text}}
+\index{nf\+\_\+put\+\_\+vara\+\_\+text@{nf\+\_\+put\+\_\+vara\+\_\+text}!nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}}
+\subsubsection{\texorpdfstring{nf\+\_\+put\+\_\+vara\+\_\+text()}{nf\_put\_vara\_text()}}
+{\footnotesize\ttfamily integer function nf\+\_\+put\+\_\+vara\+\_\+text (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{character(len=$\ast$), intent(in)}]{text }\end{DoxyParamCaption})}
+
+
+
+Definition at line 37 of file nf\+\_\+varaio.\+F90.
+
+\mbox{\Hypertarget{nf__varaio_8F90_a06ecd750696650b2ff2d1e8c5f7a9809}\label{nf__varaio_8F90_a06ecd750696650b2ff2d1e8c5f7a9809}} 
+\index{nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}!nf\+\_\+put\+\_\+vara\+\_\+text\+\_\+a@{nf\+\_\+put\+\_\+vara\+\_\+text\+\_\+a}}
+\index{nf\+\_\+put\+\_\+vara\+\_\+text\+\_\+a@{nf\+\_\+put\+\_\+vara\+\_\+text\+\_\+a}!nf\+\_\+varaio.\+F90@{nf\+\_\+varaio.\+F90}}
+\subsubsection{\texorpdfstring{nf\+\_\+put\+\_\+vara\+\_\+text\+\_\+a()}{nf\_put\_vara\_text\_a()}}
+{\footnotesize\ttfamily integer function nf\+\_\+put\+\_\+vara\+\_\+text\+\_\+a (\begin{DoxyParamCaption}\item[{integer, intent(in)}]{ncid,  }\item[{integer, intent(in)}]{varid,  }\item[{integer, dimension($\ast$), intent(in)}]{start,  }\item[{integer, dimension($\ast$), intent(in)}]{counts,  }\item[{character(len=1), dimension($\ast$), intent(in)}]{text }\end{DoxyParamCaption})}
+
+
+
+Definition at line 90 of file nf\+\_\+varaio.\+F90.
+
