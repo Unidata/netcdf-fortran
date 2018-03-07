@@ -591,20 +591,20 @@ STRICT_PROTO_MATCHING  = NO
 # documentation.
 # The default value is: YES.
 
-GENERATE_TODOLIST      = @SHOW_DOXYGEN_TAG_LIST@
+GENERATE_TODOLIST      = NO
 
 # The GENERATE_TESTLIST tag can be used to enable ( YES) or disable ( NO) the
 # test list. This list is created by putting \test commands in the
 # documentation.
 # The default value is: YES.
 
-GENERATE_TESTLIST      = @SHOW_DOXYGEN_TAG_LIST@
+GENERATE_TESTLIST      = NO
 
 # The GENERATE_BUGLIST tag can be used to enable ( YES) or disable ( NO) the bug
 # list. This list is created by putting \bug commands in the documentation.
 # The default value is: YES.
 
-GENERATE_BUGLIST       = @SHOW_DOXYGEN_TAG_LIST@
+GENERATE_BUGLIST       = NO
 
 # The GENERATE_DEPRECATEDLIST tag can be used to enable ( YES) or disable ( NO)
 # the deprecated list. This list is created by putting \deprecated commands in
@@ -756,9 +756,7 @@ WARN_LOGFILE           =
 
 INPUT                  = @abs_top_srcdir@/RELEASE_NOTES.md \
                          @abs_top_srcdir@/README.md \
-						                   @abs_top_srcdir@/libsrc \
-						                         @abs_top_srcdir@/fortran \
-						                               @abs_top_srcdir@/docs/netcdf-f77.md \
+                         @abs_top_srcdir@/docs/netcdf-f77.md \
                          @abs_top_srcdir@/docs/netcdf-f90.md \
                          @abs_top_srcdir@/docs/netcdf-f90-sec1-usage.md \
                          @abs_top_srcdir@/docs/netcdf-f90-sec2-datasets.md \
@@ -766,9 +764,9 @@ INPUT                  = @abs_top_srcdir@/RELEASE_NOTES.md \
                          @abs_top_srcdir@/docs/netcdf-f90-sec4-dimensions.md \
                          @abs_top_srcdir@/docs/netcdf-f90-sec5-user_defined_types.md \
                          @abs_top_srcdir@/docs/netcdf-f90-sec6-variables.md \
-                         @abs_top_srcdir@/docs/netcdf-f90-sec7-attributes.md \
-                         @abs_top_srcdir@/fortran \
-                         @abs_top_srcdir@/libsrc
+                         @abs_top_srcdir@/docs/netcdf-f90-sec7-attributes.md 
+                         #@abs_top_srcdir@/fortran \
+                         #@abs_top_srcdir@/libsrc
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
