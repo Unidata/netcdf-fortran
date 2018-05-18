@@ -83,14 +83,14 @@ IF(MSVC)
 ENDIF()
 
 # auto-configure style checks, other CMake modules.
-INCLUDE (${CMAKE_ROOT}/Modules/CheckLibraryExists.cmake)
-INCLUDE (${CMAKE_ROOT}/Modules/CheckIncludeFile.cmake)
-INCLUDE (${CMAKE_ROOT}/Modules/CheckTypeSize.cmake)
-INCLUDE (${CMAKE_ROOT}/Modules/CheckFunctionExists.cmake)
-INCLUDE (${CMAKE_ROOT}/Modules/CheckCXXSourceCompiles.cmake)
-INCLUDE (${CMAKE_ROOT}/Modules/TestBigEndian.cmake)
-INCLUDE (${CMAKE_ROOT}/Modules/CheckSymbolExists.cmake)
-INCLUDE (${CMAKE_ROOT}/Modules/GetPrerequisites.cmake)
+INCLUDE (CheckLibraryExists)
+INCLUDE (CheckIncludeFile)
+INCLUDE (CheckTypeSize)
+INCLUDE (CheckFunctionExists)
+INCLUDE (CheckCXXSourceCompiles)
+INCLUDE (TestBigEndian)
+INCLUDE (CheckSymbolExists)
+INCLUDE (GetPrerequisites)
 FIND_PACKAGE(PkgConfig QUIET)
 
 # Enable 'dist and distcheck'.
@@ -397,7 +397,7 @@ ENDIF()
 ###
 
 IF(NOT netCDF_LIBRARIES AND NOT netCDF_INCLUDE_DIR)
-  FIND_PACKAGE(netCDF QUIET)
+  FIND_PACKAGE(netCDF)
 ELSE()
   SET(netCDF_FOUND TRUE)
 ENDIF()
@@ -607,9 +607,9 @@ endif()
 IF(USE_NETCDF_V2)
   SET(BUILD_V2 ON CACHE BOOL "")
 ENDIF()
-# Turn this on by default when it's working
+
 OPTION(ENABLE_FORTRAN_TYPE_CHECKS
-  "Determine Fortran types corresponding to netCDF types" OFF)
+  "Determine Fortran types corresponding to netCDF types" ON)
 
 # Toggle whether or not to run tests.
 OPTION(ENABLE_TESTS "Enable netcdf-fortran tests." ON)
@@ -622,8 +622,9 @@ SET(BUILD_F03 "OFF")
 IF(ENABLE_FORTRAN_TYPE_CHECKS)
   # Do tests to determine which Fortran types correspond to NCBYTE, NCSHORT, ...
   # The configure file got these by testing an F77 program, invoking
-  # UD_FORTRAN_TYPES defined in acinclude.m4.  TODO: check the types
-  # from the test program instead of assuming these defaults.
+  # UD_FORTRAN_TYPES defined in acinclude.m4.
+  
+  INCLUDE(CMakeExtras/MatchNetCDFFortranTypes.cmake)
 ELSE()
   # Set Fortran types to default.
   SET(NCBYTE_T "byte")
