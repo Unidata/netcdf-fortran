@@ -6,6 +6,10 @@ Release Notes {#nf_release_notes}
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
+## 4.4.5 - TBD
+
+* Updated CMakeLists.txt to check for C types that match Fortran ones. See [GitHub #67](https://github.com/Unidata/netcdf-fortran/pull/67) for more information.
+
 ## 4.4.4 Released May 13, 2016
 
 * Corrected an issue where cmake-based builds specifying `USE_LOGGING` were not seeing expected behavior.  The issue was reported, and subsequently fixed, by Neil Carlson at Los Alamos Nat'l Laboratory. See [Github Pull Request #44](https://github.com/Unidata/netcdf-fortran/pull/44) for more information.
