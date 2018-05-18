@@ -695,7 +695,7 @@ ENDIF()
 
 # Set CDash-related options.
 #SET(NC4F_CTEST_DROP_SITE "my.cdash.org" CACHE STRING "Dashboard location for CTest-based testing purposes.")
-SET(NC4F_CTEST_DROP_SITE "129.114.104.111" CACHE STRING "Dashboard location for CTest-based testing purposes.")
+SET(NC4F_CTEST_DROP_SITE "cdash.unidata.ucar.edu" CACHE STRING "Dashboard location for CTest-based testing purposes.")
 SET(NC4F_CTEST_DROP_LOC_PREFIX "" CACHE STRING "Prefix for Dashboard location on remote server when using CTest-based testing.")
 
 # Generate CTestConfig file from template.
