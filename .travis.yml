@@ -12,11 +12,11 @@ services:
 
 env:
     matrix:
-        - DOCKIMG=unidata/nctests:serial   USECMAKE=TRUE USEAC=TRUE DISTCHECK=TRUE USE_CC=gcc   COPTS='-DENABLE_NETCDF_4=OFF -DCMAKE_C_FLAGS=-fsigned-char' CURHOST=docker-nc3-gcc-x64-signed
-        - DOCKIMG=unidata/nctests:serial32 USECMAKE=TRUE USEAC=TRUE DISTCHECK=TRUE USE_CC=gcc   COPTS='-DENABLE_NETCDF_4=OFF -DCMAKE_C_FLAGS=-fsigned-char' CURHOST=docker-nc3-gcc-x86-signed
+        - DOCKIMG=unidata/nctests:serial   USECMAKE=TRUE USEAC=TRUE DISTCHECK=TRUE USE_CC=gcc   COPTS='-DENABLE_NETCDF4=OFF -DCMAKE_C_FLAGS=-fsigned-char' CURHOST=docker-nc3-gcc-x64-signed
+        - DOCKIMG=unidata/nctests:serial32 USECMAKE=TRUE USEAC=TRUE DISTCHECK=TRUE USE_CC=gcc   COPTS='-DENABLE_NETCDF4=OFF -DCMAKE_C_FLAGS=-fsigned-char' CURHOST=docker-nc3-gcc-x86-signed
 
-        - DOCKIMG=unidata/nctests:serial   USECMAKE=TRUE USEAC=TRUE DISTCHECK=TRUE USE_CC=gcc   COPTS='-DENABLE_NETCDF_4=OFF -DCMAKE_C_FLAGS=-funsigned-char' CURHOST=docker-nc3-gcc-x64-unsigned
-        - DOCKIMG=unidata/nctests:serial32 USECMAKE=TRUE USEAC=TRUE DISTCHECK=TRUE USE_CC=gcc   COPTS='-DENABLE_NETCDF_4=OFF -DCMAKE_C_FLAGS=-funsigned-char' CURHOST=docker-nc3-gcc-x86-unsigned
+        - DOCKIMG=unidata/nctests:serial   USECMAKE=TRUE USEAC=TRUE DISTCHECK=TRUE USE_CC=gcc   COPTS='-DENABLE_NETCDF4=OFF -DCMAKE_C_FLAGS=-funsigned-char' CURHOST=docker-nc3-gcc-x64-unsigned
+        - DOCKIMG=unidata/nctests:serial32 USECMAKE=TRUE USEAC=TRUE DISTCHECK=TRUE USE_CC=gcc   COPTS='-DENABLE_NETCDF4=OFF -DCMAKE_C_FLAGS=-funsigned-char' CURHOST=docker-nc3-gcc-x86-unsigned
 
         - DOCKIMG=unidata/nctests:serial   USECMAKE=TRUE USEAC=TRUE DISTCHECK=TRUE USE_CC=gcc   COPTS='-DCMAKE_C_FLAGS=-fsigned-char' CURHOST=docker-nc4-gcc-x64-signed
         - DOCKIMG=unidata/nctests:serial32 USECMAKE=TRUE USEAC=TRUE DISTCHECK=TRUE USE_CC=gcc   COPTS='-DCMAKE_C_FLAGS=-fsigned-char' CURHOST=docker-nc4-gcc-x86-signed
