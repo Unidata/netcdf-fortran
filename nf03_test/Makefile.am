@@ -117,6 +117,7 @@ if BUILD_V2
 check_PROGRAMS += tst03_f77_v2
 tst03_f77_v2_SOURCES = module_tests.F90 tst03_f77_v2.F handle_err.F
 TESTS += tst03_f77_v2
-CLEANFILES += tst_f77_v2.nc temp.tmp
-
+CLEANFILES += tst_f77_v2.nc
 endif # BUILD_V2
+
+CLEANFILES += temp.tmp
