@@ -70,6 +70,5 @@ C
         integer         err
 #include "tests.inc"
 
-        nfails = nfails + 1
         call errorc(msg, nf_strerror(err))
         end
