@@ -80,7 +80,7 @@ C
 
 C       /* Try on a bad error status */
         message = nf_strerror(-666)!/* should fail */
-        if (message .ne. 'Unknown Error')
+        if (message(1:13) .ne. 'Unknown Error')
      +      call errorc('nf_strerror on bad error status returned: ',
      +          message)
 
