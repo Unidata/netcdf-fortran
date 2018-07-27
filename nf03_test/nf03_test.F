@@ -24,6 +24,8 @@ C $Id: nf_test.F,v 1.28 2009/01/25 14:33:44 ed Exp $
             print *, ' '
             print *, '  ### ', nfails, ' FAILURES TESTING ', name, 
      +               '! ###'
+C           continue the remaining tests, uncomment below to stop now
+C           stop 2
         end if
         end
 
