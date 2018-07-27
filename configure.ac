@@ -35,6 +35,33 @@ AC_CONFIG_SRCDIR([libsrc/fort-attio.c])
 
 AC_MSG_NOTICE([checking user options])
 
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
+#include <netcdf_meta.h>
+#if !defined(NC_RELAX_COORD_BOUND) || NC_RELAX_COORD_BOUND == 0
+      choke me
+#endif]])], [nc_relax_coord_bound=yes], [nc_relax_coord_bound=no])
+if test "x$nc_relax_coord_bound" = xyes; then
+   AC_DEFINE([NF_RELAX_COORD_BOUND], [1], [Enable a more relaxed boundary error check NF_EINVALCOORDS])
+fi
+
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
+#include <netcdf_meta.h>
+#if !defined(NC_HAS_PNETCDF) || NC_HAS_PNETCDF == 0
+      choke me
+#endif]])], [nc_has_pnetcdf=yes], [nc_has_pnetcdf=no])
+if test "x$nc_has_pnetcdf" = xyes; then
+   AC_DEFINE([NF_HAS_PNETCDF], [1], [Enable parallel I/O support via PnetCDF])
+fi
+
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
+#include <netcdf_meta.h>
+#if !defined(NC_HAS_PARALLEL4) || NC_HAS_PARALLEL4 == 0
+      choke me
+#endif]])], [nc_has_parallel4=yes], [nc_has_parallel4=no])
+if test "x$nc_has_parallel4" = xyes; then
+   AC_DEFINE([NF_HAS_PARALLEL4], [1], [Enable parallel I/O support via HDF5])
+fi
+
 # Does the user want to run extra tests with valgrind?
 AC_MSG_CHECKING([whether extra valgrind tests should be run])
 AC_ARG_ENABLE([valgrind-tests],
@@ -51,6 +78,10 @@ AC_ARG_ENABLE([parallel-tests],
                                netCDF-4 is not enabled, or built on a system \
                                without parallel I/O support.])])
 test "x$enable_parallel_tests" = xyes || enable_parallel_tests=no
+if test "x$nc_has_pnetcdf" = xno -a "x$nc_has_parallel4" = xno ; then
+   # paralle I/O is not enabled
+   enable_parallel_tests=no
+fi
 AC_MSG_RESULT($enable_parallel_tests)
 
 # Does the user want to do some extra tests?
@@ -462,7 +493,7 @@ AC_CHECK_HEADERS([netcdf.h], [], [AC_MSG_ERROR([netcdf.h could not be found. Ple
 AC_SEARCH_LIBS([nc_open], [netcdf])
 
 # See if various libraries are available
-AC_CHECK_FUNCS([nc_def_opaque nccreate nc_set_log_level oc_open nc_use_parallel_enabled])
+AC_CHECK_FUNCS([nc_def_opaque nccreate nc_set_log_level oc_open])
 #test "x$ac_cv_func_oc_open" = xyes && nc_has_dap=yes || nc_has_dap=no
 # Whether we build/test some functionality depends on what we found in
 # the C library.
@@ -473,19 +504,16 @@ nc_build_v2=no
 nc_build_v4=no
 nc_has_logging=no
 nc_has_dap=no
-nc_has_parallel=no
 
 test "x$ac_cv_func_nc_def_opaque" = xyes && nc_build_v4=yes
 test "x$ac_cv_func_nccreate" = xyes && nc_build_v2=yes
 test "x$ac_cv_func_nc_set_log_level" = xyes && nc_has_logging=yes
 test "x$ac_cv_func_oc_open" = xyes && nc_has_dap=yes
-test "x$ac_cv_func_nc_use_parallel_enabled" = xyes && nc_has_parallel=yes
 
 #AC_CHECK_FUNC([nc_def_opaque],[nc_build_v4=yes])
 #AC_CHECK_FUNC([nccreate],[nc_build_v2=yes])
 #AC_CHECK_FUNC([nc_set_log_level],[nc_has_logging=yes])
 #AC_CHECK_FUNC([oc_open],[nc_has_dap=yes])
-#AC_CHECK_FUNC([nc_use_parallel_enabled],[nc_has_parallel=yes])
 
 if test "x$nc_build_v4" = xyes; then
    AC_DEFINE([USE_NETCDF4], [1], [if true, build netCDF-4])
@@ -500,7 +528,9 @@ AM_CONDITIONAL([USE_NETCDF4], [test "x$nc_build_v4" = xyes])
 AM_CONDITIONAL([BUILD_V2], [test "x$nc_build_v2" = xyes])
 AM_CONDITIONAL([USE_LOGGING], [test "x$nc_has_logging" = xyes])
 AM_CONDITIONAL([BUILD_DAP], [test "x$nc_has_dap" = xyes])
-AM_CONDITIONAL([BUILD_PARALLEL], [test "x$nc_has_parallel" = xyes])
+AM_CONDITIONAL([BUILD_PNETCDF], [test "x$nc_has_pnetcdf" = xyes])
+AM_CONDITIONAL([BUILD_PARALLEL4], [test "x$nc_has_parallel4" = xyes])
+AM_CONDITIONAL([BUILD_PARALLEL], [test "x$nc_has_pnetcdf" = xyes -o "x$nc_has_parallel4" = xyes])
 AC_CHECK_HEADER(stdlib.h, ,AC_DEFINE([NO_STDLIB_H], [], [no stdlib.h]))
 AC_CHECK_HEADER(sys/types.h, ,AC_DEFINE([NO_SYS_TYPES_H], [], [no sys_types.h]))
 AC_CHECK_HEADERS([sys/param.h])

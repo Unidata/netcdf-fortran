@@ -287,7 +287,10 @@ MACRO(print_conf_summary)
     MESSAGE(STATUS "\tUsing pnetcdf:\t\t\t" ${STATUS_PNETCDF})
   ENDIF(STATUS_PNETCDF)
 
-  MESSAGE(STATUS "\tUsing Parallel IO:\t\t" ${STATUS_PARALLEL})
+  MESSAGE(STATUS "\tBuilding Parallel IO:\t\t" ${BUILD_PARALLEL})
+  MESSAGE(STATUS "\tUsing NetCDF4 Parallel IO:\t" ${NF_HAS_PARALLEL4})
+  MESSAGE(STATUS "\tUsing PnetCDF Parallel IO:\t" ${NF_HAS_PNETCDF})
+  MESSAGE(STATUS "\tTesting Parallel IO:\t\t" ${TEST_PARALLEL})
 
   IF(CMAKE_PREFIX_PATH)
     MESSAGE(STATUS "\tCMake Prefix Path:\t\t" "${CMAKE_PREFIX_PATH}")
@@ -393,37 +396,28 @@ IF(ENABLE_PARALLEL_TESTS)
 ENDIF()
 
 ###
-# Seek out dependent libraries.
+# Seek out netcdf library file and include path.
 ###
 
-IF(NOT netCDF_LIBRARIES AND NOT netCDF_INCLUDE_DIR)
-  FIND_PACKAGE(netCDF)
-ELSE()
-  SET(netCDF_FOUND TRUE)
-ENDIF()
-
-IF (netCDF_FOUND)
-  INCLUDE_DIRECTORIES(SYSTEM ${netCDF_INCLUDE_DIR})
-  SET(NETCDF_C_LIBRARY ${netCDF_LIBRARIES})
-  SET(NETCDF_C_INCLUDE_DIR ${netCDF_INCLUDE_DIR})
-ELSE()
-  # netCDF not properly packaged. Try to find it manually.
-  FIND_LIBRARY(NETCDF_C_LIBRARY NAMES netcdf libnetcdf)
+IF(NOT NETCDF_C_LIBRARY)
+  FIND_LIBRARY(NETCDF_C_LIBRARY NAMES netcdf)
   IF(NOT NETCDF_C_LIBRARY)
-    MESSAGE(FATAL_ERROR "libnetcdf not found. Please reinstall and try again.")
-  ELSE()
-    MESSAGE(STATUS "Found netcdf: ${NETCDF_C_LIBRARY}")
-    FIND_PATH(NC_H_INCLUDE_DIR "netcdf.h")
-    IF(NOT NC_H_INCLUDE_DIR)
-      MESSAGE(FATAL_ERROR "Directory containing netcdf.h cannot be found. Please reinstall and try again.")
-    ELSE()
-      INCLUDE_DIRECTORIES(SYSTEM ${NC_H_INCLUDE_DIR})
-    ENDIF()
+    MESSAGE(FATAL_ERROR "libnetcdf not found.")
   ENDIF()
 ENDIF()
+MESSAGE(STATUS "Found netcdf library: ${NETCDF_C_LIBRARY}")
+
+IF(NOT NETCDF_INCLUDE_DIR)
+  FIND_PATH(NETCDF_INCLUDE_DIR NAMES netcdf.h)
+  IF(NOT NETCDF_INCLUDE_DIR)
+    MESSAGE(FATAL_ERROR "netcdf.h not found.")
+  ENDIF()
+ENDIF()
+MESSAGE(STATUS "Found netcdf.h in ${NETCDF_INCLUDE_DIR}")
+INCLUDE_DIRECTORIES(SYSTEM ${NETCDF_INCLUDE_DIR})
 
 ###
-# End 'seek out dependent libraries'
+# End 'Seek out netcdf library file and include path.'
 ###
 
 ###
@@ -520,7 +514,6 @@ CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nc_def_opaque "" USE_NETCDF4)
 CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nccreate "" USE_NETCDF_V2)
 CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nc_set_log_level "" USE_LOGGING)
 CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} oc_open "" BUILD_DAP)
-CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nc_use_parallel_enabled "" BUILD_PARALLEL)
 
 IF(USE_NETCDF4)
   SET(NC_BUILD_V4 TRUE)
@@ -531,24 +524,18 @@ IF(USE_NETCDF_V2)
   SET(HAVE_NCCREATE TRUE)
 ENDIF(USE_NETCDF_V2)
 
+SET(STATUS_LOGGING OFF)
 IF(USE_LOGGING)
   SET(HAVE_NC_SET_LOG_LEVEL TRUE)
   SET(STATUS_LOGGING ON)
 ENDIF(USE_LOGGING)
 
+SET(ENABLE_DAP OFF)
 IF(BUILD_DAP)
   SET(HAVE_OC_OPEN TRUE)
   SET(ENABLE_DAP ON)
 ENDIF(BUILD_DAP)
 
-IF(BUILD_PARALLEL)
-  SET(STATUS_PARALLEL ON)
-  SET(HAVE_NC_USE_PARALLEL_ENABLED TRUE)
-  FIND_PATH(NC_MPIF_H_PATH "mpif.h")
-  IF(NC_MPIF_H_PATH)
-    INCLUDE_DIRECTORIES(${NC_MPIF_H_PATH})
-  ENDIF(NC_MPIF_H_PATH)
-ENDIF(BUILD_PARALLEL)
 ##
 # Set some status messages for the summary.
 ##
@@ -558,10 +545,10 @@ ENDIF(BUILD_PARALLEL)
 # End status messages/variables.
 ##
 
+SET(ENABLE_NETCDF4 OFF)
 IF(USE_NETCDF4)
   SET(ENABLE_NETCDF4 ON)
   ADD_DEFINITIONS(-DUSE_NETCDF4)
-  SET(ENABLE_NETCDF_4 ON CACHE BOOL "")
   SET(ENABLE_NETCDF4 ON CACHE BOOL "")
 ENDIF()
 
@@ -572,6 +559,40 @@ IF (UNIX AND ${CMAKE_SIZEOF_VOID_P} MATCHES "8")
     SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fmacro-backtrace-limit=0")
   endif ()
 ENDIF()
+
+# Determine C library setting for NC_RELAX_COORD_BOUND
+try_compile(NF_RELAX_COORD_BOUND ${CMAKE_CURRENT_BINARY_DIR}
+  "${CMAKE_CURRENT_SOURCE_DIR}/CMakeExtras/check_relax_coord_bound.c"
+  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${NETCDF_INCLUDE_DIR}"
+  )
+
+# Determine C library setting for NC_HAS_PNETCDF
+try_compile(NF_HAS_PNETCDF ${CMAKE_CURRENT_BINARY_DIR}
+  "${CMAKE_CURRENT_SOURCE_DIR}/CMakeExtras/check_pnetcdf.c"
+  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${NETCDF_INCLUDE_DIR}"
+  )
+
+# Determine C library setting for NC_HAS_PARALLEL4
+try_compile(NF_HAS_PARALLEL4 ${CMAKE_CURRENT_BINARY_DIR}
+  "${CMAKE_CURRENT_SOURCE_DIR}/CMakeExtras/check_parallel4.c"
+  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${NETCDF_INCLUDE_DIR}"
+  )
+
+IF(NF_HAS_PARALLEL4)
+  ADD_DEFINITIONS(-DNF_HAS_PARALLEL4)
+ENDIF()
+IF(NF_HAS_PNETCDF)
+  ADD_DEFINITIONS(-DNF_HAS_PNETCDF)
+ENDIF()
+
+IF(NF_HAS_PNETCDF OR NF_HAS_PARALLEL4)
+  SET(BUILD_PARALLEL ON)
+  SET(HAVE_NC_USE_PARALLEL_ENABLED TRUE)
+ELSE(NF_HAS_PNETCDF OR NF_HAS_PARALLEL4)
+  SET(BUILD_PARALLEL OFF)
+  SET(HAVE_NC_USE_PARALLEL_ENABLED FALSE)
+  SET(TEST_PARALLEL OFF)
+ENDIF(NF_HAS_PNETCDF OR NF_HAS_PARALLEL4)
 
 # Determine C/Fortran pointer compatibility.
 try_compile(COMPILE_SUCCESS ${CMAKE_CURRENT_BINARY_DIR}
@@ -623,7 +644,7 @@ IF(ENABLE_FORTRAN_TYPE_CHECKS)
   # Do tests to determine which Fortran types correspond to NCBYTE, NCSHORT, ...
   # The configure file got these by testing an F77 program, invoking
   # UD_FORTRAN_TYPES defined in acinclude.m4.
-  
+
   INCLUDE(CMakeExtras/MatchNetCDFFortranTypes.cmake)
 ELSE()
   # Set Fortran types to default.
@@ -714,8 +735,8 @@ IF(NC_EXTRA_DEPS)
   FOREACH(_DEP ${DEPS_LIST})
     STRING(REGEX REPLACE "^-l" "" _LIB ${_DEP})
     FIND_LIBRARY("${_LIB}_DEP" NAMES "${_LIB}" "lib${_LIB}")
-    MESSAGE(${${_LIB}_DEP})
-    IF(NOT "${_LIB}_DEP")
+    # MESSAGE(${${_LIB}_DEP})
+    IF(${_LIB}_DEP STREQUAL "")
       MESSAGE(FATAL_ERROR "Error finding ${_LIB}.")
     ELSE()
       MESSAGE(STATUS "Found ${_LIB}: ${${_LIB}_DEP}")
