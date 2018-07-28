@@ -486,7 +486,9 @@ C               /* Make sure nf_inq stills sees additions in data mode */
         if (err .ne. 0) then
             call errore('nf_inq_format: ', err)
         else if (nformat .ne. nf_format_classic .and.
-     +           nformat .ne. nf_format_64bit) then
+     +           nformat .ne. nf_format_64bit .and.
+     +           nformat .ne. nf_format_cdf5 .and.
+     +           nformat .ne. nf_format_netcdf4) then
             call errori('nf_inq_format: wrong format number returned, ', 
      +                  nformat)
         end if

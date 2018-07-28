@@ -46,6 +46,15 @@ fi
 
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
 #include <netcdf_meta.h>
+#if !defined(NC_HAS_CDF5) || NC_HAS_CDF5 == 0
+      choke me
+#endif]])], [nc_has_cdf5=yes], [nc_has_cdf5=no])
+if test "x$nc_has_cdf5" = xyes; then
+   AC_DEFINE([ENABLE_CDF5], [1], [Enable CDF-5 file format])
+fi
+
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
+#include <netcdf_meta.h>
 #if !defined(NC_HAS_PNETCDF) || NC_HAS_PNETCDF == 0
       choke me
 #endif]])], [nc_has_pnetcdf=yes], [nc_has_pnetcdf=no])

@@ -34,6 +34,8 @@ C           stop 2
 #include "tests.inc"
 
         integer         status
+        integer         i, num_cmode
+        integer         cmode(3)
 
         external        test_nf_strerror
         external        test_nf_open
@@ -209,6 +211,28 @@ C           stop 2
 
         write(*, *) 'NetCDF version: ', nf_inq_libvers()
 
+        num_cmode = 1
+        cmode(1) = 0
+#ifdef ENABLE_CDF5
+        num_cmode = num_cmode + 1
+        cmode(num_cmode) = nf_cdf5
+#endif
+#ifdef USE_NETCDF4
+        num_cmode = num_cmode + 1
+        cmode(num_cmode) = nf_netcdf4
+#endif
+
+        do i = 1, num_cmode
+
+           if (cmode(i) .EQ. 0) then
+              print*,"testing classic CDF-1 format"
+           elseif (cmode(i) .EQ. nf_cdf5) then
+              print*,"testing CDF-5 format"
+           elseif (cmode(i) .EQ. nf_netcdf4) then
+              print*,"testing NetCDF-4 format"
+           endif
+           FILE_CMODE = cmode(i)
+
 C       /* Initialize global variables defining test file */
         call init_gvars
 
@@ -381,6 +405,7 @@ C           /* Test write functions */
         call test('nf_set_fill', test_nf_set_fill)
         call test('nf_set_default_format',
      +       test_nf_set_default_format)
+        enddo
 
         print *,'Total number of failures: ', nfailsTotal
         if (nfailsTotal .ne. 0) stop 2

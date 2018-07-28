@@ -1,6 +1,6 @@
 !     This is part of the netCDF package. Copyright 2011 University
 !     Corporation for Atmospheric Research/Unidata. See COPYRIGHT file
-!     for conditions of use. 
+!     for conditions of use.
 
 !     This program tests netCDF-4 parallel I/O from fortran. This
 !     variation of the test was contributed by Dan at NASA. Thanks Dan!
@@ -10,23 +10,8 @@
       include 'netcdf.inc'
       include 'mpif.h'
 
-      character*(*) FILE_NAME
-      parameter (FILE_NAME = 'ftst_parallel_nasa.nc')
-
-      integer MAX_DIMS
-      parameter (MAX_DIMS = 2)
-      integer NX, NY
-      parameter (NX = 16)
-      parameter (NY = 16)
-      integer NUM_PROC
-      parameter (NUM_PROC = 4)
-      integer ncid, varid, dimids(MAX_DIMS)
-      integer x_dimid, y_dimid
-      real data_out(NY / 2, NX / 2), data_in(NY / 2, NX / 2)
-      integer mode_flag
-      integer x, y, retval
+      integer mode_flag ! file create mode
       integer p, my_rank, ierr
-      integer start(MAX_DIMS), count(MAX_DIMS)
 
       call MPI_Init(ierr)
       call MPI_Comm_rank(MPI_COMM_WORLD, my_rank, ierr)
@@ -43,6 +28,49 @@
          stop 2
       endif
 
+#ifdef NF_HAS_PNETCDF
+      mode_flag = IOR(nf_clobber, nf_mpiio)
+      call parallel_io(mode_flag)
+#endif
+
+#ifdef NF_HAS_PARALLEL4
+      mode_flag = IOR(nf_netcdf4, nf_classic_model)
+      mode_flag = IOR(mode_flag, nf_clobber)
+      mode_flag = IOR(mode_flag, nf_mpiio)
+      call parallel_io(mode_flag)
+#endif
+
+      call MPI_Finalize(ierr)
+
+      if (my_rank .eq. 0) print *,'*** SUCCESS!'
+
+      end program ftst_parallel_nasa
+
+      subroutine parallel_io(mode_flag)
+      implicit none
+      include 'netcdf.inc'
+      include 'mpif.h'
+
+      integer mode_flag ! file create mode
+      character*(*) FILE_NAME
+      parameter (FILE_NAME = 'ftst_parallel_nasa.nc')
+
+      integer MAX_DIMS
+      parameter (MAX_DIMS = 2)
+      integer NX, NY
+      parameter (NX = 16)
+      parameter (NY = 16)
+      integer NUM_PROC
+      parameter (NUM_PROC = 4)
+      integer ncid, varid, dimids(MAX_DIMS)
+      integer x_dimid, y_dimid
+      real data_out(NY / 2, NX / 2), data_in(NY / 2, NX / 2)
+      integer x, y, retval
+      integer my_rank, ierr
+      integer start(MAX_DIMS), count(MAX_DIMS)
+
+      call MPI_Comm_rank(MPI_COMM_WORLD, my_rank, ierr)
+
 !     Create some pretend data.
       do x = 1, NX / 2
          do y = 1, NY / 2
@@ -51,9 +79,6 @@
       end do
 
 !     Create the netCDF file.
-      mode_flag = IOR(nf_netcdf4, nf_clobber)
-!     mode_flag = IOR(nf_netcdf4, nf_classic_model)
-      mode_flag = IOR(mode_flag, nf_mpiio)
       retval = nf_create_par(FILE_NAME, mode_flag, MPI_COMM_WORLD,
      $     MPI_INFO_NULL, ncid)
       if (retval .ne. nf_noerr) stop 3
@@ -134,9 +159,4 @@
 !     Close the file.
       retval = nf_close(ncid)
       if (retval .ne. nf_noerr) stop 14
-
-      call MPI_Finalize(ierr)
-
-      if (my_rank .eq. 0) print *,'*** SUCCESS!'
-
-      end program ftst_parallel_nasa
+      end subroutine parallel_io

@@ -22,11 +22,66 @@
 !     $Id: f90tst_parallel3.f90,v 1.5 2010/05/25 13:53:04 ed Exp $
 
 program f90tst_parallel3
+  use netcdf
+  implicit none
+  include 'mpif.h'
+
+  integer :: mode_flag
+  integer :: p, my_rank, ierr
+
+  call MPI_Init(ierr)
+  call MPI_Comm_rank(MPI_COMM_WORLD, my_rank, ierr)
+  call MPI_Comm_size(MPI_COMM_WORLD, p, ierr)
+
+  if (my_rank .eq. 0) then
+     print *, ' '
+     print *, '*** Testing netCDF-4 parallel I/O with fill values.'
+  endif
+
+  ! There must be 4 procs for this test.
+  if (p .ne. 4) then
+     print *, 'Sorry, this test program must be run on four processors.'
+     stop 1
+  endif
+
+#ifdef NF_HAS_PNETCDF
+  mode_flag = IOR(nf90_clobber, nf90_mpiio)
+  mode_flag = IOR(mode_flag, nf90_64bit_data)
+  call parallel_io(mode_flag)
+#endif
+
+#ifdef NF_HAS_PARALLEL4
+  mode_flag = IOR(nf90_netcdf4, nf90_mpiposix)
+  mode_flag = IOR(mode_flag, nf90_clobber)
+  call parallel_io(mode_flag)
+#endif
+
+  call MPI_Finalize(ierr)
+
+  if (my_rank .eq. 0) print *,'*** SUCCESS!'
+
+contains
+!     This subroutine handles errors by printing an error message and
+!     exiting with a non-zero status.
+  subroutine check(errcode)
+    use netcdf
+    implicit none
+    integer, intent(in) :: errcode
+
+    if(errcode /= nf90_noerr) then
+       print *, 'Error: ', trim(nf90_strerror(errcode))
+       stop 99
+    endif
+  end subroutine check
+
+  subroutine parallel_io(mode_flag)
   use typeSizes
   use netcdf
   implicit none
   include 'mpif.h'
-  
+
+  integer :: mode_flag
+
   ! This is the name of the data file we will create.
   character (len = *), parameter :: FILE_NAME = "f90tst_parallel3.nc"
   integer, parameter :: MAX_DIMS = 2
@@ -52,24 +107,11 @@ program f90tst_parallel3
   integer (kind = EightByteInt) :: uint_out(HALF_NY, HALF_NX), uint_in(HALF_NY, HALF_NX)
   integer :: nvars, ngatts, ndims, unlimdimid, file_format
   integer :: x, y, v
-  integer :: p, my_rank, ierr
+  integer :: my_rank, ierr, old_mode
   integer :: start(MAX_DIMS), count(MAX_DIMS)
   integer :: ret
 
-  call MPI_Init(ierr)
   call MPI_Comm_rank(MPI_COMM_WORLD, my_rank, ierr)
-  call MPI_Comm_size(MPI_COMM_WORLD, p, ierr)
-
-  if (my_rank .eq. 0) then
-     print *, ' '
-     print *, '*** Testing netCDF-4 parallel I/O with fill values.'
-  endif
-
-  ! There must be 4 procs for this test.
-  if (p .ne. 4) then
-     print *, 'Sorry, this test program must be run on four processors.'
-     stop 1
-  endif
 
   ! Create some pretend data.
   do x = 1, HALF_NX
@@ -90,9 +132,9 @@ program f90tst_parallel3
        comm = MPI_COMM_WORLD, info = MPI_INFO_NULL, cache_size = CACHE_SIZE, &
        cache_nelems = CACHE_NELEMS, cache_preemption = CACHE_PREEMPTION)
   if (ret /= nf90_einval) stop 8
-  
-  ! Create the netCDF file. 
-  call check(nf90_create(FILE_NAME, IOR(nf90_netcdf4, nf90_mpiposix), ncid, &
+
+  ! Create the netCDF file.
+  call check(nf90_create(FILE_NAME, mode_flag, ncid, &
        comm = MPI_COMM_WORLD, info = MPI_INFO_NULL, cache_size = CACHE_SIZE, &
        cache_nelems = CACHE_NELEMS, cache_preemption = CACHE_PREEMPTION))
 
@@ -101,10 +143,13 @@ program f90tst_parallel3
   call check(nf90_def_dim(ncid, "y", NY, y_dimid))
   dimids =  (/ y_dimid, x_dimid /)
 
-  ! Define the variables. 
+  ! Define the variables.
   do v = 1, NUM_VARS
      call check(nf90_def_var(ncid, var_name(v), var_type(v), dimids, varid(v)))
   end do
+
+  ! enable fill mode
+  call check(nf90_set_fill(ncid, NF90_FILL, old_mode))
 
   ! This will be the last collective operation.
   call check(nf90_enddef(ncid))
@@ -134,17 +179,22 @@ program f90tst_parallel3
      call check(nf90_put_var(ncid, varid(8), uint_out, start = start, count = count))
   endif
 
-  ! Close the file. 
+  ! Close the file.
   call check(nf90_close(ncid))
 
   ! Reopen the file.
   call check(nf90_open(FILE_NAME, IOR(nf90_nowrite, nf90_mpiio), ncid, &
        comm = MPI_COMM_WORLD, info = MPI_INFO_NULL))
-  
+
   ! Check some stuff out.
   call check(nf90_inquire(ncid, ndims, nvars, ngatts, unlimdimid, file_format))
-  if (ndims /= 2 .or. nvars /= NUM_VARS .or. ngatts /= 0 .or. unlimdimid /= -1 .or. &
-       file_format /= nf90_format_netcdf4) stop 2
+  if (ndims /= 2 .or. nvars /= NUM_VARS .or. ngatts /= 0 .or. unlimdimid /= -1) stop 2
+
+  if (IAND(mode_flag, nf90_netcdf4) .GT. 0) then
+      if (file_format /= nf90_format_netcdf4) stop 3
+  else
+      if (file_format /= nf90_format_cdf5) stop 4
+  endif
 
   ! Read this processor's data.
   call check(nf90_get_var(ncid, varid(1), byte_in, start = start, count = count))
@@ -161,15 +211,15 @@ program f90tst_parallel3
   do x = 1, HALF_NX
      do y = 1, HALF_NY
         if (my_rank .eq. 0) then
-           if (byte_in(y, x) .ne. nf90_fill_byte) stop 3
-           if (short_in(y, x) .ne. nf90_fill_short) stop 4
-           if (int_in(y, x) .ne. nf90_fill_int) stop 5
-           if (areal_in(y, x) .ne. nf90_fill_real) stop 6
-           if (double_in(y, x) .ne. nf90_fill_double) stop 7
-           if (ubyte_in(y, x) .ne. nf90_fill_ubyte) stop 8
-           if (ushort_in(y, x) .ne. nf90_fill_ushort) stop 9
-           if (uint_in(y, x) .ne. nf90_fill_uint) stop 10
-        else 
+           if (byte_in(y, x) .ne. nf90_fill_byte) stop 5
+           if (short_in(y, x) .ne. nf90_fill_short) stop 6
+           if (int_in(y, x) .ne. nf90_fill_int) stop 7
+           if (areal_in(y, x) .ne. nf90_fill_real) stop 8
+           if (double_in(y, x) .ne. nf90_fill_double) stop 9
+           if (ubyte_in(y, x) .ne. nf90_fill_ubyte) stop 10
+           if (ushort_in(y, x) .ne. nf90_fill_ushort) stop 11
+           if (uint_in(y, x) .ne. nf90_fill_uint) stop 12
+        else
            if (byte_in(y, x) .ne. (my_rank * (-1))) stop 13
            if (short_in(y, x) .ne. (my_rank * (-2))) stop 14
            if (int_in(y, x) .ne. (my_rank * (-4))) stop 15
@@ -182,25 +232,9 @@ program f90tst_parallel3
      end do
   end do
 
-  ! Close the file. 
+  ! Close the file.
   call check(nf90_close(ncid))
+  end subroutine parallel_io
 
-  call MPI_Finalize(ierr)
-
-  if (my_rank .eq. 0) print *,'*** SUCCESS!'
-
-contains
-!     This subroutine handles errors by printing an error message and
-!     exiting with a non-zero status.
-  subroutine check(errcode)
-    use netcdf
-    implicit none
-    integer, intent(in) :: errcode
-    
-    if(errcode /= nf90_noerr) then
-       print *, 'Error: ', trim(nf90_strerror(errcode))
-       stop 99
-    endif
-  end subroutine check
 end program f90tst_parallel3
 

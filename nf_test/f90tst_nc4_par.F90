@@ -4,11 +4,7 @@ program f90tst_nc4_par
   use mpi
   implicit none
 
-  character (len = *), parameter :: FILE_NAME = "f90tst_nc4_par.nc"
-  integer :: nmode, ierr, fh, my_task, nprocs, i, varid
-  integer :: dimid(3), start(3), count(3)
-  real :: f(3)
-
+  integer :: ierr, my_task, nprocs, nmode
 
   call MPI_INIT(ierr)
   call MPI_COMM_RANK(MPI_COMM_WORLD, my_task, ierr)
@@ -18,24 +14,56 @@ program f90tst_nc4_par
      stop 'requires 8 tasks'
   end if
 
+#ifdef NF_HAS_PNETCDF
+  nmode = IOR(nf90_clobber, nf90_mpiio)
+  call parallel_io(nmode)
+#endif
 
-  nmode = ior(NF90_CLOBBER,NF90_NETCDF4)
-  nmode = IOR(nmode, nf90_mpiio) 
+#ifdef NF_HAS_PARALLEL4
+  nmode = ior(NF90_CLOBBER, NF90_NETCDF4)
+  nmode = IOR(nmode, nf90_mpiio)
+  call parallel_io(nmode)
+#endif
+
+  call MPI_Finalize(ierr)
+
+contains
+  !     This subroutine handles errors by printing an error message and
+  !     exiting with a non-zero status.
+  subroutine handle_err(errcode)
+    use netcdf
+    implicit none
+    integer, intent(in) :: errcode
+
+    if(errcode /= nf90_noerr) then
+       print *, 'Error: ', trim(nf90_strerror(errcode))
+       stop 2
+    endif
+  end subroutine handle_err
+
+  subroutine parallel_io(nmode)
+  use netcdf
+  use mpi
+  implicit none
+
+  character (len = *), parameter :: FILE_NAME = "f90tst_nc4_par.nc"
+  integer :: nmode, fill_mode, ierr, fh, my_task, nprocs, i, varid
+  integer :: dimid(3), start(3), count(3)
+  real :: f(3)
+
+  call MPI_COMM_RANK(MPI_COMM_WORLD, my_task, ierr)
 
   call handle_err(nf90_create(FILE_NAME, nmode, fh, &
        comm = MPI_COMM_WORLD, info = MPI_INFO_NULL))
 
-  call handle_err(nf90_set_fill(fh, NF90_NOFILL, nmode))
-
+  call handle_err(nf90_set_fill(fh, NF90_NOFILL, fill_mode))
 
   call handle_err(nf90_def_dim(fh, 'dim1', 6, dimid(1)))
   call handle_err(nf90_def_dim(fh, 'dim2', 4, dimid(2)))
   call handle_err(nf90_def_dim(fh, 'dim3', 1, dimid(3)))
 
-
   call handle_err(nf90_def_var(fh, 'var1', NF90_DOUBLE, dimid, varid))
   call handle_err(nf90_enddef(fh))
-
 
   do i=1,3
      f(i) = my_task*3+i
@@ -62,21 +90,6 @@ program f90tst_nc4_par
   end do
 
   call handle_err(nf90_close(fh))
-  call MPI_Finalize(ierr)
-
-contains
-  !     This subroutine handles errors by printing an error message and                                                                                                               
-  !     exiting with a non-zero status.                                                                                                                                               
-  subroutine handle_err(errcode)
-    use netcdf
-    implicit none
-    integer, intent(in) :: errcode
-
-    if(errcode /= nf90_noerr) then
-       print *, 'Error: ', trim(nf90_strerror(errcode))
-       stop 2
-    endif
-  end subroutine handle_err
-
+  end subroutine parallel_io
 end program f90tst_nc4_par
 
