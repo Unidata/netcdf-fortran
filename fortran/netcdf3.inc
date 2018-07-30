@@ -60,10 +60,15 @@
       integer nf_lock
       integer nf_share
       integer nf_64bit_offset
+      integer nf_64bit_data
+      integer nf_cdf5
       integer nf_sizehint_default
       integer nf_align_chunk
       integer nf_format_classic
       integer nf_format_64bit
+      integer nf_format_64bit_offset
+      integer nf_format_64bit_data
+      integer nf_format_cdf5
       integer nf_diskless
       integer nf_mmap
 
@@ -76,10 +81,15 @@
       parameter (nf_lock = 1024)
       parameter (nf_share = 2048)
       parameter (nf_64bit_offset = 512)
+      parameter (nf_64bit_data = 32)
+      parameter (nf_cdf5 = nf_64bit_data)
       parameter (nf_sizehint_default = 0)
       parameter (nf_align_chunk = -1)
       parameter (nf_format_classic = 1)
       parameter (nf_format_64bit = 2)
+      parameter (nf_format_64bit_offset = nf_format_64bit)
+      parameter (nf_format_64bit_data = 5)
+      parameter (nf_format_cdf5 = nf_format_64bit_data)
       parameter (nf_diskless = 8)
       parameter (nf_mmap = 16)
 

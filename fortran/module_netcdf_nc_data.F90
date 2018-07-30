@@ -218,10 +218,15 @@ Module netcdf_nc_data
  Integer(C_INT), Parameter :: NC_SHARE            = 2048
  Integer(C_INT), Parameter :: NC_STRICT_NC3       = 8
  Integer(C_INT), Parameter :: NC_64BIT_OFFSET     = 512
+ Integer(C_INT), Parameter :: NC_64BIT_DATA       = 32
+ Integer(C_INT), Parameter :: NC_CDF5             = NC_64BIT_DATA
  Integer(C_INT), Parameter :: NC_SIZEHINT_DEFAULT = 0
  Integer(C_INT), Parameter :: NC_ALIGN_CHUNK      = -1
  Integer(C_INT), Parameter :: NC_FORMAT_CLASSIC   = 1
  Integer(C_INT), Parameter :: NC_FORMAT_64BIT     = 2
+ Integer(C_INT), Parameter :: NC_FORMAT_64BIT_OFFSET = NC_FORMAT_64BIT
+ Integer(C_INT), Parameter :: NC_FORMAT_64BIT_DATA   = 5
+ Integer(C_INT), Parameter :: NC_FORMAT_CDF5         = NC_FORMAT_64BIT_DATA
  Integer(C_INT), Parameter :: NC_DISKLESS         = 8
  Integer(C_INT), Parameter :: NC_MMAP             = 16
  Integer(C_INT), Parameter :: NC_INMEMORY         = 32768
