@@ -311,8 +311,10 @@ C           /* there is nothing to get (edge(j).eq.0) */
                         start(j) = var_shape(j,i) + 1
                         err = nf_get_vara_$1(ncid, i,
      +                          start, edge, value)
+#ifndef NF_RELAX_COORD_BOUND
                         if (canConvert .and. err .ne. NF_EINVALCOORDS)
      +                      call errore('bad start: ', err)
+#endif
                         start(j) = 1
                     endif
 11              continue

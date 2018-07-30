@@ -1182,8 +1182,10 @@ C           /* there is nothing to get (edge(j).eq.0) */
                         start(j) = var_shape(j,i) + 1
                         err = nf_get_vara_text(ncid, i,
      +                          start, edge, value)
+#ifndef NF_RELAX_COORD_BOUND
                         if (canConvert .and. err .ne. NF_EINVALCOORDS)
      +                      call errore('bad start: ', err)
+#endif
                         start(j) = 1
                     endif
 11              continue
@@ -1375,8 +1377,10 @@ C           /* there is nothing to get (edge(j).eq.0) */
                         start(j) = var_shape(j,i) + 1
                         err = nf_get_vara_int1(ncid, i,
      +                          start, edge, value)
+#ifndef NF_RELAX_COORD_BOUND
                         if (canConvert .and. err .ne. NF_EINVALCOORDS)
      +                      call errore('bad start: ', err)
+#endif
                         start(j) = 1
                     endif
 11              continue
@@ -1569,8 +1573,10 @@ C           /* there is nothing to get (edge(j).eq.0) */
                         start(j) = var_shape(j,i) + 1
                         err = nf_get_vara_int2(ncid, i,
      +                          start, edge, value)
+#ifndef NF_RELAX_COORD_BOUND
                         if (canConvert .and. err .ne. NF_EINVALCOORDS)
      +                      call errore('bad start: ', err)
+#endif
                         start(j) = 1
                     endif
 11              continue
@@ -1762,8 +1768,10 @@ C           /* there is nothing to get (edge(j).eq.0) */
                         start(j) = var_shape(j,i) + 1
                         err = nf_get_vara_int(ncid, i,
      +                          start, edge, value)
+#ifndef NF_RELAX_COORD_BOUND
                         if (canConvert .and. err .ne. NF_EINVALCOORDS)
      +                      call errore('bad start: ', err)
+#endif
                         start(j) = 1
                     endif
 11              continue
@@ -1954,8 +1962,10 @@ C           /* there is nothing to get (edge(j).eq.0) */
                         start(j) = var_shape(j,i) + 1
                         err = nf_get_vara_real(ncid, i,
      +                          start, edge, value)
+#ifndef NF_RELAX_COORD_BOUND
                         if (canConvert .and. err .ne. NF_EINVALCOORDS)
      +                      call errore('bad start: ', err)
+#endif
                         start(j) = 1
                     endif
 11              continue
@@ -2146,8 +2156,10 @@ C           /* there is nothing to get (edge(j).eq.0) */
                         start(j) = var_shape(j,i) + 1
                         err = nf_get_vara_double(ncid, i,
      +                          start, edge, value)
+#ifndef NF_RELAX_COORD_BOUND
                         if (canConvert .and. err .ne. NF_EINVALCOORDS)
      +                      call errore('bad start: ', err)
+#endif
                         start(j) = 1
                     endif
 11              continue
