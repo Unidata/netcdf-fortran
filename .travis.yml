@@ -29,4 +29,4 @@ before_install:
 
 script:
 
-    - docker run --rm -it -h "$CURHOST" -e CBRANCH=v4.6.1 -e USEDASH=FALSE -e RUNC=OFF -e RUNF=TRUE -e RUNCXX=OFF -e RUNP=OFF -e RUNNCO=OFF -e USECMAKE=$USECMAKE -e USEAC=$USEAC -e DISTCHECK=$DISTCHECK -e COPTS="$COPTS" -e CTEST_OUTPUT_ON_FAILURE=1 -v $(pwd):/netcdf-fortran $DOCKIMG
+    - docker run --rm -it -h "$CURHOST" -e CBRANCH=master -e USEDASH=FALSE -e RUNC=OFF -e RUNF=TRUE -e RUNCXX=OFF -e RUNP=OFF -e RUNNCO=OFF -e USECMAKE=$USECMAKE -e USEAC=$USEAC -e DISTCHECK=$DISTCHECK -e COPTS="$COPTS" -e CTEST_OUTPUT_ON_FAILURE=1 -v $(pwd):/netcdf-fortran $DOCKIMG

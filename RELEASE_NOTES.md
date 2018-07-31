@@ -8,6 +8,10 @@ Entries are in reverse chronological order (most recent first).
 
 ## 4.4.5 - TBD
 
+Requirements
+* netCDF-C: 4.7.0
+
+* Misc. Bugfixes to bring netCDF-Fortran in line with the features in netCDF-C.
 * Updated CMakeLists.txt to check for C types that match Fortran ones. See [GitHub #67](https://github.com/Unidata/netcdf-fortran/pull/67) for more information.
 
 ## 4.4.4 Released May 13, 2016
