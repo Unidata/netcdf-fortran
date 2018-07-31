@@ -226,8 +226,10 @@ C           stop 2
 
            if (cmode(i) .EQ. 0) then
               print*,"testing classic CDF-1 format"
+#ifdef ENABLE_CDF5
            elseif (cmode(i) .EQ. nf_cdf5) then
               print*,"testing CDF-5 format"
+#endif
            elseif (cmode(i) .EQ. nf_netcdf4) then
               print*,"testing NetCDF-4 format"
            endif
