@@ -486,10 +486,14 @@ C               /* Make sure nf_inq stills sees additions in data mode */
         if (err .ne. 0) then
             call errore('nf_inq_format: ', err)
         else if (nformat .ne. nf_format_classic .and.
-     +           nformat .ne. nf_format_64bit .and.
+#ifdef ENABLE_CDF5
      +           nformat .ne. nf_format_cdf5 .and.
-     +           nformat .ne. nf_format_netcdf4) then
-            call errori('nf_inq_format: wrong format number returned, ', 
+#endif
+#ifdef USE_NETCDF4
+     +           nformat .ne. nf_format_netcdf4 .and.
+#endif
+     +           nformat .ne. nf_format_64bit) then
+            call errori('nf_inq_format: wrong format number returned, ',
      +                  nformat)
         end if
         err = nf_close(ncid)

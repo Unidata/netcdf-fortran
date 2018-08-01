@@ -230,8 +230,10 @@ C           stop 2
            elseif (cmode(i) .EQ. nf_cdf5) then
               print*,"testing CDF-5 format"
 #endif
+#ifdef USE_NETCDF4
            elseif (cmode(i) .EQ. nf_netcdf4) then
               print*,"testing NetCDF-4 format"
+#endif
            endif
            FILE_CMODE = cmode(i)
 
