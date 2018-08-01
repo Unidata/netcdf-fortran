@@ -3,12 +3,12 @@
 
 # This file builds and runs the f77 and f90 tests.
 
-AM_FCFLAGS = -I$(top_srcdir)/fortran ${AM_CPPFLAGS}
+AM_CPPFLAGS = -I$(top_srcdir)/fortran -I../fortran
 
 # Some fortran compilers think your files should not have an .f90
 # extension! The value of FCFLAGS_f90 is set in the configure script,
 # based on the fortran compiler.
-AM_FCFLAGS += $(FCFLAGS_f90) @MOD_FLAG@$(top_builddir)/fortran
+AM_FCFLAGS = @MOD_FLAG@$(top_builddir)/fortran $(FCFLAGS_f90)
 
 AM_FFLAGS = ${AM_FCFLAGS}
 
