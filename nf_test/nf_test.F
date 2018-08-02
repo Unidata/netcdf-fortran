@@ -34,7 +34,7 @@ C           stop 2
 #include "tests.inc"
 
         integer         status
-        integer         i, num_cmode
+        integer         i, num_cmode, err, dft_fmt
         integer         cmode(3)
 
         external        test_nf_strerror
@@ -409,6 +409,10 @@ C           /* Test write functions */
         call test('nf_set_fill', test_nf_set_fill)
         call test('nf_set_default_format',
      +       test_nf_set_default_format)
+
+        ! reset default format, otherwise the remaining tests will use
+        ! the one set in the last test
+        err = nf_set_default_format(NF_FORMAT_CLASSIC, dft_fmt)
         enddo
 
         print *,'Total number of failures: ', nfailsTotal
