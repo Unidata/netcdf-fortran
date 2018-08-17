@@ -283,10 +283,8 @@ MACRO(print_conf_summary)
   MESSAGE(STATUS "\tBuilding netCDF-4:\t\t" ${ENABLE_NETCDF4})
   MESSAGE(STATUS "\tBuilding DAP Support:\t\t" ${ENABLE_DAP})
   MESSAGE(STATUS "\tLogging Support:\t\t" ${STATUS_LOGGING})
-  IF(STATUS_PNETCDF)
-    MESSAGE(STATUS "\tUsing pnetcdf:\t\t\t" ${STATUS_PNETCDF})
-  ENDIF(STATUS_PNETCDF)
-
+  MESSAGE(STATUS "\tEnabling CDF5:\t\t\t" ${ENABLE_CDF5})
+  MESSAGE(STATUS "\tRelaxed check NC_EINVALCOORDS:\t" ${NF_RELAX_COORD_BOUND})
   MESSAGE(STATUS "\tBuilding Parallel IO:\t\t" ${BUILD_PARALLEL})
   MESSAGE(STATUS "\tUsing NetCDF4 Parallel IO:\t" ${NF_HAS_PARALLEL4})
   MESSAGE(STATUS "\tUsing PnetCDF Parallel IO:\t" ${NF_HAS_PNETCDF})
@@ -391,6 +389,7 @@ OPTION(BUILD_BENCHMARKS "Run F90 I/O Benchmarks" OFF)
 OPTION(TEST_WITH_VALGRIND "Run extra tests with valgrind" OFF)
 OPTION(ENABLE_PARALLEL_TESTS "Run parallel I/O tests for F90 and F77" OFF)
 
+SET(TEST_PARALLEL OFF)
 IF(ENABLE_PARALLEL_TESTS)
   SET(TEST_PARALLEL ON)
 ENDIF()
@@ -563,6 +562,12 @@ ENDIF()
 # Determine C library setting for NC_RELAX_COORD_BOUND
 try_compile(NF_RELAX_COORD_BOUND ${CMAKE_CURRENT_BINARY_DIR}
   "${CMAKE_CURRENT_SOURCE_DIR}/CMakeExtras/check_relax_coord_bound.c"
+  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${NETCDF_INCLUDE_DIR}"
+  )
+
+# Determine C library setting for NC_HAS_CDF5
+try_compile(ENABLE_CDF5 ${CMAKE_CURRENT_BINARY_DIR}
+  "${CMAKE_CURRENT_SOURCE_DIR}/CMakeExtras/check_cdf5.c"
   CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${NETCDF_INCLUDE_DIR}"
   )
 

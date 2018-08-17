@@ -15,7 +15,7 @@
 ! variables:
 ! 	int data(x, y) ;
 ! data:
-! 
+!
 !  data =
 !   0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
 !   0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -38,25 +38,12 @@
 !     $Id: f90tst_parallel.f90,v 1.6 2010/05/25 13:53:04 ed Exp $
 
 program f90tst_parallel
-  use typeSizes
   use netcdf
   implicit none
   include 'mpif.h'
-  
-  ! This is the name of the data file we will create.
-  character (len = *), parameter :: FILE_NAME = "f90tst_parallel.nc"
 
-  integer, parameter :: MAX_DIMS = 2
-  integer, parameter :: NX = 16, NY = 16
-  integer, parameter :: NUM_PROC = 4
-  integer :: ncid, varid, dimids(MAX_DIMS), chunksizes(MAX_DIMS), chunksizes_in(MAX_DIMS)
-  integer :: x_dimid, y_dimid, contig
-  integer :: data_out(NY / 2, NX / 2), data_in(NY / 2, NX / 2)
   integer :: mode_flag
-  integer :: nvars, ngatts, ndims, unlimdimid, file_format
-  integer :: x, y, retval
   integer :: p, my_rank, ierr
-  integer :: start(MAX_DIMS), count(MAX_DIMS)
 
   call MPI_Init(ierr)
   call MPI_Comm_rank(MPI_COMM_WORLD, my_rank, ierr)
@@ -70,8 +57,62 @@ program f90tst_parallel
   ! There must be 4 procs for this test.
   if (p .ne. 4) then
      print *, 'Sorry, this test program must be run on four processors.'
-     stop 2 
+     stop 2
   endif
+
+#ifdef NF_HAS_PNETCDF
+  mode_flag = IOR(nf90_clobber, nf90_mpiio)
+  call parallel_io(mode_flag)
+#endif
+
+#ifdef NF_HAS_PARALLEL4
+  mode_flag = IOR(nf90_netcdf4, nf90_classic_model)
+  mode_flag = IOR(mode_flag, nf90_clobber)
+  mode_flag = IOR(mode_flag, nf90_mpiio)
+  call parallel_io(mode_flag)
+#endif
+
+  call MPI_Finalize(ierr)
+
+  if (my_rank .eq. 0) print *,'*** SUCCESS!'
+
+contains
+!     This subroutine handles errors by printing an error message and
+!     exiting with a non-zero status.
+  subroutine handle_err(errcode)
+    use netcdf
+    implicit none
+    integer, intent(in) :: errcode
+
+    if(errcode /= nf90_noerr) then
+       print *, 'Error: ', trim(nf90_strerror(errcode))
+       stop 2
+    endif
+  end subroutine handle_err
+
+  subroutine parallel_io(mode_flag)
+  use typeSizes
+  use netcdf
+  implicit none
+  include 'mpif.h'
+
+  integer :: mode_flag
+
+  ! This is the name of the data file we will create.
+  character (len = *), parameter :: FILE_NAME = "f90tst_parallel.nc"
+
+  integer, parameter :: MAX_DIMS = 2
+  integer, parameter :: NX = 16, NY = 16
+  integer, parameter :: NUM_PROC = 4
+  integer :: ncid, varid, dimids(MAX_DIMS), chunksizes(MAX_DIMS), chunksizes_in(MAX_DIMS)
+  integer :: x_dimid, y_dimid, contig
+  integer :: data_out(NY / 2, NX / 2), data_in(NY / 2, NX / 2)
+  integer :: nvars, ngatts, ndims, unlimdimid, file_format
+  integer :: x, y, retval
+  integer :: my_rank, ierr
+  integer :: start(MAX_DIMS), count(MAX_DIMS)
+
+  call MPI_Comm_rank(MPI_COMM_WORLD, my_rank, ierr)
 
   ! Create some pretend data.
   do x = 1, NX / 2
@@ -80,9 +121,7 @@ program f90tst_parallel
      end do
   end do
 
-  ! Create the netCDF file. 
-  mode_flag = IOR(nf90_netcdf4, nf90_classic_model) 
-  mode_flag = IOR(mode_flag, nf90_mpiio) 
+  ! Create the netCDF file.
   call handle_err(nf90_create(FILE_NAME, mode_flag, ncid, comm = MPI_COMM_WORLD, &
        info = MPI_INFO_NULL))
 
@@ -91,7 +130,7 @@ program f90tst_parallel
   call handle_err(nf90_def_dim(ncid, "y", NY, y_dimid))
   dimids =  (/ y_dimid, x_dimid /)
 
-  ! Define the variable. 
+  ! Define the variable.
   call handle_err(nf90_def_var(ncid, "data", NF90_INT, dimids, varid))
 
   ! With classic model netCDF-4 file, enddef must be called.
@@ -113,53 +152,42 @@ program f90tst_parallel
   ! Write this processor's data.
   call handle_err(nf90_put_var(ncid, varid, data_out, start = start, count = count))
 
-  ! Close the file. 
+  ! Close the file.
   call handle_err(nf90_close(ncid))
 
   ! Reopen the file.
   call handle_err(nf90_open(FILE_NAME, IOR(nf90_nowrite, nf90_mpiio), ncid, &
        comm = MPI_COMM_WORLD, info = MPI_INFO_NULL))
-  
+
   ! Check some stuff out.
   call handle_err(nf90_inquire(ncid, ndims, nvars, ngatts, unlimdimid, file_format))
-  if (ndims /= 2 .or. nvars /= 1 .or. ngatts /= 0 .or. unlimdimid /= -1 .or. &
-       file_format /= nf90_format_netcdf4_classic) stop 3
+  if (ndims /= 2 .or. nvars /= 1 .or. ngatts /= 0 .or. unlimdimid /= -1) stop 3
+
+  if (IAND(mode_flag, nf90_netcdf4) .GT. 0) then
+      if (file_format /= nf90_format_netcdf4_classic) stop 4
+  else
+      if (file_format /= nf90_format_classic) stop 5
+  endif
 
   ! Set collective access on this variable. This will cause all
   ! reads/writes to happen together on every processor. Fairly
   ! pointless, in this contexct, but I want to at least call this
   ! function once in my testing.
   call handle_err(nf90_var_par_access(ncid, varid, nf90_collective))
-      
+
   ! Read this processor's data.
   call handle_err(nf90_get_var(ncid, varid, data_in, start = start, count = count))
 
   ! Check the data.
   do x = 1, NX / 2
      do y = 1, NY / 2
-        if (data_in(y, x) .ne. my_rank) stop 4
+        if (data_in(y, x) .ne. my_rank) stop 6
      end do
   end do
 
-  ! Close the file. 
+  ! Close the file.
   call handle_err(nf90_close(ncid))
+  end subroutine parallel_io
 
-  call MPI_Finalize(ierr)
-
-  if (my_rank .eq. 0) print *,'*** SUCCESS!'
-
-contains
-!     This subroutine handles errors by printing an error message and
-!     exiting with a non-zero status.
-  subroutine handle_err(errcode)
-    use netcdf
-    implicit none
-    integer, intent(in) :: errcode
-    
-    if(errcode /= nf90_noerr) then
-       print *, 'Error: ', trim(nf90_strerror(errcode))
-       stop 2
-    endif
-  end subroutine handle_err
 end program f90tst_parallel
 

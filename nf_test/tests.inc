@@ -156,6 +156,7 @@
       INTEGER                   GATT_TYPE(NGATTS)
       INTEGER                   ATTLEN(MAX_NATTS,NVARS)
       INTEGER                   GATT_LEN(NGATTS)
+      INTEGER                   FILE_CMODE
 
 !    /* Miscellaneous global variables: */
       CHARACTER*80              PROGNAME        !/* name of the program */
@@ -189,7 +190,8 @@
      *                          ATTLEN,
      *                          GATT_LEN,
      *                          MAX_NMPT,
-     *                          NFAILSTOTAL
+     *                          NFAILSTOTAL,
+     *                          FILE_CMODE
 
 
 !    /* Functions for accessing attribute test data */

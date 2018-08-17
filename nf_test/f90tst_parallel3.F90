@@ -22,39 +22,12 @@
 !     $Id: f90tst_parallel3.f90,v 1.5 2010/05/25 13:53:04 ed Exp $
 
 program f90tst_parallel3
-  use typeSizes
   use netcdf
   implicit none
   include 'mpif.h'
-  
-  ! This is the name of the data file we will create.
-  character (len = *), parameter :: FILE_NAME = "f90tst_parallel3.nc"
-  integer, parameter :: MAX_DIMS = 2
-  integer, parameter :: NX = 16, NY = 16
-  integer, parameter :: HALF_NX = NX/2, HALF_NY = NY/2
-  integer, parameter :: NUM_PROC = 4
-  integer, parameter :: NUM_VARS = 8
-  integer, parameter :: CACHE_SIZE = 4194304, CACHE_NELEMS = 1013
-  integer, parameter :: CACHE_PREEMPTION = 79
-  character (len = *), parameter :: var_name(NUM_VARS) = &
-       (/ 'byte__', 'short_', 'int___', 'float_', 'double', 'ubyte_', 'ushort', 'uint__' /)
-  integer :: ncid, varid(NUM_VARS), dimids(MAX_DIMS)
-  integer :: var_type(NUM_VARS) = (/ nf90_byte, nf90_short, nf90_int, &
-       nf90_float, nf90_double, nf90_ubyte, nf90_ushort, nf90_uint /)
-  integer :: x_dimid, y_dimid
-  integer :: byte_out(HALF_NY, HALF_NX), byte_in(HALF_NY, HALF_NX)
-  integer :: short_out(HALF_NY, HALF_NX), short_in(HALF_NY, HALF_NX)
-  integer :: int_out(HALF_NY, HALF_NX), int_in(HALF_NY, HALF_NX)
-  real :: areal_out(HALF_NY, HALF_NX), areal_in(HALF_NY, HALF_NX)
-  real :: double_out(HALF_NY, HALF_NX), double_in(HALF_NY, HALF_NX)
-  integer :: ubyte_out(HALF_NY, HALF_NX), ubyte_in(HALF_NY, HALF_NX)
-  integer :: ushort_out(HALF_NY, HALF_NX), ushort_in(HALF_NY, HALF_NX)
-  integer (kind = EightByteInt) :: uint_out(HALF_NY, HALF_NX), uint_in(HALF_NY, HALF_NX)
-  integer :: nvars, ngatts, ndims, unlimdimid, file_format
-  integer :: x, y, v
+
+  integer :: mode_flag
   integer :: p, my_rank, ierr
-  integer :: start(MAX_DIMS), count(MAX_DIMS)
-  integer :: ret
 
   call MPI_Init(ierr)
   call MPI_Comm_rank(MPI_COMM_WORLD, my_rank, ierr)
@@ -71,6 +44,89 @@ program f90tst_parallel3
      stop 1
   endif
 
+#ifdef NF_HAS_PNETCDF
+  mode_flag = IOR(nf90_clobber, nf90_mpiio)
+#ifdef ENABLE_CDF5
+  mode_flag = IOR(mode_flag, nf90_64bit_data)
+#else
+  mode_flag = IOR(mode_flag, nf90_64bit_offset)
+#endif
+  call parallel_io(mode_flag)
+#endif
+
+#ifdef NF_HAS_PARALLEL4
+  mode_flag = IOR(nf90_netcdf4, nf90_mpiposix)
+  mode_flag = IOR(mode_flag, nf90_clobber)
+  call parallel_io(mode_flag)
+#endif
+
+  call MPI_Finalize(ierr)
+
+  if (my_rank .eq. 0) print *,'*** SUCCESS!'
+
+contains
+!     This subroutine handles errors by printing an error message and
+!     exiting with a non-zero status.
+  subroutine check(errcode)
+    use netcdf
+    implicit none
+    integer, intent(in) :: errcode
+
+    if(errcode /= nf90_noerr) then
+       print *, 'Error: ', trim(nf90_strerror(errcode))
+       stop 99
+    endif
+  end subroutine check
+
+  subroutine parallel_io(mode_flag)
+  use typeSizes
+  use netcdf
+  implicit none
+  include 'mpif.h'
+
+  integer :: mode_flag
+
+  ! This is the name of the data file we will create.
+  character (len = *), parameter :: FILE_NAME = "f90tst_parallel3.nc"
+  integer, parameter :: MAX_DIMS = 2
+  integer, parameter :: NX = 16, NY = 16
+  integer, parameter :: HALF_NX = NX/2, HALF_NY = NY/2
+  integer, parameter :: NUM_PROC = 4
+  integer, parameter :: CACHE_SIZE = 4194304, CACHE_NELEMS = 1013
+  integer, parameter :: CACHE_PREEMPTION = 79
+#if defined(NF_HAS_PARALLEL4) || defined(ENABLE_CDF5)
+  integer, parameter :: NUM_VARS = 8
+  character (len = *), parameter :: var_name(NUM_VARS) = &
+       (/ 'byte__', 'short_', 'int___', 'float_', 'double', 'ubyte_', 'ushort', 'uint__' /)
+  integer :: var_type(NUM_VARS) = (/ nf90_byte, nf90_short, nf90_int, &
+       nf90_float, nf90_double, nf90_ubyte, nf90_ushort, nf90_uint /)
+#else
+  integer, parameter :: NUM_VARS = 5
+  character (len = *), parameter :: var_name(NUM_VARS) = &
+       (/ 'byte__', 'short_', 'int___', 'float_', 'double' /)
+  integer :: var_type(NUM_VARS) = (/ nf90_byte, nf90_short, nf90_int, &
+       nf90_float, nf90_double /)
+#endif
+  integer :: ncid, varid(NUM_VARS), dimids(MAX_DIMS)
+  integer :: x_dimid, y_dimid
+  integer :: byte_out(HALF_NY, HALF_NX), byte_in(HALF_NY, HALF_NX)
+  integer :: short_out(HALF_NY, HALF_NX), short_in(HALF_NY, HALF_NX)
+  integer :: int_out(HALF_NY, HALF_NX), int_in(HALF_NY, HALF_NX)
+  real :: areal_out(HALF_NY, HALF_NX), areal_in(HALF_NY, HALF_NX)
+  real :: double_out(HALF_NY, HALF_NX), double_in(HALF_NY, HALF_NX)
+#if defined(NF_HAS_PARALLEL4) || defined(ENABLE_CDF5)
+  integer :: ubyte_out(HALF_NY, HALF_NX), ubyte_in(HALF_NY, HALF_NX)
+  integer :: ushort_out(HALF_NY, HALF_NX), ushort_in(HALF_NY, HALF_NX)
+  integer (kind = EightByteInt) :: uint_out(HALF_NY, HALF_NX), uint_in(HALF_NY, HALF_NX)
+#endif
+  integer :: nvars, ngatts, ndims, unlimdimid, file_format
+  integer :: x, y, v
+  integer :: my_rank, ierr, old_mode
+  integer :: start(MAX_DIMS), count(MAX_DIMS)
+  integer :: ret
+
+  call MPI_Comm_rank(MPI_COMM_WORLD, my_rank, ierr)
+
   ! Create some pretend data.
   do x = 1, HALF_NX
      do y = 1, HALF_NY
@@ -79,9 +135,11 @@ program f90tst_parallel3
         int_out(y, x) = my_rank * (-4)
         areal_out(y, x) = my_rank * 2.5
         double_out(y, x) = my_rank * (-4.5)
+#if defined(NF_HAS_PARALLEL4) || defined(ENABLE_CDF5)
         ubyte_out(y, x) = my_rank
         ushort_out(y, x) = my_rank * 2
         uint_out(y, x) = my_rank * 4
+#endif
      end do
   end do
 
@@ -90,9 +148,9 @@ program f90tst_parallel3
        comm = MPI_COMM_WORLD, info = MPI_INFO_NULL, cache_size = CACHE_SIZE, &
        cache_nelems = CACHE_NELEMS, cache_preemption = CACHE_PREEMPTION)
   if (ret /= nf90_einval) stop 8
-  
-  ! Create the netCDF file. 
-  call check(nf90_create(FILE_NAME, IOR(nf90_netcdf4, nf90_mpiposix), ncid, &
+
+  ! Create the netCDF file.
+  call check(nf90_create(FILE_NAME, mode_flag, ncid, &
        comm = MPI_COMM_WORLD, info = MPI_INFO_NULL, cache_size = CACHE_SIZE, &
        cache_nelems = CACHE_NELEMS, cache_preemption = CACHE_PREEMPTION))
 
@@ -101,10 +159,13 @@ program f90tst_parallel3
   call check(nf90_def_dim(ncid, "y", NY, y_dimid))
   dimids =  (/ y_dimid, x_dimid /)
 
-  ! Define the variables. 
+  ! Define the variables.
   do v = 1, NUM_VARS
      call check(nf90_def_var(ncid, var_name(v), var_type(v), dimids, varid(v)))
   end do
+
+  ! enable fill mode
+  call check(nf90_set_fill(ncid, NF90_FILL, old_mode))
 
   ! This will be the last collective operation.
   call check(nf90_enddef(ncid))
@@ -129,22 +190,33 @@ program f90tst_parallel3
      call check(nf90_put_var(ncid, varid(3), int_out, start = start, count = count))
      call check(nf90_put_var(ncid, varid(4), areal_out, start = start, count = count))
      call check(nf90_put_var(ncid, varid(5), double_out, start = start, count = count))
+#if defined(NF_HAS_PARALLEL4) || defined(ENABLE_CDF5)
      call check(nf90_put_var(ncid, varid(6), ubyte_out, start = start, count = count))
      call check(nf90_put_var(ncid, varid(7), ushort_out, start = start, count = count))
      call check(nf90_put_var(ncid, varid(8), uint_out, start = start, count = count))
+#endif
   endif
 
-  ! Close the file. 
+  ! Close the file.
   call check(nf90_close(ncid))
 
   ! Reopen the file.
   call check(nf90_open(FILE_NAME, IOR(nf90_nowrite, nf90_mpiio), ncid, &
        comm = MPI_COMM_WORLD, info = MPI_INFO_NULL))
-  
+
   ! Check some stuff out.
   call check(nf90_inquire(ncid, ndims, nvars, ngatts, unlimdimid, file_format))
-  if (ndims /= 2 .or. nvars /= NUM_VARS .or. ngatts /= 0 .or. unlimdimid /= -1 .or. &
-       file_format /= nf90_format_netcdf4) stop 2
+  if (ndims /= 2 .or. nvars /= NUM_VARS .or. ngatts /= 0 .or. unlimdimid /= -1) stop 2
+
+  if (IAND(mode_flag, nf90_netcdf4) .GT. 0) then
+      if (file_format /= nf90_format_netcdf4) stop 3
+  else
+#ifdef ENABLE_CDF5
+      if (file_format /= nf90_format_cdf5) stop 4
+#else
+      if (file_format /= nf90_format_64bit_offset) stop 4
+#endif
+  endif
 
   ! Read this processor's data.
   call check(nf90_get_var(ncid, varid(1), byte_in, start = start, count = count))
@@ -152,55 +224,45 @@ program f90tst_parallel3
   call check(nf90_get_var(ncid, varid(3), int_in, start = start, count = count))
   call check(nf90_get_var(ncid, varid(4), areal_in, start = start, count = count))
   call check(nf90_get_var(ncid, varid(5), double_in, start = start, count = count))
+#if defined(NF_HAS_PARALLEL4) || defined(ENABLE_CDF5)
   call check(nf90_get_var(ncid, varid(6), ubyte_in, start = start, count = count))
   call check(nf90_get_var(ncid, varid(7), ushort_in, start = start, count = count))
   call check(nf90_get_var(ncid, varid(8), uint_in, start = start, count = count))
+#endif
 
   ! Check the data. All the data from the processor zero are fill
   ! value.
   do x = 1, HALF_NX
      do y = 1, HALF_NY
         if (my_rank .eq. 0) then
-           if (byte_in(y, x) .ne. nf90_fill_byte) stop 3
-           if (short_in(y, x) .ne. nf90_fill_short) stop 4
-           if (int_in(y, x) .ne. nf90_fill_int) stop 5
-           if (areal_in(y, x) .ne. nf90_fill_real) stop 6
-           if (double_in(y, x) .ne. nf90_fill_double) stop 7
-           if (ubyte_in(y, x) .ne. nf90_fill_ubyte) stop 8
-           if (ushort_in(y, x) .ne. nf90_fill_ushort) stop 9
-           if (uint_in(y, x) .ne. nf90_fill_uint) stop 10
-        else 
+           if (byte_in(y, x) .ne. nf90_fill_byte) stop 5
+           if (short_in(y, x) .ne. nf90_fill_short) stop 6
+           if (int_in(y, x) .ne. nf90_fill_int) stop 7
+           if (areal_in(y, x) .ne. nf90_fill_real) stop 8
+           if (double_in(y, x) .ne. nf90_fill_double) stop 9
+#if defined(NF_HAS_PARALLEL4) || defined(ENABLE_CDF5)
+           if (ubyte_in(y, x) .ne. nf90_fill_ubyte) stop 10
+           if (ushort_in(y, x) .ne. nf90_fill_ushort) stop 11
+           if (uint_in(y, x) .ne. nf90_fill_uint) stop 12
+#endif
+        else
            if (byte_in(y, x) .ne. (my_rank * (-1))) stop 13
            if (short_in(y, x) .ne. (my_rank * (-2))) stop 14
            if (int_in(y, x) .ne. (my_rank * (-4))) stop 15
            if (areal_in(y, x) .ne. (my_rank * (2.5))) stop 16
            if (double_in(y, x) .ne. (my_rank * (-4.5))) stop 17
+#if defined(NF_HAS_PARALLEL4) || defined(ENABLE_CDF5)
            if (ubyte_in(y, x) .ne. (my_rank * (1))) stop 18
            if (ushort_in(y, x) .ne. (my_rank * (2))) stop 19
            if (uint_in(y, x) .ne. (my_rank * (4))) stop 20
+#endif
         endif
      end do
   end do
 
-  ! Close the file. 
+  ! Close the file.
   call check(nf90_close(ncid))
+  end subroutine parallel_io
 
-  call MPI_Finalize(ierr)
-
-  if (my_rank .eq. 0) print *,'*** SUCCESS!'
-
-contains
-!     This subroutine handles errors by printing an error message and
-!     exiting with a non-zero status.
-  subroutine check(errcode)
-    use netcdf
-    implicit none
-    integer, intent(in) :: errcode
-    
-    if(errcode /= nf90_noerr) then
-       print *, 'Error: ', trim(nf90_strerror(errcode))
-       stop 99
-    endif
-  end subroutine check
 end program f90tst_parallel3
 

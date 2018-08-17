@@ -5,6 +5,7 @@
 #cmakedefine NF_RELAX_COORD_BOUND 1
 #cmakedefine NF_HAS_PARALLEL4 1
 #cmakedefine NF_HAS_PNETCDF 1
+#cmakedefine ENABLE_CDF5 1
 
 #ifndef UD_NETCDF_CPP_INC
 #define UD_NETCDF_CPP_INC
