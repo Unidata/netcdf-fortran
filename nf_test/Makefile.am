@@ -174,6 +174,6 @@ EXTRA_DIST = test_get.F test_put.F fills.cdl create_fills.sh	\
 			CMakeLists.txt
 
 # Cleaning up files created during the process.
-CLEANFILES = scratch.nc test.nc copy.nc fills.nc tst_*.nc ftst_*.nc f90tst_*.nc temp.tmp
+CLEANFILES = scratch.nc test.nc copy.nc fills.nc tst_*.nc ftst_*.nc f90tst_*.nc temp.tmp fort.*
 
 MAINTAINERCLEANFILES = test_get.F test_put.F
