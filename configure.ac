@@ -334,7 +334,7 @@ AC_MSG_CHECKING([whether benchmarks should be run (experimental)])
 AC_ARG_ENABLE([benchmarks],
               [AS_HELP_STRING([--enable-benchmarks],
                               [Run benchmarks. This is an experimental feature.])])
-test "x$enable_benchmarks" = xyes || enable_benchmarks=no
+test "x$enable_benchmarks" = xno || enable_benchmarks=yes
 AC_MSG_RESULT($enable_benchmarks)
 AM_CONDITIONAL(BUILD_BENCHMARKS, [test x$enable_benchmarks = xyes])
 
