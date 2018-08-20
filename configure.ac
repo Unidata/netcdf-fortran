@@ -318,6 +318,17 @@ if test "x$enable_large_file_tests" = xyes; then
    AC_DEFINE([LARGE_FILE_TESTS], [1], [do large file tests])
 fi
 
+###
+# Do we want to build the examples?
+###
+AC_MSG_CHECKING([whether to build the examples])
+AC_ARG_ENABLE([examples],
+    [AS_HELP_STRING([--disable-examples],
+        [don't build the netCDF Fortran examples])])
+test "x$enable_examples" = xno && nf_build_examples=no
+AC_MSG_RESULT($nf_build_examples)
+AM_CONDITIONAL(BUILD_EXAMPLES, [test x$nf_build_examples = xyes])
+
 # Does the user want to run benchmarks?
 AC_MSG_CHECKING([whether benchmarks should be run (experimental)])
 AC_ARG_ENABLE([benchmarks],
