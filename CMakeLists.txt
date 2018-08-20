@@ -755,6 +755,11 @@ ENDIF()
 # End user-specified dependent libraries.
 ###
 
+###
+# Option to enable examples.
+###
+OPTION(BUILD_EXAMPLES "Enable compilation of examples." ON)
+
 # Determine whether or not to generate documentation.
 OPTION(ENABLE_DOXYGEN "Enable generation of doxygen-based documentation." OFF)
 IF(ENABLE_DOXYGEN)
@@ -816,6 +821,8 @@ IF(ENABLE_TESTS)
 ENDIF()
 
 # Build the Fortran examples
-ADD_SUBDIRECTORY(examples)
+IF(BUILD_EXAMPLES)
+  ADD_SUBDIRECTORY(examples)
+ENDIF(BUILD_EXAMPLES)
 ADD_SUBDIRECTORY(docs)
 print_conf_summary()
