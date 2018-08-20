@@ -318,16 +318,6 @@ if test "x$enable_large_file_tests" = xyes; then
    AC_DEFINE([LARGE_FILE_TESTS], [1], [do large file tests])
 fi
 
-###
-# Do we want to build the examples?
-###
-AC_MSG_CHECKING([whether to build the examples])
-AC_ARG_ENABLE([examples],
-    [AS_HELP_STRING([--disable-examples],
-        [don't build the netCDF Fortran examples])])
-test "x$enable_examples" = xno || enable_examples=yes
-AC_MSG_RESULT($enable_examples)
-
 # Does the user want to run benchmarks?
 AC_MSG_CHECKING([whether benchmarks should be run (experimental)])
 AC_ARG_ENABLE([benchmarks],
@@ -594,7 +584,6 @@ fi
 # or no.
 AM_CONDITIONAL(TEST_PARALLEL, [test "x$enable_parallel_tests" = xyes])
 AM_CONDITIONAL(USE_VALGRIND_TESTS, [test "x$enable_valgrind_tests" = xyes])
-AM_CONDITIONAL(ENABLE_EXAMPLES, [test x$enable_examples = xyes])
 
 # Flags for nf-config script; by design $prefix, $includir, $libdir,
 # etc.  are left as shell variables in the script so as to facilitate

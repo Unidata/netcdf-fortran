@@ -24,16 +24,9 @@ else
 LIBSRC_DIR = libsrc
 endif
 
-###
-# Build Examples
-###
-if ENABLE_EXAMPLES
-	EXAMPLES_DIR = examples
-endif
-
 # This is the list of subdirs for which Makefiles will be constructed
 # and run.
-SUBDIRS = $(LIBSRC_DIR) $(FTN_DIR) . nf_test $(F03_TESTS) docs $(EXAMPLES_DIR) \
+SUBDIRS = $(LIBSRC_DIR) $(FTN_DIR) . nf_test $(F03_TESTS) docs examples \
 	CMakeExtras
 
 # Remove these generated files, for a distclean.
