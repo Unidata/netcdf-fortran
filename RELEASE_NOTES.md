@@ -14,7 +14,7 @@ Entries are in reverse chronological order (most recent first).
 
 ### Changes
 
-* Added an option in cmake builds, `BUILD_EXAMPLES`, `TRUE` by default.  Also added a `--disable-examples` option for autoconf based builds. When disabled, the examples will not be built.  See [#93](https://github.com/Unidata/netcdf-fortran/issues/92) for more information.
+* Added an option in cmake builds, `BUILD_EXAMPLES`, `TRUE` by default. When disabled, the examples will not be built.  See [#93](https://github.com/Unidata/netcdf-fortran/issues/92) for more information.
 * Misc. Bugfixes to bring netCDF-Fortran in line with the features in netCDF-C.
 * Updated CMakeLists.txt to check for C types that match Fortran ones. See [GitHub #67](https://github.com/Unidata/netcdf-fortran/pull/67) for more information.
 
