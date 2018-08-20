@@ -325,9 +325,8 @@ AC_MSG_CHECKING([whether to build the examples])
 AC_ARG_ENABLE([examples],
     [AS_HELP_STRING([--disable-examples],
         [don't build the netCDF Fortran examples])])
-test "x$enable_examples" = xno && nf_build_examples=yes
-AC_MSG_RESULT($nf_build_examples)
-AM_CONDITIONAL(BUILD_EXAMPLES, [test x$nf_build_examples = xyes])
+test "x$enable_examples" = xno || enable_examples=yes
+AC_MSG_RESULT($enable_examples)
 
 # Does the user want to run benchmarks?
 AC_MSG_CHECKING([whether benchmarks should be run (experimental)])
@@ -391,7 +390,6 @@ if test "x$nc_build_f90" = xyes; then
 fi
 
 AM_CONDITIONAL(BUILD_F03, [test "x$nc_build_f03" = xyes])
-
 # Set up libtool.
 AC_MSG_NOTICE([setting up libtool])
 LT_PREREQ([2.2])
@@ -596,6 +594,7 @@ fi
 # or no.
 AM_CONDITIONAL(TEST_PARALLEL, [test "x$enable_parallel_tests" = xyes])
 AM_CONDITIONAL(USE_VALGRIND_TESTS, [test "x$enable_valgrind_tests" = xyes])
+AM_CONDITIONAL(ENABLE_EXAMPLES, [test x$enable_examples = xyes])
 
 # Flags for nf-config script; by design $prefix, $includir, $libdir,
 # etc.  are left as shell variables in the script so as to facilitate
