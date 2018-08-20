@@ -758,7 +758,7 @@ ENDIF()
 ###
 # Option to enable examples.
 ###
-OPTION(ENABLE_EXAMPLES "Enable compilation of examples." ON)
+OPTION(BUILD_EXAMPLES "Enable compilation of examples." ON)
 
 # Determine whether or not to generate documentation.
 OPTION(ENABLE_DOXYGEN "Enable generation of doxygen-based documentation." OFF)
