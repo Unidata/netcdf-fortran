@@ -325,7 +325,7 @@ AC_MSG_CHECKING([whether to build the examples])
 AC_ARG_ENABLE([examples],
     [AS_HELP_STRING([--disable-examples],
         [don't build the netCDF Fortran examples])])
-test "x$enable_examples" = xno && nf_build_examples=no
+test "x$enable_examples" = xno && nf_build_examples=yes
 AC_MSG_RESULT($nf_build_examples)
 AM_CONDITIONAL(BUILD_EXAMPLES, [test x$nf_build_examples = xyes])
 
