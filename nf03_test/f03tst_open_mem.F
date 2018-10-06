@@ -122,7 +122,7 @@ C then call nf_open_mem in NF_DISKLESS mode
         Read(7, iostat=iostat) memfile(1:ncsize)
         If (iostat == 0) then
            Close(7)
-           mode = NF_DISKLESS
+           mode = NF_INMEMORY
            retval = nf_open_mem(FILE_NAME, mode, ncsize, memfile, ncid)
         Else
            retval = iostat
