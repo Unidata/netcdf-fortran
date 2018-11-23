@@ -145,6 +145,14 @@ ftst_parallel_SOURCES = ftst_parallel.F
 ftst_parallel_nasa_SOURCES = ftst_parallel_nasa.F
 endif # TEST_PARALLEL
 
+# Test filters
+if TEST_FILTERS
+check_PROGRAMS += ftst_filter 
+ftst_filter_SOURCES = ftst_filter.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
+TESTS += ftst_filter
+endif
+
+
 endif #USE_NETCDF4
 
 # This is the fortran v2 test. It depends on the utilities being built

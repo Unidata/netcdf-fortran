@@ -1800,6 +1800,77 @@
  status  = cstatus
 
  End Function nf_inq_var_endian
+!-------------------------------- nf_def_var_filter ---------------------------
+ Function nf_def_var_filter( ncid, varid, filterid, nparams, params) RESULT(status)
+
+! define variable filter 
+
+ USE netcdf4_nc_interfaces
+
+ Implicit NONE
+
+ Integer, Intent(IN) :: ncid, varid, filterid, nparams
+ Integer, Intent(IN) :: params(*)
+
+ Integer             :: status
+
+ Integer(C_INT) :: cncid, cvarid, cfilterid, cstatus
+ Integer(C_SIZE_T) :: cnparams
+
+ cncid    = ncid
+ cvarid   = varid-1
+ cfilterid = filterid
+ cnparams = nparams
+
+ cstatus = nc_def_var_filter(cncid, cvarid, cfilterid, cnparams, params)
+
+ status = cstatus
+
+ End Function nf_def_var_filter
+!-------------------------------- nf_inq_var_filter -----------------------------
+ Function nf_inq_var_filter(ncid, varid, filterid, nparams, params) RESULT(status)
+
+! get filter variables
+ 
+ USE netcdf4_nc_interfaces
+
+ Implicit NONE
+
+ Integer, Intent(IN)  :: ncid, varid
+ Integer, Intent(OUT) :: filterid, nparams
+ Integer, Intent(OUT) :: params(*)
+
+ Integer                :: status
+
+ Integer(C_INT) :: cncid, cvarid, cstatus, cstatus1, cfilterid
+ Integer(C_SIZE_T) :: cnparams
+ Integer(C_INT), ALLOCATABLE :: cparams(:)
+
+ cncid  = ncid
+ cvarid = varid-1
+ params(1) = 0
+
+ cstatus1 = nc_inq_varnparams(cncid, cvarid, cnparams)
+
+ If (cstatus1 == NC_NOERR) Then
+   ALLOCATE(cparams(cnparams))
+ Else
+   ALLOCATE(cparams(1))
+ EndIf
+
+ cstatus = nc_inq_var_filter(cncid, cvarid, cfilterid, cnparams, cparams)
+
+ If (cstatus == NC_NOERR) Then
+   filterid = cfilterid
+   nparams = cnparams
+   If (cnparams > 0) Then
+     params(1:nparams) = cparams(1:nparams)
+   EndIf
+ EndIf
+
+ status = cstatus
+
+ End Function nf_inq_var_filter
 !--------------------------------- nf_put_att --------------------------------
  Function nf_put_att(ncid, varid, name, xtype, nlen, value) RESULT(status)
 
