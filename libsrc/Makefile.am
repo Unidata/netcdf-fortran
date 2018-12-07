@@ -33,29 +33,6 @@ if USE_NETCDF4
 libnetcdfc_la_SOURCES += fort-nc4.c
 endif
 
-## The include file and man page are both built by make.
-#BUILT_SOURCES = netcdf.inc
-#
-#netcdf.inc: netcdf2.inc netcdf3.inc netcdf4.inc nfconfig.inc
-#	echo '!     NetCDF-3.' > netcdf.inc
-#	cat @top_srcdir@/fortran/netcdf3.inc >> netcdf.inc
-#if BUILD_V2
-#	echo >> netcdf.inc
-#	echo '!     NetCDF-2.' >> netcdf.inc
-#	cat @top_srcdir@/fortran/netcdf2.inc >> netcdf.inc
-#endif
-#if USE_NETCDF4
-#	echo >> netcdf.inc
-#	echo '!     NetCDF-4.' >> netcdf.inc
-#	cat @top_srcdir@/fortran/netcdf4.inc >> netcdf.inc
-#endif
-#if USE_LOGGING
-#	echo >> netcdf.inc
-#	echo '!     This is to turn on netCDF internal logging.' >> netcdf.inc
-#	echo '      integer nf_set_log_level' >> netcdf.inc
-#	echo '      external nf_set_log_level' >> netcdf.inc
-#endif
-
 # The F77 API man page.
 man_MANS = netcdf_f77.3
 

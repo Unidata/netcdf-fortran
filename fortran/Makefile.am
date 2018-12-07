@@ -216,16 +216,13 @@ if USE_LOGGING
 	echo '      external nf_set_log_level' >> netcdf.inc
 endif
 
-# The nfconfig.in file is turned into nfconfig.inc by the configure
-# script. The man page is generated on the developers machine for the dist
-EXTRA_DIST += netcdf.inc netcdf2.inc netcdf3.inc netcdf4.inc
+EXTRA_DIST += netcdf2.inc netcdf3.inc netcdf4.inc
 
-DISTCLEANFILES += nfconfig1.inc nfconfig.inc netcdf.inc
-
-CLEANFILES += netcdf_nc_data.mod netcdf_nc_interfaces.mod netcdf_nf_data.mod \
-              netcdf_nf_interfaces.mod netcdf_fortv2_c_interfaces.mod \
-              netcdf_f03.mod netcdf4_nc_interfaces.mod \
-              netcdf4_nf_interfaces.mod netcdf4_f03.mod
+CLEANFILES += netcdf_nc_data.mod netcdf_nc_interfaces.mod		\
+netcdf_nf_data.mod netcdf_nf_interfaces.mod				\
+netcdf_fortv2_c_interfaces.mod netcdf_f03.mod				\
+netcdf4_nc_interfaces.mod netcdf4_nf_interfaces.mod netcdf4_f03.mod	\
+nfconfig.inc netcdf.inc
 
 CLEANFILES += $(UCHEADERS) $(UCCOMMON) $(LCHEADERS) $(LCCOMMON)
 
