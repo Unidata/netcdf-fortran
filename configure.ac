@@ -341,7 +341,6 @@ AC_ARG_WITH([temp-large],
             [TEMP_LARGE=$with_temp_large])
 TEMP_LARGE=${TEMP_LARGE-.}
 AC_MSG_RESULT($TEMP_LARGE)
-#AC_SUBST(TEMP_LARGE)
 AC_DEFINE_UNQUOTED([TEMP_LARGE], ["$TEMP_LARGE"], [Place to put very large netCDF test files.])
 
 
@@ -375,10 +374,6 @@ if test "x$nc_build_f90" = xyes; then
      AX_F90_MODULE_FLAG
      AC_SUBST(MOD_FLAG, ${ax_cv_f90_modflag})
    fi
-
-   # Set the FCLIBS flag to help with shared libraries.
-#   AC_FC_LIBRARY_LDFLAGS
-#   AC_F77_LIBRARY_LDFLAGS
 fi
 
 AM_CONDITIONAL(BUILD_F03, [test "x$nc_build_f03" = xyes])
@@ -435,15 +430,6 @@ esac
 # Check to see if any macros must be set to enable large (>2GB) files.
 AC_SYS_LARGEFILE
 
-#AC_MSG_NOTICE([displaying some results])
-
-## This next macro just prints some results for debugging
-## support issues.
-#UD_DISPLAY_RESULTS
-
-# For nightly build testing, output CC, FC, etc.
-#echo "CPPFLAGS=$CPPFLAGS CC=$CC CFLAGS=$CFLAGS CXX=$CXX CXXFLAGS=$CXXFLAGS FC=$FC FCFLAGS=$FCFLAGS F77=$F77 FFLAGS=$FFLAGS LDFLAGS=$LDFLAGS LIBS=$LIBS FLIBS=$FLIBS F90LIBS=$F90LIBS" >> comps.txt
-
 ac_cv_prog_f90_uppercase_mod=no
 
 # This will test the f77 compiler, as well as check some fortran types.
@@ -498,17 +484,22 @@ fi
 
 AC_MSG_NOTICE([checking types, headers, and functions])
 
+# We must check for all these, because they may be used by the netCDF
+# C library.
+AC_CHECK_LIB([m], [floor], [], [])
+AC_CHECK_LIB([curl], [curl_easy_setopt], [], [])
+AC_SEARCH_LIBS([deflate], [zlibwapi zlibstat zlib zlib1 z], [], [])
+AC_SEARCH_LIBS([SZ_Compress], [szip sz], [], [])
+AC_SEARCH_LIBS([dlopen], [dl dld], [], [])
+AC_SEARCH_LIBS([H5Fflush], [hdf5dll hdf5], [], [])
+AC_SEARCH_LIBS([H5DSis_scale], [hdf5_hldll hdf5_hl], [], [])
+
 # Find the netCDF header and library.
 AC_CHECK_HEADERS([netcdf.h], [], [AC_MSG_ERROR([netcdf.h could not be found. Please set CPPFLAGS.])])
 AC_SEARCH_LIBS([nc_open], [netcdf])
 
-# See if various libraries are available
+# See if various functions are available
 AC_CHECK_FUNCS([nc_def_opaque nccreate nc_set_log_level oc_open])
-#test "x$ac_cv_func_oc_open" = xyes && nc_has_dap=yes || nc_has_dap=no
-# Whether we build/test some functionality depends on what we found in
-# the C library.
-#nc_build_v2=$ac_cv_func_nccreate
-#nc_build_v4=$ac_cv_func_nc_def_opaque
 
 nc_build_v2=no
 nc_build_v4=no
@@ -521,14 +512,15 @@ test "x$ac_cv_func_nccreate" = xyes && nc_build_v2=yes
 test "x$ac_cv_func_nc_set_log_level" = xyes && nc_has_logging=yes
 test "x$ac_cv_func_oc_open" = xyes && nc_has_dap=yes
 
-#AC_CHECK_FUNC([nc_def_opaque],[nc_build_v4=yes])
-#AC_CHECK_FUNC([nccreate],[nc_build_v2=yes])
-#AC_CHECK_FUNC([nc_set_log_level],[nc_has_logging=yes])
-#AC_CHECK_FUNC([oc_open],[nc_has_dap=yes])
-
 if test "x$nc_build_v4" = xyes; then
    AC_DEFINE([USE_NETCDF4], [1], [if true, build netCDF-4])
 fi
+
+if test "x$nc_has_logging" = xyes; then
+   AC_DEFINE([LOGGING], [1], [if true, C library contains logging])
+fi
+AC_MSG_CHECKING([netCDF logging present])
+AC_MSG_RESULT([$nc_has_logging])
 
 AC_MSG_CHECKING([netCDF v2 API present])
 AC_MSG_RESULT([$nc_build_v2])
@@ -554,7 +546,6 @@ AM_CONDITIONAL([TEST_FILTERS], [test "x$enable_filter_test" = xyes])
 AC_CHECK_HEADER(stdlib.h, ,AC_DEFINE([NO_STDLIB_H], [], [no stdlib.h]))
 AC_CHECK_HEADER(sys/types.h, ,AC_DEFINE([NO_SYS_TYPES_H], [], [no sys_types.h]))
 AC_CHECK_HEADERS([sys/param.h])
-#AC_CHECK_HEADERS([locale.h])
 AC_CHECK_HEADERS([locale.h stdio.h stdarg.h errno.h ctype.h fcntl.h malloc.h stdlib.h string.h \
 			   strings.h unistd.h sys/stat.h getopt.h sys/time.h sys/resource.h])
 AC_HEADER_DIRENT

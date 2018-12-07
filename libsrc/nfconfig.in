@@ -6,6 +6,7 @@
 #undef NF_HAS_PARALLEL4
 #undef NF_HAS_PNETCDF
 #undef ENABLE_CDF5
+#undef LOGGING
 
 #ifndef UD_NETCDF_CPP_INC
 #define UD_NETCDF_CPP_INC
