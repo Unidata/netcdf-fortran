@@ -237,6 +237,12 @@
       integer nf_inq_var_endian
       external nf_inq_var_endian
 
+      integer nf_def_var_filter
+      external nf_def_var_filter
+
+      integer nf_inq_var_filter
+      external nf_inq_var_filter
+
 !     User defined types.
       integer nf_inq_typeids
       external nf_inq_typeids

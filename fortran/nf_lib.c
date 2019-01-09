@@ -186,6 +186,18 @@ nc_inq_numtypes(int ncid, int *numtypes)
     return ret;
 }  
  
+extern int
+nc_inq_varnparams(int ncid, int varid, size_t* nparamsp)
+{
+ int ret;
+ unsigned int id;
+ size_t nparams;
+
+ if ((ret = nc_inq_var_filter(ncid, varid, &id, &nparams, NULL))) 
+    return ret;
+ if(nparamsp) *nparamsp = nparams;
+}  
+ 
 #endif /*USE_NETCDF4*/
 
 /*

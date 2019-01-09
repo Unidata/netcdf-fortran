@@ -509,7 +509,181 @@ NF90_INQ_VAR_FILL(INTEGER NCID, INTEGER VARID, INTEGER NO_FILL, FILL_VALUE)
 
 ## Example
 
-6.6 Get Information about a Variable from Its ID: NF90_INQUIRE_VARIABLE {#f90-get-information-about-a-variable-from-its-id-nf90_inquire_variable}
+6.6 Define Filter Parameters for a Variable: `nf90_def_var_filter` {#f90-define-filter-parameters-for-a-variable-nf90_def_var_filter}
+===========
+
+
+
+The function nf90\_def\_var\_filter sets the filter parameters for a
+variable in a netCDF-4 file.
+
+This function must be called after the variable is defined, but before
+nf90\_enddef is called.
+
+
+
+## Usage
+
+
+~~~~.fortran
+
+function nf90_def_var_filter(ncid, varid, filterid, nparams, params);
+   integer, intent(in) :: ncid, varid, filterid, nparams
+   integer, dimension(:), intent(in) :: params
+
+~~~~
+
+
+`ncid`
+
+:   NetCDF ID, from a previous call to nf90\_open or nf90\_create.
+
+`varid`
+
+:   Variable ID.
+
+`filterid`
+
+:   The HDFGroup assigned filter id (e.g. 307 for bzip2).
+
+`nparams`
+
+:   The number of parameters for the filter
+
+`params`
+
+:   A vector of parameters of size nparams.
+
+
+## Return Codes
+
+`NF90_NOERR`
+
+:   No error.
+
+`NF90_BADID`
+
+:   Bad ncid.
+
+`NF90_ENOTNC4`
+
+:   Not a netCDF-4 file.
+
+`NF90_ENOTVAR`
+
+:   Can’t find this variable.
+
+`NF90_ELATEDEF`
+
+:   This variable has already been the subject of a NF90\_ENDDEF call.
+    In netCDF-4 files NF90\_ENDDEF will be called automatically for any
+    data read or write. Once enddef has been called, it is impossible to
+    set the fill for a variable.
+
+`NF90_ENOTINDEFINE`
+
+:   Not in define mode. This is returned for netCDF classic or 64-bit
+    offset files, or for netCDF-4 files, when they were been created
+    with NF90\_STRICT\_NC3 flag. (see section
+    [NF90\_CREATE](#NF90_005fCREATE)).
+
+`NF90_EPERM`
+
+:   Attempt to create object in read-only file.
+
+`NF90_EFILTER`
+
+:   Invalid filter id or parameters
+
+
+## Example
+
+6.7 Get information about any Filter associated with a variable: `nf90_inq_var_filter` {#f90-get-information-about-a-variable-from-its-id-nf90_inq_var_filter}
+===========
+
+
+The function nf90\_inq\_var\_filter gets the filter id and parameters for a
+variable in a netCDF-4 file.
+
+
+## Usage
+
+
+~~~~.fortran
+
+function nf90_inq_var_filter(ncid, varid, filterid, nparams, params);
+   integer, intent(in) :: ncid, varid, filterid, nparams
+   integer, intent(out) :: filterid, nparams
+   integer, dimension(:), intent(out) :: params
+
+~~~~
+
+
+`ncid`
+
+:   NetCDF ID, from a previous call to nf90\_open or nf90\_create.
+
+`varid`
+
+:   Variable ID.
+
+`filterid`
+
+:   Store the the HDFGroup assigned filter id
+
+`nparams`
+
+:   Stor the number of parameters for the filter
+
+`params`
+
+:   Store the vector of parameters of size nparams.
+
+## Return Codes
+
+`NF90_NOERR`
+
+:   No error.
+
+`NF90_BADID`
+
+:   Bad ncid.
+
+`NF90_ENOTNC4`
+
+:   Not a netCDF-4 file.
+
+`NF90_ENOTVAR`
+
+:   Can’t find this variable.
+
+`NF90_ELATEDEF`
+
+:   This variable has already been the subject of a NF90\_ENDDEF call.
+    In netCDF-4 files NF90\_ENDDEF will be called automatically for any
+    data read or write. Once enddef has been called, it is impossible to
+    set the fill for a variable.
+
+`NF90_ENOTINDEFINE`
+
+:   Not in define mode. This is returned for netCDF classic or 64-bit
+    offset files, or for netCDF-4 files, when they were been created
+    with NF90\_STRICT\_NC3 flag. (see section
+    [NF90\_CREATE](#NF90_005fCREATE)).
+
+`NF90_EPERM`
+
+:   Attempt to create object in read-only file.
+
+`NF90_EFILTER`
+
+:   Invalid filter id or parameters
+
+
+## Example
+
+
+6.8 Get Information about a Variable from Its ID: NF90_INQUIRE_VARIABLE {#f90-get-information-about-a-variable-from-its-id-nf90_inquire_variable}
 ===========
 
 NF90\_INQUIRE\_VARIABLE returns information about a netCDF variable
@@ -656,7 +830,7 @@ named rh in an existing netCDF dataset named foo.nc:
 ~~~~
 
 
-6.7 Get the ID of a variable from the name: NF90_INQ_VARID {#f90-get-the-id-of-a-variable-from-the-name-nf90_inq_varid}
+6.9 Get the ID of a variable from the name: NF90_INQ_VARID {#f90-get-the-id-of-a-variable-from-the-name-nf90_inq_varid}
 ===========
 
 
@@ -734,7 +908,7 @@ named rh in an existing netCDF dataset named foo.nc:
 ~~~~
 
 
-6.8 Writing Data Values: NF90_PUT_VAR {#f90-writing-data-values-nf90_put_var}
+6.10 Writing Data Values: NF90_PUT_VAR {#f90-writing-data-values-nf90_put_var}
 ===========
 
 
@@ -1092,7 +1266,7 @@ functions:
 
 
 
-6.9 Reading Data Values: NF90_GET_VAR {#f90-reading-data-values-nf90_get_var}
+6.11 Reading Data Values: NF90_GET_VAR {#f90-reading-data-values-nf90_get_var}
 ===========
 
 
@@ -1457,7 +1631,7 @@ using Fortran 90 intrinsic functions:
 
 
 
-6.10 Reading and Writing Character String Values {#f90-reading-and-writing-character-string-values}
+6.12 Reading and Writing Character String Values {#f90-reading-and-writing-character-string-values}
 ===========
 
 Character strings are not a primitive netCDF external data type under
@@ -1555,7 +1729,7 @@ array variables:
 ~~~~
 
 
-6.11 Fill Values {#f90-fill-values}
+6.13 Fill Values {#f90-fill-values}
 ===========
 
 What happens when you try to read a value that was never written in an
@@ -1599,7 +1773,7 @@ as double) to a smaller type (such as float), if the fill value for the
 larger type cannot be represented in the smaller type.
 
 
-6.12 NF90_RENAME_VAR {#f90-nf90_rename_var}
+6.14 NF90_RENAME_VAR {#f90-nf90_rename_var}
 ===========
 
 
@@ -1682,7 +1856,7 @@ rel\_hum in an existing netCDF dataset named foo.nc:
 ~~~~
 
 
-6.13 Change between Collective and Independent Parallel Access: NF90_VAR_PAR_ACCESS {#f90-change-between-collective-and-independent-parallel-access-nf90_var_par_access}
+6.15 Change between Collective and Independent Parallel Access: NF90_VAR_PAR_ACCESS {#f90-change-between-collective-and-independent-parallel-access-nf90_var_par_access}
 ===========
 
 

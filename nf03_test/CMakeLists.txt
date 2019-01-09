@@ -52,7 +52,9 @@ IF(USE_NETCDF4)
     LIST(APPEND check_PROGRAMS f03tst_parallel)
     LIST(APPEND CLEANFILES ftst_parallel.nc)
     SET(f03tst_parallel_SOURCES f03tst_parallel.F)
-  ENDIF(TEST_PARALLEL)
+ENDIF(TEST_PARALLEL)
+
+
 ENDIF(USE_NETCDF4)
 
 # This is the fortran v2 test. It depends on the utilities being built

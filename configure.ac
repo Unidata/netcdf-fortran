@@ -108,10 +108,12 @@ AM_CONDITIONAL(EXTRA_TESTS, [test x$enable_extra_tests = xyes])
 #####
 # Determine if we want to enable doxygen-generated documentation.
 #####
+AC_MSG_CHECKING([whether netCDF documentation should be generated)])
 AC_ARG_ENABLE([doxygen],
 	[AS_HELP_STRING([--enable-doxygen],
 	[Enable generation of documentation with doxygen.])])
-    test "x$enable_doxygen" = xyes || enable_doxygen=no
+test "x$enable_doxygen" = xyes || enable_doxygen=no
+AC_MSG_RESULT($enable_doxygen)
 AM_CONDITIONAL([BUILD_DOCS], [test "x$enable_doxygen" = xyes])
 
 # Does the user want to generate dot-based documentation?
@@ -504,7 +506,8 @@ nc_build_v4=no
 nc_has_logging=no
 nc_has_dap=no
 
-test "x$ac_cv_func_nc_def_opaque" = xyes && nc_build_v4=yes
+AC_CHECK_FUNCS([nc_def_opaque],[nc_build_v4=yes],[nc_build_v4=no])
+#test "x$ac_cv_func_nc_def_opaque" = xyes && nc_build_v4=yes
 test "x$ac_cv_func_nccreate" = xyes && nc_build_v2=yes
 test "x$ac_cv_func_nc_set_log_level" = xyes && nc_has_logging=yes
 test "x$ac_cv_func_oc_open" = xyes && nc_has_dap=yes
@@ -524,6 +527,13 @@ AC_MSG_RESULT([$nc_build_v2])
 AC_MSG_CHECKING([netCDF-4 present])
 AC_MSG_RESULT([$nc_build_v4])
 
+AC_MSG_CHECKING([whether to test the filter API])
+AC_ARG_ENABLE([filter-test],
+              [AS_HELP_STRING([--enable-filter-test],
+                              [Run filter tests: requires access to the plugins directory in a netcdf-c build.])])
+test "x$enable_filter_test" = xyes || enable_filter_test=no
+AC_MSG_RESULT($enable_filter_test)
+
 AM_CONDITIONAL([USE_NETCDF4], [test "x$nc_build_v4" = xyes])
 AM_CONDITIONAL([BUILD_V2], [test "x$nc_build_v2" = xyes])
 AM_CONDITIONAL([USE_LOGGING], [test "x$nc_has_logging" = xyes])
@@ -531,6 +541,8 @@ AM_CONDITIONAL([BUILD_DAP], [test "x$nc_has_dap" = xyes])
 AM_CONDITIONAL([BUILD_PNETCDF], [test "x$nc_has_pnetcdf" = xyes])
 AM_CONDITIONAL([BUILD_PARALLEL4], [test "x$nc_has_parallel4" = xyes])
 AM_CONDITIONAL([BUILD_PARALLEL], [test "x$nc_has_pnetcdf" = xyes -o "x$nc_has_parallel4" = xyes])
+AM_CONDITIONAL([TEST_FILTERS], [test "x$enable_filter_test" = xyes])
+
 AC_CHECK_HEADER(stdlib.h, ,AC_DEFINE([NO_STDLIB_H], [], [no stdlib.h]))
 AC_CHECK_HEADER(sys/types.h, ,AC_DEFINE([NO_SYS_TYPES_H], [], [no sys_types.h]))
 AC_CHECK_HEADERS([sys/param.h])
