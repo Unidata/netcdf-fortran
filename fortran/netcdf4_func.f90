@@ -578,6 +578,28 @@
     nf90_inq_var_endian = nf_inq_var_endian(ncid, varid, endian)
   end function nf90_inq_var_endian
   ! -----------
+  function nf90_def_var_filter(ncid, varid, filterid, nparams, params)
+    integer, intent(in) :: ncid
+    integer, intent(in) :: varid
+    integer, intent(in) :: filterid
+    integer, intent(in) :: nparams
+    integer, intent(in) :: params(*)
+    integer :: nf90_def_var_filter
+  
+    nf90_def_var_filter = nf_def_var_filter(ncid, varid, filterid, nparams, params)
+  end function nf90_def_var_filter
+  ! -----------
+  function nf90_inq_var_filter(ncid, varid, filterid, nparams, params)
+    integer, intent(in) :: ncid
+    integer, intent(in) :: varid
+    integer, intent(out) :: filterid
+    integer, intent(out) :: nparams
+    integer, dimension(:), intent(out) :: params
+    integer :: nf90_inq_var_filter
+  
+    nf90_inq_var_filter = nf_inq_var_filter(ncid, varid, filterid, nparams, params)
+  end function nf90_inq_var_filter
+  ! -----------
 !  function nf90_def_var_fill(ncid, varid, no_fill, fill)
 !    integer, intent(in) :: ncid
 !    integer, intent(in) :: varid

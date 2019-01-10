@@ -624,6 +624,28 @@ Interface
 
  End Function nf_inq_var_endian
 End Interface
+!------------------------------- nf_def_var_filter ------------------------
+Interface
+ Function nf_def_var_filter(ncid, varid, id, nparams, params) RESULT(status)
+
+ Integer, Intent(IN) :: ncid, varid, id, nparams
+ Integer, Intent(IN) :: params(*)
+ Integer                :: status
+
+ End Function nf_def_var_filter
+End Interface
+!------------------------------- nf_inq_var_filter ----------------------------------
+Interface
+ Function nf_inq_var_filter(ncid, varid, id, inparams, params) RESULT(status)
+
+ Integer, Intent(IN)     :: ncid, varid
+ Integer, Intent(INOUT)  :: id
+ Integer, Intent(INOUT)  :: inparams
+ Integer, Intent(INOUT)  :: params(*)
+ Integer                :: status
+
+ End Function nf_inq_var_filter
+End Interface
 !--------------------------------- nf_put_att --------------------------------
 ! Commented out because we use C_CHAR array to pass data of different
 ! type to a C void pointer

@@ -5444,7 +5444,8 @@ The function NF\_INQ\_VAR\_SZIP returns the szip settings for a variable
 in a netCDF-4 file.
 
 It is not necessary to know the szip settings to read the variable.
-(Szip is completely transparent to readers of the data).
+(Szip is completely transparent to readers of the data). But an
+Szip compatible library must be installed.
 
 Usage
 -----
@@ -5822,7 +5823,188 @@ is checked to makere it is NF\_ENDIAN\_BIG.
 
 
 
-6.17 Get a Variable ID from Its Name: NF\_INQ\_VARID
+6.17 Define Filter for a Variable: `NF_DEF_VAR_FILTER`
+---------------------------------------------------------
+
+The function NF\_DEF\_VAR\_FILTER sets a filter (i.e. compression filter)
+for a variable in a netCDF-4 file.
+
+This function must be called after the variable is defined, but before
+NF\_ENDDEF is called.
+
+In order to use a custom filter (other than zip or szip), it is necessary
+to install the custom filter into some directory and then to specify
+the path to that directory by setting the environment variable named
+__HDF5_PLUGIN_PATH__. For details, see the netcdf-c library documentation
+for filters: https://www.unidata.ucar.edu/software/netcdf/docs/.
+
+Usage
+-----
+
+ 
+
+
+NF_DEF_VAR_FILTER(INTEGER NCID, INTEGER VARID, INTEGER FILTERID, INTEGER NPARAMS, INTEGER PARAMS(*))
+
+
+ `NCID`
+:   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
+
+ `VARID`
+:   Variable ID.
+
+ `FILTERID`
+:   Filter ID.
+
+ `NPARAMS`
+:   Number of parameters expected by the filter.
+
+ `PARAMS`
+:   A vector of integers representing the parameters to the Filter.
+
+Errors
+------
+
+NF\_DEF\_VAR\_FILTER returns the value NF\_NOERR if no errors occurred.
+Otherwise, the returned status indicates an error.
+
+Possible return codes include:
+
+ `NF_NOERR`
+:   No error.
+
+ `NF_BADID`
+:   Bad ncid.
+
+ `NF_ENOTNC4`
+:   Not a netCDF-4 file.
+
+ `NF_ENOTVAR`
+:   Can’t find this variable.
+
+ `NF_ELATEDEF`
+:   This variable has already been thebject of a NF\_ENDDEF call. In
+    netCDF-4 files NF\_ENDDEF will be called automatically for any data
+    read or write. Once enddef has been called, it is impossible to set
+    the filterness of a variable.
+
+ `NF_ENOTINDEFINE`
+:   Not in define mode. This is returned for netCDF classic or 64-bit
+    offset files, or for netCDF-4 files, when they were been created
+    with NF\_STRICT\_NC3 flag, and the file is not in define mode. (see
+    [NF\_CREATE](#NF_005fCREATE)).
+
+ `NF_EFILTER`
+:   Some kind of error in defining the filter: bad id or parameters or filter library non-existent
+
+Example
+-------
+
+In this example from nf\_test/ftst\_vars.c, a file is created with one
+variable, and its filter is set to filter id 307 (bzip).
+
+ 
+
+      INTEGER(1) params
+
+C     Create the netCDF file.
+      retval = nf_create(FILE_NAME, NF_NETCDF4, ncid)
+      if (retval .ne. nf_noerr) call handle_err(retval)
+
+C     Define the dimensions.
+      retval = nf_def_dim(ncid, "x", NX, x_dimid)
+      if (retval .ne. nf_noerr) call handle_err(retval)
+      retval = nf_def_dim(ncid, "y", NY, y_dimid)
+      if (retval .ne. nf_noerr) call handle_err(retval)
+
+C     Define the variable.
+      dimids(1) = y_dimid
+      dimids(2) = x_dimid
+      retval = NF_DEF_VAR(ncid, "data", NF_INT, NDIMS, dimids, varid)
+      if (retval .ne. nf_noerr) call handle_err(retval)
+
+C     Turn on chunking.
+      chunks(1) = NY
+      chunks(2) = NX
+      retval = NF_DEF_VAR_chunking(ncid, varid, 0, chunks)
+      if (retval .ne. nf_noerr) call handle_err(retval)
+
+C     Set variable filter
+      retval = NF_DEF_VAR_filter(ncid, varid, 307, 1, params)
+      if (retval .ne. nf_noerr) call handle_err(retval)
+
+
+6.18 Learn About Filter Parameters for a Variable: `NF_INQ_VAR_FILTER`
+----------------------------------------------------------------------
+
+The function NF\_INQ\_VAR\_FILTER returns the filter settings for a
+variable in a netCDF-4 file.
+
+Usage
+-----
+
+ 
+
+
+NF_INQ_VAR_FILTER(INTEGER NCID, INTEGER VARID, INTEGER FILTERID, INTEGER NPARAMS, INTEGER PARAMS(*))
+
+
+ `NCID`
+:   NetCDF ID, from a previous call to NF\_OPEN or NF\_CREATE.
+
+ `VARID`
+:   Variable ID.
+
+ `FILTERID`
+:   Filter ID.
+
+ `NPARAMS`
+:   Number of parameters required by the filter.
+
+ `PARAMS`
+:   Parameter values used by the filter.
+
+Errors
+------
+
+NF\_INQ\_VAR\_FILTER returns the value NF\_NOERR if no errors occurred.
+Otherwise, the returned status indicates an error.
+
+Possible return codes include:
+
+ `NF_NOERR`
+:   No error.
+
+ `NF_BADID`
+:   Bad ncid.
+
+ `NF_ENOTNC4`
+:   Not a netCDF-4 file.
+
+ `NF_ENOTVAR`
+:   Can’t find this variable.
+
+ `NF_EFILTER`
+:   Some kind of error in defining the filter: bad id or parameters or filter library non-existent
+
+Example
+-------
+
+In this example from nf\_test/ftst\_vars.F, the filter for a variable
+is checked.
+
+ 
+
+
+      integer params(1)
+      integer filterid, nparams
+      retval = nf_inq_var_filter(ncid, varid, filterid, nparams, params)
+      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (filterid .ne. 307) call handle_err(NF_EFILTER)
+      if (nparams .ne. 1) call handle_err(NF_EFILTER)
+
+
+6.19 Get a Variable ID from Its Name: NF\_INQ\_VARID
 ----------------------------------------------------
 
 The function NF\_INQ\_VARID returns the ID of a netCDF variable, given
@@ -5879,7 +6061,7 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 
 
-6.18 Get Information about a Variable from Its ID: NF\_INQ\_VAR family
+6.20 Get Information about a Variable from Its ID: NF\_INQ\_VAR family
 ----------------------------------------------------------------------
 
 A family of functions that returns information about a netCDF variable,
@@ -5984,7 +6166,7 @@ STATUS = NF_INQ_VAR (NCID, RHID, RHNAME, RHTYPE, RHN, RHDIMS, RHNATT)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 
-6.19 Write a Single Data Value: NF\_PUT\_VAR1\_ type
+6.21 Write a Single Data Value: NF\_PUT\_VAR1\_ type
 ----------------------------------------------------
 
 The functions NF\_PUT\_VAR1\_type (for various types) put a single data
@@ -6088,7 +6270,7 @@ STATUS = NF_PUT_VAR1_DOUBLE (NCID, RHID, RHINDX, 0.5)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 
-6.20 Write an Entire Variable: NF\_PUT\_VAR\_ type
+6.22 Write an Entire Variable: NF\_PUT\_VAR\_ type
 --------------------------------------------------
 
 The NF\_PUT\_VAR\_ type family of functions write all the values of a
@@ -6207,7 +6389,7 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 
 
-6.21 Write an Array of Values: NF\_PUT\_VARA\_ type
+6.23 Write an Array of Values: NF\_PUT\_VARA\_ type
 ---------------------------------------------------
 
 The function NF\_PUT\_VARA\_ type writes values into a netCDF variable
@@ -6351,7 +6533,7 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 
 
-6.22 NF\_PUT\_VARS\_ type
+6.24 NF\_PUT\_VARS\_ type
 -------------------------
 
 Each member of the family of functions NF\_PUT\_VARS\_ type writes a
@@ -6491,7 +6673,7 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 STATUS = NF_PUT_VARS_REAL(NCID, RHID, START, COUNT, STRIDE, RH)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
-6.23 NF\_PUT\_VARM\_ type
+6.25 NF\_PUT\_VARM\_ type
 -------------------------
 
 The NF\_PUT\_VARM\_ type family of functions writes a mapped array
@@ -6704,7 +6886,7 @@ STATUS = NF_PUT_VARM_REAL(NCID, RHID, START, COUNT, STRIDE, IMAP, RH)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 
-6.24 NF\_GET\_VAR1\_ type
+6.26 NF\_GET\_VAR1\_ type
 -------------------------
 
 The functions NF\_GET\_VAR1\_ type get a single data value from a
@@ -6810,7 +6992,7 @@ STATUS = NF_GET_VAR1_DOUBLE (NCID, RHID, RHINDX, RHVAL)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 
-6.25 NF\_GET\_VAR\_ type
+6.27 NF\_GET\_VAR\_ type
 ------------------------
 
 The members of the NF\_GET\_VAR\_ type family of functions read all the
@@ -6914,7 +7096,7 @@ STATUS = NF_GET_VAR_DOUBLE (NCID, RHID, RHVALS)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 
-6.26 NF\_GET\_VARA\_ type
+6.28 NF\_GET\_VARA\_ type
 -------------------------
 
 The members of the NF\_GET\_VARA\_ type family of functions read an
@@ -7045,7 +7227,7 @@ STATUS = NF_GET_VARA_DOUBLE (NCID, RHID, START, COUNT, RHVALS)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 
-6.27 NF\_GET\_VARS\_ type
+6.29 NF\_GET\_VARS\_ type
 -------------------------
 
 The NF\_GET\_VARS\_ type family of functions read absampled (strided)
@@ -7179,7 +7361,7 @@ STATUS = NF_GET_VARS_DOUBLE(NCID,RHID,START,COUNT,STRIDE,DATA(1,1,1))
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 
-6.28 NF\_GET\_VARM\_ type
+6.30 NF\_GET\_VARM\_ type
 -------------------------
 
 The NF\_GET\_VARM\_ type family of functions reads a mapped array
@@ -7392,7 +7574,7 @@ STATUS = NF_GET_VARM_REAL(NCID, RHID, START, COUNT, STRIDE, IMAP, RH)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 
-6.29 Reading and Writing Character String Values
+6.31 Reading and Writing Character String Values
 ------------------------------------------------
 
 Character strings are not a primitive netCDF external data type, in part
@@ -7499,7 +7681,7 @@ STATUS = NF_PUT_VARA_TEXT (NCID, TXID, TSTART, TCOUNT, TXVAL)
 IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 
-6.30 Fill Values
+6.32 Fill Values
 ----------------
 
 What happens when you try to read a value that was never written in an
@@ -7542,7 +7724,7 @@ errors may occur on writing or reading values from a larger type ch
 as double) to a smaller type ch as float), if the fill value for the
 larger type cannot be represented in the smaller type.
 
-6.31 NF\_RENAME\_VAR
+6.33 NF\_RENAME\_VAR
 --------------------
 
 The function NF\_RENAME\_VAR changes the name of a netCDF variable in an
@@ -7608,7 +7790,7 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 
 
 
-6.32 Change between Collective and Independent Parallel Access: NF\_VAR\_PAR\_ACCESS
+6.34 Change between Collective and Independent Parallel Access: NF\_VAR\_PAR\_ACCESS
 ------------------------------------------------------------------------------------
 
 The function NF\_VAR\_PAR\_ACCESS changes whether read/write operations
