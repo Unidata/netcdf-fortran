@@ -640,6 +640,9 @@ OPTION(ENABLE_FORTRAN_TYPE_CHECKS
 # Toggle whether or not to run tests.
 OPTION(ENABLE_TESTS "Enable netcdf-fortran tests." ON)
 
+# Enable filter testing
+OPTION(ENABLE_FILTER_TEST "Enable filter test." OFF)
+
 # Set the default fortran builds; default is to build f03
 SET(BUILD_F90 "ON")
 SET(BUILD_V2 "ON")

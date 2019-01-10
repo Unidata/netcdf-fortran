@@ -9,9 +9,9 @@ C     $Id: ftst_rengrps.F,v 1.3 2010/02/03 14:35:21 ed Exp $
       program ftst_rengrps
 C      use typeSizes
 C      use netcdf
-      use netcdf4_f03
+C      use netcdf4_f03
       implicit none
-C     include "netcdf.inc"
+     include "netcdf.inc"
       
 C This is the name of the data file we will create.
       character (len = *), parameter :: FILE_NAME = "ftst_rengrps.nc"
