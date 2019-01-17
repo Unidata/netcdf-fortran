@@ -6,7 +6,7 @@
 ##################################
 
 #Minimum required CMake Version
-cmake_minimum_required(VERSION 2.8.9)
+cmake_minimum_required(VERSION 3.0.0)
 
 #Project Name for netCDF-Fortran
 PROJECT (NC4F Fortran C)
@@ -555,8 +555,10 @@ IF (UNIX AND ${CMAKE_SIZEOF_VOID_P} MATCHES "8")
   ADD_DEFINITIONS(-DLONGLONG_IS_LONG)
   # for easier debugging of cfortran.h
   IF (APPLE)
-    SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fmacro-backtrace-limit=0")
-  endif ()
+    IF(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+      SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fmacro-backtrace-limit=0")
+    ENDIF()
+  ENDIF(APPLE)
 ENDIF()
 
 # Determine C library setting for NC_RELAX_COORD_BOUND
