@@ -6,11 +6,22 @@ Release Notes {#nf_release_notes}
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
-## 4.4.5 - TBD
+## 4.5.0 - TBD
 
 ### Requirements
 
-* netCDF-C: 4.7.0
+* netCDF-C: 4.6.2
+
+### Changes
+
+* Modified compiler flags on OSX in support of [Github #70](https://github.com/Unidata/netcdf-fortran/issues/70).
+* Bumped minimum required version of `cmake` to `3.0.0`.
+
+## 4.4.5 - January 9, 2018
+
+### Requirements
+
+* netCDF-C: 4.6.2
 
 ### Changes
 
