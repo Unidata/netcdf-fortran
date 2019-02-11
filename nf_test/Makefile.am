@@ -38,16 +38,16 @@ tst_f77_v2_SOURCES = tst_f77_v2.F
 TESTS += tst_f77_v2
 endif # BUILD_V2
 
-# Is the user building netCDF-4?
+# If the user building netCDF-4 add the netCDF-4 test programs.
 if USE_NETCDF4
 
-# Add these netCDF-4 test programs.
-check_PROGRAMS += ftst_vars ftst_vars2 ftst_vars3 ftst_vars4 ftst_vars5	\
-                  ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_groups \
-                  ftst_path ftst_rengrps
-TESTS += ftst_vars ftst_vars2 ftst_vars3 ftst_vars4 ftst_vars5	\
-         ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_groups \
-         ftst_path ftst_rengrps
+check_PROGRAMS += ftst_vars ftst_vars2 ftst_vars3 ftst_vars4		\
+ftst_vars5 ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_groups	\
+ftst_path ftst_rengrps
+
+TESTS += ftst_vars ftst_vars2 ftst_vars3 ftst_vars4 ftst_vars5		\
+ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_groups ftst_path	\
+ftst_rengrps
 
 ftst_types_SOURCES = ftst_types.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 ftst_types2_SOURCES = ftst_types2.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
@@ -131,7 +131,8 @@ endif # TEST_PARALLEL
 # Test filters
 if TEST_FILTERS
 check_PROGRAMS += ftst_filter 
-ftst_filter_SOURCES = ftst_filter.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
+ftst_filter_SOURCES = ftst_filter.F f03lib_f_interfaces.f90 f03lib.c	\
+handle_err.F
 TESTS += ftst_filter
 endif
 
@@ -155,9 +156,8 @@ tst_f90_SOURCES = tst_f90.f90
 
 # test_get.F and test_put.f need to be distributed, so that the user
 # need not have m4. fills.nc is used by test program ftest.
-EXTRA_DIST = test_get.F test_put.F fills.cdl create_fills.sh	\
-             run_f90_par_test.sh run_f77_par_test.sh ref_fills.nc \
-			CMakeLists.txt
+EXTRA_DIST = test_get.F test_put.F fills.cdl create_fills.sh		\
+run_f90_par_test.sh run_f77_par_test.sh ref_fills.nc CMakeLists.txt
 
 # Cleaning up files created during the process.
 CLEANFILES = scratch.nc test.nc copy.nc fills.nc tst_*.nc ftst_*.nc	\
