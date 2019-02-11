@@ -320,33 +320,26 @@ AC_DEFINE_UNQUOTED([TEMP_LARGE], ["$TEMP_LARGE"], [Place to put very large netCD
 
 test "x$nc_build_f03" = xyes && nc_build_f77=no
 
-if test "x$nc_build_f90" = xno; then
-   F90=
-   # If F77 is set, and FC isn't, then set FC to whatever F77 was set to.
-   AS_IF([test x${F77+set} = xset -a x${FC+set} = x],[FC=$F77])
+dnl # See if the fortran 90 build is desired. If so, set some stuff
+dnl if test "x$nc_build_f90" = xyes; then
+dnl    AC_MSG_NOTICE([setting up Fortran 90])
+dnl    if test "${F90+set}" != set; then
+dnl       F90=$FC
+dnl    fi
+dnl    AC_MSG_CHECKING([what FC is set to])
+dnl    AC_MSG_RESULT([$FC])
 
-fi
-
-# See if the fortran 90 build is desired. If so, set some stuff
-if test "x$nc_build_f90" = xyes; then
-   AC_MSG_NOTICE([setting up Fortran 90])
-   if test "${F90+set}" != set; then
-      F90=$FC
-   fi
-   AC_MSG_CHECKING([what FC is set to])
-   AC_MSG_RESULT([$FC])
-
-   if test "x$nc_build_f03" = xno; then
-     # Some f90 compilers change the case of the mod file names. Others
-     # require special flags to be set to deal with .f90 files. Find out
-     # about this compiler.
-     AC_LANG_PUSH(Fortran)
-     AC_FC_SRCEXT(f90)
-     AC_LANG_POP(Fortran)
-     AX_F90_MODULE_FLAG
-     AC_SUBST(MOD_FLAG, ${ax_cv_f90_modflag})
-   fi
-fi
+dnl    if test "x$nc_build_f03" = xno; then
+dnl      # Some f90 compilers change the case of the mod file names. Others
+dnl      # require special flags to be set to deal with .f90 files. Find out
+dnl      # about this compiler.
+dnl      AC_LANG_PUSH(Fortran)
+dnl      AC_FC_SRCEXT(f90)
+dnl      AC_LANG_POP(Fortran)
+dnl      AX_F90_MODULE_FLAG
+dnl      AC_SUBST(MOD_FLAG, ${ax_cv_f90_modflag})
+dnl    fi
+dnl fi
 
 AM_CONDITIONAL(BUILD_F03, [test "x$nc_build_f03" = xyes])
 # Set up libtool.
