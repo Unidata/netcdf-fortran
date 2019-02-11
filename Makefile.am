@@ -11,39 +11,24 @@ ACLOCAL_AMFLAGS = -I m4
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = netcdf-fortran.pc
 
-# All the fortran source
-FTN_DIR = fortran
-
-if BUILD_F03
-F03_TESTS = nf03_test
-else
-# All the C/H source
-LIBSRC_DIR = libsrc
-endif
-
 # This is the list of subdirs for which Makefiles will be constructed
 # and run.
-SUBDIRS = $(LIBSRC_DIR) $(FTN_DIR) . nf_test $(F03_TESTS) docs	\
-examples CMakeExtras
-
-# Remove these generated files, for a distclean.
-DISTCLEANFILES = VERSION comps.txt test_prog
+SUBDIRS = fortran nf_test nf03_test docs examples CMakeExtras
 
 # The nf-config script helps the user build programs with netCDF.
 bin_SCRIPTS = nf-config
 
 check_nc_config:
-	$(F90) `./nf-config --fflags` test_prog.f90 -o test_prog `./nf-config --libs`
-	./test_prog
-if BUILD_F03
 	$(F03) `./nf-config --fflags` test_prog.f03 -o test_prog `./nf-config --libs`
 	./test_prog
-endif
 
 # These files get added to the distribution.
 EXTRA_DIST = README.md RELEASE_NOTES.md netcdf-fortran.pc.in	\
 F03Interfaces_LICENSE CMakeLists.txt COPYRIGHT nf-config.in	\
 config.h.cmake.in CTestConfig.cmake.in nf-config.cmake.in
+
+# Remove these generated files, for a distclean.
+DISTCLEANFILES = VERSION
 
 install-data-hook:
 	@echo ''
