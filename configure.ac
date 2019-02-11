@@ -99,18 +99,6 @@ if test "x$nc_has_pnetcdf" = xno -a "x$nc_has_parallel4" = xno ; then
 fi
 AC_MSG_RESULT($enable_parallel_tests)
 
-# Does the user want to do some extra tests?
-AC_MSG_CHECKING([whether netCDF extra tests should be run (developers only)])
-AC_ARG_ENABLE([extra-tests],
-              [AS_HELP_STRING([--enable-extra-tests],
-                              [run some extra tests that may not pass because of known issues])])
-test "x$enable_extra_tests" = xyes || enable_extra_tests=no
-AC_MSG_RESULT($enable_extra_tests)
-if test "x$enable_extra_tests" = xyes; then
-   AC_DEFINE([EXTRA_TESTS], [1], [if true, run extra tests which may not work yet])
-fi
-AM_CONDITIONAL(EXTRA_TESTS, [test x$enable_extra_tests = xyes])
-
 #####
 # Determine if we want to enable doxygen-generated documentation.
 #####
