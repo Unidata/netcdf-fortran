@@ -8,17 +8,10 @@
 # Turn off parallel builds in this directory.
 .NOTPARALLEL:
 
-BUILT_SOURCES =
-libnetcdff_la_SOURCES =
-libnetcdff_la_DEPENDENCIES =
-EXTRA_DIST =
-CLEANFILES =
-DISTCLEANFILES =
-
 libnetcdff_la_LDFLAGS = -version-number 6:1:1
 
 # This, plus either netcdf4.f90 or netcdf.f90, is the main source.
-libnetcdff_la_SOURCES += typeSizes.f90
+libnetcdff_la_SOURCES = typeSizes.f90
 
 if USE_NETCDF4
 NETCDF_O = netcdf4.o
@@ -60,7 +53,7 @@ libnetcdff_la_SOURCES += nf_logging.F90
 endif USE_LOGGING
 
 # The file netcdf.f90 includes all of these.
-libnetcdff_la_DEPENDENCIES += netcdf_attributes.f90			\
+libnetcdff_la_DEPENDENCIES = netcdf_attributes.f90			\
 netcdf_constants.f90 netcdf_dims.f90 netcdf_expanded.f90		\
 netcdf_externals.f90 netcdf_file.f90 netcdf_overloads.f90		\
 netcdf_text_variables.f90 netcdf_variables.f90 netcdf_visibility.f90	\
@@ -83,15 +76,6 @@ endif
 
 # Tell make to rebuld fortran library if netcdf.inc has changed
 libnetcdff_la_DEPENDENCIES += netcdf.inc
-
-# All of the _DEPENDENCIES must also be in EXTRA_DIST
-EXTRA_DIST += netcdf_attributes.f90 netcdf_constants.f90		\
-netcdf_dims.f90 netcdf_expanded.f90 netcdf_externals.f90		\
-netcdf_file.f90 netcdf_overloads.f90 netcdf_text_variables.f90		\
-netcdf_variables.f90 netcdf_visibility.f90 netcdf_eightbyte.f90		\
-netcdf4_func.f90 netcdf4_externals.f90 netcdf4_visibility.f90		\
-netcdf4.f90 netcdf4_eightbyte.f90 netcdf4_overloads.f90			\
-netcdf4_variables.f90 netcdf4_file.f90 netcdf.inc CMakeLists.txt
 
 # Some fortran compilers change the file names of .mod files to all
 # uppercase. Just to be special.
@@ -150,10 +134,10 @@ endif !UPPER_CASE_MOD
 
 if UPPER_CASE_MOD
 COMMONHEADERS = $(UCHEADERS) $(UCCOMMON)
-BUILT_SOURCES += $(UCHEADERS) $(UCCOMMON) $(LCHEADERS) $(LCCOMMON)
+BUILT_SOURCES = $(UCHEADERS) $(UCCOMMON) $(LCHEADERS) $(LCCOMMON)
 else !UPPER_CASE_MOD
 COMMONHEADERS = $(LCHEADERS) $(LCCOMMON)
-BUILT_SOURCES += $(LCHEADERS) $(LCCOMMON)
+BUILT_SOURCES = $(LCHEADERS) $(LCCOMMON)
 endif !UPPER_CASE_MOD
 
 nodist_include_HEADERS = $(COMMONHEADERS)
@@ -188,13 +172,19 @@ if USE_LOGGING
 	echo '      external nf_set_log_level' >> netcdf.inc
 endif
 
-EXTRA_DIST += netcdf2.inc netcdf3.inc netcdf4.inc
+# All of the _DEPENDENCIES must also be in EXTRA_DIST
+EXTRA_DIST = netcdf_attributes.f90 netcdf_constants.f90			\
+netcdf_dims.f90 netcdf_expanded.f90 netcdf_externals.f90		\
+netcdf_file.f90 netcdf_overloads.f90 netcdf_text_variables.f90		\
+netcdf_variables.f90 netcdf_visibility.f90 netcdf_eightbyte.f90		\
+netcdf4_func.f90 netcdf4_externals.f90 netcdf4_visibility.f90		\
+netcdf4.f90 netcdf4_eightbyte.f90 netcdf4_overloads.f90			\
+netcdf4_variables.f90 netcdf4_file.f90 netcdf.inc CMakeLists.txt	\
+netcdf2.inc netcdf3.inc netcdf4.inc
 
-CLEANFILES += netcdf_nc_data.mod netcdf_nc_interfaces.mod		\
+CLEANFILES = netcdf_nc_data.mod netcdf_nc_interfaces.mod		\
 netcdf_nf_data.mod netcdf_nf_interfaces.mod				\
 netcdf_fortv2_c_interfaces.mod netcdf_f03.mod				\
 netcdf4_nc_interfaces.mod netcdf4_nf_interfaces.mod netcdf4_f03.mod	\
-nfconfig.inc netcdf.inc
-
-CLEANFILES += $(UCHEADERS) $(UCCOMMON) $(LCHEADERS) $(LCCOMMON)
-
+nfconfig.inc netcdf.inc $(UCHEADERS) $(UCCOMMON) $(LCHEADERS)		\
+$(LCCOMMON)
