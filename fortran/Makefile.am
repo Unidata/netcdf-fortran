@@ -1,13 +1,9 @@
 ## This is an automake file, part of Unidata's netCDF package.
 # Copyright 2005-2006, see the COPYRIGHT file for more information.
 
-# This file controls the building of the fortran 90 API. All testing
-# of the F90 API is done in the nf_test directory.
-
-# Remember BUILD_F90 <=> !BUILD_F03
+# This file controls the building of the fortran 90 API.
 
 AM_LDFLAGS =
-
 BUILT_SOURCES =
 libnetcdff_la_SOURCES =
 libnetcdff_la_DEPENDENCIES =
@@ -38,11 +34,6 @@ netcdf4.$(OBJEXT): netcdf_constants.f90 netcdf_externals.f90 netcdf4_externals.f
         netcdf4_variables.f90 netcdf_text_variables.f90 netcdf_expanded.f90 \
         netcdf4_eightbyte.f90 netcdf4_func.f90 netcdf4_overloads.f90
 
-if !BUILD_F03
-libnetcdff_la_LIBADD = ${top_builddir}/libsrc/libnetcdfc.la
-endif
-
-#if BUILD_F03
 libnetcdff_la_SOURCES += module_netcdf_nc_data.F90 module_netcdf_nc_interfaces.f90 \
                          module_netcdf_nf_data.F90 module_netcdf_nf_interfaces.F90 \
                          module_netcdf_f03.f90 \
@@ -62,8 +53,6 @@ if USE_LOGGING
 # add nf_logging to build
 libnetcdff_la_SOURCES += nf_logging.F90
 endif USE_LOGGING
-
-#else !BUILD_F03
 
 # The file netcdf.f90 includes all of these.
 libnetcdff_la_DEPENDENCIES += netcdf_attributes.f90 netcdf_constants.f90 netcdf_dims.f90 \
