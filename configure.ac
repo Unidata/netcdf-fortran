@@ -248,39 +248,27 @@ EOF
   AC_MSG_RESULT([$nc_ts29113_support])
 
   if test "x$nc_iso_c_binding" = xno; then
-    if test "x$enable_compiler_recover" = xyes; then
-      nc_build_f90=yes
-      AC_MSG_WARN([ISO_C_BINDING not supported - defaulting to F90 interfaces])
-    else
-      AC_MSG_FAILURE([Can't use build F03 interfaces and cannot do compiler recovery])
-    fi
+    AC_MSG_FAILURE([Can't use build F03 interfaces])
   fi
 fi
 
-
-## Do we want to use the fortran 90 wrappers instead of 2003 native code?
-AC_MSG_CHECKING([whether F03 native code is desired])
-AC_ARG_ENABLE([f03],
-              [AS_HELP_STRING([--disable-f03],
-                              [suppress netCDF Fortran 2003 native code])])
-test "x$enable_f03" = xno || enable_f03=yes
-AC_MSG_RESULT([$enable_f03])
-
+dnl ## Do we want to use the fortran 90 wrappers instead of 2003 native code?
+dnl AC_MSG_CHECKING([whether F03 native code is desired])
+dnl AC_ARG_ENABLE([f03],
+dnl               [AS_HELP_STRING([--disable-f03],
+dnl                               [suppress netCDF Fortran 2003 native code])])
+dnl test "x$enable_f03" = xno || enable_f03=yes
+dnl AC_MSG_RESULT([$enable_f03])
+enable_f03=yes
 if test "x$enable_f03" = xyes ; then nc_build_f03=yes; fi
 
 # Decide on f90 versus 2003
 if test "x$nc_iso_c_binding" = xno; then
   #Cannot build f03 native code
-  AC_MSG_NOTICE([Fortran 2003 interface not supported; Using fortran 90 interface])
-  nc_build_f90=yes
+  AC_MSG_FAILURE([Fortran 2003 interface not supported; Using fortran 90 interface])
 fi
 
-# Guarantee build state; f90 currently overrides f03
-if test "x$nc_build_f90" = xyes ; then
-  nc_build_f03=no
-else
-  nc_build_f03=yes
-fi
+nc_build_f03=yes
 
 # Does the user want to check into fortran type information?
 AC_MSG_CHECKING([whether fortran type sizes should be checked])
