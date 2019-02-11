@@ -30,9 +30,6 @@ AC_CANONICAL_TARGET
 # This call is required by automake.
 AM_INIT_AUTOMAKE([foreign dist-zip subdir-objects])
 
-# Check for the existence of this file before proceeding.
-AC_CONFIG_SRCDIR([libsrc/fort-attio.c])
-
 AC_MSG_NOTICE([checking user options])
 
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
