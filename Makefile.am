@@ -1,9 +1,9 @@
 ## This is a automake file, part of Unidata's netCDF package.
-# Copyright 2012, see the COPYRIGHT file for more information.
+# Copyright 2012-2019, see the COPYRIGHT file for more information.
 
-# This is the main automake file for netCDF-Fortran. It builds the
-# different netcdf directories. Not all directories are built,
-# depending on the options selected during configure.
+# This is the main automake file for netCDF-Fortran.
+
+# Ed Hartnett, Russ Rew, Dennis Heimbigner, Ward Fisher
 
 # This directory stores libtool macros, put there by aclocal.
 ACLOCAL_AMFLAGS = -I m4
