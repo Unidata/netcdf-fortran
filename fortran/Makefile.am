@@ -71,8 +71,6 @@ else !USE_NETCDF4
 libnetcdff_la_SOURCES += netcdf.f90 netcdf3_file.f90
 endif !USE_NETCDF4
 
-#endif !BUILD_F03
-
 if BUILD_V2
 libnetcdff_la_SOURCES += nf_v2compat.c module_netcdf_fortv2_c_interfaces.f90 nf_fortv2.f90
 endif
@@ -95,7 +93,6 @@ EXTRA_DIST += netcdf_attributes.f90 netcdf_constants.f90 netcdf_dims.f90 \
 LCHEADERS =
 UCHEADERS =
 
-if BUILD_F03
 LCHEADERS += netcdf_nc_data.mod netcdf_nc_interfaces.mod netcdf_nf_data.mod \
                    netcdf_nf_interfaces.mod netcdf_f03.mod
 UCHEADERS += NETCDF_NC_DATA.mod NETCDF_NC_INTERFACES.mod NETCDF_NF_DATA.mod \
@@ -110,12 +107,8 @@ LCHEADERS += netcdf4_nc_interfaces.mod netcdf4_nf_interfaces.mod netcdf4_f03.mod
 UCHEADERS += NETCDF4_NC_INTERFACES.mod NETCDF4_NF_INTERFACES.mod NETCDF4_F03.mod
 endif USE_NETCDF4
 
-endif BUILD_F03
-
-
 # Must be consistent with previous list of uppercase headers
 # Always construct the upper case modules (may be unused)
-if BUILD_F03
 
 #if UPPER_CASE_MOD
 #NETCDF_NC_DATA.mod: module_netcdf_nc_data.o
@@ -142,8 +135,6 @@ netcdf4_nc_interfaces.mod: module_netcdf4_nc_interfaces.o
 netcdf4_nf_interfaces.mod: module_netcdf4_nf_interfaces.o
 netcdf4_f03.mod: module_netcdf4_f03.o
 endif USE_NETCDF4
-
-endif BUILD_F03
 
 if UPPER_CASE_MOD
 $(UCHEADERS): $(LCHEADERS)
