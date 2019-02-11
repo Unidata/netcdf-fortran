@@ -44,6 +44,7 @@ if test "x$nc_relax_coord_bound" = xyes; then
    AC_DEFINE([NF_RELAX_COORD_BOUND], [1], [Enable a more relaxed boundary error check NF_EINVALCOORDS])
 fi
 
+AC_MSG_CHECKING([if netCDF was built with CDF5])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
 #include <netcdf_meta.h>
 #if !defined(NC_HAS_CDF5) || NC_HAS_CDF5 == 0
@@ -52,7 +53,9 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
 if test "x$nc_has_cdf5" = xyes; then
    AC_DEFINE([ENABLE_CDF5], [1], [Enable CDF-5 file format])
 fi
+AC_MSG_RESULT([$nc_has_cdf5])
 
+AC_MSG_CHECKING([if netCDF was built with pnetcdf])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
 #include <netcdf_meta.h>
 #if !defined(NC_HAS_PNETCDF) || NC_HAS_PNETCDF == 0
@@ -61,7 +64,9 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
 if test "x$nc_has_pnetcdf" = xyes; then
    AC_DEFINE([NF_HAS_PNETCDF], [1], [Enable parallel I/O support via PnetCDF])
 fi
+AC_MSG_RESULT([$nc_has_pnetcdf])
 
+AC_MSG_CHECKING([if netCDF was built with parallel I/O features])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
 #include <netcdf_meta.h>
 #if !defined(NC_HAS_PARALLEL4) || NC_HAS_PARALLEL4 == 0
@@ -70,6 +75,7 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
 if test "x$nc_has_parallel4" = xyes; then
    AC_DEFINE([NF_HAS_PARALLEL4], [1], [Enable parallel I/O support via HDF5])
 fi
+AC_MSG_RESULT([$nc_has_parallel4])
 
 # Does the user want to run extra tests with valgrind?
 AC_MSG_CHECKING([whether extra valgrind tests should be run])
