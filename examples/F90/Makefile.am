@@ -16,7 +16,6 @@ AM_LDFLAGS = ${top_builddir}/fortran/libnetcdff.la -lnetcdf
 F90_TESTS = simple_xy_wr simple_xy_rd sfc_pres_temp_wr	\
 sfc_pres_temp_rd pres_temp_4D_wr pres_temp_4D_rd
 F90_TESTS = simple_xy_wr simple_xy_rd
-simple_xy_rd.log: simple_xy_wr.log
 
 check_PROGRAMS = $(F90_TESTS)
 TESTS = $(F90_TESTS)
