@@ -13,7 +13,7 @@ pkgconfig_DATA = netcdf-fortran.pc
 
 # This is the list of subdirs for which Makefiles will be constructed
 # and run.
-SUBDIRS = fortran nf_test nf03_test docs examples CMakeExtras
+SUBDIRS = fortran libsrc nf_test nf03_test docs examples CMakeExtras
 
 # The nf-config script helps the user build programs with netCDF.
 bin_SCRIPTS = nf-config

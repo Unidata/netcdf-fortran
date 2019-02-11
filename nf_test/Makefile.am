@@ -22,13 +22,8 @@ LDADD = ${top_builddir}/fortran/libnetcdff.la
 check_PROGRAMS = nf_test
 TESTS = nf_test
 
-if BUILD_F03
 nf_test_SOURCES = f03lib_f_interfaces.f90 test_get.m4 test_put.m4 nf_error.F nf_test.F	\
                   test_read.F test_write.F util.F f03lib.c tests.inc
-else
-nf_test_SOURCES = test_get.m4 test_put.m4 nf_error.F nf_test.F	\
-                  test_read.F test_write.F util.F fortlib.c tests.inc
-endif
 
 # The create_fills shell creates the file fills.nc, needed by later
 # tests.
@@ -54,7 +49,6 @@ TESTS += ftst_vars ftst_vars2 ftst_vars3 ftst_vars4 ftst_vars5	\
          ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_groups \
          ftst_path ftst_rengrps
 
-if BUILD_F03
 ftst_types_SOURCES = ftst_types.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 ftst_types2_SOURCES = ftst_types2.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 ftst_types3_SOURCES = ftst_types3.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
@@ -67,20 +61,6 @@ ftst_vars6_SOURCES = ftst_vars6.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 ftst_groups_SOURCES = ftst_groups.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 ftst_path_SOURCES = ftst_path.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 ftst_rengrps_SOURCES = ftst_rengrps.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
-else !BUILD_F03
-ftst_types_SOURCES = ftst_types.F fortlib.c handle_err.F
-ftst_types2_SOURCES = ftst_types2.F fortlib.c handle_err.F
-ftst_types3_SOURCES = ftst_types3.F fortlib.c handle_err.F
-ftst_vars_SOURCES = ftst_vars.F fortlib.c handle_err.F
-ftst_vars2_SOURCES = ftst_vars2.F fortlib.c handle_err.F
-ftst_vars3_SOURCES = ftst_vars3.F fortlib.c handle_err.F
-ftst_vars4_SOURCES = ftst_vars4.F fortlib.c handle_err.F
-ftst_vars5_SOURCES = ftst_vars5.F fortlib.c handle_err.F
-ftst_vars6_SOURCES = ftst_vars6.F fortlib.c handle_err.F
-ftst_groups_SOURCES = ftst_groups.F fortlib.c handle_err.F
-ftst_path_SOURCES = ftst_path.F fortlib.c handle_err.F
-ftst_rengrps_SOURCES = ftst_rengrps.F fortlib.c handle_err.F
-endif !BUILD_F03
 
 # Add these netCDF-4 f90 test programs.
 check_PROGRAMS += f90tst_vars tst_types tst_types2 f90tst_vars_vlen	\
@@ -155,7 +135,6 @@ ftst_filter_SOURCES = ftst_filter.F f03lib_f_interfaces.f90 f03lib.c handle_err.
 TESTS += ftst_filter
 endif
 
-
 endif #USE_NETCDF4
 
 # This is the fortran v2 test. It depends on the utilities being built
@@ -163,11 +142,7 @@ endif #USE_NETCDF4
 if BUILD_V2
 check_PROGRAMS += ftest
 TESTS += ftest
-if BUILD_F03
 ftest_SOURCES = ftest.F f03lib.c
-else
-ftest_SOURCES = ftest.F fortlib.c
-endif
 endif # BUILD_V2
 
 check_PROGRAMS += tst_f90
@@ -185,6 +160,7 @@ EXTRA_DIST = test_get.F test_put.F fills.cdl create_fills.sh	\
 			CMakeLists.txt
 
 # Cleaning up files created during the process.
-CLEANFILES = scratch.nc test.nc copy.nc fills.nc tst_*.nc ftst_*.nc f90tst_*.nc temp.tmp fort.*
+CLEANFILES = scratch.nc test.nc copy.nc fills.nc tst_*.nc ftst_*.nc	\
+f90tst_*.nc temp.tmp fort.*
 
 MAINTAINERCLEANFILES = test_get.F test_put.F
