@@ -176,16 +176,6 @@ AC_PROG_CC
 AM_PROG_CC_C_O
 AC_C_CONST
 
-dnl # If F03 is set, FC isn't, then set FC to whatever F03 was set
-dnl if test "${F03+set}" = set -a "${FC+set}" != set; then
-dnl    FC=$F03
-dnl fi
-
-dnl # If F90 is set, FC isn't, then set FC to whatever F90 was set to.
-dnl if test "${F90+set}" = set -a "${FC+set}" != set; then
-dnl    FC=$F90
-dnl fi
-
 # Find fortran compiler. If FC isn't set after AC_PROG_FC, we couldn't
 # find a fortran compiler. If the user requested the fortran API, and
 # has told us not to recover from a missing compiler, then bail out
