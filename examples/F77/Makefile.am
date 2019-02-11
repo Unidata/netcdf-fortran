@@ -37,7 +37,7 @@ pres_temp_4D_rd_SOURCES = pres_temp_4D_rd.f
 # Run all test programs, plus the do_comps.sh script, which checks
 # that all the output files are the same as the C example output
 # files.
-TESTS = $(TESTPROGRAMS) #do_comps.sh
+TESTS = $(TESTPROGRAMS)
 
 # Cleaning up files created during the process.
 CLEANFILES = simple_xy.nc sfc_pres_temp.nc pres_temp_4D.nc	\

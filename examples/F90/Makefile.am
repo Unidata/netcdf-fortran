@@ -15,9 +15,11 @@ AM_LDFLAGS = ${top_builddir}/fortran/libnetcdff.la -lnetcdf
 # These are the example programs.
 F90_TESTS = simple_xy_wr simple_xy_rd sfc_pres_temp_wr	\
 sfc_pres_temp_rd pres_temp_4D_wr pres_temp_4D_rd
+F90_TESTS = simple_xy_wr simple_xy_rd
+simple_xy_rd.log: simple_xy_wr.log
 
 check_PROGRAMS = $(F90_TESTS)
-TESTS = $(F90_TESTS) # do_comps.sh
+TESTS = $(F90_TESTS)
 
 # Here's the source code for the programs.
 simple_xy_wr_SOURCES = simple_xy_wr.f90
