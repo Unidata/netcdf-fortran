@@ -581,7 +581,6 @@ AC_CONFIG_FILES([Makefile
                  nf-config
                  netcdf-fortran.pc
                  docs/Makefile
-                 libsrc/Makefile
                  fortran/Makefile
                  nf_test/Makefile
                  nf03_test/Makefile
