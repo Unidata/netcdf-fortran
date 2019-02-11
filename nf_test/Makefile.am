@@ -3,6 +3,9 @@
 
 # This file builds and runs the f77 and f90 tests.
 
+# Parallel builds don't currently work in this directory.
+.NOTPARALLEL:
+
 AM_CPPFLAGS = -I$(top_srcdir)/fortran -I../fortran
 
 # Some fortran compilers think your files should not have an .f90

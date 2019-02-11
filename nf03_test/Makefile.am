@@ -15,6 +15,8 @@
 # ftst_vars5, ftst_types, ftst_types2, and ftst_groups, if netCDF-4 is
 # enabled.
 
+# Parallel builds don't currently work in this directory.
+.NOTPARALLEL:
 
 AM_FCFLAGS = -I$(top_srcdir)/fortran ${AM_CPPFLAGS}
 
