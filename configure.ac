@@ -585,6 +585,7 @@ AC_CONFIG_FILES([Makefile
                  nf_test/Makefile
                  nf03_test/Makefile
                  CMakeExtras/Makefile
+                 libsrc/Makefile
                  examples/Makefile
                  examples/F90/Makefile
                  examples/F77/Makefile],
