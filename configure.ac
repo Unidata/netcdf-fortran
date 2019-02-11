@@ -1,8 +1,8 @@
 #                                               -*- Autoconf -*-
-## Process this file with autoconf to produce a configure script.
+# This is part of Unidata's netCDF package. Copyright 2011-2019, see
+# the COPYRIGHT file for more information.
 
-# This is part of Unidata's netCDF package. Copyright 2011, see the
-# COPYRIGHT file for more information.
+# Ed Hartnett, Russ Rew, Dennis Heimbigner, Ward Fisher
 
 # Running autoconf on this file will trigger a warning if
 # autoconf is not at least the specified version.

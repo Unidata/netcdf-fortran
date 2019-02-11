@@ -1,7 +1,9 @@
 # This is a automake file, part of Unidata's netCDF package.
-# Copyright 2005-2011, see the COPYRIGHT file for more information.
+# Copyright 2005-2019, see the COPYRIGHT file for more information.
 
 # This file builds and runs the f77 and f90 tests.
+
+# Ed Hartnett, Russ Rew, Dennis Heimbigner, Ward Fisher
 
 # Parallel builds don't currently work in this directory.
 .NOTPARALLEL:
@@ -40,15 +42,12 @@ endif # BUILD_V2
 
 # If the user building netCDF-4 add the netCDF-4 test programs.
 if USE_NETCDF4
-
 check_PROGRAMS += ftst_vars ftst_vars2 ftst_vars3 ftst_vars4		\
 ftst_vars5 ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_groups	\
 ftst_path ftst_rengrps
-
 TESTS += ftst_vars ftst_vars2 ftst_vars3 ftst_vars4 ftst_vars5		\
 ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_groups ftst_path	\
 ftst_rengrps
-
 ftst_types_SOURCES = ftst_types.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 ftst_types2_SOURCES = ftst_types2.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 ftst_types3_SOURCES = ftst_types3.F f03lib_f_interfaces.f90 f03lib.c handle_err.F

@@ -3,10 +3,11 @@
 
 # This file controls the building of the fortran 90 API.
 
+# Ed Hartnett, Russ Rew, Dennis Heimbigner, Ward Fisher
+
 # Turn off parallel builds in this directory.
 .NOTPARALLEL:
 
-AM_LDFLAGS =
 BUILT_SOURCES =
 libnetcdff_la_SOURCES =
 libnetcdff_la_DEPENDENCIES =
@@ -14,7 +15,7 @@ EXTRA_DIST =
 CLEANFILES =
 DISTCLEANFILES =
 
-libnetcdff_la_LDFLAGS = $(AM_LDFLAGS) -version-number 6:1:1
+libnetcdff_la_LDFLAGS = -version-number 6:1:1
 
 # This, plus either netcdf4.f90 or netcdf.f90, is the main source.
 libnetcdff_la_SOURCES += typeSizes.f90
