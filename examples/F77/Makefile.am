@@ -24,8 +24,6 @@ endif
 
 check_PROGRAMS = $(TESTPROGRAMS)
 
-EXTRA_DIST = do_comps.sh CMakeLists.txt
-
 # Here's the source code for the programs.
 simple_xy_wr_SOURCES = simple_xy_wr.f
 simple_xy_rd_SOURCES = simple_xy_rd.f
@@ -42,3 +40,5 @@ TESTS = $(TESTPROGRAMS)
 # Cleaning up files created during the process.
 CLEANFILES = simple_xy.nc sfc_pres_temp.nc pres_temp_4D.nc	\
 simple_xy_nc4.nc
+
+EXTRA_DIST = CMakeLists.txt

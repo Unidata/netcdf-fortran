@@ -98,4 +98,4 @@ nc4_pres_temp_4D_wr.f90:
 
 # Make sure the script which compares file outputs is included in the
 # dist.
-EXTRA_DIST = do_comps.sh run_nc4_comps.sh run_f90_par_examples.sh CMakeLists.txt
+EXTRA_DIST = run_nc4_comps.sh run_f90_par_examples.sh CMakeLists.txt
