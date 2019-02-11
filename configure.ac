@@ -252,22 +252,10 @@ EOF
   fi
 fi
 
-dnl ## Do we want to use the fortran 90 wrappers instead of 2003 native code?
-dnl AC_MSG_CHECKING([whether F03 native code is desired])
-dnl AC_ARG_ENABLE([f03],
-dnl               [AS_HELP_STRING([--disable-f03],
-dnl                               [suppress netCDF Fortran 2003 native code])])
-dnl test "x$enable_f03" = xno || enable_f03=yes
-dnl AC_MSG_RESULT([$enable_f03])
-enable_f03=yes
-if test "x$enable_f03" = xyes ; then nc_build_f03=yes; fi
-
-# Decide on f90 versus 2003
+# We must have F2003 ISO bindings to build.
 if test "x$nc_iso_c_binding" = xno; then
-  #Cannot build f03 native code
-  AC_MSG_FAILURE([Fortran 2003 interface not supported; Using fortran 90 interface])
+  AC_MSG_FAILURE([Fortran 2003 interface not supported])
 fi
-
 nc_build_f03=yes
 
 # Does the user want to check into fortran type information?
