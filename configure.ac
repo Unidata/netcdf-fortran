@@ -74,13 +74,18 @@ if test "x$nc_has_parallel4" = xyes; then
 fi
 AC_MSG_RESULT([$nc_has_parallel4])
 
+# Find valgrind, if available, and add targets for it.
+AX_VALGRIND_DFLT([sgcheck], [off])
+AX_VALGRIND_CHECK
+AM_CONDITIONAL(ENABLE_VALGRIND, [test "x$VALGRIND_ENABLED" = xyes])
+
 # Does the user want to run extra tests with valgrind?
-AC_MSG_CHECKING([whether extra valgrind tests should be run])
-AC_ARG_ENABLE([valgrind-tests],
-              [AS_HELP_STRING([--enable-valgrind-tests],
-                              [build with valgrind-tests (valgrind is required, static builds only)])])
-test "x$enable_valgrind_tests" = xyes || enable_valgrind_tests=no
-AC_MSG_RESULT($enable_valgrind_tests)
+dnl AC_MSG_CHECKING([whether extra valgrind tests should be run])
+dnl AC_ARG_ENABLE([valgrind-tests],
+dnl               [AS_HELP_STRING([--enable-valgrind-tests],
+dnl                               [build with valgrind-tests (valgrind is required, static builds only)])])
+dnl test "x$enable_valgrind_tests" = xyes || enable_valgrind_tests=no
+dnl AC_MSG_RESULT($enable_valgrind_tests)
 
 # Does the user want to run extra parallel tests when parallel netCDF-4 is built?
 AC_MSG_CHECKING([whether parallel IO tests should be run])
