@@ -79,14 +79,6 @@ AX_VALGRIND_DFLT([sgcheck], [off])
 AX_VALGRIND_CHECK
 AM_CONDITIONAL(ENABLE_VALGRIND, [test "x$VALGRIND_ENABLED" = xyes])
 
-# Does the user want to run extra tests with valgrind?
-dnl AC_MSG_CHECKING([whether extra valgrind tests should be run])
-dnl AC_ARG_ENABLE([valgrind-tests],
-dnl               [AS_HELP_STRING([--enable-valgrind-tests],
-dnl                               [build with valgrind-tests (valgrind is required, static builds only)])])
-dnl test "x$enable_valgrind_tests" = xyes || enable_valgrind_tests=no
-dnl AC_MSG_RESULT($enable_valgrind_tests)
-
 # Does the user want to run extra parallel tests when parallel netCDF-4 is built?
 AC_MSG_CHECKING([whether parallel IO tests should be run])
 AC_ARG_ENABLE([parallel-tests],
@@ -305,46 +297,14 @@ TEMP_LARGE=${TEMP_LARGE-.}
 AC_MSG_RESULT($TEMP_LARGE)
 AC_DEFINE_UNQUOTED([TEMP_LARGE], ["$TEMP_LARGE"], [Place to put very large netCDF test files.])
 
-
-# Turn off building old F77 interfaces if nc_build_f03 is still yes
-
+# We always build with f03.
 test "x$nc_build_f03" = xyes && nc_build_f77=no
-
-dnl # See if the fortran 90 build is desired. If so, set some stuff
-dnl if test "x$nc_build_f90" = xyes; then
-dnl    AC_MSG_NOTICE([setting up Fortran 90])
-dnl    if test "${F90+set}" != set; then
-dnl       F90=$FC
-dnl    fi
-dnl    AC_MSG_CHECKING([what FC is set to])
-dnl    AC_MSG_RESULT([$FC])
-
-dnl    if test "x$nc_build_f03" = xno; then
-dnl      # Some f90 compilers change the case of the mod file names. Others
-dnl      # require special flags to be set to deal with .f90 files. Find out
-dnl      # about this compiler.
-dnl      AC_LANG_PUSH(Fortran)
-dnl      AC_FC_SRCEXT(f90)
-dnl      AC_LANG_POP(Fortran)
-dnl      AX_F90_MODULE_FLAG
-dnl      AC_SUBST(MOD_FLAG, ${ax_cv_f90_modflag})
-dnl    fi
-dnl fi
-
 AM_CONDITIONAL(BUILD_F03, [test "x$nc_build_f03" = xyes])
+
 # Set up libtool.
 AC_MSG_NOTICE([setting up libtool])
 LT_PREREQ([2.2])
 LT_INIT
-
-# Valgrind tests don't work with shared builds because of some libtool
-# weirdness.
-if test "x$enable_shared" = xyes; then
-   if test $enable_valgrind_tests = yes; then
-      AC_MSG_WARN([No valgrind tests with shared libraries])
-      enable_valgrind_tests=no
-   fi
-fi
 
 AC_MSG_NOTICE([finding other utilities])
 
@@ -354,33 +314,6 @@ AC_PROG_INSTALL
 AC_MSG_NOTICE([trying to set fortran flags for this platform])
 AC_MSG_CHECKING([what FC is set to])
 AC_MSG_RESULT([$FC])
-dnl # Set fortran flag if the user has not already set it in CPPFLAGS.
-dnl case "$CPPFLAGS" in
-dnl  *pgiFortran*|*NAGf90Fortran*|*f2cFortran*|*hpuxFortran*|*apolloFortran*|*sunFortran*|*IBMR2Fortran*|*CRAYFortran*|*PATHSCALE_COMPILER*|*gFortran*|*mipsFortran*|*DECFortran*|*vmsFortran*|*CONVEXFortran*|*PowerStationFortran*|*AbsoftUNIXFortran*|*AbsoftProFortran*|*SXFortran*)
-dnl     ;;
-dnl    *)
-dnl       case "$FC" in
-dnl          pgf95|pgf90|pgf77|ifort*|lf90|lf95)
-dnl             AC_DEFINE(pgiFortran, [1], [Turned on by netCDF configure.])
-dnl             ;;
-dnl           *gfortran)
-dnl              if (gfortran --version | grep '(GCC 4.1.' || gfortran --version | grep '(GCC 4.0.'); then
-dnl                 AC_DEFINE(gFortran, [1], [Turned on by netCDF configure.])
-dnl              else
-dnl                 AC_DEFINE(pgiFortran, [1], [Turned on by netCDF configure.])
-dnl              fi
-dnl              ;;
-dnl           *g77)
-dnl              AC_DEFINE(f2cFortran, [1], [Turned on by netCDF configure.])
-dnl              ;;
-dnl           *)
-dnl              # If it's a gnu compiler, guess f2c.
-dnl              if test "x$ac_cv_fc_compiler_gnu" = xyes; then
-dnl                 AC_DEFINE(f2cFortran, [1], [Turned on by netCDF configure.])
-dnl              fi
-dnl              ;;
-dnl       esac
-dnl esac
 
 # Check to see if any macros must be set to enable large (>2GB) files.
 AC_SYS_LARGEFILE
@@ -534,7 +467,6 @@ fi
 # Automake conditionals need to be called, whether the answer is yes
 # or no.
 AM_CONDITIONAL(TEST_PARALLEL, [test "x$enable_parallel_tests" = xyes])
-AM_CONDITIONAL(USE_VALGRIND_TESTS, [test "x$enable_valgrind_tests" = xyes])
 
 # Flags for nf-config script; by design $prefix, $includir, $libdir,
 # etc.  are left as shell variables in the script so as to facilitate
