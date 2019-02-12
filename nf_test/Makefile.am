@@ -153,6 +153,10 @@ tst_f90_SOURCES = tst_f90.f90
 .m4.F:
 	m4 $(M4FLAGS) $< >$@
 
+# If valgrind is present on this machine, this will enable
+# check-valgrind target, which runs all tests with valgrind.
+@VALGRIND_CHECK_RULES@
+
 # test_get.F and test_put.f need to be distributed, so that the user
 # need not have m4. fills.nc is used by test program ftest.
 EXTRA_DIST = test_get.F test_put.F fills.cdl create_fills.sh		\
