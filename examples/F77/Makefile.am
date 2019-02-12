@@ -1,13 +1,19 @@
 ## This is a automake file, part of Unidata's netCDF package.
-# Copyright 2011, see the COPYRIGHT file for more information.
+# Copyright 2011-2019, see the COPYRIGHT file for more information.
 
 # This file builds F77 examples.
+
+# Ed Hartnett, Russ Rew, Dennis Heimbigner, Ward Fisher
+
+# Parallel builds don't currently work in this directory.
+.NOTPARALLEL:
 
 AM_FCFLAGS = -I$(top_srcdir)/fortran ${AM_CPPFLAGS}
 AM_FCFLAGS += $(FCFLAGS_f90)
 AM_FCFLAGS += @MOD_FLAG@$(top_builddir)/fortran
 AM_FFLAGS = ${AM_FCFLAGS}
 AM_LDFLAGS = ${top_builddir}/fortran/libnetcdff.la -lnetcdf
+LDADD = ${top_builddir}/fortran/libnetcdff.la -lnetcdf
 
 # These are the example programs.
 TESTPROGRAMS = simple_xy_wr simple_xy_rd sfc_pres_temp_wr	\
@@ -21,8 +27,6 @@ endif
 
 check_PROGRAMS = $(TESTPROGRAMS)
 
-EXTRA_DIST = do_comps.sh CMakeLists.txt
-
 # Here's the source code for the programs.
 simple_xy_wr_SOURCES = simple_xy_wr.f
 simple_xy_rd_SOURCES = simple_xy_rd.f
@@ -34,8 +38,10 @@ pres_temp_4D_rd_SOURCES = pres_temp_4D_rd.f
 # Run all test programs, plus the do_comps.sh script, which checks
 # that all the output files are the same as the C example output
 # files.
-TESTS = $(TESTPROGRAMS) #do_comps.sh
+TESTS = $(TESTPROGRAMS)
 
 # Cleaning up files created during the process.
 CLEANFILES = simple_xy.nc sfc_pres_temp.nc pres_temp_4D.nc	\
 simple_xy_nc4.nc
+
+EXTRA_DIST = CMakeLists.txt

@@ -1,42 +1,13 @@
 ## This is an automake file, part of Unidata's netCDF package.
-# Copyright 2005-2011, see the COPYRIGHT file for more information.
-
-# This file controls the building of the c library
-# that interfaces between fortran and C.
-
-# The (temporary) library we are building.
-# The version number is specified using the following
-# http:
-# guideline://www.gnu.org/software/libtool/manual/html_node/Updating-version-info.html
-noinst_LTLIBRARIES = libnetcdfc.la
-libnetcdfc_la_LDFLAGS = $(AM_LDFLAGS) -version-number 7:0:2
+# Copyright 2005-2019, see the COPYRIGHT file for more information.
 
 # Tell make to install these as a header file.
 include_HEADERS = nfconfig.inc
 
-# Turn on some special flags for building DLL.
-AM_CPPFLAGS = -DDLL_EXPORT
-if BUILD_DLL
-AM_CPPFLAGS += -DDLL_EXPORT
-libnetcdfc_la_LDFLAGS += -no-undefined -Wl,--output-def,netcdffdll.def
-endif # BUILD_DLL
-
-# These are the source files for the fortran library.
-libnetcdfc_la_SOURCES = fort-attio.c fort-control.c fort-dim.c		\
-fort-genatt.c fort-geninq.c fort-genvar.c fort-lib.c fort-misc.c	\
-fort-v2compat.c fort-vario.c fort-var1io.c fort-varaio.c fort-varmio.c	\
-fort-varsio.c cfortran.h fort-lib.h ncfortran.h
-
-# Is the user building netCDF-4?
-if USE_NETCDF4
-# All netCDF-4 F77 functions are in one code file.
-libnetcdfc_la_SOURCES += fort-nc4.c
-endif
-
 # The F77 API man page.
 man_MANS = netcdf_f77.3
 
-# This rule generates the F77 manpage.
+# Determine some settings for generating the F77 manpage.
 ARGS_MANPAGE = -DAPI=FORTRAN
 if USE_NETCDF4
 ARGS_MANPAGE += -DNETCDF4=TRUE
@@ -47,14 +18,16 @@ endif
 if BUILD_PARALLEL
 ARGS_MANPAGE += -DPARALLEL_IO=TRUE
 endif
+
+# Create the F77 API man page from the m4 source.
 netcdf_f77.3: $(top_srcdir)/docs/netcdf.m4
 	m4 $(M4FLAGS) $(ARGS_MANPAGE) $? >$@ || rm $@
 
 # The nfconfig.in file is turned into nfconfig.inc by the configure
 # script. The man page is generated on the developers machine for the
 # dist.
-EXTRA_DIST = nfconfig.in nfconfig.inc $(man_MANS) \
-	netcdf_f.h CMakeLists.txt nfconfig.in.cmake
+EXTRA_DIST = nfconfig.in nfconfig.inc $(man_MANS) CMakeLists.txt	\
+nfconfig.in.cmake
 
 # These files need to be cleaned up my make.
 CLEANFILES = nfconfig1.inc netcdf.inc

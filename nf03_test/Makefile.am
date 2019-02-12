@@ -1,5 +1,5 @@
 ## This is a automake file, part of Unidata's netCDF package.
-# Copyright 2005-2006, see the COPYRIGHT file for more information.
+# Copyright 2005-2019, see the COPYRIGHT file for more information.
 
 # Modified versions of nf_test routines used to test the use of
 # F03 interface netcdf modules instead of netcdf include files
@@ -15,6 +15,10 @@
 # ftst_vars5, ftst_types, ftst_types2, and ftst_groups, if netCDF-4 is
 # enabled.
 
+# Ed Hartnett, Russ Rew, Dennis Heimbigner, Ward Fisher
+
+# Parallel builds don't currently work in this directory.
+.NOTPARALLEL:
 
 AM_FCFLAGS = -I$(top_srcdir)/fortran ${AM_CPPFLAGS}
 
@@ -51,9 +55,6 @@ test03_read.F test03_write.F util03.F f03lib.c
 nf03_error.o nf03_test.o test03_get.o test03_put.o test03_read.o test03_write.o tst03_f77_v2.o util03.o: \
 module_tests.o
 
-# Cleaning up files created during the process.
-CLEANFILES = scratch.nc test.nc copy.nc fills.nc
-
 # Is the user building netCDF-4?
 if USE_NETCDF4
 
@@ -72,55 +73,52 @@ f03tst_vars5_SOURCES = module_tests.F90 f03tst_vars5.F f03lib_f_interfaces.f90 f
 f03tst_vars6_SOURCES = module_tests.F90 f03tst_vars6.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 f03tst_open_mem_SOURCES = module_tests.F90 f03tst_open_mem.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 f03tst_groups_SOURCES = module_tests.F90 f03tst_groups.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
-TESTS += f03tst_vars f03tst_vars2 f03tst_vars3 f03tst_vars4 f03tst_vars5 \
-         f03tst_vars6 f03tst_types f03tst_types2 f03tst_types3 f03tst_groups \
-         f03tst_open_mem
 
-CLEANFILES += ftst_vars.nc ftst_vars2.nc ftst_vars3.nc ftst_vars4.nc	\
-              ftst_vars5.nc ftst_vars6.nc ftst_types.nc ftst_types2.nc \
-              ftst_types3.nc ftst_groups.nc f03tst_open_mem.nc ftst_filter.nc
+TESTS += f03tst_vars f03tst_vars2 f03tst_vars3 f03tst_vars4		\
+f03tst_vars5 f03tst_vars6 f03tst_types f03tst_types2 f03tst_types3	\
+f03tst_groups f03tst_open_mem
 
 # This is a netCDF-4 V2 test program.
 if BUILD_V2
 check_PROGRAMS += f03tst_v2
 TESTS += f03tst_v2
-CLEANFILES += ftst_v2.nc
 f03tst_v2_SOURCES = f03tst_v2.F
 endif # BUILD_V2
 
 # Test parallel I/O
 if TEST_PARALLEL
 check_PROGRAMS += f03tst_parallel
-CLEANFILES += ftst_parallel.nc
 f03tst_parallel_SOURCES = f03tst_parallel.F
 endif # TEST_PARALLEL
 endif # USE_NETCDF4
-
 
 # This is the fortran v2 test. It depends on the utilities being built
 # to generate i's input file.
 if BUILD_V2
 check_PROGRAMS += f03test
 TESTS += f03test
-CLEANFILES += test.nc
 f03test_SOURCES = module_tests.F90 f03test.F f03lib.c
 endif # BUILD_V2
-
-CLEANFILES += tests.mod
-
-# test03_get.F and test03_put.f need to be distributed, so that the user
-# need not have m4.
-EXTRA_DIST = test03_get.F test03_put.F fills.cdl create_fills.sh	\
-run_f77_par_test.sh CMakeLists.txt
-
-test: check
 
 # Did the user build the V2 F77 API? If so, run this test.
 if BUILD_V2
 check_PROGRAMS += tst03_f77_v2
 tst03_f77_v2_SOURCES = module_tests.F90 tst03_f77_v2.F handle_err.F
 TESTS += tst03_f77_v2
-CLEANFILES += tst_f77_v2.nc
 endif # BUILD_V2
 
-CLEANFILES += temp.tmp
+# If valgrind is present on this machine, this will enable
+# check-valgrind target, which runs all tests with valgrind.
+@VALGRIND_CHECK_RULES@
+
+# test03_get.F and test03_put.f need to be distributed, so that the user
+# need not have m4.
+EXTRA_DIST = test03_get.F test03_put.F fills.cdl create_fills.sh	\
+run_f77_par_test.sh CMakeLists.txt
+
+# Cleaning up files created during the process.
+CLEANFILES = scratch.nc test.nc copy.nc fills.nc tst_f77_v2.nc		\
+tests.mod test.nc ftst_parallel.nc ftst_v2.nc ftst_vars.nc		\
+ftst_vars2.nc ftst_vars3.nc ftst_vars4.nc ftst_vars5.nc ftst_vars6.nc	\
+ftst_types.nc ftst_types2.nc ftst_types3.nc ftst_groups.nc		\
+f03tst_open_mem.nc ftst_filter.nc temp.tmp

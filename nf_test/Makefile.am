@@ -1,7 +1,12 @@
 # This is a automake file, part of Unidata's netCDF package.
-# Copyright 2005-2011, see the COPYRIGHT file for more information.
+# Copyright 2005-2019, see the COPYRIGHT file for more information.
 
 # This file builds and runs the f77 and f90 tests.
+
+# Ed Hartnett, Russ Rew, Dennis Heimbigner, Ward Fisher
+
+# Parallel builds don't currently work in this directory.
+.NOTPARALLEL:
 
 AM_CPPFLAGS = -I$(top_srcdir)/fortran -I../fortran
 
@@ -19,13 +24,8 @@ LDADD = ${top_builddir}/fortran/libnetcdff.la
 check_PROGRAMS = nf_test
 TESTS = nf_test
 
-if BUILD_F03
 nf_test_SOURCES = f03lib_f_interfaces.f90 test_get.m4 test_put.m4 nf_error.F nf_test.F	\
                   test_read.F test_write.F util.F f03lib.c tests.inc
-else
-nf_test_SOURCES = test_get.m4 test_put.m4 nf_error.F nf_test.F	\
-                  test_read.F test_write.F util.F fortlib.c tests.inc
-endif
 
 # The create_fills shell creates the file fills.nc, needed by later
 # tests.
@@ -40,18 +40,14 @@ tst_f77_v2_SOURCES = tst_f77_v2.F
 TESTS += tst_f77_v2
 endif # BUILD_V2
 
-# Is the user building netCDF-4?
+# If the user building netCDF-4 add the netCDF-4 test programs.
 if USE_NETCDF4
-
-# Add these netCDF-4 test programs.
-check_PROGRAMS += ftst_vars ftst_vars2 ftst_vars3 ftst_vars4 ftst_vars5	\
-                  ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_groups \
-                  ftst_path ftst_rengrps
-TESTS += ftst_vars ftst_vars2 ftst_vars3 ftst_vars4 ftst_vars5	\
-         ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_groups \
-         ftst_path ftst_rengrps
-
-if BUILD_F03
+check_PROGRAMS += ftst_vars ftst_vars2 ftst_vars3 ftst_vars4		\
+ftst_vars5 ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_groups	\
+ftst_path ftst_rengrps
+TESTS += ftst_vars ftst_vars2 ftst_vars3 ftst_vars4 ftst_vars5		\
+ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_groups ftst_path	\
+ftst_rengrps
 ftst_types_SOURCES = ftst_types.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 ftst_types2_SOURCES = ftst_types2.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 ftst_types3_SOURCES = ftst_types3.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
@@ -64,20 +60,6 @@ ftst_vars6_SOURCES = ftst_vars6.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 ftst_groups_SOURCES = ftst_groups.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 ftst_path_SOURCES = ftst_path.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 ftst_rengrps_SOURCES = ftst_rengrps.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
-else !BUILD_F03
-ftst_types_SOURCES = ftst_types.F fortlib.c handle_err.F
-ftst_types2_SOURCES = ftst_types2.F fortlib.c handle_err.F
-ftst_types3_SOURCES = ftst_types3.F fortlib.c handle_err.F
-ftst_vars_SOURCES = ftst_vars.F fortlib.c handle_err.F
-ftst_vars2_SOURCES = ftst_vars2.F fortlib.c handle_err.F
-ftst_vars3_SOURCES = ftst_vars3.F fortlib.c handle_err.F
-ftst_vars4_SOURCES = ftst_vars4.F fortlib.c handle_err.F
-ftst_vars5_SOURCES = ftst_vars5.F fortlib.c handle_err.F
-ftst_vars6_SOURCES = ftst_vars6.F fortlib.c handle_err.F
-ftst_groups_SOURCES = ftst_groups.F fortlib.c handle_err.F
-ftst_path_SOURCES = ftst_path.F fortlib.c handle_err.F
-ftst_rengrps_SOURCES = ftst_rengrps.F fortlib.c handle_err.F
-endif !BUILD_F03
 
 # Add these netCDF-4 f90 test programs.
 check_PROGRAMS += f90tst_vars tst_types tst_types2 f90tst_vars_vlen	\
@@ -148,10 +130,10 @@ endif # TEST_PARALLEL
 # Test filters
 if TEST_FILTERS
 check_PROGRAMS += ftst_filter 
-ftst_filter_SOURCES = ftst_filter.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
+ftst_filter_SOURCES = ftst_filter.F f03lib_f_interfaces.f90 f03lib.c	\
+handle_err.F
 TESTS += ftst_filter
 endif
-
 
 endif #USE_NETCDF4
 
@@ -160,11 +142,7 @@ endif #USE_NETCDF4
 if BUILD_V2
 check_PROGRAMS += ftest
 TESTS += ftest
-if BUILD_F03
 ftest_SOURCES = ftest.F f03lib.c
-else
-ftest_SOURCES = ftest.F fortlib.c
-endif
 endif # BUILD_V2
 
 check_PROGRAMS += tst_f90
@@ -175,13 +153,17 @@ tst_f90_SOURCES = tst_f90.f90
 .m4.F:
 	m4 $(M4FLAGS) $< >$@
 
+# If valgrind is present on this machine, this will enable
+# check-valgrind target, which runs all tests with valgrind.
+@VALGRIND_CHECK_RULES@
+
 # test_get.F and test_put.f need to be distributed, so that the user
 # need not have m4. fills.nc is used by test program ftest.
-EXTRA_DIST = test_get.F test_put.F fills.cdl create_fills.sh	\
-             run_f90_par_test.sh run_f77_par_test.sh ref_fills.nc \
-			CMakeLists.txt
+EXTRA_DIST = test_get.F test_put.F fills.cdl create_fills.sh		\
+run_f90_par_test.sh run_f77_par_test.sh ref_fills.nc CMakeLists.txt
 
 # Cleaning up files created during the process.
-CLEANFILES = scratch.nc test.nc copy.nc fills.nc tst_*.nc ftst_*.nc f90tst_*.nc temp.tmp fort.*
+CLEANFILES = scratch.nc test.nc copy.nc fills.nc tst_*.nc ftst_*.nc	\
+f90tst_*.nc temp.tmp fort.*
 
 MAINTAINERCLEANFILES = test_get.F test_put.F

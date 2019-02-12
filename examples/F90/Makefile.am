@@ -1,7 +1,12 @@
 ## This is a automake file, part of Unidata's netCDF package.
-# Copyright 2006, see the COPYRIGHT file for more information.
+# Copyright 2006-2019, see the COPYRIGHT file for more information.
 
 # This file builds F90 examples.
+
+# Ed Hartnett, Russ Rew, Dennis Heimbigner, Ward Fisher
+
+# Parallel builds don't currently work in this directory.
+.NOTPARALLEL:
 
 AM_FCFLAGS = -I$(top_srcdir)/fortran ${AM_CPPFLAGS}
 AM_FCFLAGS += $(FCFLAGS_f90)
@@ -14,7 +19,7 @@ F90_TESTS = simple_xy_wr simple_xy_rd sfc_pres_temp_wr	\
 sfc_pres_temp_rd pres_temp_4D_wr pres_temp_4D_rd
 
 check_PROGRAMS = $(F90_TESTS)
-TESTS = $(F90_TESTS) # do_comps.sh
+TESTS = $(F90_TESTS)
 
 # Here's the source code for the programs.
 simple_xy_wr_SOURCES = simple_xy_wr.f90
@@ -93,4 +98,4 @@ nc4_pres_temp_4D_wr.f90:
 
 # Make sure the script which compares file outputs is included in the
 # dist.
-EXTRA_DIST = do_comps.sh run_nc4_comps.sh run_f90_par_examples.sh CMakeLists.txt
+EXTRA_DIST = run_nc4_comps.sh run_f90_par_examples.sh CMakeLists.txt

@@ -12,16 +12,9 @@ foreach (f ${m4_SOURCES})
 endforeach(f)
 
 
-IF (BUILD_F03)
-  SET(nf_test_SOURCES
-    f03lib_f_interfaces.f90 test_get.F test_put.F nf_error.F nf_test.F
-    test_read.F test_write.F util.F f03lib.c tests.inc)
-ELSE()
-  SET(nf_test_SOURCES
-    test_get.F test_put.F nf_error.F nf_test.F
-    test_read.F test_write.F util.F fortlib.c tests.inc
-    )
-ENDIF()
+SET(nf_test_SOURCES
+  f03lib_f_interfaces.f90 test_get.F test_put.F nf_error.F nf_test.F
+  test_read.F test_write.F util.F f03lib.c tests.inc)
 
 SET(TESTS nf_test)
 IF (BUILD_V2)
@@ -39,33 +32,18 @@ if (USE_NETCDF4)
   SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_check_PROGRAMS})
   SET(TESTS ${TESTS} ${nc4_check_PROGRAMS})
 
-  if (BUILD_F03)
-    SET(ftst_types_SOURCES ftst_types.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
-    SET(ftst_types2_SOURCES ftst_types2.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
-    SET(ftst_types3_SOURCES ftst_types3.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
-    SET(ftst_vars_SOURCES ftst_vars.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
-    SET(ftst_vars2_SOURCES ftst_vars2.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
-    SET(ftst_vars3_SOURCES ftst_vars3.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
-    SET(ftst_vars4_SOURCES ftst_vars4.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
-    SET(ftst_vars5_SOURCES ftst_vars5.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
-    SET(ftst_vars6_SOURCES ftst_vars6.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
-    SET(ftst_groups_SOURCES ftst_groups.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
-    SET(ftst_path_SOURCES ftst_path.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
-    SET(ftst_rengrps_SOURCES ftst_rengrps.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
-  else()
-    SET(ftst_types_SOURCES ftst_types.F fortlib.c handle_err.F)
-    SET(ftst_types2_SOURCES ftst_types2.F fortlib.c handle_err.F)
-    SET(ftst_types3_SOURCES ftst_types3.F fortlib.c handle_err.F)
-    SET(ftst_vars_SOURCES ftst_vars.F fortlib.c handle_err.F)
-    SET(ftst_vars2_SOURCES ftst_vars2.F fortlib.c handle_err.F)
-    SET(ftst_vars3_SOURCES ftst_vars3.F fortlib.c handle_err.F)
-    SET(ftst_vars4_SOURCES ftst_vars4.F fortlib.c handle_err.F)
-    SET(ftst_vars5_SOURCES ftst_vars5.F fortlib.c handle_err.F)
-    SET(ftst_vars6_SOURCES ftst_vars6.F fortlib.c handle_err.F)
-    SET(ftst_groups_SOURCES ftst_groups.F fortlib.c handle_err.F)
-    SET(ftst_path_SOURCES ftst_path.F fortlib.c handle_err.F)
-    SET(ftst_rengrps_SOURCES ftst_rengrps.F fortlib.c handle_err.F)
-  endif(BUILD_F03)
+  SET(ftst_types_SOURCES ftst_types.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
+  SET(ftst_types2_SOURCES ftst_types2.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
+  SET(ftst_types3_SOURCES ftst_types3.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
+  SET(ftst_vars_SOURCES ftst_vars.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
+  SET(ftst_vars2_SOURCES ftst_vars2.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
+  SET(ftst_vars3_SOURCES ftst_vars3.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
+  SET(ftst_vars4_SOURCES ftst_vars4.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
+  SET(ftst_vars5_SOURCES ftst_vars5.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
+  SET(ftst_vars6_SOURCES ftst_vars6.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
+  SET(ftst_groups_SOURCES ftst_groups.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
+  SET(ftst_path_SOURCES ftst_path.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
+  SET(ftst_rengrps_SOURCES ftst_rengrps.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
   # Add these netCDF-4 f90 test programs.
   SET(nc4_f90_PROGRAMS
     f90tst_vars tst_types tst_types2 f90tst_vars_vlen
@@ -147,11 +125,7 @@ endif(USE_NETCDF4)
 IF (BUILD_V2)
   SET(check_PROGRAMS ${check_PROGRAMS} ftest)
   SET(TESTS ${TESTS} ftest)
-  IF (BUILD_F03)
-    SET(ftest_SOURCES ftest.F f03lib.c)
-  ELSE()
-    SET(ftest_SOURCES ftest.F fortlib.c)
-  ENDIF(BUILD_F03)
+  SET(ftest_SOURCES ftest.F f03lib.c)
 ENDIF(BUILD_V2)
 
 SET(check_PROGRAMS ${check_PROGRAMS} tst_f90)
