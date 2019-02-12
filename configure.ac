@@ -349,33 +349,33 @@ AC_PROG_INSTALL
 AC_MSG_NOTICE([trying to set fortran flags for this platform])
 AC_MSG_CHECKING([what FC is set to])
 AC_MSG_RESULT([$FC])
-# Set fortran flag if the user has not already set it in CPPFLAGS.
-case "$CPPFLAGS" in
- *pgiFortran*|*NAGf90Fortran*|*f2cFortran*|*hpuxFortran*|*apolloFortran*|*sunFortran*|*IBMR2Fortran*|*CRAYFortran*|*PATHSCALE_COMPILER*|*gFortran*|*mipsFortran*|*DECFortran*|*vmsFortran*|*CONVEXFortran*|*PowerStationFortran*|*AbsoftUNIXFortran*|*AbsoftProFortran*|*SXFortran*)
-    ;;
-   *)
-      case "$FC" in
-         pgf95|pgf90|pgf77|ifort*|lf90|lf95)
-            AC_DEFINE(pgiFortran, [1], [Turned on by netCDF configure.])
-            ;;
-          *gfortran)
-             if (gfortran --version | grep '(GCC 4.1.' || gfortran --version | grep '(GCC 4.0.'); then
-                AC_DEFINE(gFortran, [1], [Turned on by netCDF configure.])
-             else
-                AC_DEFINE(pgiFortran, [1], [Turned on by netCDF configure.])
-             fi
-             ;;
-          *g77)
-             AC_DEFINE(f2cFortran, [1], [Turned on by netCDF configure.])
-             ;;
-          *)
-             # If it's a gnu compiler, guess f2c.
-             if test "x$ac_cv_fc_compiler_gnu" = xyes; then
-                AC_DEFINE(f2cFortran, [1], [Turned on by netCDF configure.])
-             fi
-             ;;
-      esac
-esac
+dnl # Set fortran flag if the user has not already set it in CPPFLAGS.
+dnl case "$CPPFLAGS" in
+dnl  *pgiFortran*|*NAGf90Fortran*|*f2cFortran*|*hpuxFortran*|*apolloFortran*|*sunFortran*|*IBMR2Fortran*|*CRAYFortran*|*PATHSCALE_COMPILER*|*gFortran*|*mipsFortran*|*DECFortran*|*vmsFortran*|*CONVEXFortran*|*PowerStationFortran*|*AbsoftUNIXFortran*|*AbsoftProFortran*|*SXFortran*)
+dnl     ;;
+dnl    *)
+dnl       case "$FC" in
+dnl          pgf95|pgf90|pgf77|ifort*|lf90|lf95)
+dnl             AC_DEFINE(pgiFortran, [1], [Turned on by netCDF configure.])
+dnl             ;;
+dnl           *gfortran)
+dnl              if (gfortran --version | grep '(GCC 4.1.' || gfortran --version | grep '(GCC 4.0.'); then
+dnl                 AC_DEFINE(gFortran, [1], [Turned on by netCDF configure.])
+dnl              else
+dnl                 AC_DEFINE(pgiFortran, [1], [Turned on by netCDF configure.])
+dnl              fi
+dnl              ;;
+dnl           *g77)
+dnl              AC_DEFINE(f2cFortran, [1], [Turned on by netCDF configure.])
+dnl              ;;
+dnl           *)
+dnl              # If it's a gnu compiler, guess f2c.
+dnl              if test "x$ac_cv_fc_compiler_gnu" = xyes; then
+dnl                 AC_DEFINE(f2cFortran, [1], [Turned on by netCDF configure.])
+dnl              fi
+dnl              ;;
+dnl       esac
+dnl esac
 
 # Check to see if any macros must be set to enable large (>2GB) files.
 AC_SYS_LARGEFILE
@@ -386,7 +386,7 @@ ac_cv_prog_f90_uppercase_mod=no
 if test "$enable_fortran_type_check" = yes; then
    UD_FORTRAN_TYPES
    if test "x$ud_fc_failed" = xyes; then
-      AC_MSG_ERROR([F77 compiler doesn't work, and compiler recovery disabled.])
+      AC_MSG_ERROR([F77 compiler doesn't work.])
    fi
 else
    AC_DEFINE(NCBYTE_T, byte)
@@ -457,7 +457,6 @@ nc_has_logging=no
 nc_has_dap=no
 
 AC_CHECK_FUNCS([nc_def_opaque],[nc_build_v4=yes],[nc_build_v4=no])
-#test "x$ac_cv_func_nc_def_opaque" = xyes && nc_build_v4=yes
 test "x$ac_cv_func_nccreate" = xyes && nc_build_v2=yes
 test "x$ac_cv_func_nc_set_log_level" = xyes && nc_has_logging=yes
 test "x$ac_cv_func_oc_open" = xyes && nc_has_dap=yes
@@ -509,17 +508,11 @@ AC_FUNC_VPRINTF
 AC_HEADER_STDBOOL
 
 # Check for these functions...
-#AC_CHECK_FUNCS([strlcat strerror snprintf strchr strrchr mktemp strcat strcpy strdup \
-#			strcasecmp strtod strtoll strtoull getrlimit gettimeofday fsync MPI_Comm_f2c])
 AC_FUNC_ALLOCA
-#AC_CHECK_DECLS([isnan, isinf, isfinite, signbit],,,[#include <math.h>])
-#AC_STRUCT_ST_BLKSIZE
-#UD_CHECK_IEEE
 AC_TYPE_SIZE_T
 AC_TYPE_OFF_T
 AC_CHECK_TYPES([ssize_t, ptrdiff_t, uchar, longlong])
 AC_C_CHAR_UNSIGNED
-#AC_C_BIGENDIAN
 AC_CHECK_SIZEOF(short)
 AC_CHECK_SIZEOF(int)
 AC_CHECK_SIZEOF(long)

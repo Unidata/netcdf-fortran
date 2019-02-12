@@ -13,6 +13,7 @@ AM_FCFLAGS += $(FCFLAGS_f90)
 AM_FCFLAGS += @MOD_FLAG@$(top_builddir)/fortran
 AM_FFLAGS = ${AM_FCFLAGS}
 AM_LDFLAGS = ${top_builddir}/fortran/libnetcdff.la -lnetcdf
+LDADD = ${top_builddir}/fortran/libnetcdff.la -lnetcdf
 
 # These are the example programs.
 TESTPROGRAMS = simple_xy_wr simple_xy_rd sfc_pres_temp_wr	\
