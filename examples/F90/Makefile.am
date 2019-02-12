@@ -1,7 +1,9 @@
 ## This is a automake file, part of Unidata's netCDF package.
-# Copyright 2006, see the COPYRIGHT file for more information.
+# Copyright 2006-2019, see the COPYRIGHT file for more information.
 
 # This file builds F90 examples.
+
+# Ed Hartnett, Russ Rew, Dennis Heimbigner, Ward Fisher
 
 # Parallel builds don't currently work in this directory.
 .NOTPARALLEL:

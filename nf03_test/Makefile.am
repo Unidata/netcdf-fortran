@@ -1,5 +1,5 @@
 ## This is a automake file, part of Unidata's netCDF package.
-# Copyright 2005-2006, see the COPYRIGHT file for more information.
+# Copyright 2005-2019, see the COPYRIGHT file for more information.
 
 # Modified versions of nf_test routines used to test the use of
 # F03 interface netcdf modules instead of netcdf include files
@@ -14,6 +14,8 @@
 # Test programs ftst_vars, ftst_vars2, ftst_vars3, ftst_vars4,
 # ftst_vars5, ftst_types, ftst_types2, and ftst_groups, if netCDF-4 is
 # enabled.
+
+# Ed Hartnett, Russ Rew, Dennis Heimbigner, Ward Fisher
 
 # Parallel builds don't currently work in this directory.
 .NOTPARALLEL:
