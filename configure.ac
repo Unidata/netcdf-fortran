@@ -384,7 +384,7 @@ AC_SEARCH_LIBS([H5DSis_scale], [hdf5_hldll hdf5_hl], [], [])
 
 # Find the netCDF header and library.
 AC_CHECK_HEADERS([netcdf.h], [], [AC_MSG_ERROR([netcdf.h could not be found. Please set CPPFLAGS.])])
-AC_SEARCH_LIBS([nc_open], [netcdf])
+AC_SEARCH_LIBS([nc_open], [netcdf], [], [AC_MSG_ERROR([Could not link to netcdf C library. Please set LDFLAGS.])])
 
 # See if various functions are available
 AC_CHECK_FUNCS([nc_def_opaque nccreate nc_set_log_level oc_open])
