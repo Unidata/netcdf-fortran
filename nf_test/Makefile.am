@@ -24,8 +24,9 @@ LDADD = ${top_builddir}/fortran/libnetcdff.la
 check_PROGRAMS = nf_test
 TESTS = nf_test
 
-nf_test_SOURCES = f03lib_f_interfaces.f90 test_get.m4 test_put.m4 nf_error.F nf_test.F	\
-                  test_read.F test_write.F util.F f03lib.c tests.inc
+nf_test_SOURCES = f03lib_f_interfaces.f90 test_get.m4 test_put.m4	\
+nf_error.F nf_test.F test_read.F test_write.F util.F f03lib.c		\
+tests.inc
 
 # The create_fills shell creates the file fills.nc, needed by later
 # tests.
@@ -63,12 +64,12 @@ ftst_rengrps_SOURCES = ftst_rengrps.F f03lib_f_interfaces.f90 f03lib.c handle_er
 
 # Add these netCDF-4 f90 test programs.
 check_PROGRAMS += f90tst_vars tst_types tst_types2 f90tst_vars_vlen	\
-                  tst_f90_nc4 f90tst_grps f90tst_fill f90tst_fill2 f90tst_vars3		\
-                  f90tst_vars4 f90tst_vars2 f90tst_path f90tst_rengrps
+tst_f90_nc4 f90tst_grps f90tst_fill f90tst_fill2 f90tst_vars3		\
+f90tst_vars4 f90tst_vars2 f90tst_path f90tst_rengrps
 
-TESTS += f90tst_vars tst_types tst_types2 f90tst_vars_vlen tst_f90_nc4	\
-         f90tst_grps f90tst_fill f90tst_fill2 f90tst_vars3 f90tst_vars4		\
-         f90tst_vars2 f90tst_path f90tst_rengrps
+TESTS += f90tst_vars tst_types tst_types2 f90tst_vars_vlen	\
+tst_f90_nc4 f90tst_grps f90tst_fill f90tst_fill2 f90tst_vars3	\
+f90tst_vars4 f90tst_vars2 f90tst_path f90tst_rengrps
 
 f90tst_vars_SOURCES = f90tst_vars.f90
 tst_types_SOURCES = tst_types.f90
@@ -108,7 +109,7 @@ endif #BUILD_BENCHMARKS
 # Test parallel I/O.
 if TEST_PARALLEL
 check_PROGRAMS += f90tst_parallel f90tst_parallel2 f90tst_parallel3	\
-                  f90tst_nc4_par
+f90tst_nc4_par
 #f90tst_parallel_fill
 TESTS += run_f90_par_test.sh
 
