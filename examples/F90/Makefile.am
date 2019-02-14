@@ -30,21 +30,26 @@ sfc_pres_temp_rd_SOURCES = sfc_pres_temp_rd.f90
 pres_temp_4D_wr_SOURCES = pres_temp_4D_wr.f90
 pres_temp_4D_rd_SOURCES = pres_temp_4D_rd.f90
 
+# Does C library have netCDF-4? If so, build netCDF-4 examples.
 if USE_NETCDF4
 
-# This will cause netCDF-4 versions of the example programs to be
-# built.
+# In a fit of past cleverness I decided to re-purpose the classic
+# examples and use sed to turn them into netCDF-4 examples. This may
+# have been a bit too clever.
 BUILT_SOURCES = nc4_simple_xy_wr.f90 nc4_sfc_pres_temp_wr.f90	\
 nc4_pres_temp_4D_wr.f90
 
-# How to build the example.
 nc4_simple_xy_wr_SOURCES = nc4_simple_xy_wr.f90
 nc4_sfc_pres_temp_wr_SOURCES = nc4_sfc_pres_temp_wr.f90
 nc4_pres_temp_4D_wr_SOURCES = nc4_pres_temp_4D_wr.f90
 
-# Add example to the tests run.
 check_PROGRAMS += nc4_simple_xy_wr nc4_sfc_pres_temp_wr	\
 nc4_pres_temp_4D_wr
+
+# Dedicated netCDF-4 examples.
+check_PROGRAMS += simple_xy_nc4_wr simple_xy_nc4_rd
+simple_xy_nc4_wr_SOURCES = simple_xy_nc4_wr.f90
+simple_xy_nc4_rd_SOURCES = simple_xy_nc4_rd.f90
 
 TESTS += run_examples_4.sh
 
@@ -60,10 +65,6 @@ simple_xy_par_rd_SOURCES = simple_xy_par_rd.f90
 TESTS += run_f90_par_examples.sh
 endif # TEST_PARALLEL
 
-# NetCDF-4 examples.
-check_PROGRAMS += simple_xy_nc4_wr simple_xy_nc4_rd
-simple_xy_nc4_wr_SOURCES = simple_xy_nc4_wr.f90
-simple_xy_nc4_rd_SOURCES = simple_xy_nc4_rd.f90
 endif #USE_NETCDF4
 
 # This target tells how to build one of the netCDF-4 examples.
