@@ -32,7 +32,6 @@ pres_temp_4D_rd_SOURCES = pres_temp_4D_rd.f90
 
 if USE_NETCDF4
 
-if EXTRA_EXAMPLE_TESTS
 # This will cause netCDF-4 versions of the example programs to be
 # built.
 BUILT_SOURCES = nc4_simple_xy_wr.f90 nc4_sfc_pres_temp_wr.f90	\
@@ -44,15 +43,13 @@ nc4_sfc_pres_temp_wr_SOURCES = nc4_sfc_pres_temp_wr.f90
 nc4_pres_temp_4D_wr_SOURCES = nc4_pres_temp_4D_wr.f90
 
 # Add example to the tests run.
-check_PROGRAMS = nc4_simple_xy_wr nc4_sfc_pres_temp_wr	\
+check_PROGRAMS += nc4_simple_xy_wr nc4_sfc_pres_temp_wr	\
 nc4_pres_temp_4D_wr
 
 TESTS += run_examples_4.sh
 
 # Add this test script.
 #TESTS += run_nc4_comps.sh
-
-endif #EXTRA_EXAMPLE_TESTS
 
 # Optionally add parallel i/o examples.
 if TEST_PARALLEL

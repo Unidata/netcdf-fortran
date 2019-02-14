@@ -347,16 +347,6 @@ AC_MSG_FAILURE([Upper Case Modules names not supported])
 fi
 AM_CONDITIONAL(UPPER_CASE_MOD, [test "x$ac_cv_prog_f90_uppercase_mod" = xyes])
 
-# Does the user want to run extra example tests
-AC_MSG_CHECKING([whether extra example tests should be run])
-AC_ARG_ENABLE([extra-example-tests],
-              [AS_HELP_STRING([--enable-extra-example-tests],
-                              [Run extra example tests; requires GNU sed. Ignored if \
-                               netCDF-4 is not enabled.])])
-test "x$enable_extra_example_tests" = xyes || enable_extra_example_tests=no
-AC_MSG_RESULT($enable_extra_example_tests)
-AM_CONDITIONAL(EXTRA_EXAMPLE_TESTS, [test "x$enable_extra_example_tests" = xyes])
-
 # If --enable-dll is specified the DLL will be built. This only works
 # on mingw.
 AC_MSG_CHECKING([whether a win32 DLL is desired])
