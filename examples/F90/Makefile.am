@@ -44,11 +44,10 @@ nc4_sfc_pres_temp_wr_SOURCES = nc4_sfc_pres_temp_wr.f90
 nc4_pres_temp_4D_wr_SOURCES = nc4_pres_temp_4D_wr.f90
 
 # Add example to the tests run.
-F90_EXTRA_TESTS = nc4_simple_xy_wr nc4_sfc_pres_temp_wr	\
+check_PROGRAMS = nc4_simple_xy_wr nc4_sfc_pres_temp_wr	\
 nc4_pres_temp_4D_wr
 
-check_PROGRAMS += $(F90_EXTRA_TESTS)
-TESTS += $(F90_EXTRA_TESTS)
+TESTS += run_examples_4.sh
 
 # Add this test script.
 #TESTS += run_nc4_comps.sh
