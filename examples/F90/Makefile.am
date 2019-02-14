@@ -82,8 +82,8 @@ nc4_pres_temp_4D_wr.f90:
 CLEANFILES = simple_xy.nc sfc_pres_temp.nc pres_temp_4D.nc		\
 simple_xy_nc4.nc simple_xy_par.nc nc4_simple_xy_wr.f90 simple_xy.cdl	\
 nc4_sfc_pres_temp_wr.f90 sfc_pres_temp.cdl nc4_pres_temp_4d_wr.f90	\
-pres_temp_4d.cdl nc4_simple_xy.nc nc4_pres_temp_4d.nc			\
-nc4_sfc_pres_temp.nc
+pres_temp_4d.cdl nc4_simple_xy.nc nc4_pres_temp_4D.nc			\
+nc4_sfc_pres_temp.nc 
 
 EXTRA_DIST = run_examples.sh run_examples_4.sh	\
 run_f90_par_examples.sh CMakeLists.txt
