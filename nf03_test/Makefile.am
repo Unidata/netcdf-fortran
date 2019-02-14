@@ -1,19 +1,7 @@
 ## This is a automake file, part of Unidata's netCDF package.
 # Copyright 2005-2019, see the COPYRIGHT file for more information.
 
-# Modified versions of nf_test routines used to test the use of
-# F03 interface netcdf modules instead of netcdf include files
-
-# This file builds and runs the following:
-
-# The nf_test program, which tests the netCDF fortran 77 interface.
-
-# The ftest program, which tests the netCDF fortran 77 V2
-# interface. (Unless V2 is disabled).
-
-# Test programs ftst_vars, ftst_vars2, ftst_vars3, ftst_vars4,
-# ftst_vars5, ftst_types, ftst_types2, and ftst_groups, if netCDF-4 is
-# enabled.
+# These the fortran 90 API tests.
 
 # Ed Hartnett, Russ Rew, Dennis Heimbigner, Ward Fisher
 
@@ -32,36 +20,36 @@ AM_FCFLAGS += -I$(top_srcdir)/nf_test
 
 AM_FFLAGS = ${AM_FCFLAGS}
 
-AM_TESTS_ENVIRONMENT = HDF5_PLUGIN_PATH='@PLUGINDIR@' ; export HDF5_PLUGIN_PATH ;
-
-TESTS =
-
 # All tests need to link to fortran and C libraries.
 LDADD = ${top_builddir}/fortran/libnetcdff.la
 
+# Need access to top_srcdir
+AM_TESTS_ENVIRONMENT = HDF5_PLUGIN_PATH='@PLUGINDIR@' ; export HDF5_PLUGIN_PATH ;
+TESTS_ENVIRONMENT=TOPSRCDIR=${abs_top_srcdir}
+
 # The create_fills shell creates the file fills.nc, needed by later
 # tests.
-TESTS += create_fills.sh
-# Need access to top_srcdir
-TESTS_ENVIRONMENT=TOPSRCDIR=${abs_top_srcdir}
+TESTS = create_fills.sh
 
 # nf03_test is the main test program.
 check_PROGRAMS = nf03_test
 TESTS += nf03_test
-nf03_test_SOURCES = module_tests.F90 f03lib_f_interfaces.f90 test03_get.F test03_put.F nf03_error.F nf03_test.F	\
-test03_read.F test03_write.F util03.F f03lib.c
+nf03_test_SOURCES = module_tests.F90 f03lib_f_interfaces.f90		\
+test03_get.F test03_put.F nf03_error.F nf03_test.F test03_read.F	\
+test03_write.F util03.F f03lib.c
 
-# programs that "use tests" from the tests.mod module depend on it being built first, needed for make -j
+# programs that "use tests" from the tests.mod module depend on it
+# being built first, needed for make -j
 nf03_error.o nf03_test.o test03_get.o test03_put.o test03_read.o test03_write.o tst03_f77_v2.o util03.o: \
 module_tests.o
 
 # Is the user building netCDF-4?
 if USE_NETCDF4
 
-# Add these netCDF-4 f77 test programs.
-check_PROGRAMS += f03tst_vars f03tst_vars2 f03tst_vars3 f03tst_vars4 f03tst_vars5	\
-f03tst_vars6 f03tst_open_mem f03tst_types f03tst_types2 f03tst_types3 \
-f03tst_groups
+# Add these netCDF-4 f90 test programs.
+check_PROGRAMS += f03tst_vars f03tst_vars2 f03tst_vars3 f03tst_vars4	\
+f03tst_vars5 f03tst_vars6 f03tst_open_mem f03tst_types f03tst_types2	\
+f03tst_types3 f03tst_groups
 f03tst_types_SOURCES = module_tests.F90 f03tst_types.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 f03tst_types2_SOURCES = module_tests.F90 f03tst_types2.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 f03tst_types3_SOURCES = module_tests.F90 f03tst_types3.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
@@ -78,11 +66,13 @@ TESTS += f03tst_vars f03tst_vars2 f03tst_vars3 f03tst_vars4		\
 f03tst_vars5 f03tst_vars6 f03tst_types f03tst_types2 f03tst_types3	\
 f03tst_groups f03tst_open_mem
 
-# This is a netCDF-4 V2 test program.
+# Did the user build the V2 F77 API? If so, run these tests.
 if BUILD_V2
-check_PROGRAMS += f03tst_v2
-TESTS += f03tst_v2
+check_PROGRAMS += f03tst_v2 f03test tst03_f77_v2
 f03tst_v2_SOURCES = f03tst_v2.F
+f03test_SOURCES = module_tests.F90 f03test.F f03lib.c
+tst03_f77_v2_SOURCES = module_tests.F90 tst03_f77_v2.F handle_err.F
+TESTS += f03tst_v2 f03test tst03_f77_v2
 endif # BUILD_V2
 
 # Test parallel I/O
@@ -91,21 +81,6 @@ check_PROGRAMS += f03tst_parallel
 f03tst_parallel_SOURCES = f03tst_parallel.F
 endif # TEST_PARALLEL
 endif # USE_NETCDF4
-
-# This is the fortran v2 test. It depends on the utilities being built
-# to generate i's input file.
-if BUILD_V2
-check_PROGRAMS += f03test
-TESTS += f03test
-f03test_SOURCES = module_tests.F90 f03test.F f03lib.c
-endif # BUILD_V2
-
-# Did the user build the V2 F77 API? If so, run this test.
-if BUILD_V2
-check_PROGRAMS += tst03_f77_v2
-tst03_f77_v2_SOURCES = module_tests.F90 tst03_f77_v2.F handle_err.F
-TESTS += tst03_f77_v2
-endif # BUILD_V2
 
 # If valgrind is present on this machine, this will enable
 # check-valgrind target, which runs all tests with valgrind.
