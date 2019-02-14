@@ -79,6 +79,7 @@ endif # BUILD_V2
 if TEST_PARALLEL
 check_PROGRAMS += f03tst_parallel
 f03tst_parallel_SOURCES = f03tst_parallel.F
+TESTS += run_f77_par_testts.sh
 endif # TEST_PARALLEL
 endif # USE_NETCDF4
 
