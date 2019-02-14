@@ -5,9 +5,6 @@
 
 # Ed Hartnett, Russ Rew, Dennis Heimbigner, Ward Fisher
 
-# Parallel builds don't currently work in this directory.
-.NOTPARALLEL:
-
 AM_FCFLAGS = -I$(top_srcdir)/fortran ${AM_CPPFLAGS}
 AM_FCFLAGS += $(FCFLAGS_f90)
 AM_FCFLAGS += @MOD_FLAG@$(top_builddir)/fortran
@@ -16,13 +13,14 @@ AM_FFLAGS = ${AM_FCFLAGS}
 AM_LDFLAGS = ${top_builddir}/fortran/libnetcdff.la -lnetcdf
 LDADD = ${top_builddir}/fortran/libnetcdff.la -lnetcdf
 
-# These are the example programs.
+# These are the netCDF classic example programs.
 check_PROGRAMS = simple_xy_wr simple_xy_rd sfc_pres_temp_wr	\
 sfc_pres_temp_rd pres_temp_4D_wr pres_temp_4D_rd
 
+# Add the script to run the classic examples.
 TESTS = run_examples.sh
 
-# Here's the source code for the programs.
+# Here's the source code for the classic example programs.
 simple_xy_wr_SOURCES = simple_xy_wr.f90
 simple_xy_rd_SOURCES = simple_xy_rd.f90
 sfc_pres_temp_wr_SOURCES = sfc_pres_temp_wr.f90
@@ -32,21 +30,20 @@ pres_temp_4D_rd_SOURCES = pres_temp_4D_rd.f90
 
 # Does C library have netCDF-4? If so, build netCDF-4 examples.
 if USE_NETCDF4
-
 # In a fit of past cleverness I decided to re-purpose the classic
 # examples and use sed to turn them into netCDF-4 examples. This may
 # have been a bit too clever.
 BUILT_SOURCES = nc4_simple_xy_wr.f90 nc4_sfc_pres_temp_wr.f90	\
 nc4_pres_temp_4D_wr.f90
-
 nc4_simple_xy_wr_SOURCES = nc4_simple_xy_wr.f90
 nc4_sfc_pres_temp_wr_SOURCES = nc4_sfc_pres_temp_wr.f90
 nc4_pres_temp_4D_wr_SOURCES = nc4_pres_temp_4D_wr.f90
 
+# These are the netCDF-4 examples, created from classic examples.
 check_PROGRAMS += nc4_simple_xy_wr nc4_sfc_pres_temp_wr	\
 nc4_pres_temp_4D_wr
 
-# Dedicated netCDF-4 examples.
+# These are additional netCDF-4 examples.
 check_PROGRAMS += simple_xy_nc4_wr simple_xy_nc4_rd
 simple_xy_nc4_wr_SOURCES = simple_xy_nc4_wr.f90
 simple_xy_nc4_rd_SOURCES = simple_xy_nc4_rd.f90
