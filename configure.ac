@@ -486,6 +486,13 @@ AC_SUBST(HAS_DAP,[$nc_has_dap])
 AC_SUBST(HAS_NC2,[$nc_build_v2])
 AC_SUBST(HAS_NC4,[$nc_build_v4])
 
+# Some files need to exist in build directories that do not correspond
+# to their source directory, or the test program makes an assumption
+# about where files live.  AC_CONFIG_LINKS provides a mechanism to
+# link/copy files if an out-of-source build is happening.
+AC_CONFIG_LINKS([nf_test/ref_fills.nc:nf_test/ref_fills.nc])
+#AC_CONFIG_LINKS([nf_test/ref_fills.nc:nf03_test/ref_fills.nc])
+
 AC_MSG_NOTICE([generating header files and makefiles])
 
 # We will output a fortran inc file, nfconfig.inc.
