@@ -20,5 +20,9 @@ echo "*** running pres_temp_4D examples..."
 ./nc4_pres_temp_4D_wr
 ./pres_temp_4D_rd
 
+echo "*** running simple_xy_nc4 examples..."
+./simple_xy_nc4_wr
+./simple_xy_nc4_rd
+
 echo "*** Examples successful!"
 exit 0

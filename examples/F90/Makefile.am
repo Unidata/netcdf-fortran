@@ -62,7 +62,6 @@ endif # TEST_PARALLEL
 
 # NetCDF-4 examples.
 check_PROGRAMS += simple_xy_nc4_wr simple_xy_nc4_rd
-TESTS += simple_xy_nc4_wr simple_xy_nc4_rd
 simple_xy_nc4_wr_SOURCES = simple_xy_nc4_wr.f90
 simple_xy_nc4_rd_SOURCES = simple_xy_nc4_rd.f90
 endif #USE_NETCDF4
