@@ -51,10 +51,8 @@ check_PROGRAMS += simple_xy_nc4_wr simple_xy_nc4_rd
 simple_xy_nc4_wr_SOURCES = simple_xy_nc4_wr.f90
 simple_xy_nc4_rd_SOURCES = simple_xy_nc4_rd.f90
 
+# Add the script to run netCDF-4 examples.
 TESTS += run_examples_4.sh
-
-# Add this test script.
-#TESTS += run_nc4_comps.sh
 
 # Optionally add parallel i/o examples.
 if TEST_PARALLEL
@@ -67,22 +65,21 @@ endif # TEST_PARALLEL
 
 endif #USE_NETCDF4
 
-# This target tells how to build one of the netCDF-4 examples.
+# Build netCDf-4 example from netCDF classic example.
 # Note old version used sed -i, but -i is not universally recognized
 nc4_simple_xy_wr.f90:
 	sed -e 's/nf90_clobber/nf90_netcdf4/' simple_xy_wr.f90 \
 	| sed -e 's/simple_xy/nc4_simple_xy/' > nc4_simple_xy_wr.f90
 
-# This target tells how to build one of the netCDF-4 examples.
+# Build netCDf-4 example from netCDF classic example.
 nc4_sfc_pres_temp_wr.f90:
 	sed -e 's/nf90_clobber/nf90_netcdf4/' sfc_pres_temp_wr.f90 \
 	| sed -e 's/sfc_pres_temp/nc4_sfc_pres_temp/' > nc4_sfc_pres_temp_wr.f90
 
-# This target tells how to build one of the netCDF-4 examples.
+# Build netCDf-4 example from netCDF classic example.
 nc4_pres_temp_4D_wr.f90:
 	sed -e 's/nf90_clobber/nf90_netcdf4/' pres_temp_4D_wr.f90 \
 	| sed -e 's/pres_temp_4D/nc4_pres_temp_4D/' > nc4_pres_temp_4D_wr.f90
-
 
 # Cleaning up files created during the process.
 CLEANFILES = simple_xy.nc sfc_pres_temp.nc pres_temp_4D.nc		\
@@ -91,6 +88,5 @@ nc4_sfc_pres_temp_wr.f90 sfc_pres_temp.cdl nc4_pres_temp_4d_wr.f90	\
 pres_temp_4d.cdl nc4_simple_xy.nc nc4_pres_temp_4d.nc			\
 nc4_sfc_pres_temp.nc
 
-# Make sure the script which compares file outputs is included in the
-# dist.
-EXTRA_DIST = run_nc4_comps.sh run_f90_par_examples.sh CMakeLists.txt
+EXTRA_DIST = run_examples.sh run_examples_4.sh	\
+run_f90_par_examples.sh CMakeLists.txt
