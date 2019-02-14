@@ -20,6 +20,9 @@ AM_FFLAGS = ${AM_FCFLAGS}
 # All tests need to link to fortran and C libraries.
 LDADD = ${top_builddir}/fortran/libnetcdff.la
 
+# Need access to top_srcdir
+TESTS_ENVIRONMENT=TOPSRCDIR=${abs_top_srcdir}
+
 # nf_test is the main test program.
 check_PROGRAMS = nf_test
 TESTS = nf_test
@@ -31,8 +34,6 @@ tests.inc
 # The create_fills shell creates the file fills.nc, needed by later
 # tests.
 TESTS += create_fills.sh
-# Need access to top_srcdir
-TESTS_ENVIRONMENT=TOPSRCDIR=${abs_top_srcdir}
 
 # Did the user build the V2 F77 API? If so, run this test.
 if BUILD_V2
@@ -138,8 +139,7 @@ endif
 
 endif #USE_NETCDF4
 
-# This is the fortran v2 test. It depends on the utilities being built
-# to generate it's input file.
+# This is the fortran v2 test.
 if BUILD_V2
 check_PROGRAMS += ftest
 TESTS += ftest
