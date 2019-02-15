@@ -105,11 +105,11 @@ AC_ARG_ENABLE([parallel-tests],
                                netCDF-4 is not enabled, or built on a system \
                                without parallel I/O support.])])
 test "x$enable_parallel_tests" = xyes || enable_parallel_tests=no
-if test "x$nc_has_pnetcdf" = xno -a "x$nc_has_parallel4" = xno ; then
+AC_MSG_RESULT($enable_parallel_tests)
+if test $enable_parallel_tests = yes -a "x$nc_has_pnetcdf" = xno -a "x$nc_has_parallel4" = xno ; then
    # paralle I/O is not enabled
    AC_MSG_ERROR([Parallel I/O tests requested, but netcdf-c does not support parallel I/O.])
 fi
-AC_MSG_RESULT($enable_parallel_tests)
 
 # Determine if we want to enable doxygen-generated documentation. Any
 # new documentation input files should be inserted into
