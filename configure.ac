@@ -91,7 +91,7 @@ AC_ARG_ENABLE([parallel-tests],
 test "x$enable_parallel_tests" = xyes || enable_parallel_tests=no
 if test "x$nc_has_pnetcdf" = xno -a "x$nc_has_parallel4" = xno ; then
    # paralle I/O is not enabled
-   enable_parallel_tests=no
+   AC_MSG_ERROR([Parallel I/O tests requested, but netcdf-c does not support parallel I/O.])
 fi
 AC_MSG_RESULT($enable_parallel_tests)
 
