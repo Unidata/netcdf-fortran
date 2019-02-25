@@ -20,6 +20,9 @@ AM_FFLAGS = ${AM_FCFLAGS}
 # All tests need to link to fortran and C libraries.
 LDADD = ${top_builddir}/fortran/libnetcdff.la
 
+# Need access to top_srcdir
+TESTS_ENVIRONMENT=TOPSRCDIR=${abs_top_srcdir}
+
 # nf_test is the main test program.
 check_PROGRAMS = nf_test
 TESTS = nf_test
@@ -27,12 +30,6 @@ TESTS = nf_test
 nf_test_SOURCES = f03lib_f_interfaces.f90 test_get.m4 test_put.m4	\
 nf_error.F nf_test.F test_read.F test_write.F util.F f03lib.c		\
 tests.inc
-
-# The create_fills shell creates the file fills.nc, needed by later
-# tests.
-TESTS += create_fills.sh
-# Need access to top_srcdir
-TESTS_ENVIRONMENT=TOPSRCDIR=${abs_top_srcdir}
 
 # Did the user build the V2 F77 API? If so, run this test.
 if BUILD_V2
@@ -138,8 +135,7 @@ endif
 
 endif #USE_NETCDF4
 
-# This is the fortran v2 test. It depends on the utilities being built
-# to generate it's input file.
+# This is the fortran v2 test.
 if BUILD_V2
 check_PROGRAMS += ftest
 TESTS += ftest
@@ -160,8 +156,8 @@ tst_f90_SOURCES = tst_f90.f90
 
 # test_get.F and test_put.f need to be distributed, so that the user
 # need not have m4. fills.nc is used by test program ftest.
-EXTRA_DIST = test_get.F test_put.F fills.cdl create_fills.sh		\
-run_f90_par_test.sh run_f77_par_test.sh ref_fills.nc CMakeLists.txt
+EXTRA_DIST = test_get.F test_put.F fills.cdl run_f90_par_test.sh	\
+run_f77_par_test.sh ref_fills.nc CMakeLists.txt
 
 # Cleaning up files created during the process.
 CLEANFILES = scratch.nc test.nc copy.nc fills.nc tst_*.nc ftst_*.nc	\

@@ -74,12 +74,14 @@ if test "x$nc_has_parallel4" = xyes; then
 fi
 AC_MSG_RESULT([$nc_has_parallel4])
 
-# Find valgrind, if available, and add targets for it.
+# Find valgrind, if available, and add targets for it (ex:
+# check-valgrind).
 AX_VALGRIND_DFLT([sgcheck], [off])
 AX_VALGRIND_CHECK
 AM_CONDITIONAL(ENABLE_VALGRIND, [test "x$VALGRIND_ENABLED" = xyes])
 
-# Does the user want to run extra parallel tests when parallel netCDF-4 is built?
+# Does the user want to run extra parallel tests when parallel
+# netCDF-4 is built?
 AC_MSG_CHECKING([whether parallel IO tests should be run])
 AC_ARG_ENABLE([parallel-tests],
               [AS_HELP_STRING([--enable-parallel-tests],
@@ -93,9 +95,9 @@ if test "x$nc_has_pnetcdf" = xno -a "x$nc_has_parallel4" = xno ; then
 fi
 AC_MSG_RESULT($enable_parallel_tests)
 
-#####
-# Determine if we want to enable doxygen-generated documentation.
-#####
+# Determine if we want to enable doxygen-generated documentation. Any
+# new documentation input files should be inserted into
+# docs/Doxyfile.in and possibly docs/Makefile.am
 AC_MSG_CHECKING([whether netCDF documentation should be generated)])
 AC_ARG_ENABLE([doxygen],
 	[AS_HELP_STRING([--enable-doxygen],
@@ -107,13 +109,15 @@ AM_CONDITIONAL([BUILD_DOCS], [test "x$enable_doxygen" = xyes])
 # Does the user want to generate dot-based documentation?
 AC_ARG_ENABLE([dot],
 	[AS_HELP_STRING([--enable-dot],
-	[Use dot (provided by graphviz) to generate charts and graphs in the doxygen-based documentation.])])
+	[Use dot (provided by graphviz) to generate charts and graphs \
+        in the doxygen-based documentation.])])
 	test "x$enable_dot" = xyes || enable_dot=no
 
 # Does the user want to generate internal documentation?
 AC_ARG_ENABLE([internal-docs],
   [AS_HELP_STRING([--enable-internal-docs],
-    [Include documentation of library internals. This is of interest only to those developing the netCDF library.])])
+    [Include documentation of library internals. This is of interest \
+    only to those developing the netCDF library.])])
 test "x$enable_internal_docs" = xyes || enable_internal_docs=no
 AC_SUBST([BUILD_INTERNAL_DOCS], [$enable_internal_docs])
 
@@ -134,22 +138,14 @@ elif test "x$enable_dot" = xno; then
 else
    HAVE_DOT=YES
 fi
+
 # If we have doxygen, and it's enabled, then process the file.
 if test "x$enable_doxygen" != xno; then
    if test -n "$DOXYGEN"; then
         AC_SUBST(HAVE_DOT)
         AC_CONFIG_FILES([docs/Doxyfile])
    fi
-# Note: the list of files to input to doxygen
-# has been moved to docs/Doxyfile.in so
-# that make distcheck works correctly.
-# Any new inputs should be inserted into
-# docs/Doxyfile.in and possibley docs/Makefile.am
 fi
-
-#####
-# End doxygen-related documentation block.
-#####
 
 # Find the C compiler.
 AC_MSG_NOTICE([finding C compiler])
@@ -347,16 +343,6 @@ AC_MSG_FAILURE([Upper Case Modules names not supported])
 fi
 AM_CONDITIONAL(UPPER_CASE_MOD, [test "x$ac_cv_prog_f90_uppercase_mod" = xyes])
 
-# Does the user want to run extra example tests
-AC_MSG_CHECKING([whether extra example tests should be run])
-AC_ARG_ENABLE([extra-example-tests],
-              [AS_HELP_STRING([--enable-extra-example-tests],
-                              [Run extra example tests; requires GNU sed. Ignored if \
-                               netCDF-4 is not enabled.])])
-test "x$enable_extra_example_tests" = xyes || enable_extra_example_tests=no
-AC_MSG_RESULT($enable_extra_example_tests)
-AM_CONDITIONAL(EXTRA_EXAMPLE_TESTS, [test "x$enable_extra_example_tests" = xyes])
-
 # If --enable-dll is specified the DLL will be built. This only works
 # on mingw.
 AC_MSG_CHECKING([whether a win32 DLL is desired])
@@ -499,6 +485,13 @@ AC_SUBST(HAS_F03,[$nc_build_f03])
 AC_SUBST(HAS_DAP,[$nc_has_dap])
 AC_SUBST(HAS_NC2,[$nc_build_v2])
 AC_SUBST(HAS_NC4,[$nc_build_v4])
+
+# Some files need to exist in build directories that do not correspond
+# to their source directory, or the test program makes an assumption
+# about where files live.  AC_CONFIG_LINKS provides a mechanism to
+# link/copy files if an out-of-source build is happening.
+AC_CONFIG_LINKS([nf_test/fills.nc:nf_test/ref_fills.nc])
+#AC_CONFIG_LINKS([nf_test/ref_fills.nc:nf03_test/ref_fills.nc])
 
 AC_MSG_NOTICE([generating header files and makefiles])
 
