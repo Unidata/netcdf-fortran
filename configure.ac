@@ -63,12 +63,28 @@ if test "x$nc_has_pnetcdf" = xyes; then
 fi
 AC_MSG_RESULT([$nc_has_pnetcdf])
 
-AC_MSG_CHECKING([if netCDF was built with parallel I/O features])
+AC_MSG_CHECKING([if netCDF was built with HDF5 parallel I/O features])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
 #include <netcdf_meta.h>
 #if !defined(NC_HAS_PARALLEL4) || NC_HAS_PARALLEL4 == 0
       choke me
 #endif]])], [nc_has_parallel4=yes], [nc_has_parallel4=no])
+AC_MSG_RESULT([$nc_has_parallel4])
+
+AC_MSG_CHECKING([if netCDF was built with any parallel I/O features])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
+#include <netcdf_meta.h>
+#if !defined(NC_HAS_PARALLEL) || NC_HAS_PARALLEL == 0
+      choke me
+#endif]])], [nc_has_parallel=yes], [nc_has_parallel=no])
+AC_MSG_RESULT([$nc_has_parallel])
+
+# Version 4.6.1 does not have NC_HAS_PARALLEL4 but does have
+# NC_HAS_PARALLEL.
+AC_MSG_CHECKING([if netCDF-fortran should be built with HDF5 parallel I/O features])
+if test "x$nc_has_parallel" = xyes -a "x$nc_has_parallel4" = xno -a "x$nc_has_pnetcdf" = xno; then
+   nc_has_parallel4=yes
+fi
 if test "x$nc_has_parallel4" = xyes; then
    AC_DEFINE([NF_HAS_PARALLEL4], [1], [Enable parallel I/O support via HDF5])
 fi
@@ -89,11 +105,11 @@ AC_ARG_ENABLE([parallel-tests],
                                netCDF-4 is not enabled, or built on a system \
                                without parallel I/O support.])])
 test "x$enable_parallel_tests" = xyes || enable_parallel_tests=no
-if test "x$nc_has_pnetcdf" = xno -a "x$nc_has_parallel4" = xno ; then
-   # paralle I/O is not enabled
-   enable_parallel_tests=no
-fi
 AC_MSG_RESULT($enable_parallel_tests)
+if test $enable_parallel_tests = yes -a "x$nc_has_pnetcdf" = xno -a "x$nc_has_parallel4" = xno ; then
+   # paralle I/O is not enabled
+   AC_MSG_ERROR([Parallel I/O tests requested, but netcdf-c does not support parallel I/O.])
+fi
 
 # Determine if we want to enable doxygen-generated documentation. Any
 # new documentation input files should be inserted into

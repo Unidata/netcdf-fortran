@@ -56,23 +56,23 @@
       mode_flag = IOR(nf_netcdf4, nf_classic_model) 
       retval = nf_create_par(FILE_NAME, mode_flag, MPI_COMM_WORLD, 
      $     MPI_INFO_NULL, ncid)
-      if (retval .ne. nf_noerr) stop 2
+      if (retval .ne. nf_noerr) stop 3
 
 !     Define the dimensions.
       retval = nf_def_dim(ncid, "x", NX, x_dimid)
-      if (retval .ne. nf_noerr) stop 2
+      if (retval .ne. nf_noerr) stop 4
       retval = nf_def_dim(ncid, "y", NY, y_dimid)
-      if (retval .ne. nf_noerr) stop 2
+      if (retval .ne. nf_noerr) stop 5
       dimids(1) = y_dimid
       dimids(2) = x_dimid
 
 !     Define the variable. 
       retval = nf_def_var(ncid, "data", NF_INT, MAX_DIMS, dimids, varid)
-      if (retval .ne. nf_noerr) stop 2
+      if (retval .ne. nf_noerr) stop 6
 
 !     With classic model netCDF-4 file, enddef must be called.
       retval = nf_enddef(ncid)
-      if (retval .ne. nf_noerr) stop 2
+      if (retval .ne. nf_noerr) stop 7
 
 !     Determine what part of the variable will be written for this
 !     processor. It's a checkerboard decomposition.
@@ -94,38 +94,38 @@
 
 !     Write this processor's data.
       retval = nf_put_vara_int(ncid, varid, start, count, data_out)
-      if (retval .ne. nf_noerr) stop 2
+      if (retval .ne. nf_noerr) stop 8
 
 !     Close the file. 
       retval = nf_close(ncid)
-      if (retval .ne. nf_noerr) stop 2
+      if (retval .ne. nf_noerr) stop 9
 
 !     Reopen the file.
       retval = nf_open_par(FILE_NAME, nf_nowrite, MPI_COMM_WORLD, 
      $     MPI_INFO_NULL, ncid)
-      if (retval .ne. nf_noerr) stop 2
+      if (retval .ne. nf_noerr) stop 10
 
 !     Set collective access on this variable. This will cause all
 !     reads/writes to happen together on every processor. Fairly
 !     pointless, in this contexct, but I want to at least call this
 !     function once in my testing.
       retval = nf_var_par_access(ncid, varid, nf_collective)
-      if (retval .ne. nf_noerr) stop 2
+      if (retval .ne. nf_noerr) stop 11
       
 !     Read this processor's data.
       retval = nf_get_vara_int(ncid, varid, start, count, data_in)
-      if (retval .ne. nf_noerr) stop 2
+      if (retval .ne. nf_noerr) stop 12
 
 !     Check the data.
       do x = 1, NX / 2
          do y = 1, NY / 2
-            if (data_in(y, x) .ne. my_rank) stop 3
+            if (data_in(y, x) .ne. my_rank) stop 13
          end do
       end do
 
 !     Close the file. 
       retval = nf_close(ncid)
-      if (retval .ne. nf_noerr) stop 2
+      if (retval .ne. nf_noerr) stop 14
 
       call MPI_Finalize(ierr)
 
