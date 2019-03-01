@@ -6,7 +6,7 @@
 # Ed Hartnett
 
 # Tell make to install these as a header file.
-noinst_HEADERS = nfconfig.inc
+#noinst_HEADERS = nfconfig.inc
 
 # The nfconfig.in file is turned into nfconfig.inc by the configure
 # script. The man page is generated on the developers machine for the
