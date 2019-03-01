@@ -6,7 +6,7 @@
 # Ed Hartnett
 
 # Tell make to install these as a header file.
-include_HEADERS = nfconfig.inc
+noinst_HEADERS = nfconfig.inc
 
 # The nfconfig.in file is turned into nfconfig.inc by the configure
 # script. The man page is generated on the developers machine for the
@@ -15,5 +15,5 @@ EXTRA_DIST = nfconfig.in nfconfig.inc CMakeLists.txt	\
 nfconfig.in.cmake
 
 # These files need to be cleaned up my make.
-CLEANFILES = nfconfig1.inc netcdf.inc
+CLEANFILES = nfconfig1.inc
 DISTCLEANFILES = nfconfig.inc

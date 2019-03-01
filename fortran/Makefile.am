@@ -10,6 +10,9 @@
 
 libnetcdff_la_LDFLAGS = -version-number 6:1:1
 
+# Find the netcdf.inc file.
+AM_CPPFLAGS = -I${top_builddir}/libsrc
+
 # This, plus either netcdf4.f90 or netcdf.f90, is the main source.
 libnetcdff_la_SOURCES = typeSizes.f90
 
@@ -75,7 +78,7 @@ module_netcdf_fortv2_c_interfaces.f90 nf_fortv2.f90
 endif
 
 # Tell make to rebuld fortran library if netcdf.inc has changed
-libnetcdff_la_DEPENDENCIES += netcdf.inc
+#libnetcdff_la_DEPENDENCIES += netcdf.inc
 
 # Some fortran compilers change the file names of .mod files to all
 # uppercase. Just to be special.
@@ -186,5 +189,4 @@ CLEANFILES = netcdf_nc_data.mod netcdf_nc_interfaces.mod		\
 netcdf_nf_data.mod netcdf_nf_interfaces.mod				\
 netcdf_fortv2_c_interfaces.mod netcdf_f03.mod				\
 netcdf4_nc_interfaces.mod netcdf4_nf_interfaces.mod netcdf4_f03.mod	\
-nfconfig.inc netcdf.inc $(UCHEADERS) $(UCCOMMON) $(LCHEADERS)		\
-$(LCCOMMON)
+netcdf.inc $(UCHEADERS) $(UCCOMMON) $(LCHEADERS) $(LCCOMMON)
