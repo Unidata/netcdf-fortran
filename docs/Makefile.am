@@ -6,8 +6,44 @@
 
 # Ed Hartnett, Russ Rew, Dennis Heimbigner, Ward Fisher
 
-# The man page for Fortran APIs.
-man_MANS = netcdf_fortran.3
+# The man pages for Fortran 90 and Fortran 77 APIs.
+man_MANS = netcdf_fortran.3  netcdf_f77.3
+
+# Build the doxygen docs, if desired.
+if BUILD_DOCS
+all-local: doxyfile.stamp
+clean-local:
+	rm -rf $(top_builddir)/docs/man
+	rm -rf $(top_builddir)/docs/html
+	rm -rf $(top_builddir)/docs/latex
+	rm -rf $(top_builddir)/docs/latex_main
+
+# Doxygen imestamp to prevent rebuilds.
+doxyfile.stamp:
+	$(DOXYGEN) Doxyfile
+endif
+
+# Decide what should be in the man pages. This will happen on the
+# developer machine instead of the build machine. See github issue
+# #127.
+ARGS_MANPAGE = -DAPI=FORTRAN
+if USE_NETCDF4
+ARGS_MANPAGE += -DNETCDF4=TRUE
+endif
+if BUILD_DAP
+ARGS_MANPAGE += -DDAP=TRUE
+endif
+if BUILD_PARALLEL
+ARGS_MANPAGE += -DPARALLEL_IO=TRUE
+endif
+
+# Create the F77 API man page from the m4 source.
+netcdf_f77.3: netcdf.m4
+	m4 $(M4FLAGS) $(ARGS_MANPAGE) $? >$@ || rm $@
+
+# Create the F90 API man page from the m4 source.
+netcdf_fortran.3: netcdf.m4
+	m4 $(M4FLAGS) $(ARGS_MANPAGE) $? >netcdf_fortran.3 || rm netcdf_fortran.3
 
 # These files will be included with the dist for completeness. The man
 # page is built on the developer machine and packaged into the
@@ -19,35 +55,7 @@ netcdf-f90-sec7-attributes.md netcdf-f90.md				\
 netcdf-f90-sec2-datasets.md netcdf-f90-sec4-dimensions.md		\
 netcdf-f90-sec6-variables.md
 
+CLEANFILES = doxyfile.stamp
+
 # Clean up all the junk we created!
 MAINTAINERCLEANFILES = netcdf_fortran-man.html stamp-* version*
-
-# Decide what should be in the man page. This will happen on the
-# developer machine instead of the build machine. See github issue
-# #127.
-ARGS_MANPAGE = -DAPI=FORTRAN -DNETCDF4=TRUE
-if BUILD_DAP
-ARGS_MANPAGE += -DDAP=TRUE
-endif
-if BUILD_PARALLEL
-ARGS_MANPAGE += -DPARALLEL_IO=TRUE
-endif
-
-# Rule to build the man page.
-manpages: $(top_srcdir)/docs/netcdf.m4
-	m4 $(M4FLAGS) $(ARGS_MANPAGE) $? >netcdf_fortran.3 || rm netcdf_fortran.3
-
-# Doxygen imestamp to prevent rebuilds.
-doxyfile.stamp:
-	$(DOXYGEN) Doxyfile
-
-if BUILD_DOCS
-all-local: doxyfile.stamp
-clean-local:
-	rm -rf $(top_builddir)/docs/man
-	rm -rf $(top_builddir)/docs/html
-	rm -rf $(top_builddir)/docs/latex
-	rm -rf $(top_builddir)/docs/latex_main
-endif
-
-CLEANFILES = doxyfile.stamp
