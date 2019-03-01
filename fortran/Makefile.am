@@ -78,7 +78,7 @@ module_netcdf_fortv2_c_interfaces.f90 nf_fortv2.f90
 endif
 
 # Tell make to rebuld fortran library if netcdf.inc has changed
-#libnetcdff_la_DEPENDENCIES += netcdf.inc
+libnetcdff_la_DEPENDENCIES += netcdf.inc
 
 # Some fortran compilers change the file names of .mod files to all
 # uppercase. Just to be special.
