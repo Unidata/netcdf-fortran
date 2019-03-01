@@ -171,8 +171,22 @@ nc_inq_compound_field_ndims(int ncid, nc_type xtype, int fieldid, int *ndims)
 }
 
 /**
+ * Learn about a field in a compound type. Order of dimsizes is
+ * swapped for the Fortran API.
  *
  * @param ncid The ncid of the open file.
+ * @param xtype The typeid.
+ * @param fieldid The fieldid.
+ * @param name Pointer that gets name of the field. Ignored if NULL.
+ * @param offsetp Pointer that gets the offset of the field. Ignored
+ * if NULL.
+ * @param field_typeidp Pointer that gets the typeid of the
+ * field. Ignored if NULL.
+ * @param ndimsp Pointer that gets the number of dims of the
+ * field. Ignored if NULL.
+ * @param dim_sizesp Pointer that gets array of sizes of the
+ * dims. Ignored if NULL.
+
  *
  * @return ::NC_NOERR No error.
  * @return ::NC_ENOMEM Out of memory.
@@ -212,8 +226,11 @@ nc_inq_compound_field_f(int ncid, nc_type xtype, int fieldid, char *name,
 }
 
 /**
+ * Get the number of groups.
  *
  * @param ncid The ncid of the open file.
+ * @param numgrps Pointer that gets the number of groups. Ignored if
+ * NULL.
  *
  * @return ::NC_NOERR No error.
  * @return ::NC_ENOMEM Out of memory.
@@ -225,13 +242,15 @@ nc_inq_numgrps(int ncid, int *numgrps)
     int ret;
 
     if ((ret = nc_inq_grps(ncid, numgrps, NULL)))
-
         return ret;
+    return NC_NOERR;
 }
 
 /**
+ * Learn how may user-defined types are in a group.
  *
  * @param ncid The ncid of the open file.
+ * @param ntypes Pointer that gets number of types. Ignored if NULL.
  *
  * @return ::NC_NOERR No error.
  * @return ::NC_ENOMEM Out of memory.
@@ -243,28 +262,35 @@ nc_inq_numtypes(int ncid, int *numtypes)
     int ret;
 
     if ((ret = nc_inq_typeids(ncid, numtypes, NULL)))
-
         return ret;
+    return NC_NOERR;
 }
 
 /**
+ * Learn the number of filter paramters.
  *
  * @param ncid The ncid of the open file.
+ * @param varid The variable ID.
+ * @param nparamsp Pointer that gets number of parameters. Ignored if
+ * NULL.
  *
  * @return ::NC_NOERR No error.
  * @return ::NC_ENOMEM Out of memory.
- * @author Richard Weed
+ * @author Dennis Heimbigner
  */
 extern int
-nc_inq_varnparams(int ncid, int varid, size_t* nparamsp)
+nc_inq_varnparams(int ncid, int varid, size_t *nparamsp)
 {
-    int ret;
     unsigned int id;
     size_t nparams;
+    int ret;
 
     if ((ret = nc_inq_var_filter(ncid, varid, &id, &nparams, NULL)))
         return ret;
-    if(nparamsp) *nparamsp = nparams;
+    if (nparamsp)
+        *nparamsp = nparams;
+
+    return NC_NOERR;
 }
 
 #endif /*USE_NETCDF4*/
