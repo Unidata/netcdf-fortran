@@ -765,8 +765,7 @@ INPUT                  = @abs_top_srcdir@/RELEASE_NOTES.md \
                          @abs_top_srcdir@/docs/netcdf-f90-sec5-user_defined_types.md \
                          @abs_top_srcdir@/docs/netcdf-f90-sec6-variables.md \
                          @abs_top_srcdir@/docs/netcdf-f90-sec7-attributes.md 
-                         #@abs_top_srcdir@/fortran \
-                         #@abs_top_srcdir@/libsrc
+                         #@abs_top_srcdir@/fortran 
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding. Doxygen uses
