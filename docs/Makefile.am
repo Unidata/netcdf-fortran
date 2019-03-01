@@ -36,3 +36,18 @@ endif
 # Rule to build the man page.
 manpages: $(top_srcdir)/docs/netcdf.m4
 	m4 $(M4FLAGS) $(ARGS_MANPAGE) $? >netcdf_fortran.3 || rm netcdf_fortran.3
+
+# Doxygen imestamp to prevent rebuilds.
+doxyfile.stamp:
+	$(DOXYGEN) Doxyfile
+
+if BUILD_DOCS
+all-local: doxyfile.stamp
+clean-local:
+	rm -rf $(top_builddir)/docs/man
+	rm -rf $(top_builddir)/docs/html
+	rm -rf $(top_builddir)/docs/latex
+	rm -rf $(top_builddir)/docs/latex_main
+endif
+
+CLEANFILES = doxyfile.stamp

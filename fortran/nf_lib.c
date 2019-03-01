@@ -1,9 +1,7 @@
 /*
-
-Copyright 2006, University Corporation for Atmospheric Research. See
-the COPYRIGHT file for copying and redistribution conditions.
-
-$Id: fort-lib.c,v 1.15 2009/02/13 15:58:00 ed Exp $
+  Copyright 2006-2019, University Corporation for Atmospheric
+  Research. See the COPYRIGHT file for copying and redistribution
+  conditions.
 */
 
 /*
