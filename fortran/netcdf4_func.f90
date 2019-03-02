@@ -36,7 +36,7 @@
           nelems_out = nelems_in
        end if
        if (present(cache_preemption)) then
-          preemption_out = cache_preemption
+          preemption_out = int(cache_preemption * 100)
        else
           preemption_out = preemption_in
        end if
@@ -59,7 +59,7 @@
     integer :: size_in, nelems_in, preemption_in
     integer :: size_out, nelems_out, preemption_out, ret
     integer :: nf90_open_par
-  
+
     ! If the user specified chuck cache parameters, use them. But user
     ! may have specified one, two, or three settings. Leave the others
     ! unchanged.
@@ -81,7 +81,7 @@
           nelems_out = nelems_in
        end if
        if (present(cache_preemption)) then
-          preemption_out = cache_preemption
+          preemption_out = int(cache_preemption * 100)
        else
           preemption_out = preemption_in
        end if

@@ -46,7 +46,7 @@ function nf90_open(path, mode, ncid, chunksize, cache_size, cache_nelems, &
         nelems_out = nelems_in
      end if
      if (present(cache_preemption)) then
-        preemption_out = cache_preemption
+        preemption_out = int(cache_preemption * 100)
      else
         preemption_out = preemption_in
      end if
