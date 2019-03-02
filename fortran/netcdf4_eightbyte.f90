@@ -775,7 +775,7 @@ function nf90_put_var_EightByteInt(ncid, varid, values, start)
   integer                                      :: nf90_put_var_EightByteInt
 
   integer, dimension(nf90_max_var_dims) :: localIndex
-  integer                               :: counter, format_num
+  integer                               :: format_num
 
   ! Set local arguments to default values
   localIndex(:) = 1
@@ -800,7 +800,7 @@ function nf90_get_var_EightByteInt(ncid, varid, values, start)
   integer                                      :: nf90_get_var_EightByteInt
 
   integer, dimension(nf90_max_var_dims) :: localIndex
-  integer                               :: counter, format_num
+  integer                               :: format_num
   integer                               :: defaultInteger
   integer (kind = EightByteInt)         :: defaultInteger8
 

@@ -26,7 +26,7 @@
  
      integer, dimension(nf90_max_var_dims) :: localIndex, textDimIDs
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride 
-     integer                               :: counter, stringLength
+     integer                               :: stringLength
  
      ! Set local arguments to default values
      localStart (:)  = 1
@@ -274,8 +274,7 @@
  
      integer, parameter                  :: numDims = 1
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
-     integer                             :: counter
- 
+
      ! Set local arguments to default values
      localStart (:         ) = 1
      localCount (:numDims+1) = (/ len(values(1)), shape(values) /)

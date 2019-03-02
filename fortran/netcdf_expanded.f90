@@ -6,8 +6,7 @@
      integer                                      :: nf90_put_var_OneByteInt
  
      integer, dimension(nf90_max_var_dims) :: localIndex
-     integer                               :: counter
- 
+
      ! Set local arguments to default values
      localIndex(:) = 1
      if(present(start)) localIndex(:size(start)) = start(:)
@@ -23,8 +22,7 @@
      integer                                      :: nf90_put_var_TwoByteInt
  
      integer, dimension(nf90_max_var_dims) :: localIndex
-     integer                               :: counter
- 
+
      ! Set local arguments to default values
      localIndex(:) = 1
      if(present(start)) localIndex(:size(start)) = start(:)
@@ -40,8 +38,7 @@
      integer                                      :: nf90_put_var_FourByteInt
  
      integer, dimension(nf90_max_var_dims) :: localIndex
-     integer                               :: counter
- 
+
      ! Set local arguments to default values
      localIndex(:) = 1
      if(present(start)) localIndex(:size(start)) = start(:)
@@ -57,8 +54,7 @@
      integer                                      :: nf90_put_var_FourByteReal
  
      integer, dimension(nf90_max_var_dims) :: localIndex
-     integer                               :: counter
- 
+
      ! Set local arguments to default values
      localIndex(:) = 1
      if(present(start)) localIndex(:size(start)) = start(:)
@@ -74,8 +70,7 @@
      integer                                      :: nf90_put_var_EightByteReal
  
      integer, dimension(nf90_max_var_dims) :: localIndex
-     integer                               :: counter
- 
+
      ! Set local arguments to default values
      localIndex(:) = 1
      if(present(start)) localIndex(:size(start)) = start(:)
@@ -91,8 +86,7 @@
      integer                                      :: nf90_get_var_OneByteInt
  
      integer, dimension(nf90_max_var_dims) :: localIndex
-     integer                               :: counter
- 
+
      ! Set local arguments to default values
      localIndex(:) = 1
      if(present(start)) localIndex(:size(start)) = start(:)
@@ -108,8 +102,7 @@
      integer                                      :: nf90_get_var_TwoByteInt
  
      integer, dimension(nf90_max_var_dims) :: localIndex
-     integer                               :: counter
- 
+
      ! Set local arguments to default values
      localIndex(:) = 1
      if(present(start)) localIndex(:size(start)) = start(:)
@@ -125,7 +118,6 @@
      integer                                      :: nf90_get_var_FourByteInt
  
      integer, dimension(nf90_max_var_dims) :: localIndex
-     integer                               :: counter
      integer                               :: defaultInteger
      
      ! Set local arguments to default values
@@ -144,8 +136,7 @@
      integer                                      :: nf90_get_var_FourByteReal
  
      integer, dimension(nf90_max_var_dims) :: localIndex
-     integer                               :: counter
- 
+
      ! Set local arguments to default values
      localIndex(:) = 1
      if(present(start)) localIndex(:size(start)) = start(:)
@@ -161,8 +152,7 @@
      integer                                      :: nf90_get_var_EightByteReal
  
      integer, dimension(nf90_max_var_dims) :: localIndex
-     integer                               :: counter
- 
+
      ! Set local arguments to default values
      localIndex(:) = 1
      if(present(start)) localIndex(:size(start)) = start(:)
