@@ -40,7 +40,7 @@ program simple_xy_par_rd
   integer :: p, my_rank, ierr
 
   ! Loop indexes, and error handling.
-  integer :: x, y, stat
+  integer :: x, stat
 
   ! Initialize MPI, learn local rank and total number of processors.
   call MPI_Init(ierr)
