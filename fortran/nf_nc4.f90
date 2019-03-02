@@ -264,7 +264,7 @@
  cstatus = nc_inq_grpname_full(cncid, clen, cname)
 
  If (cstatus == NC_NOERR) Then
-    nlen = clen  
+    nlen = int(clen)
     name = stripCNullChar(cname, nl)
  EndIf
  status = cstatus
@@ -433,7 +433,8 @@
 
  cncid     = ncid
  dimids(1) = 0
- 
+ cparent = parent
+
  cstatus = nc_inq_dimids_f(cncid, cndims, dimids, cparent)
 
  If (cstatus == NC_NOERR) Then
@@ -1299,7 +1300,7 @@
     name         = stripCNullChar(cname, nlen)
     base_nf_type = c_base_nf_type
     base_size    = int(c_base_size)
-    num_members  = c_num_members
+    num_members  = int(c_num_members)
  EndIf
 
  status = cstatus
@@ -1443,7 +1444,7 @@
 
  If (cstatus == NC_NOERR) Then
     name   = stripCNullChar(cname, nlen)
-    isize  = csize
+    isize  = int(csize)
  EndIf
 
  status = cstatus
@@ -1862,7 +1863,7 @@
 
  If (cstatus == NC_NOERR) Then
    filterid = cfilterid
-   nparams = cnparams
+   nparams = int(cnparams)
    If (cnparams > 0) Then
      params(1:nparams) = cparams(1:nparams)
    EndIf
@@ -2004,7 +2005,7 @@
                                value)
 
  If (cstatus == NC_NOERR) Then
-    nlen = cnlen 
+    nlen = int(cnlen)
  EndIf
 
  status = cstatus
