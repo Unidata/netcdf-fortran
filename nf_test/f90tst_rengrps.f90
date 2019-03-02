@@ -10,7 +10,7 @@ program f90tst_rengrps
   ! We are writing 2D data, a 6 x 12 grid. 
   integer, parameter :: MAX_DIMS = 2
   integer, parameter :: NX = 6, NY = 12
-  integer :: chunksizes(MAX_DIMS), chunksizes_in(MAX_DIMS)
+  integer :: chunksizes(MAX_DIMS)
   integer, parameter :: CACHE_NELEMS = 10000, CACHE_SIZE = 1000000
   integer, parameter :: DEFLATE_LEVEL = 4
   ! We need these ids and other gunk for netcdf.
@@ -32,6 +32,8 @@ program f90tst_rengrps
   integer :: grpid1, grpid2
   integer :: xtype_in, ndims_in, natts_in, dimids_in(MAX_DIMS)
   character (len = nf90_max_name) :: name_in
+  integer :: chunksizes_in(MAX_DIMS)
+  integer :: x
 
   print *, ''
   print *,'*** Testing netCDF-4 rename groups from Fortran 90.'
@@ -73,9 +75,15 @@ program f90tst_rengrps
   if (name_in .ne. grp1_full_name) stop 62
 
   Call check(nf90_rename_grp(grpid1, NEW_GRP1_NAME))
-  name_in=REPEAT(" ",LEN(name_in))
+  name_in=REPEAT(" ", LEN(name_in))
   Call check(nf90_inq_grpname(grpid1, name_in))
   If (name_in /= NEW_GRP1_NAME) Call check(-1)
+
+  ! Check the vars, just for fun.
+  call check(nf90_inquire_variable(ncid, varid1, chunksizes = chunksizes_in))
+  do x = 1, size(chunksizes)
+     if (chunksizes(x) .ne. chunksizes_in(x)) stop 63
+  end do
 
   ! Close the file. 
   call check(nf90_close(ncid))
