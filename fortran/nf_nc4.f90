@@ -1468,7 +1468,7 @@
  Integer(C_INT) :: cncid, cvarid, ccontiguous, cstat1, cstatus, &
                    cndims
  Type(C_PTR)    :: cchunksizeptr
- Integer        :: i, ndims
+ Integer        :: ndims
 
  Integer(C_INT), ALLOCATABLE, TARGET :: cchunksizes(:)
 

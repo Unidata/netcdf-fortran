@@ -16,7 +16,7 @@ program f90tst_rengrps
   ! We need these ids and other gunk for netcdf.
   integer :: ncid, varid1, varid2, dimids(MAX_DIMS)
   integer :: x_dimid, y_dimid
-  integer :: nvars, ngatts, ndims, unlimdimid, file_format
+  integer :: nvars, ngatts, ndims, unlimdimid
   character (len = *), parameter :: VAR1_NAME = "VarName1"
   character (len = *), parameter :: VAR2_NAME = "VarName2"
   character (len = *), parameter :: GRP1_NAME = "Old_Grp1_name"

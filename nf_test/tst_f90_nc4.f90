@@ -2,7 +2,7 @@ program tst_f90_nc4
   use typeSizes
   use netcdf
   implicit none
-  integer :: fh, ierr, dimid, varid, ndim, nvar
+  integer :: fh, dimid, varid, ndim, nvar
   character (len = *), parameter :: FILE_NAME = "tst_f90_nc4.nc"
 
   print *, ''
