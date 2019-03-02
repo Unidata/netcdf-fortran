@@ -111,8 +111,8 @@ program f90tst_vars2
   if (chunksizes_in(1) /= chunksizes(1) .or. chunksizes_in(2) /= chunksizes(2)) &
        stop 4
   if (endianness_in .ne. nf90_endian_big) stop 5
-  print *, 'cache_size_in =', cache_size_in, 'cache_nelems_in =', cache_nelems_in, &
-       'cache_preemption_in =', cache_preemption
+  ! print *, 'cache_size_in =', cache_size_in, 'cache_nelems_in =', cache_nelems_in, &
+  !      'cache_preemption_in =', cache_preemption
 
   ! Check variable 2.
   call check(nf90_inquire_variable(ncid, varid2_in, name_in, xtype_in, ndims_in, dimids_in, &
