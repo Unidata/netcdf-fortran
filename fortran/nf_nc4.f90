@@ -293,7 +293,7 @@
 
  If (cstatus == NC_NOERR) Then
     ! Return name length 
-     nlen = clen
+     nlen = int(clen)
  EndIf
  status = cstatus
 
@@ -708,7 +708,7 @@
  cstatus = nc_inq_type(cncid, cxtype, cname(1:ie), csize)
 
  If (cstatus == NC_NOERR) Then
-    isize  = csize
+    isize  = int(csize)
  EndIf
  status = cstatus
 
@@ -743,8 +743,8 @@
 
  If (cstatus == NC_NOERR) Then
     name       = stripCNullChar(cname, nlen)
-    isize      = csize
-    nfields    = cnfieldsp
+    isize      = int(csize)
+    nfields    = int(cnfieldsp)
  EndIf
  status  = cstatus
 
@@ -804,7 +804,7 @@
  cstatus = nc_inq_compound_size(cncid, cxtype, csize)
 
  If (cstatus == NC_NOERR) Then
-    isize  = csize
+    isize  = int(csize)
  EndIf
 
  status = cstatus
@@ -833,7 +833,7 @@
  cstatus = nc_inq_compound_nfields(cncid, cxtype, cnfields)
 
  If (cstatus == NC_NOERR) Then
-    nfields = cnfields
+    nfields = int(cnfields)
  EndIf
 
  status  = cstatus
@@ -886,7 +886,7 @@
                                    cfield_typeid, cndims, cdim_sizes)
  If (cstatus == NC_NOERR) Then
    name               = stripCNullChar(cname, nlen)
-   offset             = coffset
+   offset             = int(coffset)
    field_typeid       = cfield_typeid
    ndims              = cndims
    If (ndims > 0) Then
@@ -991,7 +991,7 @@
  cstatus = nc_inq_compound_fieldoffset(cncid, cxtype, cfieldid, coffset)
 
  If (cstatus == NC_NOERR) Then
-    offset = coffset
+    offset = int(coffset)
  EndIf
 
  status = cstatus
@@ -1146,7 +1146,7 @@
 
  If (cstatus == NC_NOERR) Then
     name       = stripCNullChar(cname, nlen)
-    datum_size = cdatum_size 
+    datum_size = int(cdatum_size)
     base_type  = cbase_type 
  EndIf
 
@@ -1187,8 +1187,8 @@
 
  If (cstatus == NC_NOERR) Then
     name       = stripCNullChar(cname, nlen)
-    isize      = csize
-    nfields    = cnfields
+    isize      = int(csize)
+    nfields    = int(cnfields)
     iclass     = cclass
     base_type  = cbase_type
  EndIf
@@ -1298,7 +1298,7 @@
  If (cstatus == NC_NOERR) Then
     name         = stripCNullChar(cname, nlen)
     base_nf_type = c_base_nf_type
-    base_size    = c_base_size
+    base_size    = int(c_base_size)
     num_members  = c_num_members
  EndIf
 
