@@ -86,10 +86,9 @@ function nf90_create(path, cmode, ncid, initialsize, chunksize, cache_size, &
   integer, optional, intent(in) :: cache_preemption
   integer, optional, intent(in) :: comm, info
   integer :: size_in, nelems_in, preemption_in
-  integer :: size_out, nelems_out, preemption_out, ret
+  integer :: size_out, nelems_out, preemption_out
   integer :: nf90_create
   integer :: fileSize, chunk
-  integer :: x
 
   ! Just ignore options netCDF-3 options for netCDF-4 files, or
   ! netCDF-4 options, for netCDF-3 files, so that the same user code
