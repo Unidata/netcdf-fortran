@@ -104,12 +104,15 @@ program f90tst_vars2
   ! Check variable 1.
   call check(nf90_inquire_variable(ncid, varid1_in, name_in, xtype_in, ndims_in, dimids_in, &
        natts_in, chunksizes = chunksizes_in, endianness = endianness_in, fletcher32 = fletcher32_in, &
-       deflate_level = deflate_level_in, shuffle = shuffle_in))
+       deflate_level = deflate_level_in, shuffle = shuffle_in, cache_size = cache_size_in, &
+       cache_nelems = cache_nelems_in, cache_preemption = cache_preemption_in))
   if (name_in .ne. VAR1_NAME .or. xtype_in .ne. NF90_INT .or. ndims_in .ne. MAX_DIMS .or. &
        natts_in .ne. 0 .or. dimids_in(1) .ne. dimids(1) .or. dimids_in(2) .ne. dimids(2)) stop 3
   if (chunksizes_in(1) /= chunksizes(1) .or. chunksizes_in(2) /= chunksizes(2)) &
        stop 4
   if (endianness_in .ne. nf90_endian_big) stop 5
+  print *, 'cache_size_in =', cache_size_in, 'cache_nelems_in =', cache_nelems_in, &
+       'cache_preemption_in =', cache_preemption
 
   ! Check variable 2.
   call check(nf90_inquire_variable(ncid, varid2_in, name_in, xtype_in, ndims_in, dimids_in, &
