@@ -3,7 +3,7 @@ program f90tst_rengrps
   use typeSizes
   use netcdf
   implicit none
-  
+
   ! This is the name of the data file we will create.
   character (len = *), parameter :: FILE_NAME = "f90tst_grps.nc"
 
@@ -16,7 +16,6 @@ program f90tst_rengrps
   ! We need these ids and other gunk for netcdf.
   integer :: ncid, varid1, varid2, dimids(MAX_DIMS)
   integer :: x_dimid, y_dimid
-  integer :: nvars, ngatts, ndims, unlimdimid
   character (len = *), parameter :: VAR1_NAME = "VarName1"
   character (len = *), parameter :: VAR2_NAME = "VarName2"
   character (len = *), parameter :: GRP1_NAME = "Old_Grp1_name"
@@ -28,12 +27,12 @@ program f90tst_rengrps
   integer :: ilen
 
   ! Information read back from the file to check correctness.
-  integer :: varid1_in, varid2_in
   integer :: grpid1, grpid2
+  integer :: deflate_level_in, endianness_in
+  logical :: shuffle_in, fletcher32_in
   integer :: xtype_in, ndims_in, natts_in, dimids_in(MAX_DIMS)
   character (len = nf90_max_name) :: name_in
   integer :: chunksizes_in(MAX_DIMS)
-  integer :: x
 
   print *, ''
   print *,'*** Testing netCDF-4 rename groups from Fortran 90.'
@@ -79,11 +78,15 @@ program f90tst_rengrps
   Call check(nf90_inq_grpname(grpid1, name_in))
   If (name_in /= NEW_GRP1_NAME) Call check(-1)
 
-  ! Check the vars, just for fun.
-  call check(nf90_inquire_variable(ncid, varid1, chunksizes = chunksizes_in))
-  do x = 1, size(chunksizes)
-     if (chunksizes(x) .ne. chunksizes_in(x)) stop 63
-  end do
+  ! Check variable 1.
+  call check(nf90_inquire_variable(ncid, varid1, name_in, xtype_in, ndims_in, dimids_in, &
+       natts_in, chunksizes = chunksizes_in, endianness = endianness_in, fletcher32 = fletcher32_in, &
+       deflate_level = deflate_level_in, shuffle = shuffle_in))
+  if (name_in .ne. VAR1_NAME .or. xtype_in .ne. NF90_INT .or. ndims_in .ne. MAX_DIMS .or. &
+       natts_in .ne. 0 .or. dimids_in(1) .ne. dimids(1) .or. dimids_in(2) .ne. dimids(2)) stop 3
+  if (chunksizes_in(1) /= chunksizes(1) .or. chunksizes_in(2) /= chunksizes(2)) &
+       stop 4
+  if (endianness_in .ne. nf90_endian_big) stop 5
 
   ! Close the file. 
   call check(nf90_close(ncid))
