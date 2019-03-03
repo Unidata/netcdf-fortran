@@ -1,6 +1,4 @@
-#include "nfconfig.inc"
-
-!- Array/string put/get routines given start, count, stride, and map vectors - 
+!- Array/string put/get routines given start, count, stride, and map vectors -
 
 ! Replacement for fort-varmio.c
 

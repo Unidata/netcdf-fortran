@@ -1,4 +1,3 @@
-#include "nfconfig.inc"
 !------------ Array/string put/get routines for a given varid ----------------
 
 ! Replacement for fort-vario.c

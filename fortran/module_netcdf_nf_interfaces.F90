@@ -44,8 +44,6 @@ Module netcdf_nf_interfaces
 
  Implicit NONE
 
-#include "nfconfig.inc"
-
 !-------------------- Explicit Interfaces for nf routines ------------------
 
 ! Misc functions first

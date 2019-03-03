@@ -41,8 +41,6 @@ Module netcdf_nf_data
                                                          
  Implicit NONE
 
-#include "nfconfig.inc"
-
 ! Define values found in netcdf2.inc, netcdf3.inc, and netcdf4.inc
 ! Also some additional values from the NC_DATA interfaces
 !                
