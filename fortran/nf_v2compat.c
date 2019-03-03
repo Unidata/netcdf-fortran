@@ -40,7 +40,7 @@
  * differing error handling mechanisms between version 2 and version 3.
  */
 
-#include <config.h>
+/* #include <config.h> */
 
 #ifndef NO_NETCDF_2
 

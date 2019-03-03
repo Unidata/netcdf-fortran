@@ -4,8 +4,6 @@
 !   $Id: ftest.F,v 1.12 2009/04/02 18:29:20 dmh Exp $
 !********************************************************************
 
-#include "nfconfig.inc"
-
 !
 !     program to test the netCDF-2 Fortran API
 !

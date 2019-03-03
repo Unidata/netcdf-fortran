@@ -1,4 +1,4 @@
-#include "nfconfig.inc"
+!#include "nfconfig.inc"
 !--- Array put/get routines for different types for given start and count ----
 
 ! Replacement for fort-varaio.c
