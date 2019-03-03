@@ -460,6 +460,9 @@ CHECK_INCLUDE_FILE("netcdf.h" HAVE_NETCDF_H)
 # End Check for various system header files.
 ###
 
+ADD_DEFINITIONS(-DNCSHORT_T=integer*2)
+ADD_DEFINITIONS(-DNCBYTE_T=byte)
+
 ###
 # Type checks
 ###
