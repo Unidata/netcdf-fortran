@@ -11,7 +11,7 @@
 # The nfconfig.in file is turned into nfconfig.inc by the configure
 # script. The man page is generated on the developers machine for the
 # dist.
-EXTRA_DIST = nfconfig.in nfconfig.inc CMakeLists.txt	\
+EXTRA_DIST = nfconfig.in  CMakeLists.txt	\
 nfconfig.in.cmake
 
 # These files need to be cleaned up my make.
