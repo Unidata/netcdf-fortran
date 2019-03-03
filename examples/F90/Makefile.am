@@ -5,6 +5,9 @@
 
 # Ed Hartnett, Russ Rew, Dennis Heimbigner, Ward Fisher
 
+# Turn off parallel builds in this directory.
+.NOTPARALLEL:
+
 AM_FCFLAGS = -I$(top_srcdir)/fortran ${AM_CPPFLAGS}
 AM_FCFLAGS += $(FCFLAGS_f90)
 AM_FCFLAGS += @MOD_FLAG@$(top_builddir)/fortran
