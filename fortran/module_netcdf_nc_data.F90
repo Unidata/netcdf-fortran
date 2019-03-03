@@ -49,8 +49,6 @@ Module netcdf_nc_data
 #endif
  Implicit NONE
 
-#include "nfconfig.inc"
-
 ! All of the stuff inside this ifndef black needs to be moved to a
 ! stantdalone module and combined with the f90 interfaces typesizes
 ! module
