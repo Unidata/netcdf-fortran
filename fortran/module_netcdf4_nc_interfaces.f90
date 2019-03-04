@@ -740,14 +740,14 @@ End Interface
 !------------------------------- nc_inq_varnparams ------------------------------
 !**** NOT a Netcdf C function. Added to nf_lib.c support Fortran interaces
 Interface
- Function nc_inq_varnparams(ncid, varid, nparams) BIND(C)
+ Function nc_inq_varnparams(ncid, varid, nparamsp) BIND(C)
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T
 
  Integer(C_INT), VALUE         :: ncid, varid
- Integer(C_SIZE_T), Intent(INOUT) :: nparams
+ Integer(C_SIZE_T), Intent(INOUT) :: nparamsp
 
- Integer(C_INT)                 :: nc_inq_nparams
+ Integer(C_INT)                 :: nc_inq_varnparams
 
  End Function nc_inq_varnparams
 End Interface

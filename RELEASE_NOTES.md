@@ -14,6 +14,7 @@ Entries are in reverse chronological order (most recent first).
 
 ### Changes
 
+* Removed legacy cfortran.h based build, which allowed F77-only compilers to build the F77 API (only). Since all compilers now support F2003, we can use F2003 features to build the F77 API. Full backwards-compatibility with all existing F77 API code is assured.   See [#85](https://github.com/Unidata/netcdf-fortran/issues/85) for more information.
 * Added an option in cmake builds, `BUILD_EXAMPLES`, `TRUE` by default. When disabled, the examples will not be built.  See [#93](https://github.com/Unidata/netcdf-fortran/issues/92) for more information.
 * Misc. Bugfixes to bring netCDF-Fortran in line with the features in netCDF-C.
 * Updated CMakeLists.txt to check for C types that match Fortran ones. See [GitHub #67](https://github.com/Unidata/netcdf-fortran/pull/67) for more information.

@@ -155,12 +155,15 @@ tst_f90_SOURCES = tst_f90.f90
 @VALGRIND_CHECK_RULES@
 
 # test_get.F and test_put.f need to be distributed, so that the user
-# need not have m4. fills.nc is used by test program ftest.
+# need not have m4. ref_fills.nc is copied to fills.nc by configure
+# and used by test program ftest.
 EXTRA_DIST = test_get.F test_put.F fills.cdl run_f90_par_test.sh	\
 run_f77_par_test.sh ref_fills.nc CMakeLists.txt
 
 # Cleaning up files created during the process.
-CLEANFILES = scratch.nc test.nc copy.nc fills.nc tst_*.nc ftst_*.nc	\
+CLEANFILES = scratch.nc test.nc copy.nc tst_*.nc ftst_*.nc	\
 f90tst_*.nc temp.tmp fort.*
+
+DISTCLEANFILES = fills.nc
 
 MAINTAINERCLEANFILES = test_get.F test_put.F
