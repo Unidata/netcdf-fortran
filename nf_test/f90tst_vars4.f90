@@ -18,7 +18,7 @@ program f90tst_vars4
 
   ! We need these ids and other gunk for netcdf.
   integer :: ncid, varid, dimids(MAX_DIMS), chunksizes(MAX_DIMS)
-  integer :: x_dimid, y_dimid, contig
+  integer :: x_dimid, y_dimid
   integer :: mode_flag
   integer :: nvars, ngatts, ndims, unlimdimid, file_format
   integer :: x, y

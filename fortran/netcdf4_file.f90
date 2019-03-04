@@ -3,7 +3,7 @@
 
 ! This file contains the netcdf-4 file open and create functions.
 
-! $Id: netcdf4_constants.f90,v 1.14 2010/05/25 13:53:00 ed Exp $
+! @author Ed Hartnett
 ! -------
 function nf90_open(path, mode, ncid, chunksize, cache_size, cache_nelems, &
      cache_preemption, comm, info)
@@ -46,7 +46,7 @@ function nf90_open(path, mode, ncid, chunksize, cache_size, cache_nelems, &
         nelems_out = nelems_in
      end if
      if (present(cache_preemption)) then
-        preemption_out = cache_preemption
+        preemption_out = int(cache_preemption * 100)
      else
         preemption_out = preemption_in
      end if
@@ -86,10 +86,9 @@ function nf90_create(path, cmode, ncid, initialsize, chunksize, cache_size, &
   integer, optional, intent(in) :: cache_preemption
   integer, optional, intent(in) :: comm, info
   integer :: size_in, nelems_in, preemption_in
-  integer :: size_out, nelems_out, preemption_out, ret
+  integer :: size_out, nelems_out, preemption_out
   integer :: nf90_create
   integer :: fileSize, chunk
-  integer :: x
 
   ! Just ignore options netCDF-3 options for netCDF-4 files, or
   ! netCDF-4 options, for netCDF-3 files, so that the same user code

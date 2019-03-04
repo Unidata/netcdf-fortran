@@ -60,7 +60,7 @@
 
  If (cstatus == NC_NOERR) Then
     xtype = cxtype
-    nlen  = cnlen
+    nlen  = int(cnlen)
  EndIf
  status = cstatus
 
@@ -130,7 +130,7 @@
  cstatus = nc_inq_attlen(cncid, cvarid, cname(1:ie), cnlen)
 
  If (cstatus == NC_NOERR) Then
-    nlen = cnlen
+    nlen = int(cnlen)
  EndIf
  status = cstatus
 
@@ -257,7 +257,7 @@
  Integer(C_INT)                  :: cncid, cvarid, cstatus
  Character(LEN=(LEN(name)+1))    :: cname 
  Character(LEN=(LEN(newname)+1)) :: cnewname 
- Integer                         :: ie1, ie2, inull
+ Integer                         :: ie1, ie2
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract 1 to get C varid

@@ -104,7 +104,7 @@
  If (cstatus == NC_NOERR) Then
     ! Strip C null char from tmpname if present and set end of string
     name = stripCNullChar(tmpname, nlen)
-    dlen   = cdlen
+    dlen   = int(cdlen)
  Endif
 
  status = cstatus
@@ -173,7 +173,7 @@
  cstatus = nc_inq_dimlen(cncid, cdimid, cdlen)
 
  If (cstatus == NC_NOERR) Then
-    dlen   = cdlen
+    dlen   = int(cdlen)
  Endif
  status = cstatus
 

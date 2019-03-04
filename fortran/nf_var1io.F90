@@ -747,7 +747,7 @@
  Integer                                     :: status
 
  Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
- Type(C_PTR)    :: cndexptr, cvaluesptr
+ Type(C_PTR)    :: cndexptr
  Integer        :: ndims
 
  Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cndex(:)

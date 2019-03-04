@@ -213,7 +213,7 @@
  Integer(C_INT)               :: cmode, cncid, cstatus
  Integer(C_SIZE_T)            :: cchunk
  Character(LEN=(LEN(path)+1)) :: cpath
- Integer                      :: inull, ie
+ Integer                      :: ie
 
  cmode  = mode
  cchunk = chunksizehintp
@@ -342,7 +342,7 @@
  cstatus = nc_inq_path(cncid, cpathlen, tmppath)
 
  If (cstatus == NC_NOERR) Then
-    pathlen = cpathlen
+    pathlen = int(cpathlen)
     If (pathlen > LEN(path)) pathlen = LEN(path)
     path = stripCNullchar(tmppath, pathlen)
  EndIf

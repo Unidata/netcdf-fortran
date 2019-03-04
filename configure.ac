@@ -507,7 +507,6 @@ AC_SUBST(HAS_NC4,[$nc_build_v4])
 # about where files live.  AC_CONFIG_LINKS provides a mechanism to
 # link/copy files if an out-of-source build is happening.
 AC_CONFIG_LINKS([nf_test/fills.nc:nf_test/ref_fills.nc])
-#AC_CONFIG_LINKS([nf_test/ref_fills.nc:nf03_test/ref_fills.nc])
 
 AC_MSG_NOTICE([generating header files and makefiles])
 

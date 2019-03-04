@@ -10,11 +10,11 @@ program tst_io
   implicit none
   integer, parameter :: prsz1 = 50, prsz2 = 50, &
        prsz3 = 50, prsz4 = 50, repct = 10
-  integer :: i1, i2, i3, i4, j, k, ticksPerSec
+  integer :: i1, i2, i3, i4, ticksPerSec
   real :: psr
   integer :: clockRate
   integer :: start, now, wrint1, ncint1, wrint2, ncint2, &
-       wrint3, ncint3, iosb, iosn, size
+       wrint3, iosb, size
   real, dimension (prsz1, prsz2, prsz3, prsz4) :: x
   character(len = *), parameter :: nclFilenm1 = 'tst_io1.nc', &
        nclFilenm2 = 'tst_io2.nc', nclFilenm3 = 'tst_io3.nc', &
@@ -24,7 +24,6 @@ program tst_io
        nclFilenm10 = 'tst_io10.nc', nclFilenm11 = 'tst_io11.nc'
   ! needed for netcdf
   integer :: ncid, x1id, x2id, x3id, x4id, vrid
-  integer :: vrids, vridt, vridu, vridv, vridw, vridx, vridy, vridz
 
   psr = 1.7/real(prsz1)
 
