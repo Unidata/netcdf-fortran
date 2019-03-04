@@ -1,10 +1,10 @@
-!     This is part of the netCDF package.
-!     Copyright 2006 University Corporation for Atmospheric Research/Unidata.
-!     See COPYRIGHT file for conditions of use.
+!     This is part of the netCDF package. Copyright 2006-2019 University
+!     Corporation for Atmospheric Research/Unidata. See COPYRIGHT file
+!     for conditions of use.
 
 !     This program tests netCDF-4 variable functions from fortran.
 
-!     $Id: ftst_parallel.F,v 1.5 2010/05/25 13:53:04 ed Exp $
+!     Ed Hartnett
 
       program ftst_parallel
       implicit none
@@ -128,9 +128,10 @@
       if (retval .ne. nf_noerr) stop 9
 
 !     Reopen the file.
+      retval = nf_set_log_level(3)
       retval = nf_open_par(FILE_NAME, nf_nowrite,
      $     MPI_COMM_WORLD, MPI_INFO_NULL, ncid)
-      if (retval .ne. nf_einval) stop 7
+      if (retval .ne. nf_einval) stop 15
       retval = nf_open_par(FILE_NAME, IOR(nf_nowrite, nf_mpiio),
      $     MPI_COMM_WORLD, MPI_INFO_NULL, ncid)
       if (retval .ne. nf_noerr) stop 10
