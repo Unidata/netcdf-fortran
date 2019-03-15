@@ -1,4 +1,3 @@
-#include "nfconfig.inc"
 !---------- Routines to put/get attribute data of various data types ----------
 
 ! Replacement for fort-attio.c

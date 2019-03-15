@@ -1,4 +1,3 @@
-#include "nfconfig.inc"
 !----- Routines to put/get single data items of a variety of data types ------
 
 ! Replacement for fort-var1io.c

@@ -510,11 +510,6 @@ AC_CONFIG_LINKS([nf_test/fills.nc:nf_test/ref_fills.nc])
 
 AC_MSG_NOTICE([generating header files and makefiles])
 
-# We will output a fortran inc file, nfconfig.inc.
-AC_CONFIG_HEADERS([config.h])
-AC_CONFIG_HEADERS([libsrc/nfconfig1.inc:libsrc/nfconfig.in],
-   [sed '1d;s%^/\* \(.*\) \*/%\1%' libsrc/nfconfig1.inc >conftest.tmp && mv conftest.tmp libsrc/nfconfig.inc])
-
 AC_CONFIG_FILES([Makefile
                  nf-config
                  netcdf-fortran.pc

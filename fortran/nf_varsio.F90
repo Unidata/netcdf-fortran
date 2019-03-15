@@ -1,5 +1,3 @@
-#include "nfconfig.inc"
-
 !-------- Array/string put/get routines given start, count, and stride -------
 
 ! Replacement for fort-varsio.c

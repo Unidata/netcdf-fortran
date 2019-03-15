@@ -14,7 +14,7 @@
  * Mississippi State University, Ed Hartnett, Dennis Heimbigner
  */
 
-#include <config.h>
+/* #include <config.h> */
 #include <stddef.h>     /* for NULL */
 #include <errno.h>
 #include <string.h>

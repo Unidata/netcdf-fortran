@@ -1,4 +1,3 @@
-#include "nfconfig.inc"
 
 C Copyright 1996-2006, UCAR/Unidata
 C See COPYRIGHT file for copying and redistribution conditions.

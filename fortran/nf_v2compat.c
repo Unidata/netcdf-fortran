@@ -40,8 +40,6 @@
  * differing error handling mechanisms between version 2 and version 3.
  */
 
-#include <config.h>
-
 #ifndef NO_NETCDF_2
 
 /* LINTLIBRARY */
@@ -51,7 +49,6 @@
 #include	<stdlib.h>
 #include	<stdio.h>
 #include	"netcdf.h"
-#include	"nfconfig.inc"
 
 #ifndef USE_NETCDF4
 #define NC_CLASSIC_MODEL 0
