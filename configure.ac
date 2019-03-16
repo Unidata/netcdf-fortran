@@ -323,8 +323,6 @@ AC_MSG_RESULT([$FC])
 # Check to see if any macros must be set to enable large (>2GB) files.
 AC_SYS_LARGEFILE
 
-ac_cv_prog_f90_uppercase_mod=no
-
 # This will test the f77 compiler, as well as check some fortran types.
 if test "$enable_fortran_type_check" = yes; then
    UD_FORTRAN_TYPES
