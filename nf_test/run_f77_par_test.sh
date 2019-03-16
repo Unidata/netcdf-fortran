@@ -5,7 +5,7 @@
 set -e
 echo "Testing netCDF parallel I/O through the F77 API..."
 
-#mpiexec -n 4 ./ftst_parallel
+mpiexec -n 4 ./ftst_parallel
 mpiexec -n 4 ./ftst_parallel_nasa
 
 echo "SUCCESS!!!"
