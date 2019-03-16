@@ -24,55 +24,6 @@ AC_DEFUN([UD_PROG_NM],
     AC_SUBST(NMFLAGS)
 ])
 
-dnl
-dnl Check for an m4(1) preprocessor utility.
-dnl
-AC_DEFUN([UD_PROG_M4],
-[
-    case "${M4-unset}" in
-	unset) AC_CHECK_PROGS(M4, m4 gm4, m4) ;;
-	*) AC_CHECK_PROGS(M4, $M4 m4 gm4, m4) ;;
-    esac
-    AC_MSG_CHECKING(m4 flags)
-    case "${M4FLAGS-unset}" in
-	unset) M4FLAGS=-B10000 ;;
-    esac
-    AC_MSG_RESULT($M4FLAGS)
-    AC_SUBST(M4FLAGS)
-])
-
-dnl
-dnl Set the top-level source-directory.
-dnl
-AC_DEFUN([UD_SRCDIR],
-[
-    AC_MSG_CHECKING(for top-level source-directory)
-    SRCDIR=`(cd $srcdir && pwd)`
-    AC_MSG_RESULT($SRCDIR)
-    AC_SUBST(SRCDIR)
-])
-
-
-dnl
-dnl like AC_LONG_DOUBLE, except checks for 'long long'
-dnl
-AC_DEFUN([UD_C_LONG_LONG],
-[AC_MSG_CHECKING(for long long)
-AC_CACHE_VAL(ac_cv_c_long_long,
-[if test "$GCC" = yes; then
-  ac_cv_c_long_long=yes
-else
-AC_TRY_RUN([int main() {
-long long foo = 0;
-exit(sizeof(long long) < sizeof(long)); }],
-ac_cv_c_long_long=yes, ac_cv_c_long_long=no, :)
-fi])dnl
-AC_MSG_RESULT($ac_cv_c_long_long)
-if test "$ac_cv_c_long_long" = yes; then
-  AC_DEFINE([HAVE_LONG_LONG], [], [have long long type])
-fi
-])
-
 dnl UD_CHECK_SIZEOF(TYPE)
 AC_DEFUN([UD_CHECK_SIZEOF],
 [changequote(<<, >>)dnl
