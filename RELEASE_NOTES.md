@@ -6,7 +6,7 @@ Release Notes {#nf_release_notes}
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
-## 4.4.6 - TBD
+## 4.5.0 - TBD
 
 ### Requirements
 
