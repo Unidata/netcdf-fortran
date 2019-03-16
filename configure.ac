@@ -346,8 +346,6 @@ else
    AC_DEFINE(NF_DOUBLEPRECISION_IS_C_DOUBLE, 1, [default])
 fi
 
-AM_CONDITIONAL(UPPER_CASE_MOD, [test "x$ac_cv_prog_f90_uppercase_mod" = xyes])
-
 # If --enable-dll is specified the DLL will be built. This only works
 # on mingw.
 AC_MSG_CHECKING([whether a win32 DLL is desired])
