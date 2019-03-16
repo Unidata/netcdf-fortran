@@ -1,6 +1,6 @@
-!     This is part of the netCDF package.
-!     Copyright 2006 University Corporation for Atmospheric Research/Unidata.
-!     See COPYRIGHT file for conditions of use.
+!     This is part of the netCDF package. Copyright 2006-2019
+!     University Corporation for Atmospheric Research/Unidata. See
+!     COPYRIGHT file for conditions of use.
 
 !     This program tests netCDF-4 parallel I/O and fill values from
 !     fortran. It creates a file like this:
@@ -19,7 +19,7 @@
 ! 	ushort ushort(x, y) ;
 ! 	uint uint(x, y) ;
 
-!     $Id: f90tst_parallel3.f90,v 1.5 2010/05/25 13:53:04 ed Exp $
+!     Ed Hartnett
 
 program f90tst_parallel3
   use netcdf
@@ -142,12 +142,6 @@ contains
 #endif
      end do
   end do
-
-  ! THis should fail, because I have not set either mpiposix or mpiio.
-  ret = nf90_create(FILE_NAME, nf90_netcdf4, ncid, &
-       comm = MPI_COMM_WORLD, info = MPI_INFO_NULL, cache_size = CACHE_SIZE, &
-       cache_nelems = CACHE_NELEMS, cache_preemption = CACHE_PREEMPTION)
-  if (ret /= nf90_einval) stop 8
 
   ! Create the netCDF file.
   call check(nf90_create(FILE_NAME, mode_flag, ncid, &
