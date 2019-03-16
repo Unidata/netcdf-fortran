@@ -143,6 +143,12 @@ contains
      end do
   end do
 
+  ! THis should fail, because I have not set either mpiposix or mpiio.
+  ret = nf90_create(FILE_NAME, nf90_netcdf4, ncid, &
+       comm = MPI_COMM_WORLD, info = MPI_INFO_NULL, cache_size = CACHE_SIZE, &
+       cache_nelems = CACHE_NELEMS, cache_preemption = CACHE_PREEMPTION)
+  if (ret /= nf90_einval) stop 8
+
   ! Create the netCDF file.
   call check(nf90_create(FILE_NAME, mode_flag, ncid, &
        comm = MPI_COMM_WORLD, info = MPI_INFO_NULL, cache_size = CACHE_SIZE, &
