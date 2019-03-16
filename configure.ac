@@ -183,10 +183,6 @@ if test "${FC+set}" = set && test "x$FC" = x; then
    AC_MSG_FAILURE([Can't find F90 compiler.])
 fi
 
-# Set the default fortran builds; default is to build f03
-nc_build_f90=no
-nc_build_f03=yes
-
 # Does the user want to test for Fortran 2003 compiler.
 # Added to get around NAG evaluation compiler error turning off F03
 AC_MSG_CHECKING([whether Fortran compiler is checked for ISO_C_BINDING support])
@@ -350,13 +346,6 @@ else
    AC_DEFINE(NF_DOUBLEPRECISION_IS_C_DOUBLE, 1, [default])
 fi
 
-# Test whether F90 module names get capitalized.
-if test "x$nc_build_f90" = xyes; then
-   AC_PROG_FC_UPPERCASE_MOD
-fi
-if test "x$ac_cv_prog_f90_uppercase_mod" = xyes ; then
-AC_MSG_FAILURE([Upper Case Modules names not supported])
-fi
 AM_CONDITIONAL(UPPER_CASE_MOD, [test "x$ac_cv_prog_f90_uppercase_mod" = xyes])
 
 # If --enable-dll is specified the DLL will be built. This only works
