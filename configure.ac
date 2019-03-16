@@ -110,6 +110,7 @@ if test $enable_parallel_tests = yes -a "x$nc_has_pnetcdf" = xno -a "x$nc_has_pa
    # paralle I/O is not enabled
    AC_MSG_ERROR([Parallel I/O tests requested, but netcdf-c does not support parallel I/O.])
 fi
+AM_CONDITIONAL(TEST_PARALLEL, [test "x$enable_parallel_tests" = xyes])
 
 # Determine if we want to enable doxygen-generated documentation. Any
 # new documentation input files should be inserted into
@@ -283,10 +284,10 @@ if test "x$enable_large_file_tests" = xyes; then
 fi
 
 # Does the user want to run benchmarks?
-AC_MSG_CHECKING([whether benchmarks should be run (experimental)])
+AC_MSG_CHECKING([whether benchmarks should be run])
 AC_ARG_ENABLE([benchmarks],
               [AS_HELP_STRING([--enable-benchmarks],
-                              [Run benchmarks. This is an experimental feature.])])
+                              [Run benchmarks.])])
 test "x$enable_benchmarks" = xno || enable_benchmarks=yes
 AC_MSG_RESULT($enable_benchmarks)
 AM_CONDITIONAL(BUILD_BENCHMARKS, [test x$enable_benchmarks = xyes])
@@ -304,10 +305,6 @@ AC_ARG_WITH([temp-large],
 TEMP_LARGE=${TEMP_LARGE-.}
 AC_MSG_RESULT($TEMP_LARGE)
 AC_DEFINE_UNQUOTED([TEMP_LARGE], ["$TEMP_LARGE"], [Place to put very large netCDF test files.])
-
-# We always build with f03.
-test "x$nc_build_f03" = xyes && nc_build_f77=no
-AM_CONDITIONAL(BUILD_F03, [test "x$nc_build_f03" = xyes])
 
 # Set up libtool.
 AC_MSG_NOTICE([setting up libtool])
@@ -439,10 +436,6 @@ AC_COMPUTE_INT([longlong_is_long],[sizeof(long long) == sizeof(long)],[],[longlo
 if test $longlong_is_long = 1; then
    CFLAGS="$CFLAGS -DLONGLONG_IS_LONG"
 fi
-
-# Automake conditionals need to be called, whether the answer is yes
-# or no.
-AM_CONDITIONAL(TEST_PARALLEL, [test "x$enable_parallel_tests" = xyes])
 
 # Flags for nf-config script; by design $prefix, $includir, $libdir,
 # etc.  are left as shell variables in the script so as to facilitate
