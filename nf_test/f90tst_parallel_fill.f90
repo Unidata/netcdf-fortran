@@ -25,14 +25,14 @@ program f90tst_parallel_fill
   integer :: var_type(NUM_VARS) = (/ nf90_byte, nf90_short, nf90_int, &
        nf90_float, nf90_double, nf90_ubyte, nf90_ushort, nf90_uint /)
   integer :: x_dimid, y_dimid
-  integer :: byte_out(QUARTER_NY, QUARTER_NX), byte_in(NY, NX)
-  integer :: short_out(QUARTER_NY, QUARTER_NX), short_in(NY, NX)
-  integer :: int_out(QUARTER_NY, QUARTER_NX), int_in(NY, NX)
-  real :: areal_out(QUARTER_NY, QUARTER_NX), areal_in(NY, NX)
-  real :: double_out(QUARTER_NY, QUARTER_NX), double_in(NY, NX)
-  integer :: ubyte_out(QUARTER_NY, QUARTER_NX), ubyte_in(NY, NX)
-  integer :: ushort_out(QUARTER_NY, QUARTER_NX), ushort_in(NY, NX)
-  integer (kind = EightByteInt) :: uint_out(QUARTER_NY, QUARTER_NX), uint_in(NY, NX)
+  integer :: byte_out(HALF_NY, HALF_NX), byte_in(NY, NX)
+  integer :: short_out(HALF_NY, HALF_NX), short_in(NY, NX)
+  integer :: int_out(HALF_NY, HALF_NX), int_in(NY, NX)
+  real :: areal_out(HALF_NY, HALF_NX), areal_in(NY, NX)
+  real :: double_out(HALF_NY, HALF_NX), double_in(NY, NX)
+  integer :: ubyte_out(HALF_NY, HALF_NX), ubyte_in(NY, NX)
+  integer :: ushort_out(HALF_NY, HALF_NX), ushort_in(NY, NX)
+  integer (kind = EightByteInt) :: uint_out(HALF_NY, HALF_NX), uint_in(NY, NX)
   integer :: nvars, ngatts, ndims, unlimdimid, file_format
   integer :: x, y, v
   integer :: start_out(MAX_DIMS), count_out(MAX_DIMS)
@@ -55,8 +55,8 @@ program f90tst_parallel_fill
   endif
 
   ! Create some pretend data.
-  do x = 1, QUARTER_NX
-     do y = 1, QUARTER_NY
+  do x = 1, HALF_NX
+     do y = 1, HALF_NY
         byte_out(y, x) = -1
         short_out(y, x) =  -2
         int_out(y, x) = -4
@@ -91,29 +91,28 @@ program f90tst_parallel_fill
   ! quadrant of data will be written, so each processor writes a
   ! quarter of the quadrant, or 1/16th of the total array. (And
   ! processor 0 doesn't write anyway.)
-  count_out = (/ QUARTER_NX, QUARTER_NY /)
-  if (my_rank .eq. 0) then 
-     start_out = (/ HALF_NX + 1, HALF_NY + 1 /)
+  count_out = (/ HALF_NX, HALF_NY /)
+  if (my_rank .eq. 0) then
+     start_out = (/ 1, 1 /)
+     count_out = (/ 0, 0 /)
   else if (my_rank .eq. 1) then
-     start_out = (/ HALF_NX + 1, HALF_NY + 1 + QUARTER_NY /)
+     start_out = (/ HALF_NX + 1, 1 /)
   else if (my_rank .eq. 2) then
-     start_out = (/ HALF_NX + 1 + QUARTER_NX, HALF_NY + 1 /)
+     start_out = (/ 1, HALF_NY + 1 /)
   else if (my_rank .eq. 3) then
-     start_out = (/ HALF_NX + 1 + QUARTER_NX, HALF_NY + 1 + QUARTER_NY /)
+     start_out = (/ HALF_NX + 1, HALF_NY + 1 /)
   endif
   print *, my_rank, start_out, count_out
 
   ! Write this processor's data, except for processor zero.
-  if (my_rank .ne. 0) then
-     call check(nf90_put_var(ncid, varid(1), byte_out, start = start_out, count = count_out))
-!      call check(nf90_put_var(ncid, varid(2), short_out, start = start_out, count = count_out))
-!      call check(nf90_put_var(ncid, varid(3), int_out, start = start_out, count = count_out))
-!      call check(nf90_put_var(ncid, varid(4), areal_out, start = start_out, count = count_out))
-!      call check(nf90_put_var(ncid, varid(5), double_out, start = start_out, count = count_out))
-!      call check(nf90_put_var(ncid, varid(6), ubyte_out, start = start_out, count = count_out))
-!      call check(nf90_put_var(ncid, varid(7), ushort_out, start = start_out, count = count_out))
-!      call check(nf90_put_var(ncid, varid(8), uint_out, start = start_out, count = count_out))
-  endif
+  call check(nf90_put_var(ncid, varid(1), byte_out, start = start_out, count = count_out))
+  call check(nf90_put_var(ncid, varid(2), short_out, start = start_out, count = count_out))
+  call check(nf90_put_var(ncid, varid(3), int_out, start = start_out, count = count_out))
+  call check(nf90_put_var(ncid, varid(4), areal_out, start = start_out, count = count_out))
+  call check(nf90_put_var(ncid, varid(5), double_out, start = start_out, count = count_out))
+  call check(nf90_put_var(ncid, varid(6), ubyte_out, start = start_out, count = count_out))
+  call check(nf90_put_var(ncid, varid(7), ushort_out, start = start_out, count = count_out))
+  call check(nf90_put_var(ncid, varid(8), uint_out, start = start_out, count = count_out))
 
   ! Close the file. 
   call check(nf90_close(ncid))
