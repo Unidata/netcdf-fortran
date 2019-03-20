@@ -118,8 +118,8 @@ program f90tst_parallel_fill
   call check(nf90_close(ncid))
 
   ! Reopen the file.
-!   call check(nf90_open(FILE_NAME, nf90_nowrite, ncid, comm = MPI_COMM_WORLD, &
-!        info = MPI_INFO_NULL))
+  call check(nf90_open(FILE_NAME, nf90_nowrite, ncid, comm = MPI_COMM_WORLD, &
+       info = MPI_INFO_NULL))
   
 !   ! Check some stuff out.
 !   call check(nf90_inquire(ncid, ndims, nvars, ngatts, unlimdimid, file_format))
@@ -174,8 +174,8 @@ program f90tst_parallel_fill
 !      end do
 !   end do
 
-!   ! Close the file. 
-!   call check(nf90_close(ncid))
+! Close the file.
+  call check(nf90_close(ncid))
 
   call MPI_Finalize(ierr)
 
