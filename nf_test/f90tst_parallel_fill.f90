@@ -140,13 +140,13 @@ program f90tst_parallel_fill
 
 ! Read this processor's data.
   call check(nf90_get_var(ncid, varid(1), byte_in, start = start_in, count = count_in))
-!   call check(nf90_get_var(ncid, varid(2), short_in, start = start_in, count = count_in))
-!   call check(nf90_get_var(ncid, varid(3), int_in, start = start_in, count = count_in))
-!   call check(nf90_get_var(ncid, varid(4), areal_in, start = start_in, count = count_in))
-!   call check(nf90_get_var(ncid, varid(5), double_in, start = start_in, count = count_in))
-!   call check(nf90_get_var(ncid, varid(6), ubyte_in, start = start_in, count = count_in))
-!   call check(nf90_get_var(ncid, varid(7), ushort_in, start = start_in, count = count_in))
-!   call check(nf90_get_var(ncid, varid(8), uint_in, start = start_in, count = count_in))
+  call check(nf90_get_var(ncid, varid(2), short_in, start = start_in, count = count_in))
+  call check(nf90_get_var(ncid, varid(3), int_in, start = start_in, count = count_in))
+  call check(nf90_get_var(ncid, varid(4), areal_in, start = start_in, count = count_in))
+  call check(nf90_get_var(ncid, varid(5), double_in, start = start_in, count = count_in))
+  call check(nf90_get_var(ncid, varid(6), ubyte_in, start = start_in, count = count_in))
+  call check(nf90_get_var(ncid, varid(7), ushort_in, start = start_in, count = count_in))
+  call check(nf90_get_var(ncid, varid(8), uint_in, start = start_in, count = count_in))
 
 !   ! Check the data. All the data from the processor zero are fill
 !   ! value.
