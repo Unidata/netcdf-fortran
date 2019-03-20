@@ -6,11 +6,25 @@ Release Notes {#nf_release_notes}
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
-## 4.4.5 - TBD
+## 4.5.0 - TBD
 
 ### Requirements
 
-* netCDF-C: 4.7.0
+* netCDF-C: 4.6.0 or greater
+
+### Changes
+
+* Fixed bug which caused parallel I/O tests to not be run. See
+  [#155](https://github.com/Unidata/netcdf-fortran/issues/155).
+* Fixed bug in the setting of file cache preemption for netCDF-4
+  files. See
+  [#146](https://github.com/Unidata/netcdf-fortran/issues/146).
+
+## 4.4.5 - Release Jan 9, 2019
+
+### Requirements
+
+* netCDF-C: 4.6.0 or greater
 
 ### Changes
 

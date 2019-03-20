@@ -85,19 +85,14 @@ libnetcdff_la_DEPENDENCIES += netcdf.inc
 
 LCHEADERS = netcdf_nc_data.mod netcdf_nc_interfaces.mod	\
 netcdf_nf_data.mod netcdf_nf_interfaces.mod netcdf_f03.mod
-UCHEADERS = NETCDF_NC_DATA.mod NETCDF_NC_INTERFACES.mod	\
-NETCDF_NF_DATA.mod NETCDF_NF_INTERFACES.mod NETCDF_F03.mod
 
 if BUILD_V2
 LCHEADERS += netcdf_fortv2_c_interfaces.mod
-UCHEADERS += NETCDF_FORTV2_C_INTERFACES.mod
 endif BUILD_V2
 
 if USE_NETCDF4
 LCHEADERS += netcdf4_nc_interfaces.mod netcdf4_nf_interfaces.mod	\
 netcdf4_f03.mod
-UCHEADERS += NETCDF4_NC_INTERFACES.mod NETCDF4_NF_INTERFACES.mod	\
-NETCDF4_F03.mod
 endif USE_NETCDF4
 
 netcdf_nc_data.mod: module_netcdf_nc_data.o
@@ -115,33 +110,13 @@ netcdf4_nf_interfaces.mod: module_netcdf4_nf_interfaces.o
 netcdf4_f03.mod: module_netcdf4_f03.o
 endif USE_NETCDF4
 
-if UPPER_CASE_MOD
-$(UCHEADERS): $(LCHEADERS)
-	for lc in $(LCHEADERS) ; do \
-	uc="$${lc%%.mod}" ; \
-	uc=`echo $$uc | tr 'abcdefghijklmnopqrstuvwxyz' 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'`; \
-        uc="$${uc}.mod" ; rm -f $$uc ; cp $$lc $$uc ; \
-	done
-endif UPPER_CASE_MOD
-
 # These are always used
-if UPPER_CASE_MOD
-UCCOMMON = TYPESIZES.mod NETCDF.mod
-NETCDF.mod: $(NETCDF_O)
-TYPESIZES.mod: typeSizes.o
-else !UPPER_CASE_MOD
 LCCOMMON = typesizes.mod netcdf.mod
 netcdf.mod: $(NETCDF_O)
 typesizes.mod: typeSizes.o
-endif !UPPER_CASE_MOD
 
-if UPPER_CASE_MOD
-COMMONHEADERS = $(UCHEADERS) $(UCCOMMON)
-BUILT_SOURCES = $(UCHEADERS) $(UCCOMMON) $(LCHEADERS) $(LCCOMMON)
-else !UPPER_CASE_MOD
 COMMONHEADERS = $(LCHEADERS) $(LCCOMMON)
 BUILT_SOURCES = $(LCHEADERS) $(LCCOMMON)
-endif !UPPER_CASE_MOD
 
 nodist_include_HEADERS = $(COMMONHEADERS)
 libnetcdff_la_DEPENDENCIES += $(COMMONHEADERS)
@@ -189,4 +164,4 @@ CLEANFILES = netcdf_nc_data.mod netcdf_nc_interfaces.mod		\
 netcdf_nf_data.mod netcdf_nf_interfaces.mod				\
 netcdf_fortv2_c_interfaces.mod netcdf_f03.mod				\
 netcdf4_nc_interfaces.mod netcdf4_nf_interfaces.mod netcdf4_f03.mod	\
-netcdf.inc $(UCHEADERS) $(UCCOMMON) $(LCHEADERS) $(LCCOMMON)
+netcdf.inc $(LCHEADERS) $(LCCOMMON)

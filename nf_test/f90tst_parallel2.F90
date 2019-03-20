@@ -37,7 +37,7 @@
 !   _, _, _, _, _, _, _, _, _, _, _, _, _, _, _, _ ;
 ! }
 
-!     $Id: f90tst_parallel2.f90,v 1.4 2010/05/25 13:53:04 ed Exp $
+!     Ed Hartnett
 
 program f90tst_parallel
   use netcdf

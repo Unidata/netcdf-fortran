@@ -17,6 +17,10 @@ For more information about netCDF, see the netCDF Web page at
 
 * http://www.unidata.ucar.edu/netcdf/
 
+The netCDF Fortran libraries contain both F77 and F90 APIs. For documentation see
+
+* https://www.unidata.ucar.edu/software/netcdf/docs-fortran/
+
 ### Code Status
 
 NetCDF-Fortran uses [Travis-CI](http://travis-ci.org) for continuous integration testing. This helps to ensure that developer changes do not break the netCDF-Fortran code base.
@@ -47,11 +51,10 @@ To install this package, please see the document:
 Additional Documentation
 ------------------------
 
-The netCDF-3 C and FORTRAN-77 interfaces are documented at
+Previous varsions of the netCDF-3 C and FORTRAN-77 interfaces are
+documented at
 
 * http://www.unidata.ucar.edu/netcdf/documentation/historic/
-
-User's Guides are also available in several forms from the same location.
 
 Mailing List
 ------------

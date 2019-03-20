@@ -4,7 +4,7 @@
 
 !     This program tests netCDF-4 variable functions from fortran.
 
-!     $Id: ftst_parallel.F,v 1.3 2009/01/25 15:47:47 ed Exp $
+!     Ed Hartnett
 
       program ftst_parallel
       USE netcdf4_f03
@@ -53,8 +53,10 @@
       end do
 
 !     Create the netCDF file. 
-      mode_flag = IOR(nf_netcdf4, nf_classic_model) 
-      retval = nf_create_par(FILE_NAME, mode_flag, MPI_COMM_WORLD, 
+      mode_flag = IOR(nf_netcdf4, nf_classic_model)
+!     nf_mpiio flag not required from netcdf-c-4.6.2 onward.
+      mode_flag = IOR(mode_flag, nf_mpiio)
+      retval = nf_create_par(FILE_NAME, mode_flag, MPI_COMM_WORLD,
      $     MPI_INFO_NULL, ncid)
       if (retval .ne. nf_noerr) stop 3
 
@@ -101,7 +103,9 @@
       if (retval .ne. nf_noerr) stop 9
 
 !     Reopen the file.
-      retval = nf_open_par(FILE_NAME, nf_nowrite, MPI_COMM_WORLD, 
+!     nf_mpiio flag not required from netcdf-c-4.6.2 onward.
+      mode_flag = IOR(nf_nowrite, nf_mpiio)
+      retval = nf_open_par(FILE_NAME, mode_flag, MPI_COMM_WORLD,
      $     MPI_INFO_NULL, ncid)
       if (retval .ne. nf_noerr) stop 10
 

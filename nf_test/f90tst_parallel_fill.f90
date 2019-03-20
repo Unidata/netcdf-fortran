@@ -20,7 +20,7 @@ program f90tst_parallel_fill
   integer, parameter :: QUARTER_NX = NX / 4, QUARTER_NY = NY / 4
   integer, parameter :: NUM_VARS = 8
   character (len = *), parameter :: var_name(NUM_VARS) = &
-       (/ 'byte', 'short', 'int', 'float', 'double', 'ubyte', 'ushort', 'uint' /)
+       (/ 'byte__', 'short_', 'int___', 'float_', 'double', 'ubyte_', 'ushort', 'uint__' /)
   integer :: ncid, varid(NUM_VARS), dimids(MAX_DIMS)
   integer :: var_type(NUM_VARS) = (/ nf90_byte, nf90_short, nf90_int, &
        nf90_float, nf90_double, nf90_ubyte, nf90_ushort, nf90_uint /)
