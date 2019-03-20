@@ -2,9 +2,12 @@
 !     Copyright 2006 University Corporation for Atmospheric Research/Unidata.
 !     See COPYRIGHT file for conditions of use.
 
-!     This program tests netCDF-4 fill values.
+!     This program tests netCDF-4 fill values with parallel I/O. It
+!     writes a checkerboard decomposition for a number of variables,
+!     but task 0 (of 4) does not write. The resulting data has fill
+!     value for the first quarter of each array.
 
-!     $Id: f90tst_parallel_fill.f90,v 1.1 2009/12/10 16:44:51 ed Exp $
+!     Ed Hartnett, started 2009, finished 2019.
 
 program f90tst_parallel_fill
   use typeSizes
@@ -46,7 +49,7 @@ program f90tst_parallel_fill
 
   if (my_rank .eq. 0) then
      print *,
-     print *, '*** Testing fill values with unlimited dimension and parallel I/O.'
+     print *, '*** Testing fill values with parallel I/O.'
   endif
 
   ! There must be 4 procs for this test.
@@ -69,7 +72,8 @@ program f90tst_parallel_fill
      end do
   end do
 
-  ! Create the netCDF file.
+  ! Create the netCDF file. nf90_mpiio flag not required starting with
+  ! netcdf-c-4.6.1.
   mode = ior(nf90_netcdf4, nf90_mpiio)
   call check(nf90_create(FILE_NAME, mode, ncid, comm = MPI_COMM_WORLD, &
        info = MPI_INFO_NULL))
@@ -119,7 +123,8 @@ program f90tst_parallel_fill
   ! Close the file. 
   call check(nf90_close(ncid))
 
-  ! Reopen the file.
+  ! Reopen the file. nf90_mpiio flag not required starting with
+  ! netcdf-c-4.6.1.
   mode = ior(nf90_nowrite, nf90_mpiio)
   call check(nf90_open(FILE_NAME, mode, ncid, comm = MPI_COMM_WORLD, &
        info = MPI_INFO_NULL))
