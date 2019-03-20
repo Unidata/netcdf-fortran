@@ -47,7 +47,7 @@ contains
   implicit none
 
   character (len = *), parameter :: FILE_NAME = "f90tst_nc4_par.nc"
-  integer :: nmode, fill_mode, ierr, fh, my_task, nprocs, i, varid
+  integer :: nmode, fill_mode, ierr, fh, my_task, i, varid
   integer :: dimid(3), start(3), count(3)
   real :: f(3)
 
