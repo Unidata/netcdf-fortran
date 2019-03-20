@@ -121,10 +121,10 @@ program f90tst_parallel_fill
   call check(nf90_open(FILE_NAME, nf90_nowrite, ncid, comm = MPI_COMM_WORLD, &
        info = MPI_INFO_NULL))
   
-!   ! Check some stuff out.
-!   call check(nf90_inquire(ncid, ndims, nvars, ngatts, unlimdimid, file_format))
-!   if (ndims /= 2 .or. nvars /= NUM_VARS .or. ngatts /= 0 .or. unlimdimid /= 1 .or. &
-!        file_format /= nf90_format_netcdf4) stop 2
+! Check some stuff out.
+  call check(nf90_inquire(ncid, ndims, nvars, ngatts, unlimdimid, file_format))
+  if (ndims /= 2 .or. nvars /= NUM_VARS .or. ngatts /= 0 .or. unlimdimid /= -1 .or. &
+       file_format /= nf90_format_netcdf4) stop 2
 
 !   ! Now each processor will read one quarter of the whole array.
 !   count_in = (/ HALF_NX, HALF_NY /)
