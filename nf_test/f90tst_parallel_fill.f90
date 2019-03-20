@@ -37,6 +37,7 @@ program f90tst_parallel_fill
   integer :: x, y, v
   integer :: start_out(MAX_DIMS), count_out(MAX_DIMS)
   integer :: start_in(MAX_DIMS), count_in(MAX_DIMS)
+  integer :: mode
   integer :: p, my_rank, ierr
 
   call MPI_Init(ierr)
@@ -68,8 +69,9 @@ program f90tst_parallel_fill
      end do
   end do
 
-  ! Create the netCDF file. 
-  call check(nf90_create(FILE_NAME, nf90_netcdf4, ncid, comm = MPI_COMM_WORLD, &
+  ! Create the netCDF file.
+  mode = ior(nf90_netcdf4, nf90_mpiio)
+  call check(nf90_create(FILE_NAME, mode, ncid, comm = MPI_COMM_WORLD, &
        info = MPI_INFO_NULL))
 
   ! Define the dimensions.
@@ -118,7 +120,8 @@ program f90tst_parallel_fill
   call check(nf90_close(ncid))
 
   ! Reopen the file.
-  call check(nf90_open(FILE_NAME, nf90_nowrite, ncid, comm = MPI_COMM_WORLD, &
+  mode = ior(nf90_nowrite, nf90_mpiio)
+  call check(nf90_open(FILE_NAME, mode, ncid, comm = MPI_COMM_WORLD, &
        info = MPI_INFO_NULL))
   
   ! Check some stuff out.
