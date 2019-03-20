@@ -126,20 +126,20 @@ program f90tst_parallel_fill
   if (ndims /= 2 .or. nvars /= NUM_VARS .or. ngatts /= 0 .or. unlimdimid /= -1 .or. &
        file_format /= nf90_format_netcdf4) stop 2
 
-!   ! Now each processor will read one quarter of the whole array.
-!   count_in = (/ HALF_NX, HALF_NY /)
-!   if (my_rank .eq. 0) then 
-!      start_in = (/ 1, 1 /)
-!   else if (my_rank .eq. 1) then
-!      start_in = (/ HALF_NX + 1, 1 /)
-!   else if (my_rank .eq. 2) then
-!      start_in = (/ 1, HALF_NY + 1 /)
-!   else if (my_rank .eq. 3) then
-!      start_in = (/ HALF_NX + 1, HALF_NY + 1 /)
-!   endif
+! Now each processor will read one quarter of the whole array.
+  count_in = (/ HALF_NX, HALF_NY /)
+  if (my_rank .eq. 0) then
+     start_in = (/ 1, 1 /)
+  else if (my_rank .eq. 1) then
+     start_in = (/ HALF_NX + 1, 1 /)
+  else if (my_rank .eq. 2) then
+     start_in = (/ 1, HALF_NY + 1 /)
+  else if (my_rank .eq. 3) then
+     start_in = (/ HALF_NX + 1, HALF_NY + 1 /)
+  endif
 
-!   ! Read this processor's data.
-!   call check(nf90_get_var(ncid, varid(1), byte_in, start = start_in, count = count_in))
+! Read this processor's data.
+  call check(nf90_get_var(ncid, varid(1), byte_in, start = start_in, count = count_in))
 !   call check(nf90_get_var(ncid, varid(2), short_in, start = start_in, count = count_in))
 !   call check(nf90_get_var(ncid, varid(3), int_in, start = start_in, count = count_in))
 !   call check(nf90_get_var(ncid, varid(4), areal_in, start = start_in, count = count_in))
