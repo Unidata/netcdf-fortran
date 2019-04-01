@@ -106,15 +106,14 @@ endif #BUILD_BENCHMARKS
 # Test parallel I/O.
 if TEST_PARALLEL
 check_PROGRAMS += f90tst_parallel f90tst_parallel2 f90tst_parallel3	\
-f90tst_nc4_par
-#f90tst_parallel_fill
+f90tst_nc4_par f90tst_parallel_fill
 TESTS += run_f90_par_test.sh
 
 f90tst_parallel_SOURCES = f90tst_parallel.F90
 f90tst_parallel2_SOURCES = f90tst_parallel2.F90
 f90tst_parallel3_SOURCES = f90tst_parallel3.F90
 f90tst_nc4_par_SOURCES = f90tst_nc4_par.F90
-#f90tst_parallel_fill_SOURCES = f90tst_parallel_fill.f90
+f90tst_parallel_fill_SOURCES = f90tst_parallel_fill.f90
 endif # TEST_PARALLEL
 
 # Test parallel I/O for F77.

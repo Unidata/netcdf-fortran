@@ -123,7 +123,6 @@ contains
   integer :: x, y, v
   integer :: my_rank, ierr, old_mode
   integer :: start(MAX_DIMS), count(MAX_DIMS)
-  integer :: ret
 
   call MPI_Comm_rank(MPI_COMM_WORLD, my_rank, ierr)
 
