@@ -36,4 +36,4 @@ endif #USE_SED
 EXTRA_DIST = CMakeLists.txt
 
 # Cleaning up files created during the testing.
-CLEANFILES = ftst_*.nc *.tmp *.tmp2 f03tst_groups.F
+CLEANFILES = ftst_*.nc f03tst_*.nc *.tmp *.tmp2 f03tst_groups.F
