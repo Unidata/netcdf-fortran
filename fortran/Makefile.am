@@ -59,19 +59,17 @@ module_netcdf4_nf_interfaces.F90 module_netcdf4_f03.f90 nf_lib.c	\
 nf_nc4.f90
 endif USE_NETCDF4
 
-# Add nf_logging to build if needed.
+# Add nf_logging to F77 API if needed.
 if USE_LOGGING
 libnetcdff_la_SOURCES += nf_logging.F90
 endif USE_LOGGING
 
-# The file netcdf.f90 includes all of these.
+# The file netcdf.f90 includes all these code files.
 libnetcdff_la_DEPENDENCIES = $(COMMON_CODES)
 
 if USE_NETCDF4
-# Use netcdf4.f90 to build the library.
 libnetcdff_la_SOURCES += netcdf4.f90
-# These are the extra netCDF-4 F90 source files.
-libnetcdff_la_DEPENDENCIES += $(NETCDF4_CODES) netcdf4.f90
+libnetcdff_la_DEPENDENCIES += $(NETCDF4_CODES)
 else !USE_NETCDF4
 libnetcdff_la_SOURCES += netcdf.f90 netcdf3_file.f90
 endif !USE_NETCDF4
@@ -82,18 +80,10 @@ libnetcdff_la_SOURCES += nf_v2compat.c			\
 module_netcdf_fortv2_c_interfaces.f90 nf_fortv2.f90
 endif
 
+# These mod files for the F77 API are always built.
 MODFILES = typesizes.mod netcdf.mod netcdf_nc_data.mod			\
 netcdf_nc_interfaces.mod netcdf_nf_data.mod netcdf_nf_interfaces.mod	\
 netcdf_f03.mod
-
-if BUILD_V2
-MODFILES += netcdf_fortv2_c_interfaces.mod
-endif BUILD_V2
-
-if USE_NETCDF4
-MODFILES += netcdf4_nc_interfaces.mod netcdf4_nf_interfaces.mod	\
-netcdf4_f03.mod
-endif USE_NETCDF4
 
 # Mod files are dependant on their source.
 netcdf.mod: $(NETCDF_O)
@@ -103,11 +93,17 @@ netcdf_nc_interfaces.mod: module_netcdf_nc_interfaces.$(OBJEXT)
 netcdf_nf_data.mod: module_netcdf_nf_data.$(OBJEXT)
 netcdf_nf_interfaces.mod: module_netcdf_nf_interfaces.$(OBJEXT)
 netcdf_f03.mod: module_netcdf_f03.$(OBJEXT)
+
+# If v2 API is being built, build v2 F77 API mod file.
 if BUILD_V2
+MODFILES += netcdf_fortv2_c_interfaces.mod
 netcdf_fortv2_c_interfaces.mod: module_netcdf_fortv2_c_interfaces.$(OBJEXT)
 endif BUILD_V2
 
+# If netCDF-4 is being build, build the netCDF-4 F77 API mod files.
 if USE_NETCDF4
+MODFILES += netcdf4_nc_interfaces.mod netcdf4_nf_interfaces.mod	\
+netcdf4_f03.mod
 netcdf4_nc_interfaces.mod: module_netcdf4_nc_interfaces.$(OBJEXT)
 netcdf4_nf_interfaces.mod: module_netcdf4_nf_interfaces.$(OBJEXT)
 netcdf4_f03.mod: module_netcdf4_f03.$(OBJEXT)
@@ -140,7 +136,6 @@ if USE_LOGGING
 	echo '      external nf_set_log_level' >> netcdf.inc
 endif
 
-# All of the _DEPENDENCIES must also be in EXTRA_DIST
 EXTRA_DIST = $(COMMON_CODES) $(NETCDF4_CODES) CMakeLists.txt	\
 netcdf2.inc netcdf3.inc netcdf4.inc
 
