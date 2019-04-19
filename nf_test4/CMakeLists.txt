@@ -8,11 +8,12 @@ SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 if (USE_NETCDF4)
   # Add these netCDF-4 test programs.
   SET(nc4_check_PROGRAMS
-    ftst_groups)
+    ftst_groups ftst_vars)
   SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_check_PROGRAMS})
   SET(TESTS ${TESTS} ${nc4_check_PROGRAMS})
 
   SET(ftst_groups_SOURCES ftst_groups.F)
+  SET(ftst_vars_SOURCES ftst_vars.F)
 
 endif(USE_NETCDF4)
 

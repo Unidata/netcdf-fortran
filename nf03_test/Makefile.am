@@ -47,13 +47,12 @@ module_tests.o
 if USE_NETCDF4
 
 # Add these netCDF-4 f90 test programs.
-check_PROGRAMS += f03tst_vars f03tst_vars2 f03tst_vars3 f03tst_vars4	\
+check_PROGRAMS += f03tst_vars2 f03tst_vars3 f03tst_vars4	\
 f03tst_vars5 f03tst_vars6 f03tst_open_mem f03tst_types f03tst_types2	\
 f03tst_types3
 f03tst_types_SOURCES = module_tests.F90 f03tst_types.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 f03tst_types2_SOURCES = module_tests.F90 f03tst_types2.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 f03tst_types3_SOURCES = module_tests.F90 f03tst_types3.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
-f03tst_vars_SOURCES = module_tests.F90 f03tst_vars.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 f03tst_vars2_SOURCES = module_tests.F90 f03tst_vars2.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 f03tst_vars3_SOURCES = module_tests.F90 f03tst_vars3.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 f03tst_vars4_SOURCES = module_tests.F90 f03tst_vars4.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
@@ -61,7 +60,7 @@ f03tst_vars5_SOURCES = module_tests.F90 f03tst_vars5.F f03lib_f_interfaces.f90 f
 f03tst_vars6_SOURCES = module_tests.F90 f03tst_vars6.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 f03tst_open_mem_SOURCES = module_tests.F90 f03tst_open_mem.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 
-TESTS += f03tst_vars f03tst_vars2 f03tst_vars3 f03tst_vars4		\
+TESTS += f03tst_vars2 f03tst_vars3 f03tst_vars4		\
 f03tst_vars5 f03tst_vars6 f03tst_types f03tst_types2 f03tst_types3	\
 f03tst_open_mem
 
