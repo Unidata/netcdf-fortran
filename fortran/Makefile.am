@@ -42,7 +42,6 @@ netcdf4_eightbyte.f90 netcdf4_variables.f90
 # so the meta source is rebuilt properly when an included file is
 # modified.
 netcdf.$(OBJEXT): $(COMMON_CODES) netcdf3_file.f90
-
 netcdf4.$(OBJEXT): $(COMMON_CODES) $(NETCDF4_CODES)
 
 # Modules and source for the F77 API.
@@ -53,14 +52,15 @@ nf_control.F90 nf_dim.f90 nf_misc.f90 nf_genatt.f90 nf_geninq.f90	\
 nf_genvar.f90 nf_vario.F90 nf_var1io.F90 nf_varaio.F90 nf_varmio.F90	\
 nf_varsio.F90
 
+# Add netCDF-4 to F77 API if needed.
 if USE_NETCDF4
 libnetcdff_la_SOURCES += module_netcdf4_nc_interfaces.f90		\
 module_netcdf4_nf_interfaces.F90 module_netcdf4_f03.f90 nf_lib.c	\
 nf_nc4.f90
 endif USE_NETCDF4
 
+# Add nf_logging to build if needed.
 if USE_LOGGING
-# add nf_logging to build
 libnetcdff_la_SOURCES += nf_logging.F90
 endif USE_LOGGING
 
@@ -76,16 +76,15 @@ else !USE_NETCDF4
 libnetcdff_la_SOURCES += netcdf.f90 netcdf3_file.f90
 endif !USE_NETCDF4
 
+# Add the V2 F77 API.
 if BUILD_V2
 libnetcdff_la_SOURCES += nf_v2compat.c			\
 module_netcdf_fortv2_c_interfaces.f90 nf_fortv2.f90
 endif
 
-# Tell make to rebuld fortran library if netcdf.inc has changed
-libnetcdff_la_DEPENDENCIES += netcdf.inc
-
-MODFILES = netcdf_nc_data.mod netcdf_nc_interfaces.mod	\
-netcdf_nf_data.mod netcdf_nf_interfaces.mod netcdf_f03.mod
+MODFILES = typesizes.mod netcdf.mod netcdf_nc_data.mod			\
+netcdf_nc_interfaces.mod netcdf_nf_data.mod netcdf_nf_interfaces.mod	\
+netcdf_f03.mod
 
 if BUILD_V2
 MODFILES += netcdf_fortv2_c_interfaces.mod
@@ -96,6 +95,9 @@ MODFILES += netcdf4_nc_interfaces.mod netcdf4_nf_interfaces.mod	\
 netcdf4_f03.mod
 endif USE_NETCDF4
 
+# Mod files are dependant on their source.
+netcdf.mod: $(NETCDF_O)
+typesizes.mod: typeSizes.$(OBJEXT)
 netcdf_nc_data.mod: module_netcdf_nc_data.$(OBJEXT)
 netcdf_nc_interfaces.mod: module_netcdf_nc_interfaces.$(OBJEXT)
 netcdf_nf_data.mod: module_netcdf_nf_data.$(OBJEXT)
@@ -111,22 +113,14 @@ netcdf4_nf_interfaces.mod: module_netcdf4_nf_interfaces.$(OBJEXT)
 netcdf4_f03.mod: module_netcdf4_f03.$(OBJEXT)
 endif USE_NETCDF4
 
-# These are always used
-MODFILES += typesizes.mod netcdf.mod
-netcdf.mod: $(NETCDF_O)
-typesizes.mod: typeSizes.$(OBJEXT)
-
-BUILT_SOURCES = $(MODFILES)
-
-nodist_include_HEADERS = $(MODFILES)
-libnetcdff_la_DEPENDENCIES += $(MODFILES)
-
-nodist_include_HEADERS += netcdf.inc
-
-BUILT_SOURCES += netcdf.inc
+# The mod files and the netcdf.inc file are built on the user machine,
+# and installed as headers.
+BUILT_SOURCES = $(MODFILES) netcdf.inc
+nodist_include_HEADERS = $(MODFILES) netcdf.inc
+libnetcdff_la_DEPENDENCIES += $(MODFILES) netcdf.inc
 
 # Build netcdf.inc file from netcdf2, netcdf3 and netcdf4 files
-netcdf.inc: $(top_srcdir)/fortran/netcdf2.inc $(top_srcdir)/fortran/netcdf3.inc $(top_srcdir)/fortran/netcdf4.inc
+netcdf.inc: netcdf2.inc netcdf3.inc netcdf4.inc
 	echo '!     NetCDF-3.' > netcdf.inc
 	cat $(top_srcdir)/fortran/netcdf3.inc >> netcdf.inc
 if USE_NETCDF4
@@ -147,8 +141,7 @@ if USE_LOGGING
 endif
 
 # All of the _DEPENDENCIES must also be in EXTRA_DIST
-EXTRA_DIST = $(COMMON_CODES) $(NETCDF4_CODES) netcdf4.f90	\
-\
-netcdf.inc CMakeLists.txt netcdf2.inc netcdf3.inc netcdf4.inc
+EXTRA_DIST = $(COMMON_CODES) $(NETCDF4_CODES) CMakeLists.txt	\
+netcdf2.inc netcdf3.inc netcdf4.inc
 
 CLEANFILES = *.mod netcdf.inc
