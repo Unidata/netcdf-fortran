@@ -8,7 +8,7 @@
 # Parallel builds don't currently work in this directory.
 .NOTPARALLEL:
 
-AM_FCFLAGS = -I$(top_srcdir)/fortran ${AM_CPPFLAGS}
+AM_FCFLAGS = -I$(top_builddir)/fortran ${AM_CPPFLAGS}
 
 # Some fortran compilers think your files should not have an .f90
 # extension! The value of FCFLAGS_f90 is set in the configure script,

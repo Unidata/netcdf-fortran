@@ -15,8 +15,18 @@ LDADD = ${top_builddir}/fortran/libnetcdff.la
 
 check_PROGRAMS = ftst_groups
 TESTS = ftst_groups
-
 ftst_groups_SOURCES = ftst_groups.F
+
+if USE_SED
+BUILT_SOURCES = f03tst_groups.F
+check_PROGRAMS += f03tst_groups
+TESTS += f03tst_groups
+f03tst_groups_SOURCES = f03tst_groups.F
+
+f03tst_groups.F: ftst_groups.F
+	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
+	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@
+endif #USE_SED
 
 # If valgrind is present on this machine, this will enable
 # check-valgrind target, which runs all tests with valgrind.
@@ -25,4 +35,4 @@ ftst_groups_SOURCES = ftst_groups.F
 EXTRA_DIST = CMakeLists.txt
 
 # Cleaning up files created during the testing.
-CLEANFILES = ftst_*.nc
+CLEANFILES = ftst_*.nc *.tmp f03tst_groups.F

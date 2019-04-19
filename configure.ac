@@ -171,6 +171,13 @@ AC_PROG_CC
 AM_PROG_CC_C_O
 AC_C_CONST
 
+# Sed is needed to construct tests.
+AC_PROG_SED
+if test -z "$SED"; then
+   AC_MSG_WARN([sed not found - some tests will not be built])
+fi
+AM_CONDITIONAL(USE_SED, [test -n "${SED+1}"])
+
 # Find fortran compiler. If FC isn't set after AC_PROG_FC, we couldn't
 # find a fortran compiler. If the user requested the fortran API, and
 # has told us not to recover from a missing compiler, then bail out
