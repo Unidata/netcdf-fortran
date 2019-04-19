@@ -843,7 +843,7 @@ ADD_SUBDIRECTORY(libsrc)
 IF(ENABLE_TESTS)
   ADD_SUBDIRECTORY(nf_test)
   ADD_SUBDIRECTORY(nf03_test)
-  ADD_SUBDIRECTORY(nf03_test4)
+  ADD_SUBDIRECTORY(nf_test4)
 ENDIF()
 
 # Build the Fortran examples
