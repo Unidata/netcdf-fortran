@@ -8,7 +8,7 @@
 # Parallel builds don't currently work in this directory.
 .NOTPARALLEL:
 
-AM_FCFLAGS = -I$(top_srcdir)/fortran ${AM_CPPFLAGS}
+AM_FCFLAGS = -I$(top_builddir)/fortran ${AM_CPPFLAGS}
 
 # Some fortran compilers think your files should not have an .f90
 # extension! The value of FCFLAGS_f90 is set in the configure script,
@@ -49,7 +49,7 @@ if USE_NETCDF4
 # Add these netCDF-4 f90 test programs.
 check_PROGRAMS += f03tst_vars f03tst_vars2 f03tst_vars3 f03tst_vars4	\
 f03tst_vars5 f03tst_vars6 f03tst_open_mem f03tst_types f03tst_types2	\
-f03tst_types3 f03tst_groups
+f03tst_types3
 f03tst_types_SOURCES = module_tests.F90 f03tst_types.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 f03tst_types2_SOURCES = module_tests.F90 f03tst_types2.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 f03tst_types3_SOURCES = module_tests.F90 f03tst_types3.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
@@ -60,11 +60,10 @@ f03tst_vars4_SOURCES = module_tests.F90 f03tst_vars4.F f03lib_f_interfaces.f90 f
 f03tst_vars5_SOURCES = module_tests.F90 f03tst_vars5.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 f03tst_vars6_SOURCES = module_tests.F90 f03tst_vars6.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 f03tst_open_mem_SOURCES = module_tests.F90 f03tst_open_mem.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
-f03tst_groups_SOURCES = module_tests.F90 f03tst_groups.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 
 TESTS += f03tst_vars f03tst_vars2 f03tst_vars3 f03tst_vars4		\
 f03tst_vars5 f03tst_vars6 f03tst_types f03tst_types2 f03tst_types3	\
-f03tst_groups f03tst_open_mem
+f03tst_open_mem
 
 # Did the user build the V2 F77 API? If so, run these tests.
 if BUILD_V2
@@ -93,8 +92,5 @@ EXTRA_DIST = test03_get.F test03_put.F fills.cdl create_fills.sh	\
 run_f77_par_test.sh CMakeLists.txt
 
 # Cleaning up files created during the process.
-CLEANFILES = scratch.nc test.nc copy.nc fills.nc tst_f77_v2.nc		\
-tests.mod test.nc ftst_parallel.nc ftst_v2.nc ftst_vars.nc		\
-ftst_vars2.nc ftst_vars3.nc ftst_vars4.nc ftst_vars5.nc ftst_vars6.nc	\
-ftst_types.nc ftst_types2.nc ftst_types3.nc ftst_groups.nc		\
-f03tst_open_mem.nc ftst_filter.nc temp.tmp
+CLEANFILES = scratch.nc test.nc copy.nc fills.nc tst_f77_v2.nc	\
+tests.mod test.nc ftst_*.nc f03tst_open_mem.nc temp.tmp
