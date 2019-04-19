@@ -6,7 +6,7 @@
 # Ed Hartnett
 
 # Parallel builds don't currently work in this directory.
-.NOTPARALLEL:
+#.NOTPARALLEL:
 
 AM_CPPFLAGS = -I../fortran
 
@@ -25,7 +25,8 @@ f03tst_groups_SOURCES = f03tst_groups.F
 
 f03tst_groups.F: ftst_groups.F
 	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
-	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@
+	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
+	$(SED) "s|ftst_groups.nc|f03tst_groups.nc|" $@.tmp2 > $@
 endif #USE_SED
 
 # If valgrind is present on this machine, this will enable
@@ -35,4 +36,4 @@ endif #USE_SED
 EXTRA_DIST = CMakeLists.txt
 
 # Cleaning up files created during the testing.
-CLEANFILES = ftst_*.nc *.tmp f03tst_groups.F
+CLEANFILES = ftst_*.nc *.tmp *.tmp2 f03tst_groups.F

@@ -1,10 +1,10 @@
-C     This is part of the netCDF package.
-C     Copyright 2006 University Corporation for Atmospheric Research/Unidata.
-C     See COPYRIGHT file for conditions of use.
+C     This is part of the netCDF package. Copyright 2006-2019 University
+C     Corporation for Atmospheric Research/Unidata. See COPYRIGHT file
+C     for conditions of use.
 
-C     This program tests netCDF-4 variable functions from fortran.
+C     This program tests netCDF-4 group functions in the F77 API.
 
-C     $Id: ftst_groups.F,v 1.5 2009/01/25 14:33:44 ed Exp $
+C     Ed Hartnett, 2009
 
       program ftst_groups
       implicit none
