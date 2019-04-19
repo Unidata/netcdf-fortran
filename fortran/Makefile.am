@@ -19,21 +19,20 @@ else
 NETCDF_O = netcdf.$(OBJEXT)
 endif
 
-COMMON_CODES = netcdf_constants.f90 netcdf_externals.f90	\
-netcdf_dims.f90 netcdf_attributes.f90 netcdf_overloads.f90	\
-netcdf_visibility.f90 netcdf_file.f90 netcdf_variables.f90
+COMMON_CODES = netcdf_constants.f90 netcdf_externals.f90		\
+netcdf_dims.f90 netcdf_attributes.f90 netcdf_overloads.f90		\
+netcdf_visibility.f90 netcdf_file.f90 netcdf_variables.f90		\
+netcdf_text_variables.f90 netcdf_expanded.f90 netcdf_eightbyte.f90
 
 # Add dependencies for source files included in "meta" source files,
 # so the meta source is rebuilt properly when an included file is
 # modified.
 netcdf.$(OBJEXT): $(COMMON_CODES)		\
-netcdf3_file.f90  netcdf_text_variables.f90 netcdf_expanded.f90	\
-netcdf_eightbyte.f90
+netcdf3_file.f90
 
 netcdf4.$(OBJEXT): $(COMMON_CODES)		\
 netcdf4_externals.f90 	\
 netcdf4_visibility.f90  netcdf4_file.f90			\
-netcdf_text_variables.f90 netcdf_expanded.f90 netcdf4_eightbyte.f90	\
 netcdf4_func.f90 netcdf4_overloads.f90
 
 libnetcdff_la_SOURCES += module_netcdf_nc_data.F90			\
@@ -56,11 +55,7 @@ libnetcdff_la_SOURCES += nf_logging.F90
 endif USE_LOGGING
 
 # The file netcdf.f90 includes all of these.
-libnetcdff_la_DEPENDENCIES = netcdf_attributes.f90			\
-$(COMMON_CODES) netcdf_expanded.f90		\
-netcdf_externals.f90  		\
-netcdf_text_variables.f90 	\
-netcdf_eightbyte.f90
+libnetcdff_la_DEPENDENCIES = $(COMMON_CODES)
 
 if USE_NETCDF4
 libnetcdff_la_SOURCES += netcdf4.f90
@@ -147,13 +142,9 @@ if USE_LOGGING
 endif
 
 # All of the _DEPENDENCIES must also be in EXTRA_DIST
-EXTRA_DIST = $(COMMON_CODES)			\
-netcdf_expanded.f90 		\
-netcdf_text_variables.f90		\
-netcdf_eightbyte.f90		\
-netcdf4_func.f90 netcdf4_externals.f90 netcdf4_visibility.f90		\
-netcdf4.f90 netcdf4_eightbyte.f90 netcdf4_overloads.f90			\
-netcdf4_variables.f90 netcdf4_file.f90 netcdf.inc CMakeLists.txt	\
-netcdf2.inc netcdf3.inc netcdf4.inc
+EXTRA_DIST = $(COMMON_CODES) netcdf4_func.f90 netcdf4_externals.f90	\
+netcdf4_visibility.f90 netcdf4.f90 netcdf4_eightbyte.f90		\
+netcdf4_overloads.f90 netcdf4_variables.f90 netcdf4_file.f90		\
+netcdf.inc CMakeLists.txt netcdf2.inc netcdf3.inc netcdf4.inc
 
 CLEANFILES = *.mod netcdf.inc
