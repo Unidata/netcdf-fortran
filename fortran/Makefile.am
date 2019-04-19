@@ -10,31 +10,30 @@
 
 libnetcdff_la_LDFLAGS = -version-number 6:1:1
 
-# Find the netcdf.inc file.
-AM_CPPFLAGS = -I${top_builddir}/libsrc
-
 # This, plus either netcdf4.f90 or netcdf.f90, is the main source.
 libnetcdff_la_SOURCES = typeSizes.f90
 
 if USE_NETCDF4
-NETCDF_O = netcdf4.o
+NETCDF_O = netcdf4.$(OBJEXT)
 else
-NETCDF_O = netcdf.o
+NETCDF_O = netcdf.$(OBJEXT)
 endif
 
 # Add dependencies for source files included in "meta" source files,
 # so the meta source is rebuilt properly when an included file is
 # modified.
-netcdf.$(OBJEXT): netcdf_constants.f90 netcdf_externals.f90 netcdf_overloads.f90 \
-        netcdf_visibility.f90 netcdf_file.f90 netcdf3_file.f90 netcdf_dims.f90 \
-        netcdf_attributes.f90 netcdf_variables.f90 netcdf_text_variables.f90 \
-        netcdf_expanded.f90 netcdf_eightbyte.f90
+netcdf.$(OBJEXT): netcdf_constants.f90 netcdf_externals.f90		\
+netcdf_overloads.f90 netcdf_visibility.f90 netcdf_file.f90		\
+netcdf3_file.f90 netcdf_dims.f90 netcdf_attributes.f90			\
+netcdf_variables.f90 netcdf_text_variables.f90 netcdf_expanded.f90	\
+netcdf_eightbyte.f90
 
-netcdf4.$(OBJEXT): netcdf_constants.f90 netcdf_externals.f90 netcdf4_externals.f90 \
-        netcdf_overloads.f90 netcdf_visibility.f90 netcdf4_visibility.f90 \
-        netcdf_file.f90 netcdf4_file.f90 netcdf_dims.f90 netcdf_attributes.f90 \
-        netcdf4_variables.f90 netcdf_text_variables.f90 netcdf_expanded.f90 \
-        netcdf4_eightbyte.f90 netcdf4_func.f90 netcdf4_overloads.f90
+netcdf4.$(OBJEXT): netcdf_constants.f90 netcdf_externals.f90		\
+netcdf4_externals.f90 netcdf_overloads.f90 netcdf_visibility.f90	\
+netcdf4_visibility.f90 netcdf_file.f90 netcdf4_file.f90			\
+netcdf_dims.f90 netcdf_attributes.f90 netcdf4_variables.f90		\
+netcdf_text_variables.f90 netcdf_expanded.f90 netcdf4_eightbyte.f90	\
+netcdf4_func.f90 netcdf4_overloads.f90
 
 libnetcdff_la_SOURCES += module_netcdf_nc_data.F90			\
 module_netcdf_nc_interfaces.f90 module_netcdf_nf_data.F90		\
@@ -80,18 +79,15 @@ endif
 # Tell make to rebuld fortran library if netcdf.inc has changed
 libnetcdff_la_DEPENDENCIES += netcdf.inc
 
-# Some fortran compilers change the file names of .mod files to all
-# uppercase. Just to be special.
-
-LCHEADERS = netcdf_nc_data.mod netcdf_nc_interfaces.mod	\
+MODFILES = netcdf_nc_data.mod netcdf_nc_interfaces.mod	\
 netcdf_nf_data.mod netcdf_nf_interfaces.mod netcdf_f03.mod
 
 if BUILD_V2
-LCHEADERS += netcdf_fortv2_c_interfaces.mod
+MODFILES += netcdf_fortv2_c_interfaces.mod
 endif BUILD_V2
 
 if USE_NETCDF4
-LCHEADERS += netcdf4_nc_interfaces.mod netcdf4_nf_interfaces.mod	\
+MODFILES += netcdf4_nc_interfaces.mod netcdf4_nf_interfaces.mod	\
 netcdf4_f03.mod
 endif USE_NETCDF4
 
@@ -111,15 +107,14 @@ netcdf4_f03.mod: module_netcdf4_f03.o
 endif USE_NETCDF4
 
 # These are always used
-LCCOMMON = typesizes.mod netcdf.mod
+MODFILES += typesizes.mod netcdf.mod
 netcdf.mod: $(NETCDF_O)
 typesizes.mod: typeSizes.o
 
-COMMONHEADERS = $(LCHEADERS) $(LCCOMMON)
-BUILT_SOURCES = $(LCHEADERS) $(LCCOMMON)
+BUILT_SOURCES = $(MODFILES)
 
-nodist_include_HEADERS = $(COMMONHEADERS)
-libnetcdff_la_DEPENDENCIES += $(COMMONHEADERS)
+nodist_include_HEADERS = $(MODFILES)
+libnetcdff_la_DEPENDENCIES += $(MODFILES)
 
 # This is what we are building: a convenience library of Fortran 2003
 # functions.
@@ -164,4 +159,4 @@ CLEANFILES = netcdf_nc_data.mod netcdf_nc_interfaces.mod		\
 netcdf_nf_data.mod netcdf_nf_interfaces.mod				\
 netcdf_fortv2_c_interfaces.mod netcdf_f03.mod				\
 netcdf4_nc_interfaces.mod netcdf4_nf_interfaces.mod netcdf4_f03.mod	\
-netcdf.inc $(LCHEADERS) $(LCCOMMON)
+netcdf.inc $(MODFILES)
