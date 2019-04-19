@@ -481,6 +481,7 @@ AC_CONFIG_FILES([Makefile
                  docs/Makefile
                  fortran/Makefile
                  nf_test/Makefile
+                 nf_test4/Makefile
                  nf03_test/Makefile
                  CMakeExtras/Makefile
                  libsrc/Makefile

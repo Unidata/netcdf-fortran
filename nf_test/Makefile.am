@@ -17,11 +17,11 @@ AM_FCFLAGS = @MOD_FLAG@$(top_builddir)/fortran $(FCFLAGS_f90)
 
 AM_FFLAGS = ${AM_FCFLAGS}
 
-# All tests need to link to fortran and C libraries.
+# All tests need to link to fortran library.
 LDADD = ${top_builddir}/fortran/libnetcdff.la
 
 # Need access to top_srcdir
-TESTS_ENVIRONMENT=TOPSRCDIR=${abs_top_srcdir}
+TESTS_ENVIRONMENT = TOPSRCDIR=${abs_top_srcdir}
 
 # nf_test is the main test program.
 check_PROGRAMS = nf_test
