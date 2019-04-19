@@ -8,7 +8,14 @@
 # Turn off parallel builds in this directory.
 .NOTPARALLEL:
 
-libnetcdff_la_LDFLAGS = -version-number 6:1:1
+# This is what we are building: the netCDF fortran library, containing
+# the F77 and the F90 APIs.
+lib_LTLIBRARIES = libnetcdff.la
+
+# These linker flags specify libtool version info.
+# See http://www.gnu.org/software/libtool/manual/libtool.html#Libtool-versioning
+# for information regarding incrementing `-version-info`.
+libnetcdff_la_LDFLAGS = -version-info 6:1:1
 
 # This, plus either netcdf4.f90 or netcdf.f90, is the main source.
 libnetcdff_la_SOURCES = typeSizes.f90
@@ -19,22 +26,26 @@ else
 NETCDF_O = netcdf.$(OBJEXT)
 endif
 
-# These f90 codes are used for either netCDF classic or netCDF-4.
+# These f90 codes are used for either netCDF classic or netCDF-4 F90
+# API.
 COMMON_CODES = netcdf_constants.f90 netcdf_externals.f90		\
 netcdf_dims.f90 netcdf_attributes.f90 netcdf_overloads.f90		\
 netcdf_visibility.f90 netcdf_file.f90 netcdf_variables.f90		\
 netcdf_text_variables.f90 netcdf_expanded.f90 netcdf_eightbyte.f90
 
+# These f90 codes are used for the netCDF-4 F90 API.
 NETCDF4_CODES = netcdf4_externals.f90 netcdf4_visibility.f90	\
-netcdf4_func.f90 netcdf4_overloads.f90
+netcdf4_func.f90 netcdf4_overloads.f90 netcdf4_file.f90		\
+netcdf4_eightbyte.f90 netcdf4_variables.f90
 
 # Add dependencies for source files included in "meta" source files,
 # so the meta source is rebuilt properly when an included file is
 # modified.
 netcdf.$(OBJEXT): $(COMMON_CODES) netcdf3_file.f90
 
-netcdf4.$(OBJEXT): $(COMMON_CODES) $(NETCDF4_CODES) netcdf4_file.f90
+netcdf4.$(OBJEXT): $(COMMON_CODES) $(NETCDF4_CODES)
 
+# Modules and source for the F77 API.
 libnetcdff_la_SOURCES += module_netcdf_nc_data.F90			\
 module_netcdf_nc_interfaces.f90 module_netcdf_nf_data.F90		\
 module_netcdf_nf_interfaces.F90 module_netcdf_f03.f90 nf_attio.F90	\
@@ -43,7 +54,6 @@ nf_genvar.f90 nf_vario.F90 nf_var1io.F90 nf_varaio.F90 nf_varmio.F90	\
 nf_varsio.F90
 
 if USE_NETCDF4
-# Use netcdf4.f90 to build the library.
 libnetcdff_la_SOURCES += module_netcdf4_nc_interfaces.f90		\
 module_netcdf4_nf_interfaces.F90 module_netcdf4_f03.f90 nf_lib.c	\
 nf_nc4.f90
@@ -58,11 +68,10 @@ endif USE_LOGGING
 libnetcdff_la_DEPENDENCIES = $(COMMON_CODES)
 
 if USE_NETCDF4
+# Use netcdf4.f90 to build the library.
 libnetcdff_la_SOURCES += netcdf4.f90
 # These are the extra netCDF-4 F90 source files.
-libnetcdff_la_DEPENDENCIES += netcdf4_func.f90 $(NETCDF4_CODES)	\
-netcdf4.f90 netcdf4_eightbyte.f90		\
-netcdf4_variables.f90
+libnetcdff_la_DEPENDENCIES += $(NETCDF4_CODES) netcdf4.f90
 else !USE_NETCDF4
 libnetcdff_la_SOURCES += netcdf.f90 netcdf3_file.f90
 endif !USE_NETCDF4
@@ -87,34 +96,30 @@ MODFILES += netcdf4_nc_interfaces.mod netcdf4_nf_interfaces.mod	\
 netcdf4_f03.mod
 endif USE_NETCDF4
 
-netcdf_nc_data.mod: module_netcdf_nc_data.o
-netcdf_nc_interfaces.mod: module_netcdf_nc_interfaces.o
-netcdf_nf_data.mod: module_netcdf_nf_data.o
-netcdf_nf_interfaces.mod: module_netcdf_nf_interfaces.o
-netcdf_f03.mod: module_netcdf_f03.o
+netcdf_nc_data.mod: module_netcdf_nc_data.$(OBJEXT)
+netcdf_nc_interfaces.mod: module_netcdf_nc_interfaces.$(OBJEXT)
+netcdf_nf_data.mod: module_netcdf_nf_data.$(OBJEXT)
+netcdf_nf_interfaces.mod: module_netcdf_nf_interfaces.$(OBJEXT)
+netcdf_f03.mod: module_netcdf_f03.$(OBJEXT)
 if BUILD_V2
-netcdf_fortv2_c_interfaces.mod: module_netcdf_fortv2_c_interfaces.o
+netcdf_fortv2_c_interfaces.mod: module_netcdf_fortv2_c_interfaces.$(OBJEXT)
 endif BUILD_V2
 
 if USE_NETCDF4
-netcdf4_nc_interfaces.mod: module_netcdf4_nc_interfaces.o
-netcdf4_nf_interfaces.mod: module_netcdf4_nf_interfaces.o
-netcdf4_f03.mod: module_netcdf4_f03.o
+netcdf4_nc_interfaces.mod: module_netcdf4_nc_interfaces.$(OBJEXT)
+netcdf4_nf_interfaces.mod: module_netcdf4_nf_interfaces.$(OBJEXT)
+netcdf4_f03.mod: module_netcdf4_f03.$(OBJEXT)
 endif USE_NETCDF4
 
 # These are always used
 MODFILES += typesizes.mod netcdf.mod
 netcdf.mod: $(NETCDF_O)
-typesizes.mod: typeSizes.o
+typesizes.mod: typeSizes.$(OBJEXT)
 
 BUILT_SOURCES = $(MODFILES)
 
 nodist_include_HEADERS = $(MODFILES)
 libnetcdff_la_DEPENDENCIES += $(MODFILES)
-
-# This is what we are building: a convenience library of Fortran 2003
-# functions.
-lib_LTLIBRARIES = libnetcdff.la
 
 nodist_include_HEADERS += netcdf.inc
 
@@ -143,7 +148,7 @@ endif
 
 # All of the _DEPENDENCIES must also be in EXTRA_DIST
 EXTRA_DIST = $(COMMON_CODES) $(NETCDF4_CODES) netcdf4.f90	\
-netcdf4_eightbyte.f90 netcdf4_variables.f90 netcdf4_file.f90	\
+\
 netcdf.inc CMakeLists.txt netcdf2.inc netcdf3.inc netcdf4.inc
 
 CLEANFILES = *.mod netcdf.inc
