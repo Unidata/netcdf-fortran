@@ -27,14 +27,6 @@ IF(USE_NETCDF4)
   LIST(APPEND TESTS f03tst_open_mem)
   LIST(APPEND CLEANFILES f03tst_open_mem.nc)
 
-  # This is a netCDF-4 V2 test program.
-  IF(BUILD_V2)
-    LIST(APPEND check_PROGRAMS f03tst_v2)
-    LIST(APPEND TESTS f03tst_v2)
-    LIST(APPEND CLEANFILES ftst_v2.nc)
-    SET(f03tst_v2_SOURCES f03tst_v2.F)
-  ENDIF(BUILD_V2)
-
   # Test parallel I/O
   IF(TEST_PARALLEL)
     LIST(APPEND check_PROGRAMS f03tst_parallel)
