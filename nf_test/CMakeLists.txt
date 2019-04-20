@@ -27,7 +27,7 @@ ENDIF(BUILD_V2)
 if (USE_NETCDF4)
   # Add these netCDF-4 test programs.
   SET(nc4_check_PROGRAMS
-    ftst_vars ftst_vars2 ftst_vars3 ftst_vars4 ftst_vars5
+    ftst_vars2 ftst_vars3 ftst_vars4 ftst_vars5
     ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_path ftst_rengrps)
   SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_check_PROGRAMS})
   SET(TESTS ${TESTS} ${nc4_check_PROGRAMS})
@@ -35,7 +35,6 @@ if (USE_NETCDF4)
   SET(ftst_types_SOURCES ftst_types.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
   SET(ftst_types2_SOURCES ftst_types2.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
   SET(ftst_types3_SOURCES ftst_types3.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
-  SET(ftst_vars_SOURCES ftst_vars.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
   SET(ftst_vars2_SOURCES ftst_vars2.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
   SET(ftst_vars3_SOURCES ftst_vars3.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
   SET(ftst_vars4_SOURCES ftst_vars4.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
