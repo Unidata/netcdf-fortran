@@ -47,14 +47,10 @@ module_tests.o
 if USE_NETCDF4
 
 # Add these netCDF-4 f90 test programs.
-check_PROGRAMS += f03tst_open_mem f03tst_types f03tst_types2	\
-f03tst_types3
-f03tst_types_SOURCES = module_tests.F90 f03tst_types.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
-f03tst_types2_SOURCES = module_tests.F90 f03tst_types2.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
-f03tst_types3_SOURCES = module_tests.F90 f03tst_types3.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
+check_PROGRAMS += f03tst_open_mem
 f03tst_open_mem_SOURCES = module_tests.F90 f03tst_open_mem.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 
-TESTS += f03tst_types f03tst_types2 f03tst_types3 f03tst_open_mem
+TESTS += f03tst_open_mem
 
 # Did the user build the V2 F77 API? If so, run these tests.
 if BUILD_V2

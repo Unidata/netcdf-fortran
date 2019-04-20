@@ -12,7 +12,7 @@ LDADD = ${top_builddir}/fortran/libnetcdff.la
 
 # These programs test the F77 netCDF-4 API using include netcdf.inc.
 NF77_TESTS = ftst_groups ftst_vars ftst_vars2 ftst_vars3 ftst_vars4	\
-ftst_vars5 ftst_vars6
+ftst_vars5 ftst_vars6 ftst_types ftst_types2 ftst_types3
 
 # Compile and run the F77 API tests.
 check_PROGRAMS = $(NF77_TESTS)
@@ -26,6 +26,9 @@ ftst_vars3_SOURCES = ftst_vars3.F
 ftst_vars4_SOURCES = ftst_vars4.F
 ftst_vars5_SOURCES = ftst_vars5.F
 ftst_vars6_SOURCES = ftst_vars6.F
+ftst_types_SOURCES = ftst_types.F
+ftst_types2_SOURCES = ftst_types2.F
+ftst_types3_SOURCES = ftst_types3.F
 
 # If sed is present, generate these tests at build time. They are the
 # same tests as the F77 netCDF-4 tests above, but using the "use
@@ -34,12 +37,14 @@ if USE_SED
 
 # These test fortran codes will be created using sed.
 F03_TEST_CODES = f03tst_groups.F f03tst_vars.F f03tst_vars2.F	\
-f03tst_vars3.F f03tst_vars4.F f03tst_vars5.F f03tst_vars6.F
+f03tst_vars3.F f03tst_vars4.F f03tst_vars5.F f03tst_vars6.F	\
+f03tst_types.F f03tst_types2.F f03tst_types3.F
 BUILT_SOURCES = $(F03_TEST_CODES)
 
 # The fortran codes will compile into these tests.
-F03_TESTS = f03tst_groups f03tst_vars f03tst_vars2 f03tst_vars3	\
-f03tst_vars4 f03tst_vars5 f03tst_vars6
+F03_TESTS = f03tst_groups f03tst_vars f03tst_vars2 f03tst_vars3		\
+f03tst_vars4 f03tst_vars5 f03tst_vars6 f03tst_types f03tst_types2	\
+f03tst_types3
 
 # Compile and run the generated tests.
 check_PROGRAMS += $(F03_TESTS)
@@ -53,6 +58,9 @@ f03tst_vars3_SOURCES = f03tst_vars3.F
 f03tst_vars4_SOURCES = f03tst_vars4.F
 f03tst_vars5_SOURCES = f03tst_vars5.F
 f03tst_vars6_SOURCES = f03tst_vars6.F
+f03tst_types_SOURCES = f03tst_types.F
+f03tst_types2_SOURCES = f03tst_types2.F
+f03tst_types3_SOURCES = f03tst_types3.F
 
 # Use sed to generate the f03 versions of the test codes.
 f03tst_groups.F: ftst_groups.F
@@ -89,6 +97,21 @@ f03tst_vars6.F: ftst_vars6.F
 	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
 	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
 	$(SED) "s|ftst_vars6.nc|f03tst_vars6.nc|" $@.tmp2 > $@
+
+f03tst_types.F: ftst_types.F
+	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
+	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
+	$(SED) "s|ftst_types.nc|f03tst_types.nc|" $@.tmp2 > $@
+
+f03tst_types2.F: ftst_types2.F
+	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
+	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
+	$(SED) "s|ftst_types2.nc|f03tst_types2.nc|" $@.tmp2 > $@
+
+f03tst_types3.F: ftst_types3.F
+	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
+	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
+	$(SED) "s|ftst_types3.nc|f03tst_types3.nc|" $@.tmp2 > $@
 endif #USE_SED
 
 # If valgrind is present on this machine, this will enable

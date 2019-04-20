@@ -22,14 +22,11 @@ SET(nf03_test_SOURCES module_tests.F90 f03lib_f_interfaces.f90 test03_get.F test
   nf03_test.F test03_read.F test03_write.F util03.F f03lib.c)
 
 IF(USE_NETCDF4)
-  LIST(APPEND check_PROGRAMS f03tst_open_mem f03tst_types f03tst_types2 f03tst_types3)
-  SET(f03tst_types_SOURCES module_tests.F90 f03tst_types.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
-  SET(f03tst_types2_SOURCES module_tests.F90 f03tst_types2.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
-  SET(f03tst_types3_SOURCES module_tests.F90 f03tst_types3.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
+  LIST(APPEND check_PROGRAMS f03tst_open_mem)
   SET(f03tst_open_mem_SOURCES module_tests.F90 f03tst_open_mem.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
-  LIST(APPEND TESTS f03tst_open_mem f03tst_types f03tst_types2 f03tst_types3)
+  LIST(APPEND TESTS f03tst_open_mem)
   LIST(APPEND CLEANFILES  ftst_vars2.nc ftst_vars3.nc ftst_vars4.nc
-    ftst_vars5.nc ftst_vars6.nc ftst_types.nc ftst_types2.nc ftst_types3.nc f03tst_open_mem.nc)
+    ftst_vars5.nc ftst_vars6.nc f03tst_open_mem.nc)
 
   # This is a netCDF-4 V2 test program.
   IF(BUILD_V2)
