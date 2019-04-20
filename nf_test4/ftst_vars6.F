@@ -2,14 +2,14 @@ C     This is part of the netCDF package.
 C     Copyright 2008 University Corporation for Atmospheric Research/Unidata.
 C     See COPYRIGHT file for conditions of use.
 
-C     This program tests netCDF-4 variable functions from fortran, even
-C     more, even more.
+C     This program tests netCDF-4 variable functions from fortran,
+C     checking fill value handling.
 
-C     $Id: ftst_vars6.F,v 1.7 2009/02/11 16:53:46 ed Exp $
+C     Ed Hartnett, 2009
 
       program ftst_vars6
-      use netcdf4_f03
       implicit none
+      include 'netcdf.inc'
 
 C     This is the name of the data file we will create.
       character*(*) FILE_NAME
@@ -53,17 +53,17 @@ C     Set up var names.
 
 C     Create the netCDF file.
       retval = nf_create(FILE_NAME, NF_NETCDF4, ncid)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
 
 C     Create a dimension.
       retval = nf_def_dim(ncid, dim_name, DIM_LEN, dimids(1))
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
 
 C     Create a few integer variables.
       do x = 1, NVARS      
          retval = nf_def_var(ncid, var_name(x), NF_INT, NDIMS, dimids,
      $        varid(x))
-         if (retval .ne. nf_noerr) call handle_err(retval)
+         if (retval .ne. nf_noerr) stop retval
       end do
 
 C     Set no fill mode for the second variable.
@@ -80,11 +80,11 @@ c      if (retval .ne. 0) stop 2
 
 C     Close the file. 
       retval = nf_close(ncid)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
 
 C     Reopen the file.
       retval = nf_open(FILE_NAME, NF_NOWRITE, ncid)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
 
 C     Check it out. 
       retval = check_file(ncid, var_name, dim_name)
@@ -92,15 +92,15 @@ C     Check it out.
 
 C     Close the file. 
       retval = nf_close(ncid)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
 
       print *,'*** SUCCESS!'
       end
 
 C     This function check the file to make sure everything is OK.
       integer function check_file(ncid, var_name, dim_name)
-      use netcdf4_f03
       implicit none
+      include 'netcdf.inc'
 
 C     I need these in both here and the main program.
       integer NDIMS
@@ -131,18 +131,18 @@ C     Values that are read in, to check the file.
 C     Check it out.
       retval = nf_inq(ncid, ndims_in, nvars_in, ngatts_in,
      $     unlimdimid_in)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
       if (ndims_in .ne. 1 .or. nvars_in .ne. NVARS .or. ngatts_in .ne. 0
      $     .or. unlimdimid_in .ne. -1) stop 5
 
 C     Get the varids and the dimid.
       do x = 1, NVARS      
          retval = nf_inq_varid(ncid, var_name(x), varid_in(x))
-         if (retval .ne. nf_noerr) call handle_err(retval)
+         if (retval .ne. nf_noerr) stop retval
          if (varid_in(x) .ne. x) stop 6
       end do
       retval = nf_inq_dimid(ncid, dim_name, dimid_in)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
       if (dimid_in .ne. 1) stop 7
 
 C     These things are the same for all three variables, except
@@ -150,7 +150,7 @@ C     natts_in..
       do x = 1, NVARS      
          retval = nf_inq_var(ncid, varid_in(x), var_name_in, xtype_in,
      $        ndims_in, dimids_in, natts_in)
-         if (retval .ne. nf_noerr) call handle_err(retval)
+         if (retval .ne. nf_noerr) stop retval
          if (ndims_in .ne. 1 .or. xtype_in .ne. NF_INT .or. dimids_in(1)
      $        .ne. dimid_in) stop 8
          if (x .eq. 3 .and. natts_in .ne. 1) stop 9
@@ -162,39 +162,39 @@ C     no_fill should be off, and fill_value should be the default fill
 C     value for this type.
       retval = nf_inq_var_fill(ncid, varid_in(1), no_fill_in,
      $     fill_value_in)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
       if (no_fill_in .ne. 0 .or. fill_value_in .ne. nf_fill_int) stop 11
 
 C     Check that no_fill mode is on for the second variable.
       retval = nf_inq_var_fill(ncid, varid_in(2), no_fill_in,
      $     fill_value_in)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
       if (no_fill_in .ne. 1 .or. fill_value_in .ne. nf_fill_int) stop 12
 
 C     Check that a non-default fill value is in use for the third variable.
       retval = nf_inq_var_fill(ncid, varid_in(3), no_fill_in,
      $     fill_value_in)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
       if (no_fill_in .ne. 0 .or. fill_value_in .ne. MY_FILL_VALUE) stop
      $     2
 
 C     Get the data in var1. It will be all the default fill value.
       retval = nf_get_var_int(ncid, varid_in(1), int_data_in)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
       do x = 1, DIM_LEN
          if (int_data_in(x) .ne. nf_fill_int) stop 13
       end do
 
 C     Get the data in var2. What will it be?
       retval = nf_get_var_int(ncid, varid_in(2), int_data_in)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
 C$$$      do x = 1, DIM_LEN
 C$$$         print *, int_data_in(x)
 C$$$      end do
 
 C     Get the data in var3. It will be all the default fill value.
       retval = nf_get_var_int(ncid, varid_in(3), int_data_in)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
       do x = 1, DIM_LEN
 C         print *, int_data_in(x)
          if (int_data_in(x) .ne. MY_FILL_VALUE) stop 14

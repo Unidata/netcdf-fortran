@@ -40,20 +40,13 @@ endif # BUILD_V2
 
 # If the user building netCDF-4 add the netCDF-4 test programs.
 if USE_NETCDF4
-check_PROGRAMS += ftst_vars2 ftst_vars3 ftst_vars4		\
-ftst_vars5 ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_path	\
+check_PROGRAMS += ftst_types ftst_types2 ftst_types3 ftst_path	\
 ftst_rengrps
-TESTS += ftst_vars2 ftst_vars3 ftst_vars4 ftst_vars5		\
-ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_path ftst_rengrps
+TESTS += ftst_types ftst_types2 ftst_types3 ftst_path ftst_rengrps
 
 ftst_types_SOURCES = ftst_types.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 ftst_types2_SOURCES = ftst_types2.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 ftst_types3_SOURCES = ftst_types3.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
-ftst_vars2_SOURCES = ftst_vars2.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
-ftst_vars3_SOURCES = ftst_vars3.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
-ftst_vars4_SOURCES = ftst_vars4.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
-ftst_vars5_SOURCES = ftst_vars5.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
-ftst_vars6_SOURCES = ftst_vars6.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 ftst_path_SOURCES = ftst_path.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 ftst_rengrps_SOURCES = ftst_rengrps.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 
