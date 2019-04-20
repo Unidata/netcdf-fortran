@@ -95,6 +95,9 @@ f03tst_vars6_SOURCES = f03tst_vars6.F
 f03tst_types_SOURCES = f03tst_types.F
 f03tst_types2_SOURCES = f03tst_types2.F
 f03tst_types3_SOURCES = f03tst_types3.F
+if BUILD_V2
+f03tst_v2_SOURCES = f03tst_v2.F
+endif # BUILD_V2
 
 # Use sed to generate the f03 versions of the test codes.
 f03tst_groups.F: ftst_groups.F
