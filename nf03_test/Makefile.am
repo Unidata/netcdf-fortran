@@ -54,11 +54,10 @@ TESTS += f03tst_open_mem
 
 # Did the user build the V2 F77 API? If so, run these tests.
 if BUILD_V2
-check_PROGRAMS += f03tst_v2 f03test tst03_f77_v2
-f03tst_v2_SOURCES = f03tst_v2.F
+check_PROGRAMS += f03test tst03_f77_v2
 f03test_SOURCES = module_tests.F90 f03test.F f03lib.c
 tst03_f77_v2_SOURCES = module_tests.F90 tst03_f77_v2.F handle_err.F
-TESTS += f03tst_v2 f03test tst03_f77_v2
+TESTS += f03test tst03_f77_v2
 endif # BUILD_V2
 
 # Test parallel I/O

@@ -64,12 +64,21 @@ if USE_SED
 F03_TEST_CODES = f03tst_groups.F f03tst_vars.F f03tst_vars2.F	\
 f03tst_vars3.F f03tst_vars4.F f03tst_vars5.F f03tst_vars6.F	\
 f03tst_types.F f03tst_types2.F f03tst_types3.F
-BUILT_SOURCES = $(F03_TEST_CODES)
 
 # The fortran codes will compile into these tests.
 F03_TESTS = f03tst_groups f03tst_vars f03tst_vars2 f03tst_vars3		\
 f03tst_vars4 f03tst_vars5 f03tst_vars6 f03tst_types f03tst_types2	\
 f03tst_types3
+
+# This is a netCDF-4 V2 F77 test program.
+if BUILD_V2
+F03_TEST_CODES += f03tst_v2.F
+F03_TESTS += f03tst_v2
+endif # BUILD_V2
+
+# Note that all these fortran programs are built at compile-time on
+# the user system.
+BUILT_SOURCES = $(F03_TEST_CODES)
 
 # Compile and run the generated tests.
 check_PROGRAMS += $(F03_TESTS)
@@ -137,6 +146,14 @@ f03tst_types3.F: ftst_types3.F
 	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
 	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
 	$(SED) "s|ftst_types3.nc|f03tst_types3.nc|" $@.tmp2 > $@
+
+if BUILD_V2
+f03tst_v2.F: ftst_v2.F
+	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
+	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
+	$(SED) "s|ftst_v2.nc|f03tst_v2.nc|" $@.tmp2 > $@
+endif # BUILD_V2
+
 endif #USE_SED
 
 # If valgrind is present on this machine, this will enable
