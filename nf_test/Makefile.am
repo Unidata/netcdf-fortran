@@ -91,13 +91,6 @@ f90tst_nc4_par_SOURCES = f90tst_nc4_par.F90
 f90tst_parallel_fill_SOURCES = f90tst_parallel_fill.f90
 endif # TEST_PARALLEL
 
-# Test filters
-if TEST_FILTERS
-check_PROGRAMS += ftst_filter 
-ftst_filter_SOURCES = ftst_filter.F handle_err.F
-TESTS += ftst_filter
-endif
-
 endif #USE_NETCDF4
 
 # This is the fortran v2 test.

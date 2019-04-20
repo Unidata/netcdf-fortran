@@ -143,7 +143,7 @@ endif #USE_SED
 # check-valgrind target, which runs all tests with valgrind.
 @VALGRIND_CHECK_RULES@
 
-EXTRA_DIST = CMakeLists.txt
+EXTRA_DIST = CMakeLists.txt run_f77_par_test.sh
 
 # Cleaning up files created during the testing.
 CLEANFILES = ftst_*.nc f03tst_*.nc *.tmp *.tmp2 $(F03_TEST_CODES)
