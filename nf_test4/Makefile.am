@@ -48,6 +48,13 @@ ftst_parallel_SOURCES = ftst_parallel.F
 ftst_parallel_nasa_SOURCES = ftst_parallel_nasa.F
 endif # TEST_PARALLEL
 
+# Test filters.
+if TEST_FILTERS
+check_PROGRAMS += ftst_filter
+TESTS += ftst_filter
+ftst_filter_SOURCES = ftst_filter.F
+endif
+
 # If sed is present, generate these tests at build time. They are the
 # same tests as the F77 netCDF-4 tests above, but using the "use
 # netcdf4_f03" statement.

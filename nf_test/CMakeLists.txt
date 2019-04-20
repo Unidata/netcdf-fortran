@@ -74,12 +74,6 @@ if (USE_NETCDF4)
 
   ENDIF (TEST_PARALLEL)
 
-  IF(ENABLE_FILTER_TEST)
-    LIST(APPEND check_PROGRAMS ftst_filter)
-    LIST(APPEND CLEANFILES ftst_filter.nc)
-    SET(ftst_filter_SOURCES ftst_filter.F)
-  ENDIF(ENABLE_FILTER_TEST)
-
 endif(USE_NETCDF4)
 
 # This is the fortran v2 test. It depends on the utilities being built

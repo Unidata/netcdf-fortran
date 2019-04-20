@@ -94,8 +94,7 @@ endif # TEST_PARALLEL
 # Test filters
 if TEST_FILTERS
 check_PROGRAMS += ftst_filter 
-ftst_filter_SOURCES = ftst_filter.F f03lib_f_interfaces.f90 f03lib.c	\
-handle_err.F
+ftst_filter_SOURCES = ftst_filter.F handle_err.F
 TESTS += ftst_filter
 endif
 
