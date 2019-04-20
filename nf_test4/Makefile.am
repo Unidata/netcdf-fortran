@@ -40,6 +40,14 @@ TESTS += ftst_v2
 ftst_v2_SOURCES = ftst_v2.F
 endif # BUILD_V2
 
+# Test parallel I/O for F77.
+if TEST_PARALLEL
+check_PROGRAMS += ftst_parallel ftst_parallel_nasa
+TESTS += run_f77_par_test.sh
+ftst_parallel_SOURCES = ftst_parallel.F
+ftst_parallel_nasa_SOURCES = ftst_parallel_nasa.F
+endif # TEST_PARALLEL
+
 # If sed is present, generate these tests at build time. They are the
 # same tests as the F77 netCDF-4 tests above, but using the "use
 # netcdf4_f03" statement.

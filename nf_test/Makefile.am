@@ -91,14 +91,6 @@ f90tst_nc4_par_SOURCES = f90tst_nc4_par.F90
 f90tst_parallel_fill_SOURCES = f90tst_parallel_fill.f90
 endif # TEST_PARALLEL
 
-# Test parallel I/O for F77.
-if TEST_PARALLEL
-check_PROGRAMS += ftst_parallel ftst_parallel_nasa
-TESTS += run_f77_par_test.sh
-ftst_parallel_SOURCES = ftst_parallel.F
-ftst_parallel_nasa_SOURCES = ftst_parallel_nasa.F
-endif # TEST_PARALLEL
-
 # Test filters
 if TEST_FILTERS
 check_PROGRAMS += ftst_filter 
@@ -132,7 +124,7 @@ tst_f90_SOURCES = tst_f90.f90
 # need not have m4. ref_fills.nc is copied to fills.nc by configure
 # and used by test program ftest.
 EXTRA_DIST = test_get.F test_put.F fills.cdl run_f90_par_test.sh	\
-run_f77_par_test.sh ref_fills.nc CMakeLists.txt
+ref_fills.nc CMakeLists.txt
 
 # Cleaning up files created during the process.
 CLEANFILES = scratch.nc test.nc copy.nc tst_*.nc ftst_*.nc	\

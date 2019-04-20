@@ -34,6 +34,17 @@ if (USE_NETCDF4)
     SET(ftst_v2_SOURCES ftst_v2.F)
   ENDIF (BUILD_V2)
 
+  # Test parallel I/O for F77.
+  IF (TEST_PARALLEL)
+    SET(check_PROGRAMS ${check_PROGRAMS} ftst_parallel ftst_parallel_nasa)
+    SET(SCRIPT_TESTS ${SCRIPT_TESTS} run_f77_par_test)
+
+    # Add executables for f77_par_tst
+    build_bin_test(ftst_parallel ".F")
+    build_bin_test(ftst_parallel_nasa ".F")
+
+  ENDIF (TEST_PARALLEL)
+
 endif(USE_NETCDF4)
 
 FIND_LIBRARY(NETCDF_C_LIBRARY NAMES netcdf libnetcdf)

@@ -74,17 +74,6 @@ if (USE_NETCDF4)
 
   ENDIF (TEST_PARALLEL)
 
-  # Test parallel I/O for F77.
-  IF (TEST_PARALLEL)
-    SET(check_PROGRAMS ${check_PROGRAMS} ftst_parallel ftst_parallel_nasa)
-    SET(SCRIPT_TESTS ${SCRIPT_TESTS} run_f77_par_test)
-
-    # Add executables for f77_par_tst
-    build_bin_test(ftst_parallel ".F")
-    build_bin_test(ftst_parallel_nasa ".F")
-
-  ENDIF (TEST_PARALLEL)
-
   IF(ENABLE_FILTER_TEST)
     LIST(APPEND check_PROGRAMS ftst_filter)
     LIST(APPEND CLEANFILES ftst_filter.nc)
