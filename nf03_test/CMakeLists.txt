@@ -25,8 +25,7 @@ IF(USE_NETCDF4)
   LIST(APPEND check_PROGRAMS f03tst_open_mem)
   SET(f03tst_open_mem_SOURCES module_tests.F90 f03tst_open_mem.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
   LIST(APPEND TESTS f03tst_open_mem)
-  LIST(APPEND CLEANFILES  ftst_vars2.nc ftst_vars3.nc ftst_vars4.nc
-    ftst_vars5.nc ftst_vars6.nc f03tst_open_mem.nc)
+  LIST(APPEND CLEANFILES f03tst_open_mem.nc)
 
   # This is a netCDF-4 V2 test program.
   IF(BUILD_V2)
