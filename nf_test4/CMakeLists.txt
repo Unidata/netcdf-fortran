@@ -23,6 +23,16 @@ if (USE_NETCDF4)
   SET(ftst_types_SOURCES ftst_types.F)
   SET(ftst_types2_SOURCES ftst_types2.F)
   SET(ftst_types3_SOURCES ftst_types3.F)
+  SET(ftst_path_SOURCES ftst_path.F)
+  SET(ftst_rengrps_SOURCES ftst_rengrps.F)
+
+  # This is a netCDF-4 V2 test program.
+  IF (BUILD_V2)
+    SET(nc4_v2_PROGRAMS ftst_v2)
+    SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_v2_PROGRAMS})
+    SET(TESTS ${TESTS} ${nc4_v2_PROGRAMS})
+    SET(ftst_v2_SOURCES ftst_v2.F)
+  ENDIF (BUILD_V2)
 
 endif(USE_NETCDF4)
 

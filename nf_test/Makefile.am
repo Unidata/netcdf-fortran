@@ -64,13 +64,6 @@ f90tst_vars2_SOURCES = f90tst_vars2.f90
 f90tst_vars3_SOURCES = f90tst_vars3.f90
 f90tst_vars4_SOURCES = f90tst_vars4.f90
 
-# This is a netCDF-4 V2 test program.
-if BUILD_V2
-check_PROGRAMS += ftst_v2
-TESTS += ftst_v2
-ftst_v2_SOURCES = ftst_v2.F
-endif # BUILD_V2
-
 # This is the netCDF-4 F90 large file test.
 if LARGE_FILE_TESTS
 check_PROGRAMS += tst_flarge

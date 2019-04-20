@@ -1,10 +1,10 @@
-C     This is part of the netCDF package.
-C     Copyright 2009 University Corporation for Atmospheric Research/Unidata.
-C     See COPYRIGHT file for conditions of use.
+C     This is part of the netCDF package. Copyright 2009-2019 University
+C     Corporation for Atmospheric Research/Unidata. See COPYRIGHT file
+C     for conditions of use.
 
 C     This program tests the fortran V2 API with netCDF-4.
 
-C     $Id: ftst_v2.F,v 1.1 2009/01/27 19:49:11 ed Exp $
+C     Ed Hartnett 2009
 
       program ftst_v2
       implicit none

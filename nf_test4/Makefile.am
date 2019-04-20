@@ -33,6 +33,13 @@ ftst_types3_SOURCES = ftst_types3.F
 ftst_path_SOURCES = ftst_path.F
 ftst_rengrps_SOURCES = ftst_rengrps.F
 
+# This is a netCDF-4 V2 F77 test program.
+if BUILD_V2
+check_PROGRAMS += ftst_v2
+TESTS += ftst_v2
+ftst_v2_SOURCES = ftst_v2.F
+endif # BUILD_V2
+
 # If sed is present, generate these tests at build time. They are the
 # same tests as the F77 netCDF-4 tests above, but using the "use
 # netcdf4_f03" statement.

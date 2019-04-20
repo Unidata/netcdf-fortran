@@ -44,14 +44,6 @@ if (USE_NETCDF4)
   SET(f90tst_vars3_SOURCES f90tst_vars3.f90)
   SET(f90tst_vars4_SOURCES f90tst_vars4.f90)
 
-  # This is a netCDF-4 V2 test program.
-  IF (BUILD_V2)
-    SET(nc4_v2_PROGRAMS ftst_v2)
-    SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_v2_PROGRAMS})
-    SET(TESTS ${TESTS} ${nc4_v2_PROGRAMS})
-    SET(ftst_v2_SOURCES ftst_v2.F)
-  ENDIF (BUILD_V2)
-
   # This is the netCDF-4 F90 large file test.
   IF (LARGE_FILE_TESTS)
     SET(nc4_largefile_PROGRAMS tst_flarge)
