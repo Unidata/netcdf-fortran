@@ -1,15 +1,12 @@
-C     This is part of the netCDF package.
-C     Copyright 2006 University Corporation for Atmospheric Research/Unidata.
-C     See COPYRIGHT file for conditions of use.
+C     This is part of the netCDF package. Copyright 2006-2019 University
+C     Corporation for Atmospheric Research/Unidata. See COPYRIGHT file
+C     for conditions of use.
 
 C     This program tests netCDF-4 variable functions from fortran.
 
-C     $Id: ftst_rengrps.F,v 1.3 2010/02/03 14:35:21 ed Exp $
+C     Russ Rew, 2009
 
       program ftst_rengrps
-C      use typeSizes
-C      use netcdf
-C      use netcdf4_f03
       implicit none
       include "netcdf.inc"
       
@@ -45,36 +42,36 @@ C Information read back from the file to check correctness.
       print *, ''
       print *,'*** Testing netCDF-4 rename groups from Fortran 90.'
 
-C Create the netCDF file. 
+C     Create the netCDF file.
       call check(nf_create(FILE_NAME, NF_NETCDF4, ncid))
 
-C Define the dimensions.
+C     Define the dimensions.
       call check(nf_def_dim(ncid, "x", NX, x_dimid))
       call check(nf_def_dim(ncid, "y", NY, y_dimid))
       dimids =  (/ y_dimid, x_dimid /)
 
-C Define some nested groups.
+C     Define some nested groups.
       call check(nf_def_grp(ncid, GRP1_NAME, grpid1))
       call check(nf_def_grp(grpid1, GRP2_NAME, grpid2))
 
-C Define some variables. 
+C     Define some variables.
       chunksizes = (/ NY, NX /)
       call check(nf_def_var(ncid, VAR1_NAME, NF_INT, MAX_DIMS, dimids,  &
      &  varid1))
       call check(nf_def_var(grpid1, VAR2_NAME, NF_INT, MAX_DIMS, dimids,&
      & varid2))
 
-C Close the file. 
+C     Close the file.
       call check(nf_close(ncid))
 
-C Reopen the file.
+C     Reopen the file.
       call check(nf_open(FILE_NAME, NF_WRITE, ncid))
       
-C Get the group ids for the newly reopened file.
+C     Get the group ids for the newly reopened file.
       call check(nf_inq_grp_ncid(ncid, GRP1_NAME, grpid1))
       call check(nf_inq_grp_ncid(grpid1, GRP2_NAME, grpid2))
 
-C Check for the groups with full group names. 
+C     Check for the groups with full group names.
       write(grp1_full_name, '(A,A)') '/', GRP1_NAME
       call check(nf_inq_grp_full_ncid(ncid, grp1_full_name, grpid1))
       call check(nf_inq_grpname(grpid1, name_in))
@@ -87,16 +84,15 @@ C Check for the groups with full group names.
       Call check(nf_inq_grpname(grpid1, name_in))
       If (name_in /= NEW_GRP1_NAME) Call check(-1)
 
-C Close the file. 
+C     Close the file.
       call check(nf_close(ncid))
 
       print *,'*** SUCCESS!'
 
       contains
-C         This subroutine handles errors by printing an error message and
-C         exiting with a non-zero status.
+C     This subroutine handles errors by printing an error message and
+C     exiting with a non-zero status.
       subroutine check(errcode)
-C        use netcdf
         implicit none
         include "netcdf.inc"
         integer, intent(in) :: errcode

@@ -12,7 +12,8 @@ LDADD = ${top_builddir}/fortran/libnetcdff.la
 
 # These programs test the F77 netCDF-4 API using include netcdf.inc.
 NF77_TESTS = ftst_groups ftst_vars ftst_vars2 ftst_vars3 ftst_vars4	\
-ftst_vars5 ftst_vars6 ftst_types ftst_types2 ftst_types3
+ftst_vars5 ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_path	\
+ftst_rengrps
 
 # Compile and run the F77 API tests.
 check_PROGRAMS = $(NF77_TESTS)
@@ -29,6 +30,8 @@ ftst_vars6_SOURCES = ftst_vars6.F
 ftst_types_SOURCES = ftst_types.F
 ftst_types2_SOURCES = ftst_types2.F
 ftst_types3_SOURCES = ftst_types3.F
+ftst_path_SOURCES = ftst_path.F
+ftst_rengrps_SOURCES = ftst_rengrps.F
 
 # If sed is present, generate these tests at build time. They are the
 # same tests as the F77 netCDF-4 tests above, but using the "use

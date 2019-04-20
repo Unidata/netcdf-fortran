@@ -25,14 +25,6 @@ ENDIF(BUILD_V2)
 
 # Is the user building netCDF-4?
 if (USE_NETCDF4)
-  # Add these netCDF-4 test programs.
-  SET(nc4_check_PROGRAMS
-    ftst_path ftst_rengrps)
-  SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_check_PROGRAMS})
-  SET(TESTS ${TESTS} ${nc4_check_PROGRAMS})
-
-  SET(ftst_path_SOURCES ftst_path.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
-  SET(ftst_rengrps_SOURCES ftst_rengrps.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
   # Add these netCDF-4 f90 test programs.
   SET(nc4_f90_PROGRAMS
     f90tst_vars tst_types tst_types2 f90tst_vars_vlen
