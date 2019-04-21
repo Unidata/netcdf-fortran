@@ -10,6 +10,8 @@ C     the hard drive. This file is then opened as a Fortran
 C     unformatted, stream file and read into an allocatable
 C     array of C_CHAR type. 
 
+C     Dennis Heimbigner, 2018
+
       program ftst_open_mem
       use netcdf4_f03
       use iso_c_binding, ONLY : C_CHAR
