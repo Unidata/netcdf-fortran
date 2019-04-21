@@ -7,7 +7,7 @@ SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Is the user building netCDF-4?
 if (USE_NETCDF4)
   # Add these netCDF-4 test programs.
-  SET(nc4_check_PROGRAMS f90tst_vars f90tst_vars_vlen tst_f90_nc4
+  SET(nc4_check_PROGRAMS f90tst_vars f90tst_vars_vlen
     f90tst_grps f90tst_fill f90tst_fill2 f90tst_vars3 f90tst_vars4
     f90tst_vars2 f90tst_path f90tst_rengrps f90tst_nc4)
   SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_check_PROGRAMS})
