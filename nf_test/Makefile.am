@@ -51,32 +51,6 @@ tst_types_SOURCES = tst_types.f90
 tst_types2_SOURCES = tst_types2.f90
 tst_f90_nc4_SOURCES = tst_f90_nc4.f90
 
-# This is the netCDF-4 F90 large file test.
-if LARGE_FILE_TESTS
-check_PROGRAMS += tst_flarge
-TESTS += tst_flarge
-tst_flarge_SOURCES = tst_flarge.f90
-endif # LARGE_FILE_TESTS
-
-# This is an f90 benchmark.
-if BUILD_BENCHMARKS
-check_PROGRAMS += tst_io
-TESTS += tst_io
-tst_io_SOURCES = tst_io.f90
-endif #BUILD_BENCHMARKS
-
-# Test parallel I/O.
-if TEST_PARALLEL
-check_PROGRAMS += f90tst_parallel f90tst_parallel2 f90tst_parallel3	\
-f90tst_nc4_par f90tst_parallel_fill
-TESTS += run_f90_par_test.sh
-
-f90tst_parallel_SOURCES = f90tst_parallel.F90
-f90tst_parallel2_SOURCES = f90tst_parallel2.F90
-f90tst_parallel3_SOURCES = f90tst_parallel3.F90
-f90tst_nc4_par_SOURCES = f90tst_nc4_par.F90
-f90tst_parallel_fill_SOURCES = f90tst_parallel_fill.f90
-endif # TEST_PARALLEL
 
 endif #USE_NETCDF4
 

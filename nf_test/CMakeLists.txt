@@ -4,13 +4,11 @@ SET(CMAKE_VERBOSE_MAKEFILE OFF)
 SET(CMAKE_BUILD_TYPE "RelWithDebInfo")
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-
 # Process these files with m4.
 SET(m4_SOURCES test_get test_put)
 foreach (f ${m4_SOURCES})
 		   GEN_m4(${f})
 endforeach(f)
-
 
 SET(nf_test_SOURCES
   f03lib_f_interfaces.f90 test_get.F test_put.F nf_error.F nf_test.F
@@ -49,8 +47,6 @@ if (USE_NETCDF4)
     SET(TESTS ${TESTS} ${nc4_io_PROGRAMS})
     SET(tst_io_SOURCES tst_io.f90)
   ENDIF(BUILD_BENCHMARKS)
-
-
 endif(USE_NETCDF4)
 
 # This is the fortran v2 test. It depends on the utilities being built
@@ -112,7 +108,7 @@ ENDFOREACH()
 # test_get.F and test_put.f need to be distributed, so that the user
 # need not have m4. fills.nc is used by test program ftest.
 SET (EXTRA_DIST test_get.F test_put.F fills.cdl create_fills.sh
-  run_f90_par_test.sh run_f77_par_test.sh ref_fills.nc)
+   ref_fills.nc)
 
 # Cleaning up files created during the process.
 SET (CLEANFILES scratch.nc test.nc copy.nc fills.nc tst_*.nc ftst_*.nc)
