@@ -53,7 +53,7 @@ TESTS += run_f90_par_test.sh
 
 f90tst_parallel_SOURCES = f90tst_parallel.f90
 f90tst_parallel2_SOURCES = f90tst_parallel2.f90
-f90tst_parallel3_SOURCES = f90tst_parallel3.f90
+f90tst_parallel3_SOURCES = f90tst_parallel3.F90 # .F90 because uses ifdefs.
 f90tst_nc4_par_SOURCES = f90tst_nc4_par.f90
 f90tst_parallel_fill_SOURCES = f90tst_parallel_fill.f90
 endif # TEST_PARALLEL

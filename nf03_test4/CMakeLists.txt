@@ -32,7 +32,7 @@ if (USE_NETCDF4)
 
     build_bin_test(f90tst_parallel ".f90")
     build_bin_test(f90tst_parallel2 ".f90")
-    build_bin_test(f90tst_parallel3 ".f90")
+    build_bin_test(f90tst_parallel3 ".F90")
     build_bin_test(f90tst_nc4_par ".f90")
 
     #SET(f90tst_parallel_fill_SOURCES f90tst_parallel_fill.f90)
