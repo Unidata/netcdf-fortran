@@ -1,10 +1,10 @@
-!     This is part of the netCDF package.
-!     Copyright 2006 University Corporation for Atmospheric Research/Unidata.
-!     See COPYRIGHT file for conditions of use.
+!     This is part of the netCDF package. Copyright 2006-2019
+!     University Corporation for Atmospheric Research/Unidata. See
+!     COPYRIGHT file for conditions of use.
 
 !     This program tests netCDF-4 variable functions from fortran.
 
-!     $Id: f90tst_vars.f90,v 1.8 2009/02/23 17:55:10 ed Exp $
+!     Ed Hartnett 2009.
 
 program f90tst_vars
   use typeSizes

@@ -27,12 +27,11 @@ ENDIF(BUILD_V2)
 if (USE_NETCDF4)
   # Add these netCDF-4 f90 test programs.
   SET(nc4_f90_PROGRAMS
-    f90tst_vars tst_types tst_types2 f90tst_vars_vlen
+    tst_types tst_types2 f90tst_vars_vlen
     tst_f90_nc4 f90tst_grps f90tst_fill f90tst_fill2 f90tst_vars3
     f90tst_vars4 f90tst_vars2)
   SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_f90_PROGRAMS})
   SET(TESTS ${TESTS} ${nc4_f90_PROGRAMS})
-  SET(f90tst_vars_SOURCES f90tst_vars.f90)
   SET(tst_types_SOURCES tst_types.f90)
   SET(tst_types2_SOURCES tst_types2.f90)
   SET(tst_f90_nc4_SOURCES tst_f90_nc4.f90)

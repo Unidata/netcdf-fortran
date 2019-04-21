@@ -1,7 +1,8 @@
 # This is a automake file, part of Unidata's netCDF package.
 # Copyright 2019, see the COPYRIGHT file for more information.
 
-# This file builds and runs the f77 and f90 tests for netCDF-4.
+# This file builds and runs tests for the netCDF-4 features in the F77
+# API.
 
 # Ed Hartnett, 2019
 

@@ -1,7 +1,7 @@
 ## This is a automake file, part of Unidata's netCDF package.
 # Copyright 2005-2019, see the COPYRIGHT file for more information.
 
-# These the fortran 90 API tests.
+# These are the fortran 90 API tests.
 
 # Ed Hartnett, Russ Rew, Dennis Heimbigner, Ward Fisher
 

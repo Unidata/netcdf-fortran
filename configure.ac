@@ -490,6 +490,7 @@ AC_CONFIG_FILES([Makefile
                  nf_test/Makefile
                  nf_test4/Makefile
                  nf03_test/Makefile
+                 nf03_test4/Makefile
                  CMakeExtras/Makefile
                  libsrc/Makefile
                  examples/Makefile
