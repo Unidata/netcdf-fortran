@@ -43,6 +43,14 @@ test03_write.F util03.F f03lib.c
 nf03_error.o nf03_test.o test03_get.o test03_put.o test03_read.o test03_write.o tst03_f77_v2.o util03.o: \
 module_tests.o
 
+# Did the user build the V2 F77 API? If so, run these tests.
+if BUILD_V2
+check_PROGRAMS += f03test tst03_f77_v2
+f03test_SOURCES = module_tests.F90 f03test.F f03lib.c
+tst03_f77_v2_SOURCES = tst03_f77_v2.F
+TESTS += f03test tst03_f77_v2
+endif # BUILD_V2
+
 # Is the user building netCDF-4?
 if USE_NETCDF4
 
@@ -52,13 +60,6 @@ f03tst_open_mem_SOURCES = module_tests.F90 f03tst_open_mem.F f03lib_f_interfaces
 
 TESTS += f03tst_open_mem
 
-# Did the user build the V2 F77 API? If so, run these tests.
-if BUILD_V2
-check_PROGRAMS += f03test tst03_f77_v2
-f03test_SOURCES = module_tests.F90 f03test.F f03lib.c
-tst03_f77_v2_SOURCES = module_tests.F90 tst03_f77_v2.F handle_err.F
-TESTS += f03test tst03_f77_v2
-endif # BUILD_V2
 
 endif # USE_NETCDF4
 
