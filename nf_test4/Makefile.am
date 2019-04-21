@@ -157,19 +157,15 @@ f03tst_types3.F: ftst_types3.F
 	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
 	$(SED) "s|ftst_types3.nc|f03tst_types3.nc|" $@.tmp2 > $@
 
-if BUILD_V2
 f03tst_v2.F: ftst_v2.F
 	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
 	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
 	$(SED) "s|ftst_v2.nc|f03tst_v2.nc|" $@.tmp2 > $@
-endif # BUILD_V2
 
-if TEST_PARALLEL
 f03tst_parallel.F: ftst_parallel.F
 	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
 	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
 	$(SED) "s|ftst_parallel.nc|f03tst_parallel.nc|" $@.tmp2 > $@
-endif # TEST_PARALLEL
 
 endif #USE_SED
 
