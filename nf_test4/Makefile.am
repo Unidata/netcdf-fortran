@@ -75,12 +75,15 @@ f03tst_types3
 if BUILD_V2
 F03_TEST_CODES += f03tst_v2.F
 F03_TESTS += f03tst_v2
+f03tst_v2_SOURCES = f03tst_v2.F
 endif # BUILD_V2
 
 # Convert the parallel test.
 if TEST_PARALLEL
 F03_TEST_CODES += f03tst_parallel.F
-F03_TESTS += run_f77_par_test_03.sh
+check_PROGRAMS += f03tst_parallel
+f03tst_parallel_SOURCES = f03tst_parallel.F
+TESTS += run_f77_par_test_03.sh
 endif # TEST_PARALLEL
 
 # Note that all these fortran programs are built at compile-time on
@@ -102,9 +105,6 @@ f03tst_vars6_SOURCES = f03tst_vars6.F
 f03tst_types_SOURCES = f03tst_types.F
 f03tst_types2_SOURCES = f03tst_types2.F
 f03tst_types3_SOURCES = f03tst_types3.F
-if BUILD_V2
-f03tst_v2_SOURCES = f03tst_v2.F
-endif # BUILD_V2
 
 # Use sed to generate the f03 versions of the test codes.
 f03tst_groups.F: ftst_groups.F
