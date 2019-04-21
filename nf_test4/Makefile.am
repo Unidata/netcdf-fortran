@@ -77,6 +77,12 @@ F03_TEST_CODES += f03tst_v2.F
 F03_TESTS += f03tst_v2
 endif # BUILD_V2
 
+# Convert the parallel test.
+if TEST_PARALLEL
+F03_TEST_CODES += f03tst_parallel.F
+F03_TESTS += run_f77_par_test_03.sh
+endif # TEST_PARALLEL
+
 # Note that all these fortran programs are built at compile-time on
 # the user system.
 BUILT_SOURCES = $(F03_TEST_CODES)
@@ -158,13 +164,21 @@ f03tst_v2.F: ftst_v2.F
 	$(SED) "s|ftst_v2.nc|f03tst_v2.nc|" $@.tmp2 > $@
 endif # BUILD_V2
 
+if TEST_PARALLEL
+f03tst_parallel.F: ftst_parallel.F
+	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
+	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
+	$(SED) "s|ftst_parallel.nc|f03tst_parallel.nc|" $@.tmp2 > $@
+endif # TEST_PARALLEL
+
 endif #USE_SED
 
 # If valgrind is present on this machine, this will enable
 # check-valgrind target, which runs all tests with valgrind.
 @VALGRIND_CHECK_RULES@
 
-EXTRA_DIST = CMakeLists.txt run_f77_par_test.sh
+EXTRA_DIST = CMakeLists.txt run_f77_par_test.sh	\
+run_f77_par_test_03.sh
 
 # Cleaning up files created during the testing.
 CLEANFILES = ftst_*.nc f03tst_*.nc *.tmp *.tmp2 $(F03_TEST_CODES)
