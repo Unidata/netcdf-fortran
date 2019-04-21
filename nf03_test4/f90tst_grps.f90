@@ -4,7 +4,7 @@
 
 !     This program tests netCDF-4 variable functions from fortran.
 
-!     $Id: f90tst_grps.f90,v 1.3 2010/02/03 14:35:21 ed Exp $
+!     Ed Hartnett
 
 program f90tst_grps
   use typeSizes

@@ -53,15 +53,6 @@ f90tst_vars4 f90tst_vars2 f90tst_path f90tst_rengrps
 tst_types_SOURCES = tst_types.f90
 tst_types2_SOURCES = tst_types2.f90
 tst_f90_nc4_SOURCES = tst_f90_nc4.f90
-f90tst_vars_vlen_SOURCES = f90tst_vars_vlen.f90
-f90tst_grps_SOURCES = f90tst_grps.f90
-f90tst_path_SOURCES = f90tst_path.f90
-f90tst_rengrps_SOURCES = f90tst_rengrps.f90
-f90tst_fill_SOURCES = f90tst_fill.f90
-f90tst_fill2_SOURCES = f90tst_fill2.f90
-f90tst_vars2_SOURCES = f90tst_vars2.f90
-f90tst_vars3_SOURCES = f90tst_vars3.f90
-f90tst_vars4_SOURCES = f90tst_vars4.f90
 
 # This is the netCDF-4 F90 large file test.
 if LARGE_FILE_TESTS

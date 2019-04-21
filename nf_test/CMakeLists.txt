@@ -27,21 +27,12 @@ ENDIF(BUILD_V2)
 if (USE_NETCDF4)
   # Add these netCDF-4 f90 test programs.
   SET(nc4_f90_PROGRAMS
-    tst_types tst_types2 f90tst_vars_vlen
-    tst_f90_nc4 f90tst_grps f90tst_fill f90tst_fill2 f90tst_vars3
-    f90tst_vars4 f90tst_vars2)
+    tst_types tst_types2 )
   SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_f90_PROGRAMS})
   SET(TESTS ${TESTS} ${nc4_f90_PROGRAMS})
   SET(tst_types_SOURCES tst_types.f90)
   SET(tst_types2_SOURCES tst_types2.f90)
   SET(tst_f90_nc4_SOURCES tst_f90_nc4.f90)
-  SET(f90tst_vars_vlen_SOURCES f90tst_vars_vlen.f90)
-  SET(f90tst_grps_SOURCES f90tst_grps.f90)
-  SET(f90tst_fill_SOURCES f90tst_fill.f90)
-  SET(f90tst_fill2_SOURCES f90tst_fill2.f90)
-  SET(f90tst_vars2_SOURCES f90tst_vars2.f90)
-  SET(f90tst_vars3_SOURCES f90tst_vars3.f90)
-  SET(f90tst_vars4_SOURCES f90tst_vars4.f90)
 
   # This is the netCDF-4 F90 large file test.
   IF (LARGE_FILE_TESTS)
@@ -59,19 +50,6 @@ if (USE_NETCDF4)
     SET(tst_io_SOURCES tst_io.f90)
   ENDIF(BUILD_BENCHMARKS)
 
-  # Test parallel I/O.
-  IF (TEST_PARALLEL)
-    SET(check_PROGRAMS ${check_PROGRAMS} f90tst_parallel f90tst_parallel2 f90tst_parallel3
-      f90tst_nc4_par)
-
-    build_bin_test(f90tst_parallel ".F90")
-    build_bin_test(f90tst_parallel2 ".F90")
-    build_bin_test(f90tst_parallel3 ".F90")
-    build_bin_test(f90tst_nc4_par ".F90")
-
-    #SET(f90tst_parallel_fill_SOURCES f90tst_parallel_fill.f90)
-
-  ENDIF (TEST_PARALLEL)
 
 endif(USE_NETCDF4)
 
@@ -137,6 +115,6 @@ SET (EXTRA_DIST test_get.F test_put.F fills.cdl create_fills.sh
   run_f90_par_test.sh run_f77_par_test.sh ref_fills.nc)
 
 # Cleaning up files created during the process.
-SET (CLEANFILES scratch.nc test.nc copy.nc fills.nc tst_*.nc ftst_*.nc f90tst_*.nc)
+SET (CLEANFILES scratch.nc test.nc copy.nc fills.nc tst_*.nc ftst_*.nc)
 
 SET (MAINTAINERCLEANFILES test_get.F test_put.F)

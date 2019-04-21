@@ -1,8 +1,8 @@
-program f90tst_path
-
 ! Tests new nf90_inq_path function
 ! Mimics tests in C tst_files5.c code
+! Russ Rew
 
+program f90tst_path
   use typeSizes
   use netcdf
 

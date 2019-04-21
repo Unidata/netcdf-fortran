@@ -4,7 +4,7 @@
 
 !     This program tests netCDF-4 fill values.
 
-!     $Id: f90tst_fill2.f90,v 1.2 2009/12/28 15:45:23 russ Exp $
+!     Russ Rew, 2009
 
 program f90tst_fill
   use typeSizes
@@ -12,11 +12,10 @@ program f90tst_fill
   implicit none
   
   ! This is the name of the data file we will create.
-  character (len = *), parameter :: FILE_NAME = "f90tst_fill2.nc"
+  character (len = *), parameter :: FILE_NAME = "f90tst_fill.nc"
   integer, parameter :: MAX_DIMS = 2
   integer, parameter :: NX = 16, NY = 16
   integer, parameter :: HALF_NX = NX / 2, HALF_NY = NY / 2
-  integer, parameter :: ZERO_COUNT = 0
   integer, parameter :: NUM_VARS = 8
   character (len = *), parameter :: var_name(NUM_VARS) = &
        (/ 'byte  ', 'short ', 'int   ', 'float ', 'double', 'ubyte ', &
@@ -35,11 +34,10 @@ program f90tst_fill
   integer (kind = EightByteInt) :: uint_out(HALF_NY, HALF_NX), uint_in(NY, NX)
   integer :: nvars, ngatts, ndims, unlimdimid, file_format
   integer :: x, y, v
-  integer :: start_out(MAX_DIMS), count_out(MAX_DIMS)
-  integer :: start_in(MAX_DIMS), count_in(MAX_DIMS)
+  integer :: start(MAX_DIMS), count_out(MAX_DIMS), count_in(MAX_DIMS)
 
   print *
-  print *, '*** Testing netCDF-4 fill values with unlimited dimension.'
+  print *, '*** Testing netCDF-4 fill values.'
 
   ! Create some pretend data.
   do x = 1, HALF_NX
@@ -59,7 +57,7 @@ program f90tst_fill
   call handle_err(nf90_create(FILE_NAME, nf90_netcdf4, ncid))
 
   ! Define the dimensions.
-  call handle_err(nf90_def_dim(ncid, "x", NF90_UNLIMITED, x_dimid))
+  call handle_err(nf90_def_dim(ncid, "x", NX, x_dimid))
   call handle_err(nf90_def_dim(ncid, "y", NY, y_dimid))
   dimids =  (/ y_dimid, x_dimid /)
 
@@ -70,20 +68,15 @@ program f90tst_fill
 
   ! Write one-quarter of the data.
   count_out = (/ HALF_NX, HALF_NY /)
-  start_out = (/ HALF_NX + 1, HALF_NY + 1 /)
-  call handle_err(nf90_put_var(ncid, varid(1), byte_out, start = start_out, count = count_out))
-  call handle_err(nf90_put_var(ncid, varid(2), short_out, start = start_out, count = count_out))
-  call handle_err(nf90_put_var(ncid, varid(3), int_out, start = start_out, count = count_out))
-  call handle_err(nf90_put_var(ncid, varid(4), areal_out, start = start_out, count = count_out))
-  call handle_err(nf90_put_var(ncid, varid(5), double_out, start = start_out, count = count_out))
-  call handle_err(nf90_put_var(ncid, varid(6), ubyte_out, start = start_out, count = count_out))
-  call handle_err(nf90_put_var(ncid, varid(7), ushort_out, start = start_out, count = count_out))
-  call handle_err(nf90_put_var(ncid, varid(8), uint_out, start = start_out, count = count_out))
-
-  ! Test when one dimension of count is 0
-  count_out = (/ HALF_NX, ZERO_COUNT /)
-  call handle_err(nf90_put_var(ncid, varid(3), int_out, start = start_out, count = count_out))
-  count_out = (/ HALF_NX, HALF_NY /)
+  start = (/ 1, 1 /)
+  call handle_err(nf90_put_var(ncid, varid(1), byte_out, start = start, count = count_out))
+  call handle_err(nf90_put_var(ncid, varid(2), short_out, start = start, count = count_out))
+  call handle_err(nf90_put_var(ncid, varid(3), int_out, start = start, count = count_out))
+  call handle_err(nf90_put_var(ncid, varid(4), areal_out, start = start, count = count_out))
+  call handle_err(nf90_put_var(ncid, varid(5), double_out, start = start, count = count_out))
+  call handle_err(nf90_put_var(ncid, varid(6), ubyte_out, start = start, count = count_out))
+  call handle_err(nf90_put_var(ncid, varid(7), ushort_out, start = start, count = count_out))
+  call handle_err(nf90_put_var(ncid, varid(8), uint_out, start = start, count = count_out))
 
   ! Close the file. 
   call handle_err(nf90_close(ncid))
@@ -93,26 +86,24 @@ program f90tst_fill
   
   ! Check some stuff out.
   call handle_err(nf90_inquire(ncid, ndims, nvars, ngatts, unlimdimid, file_format))
-  if (ndims /= 2 .or. nvars /= NUM_VARS .or. ngatts /= 0 .or. unlimdimid /= 1 .or. &
+  if (ndims /= 2 .or. nvars /= NUM_VARS .or. ngatts /= 0 .or. unlimdimid /= -1 .or. &
        file_format /= nf90_format_netcdf4) stop 2
 
   ! Read all the data.
-  start_in = (/ 1, 1 /)
   count_in = (/ NX, NY /)
-  call handle_err(nf90_get_var(ncid, varid(1), byte_in, start = start_in, count = count_in))
-  call handle_err(nf90_get_var(ncid, varid(2), short_in, start = start_in, count = count_in))
-  call handle_err(nf90_get_var(ncid, varid(3), int_in, start = start_in, count = count_in))
-  call handle_err(nf90_get_var(ncid, varid(4), areal_in, start = start_in, count = count_in))
-  call handle_err(nf90_get_var(ncid, varid(5), double_in, start = start_in, count = count_in))
-  call handle_err(nf90_get_var(ncid, varid(6), ubyte_in, start = start_in, count = count_in))
-  call handle_err(nf90_get_var(ncid, varid(7), ushort_in, start = start_in, count = count_in))
-  call handle_err(nf90_get_var(ncid, varid(8), uint_in, start = start_in, count = count_in))
+  call handle_err(nf90_get_var(ncid, varid(1), byte_in, start = start, count = count_in))
+  call handle_err(nf90_get_var(ncid, varid(2), short_in, start = start, count = count_in))
+  call handle_err(nf90_get_var(ncid, varid(3), int_in, start = start, count = count_in))
+  call handle_err(nf90_get_var(ncid, varid(4), areal_in, start = start, count = count_in))
+  call handle_err(nf90_get_var(ncid, varid(5), double_in, start = start, count = count_in))
+  call handle_err(nf90_get_var(ncid, varid(6), ubyte_in, start = start, count = count_in))
+  call handle_err(nf90_get_var(ncid, varid(7), ushort_in, start = start, count = count_in))
+  call handle_err(nf90_get_var(ncid, varid(8), uint_in, start = start, count = count_in))
 
-  ! Check the data. All the data except the third quadrant are fill
-  ! value.
+  ! Check the data. All the data in the first quadrant are fill value.
   do x = 1, NX
      do y = 1, NY
-        if ((x .gt. HALF_NX) .and. (y .gt. HALF_NY)) then
+        if ((x .le. HALF_NX) .and. (y .le. HALF_NY)) then
            if (byte_in(y, x) .ne. -1) stop 13
            if (short_in(y, x) .ne. -2) stop 14
            if (int_in(y, x) .ne. -4) stop 15
