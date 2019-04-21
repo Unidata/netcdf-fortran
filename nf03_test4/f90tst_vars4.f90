@@ -4,6 +4,8 @@
 
 !     This program tests netCDF-4 variable functions from fortran.
 
+!     Ed Hartnett, 2009
+
 program f90tst_vars4
   use typeSizes
   use netcdf

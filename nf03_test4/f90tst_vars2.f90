@@ -1,6 +1,6 @@
-!     This is part of the netCDF package.
-!     Copyright 2006 University Corporation for Atmospheric Research/Unidata.
-!     See COPYRIGHT file for conditions of use.
+!     This is part of the netCDF package. Copyright 2006-2019
+!     University Corporation for Atmospheric Research/Unidata. See
+!     COPYRIGHT file for conditions of use.
 
 !     This program tests netCDF-4 variable functions from fortran.
 

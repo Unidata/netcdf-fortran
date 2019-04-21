@@ -12,7 +12,8 @@ AM_FCFLAGS = -I$(top_builddir)/fortran
 # All tests need to link to fortran library.
 LDADD = ${top_builddir}/fortran/libnetcdff.la
 
-NC4_F90_TESTS = f90tst_vars f90tst_vars_vlen tst_f90_nc4 f90tst_grps	\
+# tst_f90_nc4 
+NC4_F90_TESTS = f90tst_vars f90tst_vars_vlen f90tst_grps	\
 f90tst_fill f90tst_fill2 f90tst_vars3 f90tst_vars4 f90tst_vars2		\
 f90tst_path f90tst_rengrps
 check_PROGRAMS = $(NC4_F90_TESTS)
