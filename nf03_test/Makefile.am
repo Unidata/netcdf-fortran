@@ -51,18 +51,6 @@ tst03_f77_v2_SOURCES = tst03_f77_v2.F
 TESTS += f03test tst03_f77_v2
 endif # BUILD_V2
 
-# Is the user building netCDF-4?
-if USE_NETCDF4
-
-# Add these netCDF-4 f90 test programs.
-check_PROGRAMS += f03tst_open_mem
-f03tst_open_mem_SOURCES = module_tests.F90 f03tst_open_mem.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
-
-TESTS += f03tst_open_mem
-
-
-endif # USE_NETCDF4
-
 # If valgrind is present on this machine, this will enable
 # check-valgrind target, which runs all tests with valgrind.
 @VALGRIND_CHECK_RULES@

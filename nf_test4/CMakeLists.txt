@@ -7,9 +7,9 @@ SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Is the user building netCDF-4?
 if (USE_NETCDF4)
   # Add these netCDF-4 test programs.
-  SET(nc4_check_PROGRAMS
-    ftst_groups ftst_vars ftst_vars2 ftst_vars3 ftst_vars4
-    ftst_vars5 ftst_vars6 ftst_types ftst_types2 ftst_types3)
+  SET(nc4_check_PROGRAMS ftst_groups ftst_vars ftst_vars2 ftst_vars3
+    ftst_vars4 ftst_vars5 ftst_vars6 ftst_types ftst_types2
+    ftst_types3 ftst_path ftst_rengrps ftst_open_mem)
   SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_check_PROGRAMS})
   SET(TESTS ${TESTS} ${nc4_check_PROGRAMS})
 
@@ -25,6 +25,7 @@ if (USE_NETCDF4)
   SET(ftst_types3_SOURCES ftst_types3.F)
   SET(ftst_path_SOURCES ftst_path.F)
   SET(ftst_rengrps_SOURCES ftst_rengrps.F)
+  SET(ftst_open_mem_SOURCES ftst_open_mem.F)
 
   # This is a netCDF-4 V2 test program.
   IF (BUILD_V2)

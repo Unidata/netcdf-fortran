@@ -21,22 +21,6 @@ LIST(APPEND TESTS nf03_test)
 SET(nf03_test_SOURCES module_tests.F90 f03lib_f_interfaces.f90 test03_get.F test03_put.F nf03_error.F
   nf03_test.F test03_read.F test03_write.F util03.F f03lib.c)
 
-IF(USE_NETCDF4)
-  LIST(APPEND check_PROGRAMS f03tst_open_mem)
-  SET(f03tst_open_mem_SOURCES module_tests.F90 f03tst_open_mem.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
-  LIST(APPEND TESTS f03tst_open_mem)
-  LIST(APPEND CLEANFILES f03tst_open_mem.nc)
-
-  # Test parallel I/O
-  IF(TEST_PARALLEL)
-    LIST(APPEND check_PROGRAMS f03tst_parallel)
-    LIST(APPEND CLEANFILES ftst_parallel.nc)
-    SET(f03tst_parallel_SOURCES f03tst_parallel.F)
-ENDIF(TEST_PARALLEL)
-
-
-ENDIF(USE_NETCDF4)
-
 # This is the fortran v2 test. It depends on the utilities being built
 # to generate it's input file.
 IF(BUILD_V2)
