@@ -32,9 +32,9 @@ f90tst_vars4_SOURCES = f90tst_vars4.f90
 
 # This is the netCDF-4 F90 large file test.
 if LARGE_FILE_TESTS
-check_PROGRAMS += tst_flarge
-TESTS += tst_flarge
-tst_flarge_SOURCES = tst_flarge.f90
+check_PROGRAMS += f90tst_flarge
+TESTS += f90tst_flarge
+f90tst_flarge_SOURCES = f90tst_flarge.f90
 endif # LARGE_FILE_TESTS
 
 # This is an f90 benchmark.
