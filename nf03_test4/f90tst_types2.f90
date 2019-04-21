@@ -12,7 +12,7 @@ program f90tst_types2
   implicit none
   
   ! This is the name of the data file we will create.
-  character (len = *), parameter :: FILE_NAME = "tst_types2.nc"
+  character (len = *), parameter :: FILE_NAME = "f90tst_types2.nc"
   
   integer :: ncid, varid1, varid2, varid3, varid4, varid5, varid6, varid7
   integer :: dimid1, dimid2, dimid3, dimid4, dimid5, dimid6, dimid7
