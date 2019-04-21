@@ -2,7 +2,8 @@
 ! copying and redistribution conditions.
 
 ! This program tests io times with large files (> 4 GB) in
-! netCDF-4. This is user-contributed code.
+! netCDF-4. This is user-contributed code. This test creates a bunch
+! of fort.* output files.
 
 ! Ed Hartnett, 2007
 program f90tst_io

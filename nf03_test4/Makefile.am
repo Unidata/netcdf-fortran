@@ -66,4 +66,4 @@ endif # TEST_PARALLEL
 EXTRA_DIST = CMakeLists.txt run_f90_par_test.sh
 
 # Cleaning up files created during the testing.
-CLEANFILES = f90tst_*.nc
+CLEANFILES = f90tst_*.nc fort.*
