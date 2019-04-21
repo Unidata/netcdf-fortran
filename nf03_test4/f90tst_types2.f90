@@ -4,9 +4,9 @@
 
 !     This program tests netCDF-4 int64 types from fortran 90.
 
-!     $Id: tst_types2.f90,v 1.2 2009/01/25 14:33:44 ed Exp $
+!     Ed Hartnett, 2009
 
-program tst_types2
+program f90tst_types2
   use typeSizes
   use netcdf
   implicit none
@@ -255,5 +255,4 @@ contains
     end if
   end subroutine check  
 
-end program tst_types2
-
+end program f90tst_types2

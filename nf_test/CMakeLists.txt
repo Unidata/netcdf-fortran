@@ -19,32 +19,9 @@ IF (BUILD_V2)
   SET(check_PROGRAMS tst_f77_v2)
   SET(tst_f77_v2_SOURCES tst_f77_v2.F)
   SET(TESTS ${TESTS} tst_f77_v2)
-ENDIF(BUILD_V2)
-
-# Is the user building netCDF-4?
-if (USE_NETCDF4)
-  # Add these netCDF-4 f90 test programs.
-  SET(nc4_f90_PROGRAMS
-    tst_types tst_types2 )
-  SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_f90_PROGRAMS})
-  SET(TESTS ${TESTS} ${nc4_f90_PROGRAMS})
-  SET(tst_types_SOURCES tst_types.f90)
-  SET(tst_types2_SOURCES tst_types2.f90)
-  SET(tst_f90_nc4_SOURCES tst_f90_nc4.f90)
-
-  # This is the netCDF-4 F90 large file test.
-  IF (LARGE_FILE_TESTS)
-    SET(nc4_largefile_PROGRAMS tst_flarge)
-    SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_largefile_PROGRAMS})
-    SET(TESTS ${TESTS} ${nc4_largefile_PROGRAMS})
-    SET(tst_flarge_SOURCES tst_flarge.f90)
-  ENDIF(LARGE_FILE_TESTS)
-
-endif(USE_NETCDF4)
 
 # This is the fortran v2 test. It depends on the utilities being built
 # to generate its input file.
-IF (BUILD_V2)
   SET(check_PROGRAMS ${check_PROGRAMS} ftest)
   SET(TESTS ${TESTS} ftest)
   SET(ftest_SOURCES ftest.F f03lib.c)

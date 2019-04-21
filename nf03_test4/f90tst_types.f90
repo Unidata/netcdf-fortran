@@ -4,15 +4,15 @@
 
 !     This program tests netCDF-4 new types from fortran 90.
 
-!     $Id: tst_types.f90,v 1.7 2009/01/25 14:33:44 ed Exp $
+!     Ed Hartnett, 2009
 
-program tst_types
+program f90tst_types
   use typeSizes
   use netcdf
   implicit none
   
   ! This is the name of the data file we will create.
-  character (len = *), parameter :: FILE_NAME = "tst_types.nc"
+  character (len = *), parameter :: FILE_NAME = "f90tst_types.nc"
 
   ! Information for the types we create.
   character (len = *), parameter :: OPAQUE_TYPE_NAME = "Odessyus"
@@ -89,5 +89,4 @@ contains
     end if
   end subroutine check  
 
-end program tst_types
-
+end program f90tst_types

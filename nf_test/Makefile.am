@@ -38,20 +38,6 @@ tst_f77_v2_SOURCES = tst_f77_v2.F
 TESTS += tst_f77_v2
 endif # BUILD_V2
 
-# If the user building netCDF-4 add the netCDF-4 test programs.
-if USE_NETCDF4
-
-# Add these netCDF-4 f90 API test programs.
-check_PROGRAMS +=  tst_types tst_types2
-
-TESTS += tst_types tst_types2
-
-tst_types_SOURCES = tst_types.f90
-tst_types2_SOURCES = tst_types2.f90
-
-
-endif #USE_NETCDF4
-
 # This is the fortran v2 test.
 if BUILD_V2
 check_PROGRAMS += ftest
