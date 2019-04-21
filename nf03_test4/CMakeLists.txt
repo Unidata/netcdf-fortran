@@ -22,6 +22,27 @@ if (USE_NETCDF4)
   SET(f90tst_vars3_SOURCES f90tst_vars3.f90)
   SET(f90tst_vars4_SOURCES f90tst_vars4.f90)
 
+  # Test parallel I/O.
+  IF (TEST_PARALLEL)
+    SET(check_PROGRAMS ${check_PROGRAMS} f90tst_parallel f90tst_parallel2 f90tst_parallel3
+      f90tst_nc4_par)
+
+    build_bin_test(f90tst_parallel ".F90")
+    build_bin_test(f90tst_parallel2 ".F90")
+    build_bin_test(f90tst_parallel3 ".F90")
+    build_bin_test(f90tst_nc4_par ".F90")
+
+    #SET(f90tst_parallel_fill_SOURCES f90tst_parallel_fill.f90)
+
+  ENDIF (TEST_PARALLEL)
+
+  # This is an f90 benchmark.
+  IF(BUILD_BENCHMARKS)
+    SET(nc4_io_PROGRAMS f90tst_io)
+    SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_io_PROGRAMS})
+    SET(TESTS ${TESTS} ${nc4_io_PROGRAMS})
+    SET(tst_io_SOURCES f90tst_io.f90)
+  ENDIF(BUILD_BENCHMARKS)
 endif(USE_NETCDF4)
 
 FIND_LIBRARY(NETCDF_C_LIBRARY NAMES netcdf libnetcdf)

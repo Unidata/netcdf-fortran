@@ -39,9 +39,9 @@ endif # LARGE_FILE_TESTS
 
 # This is an f90 benchmark.
 if BUILD_BENCHMARKS
-check_PROGRAMS += tst_io
-TESTS += tst_io
-tst_io_SOURCES = tst_io.f90
+check_PROGRAMS += f90tst_io
+TESTS += f90tst_io
+f90tst_io_SOURCES = f90tst_io.f90
 endif #BUILD_BENCHMARKS
 
 # Test parallel I/O.

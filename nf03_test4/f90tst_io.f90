@@ -1,10 +1,10 @@
-! Copyright 2007, UCAR/Unidata. See netcdf/COPYRIGHT file for copying
-! and redistribution conditions.
+! Copyright 2007-2019, UCAR/Unidata. See netcdf/COPYRIGHT file for
+! copying and redistribution conditions.
 
 ! This program tests io times with large files (> 4 GB) in
 ! netCDF-4. This is user-contributed code.
 
-! $Id: tst_io.f90,v 1.7 2009/02/17 13:17:18 ed Exp $
+! Ed Hartnett, 2007
 program tst_io
   use netcdf ! access to netcdf module
   implicit none

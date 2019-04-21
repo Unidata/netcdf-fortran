@@ -40,13 +40,6 @@ if (USE_NETCDF4)
     SET(tst_flarge_SOURCES tst_flarge.f90)
   ENDIF(LARGE_FILE_TESTS)
 
-  # This is an f90 benchmark.
-  IF(BUILD_BENCHMARKS)
-    SET(nc4_io_PROGRAMS tst_io)
-    SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_io_PROGRAMS})
-    SET(TESTS ${TESTS} ${nc4_io_PROGRAMS})
-    SET(tst_io_SOURCES tst_io.f90)
-  ENDIF(BUILD_BENCHMARKS)
 endif(USE_NETCDF4)
 
 # This is the fortran v2 test. It depends on the utilities being built
