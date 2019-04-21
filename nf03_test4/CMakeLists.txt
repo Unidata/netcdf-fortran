@@ -9,7 +9,7 @@ if (USE_NETCDF4)
   # Add these netCDF-4 test programs.
   SET(nc4_check_PROGRAMS f90tst_vars f90tst_vars_vlen tst_f90_nc4
     f90tst_grps f90tst_fill f90tst_fill2 f90tst_vars3 f90tst_vars4
-    f90tst_vars2)
+    f90tst_vars2 f90tst_path f90tst_rengrps f90tst_nc4)
   SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_check_PROGRAMS})
   SET(TESTS ${TESTS} ${nc4_check_PROGRAMS})
 
@@ -21,16 +21,19 @@ if (USE_NETCDF4)
   SET(f90tst_vars2_SOURCES f90tst_vars2.f90)
   SET(f90tst_vars3_SOURCES f90tst_vars3.f90)
   SET(f90tst_vars4_SOURCES f90tst_vars4.f90)
+  SET(f90tst_path_SOURCES f90tst_path.f90)
+  SET(f90tst_rengrps_SOURCES f90tst_rengrps.f90)
+  SET(f90tst_nc4_SOURCES f90tst_nc4.f90)
 
   # Test parallel I/O.
   IF (TEST_PARALLEL)
     SET(check_PROGRAMS ${check_PROGRAMS} f90tst_parallel f90tst_parallel2 f90tst_parallel3
       f90tst_nc4_par)
 
-    build_bin_test(f90tst_parallel ".F90")
-    build_bin_test(f90tst_parallel2 ".F90")
-    build_bin_test(f90tst_parallel3 ".F90")
-    build_bin_test(f90tst_nc4_par ".F90")
+    build_bin_test(f90tst_parallel ".f90")
+    build_bin_test(f90tst_parallel2 ".f90")
+    build_bin_test(f90tst_parallel3 ".f90")
+    build_bin_test(f90tst_nc4_par ".f90")
 
     #SET(f90tst_parallel_fill_SOURCES f90tst_parallel_fill.f90)
 

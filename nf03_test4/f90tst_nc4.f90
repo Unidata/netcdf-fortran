@@ -1,9 +1,17 @@
-program tst_f90_nc4
+!     This is part of the netCDF package. Copyright 2006-2019
+!     University Corporation for Atmospheric Research/Unidata. See
+!     COPYRIGHT file for conditions of use.
+
+!     Tests new nf90_inq_path function
+!     Mimics tests in C tst_files5.c code
+
+!     Ed Hartnett, 2011
+program f90tst_nc4
   use typeSizes
   use netcdf
   implicit none
   integer :: fh, dimid, varid, ndim, nvar
-  character (len = *), parameter :: FILE_NAME = "tst_f90_nc4.nc"
+  character (len = *), parameter :: FILE_NAME = "f90tst_nc4.nc"
 
   print *, ''
   print *,'*** testing simple netCDF-4 file.'
@@ -49,6 +57,4 @@ contains
        stop 2
     endif
   end subroutine check
-end program tst_f90_nc4
-
-	
+end program f90tst_nc4

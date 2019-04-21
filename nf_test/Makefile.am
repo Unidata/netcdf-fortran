@@ -42,14 +42,12 @@ endif # BUILD_V2
 if USE_NETCDF4
 
 # Add these netCDF-4 f90 API test programs.
-check_PROGRAMS +=  tst_types tst_types2 	\
-tst_f90_nc4
+check_PROGRAMS +=  tst_types tst_types2
 
 TESTS += tst_types tst_types2
 
 tst_types_SOURCES = tst_types.f90
 tst_types2_SOURCES = tst_types2.f90
-tst_f90_nc4_SOURCES = tst_f90_nc4.f90
 
 
 endif #USE_NETCDF4
