@@ -2,10 +2,10 @@ C     This is part of the netCDF package.
 C     Copyright 2008 University Corporation for Atmospheric Research/Unidata.
 C     See COPYRIGHT file for conditions of use.
 
-C     This program tests netCDF-4 variable functions from fortran, even
-C     more, even more.
+C     This program tests netCDF-4 variable functions from fortran,
+C     testing VLEN types.
 
-C     $Id: ftst_vars4.F,v 1.11 2009/10/24 10:03:39 ed Exp $
+C     Ed Hartnett, 2009
 
       program ftst_vars4
       implicit none
@@ -51,40 +51,40 @@ C     Loop indexes, and error handling.
 
 C     Create the netCDF file.
       retval = nf_create(FILE_NAME, NF_NETCDF4, ncid)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
 
 C     Create the vlen type.
       retval = nf_def_vlen(ncid, vlen_type_name, nf_int, vlen_typeid)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
 
 C     Set up the vlen with this helper function, since F77 can't deal
 C     with pointers.
       retval = nf_put_vlen_element(ncid, vlen_typeid, vlen, 
      &     vlen_len, data1)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
 
 C     Write the vlen attribute.
       retval = nf_put_att(ncid, NF_GLOBAL, 'att1', vlen_typeid, 1, vlen)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
 
 C     Close the file. 
       retval = nf_close(ncid)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
 
 C     Reopen the file.
       retval = nf_open(FILE_NAME, NF_NOWRITE, ncid)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
 
 C     Get the typeids of all user defined types.
       retval = nf_inq_typeids(ncid, num_types, typeids)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
       if (num_types .ne. max_types) stop 2
 
 C     Use nf_inq_user_type to confirm this is an vlen type, with base
 C     type NF_INT.
       retval = nf_inq_user_type(ncid, typeids(1), type_name, type_size, 
      &     base_type, nfields, class)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
       if (type_name(1:len(vlen_type_name)) .ne. vlen_type_name .or.
      &     base_type .ne. nf_int .or.
      &     nfields .ne. 0 .or. class .ne. nf_vlen) stop 2
@@ -93,18 +93,18 @@ C     Use nf_inq_vlen and make sure we get the same answers as we did
 C     with nf_inq_user_type.
       retval = nf_inq_vlen(ncid, typeids(1), type_name, base_size, 
      &     base_type)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
       if (type_name(1:len(vlen_type_name)) .ne. vlen_type_name .or.
      &     base_type .ne. nf_int) stop 2
 
 C     Read the vlen attribute.
       retval = nf_get_att(ncid, NF_GLOBAL, 'att1', vlen_in)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
 
 C     Get the data from the vlen we just read.
       retval = nf_get_vlen_element(ncid, vlen_typeid, vlen_in, 
      &     vlen_len_in, data1_in)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
       if (vlen_len_in .ne. vlen_len) stop 2
 
 C     Check the data
@@ -114,7 +114,7 @@ C     Check the data
 
 C     Close the file. 
       retval = nf_close(ncid)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
 
       print *,'*** SUCCESS!'
       end

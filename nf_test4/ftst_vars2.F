@@ -2,10 +2,10 @@ C     This is part of the netCDF package.
 C     Copyright 2008 University Corporation for Atmospheric Research/Unidata.
 C     See COPYRIGHT file for conditions of use.
 
-C     This program tests netCDF-4 variable functions from fortran, even
-C     more.
+C     This program tests netCDF-4 variable functions from fortran,
+C     testing new netCDF-4 atomic types.
 
-C     $Id: ftst_vars2.F,v 1.6 2010/01/20 15:21:46 ed Exp $
+C     Ed Hartnett, 2010
 
       program ftst_vars2
       implicit none
@@ -59,15 +59,15 @@ C     Create some pretend data.
 
 C     Create the netCDF file.
       retval = nf_create(FILE_NAME, NF_NETCDF4, ncid)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
 
 C     Define the dimensions.
       retval = nf_def_dim(ncid, "z", NZ, dimids(3))
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
       retval = nf_def_dim(ncid, "y", NY, dimids(2))
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
       retval = nf_def_dim(ncid, "x", NX, dimids(1))
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
 
 C     These are the types of vars that will be written.
       typeid(1) = NF_UBYTE
@@ -82,12 +82,12 @@ C     Define the variables.
  1001    format('var', I1)
          retval = nf_def_var(ncid, var_name, typeid(i), NDIMS, 
      &        dimids, varid(i))
-         if (retval .ne. nf_noerr) call handle_err(retval)
+         if (retval .ne. nf_noerr) stop retval
 
 C        Set variable caches.
          retval = nf_set_var_chunk_cache(ncid, varid(i), CACHE_SIZE, 
      &        CACHE_NELEMS, CACHE_PREEMPTION)
-         if (retval .ne. nf_noerr) call handle_err(retval)
+         if (retval .ne. nf_noerr) stop retval
       end do
 
 C     Check the per-variable cache to make sure it is what we think it
@@ -95,7 +95,7 @@ C     is.
       do i = 1, NTYPES
          retval = nf_get_var_chunk_cache(ncid, varid(i), cache_size_in, 
      &        cache_nelems_in, cache_preemption_in)
-         if (retval .ne. nf_noerr) call handle_err(retval)
+         if (retval .ne. nf_noerr) stop retval
          if (cache_size_in .ne. CACHE_SIZE .or. cache_nelems_in .ne. 
      &        CACHE_NELEMS .or. cache_preemption .ne. CACHE_PREEMPTION)
      &        stop 8
@@ -105,21 +105,21 @@ C     is.
 C     Write the pretend data to the file.
       do i = 1, NTYPES
          retval = nf_put_var_int(ncid, varid(i), data_out)
-         if (retval .ne. nf_noerr) call handle_err(retval)
+         if (retval .ne. nf_noerr) stop retval
       end do
 
 C     Close the file. 
       retval = nf_close(ncid)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
 
 C     Reopen the file and check again.
       retval = nf_open(FILE_NAME, NF_NOWRITE, ncid)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
 
 C     Read the data and check it.
       do i = 1, NTYPES
          retval = nf_get_var_int(ncid, varid(i), data_in)
-         if (retval .ne. nf_noerr) call handle_err(retval)
+         if (retval .ne. nf_noerr) stop retval
          do x = 1, NX
             do y = 1, NY
                do z = 1, NZ
@@ -131,7 +131,7 @@ C     Read the data and check it.
 
 C     Close the file. 
       retval = nf_close(ncid)
-      if (retval .ne. nf_noerr) call handle_err(retval)
+      if (retval .ne. nf_noerr) stop retval
 
       print *,'*** SUCCESS!'
       end
