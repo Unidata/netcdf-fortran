@@ -12,7 +12,8 @@ LDADD = ${top_builddir}/fortran/libnetcdff.la
 
 # These programs test the F77 netCDF-4 API using include netcdf.inc.
 NF77_TESTS = ftst_groups ftst_vars ftst_vars2 ftst_vars3 ftst_vars4	\
-ftst_vars5 ftst_vars6 ftst_types ftst_types2 ftst_types3
+ftst_vars5 ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_path	\
+ftst_rengrps
 
 # Compile and run the F77 API tests.
 check_PROGRAMS = $(NF77_TESTS)
@@ -29,6 +30,30 @@ ftst_vars6_SOURCES = ftst_vars6.F
 ftst_types_SOURCES = ftst_types.F
 ftst_types2_SOURCES = ftst_types2.F
 ftst_types3_SOURCES = ftst_types3.F
+ftst_path_SOURCES = ftst_path.F
+ftst_rengrps_SOURCES = ftst_rengrps.F
+
+# This is a netCDF-4 V2 F77 test program.
+if BUILD_V2
+check_PROGRAMS += ftst_v2
+TESTS += ftst_v2
+ftst_v2_SOURCES = ftst_v2.F
+endif # BUILD_V2
+
+# Test parallel I/O for F77.
+if TEST_PARALLEL
+check_PROGRAMS += ftst_parallel ftst_parallel_nasa
+TESTS += run_f77_par_test.sh
+ftst_parallel_SOURCES = ftst_parallel.F
+ftst_parallel_nasa_SOURCES = ftst_parallel_nasa.F
+endif # TEST_PARALLEL
+
+# Test filters.
+if TEST_FILTERS
+check_PROGRAMS += ftst_filter
+TESTS += ftst_filter
+ftst_filter_SOURCES = ftst_filter.F
+endif
 
 # If sed is present, generate these tests at build time. They are the
 # same tests as the F77 netCDF-4 tests above, but using the "use
@@ -39,12 +64,21 @@ if USE_SED
 F03_TEST_CODES = f03tst_groups.F f03tst_vars.F f03tst_vars2.F	\
 f03tst_vars3.F f03tst_vars4.F f03tst_vars5.F f03tst_vars6.F	\
 f03tst_types.F f03tst_types2.F f03tst_types3.F
-BUILT_SOURCES = $(F03_TEST_CODES)
 
 # The fortran codes will compile into these tests.
 F03_TESTS = f03tst_groups f03tst_vars f03tst_vars2 f03tst_vars3		\
 f03tst_vars4 f03tst_vars5 f03tst_vars6 f03tst_types f03tst_types2	\
 f03tst_types3
+
+# This is a netCDF-4 V2 F77 test program.
+if BUILD_V2
+F03_TEST_CODES += f03tst_v2.F
+F03_TESTS += f03tst_v2
+endif # BUILD_V2
+
+# Note that all these fortran programs are built at compile-time on
+# the user system.
+BUILT_SOURCES = $(F03_TEST_CODES)
 
 # Compile and run the generated tests.
 check_PROGRAMS += $(F03_TESTS)
@@ -61,6 +95,9 @@ f03tst_vars6_SOURCES = f03tst_vars6.F
 f03tst_types_SOURCES = f03tst_types.F
 f03tst_types2_SOURCES = f03tst_types2.F
 f03tst_types3_SOURCES = f03tst_types3.F
+if BUILD_V2
+f03tst_v2_SOURCES = f03tst_v2.F
+endif # BUILD_V2
 
 # Use sed to generate the f03 versions of the test codes.
 f03tst_groups.F: ftst_groups.F
@@ -112,13 +149,21 @@ f03tst_types3.F: ftst_types3.F
 	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
 	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
 	$(SED) "s|ftst_types3.nc|f03tst_types3.nc|" $@.tmp2 > $@
+
+if BUILD_V2
+f03tst_v2.F: ftst_v2.F
+	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
+	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
+	$(SED) "s|ftst_v2.nc|f03tst_v2.nc|" $@.tmp2 > $@
+endif # BUILD_V2
+
 endif #USE_SED
 
 # If valgrind is present on this machine, this will enable
 # check-valgrind target, which runs all tests with valgrind.
 @VALGRIND_CHECK_RULES@
 
-EXTRA_DIST = CMakeLists.txt
+EXTRA_DIST = CMakeLists.txt run_f77_par_test.sh
 
 # Cleaning up files created during the testing.
 CLEANFILES = ftst_*.nc f03tst_*.nc *.tmp *.tmp2 $(F03_TEST_CODES)

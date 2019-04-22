@@ -25,14 +25,6 @@ ENDIF(BUILD_V2)
 
 # Is the user building netCDF-4?
 if (USE_NETCDF4)
-  # Add these netCDF-4 test programs.
-  SET(nc4_check_PROGRAMS
-    ftst_path ftst_rengrps)
-  SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_check_PROGRAMS})
-  SET(TESTS ${TESTS} ${nc4_check_PROGRAMS})
-
-  SET(ftst_path_SOURCES ftst_path.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
-  SET(ftst_rengrps_SOURCES ftst_rengrps.F f03lib_f_interfaces.f90 f03lib.c handle_err.F)
   # Add these netCDF-4 f90 test programs.
   SET(nc4_f90_PROGRAMS
     f90tst_vars tst_types tst_types2 f90tst_vars_vlen
@@ -51,14 +43,6 @@ if (USE_NETCDF4)
   SET(f90tst_vars2_SOURCES f90tst_vars2.f90)
   SET(f90tst_vars3_SOURCES f90tst_vars3.f90)
   SET(f90tst_vars4_SOURCES f90tst_vars4.f90)
-
-  # This is a netCDF-4 V2 test program.
-  IF (BUILD_V2)
-    SET(nc4_v2_PROGRAMS ftst_v2)
-    SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_v2_PROGRAMS})
-    SET(TESTS ${TESTS} ${nc4_v2_PROGRAMS})
-    SET(ftst_v2_SOURCES ftst_v2.F)
-  ENDIF (BUILD_V2)
 
   # This is the netCDF-4 F90 large file test.
   IF (LARGE_FILE_TESTS)
@@ -89,23 +73,6 @@ if (USE_NETCDF4)
     #SET(f90tst_parallel_fill_SOURCES f90tst_parallel_fill.f90)
 
   ENDIF (TEST_PARALLEL)
-
-  # Test parallel I/O for F77.
-  IF (TEST_PARALLEL)
-    SET(check_PROGRAMS ${check_PROGRAMS} ftst_parallel ftst_parallel_nasa)
-    SET(SCRIPT_TESTS ${SCRIPT_TESTS} run_f77_par_test)
-
-    # Add executables for f77_par_tst
-    build_bin_test(ftst_parallel ".F")
-    build_bin_test(ftst_parallel_nasa ".F")
-
-  ENDIF (TEST_PARALLEL)
-
-  IF(ENABLE_FILTER_TEST)
-    LIST(APPEND check_PROGRAMS ftst_filter)
-    LIST(APPEND CLEANFILES ftst_filter.nc)
-    SET(ftst_filter_SOURCES ftst_filter.F)
-  ENDIF(ENABLE_FILTER_TEST)
 
 endif(USE_NETCDF4)
 

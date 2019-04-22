@@ -40,12 +40,6 @@ endif # BUILD_V2
 
 # If the user building netCDF-4 add the netCDF-4 test programs.
 if USE_NETCDF4
-check_PROGRAMS += ftst_path	\
-ftst_rengrps
-TESTS += ftst_path ftst_rengrps
-
-ftst_path_SOURCES = ftst_path.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
-ftst_rengrps_SOURCES = ftst_rengrps.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
 
 # Add these netCDF-4 f90 API test programs.
 check_PROGRAMS += f90tst_vars tst_types tst_types2 f90tst_vars_vlen	\
@@ -69,13 +63,6 @@ f90tst_fill2_SOURCES = f90tst_fill2.f90
 f90tst_vars2_SOURCES = f90tst_vars2.f90
 f90tst_vars3_SOURCES = f90tst_vars3.f90
 f90tst_vars4_SOURCES = f90tst_vars4.f90
-
-# This is a netCDF-4 V2 test program.
-if BUILD_V2
-check_PROGRAMS += ftst_v2
-TESTS += ftst_v2
-ftst_v2_SOURCES = ftst_v2.F
-endif # BUILD_V2
 
 # This is the netCDF-4 F90 large file test.
 if LARGE_FILE_TESTS
@@ -104,22 +91,6 @@ f90tst_nc4_par_SOURCES = f90tst_nc4_par.F90
 f90tst_parallel_fill_SOURCES = f90tst_parallel_fill.f90
 endif # TEST_PARALLEL
 
-# Test parallel I/O for F77.
-if TEST_PARALLEL
-check_PROGRAMS += ftst_parallel ftst_parallel_nasa
-TESTS += run_f77_par_test.sh
-ftst_parallel_SOURCES = ftst_parallel.F
-ftst_parallel_nasa_SOURCES = ftst_parallel_nasa.F
-endif # TEST_PARALLEL
-
-# Test filters
-if TEST_FILTERS
-check_PROGRAMS += ftst_filter 
-ftst_filter_SOURCES = ftst_filter.F f03lib_f_interfaces.f90 f03lib.c	\
-handle_err.F
-TESTS += ftst_filter
-endif
-
 endif #USE_NETCDF4
 
 # This is the fortran v2 test.
@@ -145,7 +116,7 @@ tst_f90_SOURCES = tst_f90.f90
 # need not have m4. ref_fills.nc is copied to fills.nc by configure
 # and used by test program ftest.
 EXTRA_DIST = test_get.F test_put.F fills.cdl run_f90_par_test.sh	\
-run_f77_par_test.sh ref_fills.nc CMakeLists.txt
+ref_fills.nc CMakeLists.txt
 
 # Cleaning up files created during the process.
 CLEANFILES = scratch.nc test.nc copy.nc tst_*.nc ftst_*.nc	\

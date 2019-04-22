@@ -1,12 +1,15 @@
+C     This is part of the netCDF package. Copyright 2006-2019 University
+C     Corporation for Atmospheric Research/Unidata. See COPYRIGHT file
+C     for conditions of use.
+
+C     Tests new nf_inq_path function
+C     Mimics tests in C tst_files5.c code
+
+C     Russ Rew, 2014
+
       program ftst_path
-
-C Tests new nf_inq_path function
-C Mimics tests in C tst_files5.c code
-
-
       implicit NONE
-
-      include "netcdf.inc" 
+      include "netcdf.inc"
 
       character(len=*), parameter  :: FILE_NAME="ftst_path.nc"
 
