@@ -1,7 +1,7 @@
 ## This is a automake file, part of Unidata's netCDF package.
 # Copyright 2005-2019, see the COPYRIGHT file for more information.
 
-# These the fortran 90 API tests.
+# These are the fortran 90 API tests.
 
 # Ed Hartnett, Russ Rew, Dennis Heimbigner, Ward Fisher
 
@@ -43,30 +43,13 @@ test03_write.F util03.F f03lib.c
 nf03_error.o nf03_test.o test03_get.o test03_put.o test03_read.o test03_write.o tst03_f77_v2.o util03.o: \
 module_tests.o
 
-# Is the user building netCDF-4?
-if USE_NETCDF4
-
-# Add these netCDF-4 f90 test programs.
-check_PROGRAMS += f03tst_open_mem
-f03tst_open_mem_SOURCES = module_tests.F90 f03tst_open_mem.F f03lib_f_interfaces.f90 f03lib.c handle_err.F
-
-TESTS += f03tst_open_mem
-
 # Did the user build the V2 F77 API? If so, run these tests.
 if BUILD_V2
 check_PROGRAMS += f03test tst03_f77_v2
 f03test_SOURCES = module_tests.F90 f03test.F f03lib.c
-tst03_f77_v2_SOURCES = module_tests.F90 tst03_f77_v2.F handle_err.F
+tst03_f77_v2_SOURCES = tst03_f77_v2.F
 TESTS += f03test tst03_f77_v2
 endif # BUILD_V2
-
-# Test parallel I/O
-if TEST_PARALLEL
-check_PROGRAMS += f03tst_parallel
-f03tst_parallel_SOURCES = f03tst_parallel.F
-TESTS += run_f77_par_test.sh
-endif # TEST_PARALLEL
-endif # USE_NETCDF4
 
 # If valgrind is present on this machine, this will enable
 # check-valgrind target, which runs all tests with valgrind.
@@ -75,7 +58,7 @@ endif # USE_NETCDF4
 # test03_get.F and test03_put.f need to be distributed, so that the user
 # need not have m4.
 EXTRA_DIST = test03_get.F test03_put.F fills.cdl create_fills.sh	\
-run_f77_par_test.sh CMakeLists.txt
+CMakeLists.txt
 
 # Cleaning up files created during the process.
 CLEANFILES = scratch.nc test.nc copy.nc fills.nc tst_f77_v2.nc	\

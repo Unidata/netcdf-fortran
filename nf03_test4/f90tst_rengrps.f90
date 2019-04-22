@@ -1,11 +1,18 @@
-!     Modified version of f90tst_grps to add test for rename_grps 
+!     This is part of the netCDF package. Copyright 2006-2019
+!     University Corporation for Atmospheric Research/Unidata. See
+!     COPYRIGHT file for conditions of use.
+
+!     Modified version of f90tst_grps to add test for rename_grps.
+
+!     Russ Rew, 2014
+
 program f90tst_rengrps
   use typeSizes
   use netcdf
   implicit none
 
   ! This is the name of the data file we will create.
-  character (len = *), parameter :: FILE_NAME = "f90tst_grps.nc"
+  character (len = *), parameter :: FILE_NAME = "f90tst_rengrps.nc"
 
   ! We are writing 2D data, a 6 x 12 grid. 
   integer, parameter :: MAX_DIMS = 2

@@ -2,6 +2,8 @@
 
 # This shell runs some parallel I/O tests for the F77 API.
 
+# Ed Hartnett, 2009
+
 set -e
 echo "Testing netCDF parallel I/O through the F77 API..."
 

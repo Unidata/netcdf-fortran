@@ -1,8 +1,13 @@
+!     This is part of the netCDF package. Copyright 2006-2019
+!     University Corporation for Atmospheric Research/Unidata. See
+!     COPYRIGHT file for conditions of use.
+
+!     Tests new nf90_inq_path function
+!     Mimics tests in C tst_files5.c code
+
+!      Russ Rew
+
 program f90tst_path
-
-! Tests new nf90_inq_path function
-! Mimics tests in C tst_files5.c code
-
   use typeSizes
   use netcdf
 

@@ -1,11 +1,12 @@
-! Copyright 2007, UCAR/Unidata. See netcdf/COPYRIGHT file for copying
-! and redistribution conditions.
+! Copyright 2007-2019, UCAR/Unidata. See netcdf/COPYRIGHT file for
+! copying and redistribution conditions.
 
 ! This program tests io times with large files (> 4 GB) in
-! netCDF-4. This is user-contributed code.
+! netCDF-4. This is user-contributed code. This test creates a bunch
+! of fort.* output files.
 
-! $Id: tst_io.f90,v 1.7 2009/02/17 13:17:18 ed Exp $
-program tst_io
+! Ed Hartnett, 2007
+program f90tst_io
   use netcdf ! access to netcdf module
   implicit none
   integer, parameter :: prsz1 = 50, prsz2 = 50, &
@@ -16,12 +17,12 @@ program tst_io
   integer :: start, now, wrint1, ncint1, wrint2, ncint2, &
        wrint3, iosb, size
   real, dimension (prsz1, prsz2, prsz3, prsz4) :: x
-  character(len = *), parameter :: nclFilenm1 = 'tst_io1.nc', &
-       nclFilenm2 = 'tst_io2.nc', nclFilenm3 = 'tst_io3.nc', &
-       nclFilenm4 = 'tst_io4.nc', nclFilenm5 = 'tst_io5.nc', &
-       nclFilenm6 = 'tst_io6.nc', nclFilenm7 = 'tst_io7.nc', &
-       nclFilenm8 = 'tst_io8.nc', nclFilenm9 = 'tst_io9.nc', &
-       nclFilenm10 = 'tst_io10.nc', nclFilenm11 = 'tst_io11.nc'
+  character(len = *), parameter :: nclFilenm1 = 'f90tst_io1.nc', &
+       nclFilenm2 = 'f90tst_io2.nc', nclFilenm3 = 'f90tst_io3.nc', &
+       nclFilenm4 = 'f90tst_io4.nc', nclFilenm5 = 'f90tst_io5.nc', &
+       nclFilenm6 = 'f90tst_io6.nc', nclFilenm7 = 'f90tst_io7.nc', &
+       nclFilenm8 = 'f90tst_io8.nc', nclFilenm9 = 'f90tst_io9.nc', &
+       nclFilenm10 = 'f90tst_io10.nc', nclFilenm11 = 'f90tst_io11.nc'
   ! needed for netcdf
   integer :: ncid, x1id, x2id, x3id, x4id, vrid
 
@@ -181,4 +182,4 @@ contains
 
   end subroutine setupNetCDF
 
-end program tst_io
+end program f90tst_io

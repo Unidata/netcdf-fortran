@@ -13,13 +13,14 @@ pkgconfig_DATA = netcdf-fortran.pc
 
 # Run these tests for netCDF-4 builds.
 if USE_NETCDF4
-NF_TEST4 = nf_test4
+NF_TEST4 = nf_test4     # netCDF-4 F77 API tests
+NF03_TEST4 = nf03_test4 # netCDF-4 F90 API tests
 endif # USE_NETCDF4
 
 # This is the list of subdirs for which Makefiles will be constructed
 # and run.
-SUBDIRS = libsrc fortran nf_test nf03_test $(NF_TEST4) docs examples	\
-CMakeExtras
+SUBDIRS = libsrc fortran nf_test nf03_test $(NF_TEST4) $(NF03_TEST4)	\
+docs examples CMakeExtras
 
 # The nf-config script helps the user build programs with netCDF.
 bin_SCRIPTS = nf-config

@@ -3,15 +3,15 @@
 
 ! This program tests large files (> 4 GB) in netCDF-4. 
 
-! $Id: tst_flarge.f90,v 1.3 2010/05/15 00:47:21 russ Exp $
-program tst_flarge
+! Russ Rew, 2007
+program f90tst_flarge
   use typeSizes
   use netcdf
   implicit none
 
   integer :: ncFileID, dimID, varID1, varID2 
   integer, parameter :: BIG_DIMENSION = 300000000
-  character (len = *), parameter :: fileName = "tst_flarge.nc"
+  character (len = *), parameter :: fileName = "f90tst_flarge.nc"
   character (len = *), parameter :: dimName = "really_big_dimension"
   character (len = *), parameter :: var1Name = "TweedleDum"
   character (len = *), parameter :: var2Name = "TweedleDee"
@@ -61,4 +61,4 @@ contains
        stop 2
     end if
   end subroutine check
-end program tst_flarge
+end program f90tst_flarge

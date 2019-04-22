@@ -1,7 +1,8 @@
 # This is a automake file, part of Unidata's netCDF package.
 # Copyright 2019, see the COPYRIGHT file for more information.
 
-# This file builds and runs the f77 and f90 tests for netCDF-4.
+# This file builds and runs tests for the netCDF-4 features in the F77
+# API.
 
 # Ed Hartnett, 2019
 
@@ -13,7 +14,7 @@ LDADD = ${top_builddir}/fortran/libnetcdff.la
 # These programs test the F77 netCDF-4 API using include netcdf.inc.
 NF77_TESTS = ftst_groups ftst_vars ftst_vars2 ftst_vars3 ftst_vars4	\
 ftst_vars5 ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_path	\
-ftst_rengrps
+ftst_rengrps f03tst_open_mem
 
 # Compile and run the F77 API tests.
 check_PROGRAMS = $(NF77_TESTS)
@@ -32,6 +33,7 @@ ftst_types2_SOURCES = ftst_types2.F
 ftst_types3_SOURCES = ftst_types3.F
 ftst_path_SOURCES = ftst_path.F
 ftst_rengrps_SOURCES = ftst_rengrps.F
+f03tst_open_mem_SOURCES = f03tst_open_mem.F
 
 # This is a netCDF-4 V2 F77 test program.
 if BUILD_V2
@@ -74,7 +76,16 @@ f03tst_types3
 if BUILD_V2
 F03_TEST_CODES += f03tst_v2.F
 F03_TESTS += f03tst_v2
+f03tst_v2_SOURCES = f03tst_v2.F
 endif # BUILD_V2
+
+# Convert the parallel test.
+if TEST_PARALLEL
+F03_TEST_CODES += f03tst_parallel.F
+check_PROGRAMS += f03tst_parallel
+f03tst_parallel_SOURCES = f03tst_parallel.F
+TESTS += run_f77_par_test_03.sh
+endif # TEST_PARALLEL
 
 # Note that all these fortran programs are built at compile-time on
 # the user system.
@@ -95,9 +106,6 @@ f03tst_vars6_SOURCES = f03tst_vars6.F
 f03tst_types_SOURCES = f03tst_types.F
 f03tst_types2_SOURCES = f03tst_types2.F
 f03tst_types3_SOURCES = f03tst_types3.F
-if BUILD_V2
-f03tst_v2_SOURCES = f03tst_v2.F
-endif # BUILD_V2
 
 # Use sed to generate the f03 versions of the test codes.
 f03tst_groups.F: ftst_groups.F
@@ -150,12 +158,15 @@ f03tst_types3.F: ftst_types3.F
 	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
 	$(SED) "s|ftst_types3.nc|f03tst_types3.nc|" $@.tmp2 > $@
 
-if BUILD_V2
 f03tst_v2.F: ftst_v2.F
 	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
 	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
 	$(SED) "s|ftst_v2.nc|f03tst_v2.nc|" $@.tmp2 > $@
-endif # BUILD_V2
+
+f03tst_parallel.F: ftst_parallel.F
+	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
+	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
+	$(SED) "s|ftst_parallel.nc|f03tst_parallel.nc|" $@.tmp2 > $@
 
 endif #USE_SED
 
@@ -163,7 +174,8 @@ endif #USE_SED
 # check-valgrind target, which runs all tests with valgrind.
 @VALGRIND_CHECK_RULES@
 
-EXTRA_DIST = CMakeLists.txt run_f77_par_test.sh
+EXTRA_DIST = CMakeLists.txt run_f77_par_test.sh	\
+run_f77_par_test_03.sh
 
 # Cleaning up files created during the testing.
 CLEANFILES = ftst_*.nc f03tst_*.nc *.tmp *.tmp2 $(F03_TEST_CODES)

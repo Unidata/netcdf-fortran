@@ -38,61 +38,6 @@ tst_f77_v2_SOURCES = tst_f77_v2.F
 TESTS += tst_f77_v2
 endif # BUILD_V2
 
-# If the user building netCDF-4 add the netCDF-4 test programs.
-if USE_NETCDF4
-
-# Add these netCDF-4 f90 API test programs.
-check_PROGRAMS += f90tst_vars tst_types tst_types2 f90tst_vars_vlen	\
-tst_f90_nc4 f90tst_grps f90tst_fill f90tst_fill2 f90tst_vars3		\
-f90tst_vars4 f90tst_vars2 f90tst_path f90tst_rengrps
-
-TESTS += f90tst_vars tst_types tst_types2 f90tst_vars_vlen	\
-tst_f90_nc4 f90tst_grps f90tst_fill f90tst_fill2 f90tst_vars3	\
-f90tst_vars4 f90tst_vars2 f90tst_path f90tst_rengrps
-
-f90tst_vars_SOURCES = f90tst_vars.f90
-tst_types_SOURCES = tst_types.f90
-tst_types2_SOURCES = tst_types2.f90
-tst_f90_nc4_SOURCES = tst_f90_nc4.f90
-f90tst_vars_vlen_SOURCES = f90tst_vars_vlen.f90
-f90tst_grps_SOURCES = f90tst_grps.f90
-f90tst_path_SOURCES = f90tst_path.f90
-f90tst_rengrps_SOURCES = f90tst_rengrps.f90
-f90tst_fill_SOURCES = f90tst_fill.f90
-f90tst_fill2_SOURCES = f90tst_fill2.f90
-f90tst_vars2_SOURCES = f90tst_vars2.f90
-f90tst_vars3_SOURCES = f90tst_vars3.f90
-f90tst_vars4_SOURCES = f90tst_vars4.f90
-
-# This is the netCDF-4 F90 large file test.
-if LARGE_FILE_TESTS
-check_PROGRAMS += tst_flarge
-TESTS += tst_flarge
-tst_flarge_SOURCES = tst_flarge.f90
-endif # LARGE_FILE_TESTS
-
-# This is an f90 benchmark.
-if BUILD_BENCHMARKS
-check_PROGRAMS += tst_io
-TESTS += tst_io
-tst_io_SOURCES = tst_io.f90
-endif #BUILD_BENCHMARKS
-
-# Test parallel I/O.
-if TEST_PARALLEL
-check_PROGRAMS += f90tst_parallel f90tst_parallel2 f90tst_parallel3	\
-f90tst_nc4_par f90tst_parallel_fill
-TESTS += run_f90_par_test.sh
-
-f90tst_parallel_SOURCES = f90tst_parallel.F90
-f90tst_parallel2_SOURCES = f90tst_parallel2.F90
-f90tst_parallel3_SOURCES = f90tst_parallel3.F90
-f90tst_nc4_par_SOURCES = f90tst_nc4_par.F90
-f90tst_parallel_fill_SOURCES = f90tst_parallel_fill.f90
-endif # TEST_PARALLEL
-
-endif #USE_NETCDF4
-
 # This is the fortran v2 test.
 if BUILD_V2
 check_PROGRAMS += ftest
@@ -115,8 +60,8 @@ tst_f90_SOURCES = tst_f90.f90
 # test_get.F and test_put.f need to be distributed, so that the user
 # need not have m4. ref_fills.nc is copied to fills.nc by configure
 # and used by test program ftest.
-EXTRA_DIST = test_get.F test_put.F fills.cdl run_f90_par_test.sh	\
-ref_fills.nc CMakeLists.txt
+EXTRA_DIST = test_get.F test_put.F fills.cdl ref_fills.nc	\
+CMakeLists.txt
 
 # Cleaning up files created during the process.
 CLEANFILES = scratch.nc test.nc copy.nc tst_*.nc ftst_*.nc	\

@@ -4,13 +4,11 @@ SET(CMAKE_VERBOSE_MAKEFILE OFF)
 SET(CMAKE_BUILD_TYPE "RelWithDebInfo")
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-
 # Process these files with m4.
 SET(m4_SOURCES test_get test_put)
 foreach (f ${m4_SOURCES})
 		   GEN_m4(${f})
 endforeach(f)
-
 
 SET(nf_test_SOURCES
   f03lib_f_interfaces.f90 test_get.F test_put.F nf_error.F nf_test.F
@@ -21,64 +19,9 @@ IF (BUILD_V2)
   SET(check_PROGRAMS tst_f77_v2)
   SET(tst_f77_v2_SOURCES tst_f77_v2.F)
   SET(TESTS ${TESTS} tst_f77_v2)
-ENDIF(BUILD_V2)
-
-# Is the user building netCDF-4?
-if (USE_NETCDF4)
-  # Add these netCDF-4 f90 test programs.
-  SET(nc4_f90_PROGRAMS
-    f90tst_vars tst_types tst_types2 f90tst_vars_vlen
-    tst_f90_nc4 f90tst_grps f90tst_fill f90tst_fill2 f90tst_vars3
-    f90tst_vars4 f90tst_vars2)
-  SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_f90_PROGRAMS})
-  SET(TESTS ${TESTS} ${nc4_f90_PROGRAMS})
-  SET(f90tst_vars_SOURCES f90tst_vars.f90)
-  SET(tst_types_SOURCES tst_types.f90)
-  SET(tst_types2_SOURCES tst_types2.f90)
-  SET(tst_f90_nc4_SOURCES tst_f90_nc4.f90)
-  SET(f90tst_vars_vlen_SOURCES f90tst_vars_vlen.f90)
-  SET(f90tst_grps_SOURCES f90tst_grps.f90)
-  SET(f90tst_fill_SOURCES f90tst_fill.f90)
-  SET(f90tst_fill2_SOURCES f90tst_fill2.f90)
-  SET(f90tst_vars2_SOURCES f90tst_vars2.f90)
-  SET(f90tst_vars3_SOURCES f90tst_vars3.f90)
-  SET(f90tst_vars4_SOURCES f90tst_vars4.f90)
-
-  # This is the netCDF-4 F90 large file test.
-  IF (LARGE_FILE_TESTS)
-    SET(nc4_largefile_PROGRAMS tst_flarge)
-    SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_largefile_PROGRAMS})
-    SET(TESTS ${TESTS} ${nc4_largefile_PROGRAMS})
-    SET(tst_flarge_SOURCES tst_flarge.f90)
-  ENDIF(LARGE_FILE_TESTS)
-
-  # This is an f90 benchmark.
-  IF(BUILD_BENCHMARKS)
-    SET(nc4_io_PROGRAMS tst_io)
-    SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_io_PROGRAMS})
-    SET(TESTS ${TESTS} ${nc4_io_PROGRAMS})
-    SET(tst_io_SOURCES tst_io.f90)
-  ENDIF(BUILD_BENCHMARKS)
-
-  # Test parallel I/O.
-  IF (TEST_PARALLEL)
-    SET(check_PROGRAMS ${check_PROGRAMS} f90tst_parallel f90tst_parallel2 f90tst_parallel3
-      f90tst_nc4_par)
-
-    build_bin_test(f90tst_parallel ".F90")
-    build_bin_test(f90tst_parallel2 ".F90")
-    build_bin_test(f90tst_parallel3 ".F90")
-    build_bin_test(f90tst_nc4_par ".F90")
-
-    #SET(f90tst_parallel_fill_SOURCES f90tst_parallel_fill.f90)
-
-  ENDIF (TEST_PARALLEL)
-
-endif(USE_NETCDF4)
 
 # This is the fortran v2 test. It depends on the utilities being built
 # to generate its input file.
-IF (BUILD_V2)
   SET(check_PROGRAMS ${check_PROGRAMS} ftest)
   SET(TESTS ${TESTS} ftest)
   SET(ftest_SOURCES ftest.F f03lib.c)
@@ -135,9 +78,9 @@ ENDFOREACH()
 # test_get.F and test_put.f need to be distributed, so that the user
 # need not have m4. fills.nc is used by test program ftest.
 SET (EXTRA_DIST test_get.F test_put.F fills.cdl create_fills.sh
-  run_f90_par_test.sh run_f77_par_test.sh ref_fills.nc)
+   ref_fills.nc)
 
 # Cleaning up files created during the process.
-SET (CLEANFILES scratch.nc test.nc copy.nc fills.nc tst_*.nc ftst_*.nc f90tst_*.nc)
+SET (CLEANFILES scratch.nc test.nc copy.nc fills.nc tst_*.nc ftst_*.nc)
 
 SET (MAINTAINERCLEANFILES test_get.F test_put.F)
