@@ -1,23 +1,21 @@
 /*
- * $Id: fort03.c,v 1.9 2007/07/28 13:14:00 rick Exp $
- *
  * This file contains support functions for FORTRAN code.  For example,
  * under HP-UX A.09.05, the U77 library doesn't contain the exit()
  * routine -- so we create one here.
  */
 
 /*
-   Modified fortlib.c - We remove all cfortran.h stuff to make 
-   compiling easier. Also functions are modified to be extern
-   and not static so FORTRAN can see them
+  Modified fortlib.c - We remove all cfortran.h stuff to make
+  compiling easier. Also functions are modified to be extern
+  and not static so FORTRAN can see them
 
-   Version 1. July  2007 first vesion 
-   Version 2. April 2009 - modified for netCDF 4.0.1
-      
-   Modified by: Richard Weed, Ph.D
-   Center for Advanced Vehicular Systems
-   Misssissippi State University
-   rweed@.cavs.msstate.edu
+  Version 1. July  2007 first vesion
+  Version 2. April 2009 - modified for netCDF 4.0.1
+
+  Modified by: Richard Weed, Ph.D
+  Center for Advanced Vehicular Systems
+  Misssissippi State University
+  rweed@.cavs.msstate.edu
 */
 
 #include <stdlib.h>
@@ -29,7 +27,7 @@ extern double
 myrand(int iflag)
 {
     if (iflag != 0)
-	srand(iflag);
+        srand(iflag);
 
     /*
      * Return a pseudo-random value between 0.0 and 1.0.
@@ -45,10 +43,10 @@ extern int
 myshift(int value, int amount)
 {
     if (amount < 0)
-	value >>= -amount;
+        value >>= -amount;
     else
-    if (amount > 0)
-	value <<= amount;
+        if (amount > 0)
+            value <<= amount;
     return value;
 }
 
@@ -56,8 +54,8 @@ myshift(int value, int amount)
 extern void
 nc_ignorefpe(int doit)
 {
-	if(doit)
-		(void) signal(SIGFPE, SIG_IGN);
+    if(doit)
+        (void) signal(SIGFPE, SIG_IGN);
 }
 
 extern double cmax_uchar()
