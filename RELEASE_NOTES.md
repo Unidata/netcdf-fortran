@@ -14,6 +14,8 @@ Entries are in reverse chronological order (most recent first).
 
 ### Changes
 
+* Moved netCDF-4 F77 API tests to new subdirectory nf_test4.
+* Moved netCDF-4 F90 API tests to new subdirectory nf03_test4.
 * Fixed bug which caused parallel I/O tests to not be run. See
   [#155](https://github.com/Unidata/netcdf-fortran/issues/155) and
   [#157](https://github.com/Unidata/netcdf-fortran/issues/157).
@@ -24,13 +26,13 @@ Entries are in reverse chronological order (most recent first).
   build time with sed. See
   [#165](https://github.com/Unidata/netcdf-fortran/issues/165).
 * Removed no longer needed configure options --enable-dll (see
-[#161](https://github.com/Unidata/netcdf-fortran/issues/161)),
---enable-extra-tests (see
-[#114](https://github.com/Unidata/netcdf-fortran/issues/114)),
---enable-extra-example-tests(see
-[#126](https://github.com/Unidata/netcdf-fortran/issues/126)), and
---enable-valgrind (see
-[#118](https://github.com/Unidata/netcdf-fortran/issues/118)).
+  [#161](https://github.com/Unidata/netcdf-fortran/issues/161)),
+  --enable-extra-tests (see
+  [#114](https://github.com/Unidata/netcdf-fortran/issues/114)),
+  --enable-extra-example-tests(see
+  [#126](https://github.com/Unidata/netcdf-fortran/issues/126)), and
+  --enable-valgrind (see
+  [#118](https://github.com/Unidata/netcdf-fortran/issues/118)).
 * Moved handling of F77 man page to the docs directory. See
   [#141](https://github.com/Unidata/netcdf-fortran/issues/141)
 
