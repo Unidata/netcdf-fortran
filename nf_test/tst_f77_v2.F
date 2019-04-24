@@ -1,4 +1,4 @@
-C     This is part of netCDF, Copyright 2006, UCAR
+C     This is part of netCDF, Copyright 2006-2019, UCAR
 
 C     This test program uses the fortran 77 v2 API to create a simple
 C     data file with some phoney data in it. This program is heavily
@@ -7,7 +7,7 @@ C     jvkepner@astro.Princeton.EDU.
 
 C     This program will bail out in the event of a netcdf error.
 
-C     $Id: tst_f77_v2.F,v 1.2 2009/01/25 14:33:44 ed Exp $
+C     Ed Hartnett
 
       PROGRAM tst_f77_v2
       
