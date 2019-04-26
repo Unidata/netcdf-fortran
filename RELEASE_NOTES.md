@@ -14,6 +14,7 @@ Entries are in reverse chronological order (most recent first).
 
 ### Changes
 
+* Moved netCDF classic F90 API tests to new subdirectory nf03_test.
 * Moved netCDF-4 F77 API tests to new subdirectory nf_test4.
 * Moved netCDF-4 F90 API tests to new subdirectory nf03_test4.
 * Fixed bug which caused parallel I/O tests to not be run. See
