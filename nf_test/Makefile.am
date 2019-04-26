@@ -1,47 +1,31 @@
 # This is a automake file, part of Unidata's netCDF package.
 # Copyright 2005-2019, see the COPYRIGHT file for more information.
 
-# This file builds and runs the f77 and f90 tests.
+# This file builds and runs the tests for the netCDF classic F77
+# API. Tests are run using traditional include netcdf.inc, and then
+# again using the F77 API through its Fortran mod file. To achieve
+# this, sed is used to modify the tests using include, to create the
+# tests using the fortran module.
 
 # Ed Hartnett, Russ Rew, Dennis Heimbigner, Ward Fisher
 
-AM_CPPFLAGS = -I$(top_srcdir)/fortran -I../fortran
+# FFLAGS is used when compiling *.F
+AM_FFLAGS = -I$(top_builddir)/fortran
 
-# Some fortran compilers think your files should not have an .f90
-# extension! The value of FCFLAGS_f90 is set in the configure script,
-# based on the fortran compiler.
-AM_FCFLAGS = @MOD_FLAG@$(top_builddir)/fortran $(FCFLAGS_f90)
+# FCFLAGS is used when compiling *.F90.
+AM_FCFLAGS = $(AM_FFLAGS)
 
-AM_FFLAGS = ${AM_FCFLAGS}
-
-# All tests need to link to fortran library.
+# All tests need to link to the netcdf fortran library.
 LDADD = ${top_builddir}/fortran/libnetcdff.la
 
-# Need access to top_srcdir
-TESTS_ENVIRONMENT = TOPSRCDIR=${abs_top_srcdir}
-
-# Build this uninstalled convenience library.
-noinst_LTLIBRARIES = libtests.la
-
-# Each convenience library depends on its source.
-libtests_la_SOURCES = module_tests.F90
-
-# Each mod file depends on the .o file.
-tests.mod: module_tests.$(OBJEXT)
-
-# Mod files are built sources.
-MODFILES = tests.mod
-BUILT_SOURCES = $(MODFILES)
-
-# nf_test is the main test program.
+# nf_test is the main test program for classic netCDF F77 API.
 check_PROGRAMS = nf_test
 TESTS = nf_test
-
 nf_test_SOURCES = f03lib_f_interfaces.f90 test_get.m4 test_put.m4	\
 nf_error.F nf_test.F test_read.F test_write.F util.F f03lib.c		\
 tests.inc
 
-# Did the user build the V2 F77 API? If so, run this test.
+# Add these two V2 test programs, if V2 API is being built.
 if BUILD_V2
 check_PROGRAMS += tst_f77_v2 ftest
 TESTS += tst_f77_v2 ftest
@@ -54,6 +38,18 @@ endif # BUILD_V2
 # netcdf4_f03" statement.
 if USE_SED
 
+# Build this uninstalled convenience library, tests.mod.
+noinst_LTLIBRARIES = libtests.la
+
+# Each convenience library depends on its source.
+libtests_la_SOURCES = module_tests.F90
+
+# Each mod file depends on the .o file.
+tests.mod: module_tests.$(OBJEXT)
+
+# Mod files are built sources.
+BUILT_SOURCES = tests.mod
+
 # The fortran codes will compile into these tests.
 F03_TESTS = nf03_test
 
@@ -61,15 +57,19 @@ F03_TESTS = nf03_test
 F03_TEST_CODES = nf03_error.F test03_read.F test03_write.F	\
 nf03_test.F
 
-# nf03_test is the same as nf_test, but with "use" instead of
-# "include". Soon I hope to generate these files with sed, but for
-# now, we just store slightly modified copies of these codes in the
+# nf03_get.F/nf03_put.F/util03.F are copies of similarly named test
+# codes, but with "use" instead of "include", as well as some other
+# changes to make them work with the tests.mod file instead of
+# tests.inc. These files proved too difficult to generate with sed,
+# so, we just store slightly modified copies of these codes in the
 # repo.
 nf03_test_SOURCES = f03lib_f_interfaces.f90 test03_get.F test03_put.F	\
 nf03_error.F nf03_test.F test03_read.F test03_write.F util03.F		\
 f03lib.c
 nf03_test_LDADD = libtests.la ${top_builddir}/fortran/libnetcdff.la
 
+# If the V2 API is being built, then make copies of the two V2 F77 API
+# tests, modified to use the fortran module.
 if BUILD_V2
 F03_TEST_CODES += f03test.F tst03_f77_v2.F
 F03_TESTS += f03test tst03_f77_v2
