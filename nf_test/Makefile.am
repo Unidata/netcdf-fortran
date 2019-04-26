@@ -117,8 +117,8 @@ CMakeLists.txt
 
 # Cleaning up files created during the process.
 CLEANFILES = scratch*.nc test*.nc copy*.nc tst_*.nc ftst_*.nc		\
-f90tst_*.nc f03test*.nc temp*.tmp fort.* tst03*.nc f03tst*.nc *.mod	\
-$(F03_TEST_CODES)
+f90tst_*.nc f03test*.nc *.tmp *.tmp2 fort.* tst03*.nc f03tst*.nc	\
+ftest.nc fcopy.nc *.mod $(F03_TEST_CODES)
 
 DISTCLEANFILES = fills.nc
 
