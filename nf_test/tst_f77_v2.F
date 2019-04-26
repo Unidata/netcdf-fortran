@@ -1,4 +1,4 @@
-C     This is part of netCDF, Copyright 2006-2019, UCAR
+C     This is part of netCDF, Copyright 2006, UCAR
 
 C     This test program uses the fortran 77 v2 API to create a simple
 C     data file with some phoney data in it. This program is heavily
@@ -7,13 +7,11 @@ C     jvkepner@astro.Princeton.EDU.
 
 C     This program will bail out in the event of a netcdf error.
 
-C     Ed Hartnett
+C     Ed Hartnett, 2009
 
       PROGRAM tst_f77_v2
-      
       IMPLICIT NONE
-
-#include "tests.inc"
+      include 'netcdf.inc'
 
       INTEGER n_dim,x_dim,y_dim,z_dim
       PARAMETER(n_dim = 3, x_dim = 20, y_dim = 10, z_dim = 5)

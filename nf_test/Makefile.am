@@ -5,9 +5,6 @@
 
 # Ed Hartnett, Russ Rew, Dennis Heimbigner, Ward Fisher
 
-# Parallel builds don't currently work in this directory.
-.NOTPARALLEL:
-
 AM_CPPFLAGS = -I$(top_srcdir)/fortran -I../fortran
 
 # Some fortran compilers think your files should not have an .f90
@@ -23,6 +20,19 @@ LDADD = ${top_builddir}/fortran/libnetcdff.la
 # Need access to top_srcdir
 TESTS_ENVIRONMENT = TOPSRCDIR=${abs_top_srcdir}
 
+# Build this uninstalled convenience library.
+noinst_LTLIBRARIES = libtests.la
+
+# Each convenience library depends on its source.
+libtests_la_SOURCES = module_tests.F90
+
+# Each mod file depends on the .o file.
+tests.mod: module_tests.$(OBJEXT)
+
+# Mod files are built sources.
+MODFILES = tests.mod
+BUILT_SOURCES = $(MODFILES)
+
 # nf_test is the main test program.
 check_PROGRAMS = nf_test
 TESTS = nf_test
@@ -33,21 +43,63 @@ tests.inc
 
 # Did the user build the V2 F77 API? If so, run this test.
 if BUILD_V2
-check_PROGRAMS += tst_f77_v2
+check_PROGRAMS += tst_f77_v2 ftest
+TESTS += tst_f77_v2 ftest
 tst_f77_v2_SOURCES = tst_f77_v2.F
-TESTS += tst_f77_v2
-endif # BUILD_V2
-
-# This is the fortran v2 test.
-if BUILD_V2
-check_PROGRAMS += ftest
-TESTS += ftest
 ftest_SOURCES = ftest.F f03lib.c
 endif # BUILD_V2
 
-check_PROGRAMS += tst_f90
-TESTS += tst_f90
-tst_f90_SOURCES = tst_f90.f90
+# nf03_test is the same as nf_test, but with "use" instead of
+# "include". Soon I hope to generate these files with sed, but for
+# now, we just store slightly modified copies of these codes in the
+# repo.
+check_PROGRAMS += nf03_test
+TESTS += nf03_test
+nf03_test_SOURCES = f03lib_f_interfaces.f90 test03_get.F test03_put.F	\
+nf03_error.F nf03_test.F test03_read.F test03_write.F util03.F		\
+f03lib.c
+nf03_test_LDADD = libtests.la ${top_builddir}/fortran/libnetcdff.la
+
+# If sed is present, generate these tests at build time. They are the
+# same tests as the F77 netCDF-4 tests above, but using the "use
+# netcdf4_f03" statement.
+if USE_SED
+
+# These test fortran codes will be created using sed.
+F03_TEST_CODES =
+
+# The fortran codes will compile into these tests.
+F03_TESTS =
+
+if BUILD_V2
+F03_TEST_CODES += f03test.F tst03_f77_v2.F
+F03_TESTS += f03test tst03_f77_v2
+f03test_SOURCES = f03test.F
+f03test_LDADD = libtests.la ${top_builddir}/fortran/libnetcdff.la
+tst03_f77_v2_SOURCES = tst03_f77_v2.F
+tst03_f77_v2_LDADD = libtests.la ${top_builddir}/fortran/libnetcdff.la
+endif # BUILD_V2
+
+# Note that all these fortran programs are built at compile-time on
+# the user system.
+BUILT_SOURCES += $(F03_TEST_CODES)
+
+# Compile and run the generated tests.
+check_PROGRAMS += $(F03_TESTS)
+TESTS += $(F03_TESTS)
+
+# Use sed to generate the f03 versions of some test codes.
+f03test.F: ftest.F
+	$(SED) "s|include 'netcdf.inc'|use netcdf_f03|" $< > $@.tmp
+	$(SED) "s|ftest.nc|f03test_test.nc|" $@.tmp > $@.tmp2
+	$(SED) "s|fcopy.nc|f03test_copy.nc|" $@.tmp2 > $@
+
+tst03_f77_v2.F: tst_f77_v2.F
+	$(SED) "s|IMPLICIT NONE|USE tests|" $< > $@.tmp
+	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
+	$(SED) "s|tst_f77_v2.nc|tst03_f77_v2.nc|" $@.tmp2 > $@
+
+endif #USE_SED
 
 # Tell make how to turn .m4 files into .F files.
 .m4.F:
@@ -64,8 +116,9 @@ EXTRA_DIST = test_get.F test_put.F fills.cdl ref_fills.nc	\
 CMakeLists.txt
 
 # Cleaning up files created during the process.
-CLEANFILES = scratch.nc test.nc copy.nc tst_*.nc ftst_*.nc	\
-f90tst_*.nc temp.tmp fort.*
+CLEANFILES = scratch*.nc test*.nc copy*.nc tst_*.nc ftst_*.nc	\
+f90tst_*.nc f03test*.nc *.tmp *.tmp2 fort.* tst03*.nc	\
+f03tst*.nc ftest.nc fcopy.nc *.mod $(F03_TEST_CODES)
 
 DISTCLEANFILES = fills.nc
 
