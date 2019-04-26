@@ -58,7 +58,7 @@ if USE_SED
 F03_TESTS = nf03_test
 
 # These test fortran codes will be created using sed.
-F03_TEST_CODES = nf03_error.F
+F03_TEST_CODES = nf03_error.F test03_read.F
 
 # nf03_test is the same as nf_test, but with "use" instead of
 # "include". Soon I hope to generate these files with sed, but for
@@ -105,9 +105,9 @@ nf03_error.F: nf_error.F
 # 	$(SED) "s|implicit none|USE tests|" $< > $@.tmp
 # 	$(SED) "s|#include \"tests.inc\"|      implicit none|" $@.tmp > $@
 
-# test03_read.F: test_read.F
-# 	$(SED) "s|implicit none|USE tests|" $< > $@.tmp
-# 	$(SED) "s|#include \"tests.inc\"|      implicit none|" $@.tmp > $@
+test03_read.F: test_read.F
+	$(SED) "s|implicit none|USE tests|" $< > $@.tmp
+	$(SED) "s|#include \"tests.inc\"|      implicit none|" $@.tmp > $@
 
 # test03_write.F: test_write.F
 # 	$(SED) "s|implicit none|USE tests|" $< > $@.tmp
