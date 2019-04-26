@@ -7,9 +7,9 @@ C
 C     Use for logging error messages
 C
       subroutine error(msg)
-      implicit        none
-      character*(*)   msg
+      implicit none
 #include "tests.inc"
+      character*(*)   msg
 
       nfails = nfails + 1
       if (nfails .le. max_nmpt) print *, msg
@@ -20,10 +20,10 @@ C
 C     Use for logging error conditions
 C
       subroutine errori(msg, i)
-      implicit        none
+      implicit none
+#include "tests.inc"
       character*(*)   msg
       integer         i
-#include "tests.inc"
 
       nfails = nfails + 1
       if (nfails .le. max_nmpt) print *, msg, i
@@ -34,10 +34,10 @@ C
 C     Use for logging error conditions
 C
       subroutine errord(msg, d)
-      implicit        none
+      implicit none
+#include "tests.inc"
       character*(*)   msg
       doubleprecision d
-#include "tests.inc"
 
       nfails = nfails + 1
       if (nfails .le. max_nmpt) print *, msg, d
@@ -48,10 +48,10 @@ C
 C     Use for logging error conditions
 C
       subroutine errorc(msg, string)
-      implicit        none
+      implicit none
+#include "tests.inc"
       character*(*)   msg
       character*(*)   string
-#include "tests.inc"
 
       nfails = nfails + 1
       if (nfails .le. max_nmpt) print *, msg,
@@ -63,10 +63,10 @@ C
 C     Use for logging error conditions
 C
       subroutine errore(msg, err)
-      implicit        none
+      implicit none
+#include "tests.inc"
       character*(*)   msg
       integer         err
-#include "tests.inc"
 
       call errorc(msg, nf_strerror(err))
       end
