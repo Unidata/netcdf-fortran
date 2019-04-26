@@ -58,7 +58,7 @@ if USE_SED
 F03_TESTS = nf03_test
 
 # These test fortran codes will be created using sed.
-F03_TEST_CODES =
+F03_TEST_CODES = nf03_error.F
 
 # nf03_test is the same as nf_test, but with "use" instead of
 # "include". Soon I hope to generate these files with sed, but for
@@ -97,9 +97,21 @@ tst03_f77_v2.F: tst_f77_v2.F
 	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
 	$(SED) "s|tst_f77_v2.nc|tst03_f77_v2.nc|" $@.tmp2 > $@
 
-nf03_test.F: nf_test.F
+nf03_error.F: nf_error.F
 	$(SED) "s|implicit none|USE tests|" $< > $@.tmp
 	$(SED) "s|#include \"tests.inc\"|      implicit none|" $@.tmp > $@
+
+# nf03_test.F: nf_test.F
+# 	$(SED) "s|implicit none|USE tests|" $< > $@.tmp
+# 	$(SED) "s|#include \"tests.inc\"|      implicit none|" $@.tmp > $@
+
+# test03_read.F: test_read.F
+# 	$(SED) "s|implicit none|USE tests|" $< > $@.tmp
+# 	$(SED) "s|#include \"tests.inc\"|      implicit none|" $@.tmp > $@
+
+# test03_write.F: test_write.F
+# 	$(SED) "s|implicit none|USE tests|" $< > $@.tmp
+# 	$(SED) "s|#include \"tests.inc\"|      implicit none|" $@.tmp > $@
 
 endif #USE_SED
 
