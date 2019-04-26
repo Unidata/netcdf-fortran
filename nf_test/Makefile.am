@@ -54,8 +54,6 @@ test03_write.F util03.F f03lib.c
 nf03_error.o nf03_test.o test03_get.o test03_put.o test03_read.o test03_write.o util03.o: \
 module_tests.o
 
-
-
 # If sed is present, generate these tests at build time. They are the
 # same tests as the F77 netCDF-4 tests above, but using the "use
 # netcdf4_f03" statement.
