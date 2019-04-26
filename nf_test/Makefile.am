@@ -49,27 +49,25 @@ tst_f77_v2_SOURCES = tst_f77_v2.F
 ftest_SOURCES = ftest.F f03lib.c
 endif # BUILD_V2
 
-# nf03_test is the same as nf_test, but with "use" instead of
-# "include". Soon I hope to generate these files with sed, but for
-# now, we just store slightly modified copies of these codes in the
-# repo.
-check_PROGRAMS += nf03_test
-TESTS += nf03_test
-nf03_test_SOURCES = f03lib_f_interfaces.f90 test03_get.F test03_put.F	\
-nf03_error.F nf03_test.F test03_read.F test03_write.F util03.F		\
-f03lib.c
-nf03_test_LDADD = libtests.la ${top_builddir}/fortran/libnetcdff.la
-
 # If sed is present, generate these tests at build time. They are the
 # same tests as the F77 netCDF-4 tests above, but using the "use
 # netcdf4_f03" statement.
 if USE_SED
 
+# The fortran codes will compile into these tests.
+F03_TESTS = nf03_test
+
 # These test fortran codes will be created using sed.
 F03_TEST_CODES =
 
-# The fortran codes will compile into these tests.
-F03_TESTS =
+# nf03_test is the same as nf_test, but with "use" instead of
+# "include". Soon I hope to generate these files with sed, but for
+# now, we just store slightly modified copies of these codes in the
+# repo.
+nf03_test_SOURCES = f03lib_f_interfaces.f90 test03_get.F test03_put.F	\
+nf03_error.F nf03_test.F test03_read.F test03_write.F util03.F		\
+f03lib.c
+nf03_test_LDADD = libtests.la ${top_builddir}/fortran/libnetcdff.la
 
 if BUILD_V2
 F03_TEST_CODES += f03test.F tst03_f77_v2.F
@@ -98,6 +96,10 @@ tst03_f77_v2.F: tst_f77_v2.F
 	$(SED) "s|IMPLICIT NONE|USE tests|" $< > $@.tmp
 	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
 	$(SED) "s|tst_f77_v2.nc|tst03_f77_v2.nc|" $@.tmp2 > $@
+
+nf03_test.F: nf_test.F
+	$(SED) "s|implicit none|USE tests|" $< > $@.tmp
+	$(SED) "s|#include \"tests.inc\"|      implicit none|" $@.tmp > $@
 
 endif #USE_SED
 
