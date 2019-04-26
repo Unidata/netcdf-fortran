@@ -31,7 +31,6 @@
 #define NO_NETCDF_2 1
 #endif
 
-#include "nfconfig.inc"
 #ifdef USE_NETCDF4
        USE netcdf4_f03
 #else

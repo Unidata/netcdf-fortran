@@ -18,6 +18,10 @@ SET(nf03_test_SOURCES module_tests.F90 f03lib_f_interfaces.f90 test03_get.F test
 
 LIST(APPEND CLEANFILES tests.mod)
 
+SET(check_PROGRAMS ${check_PROGRAMS} tst_f90)
+SET(TESTS ${TESTS} tst_f90)
+SET(tst_f90_SOURCES tst_f90.f90)
+
 # test03_get.F and test03_put.f need to be distributed, so that the user
 # need not have m4.
 SET(EXTRA_DIST test03_get.F test03_put.F fills.cdl create_fills.sh run_f77_par_test.sh)
