@@ -57,7 +57,7 @@ F03_TESTS = nf03_test
 F03_TEST_CODES = nf03_error.F test03_read.F test03_write.F	\
 nf03_test.F test03_get.F
 
-# nf03_get.F/nf03_put.F/util03.F are copies of similarly named test
+# test03_put.F and util03.F are copies of similarly named test
 # codes, but with "use" instead of "include", as well as some other
 # changes to make them work with the tests.mod file instead of
 # tests.inc. These files proved too difficult to generate with sed,
