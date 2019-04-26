@@ -8,10 +8,10 @@ C     implementation of the netCDF library.
 C     Steve Emmerson, Ed Hartnett
 
       subroutine test(name, func)
-      implicit        none
+      implicit none
+#include "tests.inc"
       character*(*)   name
       external        func
-#include "tests.inc"
 
       write(*, 1) name
  1    format(' *** testing ', a, ' ... ')
@@ -29,8 +29,7 @@ C     stop 2
       end
 
       program nf_test
-      implicit        none
-
+      implicit none
 #include "tests.inc"
 
       integer         status
@@ -235,7 +234,6 @@ C     stop 2
             print*,"testing NetCDF-4 format"
 #endif
          endif
-         FILE_CMODE = cmode(i)
 
 C     /* Initialize global variables defining test file */
          call init_gvars
