@@ -5,9 +5,6 @@
 
 # Ed Hartnett, Russ Rew, Dennis Heimbigner, Ward Fisher
 
-# Parallel builds don't currently work in this directory.
-.NOTPARALLEL:
-
 AM_CPPFLAGS = -I$(top_srcdir)/fortran -I../fortran
 
 # Some fortran compilers think your files should not have an .f90
@@ -63,11 +60,6 @@ nf03_error.F nf03_test.F test03_read.F test03_write.F util03.F		\
 f03lib.c
 nf03_test_LDADD = libtests.la ${top_builddir}/fortran/libnetcdff.la
 
-# programs that "use tests" from the tests.mod module depend on it
-# being built first, needed for make -j
-#nf03_error.o nf03_test.o test03_get.o test03_put.o test03_read.o test03_write.o util03.o: \
-#module_tests.o
-
 # If sed is present, generate these tests at build time. They are the
 # same tests as the F77 netCDF-4 tests above, but using the "use
 # netcdf4_f03" statement.
@@ -99,8 +91,8 @@ TESTS += $(F03_TESTS)
 # Use sed to generate the f03 versions of some test codes.
 f03test.F: ftest.F
 	$(SED) "s|include 'netcdf.inc'|use netcdf_f03|" $< > $@.tmp
-	$(SED) "s|test.nc|f03tst_test.nc|" $@.tmp > $@.tmp2
-	$(SED) "s|copy.nc|f03tst_copy.nc|" $@.tmp2 > $@
+	$(SED) "s|ftest.nc|f03test_test.nc|" $@.tmp > $@.tmp2
+	$(SED) "s|fcopy.nc|f03test_copy.nc|" $@.tmp2 > $@
 
 tst03_f77_v2.F: tst_f77_v2.F
 	$(SED) "s|IMPLICIT NONE|USE tests|" $< > $@.tmp
@@ -124,8 +116,8 @@ EXTRA_DIST = test_get.F test_put.F fills.cdl ref_fills.nc	\
 CMakeLists.txt
 
 # Cleaning up files created during the process.
-CLEANFILES = scratch.nc test.nc copy.nc tst_*.nc ftst_*.nc	\
-f90tst_*.nc temp.tmp fort.* *.mod
+CLEANFILES = scratch*.nc test*.nc copy*.nc tst_*.nc ftst_*.nc	\
+f90tst_*.nc f03test*.nc temp*.tmp fort.* *.mod $(F03_TEST_CODES)
 
 DISTCLEANFILES = fills.nc
 

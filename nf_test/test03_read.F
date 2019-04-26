@@ -114,7 +114,7 @@ C On exit, any open netCDF files are closed.
         integer unit51
 C       /* Create a non-netCDF file named 'temp.tmp' */
         unit51 = 51
-        TEMPFILE = 'temp.tmp'
+        TEMPFILE = 'temp03.tmp'
         OPEN(unit51, FILE=TEMPFILE)
         WRITE(51,*) 'text'
         CLOSE(51)

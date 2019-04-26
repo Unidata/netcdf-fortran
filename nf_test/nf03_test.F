@@ -200,8 +200,8 @@ C           stop 2
         print *, '*** Testing netCDF-3 Fortran 77 API.'
         call ignorefpe(1)
 
-        testfile = 'test.nc'
-        scratch = 'scratch.nc'
+        testfile = 'test03.nc'
+        scratch = 'scratch03.nc'
 
         nfailsTotal = 0
         progname = 'nf_test'

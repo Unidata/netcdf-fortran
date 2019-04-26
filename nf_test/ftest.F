@@ -40,8 +40,8 @@
 !      allowable roundoff 
       common /dims/timedim, latdim, londim, leveldim, lendim,
      + dimsiz
-      data name/'test.nc'/
-      data name2/'copy.nc'/
+      data name/'ftest.nc'/
+      data name2/'fcopy.nc'/
 
       print *, ''
       print *,'*** Testing netCDF-2 Fortran 77 API.'
