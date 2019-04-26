@@ -97,14 +97,14 @@ netcdf_f03.mod: module_netcdf_f03.$(OBJEXT)
 # If v2 API is being built, build v2 F77 API mod file.
 if BUILD_V2
 MODFILES += netcdf_fortv2_c_interfaces.mod
-netcdf_fortv2_c_interfaces.mod: module_netcdf_fortv2_c_interfaces.$(OBJEXT)
+netcdf_fortv2_c_interfaces.mod: module_netcdf_fortv2_c_interfaces.$(OBJEXT) netcdf_nc_interfaces.mod
 endif BUILD_V2
 
 # If netCDF-4 is being build, build the netCDF-4 F77 API mod files.
 if USE_NETCDF4
 MODFILES += netcdf4_nc_interfaces.mod netcdf4_nf_interfaces.mod	\
 netcdf4_f03.mod
-netcdf4_nc_interfaces.mod: module_netcdf4_nc_interfaces.$(OBJEXT)
+netcdf4_nc_interfaces.mod: module_netcdf4_nc_interfaces.$(OBJEXT) netcdf_nc_interfaces.mod
 netcdf4_nf_interfaces.mod: module_netcdf4_nf_interfaces.$(OBJEXT)
 netcdf4_f03.mod: module_netcdf4_f03.$(OBJEXT)
 endif USE_NETCDF4

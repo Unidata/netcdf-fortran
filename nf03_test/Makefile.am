@@ -5,9 +5,6 @@
 
 # Ed Hartnett, Russ Rew, Dennis Heimbigner, Ward Fisher
 
-# Parallel builds don't currently work in this directory.
-.NOTPARALLEL:
-
 AM_FCFLAGS = -I$(top_builddir)/fortran ${AM_CPPFLAGS}
 
 # Some fortran compilers think your files should not have an .f90
