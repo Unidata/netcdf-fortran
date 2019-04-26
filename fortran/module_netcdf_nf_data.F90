@@ -163,6 +163,15 @@ Module netcdf_nf_data
  Integer, Parameter :: NF_FATAL   = NC_FATAL 
  Integer, Parameter :: NF_VERBOSE = NC_VERBOSE 
 
+#ifdef ENABLE_CDF5
+ ! new format types
+
+ Integer, Parameter :: NF_FORMAT_CDF5            = NC_FORMAT_CDF5
+
+ ! New create mode flag
+ Integer, Parameter :: NF_CDF5           = NC_CDF5
+
+#endif
 #ifdef USE_NETCDF4
 
 ! NETCDF4 parameters 
@@ -195,13 +204,11 @@ Module netcdf_nf_data
  Integer, Parameter :: NF_FORMAT_NETCDF4         = NC_FORMAT_NETCDF4 
  Integer, Parameter :: NF_FORMAT_NETCDF4_CLASSIC = NC_FORMAT_NETCDF4_CLASSIC
  Integer, Parameter :: NF_FORMAT_64BIT_DATA      = NC_FORMAT_64BIT_DATA
- Integer, Parameter :: NF_FORMAT_CDF5            = NC_FORMAT_CDF5
 
 ! Netcdf4 create mode flags
  Integer, Parameter :: NF_NETCDF4        = NC_NETCDF4 
  Integer, Parameter :: NF_HDF5           = NF_NETCDF4 ! deprecated
  Integer, Parameter :: NF_CLASSIC_MODEL  = NC_CLASSIC_MODEL
- Integer, Parameter :: NF_CDF5           = NC_CDF5
 
 ! Netcdf4 variable flags
 

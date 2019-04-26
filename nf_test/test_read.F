@@ -8,7 +8,7 @@ C     Try on a bad error status.
 C     Test for each defined error status.
 C
       subroutine test_nf_strerror()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer         number_of_messages
       parameter       (number_of_messages = 27)
@@ -104,7 +104,7 @@ C     If in writable section of tests,
 C     Open a netCDF file with NF_WRITE mode, write something, close it.
 C     On exit, any open netCDF files are closed.
       subroutine test_nf_open()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer err
       integer ncid
@@ -180,7 +180,7 @@ C     Try on bad handle, check error return.
 C     Try in define mode and data mode.
 C     /
       subroutine test_nf_close()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
       integer err
@@ -235,14 +235,14 @@ C     If in writable section of tests,
 C     Try in define mode, after adding an unlimited dimension, variable.
 C     On exit, any open netCDF files are closed.
       subroutine test_nf_inq()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
       integer ncid2             !/* for scratch netCDF dataset */
-      integer ndims             !/* number of dimensions */
-      integer nvars             !/* number of variables */
-      integer ngatts            !/* number of global attributes */
-      integer recdim            !/* id of unlimited dimension */
+      integer ndims1             !/* number of dimensions */
+      integer nvars1             !/* number of variables */
+      integer ngatts1            !/* number of global attributes */
+      integer recdim1            !/* id of unlimited dimension */
       integer err
       integer ndims0
       integer nvars0
@@ -256,26 +256,26 @@ C     On exit, any open netCDF files are closed.
      +     call errore('nf_open: ', err)
 
 C     /* Try on bad handle */
-      err = nf_inq(BAD_ID, ndims, nvars, ngatts, recdim)
+      err = nf_inq(BAD_ID, ndims1, nvars1, ngatts1, recdim1)
       if (err .ne. NF_EBADID)
      +     call errore('bad ncid: ', err)
 
-      err = nf_inq(ncid, ndims, nvars, ngatts, recdim)
+      err = nf_inq(ncid, ndims1, nvars1, ngatts1, recdim1)
       if (err .ne. 0) then
          call errore('nf_inq: ', err)
-      else if (ndims .ne. NDIMS) then
+      else if (ndims1 .ne. NDIMS) then
          call errori('nf_inq: wrong number of dimensions returned: ',
-     +        ndims)
-      else if (nvars .ne. NVARS) then
+     +        ndims1)
+      else if (nvars1 .ne. NVARS) then
          call errori('nf_inq: wrong number of variables returned: ',
-     +        nvars)
-      else if (ngatts .ne. NGATTS) then
+     +        nvars1)
+      else if (ngatts1 .ne. NGATTS) then
          call errori(
      +        'nf_inq: wrong number of global atts returned: ',
-     +        ngatts)
-      else if (recdim .ne. RECDIM) then
+     +        ngatts1)
+      else if (recdim1 .ne. RECDIM) then
          call errori('nf_inq: wrong record dimension ID returned: ',
-     +        recdim)
+     +        recdim1)
       end if
 
       if (.not. readonly) then  !/* tests using netCDF scratch file */
@@ -289,28 +289,28 @@ C     /* Try on bad handle */
      +           call errore('nf_inq: ', err)
             err = nf_redef(ncid2) !/* enter define mode */
 C     /* Check that inquire still works in define mode */
-            err = nf_inq(ncid2, ndims, nvars, ngatts, recdim)
+            err = nf_inq(ncid2, ndims1, nvars1, ngatts1, recdim1)
             if (err .ne. 0) then
                call errore('nf_inq in define mode: ', err)
-            else if (ndims .ne. ndims0) then
-               call errori('nf_inq in define mode: ndims wrong, ',
-     +              ndims)
-            else if (nvars .ne. nvars0) then
-               call errori('nf_inq in define mode: nvars wrong, ',
-     +              nvars)
-            else if (ngatts .ne. ngatts0) then
+            else if (ndims1 .ne. ndims0) then
+               call errori('nf_inq in define mode: ndims1 wrong, ',
+     +              ndims1)
+            else if (nvars1 .ne. nvars0) then
+               call errori('nf_inq in define mode: nvars1 wrong, ',
+     +              nvars1)
+            else if (ngatts1 .ne. ngatts0) then
                call errori(
-     +              'nf_inq in define mode: ngatts wrong, ', ngatts)
-            else if (recdim .ne. recdim0) then
-               call errori('nf_inq in define mode: recdim wrong, ',
-     +              recdim)
+     +              'nf_inq in define mode: ngatts wrong, ', ngatts1)
+            else if (recdim1 .ne. recdim0) then
+               call errori('nf_inq in define mode: recdim1 wrong, ',
+     +              recdim1)
             end if
 
 C     /* Add dim, var, global att */
             err = nf_def_dim(ncid2, 'inqd', 1, did)
             if (err .ne. 0)
      +           call errore('nf_def_dim: ', err)
-            err = nf_def_var(ncid2, 'inqv', NF_FLOAT, 0, 0, vid)
+            err = nf_def_var(ncid2, 'inqv', NF_FLOAT, 0, (/0/), vid)
             if (err .ne. 0)
      +           call errore('nf_def_var: ', err)
 
@@ -320,36 +320,36 @@ C     /* Add dim, var, global att */
      +           call errore('nf_put_att_text: ', err)
 
 C     /* Make sure nf_inq sees the additions while in define mode */
-            err = nf_inq(ncid2, ndims, nvars, ngatts, recdim)
+            err = nf_inq(ncid2, ndims1, nvars1, ngatts1, recdim1)
             if (err .ne. 0) then
                call errore('nf_inq in define mode: ', err)
-            else if (ndims .ne. ndims0 + 1) then
-               call errori('nf_inq in define mode: ndims wrong, ',
-     +              ndims)
-            else if (nvars .ne. nvars0 + 1) then
+            else if (ndims1 .ne. ndims0 + 1) then
+               call errori('nf_inq in define mode: ndims1 wrong, ',
+     +              ndims1)
+            else if (nvars1 .ne. nvars0 + 1) then
                call errori('nf_inq in define mode: nvars wrong, ',
-     +              nvars)
-            else if (ngatts .ne. ngatts0 + 1) then
-               call errori('nf_inq in define mode: ngatts wrong, ',
-     +              ngatts)
+     +              nvars1)
+            else if (ngatts1 .ne. ngatts0 + 1) then
+               call errori('nf_inq in define mode: ngatts1 wrong, ',
+     +              ngatts1)
             end if
             err = nf_enddef(ncid2)
             if (err .ne. 0)
      +           call errore('nf_enddef: ', err)
 
 C     /* Make sure nf_inq stills sees additions in data mode */
-            err = nf_inq(ncid2, ndims, nvars, ngatts, recdim)
+            err = nf_inq(ncid2, ndims1, nvars1, ngatts1, recdim1)
             if (err .ne. 0) then
                call errore('nf_inq failed in data mode: ',err)
-            else if (ndims .ne. ndims0 + 1) then
-               call errori('nf_inq in define mode: ndims wrong, ',
-     +              ndims)
-            else if (nvars .ne. nvars0 + 1) then
+            else if (ndims1 .ne. ndims0 + 1) then
+               call errori('nf_inq in define mode: ndims1 wrong, ',
+     +              ndims1)
+            else if (nvars1 .ne. nvars0 + 1) then
                call errori('nf_inq in define mode: nvars wrong, ',
-     +              nvars)
-            else if (ngatts .ne. ngatts0 + 1) then
-               call errori('nf_inq in define mode: ngatts wrong, ',
-     +              ngatts)
+     +              nvars1)
+            else if (ngatts1 .ne. ngatts0 + 1) then
+               call errori('nf_inq in define mode: ngatts1 wrong, ',
+     +              ngatts1)
             end if
             err = nf_close(ncid2)
             err = nf_delete(scratch)
@@ -366,25 +366,25 @@ C     /* Make sure nf_inq stills sees additions in data mode */
 
 
       subroutine test_nf_inq_natts()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
-      integer ngatts            !/* number of global attributes */
+      integer ngatts1            !/* number of global attributes */
       integer err
 
-      err = nf_inq_natts(BAD_ID, ngatts)
+      err = nf_inq_natts(BAD_ID, ngatts1)
       if (err .ne. NF_EBADID)
      +     call errore('bad ncid: ', err)
       err = nf_open(testfile, NF_NOWRITE, ncid)
       if (err .ne. 0)
      +     call errore('nf_open: ', err)
-      err = nf_inq_natts(ncid, ngatts)
+      err = nf_inq_natts(ncid, ngatts1)
       if (err .ne. 0) then
          call errore('nf_inq_natts: ', err)
-      else if (ngatts .ne. NGATTS) then
+      else if (ngatts1 .ne. NGATTS) then
          call errori(
      +        'nf_inq_natts: wrong number of global atts returned, ',
-     +        ngatts)
+     +        ngatts1)
       end if
       err = nf_close(ncid)
       if (err .ne. 0)
@@ -393,23 +393,23 @@ C     /* Make sure nf_inq stills sees additions in data mode */
 
 
       subroutine test_nf_inq_ndims()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
-      integer ndims
+      integer ndims1
       integer err
 
-      err = nf_inq_ndims(BAD_ID, ndims)
+      err = nf_inq_ndims(BAD_ID, ndims1)
       if (err .ne. NF_EBADID)
      +     call errore('bad ncid: ', err)
       err = nf_open(testfile, NF_NOWRITE, ncid)
       if (err .ne. 0)
      +     call errore('nf_open: ', err)
-      err = nf_inq_ndims(ncid, ndims)
+      err = nf_inq_ndims(ncid, ndims1)
       if (err .ne. 0) then
          call errore('nf_inq_ndims: ', err)
-      else if (ndims .ne. NDIMS) then
-         call errori('nf_inq_ndims: wrong number returned, ', ndims)
+      else if (ndims1 .ne. NDIMS) then
+         call errori('nf_inq_ndims: wrong number returned, ', ndims1)
       end if
       err = nf_close(ncid)
       if (err .ne. 0)
@@ -418,23 +418,23 @@ C     /* Make sure nf_inq stills sees additions in data mode */
 
 
       subroutine test_nf_inq_nvars()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
-      integer nvars
+      integer nvars1
       integer err
 
-      err = nf_inq_nvars(BAD_ID, nvars)
+      err = nf_inq_nvars(BAD_ID, nvars1)
       if (err .ne. NF_EBADID)
      +     call errore('bad ncid: ', err)
       err = nf_open(testfile, NF_NOWRITE, ncid)
       if (err .ne. 0)
      +     call errore('nf_open: ', err)
-      err = nf_inq_nvars(ncid, nvars)
+      err = nf_inq_nvars(ncid, nvars1)
       if (err .ne. 0) then
          call errore('nf_inq_nvars: ', err)
-      else if (nvars .ne. NVARS) then
-         call errori('nf_inq_nvars: wrong number returned, ', nvars)
+      else if (nvars1 .ne. NVARS) then
+         call errori('nf_inq_nvars: wrong number returned, ', nvars1)
       end if
       err = nf_close(ncid)
       if (err .ne. 0)
@@ -443,7 +443,7 @@ C     /* Make sure nf_inq stills sees additions in data mode */
 
 
       subroutine test_nf_inq_unlimdim()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
       integer unlimdim
@@ -469,7 +469,7 @@ C     /* Make sure nf_inq stills sees additions in data mode */
 
 
       subroutine test_nf_inq_format()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
       integer nformat
@@ -502,7 +502,7 @@ C     /* Make sure nf_inq stills sees additions in data mode */
 
 
       subroutine test_nf_inq_dimid()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
       integer dimid
@@ -534,7 +534,7 @@ C     /* Make sure nf_inq stills sees additions in data mode */
 
 
       subroutine test_nf_inq_dim()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
       integer i
@@ -568,7 +568,7 @@ C     /* Make sure nf_inq stills sees additions in data mode */
 
 
       subroutine test_nf_inq_dimlen()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
       integer i
@@ -599,7 +599,7 @@ C     /* Make sure nf_inq stills sees additions in data mode */
 
 
       subroutine test_nf_inq_dimname()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
       integer i
@@ -630,7 +630,7 @@ C     /* Make sure nf_inq stills sees additions in data mode */
 
 
       subroutine test_nf_inq_varid()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
       integer vid
@@ -664,14 +664,14 @@ C     /* Make sure nf_inq stills sees additions in data mode */
 
 
       subroutine test_nf_inq_var()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
       integer i
       integer err
       character*(NF_MAX_NAME) name
       integer datatype
-      integer ndims
+      integer ndims1
       integer dimids(MAX_RANK)
       integer na
 
@@ -679,15 +679,15 @@ C     /* Make sure nf_inq stills sees additions in data mode */
       if (err .ne. 0)
      +     call errore('nf_open: ', err)
       do 1, i = 1, NVARS
-         err = nf_inq_var(BAD_ID, i, name, datatype, ndims, dimids,
+         err = nf_inq_var(BAD_ID, i, name, datatype, ndims1, dimids,
      +        na)
          if (err .ne. NF_EBADID)
      +        call errore('bad ncid: ', err)
-         err = nf_inq_var(ncid,BAD_VARID,name,datatype,ndims,dimids,
+         err = nf_inq_var(ncid,BAD_VARID,name,datatype,ndims1,dimids,
      +        na)
          if (err .ne. NF_ENOTVAR)
      +        call errore('bad var id: ', err)
-         err = nf_inq_var(ncid, i, name, datatype, ndims, dimids,
+         err = nf_inq_var(ncid, i, name, datatype, ndims1, dimids,
      +        na)
          if (err .ne. 0) then
             call errore('nf_inq_var: ', err)
@@ -695,9 +695,9 @@ C     /* Make sure nf_inq stills sees additions in data mode */
             call errorc('name unexpected: ', name)
          else if (var_type(i) .ne. datatype) then
             call errori('type unexpected: ', datatype)
-         else if (var_rank(i) .ne. ndims) then
-            call errori('ndims expected: ', ndims)
-         else if (.not.int_vec_eq(var_dimid(1,i),dimids,ndims)) then
+         else if (var_rank(i) .ne. ndims1) then
+            call errori('ndims1 expected: ', ndims1)
+         else if (.not.int_vec_eq(var_dimid(1,i),dimids,ndims1)) then
             call error('unexpected dimid')
          else if (var_natts(i) .ne. na) then
             call errori('natts unexpected: ', na)
@@ -710,7 +710,7 @@ C     /* Make sure nf_inq stills sees additions in data mode */
 
 
       subroutine test_nf_inq_vardimid()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
       integer i
@@ -742,7 +742,7 @@ C     /* Make sure nf_inq stills sees additions in data mode */
 
 
       subroutine test_nf_inq_varname()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
       integer i
@@ -773,7 +773,7 @@ C     /* Make sure nf_inq stills sees additions in data mode */
 
 
       subroutine test_nf_inq_varnatts()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
       integer i
@@ -804,28 +804,28 @@ C     /* Make sure nf_inq stills sees additions in data mode */
 
 
       subroutine test_nf_inq_varndims()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
       integer i
       integer err
-      integer ndims
+      integer ndims1
 
       err = nf_open(testfile, NF_NOWRITE, ncid)
       if (err .ne. 0)
      +     call errore('nf_open: ', err)
       do 1, i = 1, NVARS
-         err = nf_inq_varndims(BAD_ID, i, ndims)
+         err = nf_inq_varndims(BAD_ID, i, ndims1)
          if (err .ne. NF_EBADID)
      +        call errore('bad ncid: ', err)
-         err = nf_inq_varndims(ncid, BAD_VARID, ndims)
+         err = nf_inq_varndims(ncid, BAD_VARID, ndims1)
          if (err .ne. NF_ENOTVAR)
      +        call errore('bad var id: ', err)
-         err = nf_inq_varndims(ncid, i, ndims)
+         err = nf_inq_varndims(ncid, i, ndims1)
          if (err .ne. 0) then
             call errore('nf_inq_varndims: ', err)
-         else if (var_rank(i) .ne. ndims) then
-            call errori('ndims unexpected: ', ndims)
+         else if (var_rank(i) .ne. ndims1) then
+            call errori('ndims1 unexpected: ', ndims1)
          end if
  1    continue
       err = nf_close(ncid)
@@ -835,7 +835,7 @@ C     /* Make sure nf_inq stills sees additions in data mode */
 
 
       subroutine test_nf_inq_vartype()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
       integer i
@@ -866,7 +866,7 @@ C     /* Make sure nf_inq stills sees additions in data mode */
 
 
       subroutine test_nf_inq_att()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
       integer i
@@ -909,7 +909,7 @@ C     /* Make sure nf_inq stills sees additions in data mode */
 
 
       subroutine test_nf_inq_attlen()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
       integer i
@@ -949,7 +949,7 @@ C     /* Make sure nf_inq stills sees additions in data mode */
 
 
       subroutine test_nf_inq_atttype()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
       integer i
@@ -990,7 +990,7 @@ C     /* Make sure nf_inq stills sees additions in data mode */
 
 
       subroutine test_nf_inq_attname()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
       integer i
@@ -1033,7 +1033,7 @@ C     /* Make sure nf_inq stills sees additions in data mode */
 
 
       subroutine test_nf_inq_attid()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer ncid
       integer i

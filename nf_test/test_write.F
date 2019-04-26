@@ -10,16 +10,16 @@ C     test that it can be opened, do nf_inq to check nvars = 0, etc.
 C     Try again in NF_NOCLOBBER mode, check error return
 C     On exit, delete this file
       subroutine test_nf_create()
-      implicit        none
+      implicit none
 #include "tests.inc"
 
       integer clobber           !/* 0 for NF_NOCLOBBER, 1 for NF_CLOBBER */
       integer err
       integer ncid
-      integer ndims             !/* number of dimensions */
-      integer nvars             !/* number of variables */
-      integer ngatts            !/* number of global attributes */
-      integer recdim            !/* id of unlimited dimension */
+      integer ndims1             !/* number of dimensions */
+      integer nvars1             !/* number of variables */
+      integer ngatts1            !/* number of global attributes */
+      integer recdim1            !/* id of unlimited dimension */
       integer flags
 
       flags = NF_NOCLOBBER
@@ -36,25 +36,25 @@ C     On exit, delete this file
          if (err .ne. 0) then
             call errore('nf_open: ', err)
          end if
-         err = nf_inq(ncid, ndims, nvars, ngatts, recdim)
+         err = nf_inq(ncid, ndims1, nvars1, ngatts1, recdim1)
          if (err .ne. 0) then
             call errore('nf_inq: ', err)
-         else if (ndims .ne. 0) then
+         else if (ndims1 .ne. 0) then
             call errori(
      +           'nf_inq: wrong number of dimensions returned, ',
-     +           ndims)
-         else if (nvars .ne. 0) then
+     +           ndims1)
+         else if (nvars1 .ne. 0) then
             call errori(
      +           'nf_inq: wrong number of variables returned, ',
-     +           nvars)
-         else if (ngatts .ne. 0) then
+     +           nvars1)
+         else if (ngatts1 .ne. 0) then
             call errori(
      +           'nf_inq: wrong number of global atts returned, ',
-     +           ngatts)
-         else if (recdim .ge. 1) then
+     +           ngatts1)
+         else if (recdim1 .ge. 1) then
             call errori(
      +           'nf_inq: wrong record dimension ID returned, ',
-     +           recdim)
+     +           recdim1)
          end if
          err = nf_close(ncid)
          if (err .ne. 0) then
@@ -92,7 +92,7 @@ C     put vars
 C     close
 C     check file: vars & atts
       subroutine test_nf_redef()
-      implicit        none
+      implicit none
 #include "tests.inc"
       integer         title_len
       parameter       (title_len = 9)
@@ -143,7 +143,7 @@ C     /* tests using scratch file */
       if (err .ne. 0)
      +     call errore('nf_inq_varid: ', err)
       var = 1.0
-      err = nf_put_var1_double(ncid, vid, 0, var)
+      err = nf_put_var1_double(ncid, vid, (/0/), var)
       if (err .ne. NF_EINDEFINE)
      +     call errore('nf_put_var... in define mode: ', err)
       err = nf_redef(ncid)
@@ -173,7 +173,7 @@ C     /* tests using scratch file */
       if (err .ne. 0)
      +     call errore('nf_enddef: ', err)
       var = 1.0
-      err = nf_put_var1_double(ncid, vid, 0, var)
+      err = nf_put_var1_double(ncid, vid, (/0/), var)
       if (err .ne. 0)
      +     call errore('nf_put_var1_double: ', err)
       err = nf_close(ncid)
@@ -211,7 +211,7 @@ C     Test nf_enddef
 C     Simply calls test_nf_redef which tests both nf_redef & nf_enddef
 
       subroutine test_nf_enddef()
-      implicit        none
+      implicit none
 #include "tests.inc"
 
       call test_nf_redef
@@ -223,7 +223,7 @@ C     try with bad handle, check error
 C     try in define mode, check error
 C     try writing with one handle, reading with another on same netCDF
       subroutine test_nf_sync()
-      implicit        none
+      implicit none
 #include "tests.inc"
 
       integer ncidw             !/* netcdf id for writing */
@@ -288,15 +288,15 @@ C     try in define mode before anything written, check that file was deleted
 C     try after nf_enddef, nf_redef, define new dims, vars, atts
 C     try after writing variable
       subroutine test_nf_abort()
-      implicit        none
+      implicit none
 #include "tests.inc"
 
       integer ncid              !/* netcdf id */
       integer err
-      integer ndims
-      integer nvars
-      integer ngatts
-      integer recdim
+      integer ndims1
+      integer nvars1
+      integer ngatts1
+      integer recdim1
 
 C     /* BAD_ID test */
       err = nf_abort(BAD_ID)
@@ -349,15 +349,15 @@ C     try nf_abort: should restore previous state (no dims, vars, atts)
       err = nf_open(scratch, NF_NOWRITE, ncid)
       if (err .ne. 0)
      +     call errore('nf_open: ', err)
-      err = nf_inq (ncid, ndims, nvars, ngatts, recdim)
+      err = nf_inq (ncid, ndims1, nvars1, ngatts1, recdim1)
       if (err .ne. 0)
      +     call errore('nf_inq: ', err)
-      if (ndims .ne. 0)
-     +     call errori('ndims should be ', 0)
-      if (nvars .ne. 0)
-     +     call errori('nvars should be ', 0)
-      if (ngatts .ne. 0)
-     +     call errori('ngatts should be ', 0)
+      if (ndims1 .ne. 0)
+     +     call errori('ndims1 should be ', 0)
+      if (nvars1 .ne. 0)
+     +     call errori('nvars1 should be ', 0)
+      if (ngatts1 .ne. 0)
+     +     call errori('ngatts1 should be ', 0)
       err = nf_close (ncid)
       if (err .ne. 0)
      +     call errore('nf_close: ', err)
@@ -397,7 +397,7 @@ C     try with illegal sizes, check error
 C     make sure unlimited size works, shows up in nf_inq_unlimdim
 C     try to define a second unlimited dimension, check error
       subroutine test_nf_def_dim()
-      implicit        none
+      implicit none
 #include "tests.inc"
 
       integer ncid
@@ -437,7 +437,7 @@ C     /* define-mode tests: unlimited dim */
       if (err .ne. 0)
      +     call errore('nf_inq_unlimdim: ', err)
       if (dimid .ne. RECDIM)
-     +     call error('Unexpected recdim: ')
+     +     call error('Unexpected recdim1: ')
       err = nf_inq_dimlen(ncid, dimid, length)
       if (length .ne. 0)
      +     call errori('Unexpected length: ', 0)
@@ -490,7 +490,7 @@ C     check that proper rename worked with nf_inq_dim
 C     try renaming to existing dimension name, check error
 C     try with bad dimension handle, check error
       subroutine test_nf_rename_dim()
-      implicit        none
+      implicit none
 #include "tests.inc"
 
       integer ncid
@@ -543,14 +543,14 @@ C     try in data mode, check error
 C     check that returned id is one more than previous id
 C     try with bad dimension ids, check error
       subroutine test_nf_def_var()
-      implicit        none
+      implicit none
 #include "tests.inc"
 
       integer ncid
       integer vid
       integer err               !/* status */
       integer i
-      integer ndims
+      integer ndims1
       integer na
       character*(NF_MAX_NAME) name
       integer dimids(MAX_RANK)
@@ -570,7 +570,7 @@ C     /* scalar tests */
       err = nf_def_var(ncid, 'abc', NF_SHORT, 0, dimids, vid)
       if (err .ne. 0)
      +     call errore('nf_def_var: ', err)
-      err = nf_inq_var(ncid, vid, name, datatype, ndims, dimids,
+      err = nf_inq_var(ncid, vid, name, datatype, ndims1, dimids,
      +     na)
       if (err .ne. 0)
      +     call errore('nf_inq_var: ', err)
@@ -578,7 +578,7 @@ C     /* scalar tests */
      +     call errorc('Unexpected name: ', name)
       if (datatype .ne. NF_SHORT)
      +     call error('Unexpected datatype')
-      if (ndims .ne. 0)
+      if (ndims1 .ne. 0)
      +     call error('Unexpected rank')
       err = nf_def_var(ncid, BAD_NAME, NF_SHORT, 0, dimids, vid)
       if (err .ne. NF_EBADNAME)
@@ -643,7 +643,7 @@ C     try renaming to existing variable name, check error
 C     check that proper rename worked with nf_inq_varid
 C     try in data mode, check error
       subroutine test_nf_rename_var()
-      implicit        none
+      implicit none
 #include "tests.inc"
 
       integer ncid
@@ -726,7 +726,7 @@ C     check that changing type and length of an attribute work OK
 C     try with same ncid for source and target, different variables
 C     try with same ncid for source and target, same variable
       subroutine test_nf_copy_att()
-      implicit        none
+      implicit none
 #include "tests.inc"
 
       integer ncid_in
@@ -865,7 +865,7 @@ C     try renaming to existing att name, check error
 C     check that proper rename worked with nf_inq_attid
 C     try in data mode, check error
       subroutine test_nf_rename_att()
-      implicit        none
+      implicit none
 #include "tests.inc"
 
       integer ncid
@@ -1028,7 +1028,7 @@ C     try with nonexisting att name, check error
 C     check that proper delete worked using:
 C     nf_inq_attid, nf_inq_natts, nf_inq_varnatts
       subroutine test_nf_del_att()
-      implicit        none
+      implicit none
 #include "tests.inc"
 
       integer ncid
@@ -1161,6 +1161,7 @@ C     close file & create again for test using attribute _FillValue
       character*1 text
       doubleprecision value
       doubleprecision fill
+      doubleprecision fill_array(1)
       integer index(MAX_RANK)
 
       nok = 0
@@ -1287,6 +1288,7 @@ C     /* close scratch & create again for test using attribute _FillValue */
 
 C     /* set _FillValue = 42 for all vars */
       fill = 42
+      fill_array(1) = fill
       text = char(int(fill))
       do 3, i = 1, NVARS
          if (var_type(i) .eq. NF_CHAR) then
@@ -1295,7 +1297,7 @@ C     /* set _FillValue = 42 for all vars */
      +           call errore('nf_put_att_text: ', err)
          else
             err = nf_put_att_double(ncid, i, '_FillValue',
-     +           var_type(i),1,fill)
+     +           var_type(i),1,fill_array)
             if (err .ne. 0)
      +           call errore('nf_put_att_double: ', err)
          end if
