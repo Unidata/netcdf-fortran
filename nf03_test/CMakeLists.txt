@@ -9,11 +9,6 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/nf_test ${NC4F_BINARY_DIR}/libsrc
    ${NC4F_BINARY_DIR}/fortran)
 # All tests need to link to fortran and C libraries.
 LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/fortran)
-#FIND_LIBRARY(NETCDF_C_LIBRARY NAMES netcdf libnetcdf)
-#IF(NOT NETCDF_C_LIBRARY)
-#  MESSAGE(FATAL_ERROR "Cannot find netCDF C library, needed for netCDF Fortran tests.")
-#ENDIF()
-#FIND_PATH(NETCDF_C_INCLUDE_DIR netcdf.h)
 
 # nf03_test is the main test program.
 SET(check_PROGRAMS nf03_test)
@@ -21,28 +16,11 @@ LIST(APPEND TESTS nf03_test)
 SET(nf03_test_SOURCES module_tests.F90 f03lib_f_interfaces.f90 test03_get.F test03_put.F nf03_error.F
   nf03_test.F test03_read.F test03_write.F util03.F f03lib.c)
 
-# This is the fortran v2 test. It depends on the utilities being built
-# to generate it's input file.
-IF(BUILD_V2)
-  LIST(APPEND check_PROGRAMS f03test)
-  LIST(APPEND TESTS f03test)
-  LIST(APPEND CLEANFILES test.nc)
-  SET(f03test_SOURCES module_tests.F90 f03test.F f03lib.c)
-ENDIF(BUILD_V2)
-
 LIST(APPEND CLEANFILES tests.mod)
 
 # test03_get.F and test03_put.f need to be distributed, so that the user
 # need not have m4.
 SET(EXTRA_DIST test03_get.F test03_put.F fills.cdl create_fills.sh run_f77_par_test.sh)
-
-# Did the user build the V2 F77 API? If so, run this test.
-IF(BUILD_V2)
-  LIST(APPEND check_PROGRAMS tst03_f77_v2)
-  LIST(APPEND TESTS tst03_f77_v2)
-  LIST(APPEND CLEANFILES tst_f77_v2.nc)
-  SET(tst03_f77_v2_SOURCES module_tests.F90 tst03_f77_v2.F)
-ENDIF(BUILD_V2)
 
 # Need a copy of ref_fills.nc for ftest
 execute_process(COMMAND cp ${CMAKE_SOURCE_DIR}/nf_test/ref_fills.nc ${CMAKE_CURRENT_BINARY_DIR}/fills.nc)
@@ -55,12 +33,3 @@ FOREACH(t ${TESTS})
   TARGET_LINK_LIBRARIES(${t} netcdff)
   ADD_TEST(${t} ${t})
 ENDFOREACH()
-
-# FILE(GLOB COPY_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.sh ${CMAKE_CURRENT_SOURCE_DIR}/*.cdl)
-# FILE(COPY ${COPY_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR} FILE_PERMISSIONS OWNER_WRITE OWNER_READ OWNER_EXECUTE)
-
-# FOREACH(F ${CDL_EXAMPLE_TESTS})
-# 	add_sh_test(cdl ${F})
-# ENDFOREACH()
-
-# SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${CLEANFILES}")

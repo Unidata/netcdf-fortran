@@ -33,21 +33,54 @@ tests.inc
 
 # Did the user build the V2 F77 API? If so, run this test.
 if BUILD_V2
-check_PROGRAMS += tst_f77_v2
+check_PROGRAMS += tst_f77_v2 ftest
+TESTS += tst_f77_v2 ftest
 tst_f77_v2_SOURCES = tst_f77_v2.F
-TESTS += tst_f77_v2
-endif # BUILD_V2
-
-# This is the fortran v2 test.
-if BUILD_V2
-check_PROGRAMS += ftest
-TESTS += ftest
 ftest_SOURCES = ftest.F f03lib.c
 endif # BUILD_V2
 
 check_PROGRAMS += tst_f90
 TESTS += tst_f90
 tst_f90_SOURCES = tst_f90.f90
+
+# If sed is present, generate these tests at build time. They are the
+# same tests as the F77 netCDF-4 tests above, but using the "use
+# netcdf4_f03" statement.
+if USE_SED
+
+# These test fortran codes will be created using sed.
+F03_TEST_CODES =
+
+# The fortran codes will compile into these tests.
+F03_TESTS =
+
+if BUILD_V2
+F03_TEST_CODES += f03test.F tst03_f77_v2.F
+F03_TESTS += f03test tst03_f77_v2
+f03test_SOURCES = f03test.F
+tst03_f77_v2_SOURCES = tst03_f77_v2.F
+endif # BUILD_V2
+
+# Note that all these fortran programs are built at compile-time on
+# the user system.
+BUILT_SOURCES = $(F03_TEST_CODES)
+
+# Compile and run the generated tests.
+check_PROGRAMS += $(F03_TESTS)
+TESTS += $(F03_TESTS)
+
+# Use sed to generate the f03 versions of some test codes.
+f03test.F: ftest.F
+	$(SED) "s|include 'netcdf.inc'|use netcdf_f03|" $< > $@.tmp
+	$(SED) "s|test.nc|f03tst_test.nc|" $@.tmp > $@.tmp2
+	$(SED) "s|copy.nc|f03tst_copy.nc|" $@.tmp2 > $@
+
+tst03_f77_v2.F: tst_f77_v2.F
+	$(SED) "s|IMPLICIT NONE|USE tests|" $< > $@.tmp
+	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
+	$(SED) "s|tst_f77_v2.nc|tst03_f77_v2.nc|" $@.tmp2 > $@
+
+endif #USE_SED
 
 # Tell make how to turn .m4 files into .F files.
 .m4.F:

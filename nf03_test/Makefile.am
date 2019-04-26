@@ -40,16 +40,8 @@ test03_write.F util03.F f03lib.c
 
 # programs that "use tests" from the tests.mod module depend on it
 # being built first, needed for make -j
-nf03_error.o nf03_test.o test03_get.o test03_put.o test03_read.o test03_write.o tst03_f77_v2.o util03.o: \
+nf03_error.o nf03_test.o test03_get.o test03_put.o test03_read.o test03_write.o util03.o: \
 module_tests.o
-
-# Did the user build the V2 F77 API? If so, run these tests.
-if BUILD_V2
-check_PROGRAMS += f03test tst03_f77_v2
-f03test_SOURCES = module_tests.F90 f03test.F f03lib.c
-tst03_f77_v2_SOURCES = tst03_f77_v2.F
-TESTS += f03test tst03_f77_v2
-endif # BUILD_V2
 
 # If valgrind is present on this machine, this will enable
 # check-valgrind target, which runs all tests with valgrind.
@@ -61,5 +53,5 @@ EXTRA_DIST = test03_get.F test03_put.F fills.cdl create_fills.sh	\
 CMakeLists.txt
 
 # Cleaning up files created during the process.
-CLEANFILES = scratch.nc test.nc copy.nc fills.nc tst_f77_v2.nc	\
-tests.mod test.nc ftst_*.nc f03tst_open_mem.nc temp.tmp
+CLEANFILES = scratch.nc test.nc copy.nc fills.nc tests.mod test.nc	\
+ftst_*.nc f03tst_open_mem.nc temp.tmp
