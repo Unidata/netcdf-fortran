@@ -23,6 +23,19 @@ LDADD = ${top_builddir}/fortran/libnetcdff.la
 # Need access to top_srcdir
 TESTS_ENVIRONMENT = TOPSRCDIR=${abs_top_srcdir}
 
+# Build this uninstalled convenience library.
+noinst_LTLIBRARIES = libtests.la
+
+# Each convenience library depends on its source.
+libtests_la_SOURCES = module_tests.F90
+
+# Each mod file depends on the .o file.
+tests.mod: module_tests.$(OBJEXT)
+
+# Mod files are built sources.
+MODFILES = tests.mod
+BUILT_SOURCES = $(MODFILES)
+
 # nf_test is the main test program.
 check_PROGRAMS = nf_test
 TESTS = nf_test
@@ -45,14 +58,15 @@ endif # BUILD_V2
 # repo.
 check_PROGRAMS += nf03_test
 TESTS += nf03_test
-nf03_test_SOURCES = module_tests.F90 f03lib_f_interfaces.f90		\
-test03_get.F test03_put.F nf03_error.F nf03_test.F test03_read.F	\
-test03_write.F util03.F f03lib.c
+nf03_test_SOURCES = f03lib_f_interfaces.f90 test03_get.F test03_put.F	\
+nf03_error.F nf03_test.F test03_read.F test03_write.F util03.F		\
+f03lib.c
+nf03_test_LDADD = libtests.la ${top_builddir}/fortran/libnetcdff.la
 
 # programs that "use tests" from the tests.mod module depend on it
 # being built first, needed for make -j
-nf03_error.o nf03_test.o test03_get.o test03_put.o test03_read.o test03_write.o util03.o: \
-module_tests.o
+#nf03_error.o nf03_test.o test03_get.o test03_put.o test03_read.o test03_write.o util03.o: \
+#module_tests.o
 
 # If sed is present, generate these tests at build time. They are the
 # same tests as the F77 netCDF-4 tests above, but using the "use
@@ -69,12 +83,14 @@ if BUILD_V2
 F03_TEST_CODES += f03test.F tst03_f77_v2.F
 F03_TESTS += f03test tst03_f77_v2
 f03test_SOURCES = f03test.F
+f03test_LDADD = libtests.la ${top_builddir}/fortran/libnetcdff.la
 tst03_f77_v2_SOURCES = tst03_f77_v2.F
+tst03_f77_v2_LDADD = libtests.la ${top_builddir}/fortran/libnetcdff.la
 endif # BUILD_V2
 
 # Note that all these fortran programs are built at compile-time on
 # the user system.
-BUILT_SOURCES = $(F03_TEST_CODES)
+BUILT_SOURCES += $(F03_TEST_CODES)
 
 # Compile and run the generated tests.
 check_PROGRAMS += $(F03_TESTS)
@@ -109,7 +125,7 @@ CMakeLists.txt
 
 # Cleaning up files created during the process.
 CLEANFILES = scratch.nc test.nc copy.nc tst_*.nc ftst_*.nc	\
-f90tst_*.nc temp.tmp fort.*
+f90tst_*.nc temp.tmp fort.* *.mod
 
 DISTCLEANFILES = fills.nc
 
