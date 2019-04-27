@@ -245,8 +245,7 @@ if USE_LOGGING
 	echo '      external nf_set_log_level' >> netcdf.inc
 endif
 
-# EXTRA_DIST = $(COMMON_CODES) $(NETCDF4_CODES) CMakeLists.txt	\
-# netcdf2.inc netcdf3.inc netcdf4.inc
-EXTRA_DIST = CMakeLists.txt netcdf2.inc netcdf3.inc netcdf4.inc
+EXTRA_DIST = $(COMMON_CODES) $(NETCDF4_CODES) CMakeLists.txt	\
+netcdf2.inc netcdf3.inc netcdf4.inc
 
 CLEANFILES = *.mod netcdf.inc
