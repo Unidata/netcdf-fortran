@@ -27,7 +27,7 @@
 !   Fortran 90 doesn't allow one to check the number of bytes in a real variable;
 !     we check only that four byte and eight byte reals have different kind parameters. 
 !
-module typeSizes
+module typesizes
   implicit none
   public
   integer, parameter ::   OneByteInt = selected_int_kind(2), &
