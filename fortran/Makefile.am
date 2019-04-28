@@ -33,30 +33,36 @@ noinst_LTLIBRARIES = libtypeSizes.la libnetcdf_nc_data.la	\
 libnetcdf_nf_data.la libnetcdf_nc_interfaces.la			\
 libnetcdf_nf_interfaces.la libnetcdfm.la libnetcdf_f03.la
 
+# These are the ource for the F77 API.
+libnetcdff_la_SOURCES = nf_attio.F90 nf_control.F90 nf_dim.f90		\
+nf_misc.f90 nf_genatt.f90 nf_geninq.f90 nf_genvar.f90 nf_vario.F90	\
+nf_var1io.F90 nf_varaio.F90 nf_varmio.F90 nf_varsio.F90
+
 # Different source for the netcdf.mod is used for netcdf classic
 # vs. netcdf4.
 if USE_NETCDF4
 libnetcdfm_la_SOURCES = netcdf4.f90
-netcdf4.$(OBJECT): typeSizes.mod
+netcdf4.$(OBJECT): typesizes.mod
 netcdf.mod: netcdf4.$(OBJEXT)
 EXTRA_libnetcdfm_la_DEPENDENCIES = $(COMMON_CODES)
 else # classic-only build
 libnetcdfm_la_SOURCES = netcdf.f90
-netcdf.$(OBJECT): typeSizes.mod
+netcdf.$(OBJECT): typesizes.mod
 netcdf.mod: netcdf.$(OBJEXT)
 EXTRA_libnetcdfm_la_DEPENDENCIES = $(COMMON_CODES) $(NETCDF4_CODES)
+libnetcdff_la_SOURCES += netcdf3_file.f90
 endif # USE_NETCDF4
 
 # Each convenience library depends on its source.
 libtypeSizes_la_SOURCES = typeSizes.f90
-libnetcdf_nc_data_la_SOURCES = module_netcdf_nc_data.f90
-libnetcdf_nf_data_la_SOURCES = module_netcdf_nf_data.f90
+libnetcdf_nc_data_la_SOURCES = module_netcdf_nc_data.F90
+libnetcdf_nf_data_la_SOURCES = module_netcdf_nf_data.F90
 libnetcdf_nc_interfaces_la_SOURCES = module_netcdf_nc_interfaces.f90
-libnetcdf_nf_interfaces_la_SOURCES = module_netcdf_nf_interfaces.f90
+libnetcdf_nf_interfaces_la_SOURCES = module_netcdf_nf_interfaces.F90
 libnetcdf_f03_la_SOURCES = module_netcdf_f03.f90
 
 # Each mod file depends on the .o file.
-typeSizes.mod: typeSizes.$(OBJEXT)
+typesizes.mod: typeSizes.$(OBJEXT)
 netcdf_nc_data.mod: module_netcdf_nc_data.$(OBJEXT)
 netcdf_nf_data.mod: module_netcdf_nf_data.$(OBJEXT)
 netcdf_nc_interfaces.mod: module_netcdf_nc_interfaces.$(OBJEXT)
@@ -71,18 +77,13 @@ module_netcdf_f03.$(OBJEXT): netcdf_nf_data.mod netcdf_nf_interfaces.mod
 
 # Mod files are built and then installed as headers. Order is
 # significant in this list of modfiles.
-MODFILES = typeSizes.mod netcdf_nc_data.mod netcdf_nf_data.mod	\
+MODFILES = typesizes.mod netcdf_nc_data.mod netcdf_nf_data.mod	\
 netcdf_nc_interfaces.mod netcdf_nf_interfaces.mod
 
 # Add our convenience libraries to the netCDF fortran library.
 libnetcdff_la_LIBADD = libtypeSizes.la libnetcdf_nc_data.la	\
 libnetcdf_nf_data.la libnetcdf_nc_interfaces.la			\
 libnetcdf_nf_interfaces.la libnetcdfm.la libnetcdf_f03.la
-
-# These are the ource for the F77 API.
-libnetcdff_la_SOURCES = nf_attio.F90 nf_control.F90 nf_dim.f90		\
-nf_misc.f90 nf_genatt.f90 nf_geninq.f90 nf_genvar.f90 nf_vario.F90	\
-nf_var1io.F90 nf_varaio.F90 nf_varmio.F90 nf_varsio.F90
 
 # Add the V2 F77 API.
 if BUILD_V2
@@ -112,7 +113,7 @@ libnetcdf4_nf_interfaces.la libnetcdf4_f03.la
 
 # Each convenience library depends on its source.
 libnetcdf4_nc_interfaces_la_SOURCES = module_netcdf4_nc_interfaces.f90
-libnetcdf4_nf_interfaces_la_SOURCES = module_netcdf4_nf_interfaces.f90
+libnetcdf4_nf_interfaces_la_SOURCES = module_netcdf4_nf_interfaces.F90
 libnetcdf4_f03_la_SOURCES = module_netcdf4_f03.f90
 
 # Each mod file depends on the .o file.
@@ -135,11 +136,14 @@ libnetcdf4_nf_interfaces.la libnetcdf4_f03.la
 
 endif # USE_NETCDF4
 
+# This must come last in the list of MODFILES.
 MODFILES += netcdf.mod
 
-# Mod files are installed as headers, and are built sources.
-include_HEADERS = $(MODFILES)
+# Mod files are build sources.
 BUILT_SOURCES = $(MODFILES)
+
+# Mod files are installed as headers, but not distrubuted.
+nodist_include_HEADERS = $(MODFILES)
 
 # if USE_NETCDF4
 # NETCDF_O = netcdf4.$(OBJEXT)
@@ -222,7 +226,7 @@ BUILT_SOURCES = $(MODFILES)
 # The netcdf.inc file is built on the user machine, and installed as
 # a header.
 BUILT_SOURCES += netcdf.inc
-include_HEADERS += netcdf.inc
+nodist_include_HEADERS += netcdf.inc
 
 # Build netcdf.inc file from netcdf2, netcdf3 and netcdf4 files
 netcdf.inc: netcdf2.inc netcdf3.inc netcdf4.inc
