@@ -102,11 +102,6 @@ if USE_NETCDF4
 # Add additional source files to the library to support netCDF4.
 libnetcdff_la_SOURCES += nf_lib.c nf_nc4.f90
 
-# Add the code that implements the F90 API.
-# libnetcdff_la_DEPENDENCIES = netcdf4_externals.f90		\
-# netcdf4_visibility.f90 netcdf4_func.f90 netcdf4_overloads.f90	\
-# netcdf4_file.f90 netcdf4_eightbyte.f90 netcdf4_variables.f90
-
 # Add these uninstalled convenience libraries for netcdf-4.
 noinst_LTLIBRARIES += libnetcdf4_nc_interfaces.la	\
 libnetcdf4_nf_interfaces.la libnetcdf4_f03.la
@@ -144,84 +139,6 @@ BUILT_SOURCES = $(MODFILES)
 
 # Mod files are installed as headers, but not distrubuted.
 nodist_include_HEADERS = $(MODFILES)
-
-# if USE_NETCDF4
-# NETCDF_O = netcdf4.$(OBJEXT)
-# else
-# NETCDF_O = netcdf.$(OBJEXT)
-# endif
-
-
-# # Add dependencies for source files included in "meta" source files,
-# # so the meta source is rebuilt properly when an included file is
-# # modified.
-# netcdf.$(OBJEXT): $(COMMON_CODES) netcdf3_file.f90
-# netcdf4.$(OBJEXT): $(COMMON_CODES) $(NETCDF4_CODES)
-
-# # Modules and source for the F77 API.
-# libnetcdff_la_SOURCES += module_netcdf_nc_data.F90			\
-# module_netcdf_nc_interfaces.f90 module_netcdf_nf_data.F90		\
-# module_netcdf_nf_interfaces.F90 module_netcdf_f03.f90 nf_attio.F90	\
-# nf_control.F90 nf_dim.f90 nf_misc.f90 nf_genatt.f90 nf_geninq.f90	\
-# nf_genvar.f90 nf_vario.F90 nf_var1io.F90 nf_varaio.F90 nf_varmio.F90	\
-# nf_varsio.F90
-
-# # Add netCDF-4 to F77 API if needed.
-# if USE_NETCDF4
-# libnetcdff_la_SOURCES += module_netcdf4_nc_interfaces.f90		\
-# module_netcdf4_nf_interfaces.F90 module_netcdf4_f03.f90 nf_lib.c	\
-# nf_nc4.f90
-# endif USE_NETCDF4
-
-# # Add nf_logging to F77 API if needed.
-# if USE_LOGGING
-# libnetcdff_la_SOURCES += nf_logging.F90
-# endif USE_LOGGING
-
-# # The file netcdf.f90 includes all these code files.
-# libnetcdff_la_DEPENDENCIES = $(COMMON_CODES)
-
-# if USE_NETCDF4
-# libnetcdff_la_SOURCES += netcdf4.f90
-# libnetcdff_la_DEPENDENCIES += $(NETCDF4_CODES)
-# else !USE_NETCDF4
-# libnetcdff_la_SOURCES += netcdf.f90 netcdf3_file.f90
-# endif !USE_NETCDF4
-
-# # Add the V2 F77 API.
-# if BUILD_V2
-# libnetcdff_la_SOURCES += nf_v2compat.c			\
-# module_netcdf_fortv2_c_interfaces.f90 nf_fortv2.f90
-# endif
-
-# # These mod files for the F77 API are always built.
-# MODFILES = typesizes.mod netcdf.mod netcdf_nc_data.mod			\
-# netcdf_nc_interfaces.mod netcdf_nf_data.mod netcdf_nf_interfaces.mod	\
-# netcdf_f03.mod
-
-# # Mod files are dependant on their source.
-# netcdf.mod: $(NETCDF_O)
-# typesizes.mod: typeSizes.$(OBJEXT)
-# netcdf_nc_data.mod: module_netcdf_nc_data.$(OBJEXT)
-# netcdf_nc_interfaces.mod: module_netcdf_nc_interfaces.$(OBJEXT)
-# netcdf_nf_data.mod: module_netcdf_nf_data.$(OBJEXT)
-# netcdf_nf_interfaces.mod: module_netcdf_nf_interfaces.$(OBJEXT)
-# netcdf_f03.mod: module_netcdf_f03.$(OBJEXT)
-
-# # If v2 API is being built, build v2 F77 API mod file.
-# if BUILD_V2
-# MODFILES += netcdf_fortv2_c_interfaces.mod
-# netcdf_fortv2_c_interfaces.mod: module_netcdf_fortv2_c_interfaces.$(OBJEXT) netcdf_nc_interfaces.mod
-# endif BUILD_V2
-
-# # If netCDF-4 is being build, build the netCDF-4 F77 API mod files.
-# if USE_NETCDF4
-# MODFILES += netcdf4_nc_interfaces.mod netcdf4_nf_interfaces.mod	\
-# netcdf4_f03.mod
-# netcdf4_nc_interfaces.mod: module_netcdf4_nc_interfaces.$(OBJEXT) netcdf_nc_interfaces.mod
-# netcdf4_nf_interfaces.mod: module_netcdf4_nf_interfaces.$(OBJEXT)
-# netcdf4_f03.mod: module_netcdf4_f03.$(OBJEXT)
-# endif USE_NETCDF4
 
 # The netcdf.inc file is built on the user machine, and installed as
 # a header.
