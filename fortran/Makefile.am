@@ -72,8 +72,10 @@ netcdf_f03.mod: module_netcdf_f03.$(OBJEXT)
 # Some mods are dependant on other mods in this dir.
 module_netcdf_nf_data.$(OBJEXT): netcdf_nc_data.mod
 module_netcdf_nc_interfaces.$(OBJEXT): netcdf_nc_data.mod
+module_netcdf4_nc_interfaces.$(OBJEXT): netcdf_nc_interfaces.mod
 module_netcdf_nf_interfaces.$(OBJEXT): netcdf_nf_data.mod
 module_netcdf_f03.$(OBJEXT): netcdf_nf_data.mod netcdf_nf_interfaces.mod
+module_netcdf_fortv2_c_interfaces.$(OBJEXT): netcdf_nc_interfaces.mod
 
 # Mod files are built and then installed as headers. Order is
 # significant in this list of modfiles.
