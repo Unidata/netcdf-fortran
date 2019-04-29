@@ -41,16 +41,22 @@ nf_var1io.F90 nf_varaio.F90 nf_varmio.F90 nf_varsio.F90
 # Different source for the netcdf.mod is used for netcdf classic
 # vs. netcdf4.
 if USE_NETCDF4
+
+# Use the netCDF-4 F90 code.
 libnetcdfm_la_SOURCES = netcdf4.f90
-netcdf4.$(OBJECT): typesizes.mod
+netcdf4.$(OBJEXT): typesizes.mod
 netcdf.mod: netcdf4.$(OBJEXT)
 EXTRA_libnetcdfm_la_DEPENDENCIES = $(COMMON_CODES) $(NETCDF4_CODES)
+
 else # classic-only build
+
+# Use the netCDF classic F90 code.
 libnetcdfm_la_SOURCES = netcdf.f90
-netcdf.$(OBJECT): typesizes.mod
+netcdf.$(OBJEXT): typesizes.mod
 netcdf.mod: netcdf.$(OBJEXT)
 EXTRA_libnetcdfm_la_DEPENDENCIES = $(COMMON_CODES)
 libnetcdff_la_SOURCES += netcdf3_file.f90
+
 endif # USE_NETCDF4
 
 # Each convenience library depends on its source.
