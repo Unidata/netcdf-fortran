@@ -44,12 +44,12 @@ if USE_NETCDF4
 libnetcdfm_la_SOURCES = netcdf4.f90
 netcdf4.$(OBJECT): typesizes.mod
 netcdf.mod: netcdf4.$(OBJEXT)
-EXTRA_libnetcdfm_la_DEPENDENCIES = $(COMMON_CODES)
+EXTRA_libnetcdfm_la_DEPENDENCIES = $(COMMON_CODES) $(NETCDF4_CODES)
 else # classic-only build
 libnetcdfm_la_SOURCES = netcdf.f90
 netcdf.$(OBJECT): typesizes.mod
 netcdf.mod: netcdf.$(OBJEXT)
-EXTRA_libnetcdfm_la_DEPENDENCIES = $(COMMON_CODES) $(NETCDF4_CODES)
+EXTRA_libnetcdfm_la_DEPENDENCIES = $(COMMON_CODES)
 libnetcdff_la_SOURCES += netcdf3_file.f90
 endif # USE_NETCDF4
 
@@ -75,7 +75,6 @@ module_netcdf_nc_interfaces.$(OBJEXT): netcdf_nc_data.mod
 module_netcdf4_nc_interfaces.$(OBJEXT): netcdf_nc_interfaces.mod
 module_netcdf_nf_interfaces.$(OBJEXT): netcdf_nf_data.mod
 module_netcdf_f03.$(OBJEXT): netcdf_nf_data.mod netcdf_nf_interfaces.mod
-module_netcdf_fortv2_c_interfaces.$(OBJEXT): netcdf_nc_interfaces.mod
 
 # Mod files are built and then installed as headers. Order is
 # significant in this list of modfiles.
