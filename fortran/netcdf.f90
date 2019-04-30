@@ -34,7 +34,7 @@
 !     length of the argument character string. 
 !
  module netcdf
-  use typeSizes, only: OneByteInt, TwoByteInt, FourByteInt, EightByteInt, &
+  use typesizes, only: OneByteInt, TwoByteInt, FourByteInt, EightByteInt, &
                        FourByteReal, EightByteReal
   implicit none
   private

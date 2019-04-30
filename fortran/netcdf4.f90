@@ -37,7 +37,7 @@
 ! Hartnett in 2006 to support the netCDF-4 API.
 !
  module netcdf
-  use typeSizes, only: OneByteInt, TwoByteInt, FourByteInt, EightByteInt, &
+  use typesizes, only: OneByteInt, TwoByteInt, FourByteInt, EightByteInt, &
                        FourByteReal, EightByteReal
   implicit none
   private
