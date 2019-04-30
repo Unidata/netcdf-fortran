@@ -53,8 +53,8 @@ endif # TEST_PARALLEL
 # Test filters.
 if TEST_FILTERS
 check_PROGRAMS += ftst_filter
-TESTS += ftst_filter
 ftst_filter_SOURCES = ftst_filter.F
+TESTS += run_tst_filter.sh
 endif
 
 # If sed is present, generate these tests at build time. They are the
