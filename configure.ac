@@ -352,13 +352,16 @@ AC_MSG_NOTICE([checking types, headers, and functions])
 
 # We must check for all these, because they may be used by the netCDF
 # C library.
+# Removing the checks for some of the libraries because of issues
+# observed when they are detected, are not needed, and an attempt to
+# link against is made anyways.
+# See https://github.com/Unidata/netcdf-fortran/issues/164
+#
+# Specifying LDFLAGS="$(nc-config --libs [--static])" should
+# let downstream developers link more reliably against libnetcdf.
+
 AC_CHECK_LIB([m], [floor], [], [])
-AC_CHECK_LIB([curl], [curl_easy_setopt], [], [])
-AC_SEARCH_LIBS([deflate], [zlibwapi zlibstat zlib zlib1 z], [], [])
-AC_SEARCH_LIBS([SZ_Compress], [szip sz], [], [])
 AC_SEARCH_LIBS([dlopen], [dl dld], [], [])
-AC_SEARCH_LIBS([H5Fflush], [hdf5dll hdf5], [], [])
-AC_SEARCH_LIBS([H5DSis_scale], [hdf5_hldll hdf5_hl], [], [])
 
 # Find the netCDF header and library.
 AC_CHECK_HEADERS([netcdf.h], [], [AC_MSG_ERROR([netcdf.h could not be found. Please set CPPFLAGS.])])
