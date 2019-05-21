@@ -81,5 +81,13 @@ FOREACH(t ${TESTS})
   ADD_TEST(${t} ${t})
 ENDFOREACH()
 
+FOREACH(t ${SCRIPT_TESTS})
+  add_sh_test(${t} "nf4")
+ENDFOREACH()
+
+# Link the filter test as well.
+TARGET_LINK_LIBRARIES(ftst_filter netcdff)
+
+
 # Cleaning up files created during the process.
 SET (CLEANFILES ftst_*.nc)
