@@ -86,8 +86,9 @@ FOREACH(t ${SCRIPT_TESTS})
 ENDFOREACH()
 
 # Link the filter test as well.
-TARGET_LINK_LIBRARIES(ftst_filter netcdff)
-
+IF(ENABLE_FILTER_TEST)
+  TARGET_LINK_LIBRARIES(ftst_filter netcdff)
+ENDIF(ENABLE_FILTER_TEST)
 
 # Cleaning up files created during the process.
 SET (CLEANFILES ftst_*.nc)

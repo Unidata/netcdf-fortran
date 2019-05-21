@@ -93,7 +93,7 @@ program nc4_pres_temp_4D_wr
   end do
 
   ! Create the file. 
-  call check( nf90_create(FILE_NAME, NF90_NETCDF4, ncid) )
+  call check( nf90_create(FILE_NAME, nf90_netcdf4, ncid) )
   
   ! Define the dimensions. The record dimension is defined to have
   ! unlimited length - it can grow as needed. In this example it is
