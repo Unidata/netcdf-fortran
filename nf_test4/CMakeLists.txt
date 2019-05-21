@@ -47,9 +47,10 @@ if (USE_NETCDF4)
   ENDIF (TEST_PARALLEL)
 
   IF(ENABLE_FILTER_TEST)
-    LIST(APPEND check_PROGRAMS ftst_filter)
-    LIST(APPEND CLEANFILES ftst_filter.nc)
-    SET(ftst_filter_SOURCES ftst_filter.F)
+    SET(check_PROGRAMS ${check_PROGRAMS} ftst_filter)
+    SET(SCRIPT_TESTS ${SCRIPT_TESTS} run_tst_filter)
+    # Add executables
+    build_bin_test(ftst_filter ".F")
   ENDIF(ENABLE_FILTER_TEST)
 
 endif(USE_NETCDF4)
