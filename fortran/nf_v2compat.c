@@ -51,7 +51,9 @@
 #include	"netcdf.h"
 
 #ifndef USE_NETCDF4
+#ifndef NC_CLASSIC_MODEL
 #define NC_CLASSIC_MODEL 0
+#endif
 #else
 /* There is a dependency error here;
 NC_CLASSIC_MODEL will not be defined
