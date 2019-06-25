@@ -45,37 +45,37 @@ C     Loop indexes, and error handling.
 
 C     Create the netCDF file.
       retval = nf_create(FILE_NAME, NF_NETCDF4, ncid)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
 
 C     Define a compound type.
       retval = nf_def_compound(ncid, cmp_size, type_name, 
      &     cmp_typeid)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
 
 C     Include an array.
       dim_sizes(1) = NX
       dim_sizes(2) = NY
       retval = nf_insert_array_compound(ncid, cmp_typeid, ary_name, 0, 
      &     NF_INT, NDIMS, dim_sizes)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
 
 C     Close the file. 
       retval = nf_close(ncid)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
 
 C     Reopen the file and check again.
       retval = nf_open(FILE_NAME, NF_NOWRITE, ncid)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
 
 C     Find the type.
       retval = nf_inq_typeids(ncid, ntypes, typeids)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       if (ntypes .ne. 1 .or. typeids(1) .ne. cmp_typeid) stop 2
       
 C     Check the type.
       retval = nf_inq_user_type(ncid, typeids(1), name_in, size_in, 
      &     base_type_in, nfields_in, class_in)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       if (name_in(1:len(type_name)) .ne. type_name .or. 
      &     size_in .ne. cmp_size .or. nfields_in .ne. 1 .or. 
      &     class_in .ne. NF_COMPOUND) stop 2
@@ -83,7 +83,7 @@ C     Check the type.
 C     Check the first field of the compound type.
       retval = nf_inq_compound_field(ncid, typeids(1), 1, name_in, 
      &     offset_in, field_typeid_in, ndims_in, dim_sizes_in)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       if (name_in(1:len(ary_name)) .ne. ary_name .or. 
      &     offset_in .ne. 0 .or. field_typeid_in .ne. NF_INT .or. 
      &     ndims_in .ne. NDIMS .or. 
@@ -92,7 +92,7 @@ C     Check the first field of the compound type.
 
 C     Close the file. 
       retval = nf_close(ncid)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
 
       print *,'*** SUCCESS!'
       end

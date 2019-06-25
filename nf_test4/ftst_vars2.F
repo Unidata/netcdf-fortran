@@ -59,15 +59,15 @@ C     Create some pretend data.
 
 C     Create the netCDF file.
       retval = nf_create(FILE_NAME, NF_NETCDF4, ncid)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
 
 C     Define the dimensions.
       retval = nf_def_dim(ncid, "z", NZ, dimids(3))
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       retval = nf_def_dim(ncid, "y", NY, dimids(2))
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       retval = nf_def_dim(ncid, "x", NX, dimids(1))
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
 
 C     These are the types of vars that will be written.
       typeid(1) = NF_UBYTE
@@ -82,12 +82,12 @@ C     Define the variables.
  1001    format('var', I1)
          retval = nf_def_var(ncid, var_name, typeid(i), NDIMS, 
      &        dimids, varid(i))
-         if (retval .ne. nf_noerr) stop retval
+         if (retval .ne. nf_noerr) stop 1
 
 C        Set variable caches.
          retval = nf_set_var_chunk_cache(ncid, varid(i), CACHE_SIZE, 
      &        CACHE_NELEMS, CACHE_PREEMPTION)
-         if (retval .ne. nf_noerr) stop retval
+         if (retval .ne. nf_noerr) stop 1
       end do
 
 C     Check the per-variable cache to make sure it is what we think it
@@ -95,7 +95,7 @@ C     is.
       do i = 1, NTYPES
          retval = nf_get_var_chunk_cache(ncid, varid(i), cache_size_in, 
      &        cache_nelems_in, cache_preemption_in)
-         if (retval .ne. nf_noerr) stop retval
+         if (retval .ne. nf_noerr) stop 1
          if (cache_size_in .ne. CACHE_SIZE .or. cache_nelems_in .ne. 
      &        CACHE_NELEMS .or. cache_preemption .ne. CACHE_PREEMPTION)
      &        stop 8
@@ -105,21 +105,21 @@ C     is.
 C     Write the pretend data to the file.
       do i = 1, NTYPES
          retval = nf_put_var_int(ncid, varid(i), data_out)
-         if (retval .ne. nf_noerr) stop retval
+         if (retval .ne. nf_noerr) stop 1
       end do
 
 C     Close the file. 
       retval = nf_close(ncid)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
 
 C     Reopen the file and check again.
       retval = nf_open(FILE_NAME, NF_NOWRITE, ncid)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
 
 C     Read the data and check it.
       do i = 1, NTYPES
          retval = nf_get_var_int(ncid, varid(i), data_in)
-         if (retval .ne. nf_noerr) stop retval
+         if (retval .ne. nf_noerr) stop 1
          do x = 1, NX
             do y = 1, NY
                do z = 1, NZ
@@ -131,7 +131,7 @@ C     Read the data and check it.
 
 C     Close the file. 
       retval = nf_close(ncid)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
 
       print *,'*** SUCCESS!'
       end
