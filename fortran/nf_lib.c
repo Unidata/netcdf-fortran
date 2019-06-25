@@ -239,11 +239,7 @@ nc_inq_compound_field_f(int ncid, nc_type xtype, int fieldid, char *name,
 extern int
 nc_inq_numgrps(int ncid, int *numgrps)
 {
-    int ret;
-
-    if ((ret = nc_inq_grps(ncid, numgrps, NULL)))
-        return ret;
-    return NC_NOERR;
+    return nc_inq_grps(ncid, numgrps, NULL);
 }
 
 /**
@@ -259,11 +255,7 @@ nc_inq_numgrps(int ncid, int *numgrps)
 extern int
 nc_inq_numtypes(int ncid, int *numtypes)
 {
-    int ret;
-
-    if ((ret = nc_inq_typeids(ncid, numtypes, NULL)))
-        return ret;
-    return NC_NOERR;
+    return nc_inq_typeids(ncid, numtypes, NULL);
 }
 
 /**
