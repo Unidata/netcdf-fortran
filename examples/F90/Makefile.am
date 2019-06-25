@@ -68,17 +68,17 @@ endif #USE_NETCDF4
 # Build netCDf-4 example from netCDF classic example.
 # Note old version used sed -i, but -i is not universally recognized
 nc4_simple_xy_wr.f90:
-	sed -e 's/nf90_clobber/nf90_netcdf4/' simple_xy_wr.f90 \
+	sed -e 's/nf90_clobber/nf90_netcdf4/' $(srcdir)/simple_xy_wr.f90 \
 	| sed -e 's/simple_xy/nc4_simple_xy/' > nc4_simple_xy_wr.f90
 
 # Build netCDf-4 example from netCDF classic example.
 nc4_sfc_pres_temp_wr.f90:
-	sed -e 's/nf90_clobber/nf90_netcdf4/' sfc_pres_temp_wr.f90 \
+	sed -e 's/nf90_clobber/nf90_netcdf4/' $(srcdir)/sfc_pres_temp_wr.f90 \
 	| sed -e 's/sfc_pres_temp/nc4_sfc_pres_temp/' > nc4_sfc_pres_temp_wr.f90
 
 # Build netCDf-4 example from netCDF classic example.
 nc4_pres_temp_4D_wr.f90:
-	sed -e 's/nf90_clobber/nf90_netcdf4/' pres_temp_4D_wr.f90 \
+	sed -e 's/nf90_clobber/nf90_netcdf4/' $(srcdir)/pres_temp_4D_wr.f90 \
 	| sed -e 's/pres_temp_4D/nc4_pres_temp_4D/' > nc4_pres_temp_4D_wr.f90
 
 # Cleaning up files created during the process.
