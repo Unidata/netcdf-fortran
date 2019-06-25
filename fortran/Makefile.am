@@ -124,7 +124,6 @@ netcdf4_nf_interfaces.mod: module_netcdf4_nf_interfaces.$(OBJEXT)
 netcdf4_f03.mod: module_netcdf4_f03.$(OBJEXT)
 
 # Some mods are dependant on other mods in this dir.
-module_netcdf4_nc_interfaces.$(OBJEXT): netcdf_nc_interfaces.mod
 module_netcdf4_nf_interfaces.$(OBJEXT): netcdf4_nc_interfaces.mod
 module_netcdf4_f03.$(OBJEXT): netcdf_nf_data.mod netcdf_nf_interfaces.mod netcdf4_nf_interfaces.mod
 
