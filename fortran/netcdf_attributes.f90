@@ -208,7 +208,7 @@
     integer (kind = EightByteInt), dimension(:), intent( in) :: values
     integer                                                  :: nf90_put_att_EightByteInt
 
-    nf90_put_att_EightByteInt = nf_put_att_int(ncid, varid, name, nf90_int, size(values), int(values))
+    nf90_put_att_EightByteInt = nf_put_att_int64(ncid, varid, name, nf90_int64, size(values), values)
   end function nf90_put_att_EightByteInt
   ! -------
   function nf90_put_att_one_EightByteInt(ncid, varid, name, values)
@@ -217,33 +217,30 @@
     integer (kind = EightByteInt),               intent( in) :: values
     integer                                                  :: nf90_put_att_one_EightByteInt
 
-    integer, dimension(1) :: valuesA
+    integer(kind=EightByteInt), dimension(1) :: valuesA
     valuesA(1) = values
-    nf90_put_att_one_EightByteInt = nf_put_att_int(ncid, varid, name, nf90_int, 1, valuesA)
+    nf90_put_att_one_EightByteInt = nf_put_att_int64(ncid, varid, name, nf90_int64, 1, valuesA)
   end function nf90_put_att_one_EightByteInt
   ! -------
   function nf90_get_att_EightByteInt(ncid, varid, name, values)
     integer,                                     intent( in) :: ncid, varid
     character(len = *),                          intent( in) :: name
     integer (kind = EightByteInt), dimension(:), intent(out) :: values
-    integer                                                 :: nf90_get_att_EightByteInt
-    
-    integer, dimension(size(values)) :: defaultInteger
+    integer                                                  :: nf90_get_att_EightByteInt
 
-    nf90_get_att_EightByteInt = nf_get_att_int(ncid, varid, name, defaultInteger)
-    values(:) = defaultInteger(:)
+    nf90_get_att_EightByteInt = nf_get_att_int64(ncid, varid, name, values)
   end function nf90_get_att_EightByteInt
   ! -------
   function nf90_get_att_one_EightByteInt(ncid, varid, name, values)
     integer,                                     intent( in) :: ncid, varid
     character(len = *),                          intent( in) :: name
     integer (kind = EightByteInt),               intent(out) :: values
-    integer                                                 :: nf90_get_att_one_EightByteInt
+    integer                                                  :: nf90_get_att_one_EightByteInt
 
-    integer, dimension(1) :: defaultInteger
+    integer(kind=EightByteInt), dimension(1) :: valuesA
 
-    nf90_get_att_one_EightByteInt = nf_get_att_int(ncid, varid, name, defaultInteger)
-    values = defaultInteger(1)
+    nf90_get_att_one_EightByteInt = nf_get_att_int64(ncid, varid, name, valuesA)
+    values = valuesA(1)
   end function nf90_get_att_one_EightByteInt
   ! -------
   ! Real attributes

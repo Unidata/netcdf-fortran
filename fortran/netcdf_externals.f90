@@ -22,7 +22,9 @@
                                     nf_inq_att, nf_inq_attid, nf_inq_attname
   integer,              external :: nf_put_att_text, nf_get_att_text,                 &
                                     nf_put_att_int1, nf_put_att_int2, nf_put_att_int, &
+                                    nf_put_att_int64, &
                                     nf_get_att_int1, nf_get_att_int2, nf_get_att_int, &
+                                    nf_get_att_int64, &
                                     nf_put_att_real,   nf_get_att_real,               &
                                     nf_put_att_double, nf_get_att_double
                                     
