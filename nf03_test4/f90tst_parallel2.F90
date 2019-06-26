@@ -44,7 +44,7 @@ program f90tst_parallel
   implicit none
   include 'mpif.h'
 
-  integer :: mode_flag
+  integer :: mode_flag, cmode
   integer :: p, my_rank, ierr
 
   call MPI_Init(ierr)
@@ -62,21 +62,26 @@ program f90tst_parallel
      stop 2
   endif
 
+  cmode = IOR(nf90_clobber, nf90_mpiio)
+
 #ifdef NF_HAS_PNETCDF
-  mode_flag = IOR(nf90_clobber, nf90_mpiio)
+  ! test CDF-1 file
+  call parallel_io(cmode)
+
+  ! test CDF-2 file
+  mode_flag = IOR(cmode, nf90_64bit_offset)
   call parallel_io(mode_flag)
-  mode_flag = IOR(nf90_clobber, nf90_mpiio)
-  mode_flag = IOR(mode_flag, nf90_64bit_offset)
+
+#ifdef ENABLE_CDF5
+  ! test CDF-5 file
+  mode_flag = IOR(cmode, nf90_64bit_data)
   call parallel_io(mode_flag)
-  mode_flag = IOR(nf90_clobber, nf90_mpiio)
-  mode_flag = IOR(mode_flag, nf90_64bit_data)
-  call parallel_io(mode_flag)
+#endif
 #endif
 
 #ifdef NF_HAS_PARALLEL4
-  mode_flag = IOR(nf90_netcdf4, nf90_classic_model)
-  mode_flag = IOR(mode_flag, nf90_mpiposix)
-  mode_flag = IOR(mode_flag, nf90_clobber)
+  mode_flag = IOR(cmode, nf90_netcdf4)
+  mode_flag = IOR(mode_flag, nf90_classic_model)
   call parallel_io(mode_flag)
 #endif
 
