@@ -55,46 +55,6 @@ Module netcdf4_nc_interfaces
 
 ! NETCDF 4 functions supported by FORTRAN interface
 
-!----------------------------- nc_create_par_fortran -------------------------
-Interface
- Function nc_create_par_fortran(path, cmode, comm, info, ncidp) BIND(C)
-
- USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
-
- Character(KIND=C_CHAR), Intent(IN)  :: path(*)
- Integer(C_INT),         VALUE       :: cmode, comm, info
- Integer(C_INT),         Intent(OUT) :: ncidp
-
- Integer(C_INT)                      :: nc_create_par_fortran
-
- End Function nc_create_par_fortran
-End Interface
-!----------------------------- nc_open_par_fortran ---------------------------
-Interface
- Function nc_open_par_fortran(path, mode, comm, info, ncidp) BIND(C)
-
- USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
-
- Character(KIND=C_CHAR), Intent(IN)  :: path(*)
- Integer(C_INT),         VALUE       :: mode, comm, info
- Integer(C_INT),         Intent(OUT) :: ncidp
-
- Integer(C_INT)                      :: nc_open_par_fortran
-
- End Function nc_open_par_fortran
-End Interface
-!------------------------------- nc_var_par_access ----------------------------
-Interface
- Function nc_var_par_access(ncid, varid, par_access) BIND(C)
-
- USE ISO_C_BINDING, ONLY: C_INT
-
- Integer(C_INT), VALUE :: ncid, varid, par_access
-
- Integer(C_INT)        :: nc_var_par_access
-
- End Function nc_var_par_access
-End Interface
 !------------------------------- nc_inq_ncid ----------------------------------
 Interface
  Function nc_inq_ncid(ncid, name, grp_ncid) BIND(C)
@@ -924,35 +884,6 @@ Interface
 
  End Function nc_inq_var_filter
 End Interface
-!------------------------------- nc_put_att -----------------------------------
-Interface
- Function nc_put_att(ncid, varid, name, xtype, nlen, op) BIND(C)
-
- USE ISO_C_BINDING, ONLY: C_INT, C_CHAR, C_SIZE_T, C_PTR
-
- Integer(C_INT),         VALUE      :: ncid, varid, xtype
- Integer(C_SIZE_T),      VALUE      :: nlen
- Character(KIND=C_CHAR), Intent(IN) :: name(*)
- Type(C_PTR),            VALUE      :: op
-
- Integer(C_INT)                     :: nc_put_att
-
- End Function nc_put_att
-End Interface
-!------------------------------- nc_get_att -----------------------------------
-Interface
- Function nc_get_att(ncid, varid, name, op) BIND(C)
-
- USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
-
- Integer(C_INT),         VALUE       :: ncid, varid
- Character(KIND=C_CHAR), Intent(IN)  :: name(*)
- Character(KIND=C_CHAR), Intent(OUT) :: op(*)
-
- Integer(C_INT)                      :: nc_get_att
-
- End Function nc_get_att
-End Interface
 !------------------------------- nc_put_vlen_element --------------------------
 Interface
  Function nc_put_vlen_element(ncid, xtype, vlen_element, nlen, op) BIND(C)
@@ -1020,146 +951,6 @@ Interface
  Integer(C_INT)                :: nc_free_string
 
  End Function nc_free_string
-End Interface
-!------------------------------- nc_put_var1_longlong -------------------------
-Interface
- Function nc_put_var1_longlong(ncid, varid, indexp, op) BIND(C)
-
- USE ISO_C_BINDING, ONLY: C_INT, C_LONG_LONG, C_PTR
-
- Integer(C_INT),       VALUE      :: ncid, varid
- Type(C_PTR),          VALUE      :: indexp
- Integer(C_LONG_LONG), Intent(IN) :: op
-
- Integer(C_INT)                   :: nc_put_var1_longlong
-
- End Function nc_put_var1_longlong
-End Interface
-!------------------------------- nc_get_var1_longlong -------------------------
-Interface
- Function nc_get_var1_longlong(ncid, varid, indexp, ip) BIND(C)
-
- USE ISO_C_BINDING, ONLY: C_INT, C_LONG_LONG, C_PTR
-
- Integer(C_INT),       VALUE       :: ncid, varid
- Type(C_PTR),          VALUE       :: indexp
- Integer(C_LONG_LONG), Intent(OUT) :: ip
-
- Integer(C_INT)                    :: nc_get_var1_longlong
-
- End Function nc_get_var1_longlong
-End Interface
-!--------------------------------- nc_put_vara_longlong -----------------------
-Interface
- Function nc_put_vara_longlong(ncid, varid, startp, countp, op) BIND(C)
-
- USE ISO_C_BINDING, ONLY: C_INT, C_LONG_LONG, C_PTR
-
- Integer(C_INT),       VALUE      :: ncid, varid
- Type(C_PTR),          VALUE      :: startp, countp
- Integer(C_LONG_LONG), Intent(IN) :: op(*)
-
- Integer(C_INT)                   :: nc_put_vara_longlong
-
- End Function nc_put_vara_longlong
-End Interface
-!--------------------------------- nc_get_vara_longlong -----------------------
-Interface
- Function nc_get_vara_longlong(ncid, varid, startp, countp, ip) BIND(C)
-
- USE ISO_C_BINDING, ONLY: C_INT, C_LONG_LONG, C_PTR
-
- Integer(C_INT),       VALUE       :: ncid, varid
- Type(C_PTR),          VALUE       :: startp, countp
- Integer(C_LONG_LONG), Intent(OUT) :: ip(*)
-
- Integer(C_INT)                    :: nc_get_vara_longlong
-
- End Function nc_get_vara_longlong
-End Interface
-!--------------------------------- nc_put_varm_longlong ----------------------
-Interface
- Function nc_put_varm_longlong(ncid, varid, startp, countp, stridep, imapp, &
-                               op) BIND(C)
-
- USE ISO_C_BINDING, ONLY: C_INT, C_PTR, C_LONG_LONG
-
- Integer(C_INT),       VALUE      :: ncid, varid
- Type(C_PTR),          VALUE      :: startp, countp, stridep, imapp
- Integer(C_LONG_LONG), Intent(IN) :: op(*)
-
- Integer(C_INT)                   :: nc_put_varm_longlong
-
- End Function nc_put_varm_longlong
-End Interface
-!--------------------------------- nc_get_varm_longlong -----------------------
-Interface
- Function nc_get_varm_longlong(ncid, varid, startp, countp, stridep, imapp, &
-                               ip) BIND(C)
-
- USE ISO_C_BINDING, ONLY: C_INT, C_PTR, C_LONG_LONG
-
- Integer(C_INT),       VALUE       :: ncid, varid
- Type(C_PTR),          VALUE       :: startp, countp, stridep, imapp
- Integer(C_LONG_LONG), Intent(OUT) :: ip(*)
-
- Integer(C_INT)                    :: nc_get_varm_longlong
-
- End Function nc_get_varm_longlong
-End Interface
-!--------------------------------- nc_put_vars_longlong -----------------------
-Interface
- Function nc_put_vars_longlong(ncid, varid, startp, countp, stridep, op) BIND(C)
-
- USE ISO_C_BINDING, ONLY: C_INT, C_PTR, C_LONG_LONG
-
- Integer(C_INT),       VALUE      :: ncid, varid
- Type(C_PTR),          VALUE      :: startp, countp, stridep
- Integer(C_LONG_LONG), Intent(IN) :: op(*)
-
- Integer(C_INT)                   :: nc_put_vars_longlong
-
- End Function nc_put_vars_longlong
-End Interface
-!--------------------------------- nc_get_vars_longlong -----------------------
-Interface
- Function nc_get_vars_longlong(ncid, varid, startp, countp, stridep, ip) BIND(C)
-
- USE ISO_C_BINDING, ONLY: C_INT, C_PTR, C_LONG_LONG
-
- Integer(C_INT),       VALUE       :: ncid, varid
- Type(C_PTR),          VALUE       :: startp, countp, stridep
- Integer(C_LONG_LONG), Intent(OUT) :: ip(*)
-
- Integer(C_INT)                    :: nc_get_vars_longlong
-
- End Function nc_get_vars_longlong
-End Interface
-!------------------------------- nc_put_var_longlong --------------------------
-Interface
- Function nc_put_var_longlong(ncid, varid, op) BIND(C)
-
- USE ISO_C_BINDING, ONLY: C_INT, C_LONG_LONG
-
- Integer(C_INT),       VALUE      :: ncid, varid
- Integer(C_LONG_LONG), Intent(IN) :: op(*)
-
- Integer(C_INT)                   :: nc_put_var_longlong
-
- End Function nc_put_var_longlong
-End Interface
-!------------------------------- nc_get_var_longlong --------------------------
-Interface
- Function nc_get_var_longlong(ncid, varid, ip) BIND(C)
-
- USE ISO_C_BINDING, ONLY: C_INT, C_LONG_LONG
-
- Integer(C_INT),       VALUE       :: ncid, varid
- Integer(C_LONG_LONG), Intent(OUT) :: ip(*)
-
- Integer(C_INT)                    :: nc_get_var_longlong
-
- End Function nc_get_var_longlong
 End Interface
 !------------------------------- nc_set_chunk_cache_ints ----------------------
 Interface
@@ -1237,32 +1028,6 @@ Interface
  Integer(C_INT)                   :: nc_get_chunk_cache
 
  End Function nc_get_chunk_cache
-End Interface
-!---------------------------------- nc_put_var --------------------------------
-Interface
- Function nc_put_var(ncid, varid, op) BIND(C)
-
- USE ISO_C_BINDING, ONLY: C_INT, C_PTR
-
- Integer(C_INT), VALUE :: ncid, varid
- Type(C_PTR),    VALUE :: op
-
- Integer(C_INT)        :: nc_put_var
-
- End Function nc_put_var
-End Interface
-!---------------------------------- nc_get_var --------------------------------
-Interface
- Function nc_get_var(ncid, varid, ip) BIND(C)
-
- USE ISO_C_BINDING, ONLY: C_INT, C_CHAR
-
- Integer(C_INT),         VALUE         :: ncid, varid
- Character(KIND=C_CHAR), Intent(INOUT) :: ip(*)
-
- Integer(C_INT)                        :: nc_get_var
-
- End Function nc_get_var
 End Interface
 
 !--------------------------End of Module netcdf4_c_interfaces -----------------
