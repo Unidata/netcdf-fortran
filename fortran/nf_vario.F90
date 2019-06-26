@@ -228,6 +228,30 @@
  status = cstatus
 
  End Function nf_put_var_double
+!--------------------------------- nf_put_var_int64 --------------------------
+ Function nf_put_var_int64(ncid, varid, ivals) RESULT(status)
+
+! Write out 64 bit integer array to dataset
+
+ USE netcdf_nc_interfaces
+
+ Implicit NONE
+
+ Integer,      Intent(IN) :: ncid, varid
+ Integer(IK8), Intent(IN) :: ivals(*)
+
+ Integer                       :: status
+
+ Integer(C_INT) :: cncid, cvarid,  cstatus
+
+ cncid  = ncid
+ cvarid = varid - 1 ! Subtract 1 to get C varid
+
+ cstatus = nc_put_var_longlong(cncid, cvarid, ivals)
+
+ status = cstatus
+
+ End Function nf_put_var_int64
 !--------------------------------- nf_get_var_text -----------------------
  Function nf_get_var_text(ncid, varid, text) RESULT(status)
 
@@ -429,3 +453,27 @@
  status = cstatus
 
  End Function nf_get_var_double
+!--------------------------------- nf_get_var_int64 --------------------------
+ Function nf_get_var_int64(ncid, varid, ivals) RESULT(status)
+
+! Read in 64 bit integer array from dataset
+
+ USE netcdf_nc_interfaces
+
+ Implicit NONE
+
+ Integer,      Intent(IN)  :: ncid, varid
+ Integer(IK8), Intent(OUT) :: ivals(*)
+
+ Integer                   :: status
+
+ Integer(C_INT) :: cncid, cvarid,  cstatus
+
+ cncid  = ncid
+ cvarid = varid - 1 ! Subtract 1 to get C varid
+
+ cstatus = nc_get_var_longlong(cncid, cvarid, ivals)
+
+ status = cstatus
+
+ End Function nf_get_var_int64

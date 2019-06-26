@@ -350,6 +350,59 @@
  If (ALLOCATED(cndex)) DEALLOCATE(cndex)
 
  End Function nf_put_var1_double
+!--------------------------------- nf_put_var1_int64 --------------------------
+ Function nf_put_var1_int64(ncid, varid, ndex, ival) RESULT(status)
+
+! Write out a 64 bit integer variable to location vector ndex to dataset
+! Note that the default fort interfaces pass ival as an integer to
+! nc_put_var1_longlong which is expecting a longlong. We chose to
+! pass ival as an integer of type SELECTED_INT_KIND(18) which is
+! consistent with the f90 interfaces that call these routines
+
+ USE netcdf_nc_interfaces
+
+ Implicit NONE
+
+ Integer,      Intent(IN) :: ncid, varid
+ Integer,      Intent(IN) :: ndex(*)
+ Integer(IK8), Intent(IN) :: ival
+
+ Integer                  :: status
+
+ Integer(C_INT)       :: cncid, cvarid, cndims, cstat1, cstatus
+ Integer(C_LONG_LONG) :: cival
+ Type(C_PTR)          :: cndexptr
+ Integer              :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cndex(:)
+
+ cncid  = ncid
+ cvarid = varid - 1 ! Subtract one to get C varid
+ cival  = ival
+
+ cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
+
+ cndexptr = C_NULL_PTR
+ ndims    = cndims
+
+ If (cstat1 == NC_NOERR) Then
+   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index
+     ALLOCATE(cndex(ndims))
+     cndex(1:ndims) = ndex(ndims:1:-1) - 1
+     cndexptr       = C_LOC(cndex)
+   EndIf
+ EndIf
+
+ cstatus = nc_put_var1_longlong(cncid, cvarid, cndexptr, cival)
+
+ status = cstatus
+
+! Make sure there are no dangling pointers and allocated values
+
+ cndexptr = C_NULL_PTR
+ If (ALLOCATED(cndex)) DEALLOCATE(cndex)
+
+ End Function nf_put_var1_int64
 !--------------------------------- nf_put_var1 ------------------------
  Function nf_put_var1(ncid, varid, ndex, values) RESULT(status)
 
@@ -727,6 +780,55 @@
  If (ALLOCATED(cndex)) DEALLOCATE(cndex)
 
  End Function nf_get_var1_double
+!--------------------------------- nf_get_var1_int64 -------------------------
+ Function nf_get_var1_int64(ncid, varid, ndex, ival) RESULT(status)
+
+! Read in 64 bit integer variable from location vector ndex in dataset
+
+ USE netcdf_nc_interfaces
+
+ Implicit NONE
+
+ Integer,      Intent(IN)  :: ncid, varid
+ Integer,      Intent(IN)  :: ndex(*)
+ Integer(IK8), Intent(OUT) :: ival
+
+ Integer                   :: status
+
+ Integer(C_INT)       :: cncid, cvarid, cndims, cstat1, cstatus
+ Integer(C_LONG_LONG) :: cival
+ Type(C_PTR)          :: cndexptr
+ Integer              :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cndex(:)
+
+ cncid  = ncid
+ cvarid = varid - 1 ! Subtract one to get C varid
+
+ cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
+
+ cndexptr = C_NULL_PTR
+ ndims    = cndims
+
+ If (cstat1 == NC_NOERR) Then
+   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index
+     ALLOCATE(cndex(ndims))
+     cndex(1:ndims) = ndex(ndims:1:-1) - 1
+     cndexptr       = C_LOC(cndex)
+   EndIf
+ EndIf
+
+ cstatus = nc_get_var1_longlong(cncid, cvarid, cndexptr, cival)
+
+ ival   = cival
+ status = cstatus
+
+! Make sure there are no dangling pointers and allocated values
+
+ cndexptr = C_NULL_PTR
+ If (ALLOCATED(cndex)) DEALLOCATE(cndex)
+
+ End Function nf_get_var1_int64
 !--------------------------------- nf_get_var1 -------------------------------
  Function nf_get_var1(ncid, varid, ndex, values) RESULT(status)
 
