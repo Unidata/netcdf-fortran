@@ -14,7 +14,9 @@ SET(nf_test_SOURCES
   f03lib_f_interfaces.f90 test_get.F test_put.F nf_error.F nf_test.F
   test_read.F test_write.F util.F f03lib.c tests.inc)
 
-SET(TESTS nf_test)
+SET(tst_int64_SOURCES tst_int64.F)
+
+SET(TESTS nf_test tst_int64)
 IF (BUILD_V2)
   SET(check_PROGRAMS tst_f77_v2)
   SET(tst_f77_v2_SOURCES tst_f77_v2.F)
