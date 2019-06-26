@@ -43,7 +43,7 @@ netcdf_f77.3: netcdf.m4
 
 # Create the F90 API man page from the m4 source.
 netcdf_fortran.3: netcdf.m4
-	m4 $(M4FLAGS) $(ARGS_MANPAGE) $? >netcdf_fortran.3 || rm netcdf_fortran.3
+	m4 $(M4FLAGS) $(ARGS_MANPAGE) $? >$@ || rm $@
 
 # These files will be included with the dist for completeness. The man
 # page is built on the developer machine and packaged into the
