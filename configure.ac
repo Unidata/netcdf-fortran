@@ -341,6 +341,7 @@ else
    AC_DEFINE(NCSHORT_T, integer*2)
    AC_DEFINE(NF_INT1_T, byte)
    AC_DEFINE(NF_INT2_T, integer*2)
+   AC_DEFINE(NF_INT8_T, integer*8)
    AC_DEFINE(NF_INT1_IS_C_SIGNED_CHAR, 1, [default])
    AC_DEFINE(NF_INT2_IS_C_SHORT, 1, [default])
    AC_DEFINE(NF_INT_IS_C_INT, 1, [default])
