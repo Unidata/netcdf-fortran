@@ -14,6 +14,7 @@ Entries are in reverse chronological order (most recent first).
 
 ### Changes
 
+* Added support for 64-bit integer memory type. See [Github #190](https://github.com/Unidata/netcdf-fortran/issues/190).
 * Moved netCDF classic F90 API tests to new subdirectory nf03_test.
 * Moved netCDF-4 F77 API tests to new subdirectory nf_test4.
 * Moved netCDF-4 F90 API tests to new subdirectory nf03_test4.
