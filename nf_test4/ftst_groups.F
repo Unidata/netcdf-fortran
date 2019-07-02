@@ -41,112 +41,112 @@ C     Error handling.
 
 C     Create the netCDF file.
       retval = nf_create(file_name, NF_NETCDF4, ncid)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
 
 C     Create a group and a subgroup.
       retval = nf_def_grp(ncid, group_name, grpid)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       retval = nf_def_grp(grpid, sub_group_name, sub_grpid)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
 
 C     Create a two dims and two vars.
       retval = nf_def_dim(sub_grpid, dim1_name, 0, dimids(1))
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       retval = nf_def_dim(sub_grpid, dim2_name, 0, dimids(2))
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       retval = nf_def_var(sub_grpid, var1_name, NF_UINT64, 2, dimids, 
      &     varids(1))
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       retval = nf_def_var(sub_grpid, var2_name, NF_UINT64, 2, dimids, 
      &     varids(2))
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
 
 C     Close the file. 
       retval = nf_close(ncid)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
 
 C     Reopen the file.
       retval = nf_open(file_name, NF_NOWRITE, ncid)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       
 C     Check the name of the root group.
       retval = nf_inq_grpname(ncid, name_in)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       if (name_in(1:1) .ne. '/') stop 2
 
 C     Check the full name of the root group (also "/").
       retval = nf_inq_grpname_full(ncid, full_name_len, name_in)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       if (full_name_len .ne. 1 .or. name_in(1:1) .ne. '/') stop 2
 
 C     What groups are there from the root group?
       retval = nf_inq_grps(ncid, ngroups_in, grpids)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       if (ngroups_in .ne. 1) stop 2
 
 C     Check the name of this group.
       retval = nf_inq_grpname(grpids(1), name_in)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       if (name_in(1:len(group_name)) .ne. group_name) stop 2
 
 C     Check the length of the full name.
       retval = nf_inq_grpname_len(grpids(1), full_name_len)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       if (full_name_len .ne. len(group_name) + 1) stop 2
 
 C     Check the full name.
       retval = nf_inq_grpname_full(grpids(1), full_name_len, name_in2)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       if (name_in2(1:1) .ne. '/' .or. 
      &     name_in2(2:len(group_name)+1) .ne. group_name .or.
      &     full_name_len .ne. len(group_name) + 1) stop 2
 
 C     Check getting the grpid by full name
       retval = nf_inq_grp_full_ncid(ncid, name_in, grpid_in)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       if (grpid_in .ne. grpids(1)) stop 2
 
 C     Check the parent ncid.
       retval = nf_inq_grp_parent(grpids(1), grpid_in)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       if (grpid_in .ne. ncid) stop 2
 
 C     Check getting the group by name
       retval = nf_inq_ncid(ncid, group_name, grpid_in)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       if (grpid_in .ne. grpids(1)) stop 2
 
 C     Check getting the group by name
       retval = nf_inq_ncid(ncid, group_name, grpid_in)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       if (grpid_in .ne. grpids(1)) stop 2
 
 C     Get the sub group id, using its name.
       retval = nf_inq_ncid(grpid_in, sub_group_name, subgrp_in)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
 
 C     Check varids in subgroup.
       retval = nf_inq_varids(subgrp_in, nvars, varids_in)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       if (nvars .ne. 2 .or. varids_in(1) .ne. varids(1) .or.
      &     varids_in(2) .ne. varids(2)) stop 2
 
 C     Check dimids in subgroup.
       retval = nf_inq_dimids(subgrp_in, ndims, dimids_in, 0)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       if (ndims .ne. 2 .or. dimids_in(1) .ne. dimids(1) .or.
      &     dimids_in(2) .ne. dimids(2)) stop 2
 
 C     Check dimids including parents (will get same answers, since there
 C     are no dims in parent group.
       retval = nf_inq_dimids(subgrp_in, ndims, dimids_in, 1)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
       if (ndims .ne. 2 .or. dimids_in(1) .ne. dimids(1) .or.
      &     dimids_in(2) .ne. dimids(2)) stop 2
 
 C     Close the file. 
       retval = nf_close(ncid)
-      if (retval .ne. nf_noerr) stop retval
+      if (retval .ne. nf_noerr) stop 1
 
       print *,'*** SUCCESS!'
       end
