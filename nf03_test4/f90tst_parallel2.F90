@@ -44,7 +44,7 @@ program f90tst_parallel
   implicit none
   include 'mpif.h'
 
-  integer :: mode_flag
+  integer :: mode_flag, cmode
   integer :: p, my_rank, ierr
 
   call MPI_Init(ierr)
@@ -62,15 +62,26 @@ program f90tst_parallel
      stop 2
   endif
 
+  cmode = IOR(nf90_clobber, nf90_mpiio)
+
 #ifdef NF_HAS_PNETCDF
-  mode_flag = IOR(nf90_clobber, nf90_mpiio)
+  ! test CDF-1 file
+  call parallel_io(cmode)
+
+  ! test CDF-2 file
+  mode_flag = IOR(cmode, nf90_64bit_offset)
   call parallel_io(mode_flag)
+
+#ifdef ENABLE_CDF5
+  ! test CDF-5 file
+  mode_flag = IOR(cmode, nf90_64bit_data)
+  call parallel_io(mode_flag)
+#endif
 #endif
 
 #ifdef NF_HAS_PARALLEL4
-  mode_flag = IOR(nf90_netcdf4, nf90_classic_model)
-  mode_flag = IOR(mode_flag, nf90_mpiposix)
-  mode_flag = IOR(mode_flag, nf90_clobber)
+  mode_flag = IOR(cmode, nf90_netcdf4)
+  mode_flag = IOR(mode_flag, nf90_classic_model)
   call parallel_io(mode_flag)
 #endif
 
@@ -88,7 +99,7 @@ contains
 
     if(errcode /= nf90_noerr) then
        print *, 'Error: ', trim(nf90_strerror(errcode))
-       stop 5
+       stop 9
     endif
   end subroutine handle_err
 
@@ -160,7 +171,7 @@ contains
   call handle_err(nf90_close(ncid))
 
   ! Reopen the file.
-  call handle_err(nf90_open(FILE_NAME, IOR(nf90_nowrite, nf90_mpiposix), ncid, &
+  call handle_err(nf90_open(FILE_NAME, IOR(nf90_nowrite, nf90_mpiio), ncid, &
        comm = MPI_COMM_WORLD, info = MPI_INFO_NULL))
 
   ! Check some stuff out.
@@ -169,8 +180,12 @@ contains
 
   if (IAND(mode_flag, nf90_netcdf4) .GT. 0) then
       if (file_format /= nf90_format_netcdf4_classic) stop 4
+  else if (IAND(mode_flag, nf90_64bit_offset) .GT. 0) then
+      if (file_format /= nf90_format_64bit_offset) stop 5
+  else if (IAND(mode_flag, nf90_64bit_data) .GT. 0) then
+      if (file_format /= nf90_format_64bit_data) stop 6
   else
-      if (file_format /= nf90_format_classic) stop 5
+      if (file_format /= nf90_format_classic) stop 7
   endif
 
   ! Set collective access on this variable. This will cause all
@@ -186,7 +201,7 @@ contains
   ! Check the data.
   do x = 1, NX / 4
      do y = 1, NY / 4
-        if (data_in(y, x) .ne. my_rank) stop 6
+        if (data_in(y, x) .ne. my_rank) stop 8
      end do
   end do
 

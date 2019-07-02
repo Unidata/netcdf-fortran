@@ -6,22 +6,12 @@
 !     $Id: netcdf4.inc,v 1.28 2010/05/25 13:53:02 ed Exp $
 
 !     New netCDF-4 types.
-      integer nf_ubyte
-      integer nf_ushort
-      integer nf_uint
-      integer nf_int64
-      integer nf_uint64
       integer nf_string
       integer nf_vlen
       integer nf_opaque
       integer nf_enum
       integer nf_compound
 
-      parameter (nf_ubyte = 7)
-      parameter (nf_ushort = 8)
-      parameter (nf_uint = 9)
-      parameter (nf_int64 = 10)
-      parameter (nf_uint64 = 11)
       parameter (nf_string = 12)
       parameter (nf_vlen = 13)
       parameter (nf_opaque = 14)
@@ -357,28 +347,6 @@
       external nf_get_vara
       integer nf_get_vars
       external nf_get_vars
-
-!     64-bit int functions.
-      integer nf_put_var1_int64
-      external nf_put_var1_int64
-      integer nf_put_vara_int64
-      external nf_put_vara_int64
-      integer nf_put_vars_int64
-      external nf_put_vars_int64
-      integer nf_put_varm_int64
-      external nf_put_varm_int64
-      integer nf_put_var_int64
-      external nf_put_var_int64
-      integer nf_get_var1_int64
-      external nf_get_var1_int64
-      integer nf_get_vara_int64
-      external nf_get_vara_int64
-      integer nf_get_vars_int64
-      external nf_get_vars_int64
-      integer nf_get_varm_int64
-      external nf_get_varm_int64
-      integer nf_get_var_int64
-      external nf_get_var_int64
 
 !     For helping F77 users with VLENs.
       integer nf_get_vlen_element

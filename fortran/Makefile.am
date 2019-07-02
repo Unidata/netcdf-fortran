@@ -103,6 +103,8 @@ libnetcdff_la_SOURCES += nf_v2compat.c nf_fortv2.f90
 libnetcdff_la_LIBADD += libnetcdf_fortv2_c_interfaces.la
 endif # BUILD_V2
 
+libnetcdff_la_SOURCES += nf_nc.f90
+
 # Are we building netCDF-4?
 if USE_NETCDF4
 

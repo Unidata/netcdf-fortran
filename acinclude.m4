@@ -235,6 +235,7 @@ dnl	UD_CHECK_FORTRAN_TYPE(NF_INT1_T, byte integer*1 "integer(kind(1))")
 dnl	UD_CHECK_FORTRAN_TYPE(NF_INT2_T, integer*2 "integer(kind(2))")
 	UD_CHECK_FORTRAN_TYPE(NF_INT1_T, byte integer*1 "integer(kind=1)" "integer(selected_int_kind(2))")
 	UD_CHECK_FORTRAN_TYPE(NF_INT2_T, integer*2 "integer(kind=2)" "integer(selected_int_kind(4))")
+	UD_CHECK_FORTRAN_TYPE(NF_INT8_T, integer*8 "integer(kind=8)" "integer(selected_int_kind(18))")
 
 	case "${NF_INT1_T}" in
 	    '') ;;
@@ -249,6 +250,13 @@ dnl	UD_CHECK_FORTRAN_TYPE(NF_INT2_T, integer*2 "integer(kind(2))")
 	    *)  UD_CHECK_CTYPE_FORTRAN($NF_INT2_T, short, INT2)
 		UD_CHECK_CTYPE_FORTRAN($NF_INT2_T, int, INT2)
 		UD_CHECK_CTYPE_FORTRAN($NF_INT2_T, long, INT2)
+		;;
+	esac
+	case "${NF_INT8_T}" in
+	    '') ;;
+	    *)  UD_CHECK_CTYPE_FORTRAN($NF_INT8_T, "short", INT8)
+		UD_CHECK_CTYPE_FORTRAN($NF_INT8_T, "int", INT8)
+		UD_CHECK_CTYPE_FORTRAN($NF_INT8_T, "long long", INT8)
 		;;
 	esac
 	UD_CHECK_CTYPE_FORTRAN(integer, int long, INT)

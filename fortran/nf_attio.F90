@@ -230,6 +230,50 @@
  status = cstatus
 
  End Function nf_put_att_int
+!--------------------------------- nf_put_att_int64 -------------------------
+ Function nf_put_att_int64(ncid, varid, name, xtype, nlen, i8vals) &
+                           RESULT(status)
+
+! Write variable or global attribute 64 bit integer data to dataset ncid
+
+ USE netcdf_nc_interfaces
+
+ Implicit NONE
+
+ Integer,          Intent(IN) :: ncid, varid, nlen, xtype
+ Character(LEN=*), Intent(IN) :: name
+ Integer(NFINT8),  Intent(IN) :: i8vals(*)
+
+ Integer                      :: status
+
+ Integer(C_INT)               :: cncid, cvarid, cstatus, cxtype
+ Integer(C_SIZE_T)            :: cnlen
+ Character(LEN=(LEN(name)+1)) :: cname
+ Integer                      :: ie
+
+ cncid  = ncid
+ cvarid = varid -1 ! Subtract 1 to get C varid
+ cnlen  = nlen
+ cxtype = xtype
+
+ cname = addCNullChar(name, ie)
+
+#if NF_INT8_IS_C_SHORT
+ cstatus = nc_put_att_short(cncid, cvarid, cname(1:ie), &
+                            cxtype, cnlen, i8vals)
+#elif NF_INT8_IS_C_INT
+ cstatus = nc_put_att_int(cncid, cvarid, cname(1:ie), &
+                           cxtype, cnlen, i8vals)
+#elif NF_INT8_IS_C_LONG
+ cstatus = nc_put_att_long(cncid, cvarid, cname(1:ie), &
+                           cxtype, cnlen, i8vals)
+#elif NF_INT8_IS_C_LONG_LONG
+ cstatus = nc_put_att_longlong(cncid, cvarid, cname(1:ie), &
+                           cxtype, cnlen, i8vals)
+#endif
+ status = cstatus
+
+ End Function nf_put_att_int64
 !--------------------------------- nf_put_att_real -------------------------
  Function nf_put_att_real(ncid, varid, name, xtype, nlen, rvals) &
                           RESULT(status)
@@ -306,6 +350,41 @@
  status = cstatus
 
  End Function nf_put_att_double
+!--------------------------------- nf_put_att --------------------------------
+ Function nf_put_att(ncid, varid, name, xtype, nlen, value) RESULT(status)
+
+! Write global attribute of any type. We use a C character
+! string as the dummy arguments for the values
+
+ USE netcdf_nc_interfaces
+
+ Implicit NONE
+
+ Integer,                Intent(IN)         :: ncid, varid, nlen, xtype
+ Character(LEN=*),       Intent(IN)         :: name
+ Character(KIND=C_CHAR), Intent(IN), TARGET :: value(*)
+
+ Integer                                    :: status
+
+ Integer(C_INT)               :: cncid, cvarid, cstatus, cxtype
+ Integer(C_SIZE_T)            :: cnlen
+ Type(C_PTR)                  :: cvalueptr
+ Character(LEN=(LEN(name)+1)) :: cname
+ Integer                      :: ie
+
+ cncid     = ncid
+ cvarid    = varid -1 ! Subtract 1 to get C varid
+ cxtype    = xtype
+ cnlen     = nlen
+ cvalueptr = C_LOC(value)
+ cname     = REPEAT(" ",LEN(cname))
+ cname     = addCNullChar(name, ie)
+
+ cstatus = nc_put_att(cncid, cvarid, cname(1:ie), cxtype, cnlen, cvalueptr)
+
+ status = cstatus
+
+ End Function nf_put_att
 !--------------------------------- nf_get_att_text -----------------------
  Function nf_get_att_text(ncid, varid, name, text) RESULT(status)
 
@@ -488,6 +567,44 @@
  status = cstatus
 
  End Function nf_get_att_int
+!--------------------------------- nf_get_att_int64 --------------------------
+ Function nf_get_att_int64(ncid, varid, name, i8vals) RESULT(status)
+
+! Read variable or global attribute 64-bit Integer data from dataset ncid
+
+ USE netcdf_nc_interfaces
+
+ Implicit NONE
+
+ Integer,          Intent(IN)  :: ncid, varid
+ Character(LEN=*), Intent(IN)  :: name
+ Integer(NFINT8),  Intent(OUT) :: i8vals(*)
+
+ Integer                       :: status
+
+ Integer(C_INT)               :: cncid, cvarid, cstatus
+ Character(LEN=(LEN(name)+1)) :: cname
+ Integer                      :: ie
+
+ cncid  = ncid
+ cvarid = varid -1 ! Subtract 1 to get C varid
+
+! Check for C null char and add one if missing
+
+ cname = addCNullChar(name, ie)
+
+#if NF_INT8_IS_C_SHORT
+ cstatus = nc_get_att_short(cncid, cvarid, cname(1:ie), i8vals)
+#elif NF_INT8_IS_C_INT
+ cstatus = nc_get_att_int(cncid, cvarid, cname(1:ie), i8vals)
+#elif NF_INT8_IS_C_LONG
+ cstatus = nc_get_att_long(cncid, cvarid, cname(1:ie), i8vals)
+#elif NF_INT8_IS_C_LONG_LONG
+ cstatus = nc_get_att_longlong(cncid, cvarid, cname(1:ie), i8vals)
+#endif
+ status = cstatus
+
+ End Function nf_get_att_int64
 !--------------------------------- nf_get_att_real -------------------------
  Function nf_get_att_real(ncid, varid, name, rvals) RESULT(status)
 
@@ -553,3 +670,34 @@
  status = cstatus
 
  End Function nf_get_att_double
+!--------------------------------- nf_get_att --------------------------------
+ Function nf_get_att(ncid, varid, name, value) RESULT(status)
+
+! Get global attribute of any type. We use a C character
+! string as the dummy arguments for the values. Don't supply calling
+! program with an explicit interface. Just use external
+
+ USE netcdf_nc_interfaces
+
+ Implicit NONE
+
+ Integer,                Intent(IN)    :: ncid, varid
+ Character(LEN=*),       Intent(IN)    :: name
+ Character(KIND=C_CHAR), Intent(INOUT) :: value(*)
+
+ Integer                               :: status
+
+ Integer(C_INT)               :: cncid, cvarid, cstatus
+ Character(LEN=(LEN(name)+1)) :: cname
+ Integer                      :: ie
+
+ cncid  = ncid
+ cvarid = varid -1 ! Subtract 1 to get C varid
+ cname  = REPEAT(" ",LEN(cname))
+ cname = addCNullChar(name, ie)
+
+ cstatus = nc_get_att(cncid, cvarid, cname(1:ie), value)
+
+ status = cstatus
+
+ End Function nf_get_att

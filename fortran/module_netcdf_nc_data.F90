@@ -149,6 +149,19 @@ Module netcdf_nc_data
  Integer, Parameter :: NFINT = IK4
 #endif
 
+! INT8 KINDs
+
+#ifdef NF_INT8_IS_C_SHORT
+ Integer, Parameter :: CINT8 = C_SHORT
+ Integer, Parameter :: NFINT8 = IK2
+#elif NF_INT8_IS_C_INT
+ Integer, Parameter :: CINT8 = C_INT
+ Integer, Parameter :: NFINT8 = IK4
+#else
+ Integer, Parameter :: CINT8 = C_LONG_LONG
+ Integer, Parameter :: NFINT8 = IK8
+#endif
+
 ! Set Fortran default real kind. This should
 ! take care of the case were the default real
 ! type is a 64 bit real (ala prehistoric CRAYs) 

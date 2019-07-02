@@ -26,7 +26,7 @@ program f90tst_parallel3
   implicit none
   include 'mpif.h'
 
-  integer :: mode_flag
+  integer :: mode_flag, cmode
   integer :: p, my_rank, ierr
 
   call MPI_Init(ierr)
@@ -44,19 +44,25 @@ program f90tst_parallel3
      stop 1
   endif
 
+  cmode = IOR(nf90_clobber, nf90_mpiio)
+
 #ifdef NF_HAS_PNETCDF
-  mode_flag = IOR(nf90_clobber, nf90_mpiio)
-#ifdef ENABLE_CDF5
-  mode_flag = IOR(mode_flag, nf90_64bit_data)
-#else
-  mode_flag = IOR(mode_flag, nf90_64bit_offset)
-#endif
+  ! test CDF-1 file
+  call parallel_io(cmode)
+
+  ! test CDF-2 file
+  mode_flag = IOR(cmode, nf90_64bit_offset)
   call parallel_io(mode_flag)
+
+#ifdef ENABLE_CDF5
+  ! test CDF-5 file
+  mode_flag = IOR(cmode, nf90_64bit_data)
+  call parallel_io(mode_flag)
+#endif
 #endif
 
 #ifdef NF_HAS_PARALLEL4
-  mode_flag = IOR(nf90_netcdf4, nf90_mpiposix)
-  mode_flag = IOR(mode_flag, nf90_clobber)
+  mode_flag = IOR(cmode, nf90_netcdf4)
   call parallel_io(mode_flag)
 #endif
 
@@ -94,19 +100,11 @@ contains
   integer, parameter :: NUM_PROC = 4
   integer, parameter :: CACHE_SIZE = 4194304, CACHE_NELEMS = 1013
   integer, parameter :: CACHE_PREEMPTION = 79
-#if defined(NF_HAS_PARALLEL4) || defined(ENABLE_CDF5)
   integer, parameter :: NUM_VARS = 8
   character (len = *), parameter :: var_name(NUM_VARS) = &
        (/ 'byte__', 'short_', 'int___', 'float_', 'double', 'ubyte_', 'ushort', 'uint__' /)
   integer :: var_type(NUM_VARS) = (/ nf90_byte, nf90_short, nf90_int, &
        nf90_float, nf90_double, nf90_ubyte, nf90_ushort, nf90_uint /)
-#else
-  integer, parameter :: NUM_VARS = 5
-  character (len = *), parameter :: var_name(NUM_VARS) = &
-       (/ 'byte__', 'short_', 'int___', 'float_', 'double' /)
-  integer :: var_type(NUM_VARS) = (/ nf90_byte, nf90_short, nf90_int, &
-       nf90_float, nf90_double /)
-#endif
   integer :: ncid, varid(NUM_VARS), dimids(MAX_DIMS)
   integer :: x_dimid, y_dimid
   integer :: byte_out(HALF_NY, HALF_NX), byte_in(HALF_NY, HALF_NX)
@@ -114,12 +112,10 @@ contains
   integer :: int_out(HALF_NY, HALF_NX), int_in(HALF_NY, HALF_NX)
   real :: areal_out(HALF_NY, HALF_NX), areal_in(HALF_NY, HALF_NX)
   real :: double_out(HALF_NY, HALF_NX), double_in(HALF_NY, HALF_NX)
-#if defined(NF_HAS_PARALLEL4) || defined(ENABLE_CDF5)
   integer :: ubyte_out(HALF_NY, HALF_NX), ubyte_in(HALF_NY, HALF_NX)
   integer :: ushort_out(HALF_NY, HALF_NX), ushort_in(HALF_NY, HALF_NX)
   integer (kind = EightByteInt) :: uint_out(HALF_NY, HALF_NX), uint_in(HALF_NY, HALF_NX)
-#endif
-  integer :: nvars, ngatts, ndims, unlimdimid, file_format
+  integer :: nvars, ngatts, ndims, unlimdimid, file_format, tst_nvars
   integer :: x, y, v
   integer :: my_rank, ierr, old_mode
   integer :: start(MAX_DIMS), count(MAX_DIMS)
@@ -134,11 +130,9 @@ contains
         int_out(y, x) = my_rank * (-4)
         areal_out(y, x) = my_rank * 2.5
         double_out(y, x) = my_rank * (-4.5)
-#if defined(NF_HAS_PARALLEL4) || defined(ENABLE_CDF5)
         ubyte_out(y, x) = my_rank
         ushort_out(y, x) = my_rank * 2
         uint_out(y, x) = my_rank * 4
-#endif
      end do
   end do
 
@@ -152,8 +146,16 @@ contains
   call check(nf90_def_dim(ncid, "y", NY, y_dimid))
   dimids =  (/ y_dimid, x_dimid /)
 
+  if (IAND(mode_flag, nf90_netcdf4) .GT. 0) then
+      tst_nvars = 8
+  else if (IAND(mode_flag, nf90_64bit_data) .GT. 0) then
+      tst_nvars = 8
+  else
+      tst_nvars = 5
+  end if
+
   ! Define the variables.
-  do v = 1, NUM_VARS
+  do v = 1, tst_nvars
      call check(nf90_def_var(ncid, var_name(v), var_type(v), dimids, varid(v)))
   end do
 
@@ -183,11 +185,11 @@ contains
      call check(nf90_put_var(ncid, varid(3), int_out, start = start, count = count))
      call check(nf90_put_var(ncid, varid(4), areal_out, start = start, count = count))
      call check(nf90_put_var(ncid, varid(5), double_out, start = start, count = count))
-#if defined(NF_HAS_PARALLEL4) || defined(ENABLE_CDF5)
-     call check(nf90_put_var(ncid, varid(6), ubyte_out, start = start, count = count))
-     call check(nf90_put_var(ncid, varid(7), ushort_out, start = start, count = count))
-     call check(nf90_put_var(ncid, varid(8), uint_out, start = start, count = count))
-#endif
+     if (tst_nvars .GT. 5) then
+        call check(nf90_put_var(ncid, varid(6), ubyte_out, start = start, count = count))
+        call check(nf90_put_var(ncid, varid(7), ushort_out, start = start, count = count))
+        call check(nf90_put_var(ncid, varid(8), uint_out, start = start, count = count))
+     endif
   endif
 
   ! Close the file.
@@ -199,16 +201,14 @@ contains
 
   ! Check some stuff out.
   call check(nf90_inquire(ncid, ndims, nvars, ngatts, unlimdimid, file_format))
-  if (ndims /= 2 .or. nvars /= NUM_VARS .or. ngatts /= 0 .or. unlimdimid /= -1) stop 2
+  if (ndims /= 2 .or. nvars /= tst_nvars .or. ngatts /= 0 .or. unlimdimid /= -1) stop 2
 
   if (IAND(mode_flag, nf90_netcdf4) .GT. 0) then
       if (file_format /= nf90_format_netcdf4) stop 3
-  else
-#ifdef ENABLE_CDF5
+  else if (IAND(mode_flag, nf90_64bit_data) .GT. 0) then
       if (file_format /= nf90_format_cdf5) stop 4
-#else
-      if (file_format /= nf90_format_64bit_offset) stop 4
-#endif
+  else if (IAND(mode_flag, nf90_64bit_offset) .GT. 0) then
+      if (file_format /= nf90_format_64bit_offset) stop 5
   endif
 
   ! Read this processor's data.
@@ -217,38 +217,38 @@ contains
   call check(nf90_get_var(ncid, varid(3), int_in, start = start, count = count))
   call check(nf90_get_var(ncid, varid(4), areal_in, start = start, count = count))
   call check(nf90_get_var(ncid, varid(5), double_in, start = start, count = count))
-#if defined(NF_HAS_PARALLEL4) || defined(ENABLE_CDF5)
-  call check(nf90_get_var(ncid, varid(6), ubyte_in, start = start, count = count))
-  call check(nf90_get_var(ncid, varid(7), ushort_in, start = start, count = count))
-  call check(nf90_get_var(ncid, varid(8), uint_in, start = start, count = count))
-#endif
+  if (tst_nvars .GT. 5) then
+      call check(nf90_get_var(ncid, varid(6), ubyte_in, start = start, count = count))
+      call check(nf90_get_var(ncid, varid(7), ushort_in, start = start, count = count))
+      call check(nf90_get_var(ncid, varid(8), uint_in, start = start, count = count))
+  end if
 
   ! Check the data. All the data from the processor zero are fill
   ! value.
   do x = 1, HALF_NX
      do y = 1, HALF_NY
         if (my_rank .eq. 0) then
-           if (byte_in(y, x) .ne. nf90_fill_byte) stop 5
-           if (short_in(y, x) .ne. nf90_fill_short) stop 6
-           if (int_in(y, x) .ne. nf90_fill_int) stop 7
-           if (areal_in(y, x) .ne. nf90_fill_real) stop 8
-           if (double_in(y, x) .ne. nf90_fill_double) stop 9
-#if defined(NF_HAS_PARALLEL4) || defined(ENABLE_CDF5)
-           if (ubyte_in(y, x) .ne. nf90_fill_ubyte) stop 10
-           if (ushort_in(y, x) .ne. nf90_fill_ushort) stop 11
-           if (uint_in(y, x) .ne. nf90_fill_uint) stop 12
-#endif
+           if (byte_in(y, x) .ne. nf90_fill_byte) stop 6
+           if (short_in(y, x) .ne. nf90_fill_short) stop 7
+           if (int_in(y, x) .ne. nf90_fill_int) stop 8
+           if (areal_in(y, x) .ne. nf90_fill_real) stop 9
+           if (double_in(y, x) .ne. nf90_fill_double) stop 10
+           if (tst_nvars .GT. 5) then
+              if (ubyte_in(y, x) .ne. nf90_fill_ubyte) stop 11
+              if (ushort_in(y, x) .ne. nf90_fill_ushort) stop 12
+              if (uint_in(y, x) .ne. nf90_fill_uint) stop 13
+           endif
         else
-           if (byte_in(y, x) .ne. (my_rank * (-1))) stop 13
-           if (short_in(y, x) .ne. (my_rank * (-2))) stop 14
-           if (int_in(y, x) .ne. (my_rank * (-4))) stop 15
-           if (areal_in(y, x) .ne. (my_rank * (2.5))) stop 16
-           if (double_in(y, x) .ne. (my_rank * (-4.5))) stop 17
-#if defined(NF_HAS_PARALLEL4) || defined(ENABLE_CDF5)
-           if (ubyte_in(y, x) .ne. (my_rank * (1))) stop 18
-           if (ushort_in(y, x) .ne. (my_rank * (2))) stop 19
-           if (uint_in(y, x) .ne. (my_rank * (4))) stop 20
-#endif
+           if (byte_in(y, x) .ne. (my_rank * (-1))) stop 14
+           if (short_in(y, x) .ne. (my_rank * (-2))) stop 15
+           if (int_in(y, x) .ne. (my_rank * (-4))) stop 16
+           if (areal_in(y, x) .ne. (my_rank * (2.5))) stop 17
+           if (double_in(y, x) .ne. (my_rank * (-4.5))) stop 18
+           if (tst_nvars .GT. 5) then
+              if (ubyte_in(y, x) .ne. (my_rank * (1))) stop 19
+              if (ushort_in(y, x) .ne. (my_rank * (2))) stop 20
+              if (uint_in(y, x) .ne. (my_rank * (4))) stop 21
+           endif
         endif
      end do
   end do

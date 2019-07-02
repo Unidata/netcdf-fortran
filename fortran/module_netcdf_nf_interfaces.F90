@@ -87,6 +87,17 @@ Interface
 
  End Function nf_create
 End Interface
+!-------------------------------- nf_create_par -------------------------------
+Interface
+ Function nf_create_par (path, cmode, comm, info, ncid) RESULT(status)
+
+ Integer,          Intent(IN)  :: cmode, comm, info
+ Character(LEN=*), Intent(IN)  :: path
+ Integer,          Intent(OUT) :: ncid
+ Integer                       :: status
+
+ End Function nf_create_par
+End Interface
 !-------------------------------- nf__create ----------------------------------
 Interface
  Function nf__create(path, cmode, initialsz, chunksizehintp, ncid) &
@@ -121,6 +132,17 @@ Interface
  Integer                         :: status
 
  End Function nf_open
+End Interface
+!-------------------------------- nf_open_par --------------------------------
+Interface
+ Function nf_open_par (path, mode, comm, info, ncid) RESULT(status)
+
+ Integer,          Intent(IN)  :: mode, comm, info
+ Character(LEN=*), Intent(IN)  :: path
+ Integer,          Intent(OUT) :: ncid
+ Integer                       :: status
+
+ End Function nf_open_par
 End Interface
 !-------------------------------- nf__open ------------------------------------
 Interface
@@ -159,6 +181,15 @@ Interface nf90_open_mem
  Integer                               :: status
 
  End Function nf_open_mem
+End Interface
+!-------------------------------- nf_var_par_access -------------------------
+Interface
+ Function nf_var_par_access( ncid, varid, iaccess) RESULT (status)
+
+ Integer, Intent(IN) :: ncid, varid, iaccess
+ Integer             :: status
+
+ End Function nf_var_par_access
 End Interface
 !-------------------------------- nf_inq_path ---------------------------------
 Interface
@@ -1361,6 +1392,19 @@ Interface
 
  End Function nf_put_vara_int
 End Interface
+!--------------------------------- nf_put_vara_int64 ------------------------
+Interface
+ Function nf_put_vara_int64(ncid, varid, start, counts, i8vals) RESULT(status)
+
+ USE netcdf_nf_data, ONLY: NFINT8
+
+ Integer,         Intent(IN) :: ncid, varid
+ Integer,         Intent(IN) :: start(*), counts(*)
+ Integer(NFINT8), Intent(IN) :: i8vals(*)
+ Integer                     :: status
+
+ End Function nf_put_vara_int64
+End Interface
 !--------------------------------- nf_put_vara_real ------------------------
 Interface
  Function nf_put_vara_real(ncid, varid, start, counts, rvals) RESULT(status)
@@ -1446,6 +1490,19 @@ Interface
  Integer                     :: status
 
  End Function nf_get_vara_int
+End Interface
+!--------------------------------- nf_get_vara_int64 ------------------------
+Interface
+ Function nf_get_vara_int64(ncid, varid, start, counts, i8vals) RESULT(status)
+
+ USE netcdf_nf_data, ONLY: NFINT8
+
+ Integer,         Intent(IN)  :: ncid, varid
+ Integer,         Intent(IN)  :: start(*), counts(*)
+ Integer(NFINT8), Intent(OUT) :: i8vals(*)
+ Integer                      :: status
+
+ End Function nf_get_vara_int64
 End Interface
 !--------------------------------- nf_get_vara_real ------------------------
 Interface
@@ -1535,6 +1592,20 @@ Interface
 
  End Function nf_put_att_int
 End Interface
+!--------------------------------- nf_put_att_int64 -------------------------
+Interface
+ Function nf_put_att_int64(ncid, varid, name, xtype, nlen, i8vals) &
+                             RESULT(status)
+
+ USE netcdf_nf_data, ONLY: NFINT8
+
+ Integer,          Intent(IN) :: ncid, varid, nlen, xtype
+ Character(LEN=*), Intent(IN) :: name
+ Integer(NFINT8),  Intent(IN) :: i8vals(*)
+ Integer                      :: status
+
+ End Function nf_put_att_int64
+End Interface
 !--------------------------------- nf_put_att_real -------------------------
 Interface
  Function nf_put_att_real(ncid, varid, name, xtype, nlen, rvals) &
@@ -1621,6 +1692,19 @@ Interface
  Integer                       :: status
 
  End Function nf_get_att_int
+End Interface
+!--------------------------------- nf_get_att_int64 -------------------------
+Interface
+ Function nf_get_att_int64(ncid, varid, name, i8vals) RESULT(status)
+
+ USE netcdf_nf_data, ONLY: NFINT8
+
+ Integer,          Intent(IN)  :: ncid, varid
+ Character(LEN=*), Intent(IN)  :: name
+ Integer(NFINT8),  Intent(OUT) :: i8vals(*)
+ Integer                       :: status
+
+ End Function nf_get_att_int64
 End Interface
 !--------------------------------- nf_get_att_real -------------------------
 Interface

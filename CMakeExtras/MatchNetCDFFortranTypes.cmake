@@ -5,6 +5,7 @@
 # check sizes of C types
 check_type_size(int SIZEOF_INT)
 check_type_size(long SIZEOF_LONG)
+check_type_size("long long" SIZEOF_LONG_LONG)
 check_type_size(float SIZEOF_FLOAT)
 check_type_size(double SIZEOF_DOUBLE)
 check_type_size("signed char" SIZEOF_SIGNED_CHAR)  
@@ -16,6 +17,7 @@ SET(NCBYTE_T "byte") # 1 byte
 SET(NCSHORT_T "integer*2") # 2 bytes
 SET(NF_INT1_T "integer*1") # 1 byte
 SET(NF_INT2_T "integer*2") # 2 bytes
+SET(NF_INT8_T "integer*8") # 8 bytes
 
 # Checks the provided C types to see which ones have the number of bytes passed
 # Roughly equivalent to the Automake function UD_CHECK_CTYPE_FORTRAN
@@ -59,6 +61,7 @@ message("Matching Fortran types to C types")
 find_c_type_with_size(1 INT1 "signed char" short int long)
 find_c_type_with_size(2 INT2 short int long)
 find_c_type_with_size(4 INT int long)
+find_c_type_with_size(8 INT8 int "long long")
 find_c_type_with_size(4 REAL float double)
 find_c_type_with_size(8 DOUBLEPRECISION float double)
 

@@ -235,10 +235,11 @@ define(<<FCOMP>>,
     <<ifelse($1,ubyte,ubyte,
     <<ifelse($1,ushort,ushort,
     <<ifelse($1,uint,uint,
+    <<ifelse($1,int64,int64,
     <<ifelse($1,uint64,uint64,
     <<ifelse($1,string,string,
     <<ifelse($1,voidp,any,
-)>>)>>)>>)>>)>>)>>)>>)>>)>>)>>)>>)>>)
+)>>)>>)>>)>>)>>)>>)>>)>>)>>)>>)>>)>>)>>)
 
 dnl COMP(type)
 define(<<COMP>>, <<ifelse(API,C,<<CCOMP($1)>>,<<FCOMP($1)>>)>>)

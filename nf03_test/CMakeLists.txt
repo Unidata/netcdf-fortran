@@ -10,9 +10,10 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/nf_test ${NC4F_BINARY_DIR}/libsrc
 # All tests need to link to fortran and C libraries.
 LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/fortran)
 
-SET(check_PROGRAMS ${check_PROGRAMS} tst_f90)
-SET(TESTS ${TESTS} tst_f90)
+SET(check_PROGRAMS ${check_PROGRAMS} tst_f90 tst_fill_int64)
+SET(TESTS ${TESTS} tst_f90 tst_fill_int64)
 SET(tst_f90_SOURCES tst_f90.f90)
+SET(tst_fill_int64_SOURCES tst_fill_int64.F90)
 
 INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/fortran ${CMAKE_SOURCE_DIR}/libsrc ${CMAKE_SOURCE_DIR}
   ${CMAKE_CPP_FLAGS} ${NETCDF_C_INCLUDE_DIR})

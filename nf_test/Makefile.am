@@ -19,11 +19,12 @@ AM_FCFLAGS = $(AM_FFLAGS)
 LDADD = ${top_builddir}/fortran/libnetcdff.la
 
 # nf_test is the main test program for classic netCDF F77 API.
-check_PROGRAMS = nf_test
-TESTS = nf_test
+check_PROGRAMS = nf_test tst_int64
+TESTS = nf_test tst_int64
 nf_test_SOURCES = f03lib_f_interfaces.f90 test_get.m4 test_put.m4	\
 nf_error.F nf_test.F test_read.F test_write.F util.F f03lib.c		\
 tests.inc
+tst_int64_SOURCES = tst_int64.F
 
 # Add these two V2 test programs, if V2 API is being built.
 if BUILD_V2

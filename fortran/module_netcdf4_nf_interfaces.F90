@@ -34,37 +34,6 @@ Module netcdf4_nf_interfaces
 
 !           Explicit interfaces to netCDF 4 specific FORTRAN functions
 
-!-------------------------------- nf_create_par -------------------------------
-Interface
- Function nf_create_par (path, cmode, comm, info, ncid) RESULT(status)
-
- Integer,          Intent(IN)  :: cmode, comm, info
- Character(LEN=*), Intent(IN)  :: path
- Integer,          Intent(OUT) :: ncid
- Integer                       :: status
-
- End Function nf_create_par
-End Interface
-!-------------------------------- nf_open_par --------------------------------
-Interface
- Function nf_open_par (path, mode, comm, info, ncid) RESULT(status)
-
- Integer,          Intent(IN)  :: mode, comm, info
- Character(LEN=*), Intent(IN)  :: path
- Integer,          Intent(OUT) :: ncid
- Integer                       :: status
-
- End Function nf_open_par
-End Interface
-!-------------------------------- nf_var_par_access -------------------------
-Interface
- Function nf_var_par_access( ncid, varid, iaccess) RESULT (status)
-
- Integer, Intent(IN) :: ncid, varid, iaccess
- Integer             :: status
-
- End Function nf_var_par_access
-End Interface
 !-------------------------------- nf_inq_ncid ---------------------------------
 Interface
  Function nf_inq_ncid( ncid, name, groupid) RESULT (status)

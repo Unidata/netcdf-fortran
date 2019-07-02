@@ -487,6 +487,68 @@
  If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Function nf_put_vars_double
+!--------------------------------- nf_put_vars_int64 --------------------------
+ Function nf_put_vars_int64(ncid, varid, start, counts, strides, ivals) &
+                             RESULT(status)
+
+! Write out 64 bit integer array given start, count, and stride
+
+ USE netcdf_nc_interfaces
+
+ Implicit NONE
+
+ Integer,      Intent(IN) :: ncid, varid
+ Integer,      Intent(IN) :: start(*), counts(*), strides(*)
+ Integer(IK8), Intent(IN) :: ivals(*)
+
+ Integer                  :: status
+
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:)
+
+ cncid    = ncid
+ cvarid   = varid - 1 ! Subtract 1 to get C varid
+
+ cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ ndims       = cndims
+
+ If (cstat1 == NC_NOERR) Then
+   If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
+     ccounts(1:ndims)  = counts(ndims:1:-1)
+     cstrides(1:ndims) = strides(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
+   EndIf
+ EndIf
+
+ cstatus = nc_put_vars_longlong(cncid, cvarid, cstartptr, ccountsptr, &
+                                cstridesptr, ivals)
+
+ status = cstatus
+
+! Make sure there are no dangling pointers or allocated values
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
+
+ End Function nf_put_vars_int64
 !--------------------------------- nf_put_vars -----------------------------
  Function nf_put_vars(ncid, varid, start, counts, strides, values) &
                       RESULT(status)
@@ -1026,6 +1088,67 @@
  If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Function nf_get_vars_double
+!--------------------------------- nf_get_vars_int64 --------------------------
+ Function nf_get_vars_int64(ncid, varid, start, counts, strides, ivals) &
+                             RESULT(status)
+
+! Read in 64 bit integer array given start, count, and stride
+
+ USE netcdf_nc_interfaces
+
+ Implicit NONE
+
+ Integer,      Intent(IN)  :: ncid, varid
+ Integer,      Intent(IN)  :: start(*), counts(*), strides(*)
+ Integer(IK8), Intent(OUT) :: ivals(*)
+
+ Integer                   :: status
+
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:)
+
+ cncid    = ncid
+ cvarid   = varid - 1 ! Subtract 1 to get C varid
+
+ cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ ndims       = cndims
+
+ If (cstat1 == NC_NOERR) Then
+   If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
+     ccounts(1:ndims)  = counts(ndims:1:-1)
+     cstrides(1:ndims) = strides(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
+   EndIf
+ EndIf
+
+ cstatus = nc_get_vars_longlong(cncid, cvarid, cstartptr, ccountsptr, &
+                                cstridesptr, ivals)
+ status = cstatus
+
+! Make sure there are no dangling pointers or allocated values
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
+
+ End Function nf_get_vars_int64
 !--------------------------------- nf_get_vars ----------------------------
  Function nf_get_vars(ncid, varid, start, counts, strides, values) &
                       RESULT(status)

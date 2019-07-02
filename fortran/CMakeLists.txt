@@ -15,6 +15,8 @@ SET(netcdff_SOURCES
   nf_varmio.F90 nf_varsio.F90
 )
 
+SET(netcdff_SOURCES ${netcdff_SOURCES} nf_nc.f90)
+
 IF (USE_NETCDF4)
   SET(netcdff_SOURCES ${netcdff_SOURCES}
     module_netcdf4_nc_interfaces.f90

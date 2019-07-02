@@ -436,6 +436,59 @@
  If (ALLOCATED(cstart))  DEALLOCATE(cstart)
 
  End Function nf_put_vara_double
+!--------------------------------- nf_put_vara_int64 --------------------------
+ Function nf_put_vara_int64(ncid, varid, start, counts, ivals) RESULT(status)
+
+! Write out 64 bit integer array to dataset for given start and count vectors
+
+ USE netcdf_nc_interfaces
+
+ Implicit NONE
+
+ Integer,      Intent(IN) :: ncid, varid
+ Integer,      Intent(IN) :: start(*), counts(*)
+ Integer(IK8), Intent(IN) :: ivals(*)
+
+ Integer                  :: status
+
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+
+ cncid   = ncid
+ cvarid  = varid - 1 ! Subtract 1 to get C varid
+
+ cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
+
+ cstartptr  = C_NULL_PTR
+ ccountsptr = C_NULL_PTR
+ ndims      = cndims
+
+ If (cstat1 == NC_NOERR) Then
+   If (ndims > 0) Then ! flip array order for C and subtract 1 from start
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     cstart(1:ndims)  = start(ndims:1:-1) - 1
+     ccounts(1:ndims) = counts(ndims:1:-1)
+     cstartptr        = C_LOC(cstart)
+     ccountsptr       = C_LOC(ccounts)
+   EndIf
+ EndIf
+
+ cstatus = nc_put_vara_longlong(cncid, cvarid, cstartptr, ccountsptr, ivals)
+
+ status = cstatus
+
+! Make sure there are no dangling pointers or allocated values
+
+ cstartptr  = C_NULL_PTR
+ ccountsptr = C_NULL_PTR
+ If (ALLOCATED(ccounts)) DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))  DEALLOCATE(cstart)
+
+ End Function nf_put_vara_int64
 !--------------------------------- nf_put_vara ------------------------------
  Function nf_put_vara(ncid, varid, start, counts, values) RESULT(status)
 
@@ -898,6 +951,59 @@
  If (ALLOCATED(cstart))  DEALLOCATE(cstart)
 
  End Function nf_get_vara_double
+!--------------------------------- nf_get_vara_int64 -------------------------
+ Function nf_get_vara_int64(ncid, varid, start, counts, ivals) RESULT(status)
+
+! Read in 64 bit integer array from dataset for given start and count vectors
+
+ USE netcdf_nc_interfaces
+
+ Implicit NONE
+
+ Integer,      Intent(IN)  :: ncid, varid
+ Integer,      Intent(IN)  :: start(*), counts(*)
+ Integer(IK8), Intent(OUT) :: ivals(*)
+
+ Integer                   :: status
+
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+
+ cncid   = ncid
+ cvarid  = varid - 1 ! Subtract 1 to get C varid
+
+ cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
+
+ cstartptr  = C_NULL_PTR
+ ccountsptr = C_NULL_PTR
+ ndims      = cndims
+
+ If (cstat1 == NC_NOERR) Then
+   If (ndims > 0) Then ! flip array order for C and subtract 1 from start
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     cstart(1:ndims)  = start(ndims:1:-1) - 1
+     ccounts(1:ndims) = counts(ndims:1:-1)
+     cstartptr        = C_LOC(cstart)
+     ccountsptr       = C_LOC(ccounts)
+   EndIf
+ EndIf
+
+ cstatus = nc_get_vara_longlong(cncid, cvarid, cstartptr, ccountsptr, ivals)
+
+ status = cstatus
+
+! Make sure there are no dangling pointers or allocated values
+
+ cstartptr  = C_NULL_PTR
+ ccountsptr = C_NULL_PTR
+ If (ALLOCATED(ccounts)) DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))  DEALLOCATE(cstart)
+
+ End Function nf_get_vara_int64
 !--------------------------------- nf_get_vara ------------------------------
  Function nf_get_vara(ncid, varid, start, counts, values) RESULT(status)
 

@@ -547,6 +547,74 @@
  If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Function nf_put_varm_double
+!--------------------------------- nf_put_varm_int64 -------------------------
+ Function nf_put_varm_int64(ncid, varid, start, counts, strides, maps, &
+                            ivals) RESULT(status)
+
+! Write out 64 bit integer array given start, count, stride and map
+
+ USE netcdf_nc_interfaces
+
+ Implicit NONE
+
+ Integer,      Intent(IN) :: ncid, varid
+ Integer,      Intent(IN) :: start(*), counts(*), strides(*), maps(*)
+ Integer(IK8), Intent(IN) :: ivals(*)
+
+ Integer                  :: status
+
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr, cmapsptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:), cmaps(:)
+
+ cncid    = ncid
+ cvarid   = varid -1 ! Subtract 1 to get C varid
+
+ cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ cmapsptr    = C_NULL_PTR
+ ndims       = cndims
+
+ If (cstat1 == NC_NOERR) Then
+   If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     ALLOCATE(cmaps(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
+     ccounts(1:ndims)  = counts(ndims:1:-1)
+     cstrides(1:ndims) = strides(ndims:1:-1)
+     cmaps(1:ndims)    = maps(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
+     cmapsptr          = C_LOC(cmaps)
+   EndIf
+ EndIf
+
+ cstatus = nc_put_varm_longlong(cncid, cvarid, cstartptr, ccountsptr, &
+                                cstridesptr, cmapsptr, ivals)
+
+ status = cstatus
+
+! Make sure there are no dangling pointers or allocated values
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ cmapsptr    = C_NULL_PTR
+ If (ALLOCATED(cmaps))    DEALLOCATE(cmaps)
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
+
+ End Function nf_put_varm_int64
 !--------------------------------- nf_get_varm_text ----------------------
  Function nf_get_varm_text(ncid, varid, start, counts, strides, maps, &
                            text) RESULT(status)
@@ -1063,3 +1131,71 @@
  If (ALLOCATED(cstart))   DEALLOCATE(cstart)
 
  End Function nf_get_varm_double
+!--------------------------------- nf_get_varm_int64 -------------------------
+ Function nf_get_varm_int64(ncid, varid, start, counts, strides, maps, &
+                            ivals) RESULT(status)
+
+! Read in 64 bit integer array given start, count, stride and map
+
+ USE netcdf_nc_interfaces
+
+ Implicit NONE
+
+ Integer,      Intent(IN)  :: ncid, varid
+ Integer,      Intent(IN)  :: start(*), counts(*), strides(*), maps(*)
+ Integer(IK8), Intent(OUT) :: ivals(*)
+
+ Integer                        :: status
+
+ Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr, cmapsptr
+ Integer        :: ndims
+
+ Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
+ Integer(C_PTRDIFF_T), ALLOCATABLE, TARGET :: cstrides(:), cmaps(:)
+
+ cncid    = ncid
+ cvarid   = varid -1 ! Subtract 1 to get C varid
+
+ cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ cmapsptr    = C_NULL_PTR
+ ndims       = cndims
+
+ If (cstat1 == NC_NOERR) Then
+   If (ndims > 0) Then ! Flip arrays to C order and subtract 1 from start
+     ALLOCATE(cstart(ndims))
+     ALLOCATE(ccounts(ndims))
+     ALLOCATE(cstrides(ndims))
+     ALLOCATE(cmaps(ndims))
+     cstart(1:ndims)   = start(ndims:1:-1) - 1
+     ccounts(1:ndims)  = counts(ndims:1:-1)
+     cstrides(1:ndims) = strides(ndims:1:-1)
+     cmaps(1:ndims)    = maps(ndims:1:-1)
+     cstartptr         = C_LOC(cstart)
+     ccountsptr        = C_LOC(ccounts)
+     cstridesptr       = C_LOC(cstrides)
+     cmapsptr          = C_LOC(cmaps)
+   EndIf
+ EndIf
+
+ cstatus = nc_get_varm_longlong(cncid, cvarid, cstartptr, ccountsptr, &
+                                cstridesptr, cmapsptr, ivals)
+
+ status = cstatus
+
+! Make sure there are no dangling pointers or allocated values
+
+ cstartptr   = C_NULL_PTR
+ ccountsptr  = C_NULL_PTR
+ cstridesptr = C_NULL_PTR
+ cmapsptr    = C_NULL_PTR
+ If (ALLOCATED(cmaps))    DEALLOCATE(cmaps)
+ If (ALLOCATED(cstrides)) DEALLOCATE(cstrides)
+ If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
+ If (ALLOCATED(cstart))   DEALLOCATE(cstart)
+
+ End Function nf_get_varm_int64

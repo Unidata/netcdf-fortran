@@ -14,6 +14,11 @@
       integer nf_float
       integer nf_real
       integer nf_double
+      integer nf_ubyte
+      integer nf_ushort
+      integer nf_uint
+      integer nf_int64
+      integer nf_uint64
 
       parameter (nf_byte = 1)
       parameter (nf_int1 = nf_byte)
@@ -24,6 +29,11 @@
       parameter (nf_float = 5)
       parameter (nf_real = nf_float)
       parameter (nf_double = 6)
+      parameter (nf_ubyte = 7)
+      parameter (nf_ushort = 8)
+      parameter (nf_uint = 9)
+      parameter (nf_int64 = 10)
+      parameter (nf_uint64 = 11)
 
 !
 ! default fill values:
@@ -522,6 +532,22 @@
 !                          character(*)        name,
 !                          integer             ivals(1))
       external        nf_get_att_int
+
+      integer         nf_put_att_int64
+!                         (integer             ncid,
+!                          integer             varid,
+!                          character(*)        name,
+!                          integer             xtype,
+!                          integer             len,
+!                          nf_int8_t           i8vals(1))
+      external        nf_put_att_int64
+
+      integer         nf_get_att_int64
+!                         (integer             ncid,
+!                          integer             varid,
+!                          character(*)        name,
+!                          nf_int8_t           i8vals(1))
+      external        nf_get_att_int64
 
       integer         nf_put_att_real
 !                         (integer             ncid,
@@ -1125,4 +1151,26 @@
 !                          integer             imap(1),
 !                          doubleprecision     dvals(1))
       external        nf_get_varm_double
+
+!     64-bit int functions.
+      integer nf_put_var1_int64
+      external nf_put_var1_int64
+      integer nf_put_vara_int64
+      external nf_put_vara_int64
+      integer nf_put_vars_int64
+      external nf_put_vars_int64
+      integer nf_put_varm_int64
+      external nf_put_varm_int64
+      integer nf_put_var_int64
+      external nf_put_var_int64
+      integer nf_get_var1_int64
+      external nf_get_var1_int64
+      integer nf_get_vara_int64
+      external nf_get_vara_int64
+      integer nf_get_vars_int64
+      external nf_get_vars_int64
+      integer nf_get_varm_int64
+      external nf_get_varm_int64
+      integer nf_get_var_int64
+      external nf_get_var_int64
 
