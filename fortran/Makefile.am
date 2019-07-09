@@ -36,7 +36,8 @@ libnetcdf_nf_interfaces.la libnetcdfm.la libnetcdf_f03.la
 # These are the ource for the F77 API.
 libnetcdff_la_SOURCES = nf_attio.F90 nf_control.F90 nf_dim.f90		\
 nf_misc.f90 nf_genatt.f90 nf_geninq.f90 nf_genvar.f90 nf_vario.F90	\
-nf_var1io.F90 nf_varaio.F90 nf_varmio.F90 nf_varsio.F90
+nf_var1io.F90 nf_varaio.F90 nf_varmio.F90 nf_varsio.F90			\
+nf_logging.F90
 
 # Different source for the netcdf.mod is used for netcdf classic
 # vs. netcdf4.

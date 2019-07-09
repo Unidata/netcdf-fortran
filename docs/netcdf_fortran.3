@@ -11,10 +11,10 @@ netcdf \- Unidata's Network Common Data Form (netCDF) library interface
 include netcdf.inc
 .sp
 .SS Most Systems:
-f77 ...  \-lnetcdf \-lhdf5_hl \-lhdf5 \-lz \-lm
+f77 ...  -lnetcdf -lhdf5_hl -lhdf5 -lz -lm
 .sp
 .SS CRAY PVP Systems:
-f90 \-dp \-i64 ... \-lnetcdf
+f90 -dp -i64 ... -lnetcdf
 
 .ad
 .hy
@@ -572,7 +572,7 @@ Learn the endianness of a variable.
 .HP
 \fBinteger function nf_put_var_uint(integer \fIncid\fP, integer \fIvarid\fP, integer*4 \fIout\fP(1))\fR
 .HP
-\fBinteger function nf_put_var_(integer \fIncid\fP, integer \fIvarid\fP, integer*8 \fIout\fP(1))\fR
+\fBinteger function nf_put_var_int64(integer \fIncid\fP, integer \fIvarid\fP, integer*8 \fIout\fP(1))\fR
 .HP
 \fBinteger function nf_put_var_uint64(integer \fIncid\fP, integer \fIvarid\fP, integer*8 \fIout\fP(1))\fR
 .HP
@@ -608,7 +608,7 @@ converted to integers.
 .HP
 \fBinteger function nf_get_var_uint(integer \fIncid\fP, integer \fIvarid\fP, integer*4 \fIin\fP(1))\fR
 .HP
-\fBinteger function nf_get_var_(integer \fIncid\fP, integer \fIvarid\fP, integer*8 \fIin\fP(1))\fR
+\fBinteger function nf_get_var_int64(integer \fIncid\fP, integer \fIvarid\fP, integer*8 \fIin\fP(1))\fR
 .HP
 \fBinteger function nf_get_var_uint64(integer \fIncid\fP, integer \fIvarid\fP, integer*8 \fIin\fP(1))\fR
 .HP
@@ -644,7 +644,7 @@ not possible, an \fBNF_ERANGE\fR error is returned.
 .HP
 \fBinteger function nf_put_var1_uint(integer \fIncid\fP, integer \fIvarid\fP, integer \fIindex\fP(1), integer*4 \fI*out\fP)\fR
 .HP
-\fBinteger function nf_put_var1_(integer \fIncid\fP, integer \fIvarid\fP, integer \fIindex\fP(1), integer*8 \fI*out\fP)\fR
+\fBinteger function nf_put_var1_int64(integer \fIncid\fP, integer \fIvarid\fP, integer \fIindex\fP(1), integer*8 \fI*out\fP)\fR
 .HP
 \fBinteger function nf_put_var1_uint64(integer \fIncid\fP, integer \fIvarid\fP, integer \fIindex\fP(1), integer*8 \fI*out\fP)\fR
 .HP
@@ -678,7 +678,7 @@ error is returned.
 .HP
 \fBinteger function nf_get_var1_uint(integer \fIncid\fP, integer \fIvarid\fP, integer \fIindex\fP(1), integer*4 \fIin\fP)\fR
 .HP
-\fBinteger function nf_get_var1_(integer \fIncid\fP, integer \fIvarid\fP, integer \fIindex\fP(1), integer*8 \fIin\fP)\fR
+\fBinteger function nf_get_var1_int64(integer \fIncid\fP, integer \fIvarid\fP, integer \fIindex\fP(1), integer*8 \fIin\fP)\fR
 .HP
 \fBinteger function nf_get_var1_uint64(integer \fIncid\fP, integer \fIvarid\fP, integer \fIindex\fP(1), integer*8 \fIin\fP)\fR
 .HP
@@ -714,7 +714,7 @@ not possible, an \fBNF_ERANGE\fR error is returned.
 .HP
 \fBinteger function nf_put_vara_uint(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer*4 \fIout\fP(1))\fR
 .HP
-\fBinteger function nf_put_vara_(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer*8 \fIout\fP(1))\fR
+\fBinteger function nf_put_vara_int64(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer*8 \fIout\fP(1))\fR
 .HP
 \fBinteger function nf_put_vara_uint64(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer*8 \fIout\fP(1))\fR
 .HP
@@ -751,7 +751,7 @@ error is returned.
 .HP
 \fBinteger function nf_get_vara_uint(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer*4 \fIin\fP(1))\fR
 .HP
-\fBinteger function nf_get_vara_(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer*8 \fIin\fP(1))\fR
+\fBinteger function nf_get_vara_int64(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer*8 \fIin\fP(1))\fR
 .HP
 \fBinteger function nf_get_vara_uint64(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer*8 \fIin\fP(1))\fR
 .HP
@@ -789,7 +789,7 @@ not possible, an \fBNF_ERANGE\fR error is returned.
 .HP
 \fBinteger function nf_put_vars_uint(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer \fIstride\fP(1), integer*4 \fIout\fP(1))\fR
 .HP
-\fBinteger function nf_put_vars_(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer \fIstride\fP(1), integer*8 \fIout\fP(1))\fR
+\fBinteger function nf_put_vars_int64(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer \fIstride\fP(1), integer*8 \fIout\fP(1))\fR
 .HP
 \fBinteger function nf_put_vars_uint64(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer \fIstride\fP(1), integer*8 \fIout\fP(1))\fR
 .HP
@@ -824,7 +824,7 @@ vector, see COMMON ARGUMENTS DESCRIPTIONS below.
 .HP
 \fBinteger function nf_get_vars_uint(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer \fIstride\fP(1), integer*4 \fIin\fP(1))\fR
 .HP
-\fBinteger function nf_get_vars_(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer \fIstride\fP(1), integer*8 \fIin\fP(1))\fR
+\fBinteger function nf_get_vars_int64(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer \fIstride\fP(1), integer*8 \fIin\fP(1))\fR
 .HP
 \fBinteger function nf_get_vars_uint64(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer \fIstride\fP(1), integer*8 \fIin\fP(1))\fR
 .HP
@@ -861,7 +861,7 @@ vector, see COMMON ARGUMENTS DESCRIPTIONS below.
 .HP
 \fBinteger function nf_put_varm_uint(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer \fIstride\fP(1), \fIimap\fP, integer*4 \fIout\fP(1))\fR
 .HP
-\fBinteger function nf_put_varm_(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer \fIstride\fP(1), \fIimap\fP, integer*8 \fIout\fP(1))\fR
+\fBinteger function nf_put_varm_int64(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer \fIstride\fP(1), \fIimap\fP, integer*8 \fIout\fP(1))\fR
 .HP
 \fBinteger function nf_put_varm_uint64(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer \fIstride\fP(1), \fIimap\fP, integer*8 \fIout\fP(1))\fR
 .HP
@@ -896,7 +896,7 @@ mapping vector, see COMMON ARGUMENTS DESCRIPTIONS below.
 .HP
 \fBinteger function nf_get_varm_uint(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer \fIstride\fP(1), \fIimap\fP, integer*4 \fIin\fP(1))\fR
 .HP
-\fBinteger function nf_get_varm_(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer \fIstride\fP(1), \fIimap\fP, integer*8 \fIin\fP(1))\fR
+\fBinteger function nf_get_varm_int64(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer \fIstride\fP(1), \fIimap\fP, integer*8 \fIin\fP(1))\fR
 .HP
 \fBinteger function nf_get_varm_uint64(integer \fIncid\fP, integer \fIvarid\fP, integer \fIstart\fP(1), integer \fIcount\fP(1), integer \fIstride\fP(1), \fIimap\fP, integer*8 \fIin\fP(1))\fR
 .HP
@@ -933,7 +933,7 @@ mapping vector, see COMMON ARGUMENTS DESCRIPTIONS below.
 .HP
 \fBinteger function nf_put_att_uint(integer \fIncid\fP, integer \fIvarid\fP, character*(*) \fIname\fP, integer \fIxtype\fP, integer \fIlen\fP, integer*4 \fIout\fP(1))\fR
 .HP
-\fBinteger function nf_put_att_(integer \fIncid\fP, integer \fIvarid\fP, character*(*) \fIname\fP, integer \fIxtype\fP, integer \fIlen\fP, integer*8 \fIout\fP(1))\fR
+\fBinteger function nf_put_att_int64(integer \fIncid\fP, integer \fIvarid\fP, character*(*) \fIname\fP, integer \fIxtype\fP, integer \fIlen\fP, integer*8 \fIout\fP(1))\fR
 .HP
 \fBinteger function nf_put_att_uint64(integer \fIncid\fP, integer \fIvarid\fP, character*(*) \fIname\fP, integer \fIxtype\fP, integer \fIlen\fP, integer*8 \fIout\fP(1))\fR
 .HP
@@ -1056,7 +1056,7 @@ define mode.
 .HP
 \fBinteger function nf_get_att_uint(integer \fIncid\fP, integer \fIvarid\fP, character*(*) \fIname\fP, integer*4 \fIin\fP(1))\fR
 .HP
-\fBinteger function nf_get_att_(integer \fIncid\fP, integer \fIvarid\fP, character*(*) \fIname\fP, integer*8 \fIin\fP(1))\fR
+\fBinteger function nf_get_att_int64(integer \fIncid\fP, integer \fIvarid\fP, character*(*) \fIname\fP, integer*8 \fIin\fP(1))\fR
 .HP
 \fBinteger function nf_get_att_uint64(integer \fIncid\fP, integer \fIvarid\fP, character*(*) \fIname\fP, integer*8 \fIin\fP(1))\fR
 .HP
