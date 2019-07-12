@@ -11,7 +11,7 @@ C      use typeSizes
 C      use netcdf
 C      use netcdf4_f03
       implicit none
-     include "netcdf.inc"
+      include "netcdf.inc"
       
 C This is the name of the data file we will create.
       character (len = *), parameter :: FILE_NAME = "ftst_rengrps.nc"
