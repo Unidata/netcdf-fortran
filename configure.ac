@@ -115,7 +115,7 @@ AM_CONDITIONAL(TEST_PARALLEL, [test "x$enable_parallel_tests" = xyes])
 # Determine if we want to enable doxygen-generated documentation. Any
 # new documentation input files should be inserted into
 # docs/Doxyfile.in and possibly docs/Makefile.am
-AC_MSG_CHECKING([whether netCDF documentation should be generated)])
+AC_MSG_CHECKING([whether netCDF documentation should be generated])
 AC_ARG_ENABLE([doxygen],
 	[AS_HELP_STRING([--enable-doxygen],
 	[Enable generation of documentation with doxygen.])])
@@ -364,6 +364,24 @@ AC_MSG_NOTICE([checking types, headers, and functions])
 
 AC_CHECK_LIB([m], [floor], [], [])
 AC_SEARCH_LIBS([dlopen], [dl dld], [], [])
+
+# When the underneath NetCDF C library was built with parallel I/O enables,
+# check if the Fortran compiler supports parallel I/O. Abort if not.
+if test "x$nc_has_parallel4" = xyes -o "x$nc_has_pnetcdf" = xyes; then
+   AC_LANG_PUSH([Fortran])
+   AC_CHECK_FUNC([MPI_File_open], [],
+      [AC_SEARCH_LIBS([MPI_File_open], [], [],
+                      [AC_MSG_ERROR([
+      -----------------------------------------------------------------------
+        The NetCDF C library is built with parallel I/O feature enabled, but
+        the Fortran compiler '$FC' supplied in this configure command
+        does not support MPI-IO. Please use one that does. If parallel I/O
+        feature is not desired, please use a NetCDF C library with parallel
+        I/O feature disabled. Abort.
+      -----------------------------------------------------------------------])
+   ])])
+   AC_LANG_POP([Fortran])
+fi
 
 # Find the netCDF header and library.
 AC_CHECK_HEADERS([netcdf.h], [], [AC_MSG_ERROR([netcdf.h could not be found. Please set CPPFLAGS.])])

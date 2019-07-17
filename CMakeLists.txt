@@ -614,6 +614,17 @@ IF(NF_HAS_PNETCDF)
 ENDIF()
 
 IF(NF_HAS_PNETCDF OR NF_HAS_PARALLEL4)
+  CHECK_FUNCTION_EXISTS(MPI_File_open HAVE_MPI_IO)
+  IF(NOT HAVE_MPI_IO)
+    MESSAGE(FATAL_ERROR
+     " -----------------------------------------------------------------------\n"
+     "  The NetCDF C library is built with parallel I/O feature enabled, but\n"
+     "  the Fortran compiler 'gfortran' supplied in this configure command\n"
+     "  does not support MPI-IO. Please use one that does. If parallel I/O\n"
+     "  feature is not desired, please use a NetCDF C library with parallel\n"
+     "  I/O feature disabled. Abort.\n"
+     " -----------------------------------------------------------------------")
+  ENDIF(NOT HAVE_MPI_IO)
   SET(BUILD_PARALLEL ON)
   SET(HAVE_NC_USE_PARALLEL_ENABLED TRUE)
 ELSE(NF_HAS_PNETCDF OR NF_HAS_PARALLEL4)
