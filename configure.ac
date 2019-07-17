@@ -345,6 +345,7 @@ else
    AC_DEFINE(NF_INT1_IS_C_SIGNED_CHAR, 1, [default])
    AC_DEFINE(NF_INT2_IS_C_SHORT, 1, [default])
    AC_DEFINE(NF_INT_IS_C_INT, 1, [default])
+   AC_DEFINE(NF_INT8_IS_C_LONG_LONG, 1, [default])
    AC_DEFINE(NF_REAL_IS_C_FLOAT, 1, [default])
    AC_DEFINE(NF_DOUBLEPRECISION_IS_C_DOUBLE, 1, [default])
 fi
