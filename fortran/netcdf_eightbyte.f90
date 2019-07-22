@@ -509,7 +509,6 @@
      integer                                      :: nf90_put_var_EightByteInt
  
      integer, dimension(nf90_max_var_dims) :: localIndex
-     integer                               :: counter
  
      ! Set local arguments to default values
      localIndex(:) = 1
@@ -526,7 +525,6 @@
      integer                                      :: nf90_get_var_EightByteInt
  
      integer, dimension(nf90_max_var_dims) :: localIndex
-     integer                               :: counter
      integer                               :: defaultInteger
      
      ! Set local arguments to default values
