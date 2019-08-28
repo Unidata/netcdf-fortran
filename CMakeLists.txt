@@ -1,4 +1,4 @@
-## This is a CMake file, part of Unidata's netCDF Fortran package.
+s## This is a CMake file, part of Unidata's netCDF Fortran package.
 # Copyright 2012-2014, see the COPYRIGHT file for more information.
 
 ##################################
@@ -21,8 +21,8 @@ SET(NC4F_VERSION_PATCH 0)
 SET(NC4F_VERSION_NOTE "-development")
 SET(NC4F_VERSION ${NC4F_VERSION_MAJOR}.${NC4F_VERSION_MINOR}.${NC4F_VERSION_PATCH}${NC4F_VERSION_NOTE})
 SET(VERSION ${NC4F_VERSION})
-SET(NC4F_LIB_VERSION 6.1.1)
-SET(NC4F_SO_VERSION 6)
+SET(NC4F_LIB_VERSION 7.0.0)
+SET(NC4F_SO_VERSION 7)
 SET(PACKAGE_VERSION ${VERSION})
 
 # Set known dependencies.
