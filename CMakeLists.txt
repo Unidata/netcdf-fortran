@@ -1,4 +1,4 @@
-s## This is a CMake file, part of Unidata's netCDF Fortran package.
+## This is a CMake file, part of Unidata's netCDF Fortran package.
 # Copyright 2012-2014, see the COPYRIGHT file for more information.
 
 ##################################
