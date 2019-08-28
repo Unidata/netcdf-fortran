@@ -6,7 +6,9 @@ Release Notes {#nf_release_notes}
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
-## 4.5.0 - TBD
+## 4.5.1 - TBD
+
+## 4.5.0 - August 28, 2019
 
 ### Requirements
 
@@ -123,7 +125,7 @@ netcdf-fortran/build$ cmake .. -DNC_EXTRA_DEPS="-lhdf5 -lhdf5_hl -lcurl"
 
 * Added configuration files to github distribution.
 
-### 4.4-beta4      
+### 4.4-beta4
 
 * Moved to GitHub from Subversion, the location of the new GitHub repository is at: http://github.com/Unidata/netCDF-Fortran
 
