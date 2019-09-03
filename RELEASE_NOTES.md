@@ -6,7 +6,17 @@ Release Notes {#nf_release_notes}
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
-## 4.5.1 - TBD
+## 4.5.2 - TBD
+
+## 4.5.1 - September 3, 2019
+
+### Requirements
+
+* netCDF-C: 4.6.0 or greater
+
+### Changes
+
+* Corrected an issue where a cmake-specific file wasn't being captured by `make dist`.
 
 ## 4.5.0 - August 28, 2019
 
