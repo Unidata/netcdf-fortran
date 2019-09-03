@@ -6,7 +6,9 @@ Release Notes {#nf_release_notes}
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
-## 4.5.0 - TBD
+## 4.5.1 - TBD
+
+## 4.5.0 - August 28, 2019
 
 ### Requirements
 
@@ -17,25 +19,11 @@ Entries are in reverse chronological order (most recent first).
 * Moved netCDF classic F90 API tests to new subdirectory nf03_test.
 * Moved netCDF-4 F77 API tests to new subdirectory nf_test4.
 * Moved netCDF-4 F90 API tests to new subdirectory nf03_test4.
-* Fixed bug which caused parallel I/O tests to not be run. See
-  [#155](https://github.com/Unidata/netcdf-fortran/issues/155) and
-  [#157](https://github.com/Unidata/netcdf-fortran/issues/157).
-* Fixed bug in the setting of file cache preemption for netCDF-4
-  files. See
-  [#146](https://github.com/Unidata/netcdf-fortran/issues/146).
-* Removed many near-duplicate tests files, now they are created at
-  build time with sed. See
-  [#165](https://github.com/Unidata/netcdf-fortran/issues/165).
-* Removed no longer needed configure options --enable-dll (see
-  [#161](https://github.com/Unidata/netcdf-fortran/issues/161)),
-  --enable-extra-tests (see
-  [#114](https://github.com/Unidata/netcdf-fortran/issues/114)),
-  --enable-extra-example-tests(see
-  [#126](https://github.com/Unidata/netcdf-fortran/issues/126)), and
-  --enable-valgrind (see
-  [#118](https://github.com/Unidata/netcdf-fortran/issues/118)).
-* Moved handling of F77 man page to the docs directory. See
-  [#141](https://github.com/Unidata/netcdf-fortran/issues/141)
+* Fixed bug which caused parallel I/O tests to not be run. See [#155](https://github.com/Unidata/netcdf-fortran/issues/155) and [#157](https://github.com/Unidata/netcdf-fortran/issues/157).
+* Fixed bug in the setting of file cache preemption for netCDF-4 files. See [#146](https://github.com/Unidata/netcdf-fortran/issues/146).
+* Removed many near-duplicate tests files, now they are created at build time with sed. See [#165](https://github.com/Unidata/netcdf-fortran/issues/165).
+* Removed no longer needed configure options --enable-dll (see [#161](https://github.com/Unidata/netcdf-fortran/issues/161)), `--enable-extra-tests` (see [#114](https://github.com/Unidata/netcdf-fortran/issues/114)), `--enable-extra-example-tests` (see [#126](https://github.com/Unidata/netcdf-fortran/issues/126)), and `--enable-valgrind` (see [#118](https://github.com/Unidata/netcdf-fortran/issues/118)).
+* Moved handling of F77 man page to the docs directory. See [#141](https://github.com/Unidata/netcdf-fortran/issues/141).
 
 ## 4.4.5 - Release Jan 9, 2019
 
@@ -123,7 +111,7 @@ netcdf-fortran/build$ cmake .. -DNC_EXTRA_DEPS="-lhdf5 -lhdf5_hl -lcurl"
 
 * Added configuration files to github distribution.
 
-### 4.4-beta4      
+### 4.4-beta4
 
 * Moved to GitHub from Subversion, the location of the new GitHub repository is at: http://github.com/Unidata/netCDF-Fortran
 
