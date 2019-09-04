@@ -8,7 +8,7 @@ Entries are in reverse chronological order (most recent first).
 
 ## 4.5.2 - TBD
 
-## 4.5.1 - September 3, 2019
+## 4.5.1 - September 4, 2019
 
 ### Requirements
 
