@@ -23,6 +23,13 @@ IF(ENABLE_DOXYGEN)
   FILE(COPY ${IMG_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/html/)
 ENDIF()
 
-SET(CUR_EXTRA_DIST ${CUR_EXTRA_DIST} CMakeLists.txt Makefile.am netcdf.m4 DoxygenLayout.xml Doxyfile.in footer.html mainpage.doc tutorial.doc install.doc dispatch.doc guide.doc types.doc notes.doc cdl.doc architecture.doc internal.doc Doxyfile.in.cmake windows-binaries.md Building-with-CMake.md)
+IF(HAVE_M4)
+IF(NOT MSVC)
+       ADD_CUSTOM_TARGET(manpage ALL
+         COMMAND ${NF_M4} '${CMAKE_CURRENT_SOURCE_DIR}/netcdf.m4' > '${CMAKE_CURRENT_BINARY_DIR}/netcdf_fortran.3'
+         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+         )
 
-ADD_EXTRA_DIST("${CUR_EXTRA_DIST}")
+  INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/netcdf_fortran.3 DESTINATION "share/man/man3" COMPONENT documentation)
+ENDIF(NOT MSVC)
+ENDIF(HAVE_M4)
