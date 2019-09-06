@@ -34,11 +34,11 @@ f90tst_types_SOURCES = f90tst_types.f90
 f90tst_types2_SOURCES = f90tst_types2.f90
 
 # This is the netCDF-4 F90 large file test.
-if ENABLE_LARGE_FILE_TESTS
+if LARGE_FILE_TESTS
 check_PROGRAMS += f90tst_flarge
 TESTS += f90tst_flarge
 f90tst_flarge_SOURCES = f90tst_flarge.f90
-endif # ENABLE_LARGE_FILE_TESTS
+endif # LARGE_FILE_TESTS
 
 # This is an f90 benchmark.
 if BUILD_BENCHMARKS
