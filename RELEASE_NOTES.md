@@ -12,7 +12,7 @@ Entries are in reverse chronological order (most recent first).
 
 ### Changes
 
-* Corrected an issue where cmake-specific large file tests weren't being captured by `make dist`.
+* Corrected an issue where cmake-specific large file tests weren't being captured by `make dist`. See [Github #198](https://github.com/Unidata/netcdf-fortran/issues/198) for more details.
 
 ## 4.5.1 - September 4, 2019
 
