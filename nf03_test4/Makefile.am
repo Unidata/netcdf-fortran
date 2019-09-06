@@ -12,7 +12,7 @@ AM_FCFLAGS = -I$(top_builddir)/fortran
 # All tests need to link to fortran library.
 LDADD = ${top_builddir}/fortran/libnetcdff.la
 
-# tst_f90_nc4 
+# tst_f90_nc4
 NC4_F90_TESTS = f90tst_vars f90tst_vars_vlen f90tst_grps f90tst_fill	\
 f90tst_fill2 f90tst_vars2 f90tst_vars3 f90tst_vars4 f90tst_path		\
 f90tst_rengrps f90tst_nc4 f90tst_types f90tst_types2
@@ -34,11 +34,11 @@ f90tst_types_SOURCES = f90tst_types.f90
 f90tst_types2_SOURCES = f90tst_types2.f90
 
 # This is the netCDF-4 F90 large file test.
-if LARGE_FILE_TESTS
+if ENABLE_LARGE_FILE_TESTS
 check_PROGRAMS += f90tst_flarge
 TESTS += f90tst_flarge
 f90tst_flarge_SOURCES = f90tst_flarge.f90
-endif # LARGE_FILE_TESTS
+endif # ENABLE_LARGE_FILE_TESTS
 
 # This is an f90 benchmark.
 if BUILD_BENCHMARKS
@@ -65,7 +65,7 @@ endif # TEST_PARALLEL
 # check-valgrind target, which runs all tests with valgrind.
 @VALGRIND_CHECK_RULES@
 
-EXTRA_DIST = CMakeLists.txt run_f90_par_test.sh
+EXTRA_DIST = CMakeLists.txt run_f90_par_test.sh f90tst_flarge.f90
 
 # Cleaning up files created during the testing.
 CLEANFILES = f90tst_*.nc fort.*
