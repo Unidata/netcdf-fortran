@@ -49,10 +49,10 @@ if (USE_NETCDF4)
 
   # This is the netCDF-4 F90 large file test.
   IF (LARGE_FILE_TESTS)
-    SET(nc4_largefile_PROGRAMS tst_flarge)
+    SET(nc4_largefile_PROGRAMS f90tst_flarge)
     SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_largefile_PROGRAMS})
     SET(TESTS ${TESTS} ${nc4_largefile_PROGRAMS})
-    SET(tst_flarge_SOURCES tst_flarge.f90)
+    SET(f90tst_flarge_SOURCES f90tst_flarge.f90)
   ENDIF(LARGE_FILE_TESTS)
 
   # This is an f90 benchmark.
