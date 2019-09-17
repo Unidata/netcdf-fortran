@@ -12,6 +12,7 @@ Entries are in reverse chronological order (most recent first).
 
 ### Changes
 
+* Corrected an issue where netCDF-Fortran would fail to build correctly on some platforms when the underlying `libnetcdf` lacked netCDF-4 support. See [GitHub #200](https://github.com/Unidata/netcdf-fortran/issues/200) for more information.
 * Corrected an issue where cmake-specific large file tests weren't being captured by `make dist`. See [Github #198](https://github.com/Unidata/netcdf-fortran/issues/198) for more details.
 
 ## 4.5.1 - September 4, 2019

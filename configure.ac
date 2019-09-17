@@ -395,7 +395,7 @@ nc_build_v4=no
 nc_has_logging=no
 nc_has_dap=no
 
-AC_CHECK_FUNCS([nc_def_opaque],[nc_build_v4=yes],[nc_build_v4=no])
+AC_CHECK_FUNCS([nc_get_chunk_cache_ints],[nc_build_v4=yes],[nc_build_v4=no])
 test "x$ac_cv_func_nccreate" = xyes && nc_build_v2=yes
 test "x$ac_cv_func_nc_set_log_level" = xyes && nc_has_logging=yes
 test "x$ac_cv_func_oc_open" = xyes && nc_has_dap=yes
