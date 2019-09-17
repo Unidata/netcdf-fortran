@@ -395,7 +395,7 @@ nc_build_v4=no
 nc_has_logging=no
 nc_has_dap=no
 
-AC_CHECK_FUNCS([nc_def_opaque],[nc_build_v4=yes],[nc_build_v4=no])
+AC_CHECK_FUNCS([nc_get_chunk_cache_ints],[nc_build_v4=yes],[nc_build_v4=no])
 test "x$ac_cv_func_nccreate" = xyes && nc_build_v2=yes
 test "x$ac_cv_func_nc_set_log_level" = xyes && nc_has_logging=yes
 test "x$ac_cv_func_oc_open" = xyes && nc_has_dap=yes
@@ -403,6 +403,9 @@ test "x$ac_cv_func_oc_open" = xyes && nc_has_dap=yes
 if test "x$nc_build_v4" = xyes; then
    AC_DEFINE([USE_NETCDF4], [1], [if true, build netCDF-4])
 fi
+
+AC_MSG_CHECKING([netCDF-4 support])
+AC_MSG_RESULT([$nc_build_v4])
 
 if test "x$nc_has_logging" = xyes; then
    AC_DEFINE([LOGGING], [1], [if true, C library contains logging])
