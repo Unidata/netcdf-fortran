@@ -404,9 +404,6 @@ if test "x$nc_build_v4" = xyes; then
    AC_DEFINE([USE_NETCDF4], [1], [if true, build netCDF-4])
 fi
 
-AC_MSG_CHECKING([netCDF-4 support])
-AC_MSG_RESULT([$nc_build_v4])
-
 if test "x$nc_has_logging" = xyes; then
    AC_DEFINE([LOGGING], [1], [if true, C library contains logging])
 fi
