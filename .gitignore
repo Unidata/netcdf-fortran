@@ -3,3 +3,6 @@ build*
 \#.\#
 *.*~
 html
+*.o
+*.tmp
+*.tmp2
