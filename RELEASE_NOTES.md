@@ -6,9 +6,11 @@ Release Notes {#nf_release_notes}
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
-## 4.5.2 -
+## 4.5.2 - September 18, 2019
 
 ### Requirements
+
+* netCDF-C: 4.6.0 or greater
 
 ### Changes
 
