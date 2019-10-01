@@ -14,7 +14,7 @@ program f90tst_parallel_fill
   use netcdf
   implicit none
   include 'mpif.h'
-  
+
   ! This is the name of the data file we will create.
   character (len = *), parameter :: FILE_NAME = "f90tst_parallel_fill.nc"
   integer, parameter :: MAX_DIMS = 2
@@ -48,7 +48,6 @@ program f90tst_parallel_fill
   call MPI_Comm_size(MPI_COMM_WORLD, p, ierr)
 
   if (my_rank .eq. 0) then
-     print *,
      print *, '*** Testing fill values with parallel I/O.'
   endif
 
@@ -83,10 +82,10 @@ program f90tst_parallel_fill
   call check(nf90_def_dim(ncid, "y", NY, y_dimid))
   dimids =  (/ y_dimid, x_dimid /)
 
-  ! Define the variables. 
+  ! Define the variables.
   do v = 1, NUM_VARS
      call check(nf90_def_var(ncid, var_name(v), var_type(v), dimids, varid(v)))
-     call check(nf90_var_par_access(ncid, varid(v), nf90_collective))     
+     call check(nf90_var_par_access(ncid, varid(v), nf90_collective))
   end do
 
   ! This will be the last collective operation.
@@ -120,7 +119,7 @@ program f90tst_parallel_fill
   call check(nf90_put_var(ncid, varid(7), ushort_out, start = start_out, count = count_out))
   call check(nf90_put_var(ncid, varid(8), uint_out, start = start_out, count = count_out))
 
-  ! Close the file. 
+  ! Close the file.
   call check(nf90_close(ncid))
 
   ! Reopen the file. nf90_mpiio flag not required starting with
@@ -128,7 +127,7 @@ program f90tst_parallel_fill
   mode = ior(nf90_nowrite, nf90_mpiio)
   call check(nf90_open(FILE_NAME, mode, ncid, comm = MPI_COMM_WORLD, &
        info = MPI_INFO_NULL))
-  
+
   ! Check some stuff out.
   call check(nf90_inquire(ncid, ndims, nvars, ngatts, unlimdimid, file_format))
   if (ndims /= 2 .or. nvars /= NUM_VARS .or. ngatts /= 0 .or. unlimdimid /= -1 .or. &
@@ -196,11 +195,10 @@ contains
     use netcdf
     implicit none
     integer, intent(in) :: errcode
-    
+
     if(errcode /= nf90_noerr) then
        print *, 'Error: ', trim(nf90_strerror(errcode))
        stop 99
     endif
   end subroutine check
 end program f90tst_parallel_fill
-
