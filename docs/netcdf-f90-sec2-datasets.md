@@ -291,7 +291,7 @@ The following optional arguments allow additional performance tuning.
     will be used instead of the default (1000) as the maximum number of
     elements in the HDF5 chunk cache.
 
-`cache_premtion`
+`cache_preemption`
 
 :   If cache\_preemption is provided when creating a netCDF-4/HDF5 file,
     it will be used instead of the default (0.75) as the preemption
@@ -438,7 +438,7 @@ The following optional argument allows additional performance tuning.
     will be used instead of the default (1000) as the maximum number of
     elements in the HDF5 chunk cache.
 
-`cache_premtion`
+`cache_preemption`
 
 :   If cache\_preemption is provided when opening a netCDF-4/HDF5 file,
     it will be used instead of the default (0.75) as the preemption
