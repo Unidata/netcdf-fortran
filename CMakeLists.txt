@@ -633,9 +633,7 @@ ENDIF()
 
 IF(NF_HAS_PNETCDF OR NF_HAS_PARALLEL4)
   FIND_PACKAGE(MPI REQUIRED)
-  INCLUDE_DIRECTORIES(${MPI_Fortran_INCLUDE_PATH})
-  CHECK_FUNCTION_EXISTS(MPI_Comm_open HAVE_MPI_IO)
-  IF(NOT HAVE_MPI_IO)
+  IF(NOT MPI_Fortran_FOUND)
     MESSAGE(FATAL_ERROR
      " -----------------------------------------------------------------------\n"
      "  The NetCDF C library is built with parallel I/O feature enabled, but\n"
@@ -644,7 +642,8 @@ IF(NF_HAS_PNETCDF OR NF_HAS_PARALLEL4)
      "  feature is not desired, please use a NetCDF C library with parallel\n"
      "  I/O feature disabled. Abort.\n"
      " -----------------------------------------------------------------------")
-  ENDIF(NOT HAVE_MPI_IO)
+  ENDIF(NOT MPI_Fortran_FOUND)
+  INCLUDE_DIRECTORIES(${MPI_Fortran_INCLUDE_PATH})
   SET(BUILD_PARALLEL ON)
   SET(HAVE_NC_USE_PARALLEL_ENABLED TRUE)
 ELSE(NF_HAS_PNETCDF OR NF_HAS_PARALLEL4)
