@@ -15,7 +15,6 @@ AC_INIT([netCDF-Fortran], [4.5.3-development], [support-netcdf@unidata.ucar.edu]
 # AC_INIT.
 echo -n AC_PACKAGE_VERSION>VERSION
 AC_SUBST(PACKAGE_VERSION)
-
 AC_MSG_NOTICE([netCDF-Fortran AC_PACKAGE_VERSION])
 
 # Keep libtool macros in an m4 directory.
@@ -367,21 +366,21 @@ AC_SEARCH_LIBS([dlopen], [dl dld], [], [])
 
 # When the underneath NetCDF C library was built with parallel I/O enables,
 # check if the Fortran compiler supports parallel I/O. Abort if not.
-if test "x$nc_has_parallel4" = xyes -o "x$nc_has_pnetcdf" = xyes; then
-   AC_LANG_PUSH([Fortran])
-   AC_CHECK_FUNC([MPI_File_open], [],
-      [AC_SEARCH_LIBS([MPI_File_open], [], [],
-                      [AC_MSG_ERROR([
-      -----------------------------------------------------------------------
-        The NetCDF C library is built with parallel I/O feature enabled, but
-        the Fortran compiler '$FC' supplied in this configure command
-        does not support MPI-IO. Please use one that does. If parallel I/O
-        feature is not desired, please use a NetCDF C library with parallel
-        I/O feature disabled. Abort.
-      -----------------------------------------------------------------------])
-   ])])
-   AC_LANG_POP([Fortran])
-fi
+#if test "x$nc_has_parallel4" = xyes -o "x$nc_has_pnetcdf" = xyes; then
+#   AC_LANG_PUSH([Fortran])
+#   AC_CHECK_FUNC([MPI_File_open], [],
+#      [AC_SEARCH_LIBS([MPI_File_open], [], [],
+#                      [AC_MSG_ERROR([
+#      -----------------------------------------------------------------------
+#        The NetCDF C library is built with parallel I/O feature enabled, but
+#        the Fortran compiler '$FC' supplied in this configure command
+#        does not support MPI-IO. Please use one that does. If parallel I/O
+#        feature is not desired, please use a NetCDF C library with parallel
+#        I/O feature disabled. Abort.
+#      -----------------------------------------------------------------------])
+# ])])
+#   AC_LANG_POP([Fortran])
+#fi
 
 # Find the netCDF header and library.
 AC_CHECK_HEADERS([netcdf.h], [], [AC_MSG_ERROR([netcdf.h could not be found. Please set CPPFLAGS.])])

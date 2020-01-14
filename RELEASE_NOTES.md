@@ -6,6 +6,16 @@ Release Notes {#nf_release_notes}
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
+## 4.5.3 - TBD
+
+### Requirements
+
+* netCDF-C: 4.6.0+
+
+### Changes
+
+* Corrected an issue where parallel netCDF-Fortran builds would fail despite the presense of MPI libraries/compiler/infrastructure. See [Github #208](https://github.com/Unidata/netcdf-fortran/issues/208) for more information.
+
 ## 4.5.2 - September 18, 2019
 
 ### Requirements
