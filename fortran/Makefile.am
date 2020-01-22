@@ -179,3 +179,6 @@ EXTRA_DIST = $(COMMON_CODES) $(NETCDF4_CODES) CMakeLists.txt	\
 netcdf2.inc netcdf3.inc netcdf4.inc
 
 CLEANFILES = *.mod netcdf.inc
+
+# Turn off parallel builds in this directory.
+.NOTPARALLEL:
