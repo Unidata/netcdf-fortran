@@ -43,7 +43,7 @@ C     Loop index and error handling.
       print *,'*** Testing szip compression.'
 
 C     Prepare some data to write.
-      do x = 1, data_len
+      do x = 1, DATA_LEN
          data1(x) = x
       end do
 
@@ -66,6 +66,10 @@ C     Create a few integer variables.
      $        varid(x))
          if (retval .ne. nf_noerr) stop 1
       end do
+
+C     Set an alternative fill value for the third variable.
+      retval = nf_def_var_fill(ncid, varid(3), 0, MY_FILL_VALUE)
+      if (retval .ne. 0) stop 3
 
 C     Write some data.
       retval = nf_put_var_int(ncid, varid(1), data1)
@@ -138,27 +142,26 @@ C     Get the varids and the dimid.
       if (retval .ne. nf_noerr) stop 1
       if (dimid_in .ne. 1) stop 7
 
-C     Get the data in var1. It will be all the default fill value.
+C     Get the data in var1. It will be values we have set.
       retval = nf_get_var_int(ncid, varid_in(1), int_data_in)
       if (retval .ne. nf_noerr) stop 1
       do x = 1, DIM_LEN
          if (int_data_in(x) .ne. x) stop 13
       end do
 
-C     Get the data in var2. What will it be?
+C     Get the data in var2. It will be default fill value.
       retval = nf_get_var_int(ncid, varid_in(2), int_data_in)
       if (retval .ne. nf_noerr) stop 1
-C$$$      do x = 1, DIM_LEN
-C$$$         print *, int_data_in(x)
-C$$$      end do
+      do x = 1, DIM_LEN
+         if (int_data_in(x) .ne. NF_FILL_INT) stop 13
+      end do
 
-C     Get the data in var3. It will be all the default fill value.
+C     Get the data in var3. It will be all the assigned fill value.
       retval = nf_get_var_int(ncid, varid_in(3), int_data_in)
       if (retval .ne. nf_noerr) stop 1
-c$$$      do x = 1, DIM_LEN
-c$$$C         print *, int_data_in(x)
-c$$$         if (int_data_in(x) .ne. MY_FILL_VALUE) stop 14
-c$$$      end do
+      do x = 1, DIM_LEN
+         if (int_data_in(x) .ne. MY_FILL_VALUE) stop 14
+      end do
 
       check_file = 0
       end 
