@@ -2528,17 +2528,17 @@ Interface
 End Interface
 
 !---------------------------------- nc_def_var_szip ---------------------------------
-Interface
- Function nc_def_var_szip(ncid, varid, level) BIND(C)
+! Interface
+!  Function nc_def_var_szip(ncid, varid, level) BIND(C)
 
- USE ISO_C_BINDING, ONLY: C_CHAR, C_INT
+!  USE ISO_C_BINDING, ONLY: C_CHAR, C_INT
 
- Integer(C_INT), VALUE :: ncid, varid, level
+!  Integer(C_INT), VALUE :: ncid, varid, level
 
- Integer(C_INT) :: nc_def_var_szip
+!  Integer(C_INT) :: nc_def_var_szip
 
- End Function nc_def_var_szip
-End Interface
+!  End Function nc_def_var_szip
+! End Interface
 
 !---------------------------- Start of module procedures ---------------------
 CONTAINS
