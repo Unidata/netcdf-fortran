@@ -57,6 +57,10 @@ ftst_filter_SOURCES = ftst_filter.F
 TESTS += run_tst_filter.sh
 endif
 
+# Test szip
+if TEST_SZIP_WRITE
+endif
+
 # If sed is present, generate these tests at build time. They are the
 # same tests as the F77 netCDF-4 tests above, but using the "use
 # netcdf4_f03" statement.

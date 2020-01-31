@@ -93,6 +93,7 @@ AC_MSG_RESULT([$nc_has_parallel4])
 AC_SEARCH_LIBS([nc_def_var_szip], [netcdf], [nc_has_szip_write=yes], [nc_has_szip_write=no])
 AC_MSG_CHECKING([if netCDF was built with nc_def_var_szip()])
 AC_MSG_RESULT([$nc_has_szip_write])
+AM_CONDITIONAL(TEST_SZIP_WRITE, [test "x$nc_has_szip_write" = xyes])
 
 # Find valgrind, if available, and add targets for it (ex:
 # check-valgrind).
