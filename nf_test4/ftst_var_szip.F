@@ -71,6 +71,10 @@ C     Set an alternative fill value for the third variable.
       retval = nf_def_var_fill(ncid, varid(3), 0, MY_FILL_VALUE)
       if (retval .ne. 0) stop 3
 
+C     Turn on szip compression for var 1.
+      retval = nf_def_var_szip(ncid, varid(1), 3)
+      if (retval .ne. 0) stop 3
+
 C     Write some data.
       retval = nf_put_var_int(ncid, varid(1), data1)
       if (retval .ne. nf_noerr) stop 1
