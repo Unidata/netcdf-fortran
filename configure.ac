@@ -89,6 +89,11 @@ if test "x$nc_has_parallel4" = xyes; then
 fi
 AC_MSG_RESULT([$nc_has_parallel4])
 
+# Starting with version 4.7.4, netcdf-c has function nc_def_var_szip().
+AC_SEARCH_LIBS([nc_def_var_szip], [netcdf], [nc_has_szip_write=yes], [nc_has_szip_write=no])
+AC_MSG_CHECKING([if netCDF was built with nc_def_var_szip()])
+AC_MSG_RESULT([$nc_has_szip_write])
+
 # Find valgrind, if available, and add targets for it (ex:
 # check-valgrind).
 AX_VALGRIND_DFLT([sgcheck], [off])
@@ -495,6 +500,7 @@ AC_SUBST(HAS_F03,[$nc_build_f03])
 AC_SUBST(HAS_DAP,[$nc_has_dap])
 AC_SUBST(HAS_NC2,[$nc_build_v2])
 AC_SUBST(HAS_NC4,[$nc_build_v4])
+AC_SUBST(HAS_SZIP_WRITE,[$nc_has_szip_write])
 
 # Some files need to exist in build directories that do not correspond
 # to their source directory, or the test program makes an assumption
