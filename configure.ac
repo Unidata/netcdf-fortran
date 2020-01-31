@@ -90,8 +90,13 @@ fi
 AC_MSG_RESULT([$nc_has_parallel4])
 
 # Starting with version 4.7.4, netcdf-c has function nc_def_var_szip().
-AC_SEARCH_LIBS([nc_def_var_szip], [netcdf], [nc_has_szip_write=yes], [nc_has_szip_write=no])
-AC_MSG_CHECKING([if netCDF was built with nc_def_var_szip()])
+AC_SEARCH_LIBS([nc_def_var_szip], [netcdf], [], [AC_MSG_ERROR([netcdf-c version 4.7.4 or greater is required])])
+AC_MSG_CHECKING([if netCDF was built with support for szip writes])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
+#include <netcdf_meta.h>
+#if !defined(NC_HAS_SZIP_WRITE)
+      choke me
+#endif]])], [nc_has_szip_write=yes], [nc_has_szip_write=no])
 AC_MSG_RESULT([$nc_has_szip_write])
 AM_CONDITIONAL(TEST_SZIP_WRITE, [test "x$nc_has_szip_write" = xyes])
 
