@@ -59,6 +59,9 @@ endif
 
 # Test szip
 if TEST_SZIP_WRITE
+check_PROGRAMS += ftst_var_szip
+ftst_var_szip_SOURCES = ftst_var_szip.F
+TESTS += ftst_var_szip
 endif
 
 # If sed is present, generate these tests at build time. They are the
