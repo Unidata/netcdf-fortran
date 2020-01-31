@@ -22,13 +22,13 @@ C     This is the name of the data file we will create.
       integer NVARS
       parameter (NVARS = 3)
       integer DATA_LEN
-      parameter (DATA_LEN = 2)
+      parameter (DATA_LEN = 22)
       integer check_file
 
       integer ncid, varid(NVARS), dimids(NDIMS)
       integer data_len_in, offset
       parameter (offset = 20)
-      integer data1(data_len), data1_in(data_len)
+      integer data1(DATA_LEN), data1_in(DATA_LEN)
       character*(4) var_name(NVARS)
       character*(4) dim_name
       parameter (dim_name = 'dim1')
@@ -67,6 +67,10 @@ C     Create a few integer variables.
          if (retval .ne. nf_noerr) stop 1
       end do
 
+C     Write some data.
+      retval = nf_put_var_int(ncid, varid(1), data1)
+      if (retval .ne. nf_noerr) stop 1
+
 C     Close the file.
       retval = nf_close(ncid)
       if (retval .ne. nf_noerr) stop 1
@@ -99,7 +103,7 @@ C     I need these in both here and the main program.
       integer NVARS
       parameter (NVARS = 3)
       integer DATA_LEN
-      parameter (DATA_LEN = 2)
+      parameter (DATA_LEN = 22)
       integer MY_FILL_VALUE
       parameter (MY_FILL_VALUE = 42)
 
@@ -138,7 +142,7 @@ C     Get the data in var1. It will be all the default fill value.
       retval = nf_get_var_int(ncid, varid_in(1), int_data_in)
       if (retval .ne. nf_noerr) stop 1
       do x = 1, DIM_LEN
-         if (int_data_in(x) .ne. nf_fill_int) stop 13
+         if (int_data_in(x) .ne. x) stop 13
       end do
 
 C     Get the data in var2. What will it be?
