@@ -61,6 +61,13 @@ f90tst_nc4_par_SOURCES = f90tst_nc4_par.F90
 f90tst_parallel_fill_SOURCES = f90tst_parallel_fill.f90
 endif # TEST_PARALLEL
 
+# Test szip if write capability is present in C library.
+if TEST_SZIP_WRITE
+check_PROGRAMS += f90tst_var_szip
+TESTS += f90tst_var_szip
+f90tst_var_szip_SOURCES = f90tst_var_szip.f90
+endif # TEST_SZIP_WRITE
+
 # If valgrind is present on this machine, this will enable
 # check-valgrind target, which runs all tests with valgrind.
 @VALGRIND_CHECK_RULES@

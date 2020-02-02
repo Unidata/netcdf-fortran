@@ -57,7 +57,7 @@ ftst_filter_SOURCES = ftst_filter.F
 TESTS += run_tst_filter.sh
 endif
 
-# Test szip
+# Test szip if write capability is present in C library.
 if TEST_SZIP_WRITE
 check_PROGRAMS += ftst_var_szip
 ftst_var_szip_SOURCES = ftst_var_szip.F
@@ -99,7 +99,7 @@ if TEST_SZIP_WRITE
 F03_TEST_CODES += f03tst_var_szip.F
 F03_TESTS += f03tst_var_szip
 f03tst_var_szip_SOURCES = f03tst_var_szip.F
-endif
+endif # TEST_SZIP_WRITE
 
 # Note that all these fortran programs are built at compile-time on
 # the user system.
