@@ -52,6 +52,8 @@ C     Set up var names.
       var_name(2) = 'var2'
       var_name(3) = 'var3'
 
+      retval = nf_set_log_level(3)
+
 C     Create the netCDF file.
       retval = nf_create(FILE_NAME, NF_NETCDF4, ncid)
       if (retval .ne. nf_noerr) stop 1
@@ -72,7 +74,7 @@ C     Set an alternative fill value for the third variable.
       if (retval .ne. 0) stop 3
 
 C     Turn on szip compression for var 1.
-      retval = nf_def_var_szip(ncid, varid(1), 3)
+      retval = nf_def_var_szip(ncid, varid(1), 32, 4)
       if (retval .ne. 0) stop 3
 
 C     Write some data.
