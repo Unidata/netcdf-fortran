@@ -134,6 +134,7 @@ C     Values that are read in, to check the file.
       integer varid_in(NVARS), dimid_in, no_fill_in, fill_value_in
       character*(4) var_name_in
       integer int_data_in(DIM_LEN)
+      integer options_mask_in, pixels_per_block_in
 
       integer x, retval
 
@@ -160,6 +161,12 @@ C     Get the data in var1. It will be values we have set.
       do x = 1, DIM_LEN
          if (int_data_in(x) .ne. x) stop 13
       end do
+
+C     Get the szip settings for var1. H5Zszip code will sometimes bump
+C     the bits_per_pixel from 32 to 64 and may add other flags to the
+C     options_mask, so we don't check these values in this test.
+      retval = nf_inq_var_szip(ncid, varid_in(1), options_mask_in,
+     $     pixels_per_block_in)
 
 C     Get the data in var2. It will be default fill value.
       retval = nf_get_var_int(ncid, varid_in(2), int_data_in)
