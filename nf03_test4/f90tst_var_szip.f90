@@ -1,10 +1,10 @@
 !     This is part of the netCDF package.
-!     Copyright 2006 University Corporation for Atmospheric Research/Unidata.
+!     Copyright 2020 University Corporation for Atmospheric Research/Unidata.
 !     See COPYRIGHT file for conditions of use.
 
 !     This program tests netCDF-4 variable functions from fortran.
 
-!     Ed Hartnett, 2009
+!     Ed Hartnett, 2/1/2020
 
 program f90tst_var_szip
   use typeSizes
@@ -32,7 +32,7 @@ program f90tst_var_szip
 
 
   print *, ''
-  print *,'*** Testing definition of netCDF-4 vars from Fortran 90.'
+  print *,'*** Testing szip writes of netCDF-4 var from Fortran 90.'
 
   ! Create some pretend data.
   do x = 1, NX
@@ -53,7 +53,10 @@ program f90tst_var_szip
   ! Define the variable. 
   chunksizes = (/ 256, 10 /)
   call handle_err(nf90_def_var(ncid, 'data', NF90_INT, dimids, & 
-       varid, chunksizes = chunksizes, deflate_level = 4))
+       varid, chunksizes = chunksizes))
+
+  ! Turn on szip compression.
+  call handle_err(nf90_def_var_szip(ncid, 1, 32, 4))
 
   ! With classic model netCDF-4 file, enddef must be called.
   call handle_err(nf90_enddef(ncid))
@@ -79,7 +82,7 @@ program f90tst_var_szip
        dimids_in(1) /= y_dimid .or. dimids_in(2) /= x_dimid .or. &
        natts_in .ne. 0 .or. contiguous_in .neqv. .false. .or. &
        chunksizes_in(1) /= chunksizes(1) .or. chunksizes_in(2) /= chunksizes(2) .or. &
-       deflate_level_in .ne. 4 .or. shuffle_in .neqv. .false. .or. fletcher32_in .neqv. .false.) &
+       shuffle_in .neqv. .false. .or. fletcher32_in .neqv. .false.) &
        stop 4
 
   ! Check the data.
