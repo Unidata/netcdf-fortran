@@ -94,6 +94,13 @@ f03tst_parallel_SOURCES = f03tst_parallel.F
 TESTS += run_f77_par_test_03.sh
 endif # TEST_PARALLEL
 
+# Convert the szip test.
+if TEST_SZIP_WRITE
+F03_TEST_CODES += f03tst_var_szip.F
+F03_TESTS += f03tst_var_szip
+f03tst_var_szip_SOURCES = f03tst_var_szip.F
+endif
+
 # Note that all these fortran programs are built at compile-time on
 # the user system.
 BUILT_SOURCES = $(F03_TEST_CODES)
@@ -174,6 +181,11 @@ f03tst_parallel.F: ftst_parallel.F
 	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
 	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
 	$(SED) "s|ftst_parallel.nc|f03tst_parallel.nc|" $@.tmp2 > $@
+
+f03tst_var_szip.F: ftst_var_szip.F
+	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
+	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
+	$(SED) "s|ftst_var_szip.nc|f03tst_var_szip.nc|" $@.tmp2 > $@
 
 endif #USE_SED
 
