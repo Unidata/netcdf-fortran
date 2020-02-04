@@ -1520,6 +1520,25 @@
  
  End Function nf_inq_var_deflate
 
+!-------------------------------- nf_def_var_szip --------------------------
+ Function nf_def_var_szip(ncid, varid, options_mask, pixels_per_block) &
+      RESULT (status)
+! define variable deflation
+ USE netcdf4_nc_interfaces
+ Implicit NONE
+ Integer, Intent(IN) :: ncid, varid, options_mask, pixels_per_block
+ Integer :: status
+ Integer(C_INT) :: cncid, cvarid, coptions_mask, cpixels_per_block, cstatus
+
+ cncid = ncid
+ cvarid = varid-1
+ coptions_mask = options_mask
+ cpixels_per_block = pixels_per_block
+
+ cstatus = nc_def_var_szip(cncid, cvarid, coptions_mask, cpixels_per_block)
+ status = cstatus
+
+ End Function nf_def_var_szip
 !-------------------------------- nf_inq_var_szip -----------------------------
  Function nf_inq_var_szip(ncid, varid, options_mask, pixels_per_block) RESULT(status)
 

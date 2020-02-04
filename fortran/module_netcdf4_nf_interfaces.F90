@@ -522,6 +522,16 @@ Interface
 
  End Function nf_inq_var_deflate
 End Interface
+!-------------------------------- nf_def_var_szip --------------------------
+Interface
+ Function nf_def_var_szip( ncid, varid, options_mask, pixels_per_block) &
+                               RESULT (status)
+
+ Integer, Intent(IN) :: ncid, varid, options_mask, pixels_per_block
+ Integer             :: status
+
+ End Function nf_def_var_szip
+End Interface
 !-------------------------------- nf_inq_var_szip -----------------------------
 Interface
  Function nf_inq_var_szip(ncid, varid, options_mask, pixels_per_block) RESULT(status)

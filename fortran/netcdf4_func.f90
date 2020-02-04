@@ -521,6 +521,16 @@
     nf90_def_var_deflate = nf_def_var_deflate(ncid, varid, shuffle, deflate, deflate_level)
   end function nf90_def_var_deflate
   ! -----------
+  function nf90_def_var_szip(ncid, varid, options_mask, pixels_per_block)
+    integer, intent(in) :: ncid
+    integer, intent(in) :: varid
+    integer, intent(in) :: options_mask
+    integer, intent(in) :: pixels_per_block
+    integer :: nf90_def_var_szip
+
+    nf90_def_var_szip = nf_def_var_szip(ncid, varid, options_mask, pixels_per_block)
+  end function nf90_def_var_szip
+  ! -----------
   function nf90_def_var_fletcher32(ncid, varid, fletcher32)
     integer, intent(in) :: ncid
     integer, intent(in) :: varid
@@ -550,6 +560,16 @@
   
     nf90_inq_var_deflate = nf_inq_var_deflate(ncid, varid, shuffle, deflate, deflate_level)
   end function nf90_inq_var_deflate
+  ! -----------
+  function nf90_inq_var_szip(ncid, varid, options_mask, pixels_per_block)
+    integer, intent(in) :: ncid
+    integer, intent(in) :: varid
+    integer, intent(out) :: options_mask
+    integer, intent(out) :: pixels_per_block
+    integer :: nf90_inq_var_szip
+
+    nf90_inq_var_szip = nf_inq_var_szip(ncid, varid, options_mask, pixels_per_block)
+  end function nf90_inq_var_szip
   ! -----------
   function nf90_inq_var_fletcher32(ncid, varid, fletcher32)
     integer, intent(in) :: ncid

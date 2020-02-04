@@ -57,6 +57,13 @@ ftst_filter_SOURCES = ftst_filter.F
 TESTS += run_tst_filter.sh
 endif
 
+# Test szip if write capability is present in C library.
+if TEST_SZIP_WRITE
+check_PROGRAMS += ftst_var_szip
+ftst_var_szip_SOURCES = ftst_var_szip.F
+TESTS += ftst_var_szip
+endif
+
 # If sed is present, generate these tests at build time. They are the
 # same tests as the F77 netCDF-4 tests above, but using the "use
 # netcdf4_f03" statement.
@@ -86,6 +93,13 @@ check_PROGRAMS += f03tst_parallel
 f03tst_parallel_SOURCES = f03tst_parallel.F
 TESTS += run_f77_par_test_03.sh
 endif # TEST_PARALLEL
+
+# Convert the szip test.
+if TEST_SZIP_WRITE
+F03_TEST_CODES += f03tst_var_szip.F
+F03_TESTS += f03tst_var_szip
+f03tst_var_szip_SOURCES = f03tst_var_szip.F
+endif # TEST_SZIP_WRITE
 
 # Note that all these fortran programs are built at compile-time on
 # the user system.
@@ -167,6 +181,11 @@ f03tst_parallel.F: ftst_parallel.F
 	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
 	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
 	$(SED) "s|ftst_parallel.nc|f03tst_parallel.nc|" $@.tmp2 > $@
+
+f03tst_var_szip.F: ftst_var_szip.F
+	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
+	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
+	$(SED) "s|ftst_var_szip.nc|f03tst_var_szip.nc|" $@.tmp2 > $@
 
 endif #USE_SED
 

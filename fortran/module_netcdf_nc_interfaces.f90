@@ -2526,6 +2526,20 @@ Interface
 
  End Function nc_set_default_format
 End Interface
+
+!---------------------------------- nc_def_var_szip ---------------------------------
+Interface
+ Function nc_def_var_szip(ncid, varid, options_mask, pixels_per_block) BIND(C)
+
+ USE ISO_C_BINDING, ONLY: C_CHAR, C_INT
+
+ Integer(C_INT), VALUE :: ncid, varid, options_mask, pixels_per_block
+
+ Integer(C_INT) :: nc_def_var_szip
+
+ End Function nc_def_var_szip
+End Interface
+
 !---------------------------- Start of module procedures ---------------------
 CONTAINS
 
