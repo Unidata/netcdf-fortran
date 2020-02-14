@@ -792,6 +792,9 @@ CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/CTestConfig.cmake.in"
   "${CMAKE_SOURCE_DIR}/CTestConfig.cmake"
   @ONLY)
 
+# Fortran compiler flag for the (module) include directory. Used for generating nf-config.
+SET(MOD_FLAG -I)
+
 # Generate nf-config form template.
 CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/nf-config.cmake.in"
   "${CMAKE_BINARY_DIR}/tmp/nf-config" @ONLY
