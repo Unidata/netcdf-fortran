@@ -222,6 +222,9 @@ AC_FC_SRCEXT(f90)
 AC_LANG_POP(Fortran)
 AX_F90_MODULE_FLAG
 AC_SUBST(MOD_FLAG, ${ax_cv_f90_modflag})
+AX_F90_MODULE_NAMING
+AC_SUBST(MODEXT, ${ax_cv_f90_modnaming_ext})
+AM_CONDITIONAL(MOD_UPPERCASE, [test x$ax_cv_f90_modnaming_upper = xyes])
 if test "x$enable_f03_compiler_check" = xyes; then
   AC_MSG_CHECKING([if Fortran compiler supports Fortran 2003 ISO_C_BINDING])
   cat <<EOF >conftest.f90

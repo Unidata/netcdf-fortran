@@ -45,11 +45,14 @@ noinst_LTLIBRARIES = libtests.la
 # Each convenience library depends on its source.
 libtests_la_SOURCES = module_tests.F90
 
-# Each mod file depends on the .o file.
-tests.mod: module_tests.$(OBJEXT)
+if MOD_UPPERCASE
+tests_mod = TESTS.$(MODEXT)
+else !MOD_UPPERCASE
+tests_mod = tests.$(MODEXT)
+endif !MOD_UPPERCASE
 
-# Mod files are built sources.
-BUILT_SOURCES = tests.mod
+$(tests_mod): module_tests.$(OBJEXT)
+	@if test ! -f $@; then rm -f $<; $(MAKE) $<; fi
 
 # The fortran codes will compile into these tests.
 F03_TESTS = nf03_test
@@ -67,6 +70,11 @@ nf03_test.F test03_get.F
 nf03_test_SOURCES = f03lib_f_interfaces.f90 test03_get.F test03_put.F	\
 nf03_error.F nf03_test.F test03_read.F test03_write.F util03.F		\
 f03lib.c
+
+test03_put.$(OBJEXT) util03.$(OBJEXT) test03_read.$(OBJEXT)      \
+test03_get.$(OBJEXT) nf03_error.$(OBJEXT) test03_write.$(OBJEXT) \
+nf03_test.$(OBJEXT): $(tests_mod)
+
 nf03_test_LDADD = libtests.la ${top_builddir}/fortran/libnetcdff.la
 
 # If the V2 API is being built, then make copies of the two V2 F77 API
@@ -78,11 +86,12 @@ f03test_SOURCES = f03test.F
 f03test_LDADD = libtests.la ${top_builddir}/fortran/libnetcdff.la
 tst03_f77_v2_SOURCES = tst03_f77_v2.F
 tst03_f77_v2_LDADD = libtests.la ${top_builddir}/fortran/libnetcdff.la
-endif # BUILD_V2
+tst03_f77_v2.$(OBJEXT): $(tests_mod)
+endif BUILD_V2
 
 # Note that all these fortran programs are built at compile-time on
 # the user system.
-BUILT_SOURCES += $(F03_TEST_CODES)
+BUILT_SOURCES = $(F03_TEST_CODES)
 
 # Compile and run the generated tests.
 check_PROGRAMS += $(F03_TESTS)
