@@ -94,7 +94,7 @@ AC_SEARCH_LIBS([nc_def_var_szip], [netcdf], [], [AC_MSG_ERROR([netcdf-c version 
 AC_MSG_CHECKING([if netCDF was built with support for szip writes])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
 #include <netcdf_meta.h>
-#if !defined(NC_HAS_SZIP_WRITE)
+#if !(NC_HAS_SZIP_WRITE)
       choke me
 #endif]])], [nc_has_szip_write=yes], [nc_has_szip_write=no])
 AC_MSG_RESULT([$nc_has_szip_write])
