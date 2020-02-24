@@ -88,6 +88,9 @@ ENDIF()
 # For CMAKE_INSTALL_LIBDIR
 INCLUDE(GNUInstallDirs)
 
+# Include this so we can check values in netcdf_meta.h.
+INCLUDE(CheckCSourceCompiles)
+
 IF(MSVC)
   SET(GLOBAL PROPERTY USE_FOLDERS ON)
 ENDIF()
