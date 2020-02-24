@@ -7,11 +7,12 @@ prefix=@prefix@
 exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
+fmoddir=@fmoddir@
 
 cc="@CC@"
 fc="@FC@"
-cflags=" -I${includedir} @CPPFLAGS@" 
-fflags="@MOD_FLAG@${includedir}"
+cflags="-I${includedir} @CPPFLAGS@" 
+fflags="-I${includedir} @MOD_FLAG@${fmoddir}"
 has_dap="@HAS_DAP@"
 has_nc2="@HAS_NC2@"
 has_nc4="@HAS_NC4@"

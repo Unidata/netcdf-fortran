@@ -88,6 +88,9 @@ ENDIF()
 # For CMAKE_INSTALL_LIBDIR
 INCLUDE(GNUInstallDirs)
 
+# By default install Fortran modules into include directory
+OPTION(Fortran_INSTALL_MODDIR "Fortran module install directory" "${CMAKE_INSTALL_INCLUDEDIR}")
+
 IF(MSVC)
   SET(GLOBAL PROPERTY USE_FOLDERS ON)
 ENDIF()

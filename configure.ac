@@ -323,6 +323,13 @@ TEMP_LARGE=${TEMP_LARGE-.}
 AC_MSG_RESULT($TEMP_LARGE)
 AC_DEFINE_UNQUOTED([TEMP_LARGE], ["$TEMP_LARGE"], [Place to put very large netCDF test files.])
 
+# Allow setting the fortran module install dir
+AC_ARG_WITH([fmoddir],
+  [AS_HELP_STRING([--with-fmoddir=DIR], [Fortran module install directory])],
+  [fmoddir=$withval],
+  [fmoddir="\${includedir}"])
+AC_SUBST([fmoddir], [$fmoddir])
+
 # Set up libtool.
 AC_MSG_NOTICE([setting up libtool])
 LT_PREREQ([2.2])
