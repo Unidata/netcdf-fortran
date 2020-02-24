@@ -27,15 +27,17 @@ C     This is the name of the data file we will create.
       integer check_file
 
       integer ncid, varid(NVARS), dimids(NDIMS)
-      integer data_len_in, offset
+      integer offset
       parameter (offset = 20)
-      integer data1(DATA_LEN), data1_in(DATA_LEN)
+      integer data1(DATA_LEN)
       character*(4) var_name(NVARS)
       character*(4) dim_name
       parameter (dim_name = 'dim1')
       integer NO_FILL, MY_FILL_VALUE
       parameter (NO_FILL = 1)
       parameter (MY_FILL_VALUE = 42)
+      integer storage_in
+      integer chunksizes_in(NDIMS)
 
 C     Loop index and error handling.
       integer x, retval
@@ -73,6 +75,12 @@ C     Create a few integer variables.
 C     Turn on compact storage for the first var.
       retval = nf_def_var_chunking(ncid, varid(1), nf_compact, 0)
       if (retval .ne. 0) stop 3
+
+C     Check compact storage for the first var.
+      retval = nf_inq_var_chunking(ncid, varid(1), storage_in,
+     $     chunksizes_in)
+      if (retval .ne. 0) stop 3
+      if (storage_in .ne. nf_compact) stop 4
 
 C     Set an alternative fill value for the third variable.
       retval = nf_def_var_fill(ncid, varid(3), 0, MY_FILL_VALUE)
@@ -125,11 +133,9 @@ C     Parameters
 
 C     Values that are read in, to check the file.
       integer ndims_in, nvars_in, ngatts_in, unlimdimid_in
-      integer xtype_in, dimids_in(NDIMS), natts_in
-      integer varid_in(NVARS), dimid_in, no_fill_in, fill_value_in
-      character*(4) var_name_in
+      integer varid_in(NVARS), dimid_in
       integer int_data_in(DIM_LEN)
-      integer options_mask_in, pixels_per_block_in
+C      integer chunksizes_in(NDIMS)
 
       integer x, retval
 
@@ -149,6 +155,12 @@ C     Get the varids and the dimid.
       retval = nf_inq_dimid(ncid, dim_name, dimid_in)
       if (retval .ne. nf_noerr) stop 1
       if (dimid_in .ne. 1) stop 7
+
+C     Check compact storage for the first var.
+c$$$      retval = nf_inq_var_chunking(ncid, varid_in(1), storage_in,
+c$$$     $     chunksizes_in)
+c$$$      if (retval .ne. 0) stop 3
+c$$$      if (storage_in .ne. nf_compact) stop 4
 
 C     Get the data in var1. It will be values we have set.
       retval = nf_get_var_int(ncid, varid_in(1), int_data_in)
