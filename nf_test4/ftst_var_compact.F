@@ -70,6 +70,10 @@ C     Create a few integer variables.
          if (retval .ne. nf_noerr) stop 1
       end do
 
+C     Turn on compact storage for the first var.
+      retval = nf_def_var_chunking(ncid, varid(1), nf_compact, 0)
+      if (retval .ne. 0) stop 3
+
 C     Set an alternative fill value for the third variable.
       retval = nf_def_var_fill(ncid, varid(3), 0, MY_FILL_VALUE)
       if (retval .ne. 0) stop 3
