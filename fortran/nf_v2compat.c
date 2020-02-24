@@ -20,13 +20,11 @@
 
 #ifndef NO_NETCDF_2
 
-/* LINTLIBRARY */
-
-#include        <ctype.h>
-#include        <string.h>
-#include        <stdlib.h>
-#include        <stdio.h>
-#include        "netcdf.h"
+#include <ctype.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "netcdf.h"
 
 #ifndef USE_NETCDF4
 #ifndef NC_CLASSIC_MODEL
@@ -1550,7 +1548,7 @@ c_ncaptc(
     int*        rcode           /* returned error code */
     )
 {
-    int         status;
+    int         status = 0;
 
     if (datatype != NC_CHAR)
         status = NC_ECHAR;
