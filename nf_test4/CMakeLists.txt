@@ -74,6 +74,13 @@ INCLUDE_DIRECTORIES(
 LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/fortran
   ${NC4F_BINARY_DIR}/fortran)
 
+# If szip write capability exists in the C library, run the szip test.
+IF (HAVE_SZIP_WRITE)
+  SET(check_PROGRAMS ${check_PROGRAMS} ftst_var_szip)
+  SET(ftst_var_szip_SOURCES ftst_var_szip.F)
+  SET(TESTS ${TESTS} ftst_var_szip)
+ENDIF()
+
 # Create pre-compiled tests.
 FOREACH(t ${TESTS})
   ADD_EXECUTABLE(${t} ${${t}_SOURCES})
