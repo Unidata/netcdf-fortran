@@ -146,13 +146,13 @@ MODFILES += netcdf.mod
 # Mod files are build sources.
 BUILT_SOURCES = $(MODFILES)
 
-# Mod files are installed as headers, but not distrubuted.
-nodist_include_HEADERS = $(MODFILES)
+# Mod files are installed, but not distrubuted.
+nodist_fmod_DATA = $(MODFILES)
 
 # The netcdf.inc file is built on the user machine, and installed as
 # a header.
 BUILT_SOURCES += netcdf.inc
-nodist_include_HEADERS += netcdf.inc
+nodist_include_HEADERS = netcdf.inc
 
 # Build netcdf.inc file from netcdf2, netcdf3 and netcdf4 files
 netcdf.inc: netcdf2.inc netcdf3.inc netcdf4.inc

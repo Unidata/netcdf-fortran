@@ -8,11 +8,12 @@ prefix=@CMAKE_INSTALL_PREFIX@
 exec_prefix=@CMAKE_INSTALL_PREFIX@
 libdir=@CMAKE_INSTALL_PREFIX@/lib
 includedir=@CMAKE_INSTALL_PREFIX@/include
+fmoddir=@CMAKE_INSTALL_PREFIX@/@Fortran_INSTALL_MODDIR@
 #
 cc="@CMAKE_C_COMPILER@"
 fc="@CMAKE_Fortran_COMPILER@"
 cflags="-I@CMAKE_INSTALL_PREFIX@/include @CMAKE_C_FLAGS@ @CMAKE_CPP_FLAGS@"
-fflags="@MOD_FLAG@${includedir}"
+fflags="-I${includedir} @MOD_FLAG@${fmoddir}"
 #
 has_dap="@HAS_DAP@"
 has_nc2="@HAS_NC2@"
