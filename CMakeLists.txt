@@ -88,6 +88,9 @@ ENDIF()
 # For CMAKE_INSTALL_LIBDIR
 INCLUDE(GNUInstallDirs)
 
+# Include this so we can check values in netcdf_meta.h.
+INCLUDE(CheckCSourceCompiles)
+
 # By default install Fortran modules into include directory
 OPTION(Fortran_INSTALL_MODDIR "Fortran module install directory" "${CMAKE_INSTALL_INCLUDEDIR}")
 
@@ -548,6 +551,17 @@ CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nc_get_chunk_cache_ints "" USE_NETCDF4)
 CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nccreate "" USE_NETCDF_V2)
 CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nc_set_log_level "" USE_LOGGING)
 CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} oc_open "" BUILD_DAP)
+
+###
+# Check to see if szip write capability is present in netcdf-c.
+###
+SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_INCLUDE_DIR})
+CHECK_C_SOURCE_COMPILES("
+#include <netcdf_meta.h>
+#if !NC_HAS_SZIP_WRITE
+      choke me
+#endif
+int main() {return 0;}" HAVE_SZIP_WRITE)
 
 SET(HAS_NC4 FALSE)
 IF(USE_NETCDF4)
