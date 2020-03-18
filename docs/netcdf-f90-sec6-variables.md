@@ -145,7 +145,8 @@ in a netCDF-4/HDF5 file.
 `xtype`
 
 :   One of the set of predefined netCDF external data types. The type of
-    this parameter, NF90\_TYPE, is defined in the netCDF header file.
+    this parameter, is defined in the netCDF header file.
+    
     The valid netCDF external data types are NF90\_BYTE, NF90\_CHAR,
     NF90\_SHORT, NF90\_INT, NF90\_FLOAT, and NF90\_DOUBLE. If the file
     is a NetCDF-4/HDF5 file, the additional types NF90\_UBYTE,
