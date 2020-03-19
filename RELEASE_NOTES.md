@@ -14,6 +14,7 @@ Entries are in reverse chronological order (most recent first).
 
 ### Changes
 
+* Added support for HDF5 compact storage. See [Github #213](https://github.com/Unidata/netcdf-fortran/issues/207).
 * Added support for creating netCDF/HDF5 files with szip compression with new functions nf90_def_var_szip() and nf_def_var_szip(). See [Github #213](https://github.com/Unidata/netcdf-fortran/issues/213).
 * Corrected an issue where parallel netCDF-Fortran builds would fail despite the presense of MPI libraries/compiler/infrastructure. See [Github #208](https://github.com/Unidata/netcdf-fortran/issues/208) for more information.
 
