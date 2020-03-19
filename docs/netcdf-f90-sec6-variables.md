@@ -188,6 +188,12 @@ in a netCDF-4/HDF5 file.
     sizes will be used if chunking is required and this function is
     not called.
 
+    If NF90\_COMPACT, then compact storage is used for this variable.
+    Compact storage may only be used on fix-sized variables with a
+    total data size 64 MB or less. Compact datasets are stored with
+    the file metadata, and can be read very quickly on a large number
+    of parallel processors.
+
     By default contiguous storage is used for fix-sized variables when
     conpression, chunking, shuffle, and checksums are not used.
 
