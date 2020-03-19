@@ -59,6 +59,8 @@
       parameter (nf_chunked = 0)
       integer nf_contiguous
       parameter (nf_contiguous = 1)
+      integer nf_compact
+      parameter (nf_compact = 2)
 
 !     For NF_DEF_VAR_FLETCHER32
       integer nf_nochecksum

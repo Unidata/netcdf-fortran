@@ -4760,8 +4760,8 @@ IF (STATUS .NE. NF_NOERR) CALL HANDLE_ERR(STATUS)
 --------------------------------------------------------------------
 
 The function NF\_DEF\_VAR\_CHUNKING sets the storage parameters for a
-variable in a netCDF-4 file. It can set the chunk sizes to get chunked
-storage, or it can set the contiguous flag to get contiguous storage.
+variable in a netCDF-4 file. Storage may be either chunked,
+contiguous, or compact.
 
 Variables that make use of one or more unlimited dimensions,
 compression, or checms must use chunking. Such variables are created
@@ -4782,6 +4782,10 @@ before nc\_enddef is called.
 
 Note that you cannot set chunking for scalar variables. Only non-scalar
 variables can have chunking.
+
+Compact storage may be used on fixed-size variables with a total data
+size of 64 MB or less. Compact storage allows for fast read times on
+HPC systems.
 
 Usage
 -----
@@ -4917,7 +4921,8 @@ NF_INQ_VAR_CHUNKING(INTEGER NCID, INTEGER VARID, INTEGER STORAGE, INTEGER CHUNKS
 
  `STORAGE`
 :   On return, set to NF\_CONTIGUOUS if this variable uses contiguous
-    storage, NF\_CHUNKED if it uses chunked storage.
+    storage, NF\_CHUNKED if it uses chunked storage, NF\_COMPACT if it uses
+    compact storage.
 
  `CHUNKSIZES`
 :   An array of chunk sizes. The length of CHUNKSIZES must be the same

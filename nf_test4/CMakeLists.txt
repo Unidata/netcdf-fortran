@@ -9,7 +9,7 @@ if (USE_NETCDF4)
   # Add these netCDF-4 test programs.
   SET(nc4_check_PROGRAMS ftst_groups ftst_vars ftst_vars2 ftst_vars3
     ftst_vars4 ftst_vars5 ftst_vars6 ftst_types ftst_types2
-    ftst_types3 ftst_path ftst_rengrps f03tst_open_mem)
+    ftst_types3 ftst_path ftst_rengrps f03tst_open_mem ftst_var_compact)
   SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_check_PROGRAMS})
   SET(TESTS ${TESTS} ${nc4_check_PROGRAMS})
 
@@ -26,6 +26,7 @@ if (USE_NETCDF4)
   SET(ftst_path_SOURCES ftst_path.F)
   SET(ftst_rengrps_SOURCES ftst_rengrps.F)
   SET(f03tst_open_mem_SOURCES f03tst_open_mem.F)
+  SET(ftst_var_compact_SOURCES ftst_var_compact.F)
 
   # This is a netCDF-4 V2 test program.
   IF (BUILD_V2)
