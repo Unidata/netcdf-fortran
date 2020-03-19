@@ -235,6 +235,7 @@ integer, parameter, public :: &
      nf90_chunked = 0, &
      nf90_notcontiguous = 0, &
      nf90_contiguous = 1, &
+     nf90_compact = 2, &
      nf90_nochecksum = 0, &
      nf90_fletcher32 = 1, &
      nf90_noshuffle = 0, &
