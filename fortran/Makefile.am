@@ -18,15 +18,20 @@ libnetcdff_la_LDFLAGS = -version-info 7:0:0
 
 # These f90 codes are used for either netCDF classic or netCDF-4 F90
 # API.
-COMMON_CODES = netcdf_constants.f90 netcdf_externals.f90		\
-netcdf_dims.f90 netcdf_attributes.f90 netcdf_overloads.f90		\
-netcdf_visibility.f90 netcdf_file.f90 netcdf_variables.f90		\
-netcdf_text_variables.f90 netcdf_expanded.f90 netcdf_eightbyte.f90
+COMMON_CODES = netcdf_constants.f90 netcdf_externals.f90	\
+netcdf_dims.f90 netcdf_attributes.f90 netcdf_overloads.f90	\
+netcdf_visibility.f90 netcdf_file.f90 netcdf_text_variables.f90	\
+netcdf_expanded.f90
 
 # These f90 codes are used for the netCDF-4 F90 API.
 NETCDF4_CODES = netcdf4_externals.f90 netcdf4_visibility.f90	\
 netcdf4_func.f90 netcdf4_overloads.f90 netcdf4_file.f90		\
 netcdf4_eightbyte.f90 netcdf4_variables.f90
+
+# These f90 codes are used in the netCDF classic API, when netCDF/HDF5
+# is not being built.
+NETCDF3_CODES = netcdf_eightbyte.f90 netcdf3_file.f90	\
+netcdf_variables.f90
 
 # Build these uninstalled convenience libraries.
 noinst_LTLIBRARIES = libtypeSizes.la libnetcdf_nc_data.la	\
@@ -50,7 +55,7 @@ if USE_NETCDF4
 
 # Use the netCDF-4 F90 code.
 libnetcdfm_la_SOURCES = netcdf4.f90
-netcdf4.$(OBJEXT): typesizes.mod
+netcdf4.$(OBJEXT): typesizes.mod $(COMMON_CODES) $(NETCDF4_CODES)
 netcdf.mod: netcdf4.$(OBJEXT)
 EXTRA_libnetcdfm_la_DEPENDENCIES = $(COMMON_CODES) $(NETCDF4_CODES)
 
@@ -58,7 +63,7 @@ else # classic-only build
 
 # Use the netCDF classic F90 code.
 libnetcdfm_la_SOURCES = netcdf.f90
-netcdf.$(OBJEXT): typesizes.mod
+netcdf.$(OBJEXT): typesizes.mod $(COMMON_CODES) $(NETCDF3_CODES)
 netcdf.mod: netcdf.$(OBJEXT)
 EXTRA_libnetcdfm_la_DEPENDENCIES = $(COMMON_CODES)
 libnetcdff_la_SOURCES += netcdf3_file.f90
@@ -84,7 +89,6 @@ netcdf_f03.mod: module_netcdf_f03.$(OBJEXT)
 # Some mods are dependant on other mods in this dir.
 module_netcdf_nf_data.$(OBJEXT): netcdf_nc_data.mod
 module_netcdf_nc_interfaces.$(OBJEXT): netcdf_nc_data.mod
-module_netcdf4_nc_interfaces.$(OBJEXT): netcdf_nc_interfaces.mod
 module_netcdf_nf_interfaces.$(OBJEXT): netcdf_nf_data.mod
 module_netcdf_f03.$(OBJEXT): netcdf_nf_data.mod netcdf_nf_interfaces.mod
 nf_nc.$(OBJEXT): netcdf_nc_interfaces.mod
@@ -116,6 +120,7 @@ if USE_NETCDF4
 
 # Add additional source files to the library to support netCDF4.
 libnetcdff_la_SOURCES += nf_lib.c nf_nc4.f90
+nf_nc4.$(OBJEXT): netcdf4_nc_interfaces.mod
 
 # Add these uninstalled convenience libraries for netcdf-4.
 noinst_LTLIBRARIES += libnetcdf4_nc_interfaces.la	\
@@ -132,7 +137,8 @@ netcdf4_nf_interfaces.mod: module_netcdf4_nf_interfaces.$(OBJEXT)
 netcdf4_f03.mod: module_netcdf4_f03.$(OBJEXT)
 
 # Some mods are dependant on other mods in this dir.
-module_netcdf4_nf_interfaces.$(OBJEXT): netcdf4_nc_interfaces.mod
+module_netcdf4_nf_interfaces.$(OBJEXT): netcdf4_nc_interfaces.mod netcdf_nf_data.mod 
+module_netcdf4_nc_interfaces.$(OBJEXT): netcdf_nc_interfaces.mod 
 module_netcdf4_f03.$(OBJEXT): netcdf_nf_data.mod netcdf_nf_interfaces.mod netcdf4_nf_interfaces.mod
 
 # Add the netcdf4 mod files to the list.
@@ -185,5 +191,3 @@ netcdf2.inc netcdf3.inc netcdf4.inc
 
 CLEANFILES = *.mod netcdf.inc
 
-# Turn off parallel builds in this directory.
-.NOTPARALLEL:
