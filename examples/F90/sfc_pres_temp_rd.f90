@@ -8,10 +8,10 @@
 ! the use of the netCDF fortran 90 API.
 
 ! This program is part of the netCDF tutorial:
-! https://www.unidata.ucar.edu/software/netcdf/docs/tutorial_8dox.html
+! http://www.unidata.ucar.edu/software/netcdf/docs/tutorial_8dox.html
 
 ! Full documentation of the netCDF Fortran 90 API can be found at:
-! https://www.unidata.ucar.edu/software/netcdf/docs-fortran/f90_The-NetCDF-Fortran-90-Interface-Guide.html
+! http://www.unidata.ucar.edu/software/netcdf/docs-fortran/f90_The-NetCDF-Fortran-90-Interface-Guide.html
 
 ! Ed Hartnett
 
