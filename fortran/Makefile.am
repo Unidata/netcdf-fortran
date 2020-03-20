@@ -37,7 +37,7 @@ libnetcdf_nf_interfaces.la libnetcdfm.la libnetcdf_f03.la
 libnetcdff_la_SOURCES = nf_attio.F90 nf_control.F90 nf_dim.f90		\
 nf_misc.f90 nf_genatt.f90 nf_geninq.f90 nf_genvar.f90 nf_vario.F90	\
 nf_var1io.F90 nf_varaio.F90 nf_varmio.F90 nf_varsio.F90			\
-nf_logging.F90
+nf_logging.F90 nf_nc.f90
 
 # Different source for the netcdf.mod is used for netcdf classic
 # vs. netcdf4.
@@ -82,6 +82,7 @@ module_netcdf_nc_interfaces.$(OBJEXT): netcdf_nc_data.mod
 module_netcdf4_nc_interfaces.$(OBJEXT): netcdf_nc_interfaces.mod
 module_netcdf_nf_interfaces.$(OBJEXT): netcdf_nf_data.mod
 module_netcdf_f03.$(OBJEXT): netcdf_nf_data.mod netcdf_nf_interfaces.mod
+nf_nc.$(OBJEXT): netcdf_nc_interfaces.mod
 
 # Mod files are built and then installed as headers. Order is
 # significant in this list of modfiles.
@@ -103,8 +104,6 @@ MODFILES += netcdf_fortv2_c_interfaces.mod
 libnetcdff_la_SOURCES += nf_v2compat.c nf_fortv2.f90
 libnetcdff_la_LIBADD += libnetcdf_fortv2_c_interfaces.la
 endif # BUILD_V2
-
-libnetcdff_la_SOURCES += nf_nc.f90
 
 # Are we building netCDF-4?
 if USE_NETCDF4
