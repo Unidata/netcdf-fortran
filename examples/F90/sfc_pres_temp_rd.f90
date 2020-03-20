@@ -8,12 +8,12 @@
 ! the use of the netCDF fortran 90 API.
 
 ! This program is part of the netCDF tutorial:
-! http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-tutorial
+! http://www.unidata.ucar.edu/software/netcdf/docs/tutorial_8dox.html
 
 ! Full documentation of the netCDF Fortran 90 API can be found at:
-! http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-f90
+! http://www.unidata.ucar.edu/software/netcdf/docs-fortran/f90_The-NetCDF-Fortran-90-Interface-Guide.html
 
-! $Id: sfc_pres_temp_rd.f90,v 1.10 2010/04/06 19:32:09 ed Exp $
+! Ed Hartnett
 
 program sfc_pres_temp_rd
   use netcdf

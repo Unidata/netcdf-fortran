@@ -8,12 +8,12 @@ C     fortran 77 API. The companion program pres_temp_4D_rd.f shows how
 C     to read the netCDF data file created by this program.
 
 C     This program is part of the netCDF tutorial:
-C     http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-tutorial
+C     http://www.unidata.ucar.edu/software/netcdf/docs/tutorial_8dox.html
 
 C     Full documentation of the netCDF Fortran 77 API can be found at:
-C     http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-f77
+C     http://www.unidata.ucar.edu/software/netcdf/docs-fortran/nc_f77_interface_guide.html
 
-C     $Id: pres_temp_4D_wr.f,v 1.12 2007/02/14 20:59:20 ed Exp $
+C     Ed Hartnett
 
       program pres_temp_4D_wr
       implicit none

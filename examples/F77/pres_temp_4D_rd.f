@@ -8,12 +8,12 @@ C     the companion program pres_temp_4D_wr.f. It is intended to
 C     illustrate the use of the netCDF Fortran 77 API.
 
 C     This program is part of the netCDF tutorial:
-C     http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-tutorial
+C     http://www.unidata.ucar.edu/software/netcdf/docs/tutorial_8dox.html
 
 C     Full documentation of the netCDF Fortran 77 API can be found at:
-C     http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-f77
+C     http://www.unidata.ucar.edu/software/netcdf/docs-fortran/nc_f77_interface_guide.html
 
-C     $Id: pres_temp_4D_rd.f,v 1.12 2007/02/14 20:59:20 ed Exp $
+C     Ed Hartnett
 
       program pres_temp_4D_rd
       implicit none
@@ -34,7 +34,6 @@ C     timesteps of data.
       parameter (LVL_NAME = 'level')
       parameter (LAT_NAME = 'latitude', LON_NAME = 'longitude')
       parameter (REC_NAME = 'time')
-      integer lvl_dimid, lon_dimid, lat_dimid, rec_dimid
 
 C     The start and count arrays will tell the netCDF library where to
 C     read our data.
@@ -54,7 +53,6 @@ C     terminology these are called "variables."
       parameter (PRES_NAME='pressure')
       parameter (TEMP_NAME='temperature')
       integer pres_varid, temp_varid
-      integer dimids(NDIMS)
 
 C     We recommend that each variable carry a "units" attribute.
       character*(*) UNITS

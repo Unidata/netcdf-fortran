@@ -6,15 +6,13 @@
 ! netCDF data file created by the companion program
 ! simple_xy_par_wr.f90. The data are read using parallel I/O.
       
-! This is intended to illustrate the use of the netCDF fortran 90
-! API. This example program is part of the netCDF tutorial, which can
-! be found at:
-! http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-tutorial
-      
-! Full documentation of the netCDF Fortran 90 API can be found at:
-! http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-f90
+! This program is part of the netCDF tutorial:
+! http://www.unidata.ucar.edu/software/netcdf/docs/tutorial_8dox.html
 
-! $Id: simple_xy_par_rd.f90,v 1.2 2009/03/12 18:30:41 ed Exp $
+! Full documentation of the netCDF Fortran 90 API can be found at:
+! http://www.unidata.ucar.edu/software/netcdf/docs-fortran/f90_The-NetCDF-Fortran-90-Interface-Guide.html
+
+! Ed Hartnett
 
 program simple_xy_par_rd
   use netcdf

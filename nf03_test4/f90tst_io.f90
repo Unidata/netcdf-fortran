@@ -95,7 +95,7 @@ program f90tst_io
   enddo
 
   ! Next the netCDF writes
-  call setupNetCDF (nclFilenm1, ncid, vrid, x, prsz1, prsz2, prsz3, prsz4, &
+  call setupNetCDF (nclFilenm1, ncid, vrid, prsz1, prsz2, prsz3, prsz4, &
        x1id, x2id, x3id, x4id, NF90_CLOBBER, 20)
   call system_clock(start)
   call check (NF90_PUT_VAR(ncid, vrid, x), 18)
@@ -109,7 +109,7 @@ program f90tst_io
 
   call system_clock(start)
   do i1 = 1, repct
-     call setupNetCDF (nclFilenm1, ncid, vrid, x, prsz1, prsz2, prsz3, prsz4, &
+     call setupNetCDF (nclFilenm1, ncid, vrid, prsz1, prsz2, prsz3, prsz4, &
           x1id, x2id, x3id, x4id, NF90_CLOBBER, 130)
      call check (NF90_PUT_VAR(ncid, vrid, x), 23 + i1)
      call check (NF90_CLOSE(ncid), 15)
@@ -121,21 +121,21 @@ program f90tst_io
 4 format("Time for", i5, "MB", i3, a22, i7, " msec. Spd ratio = ", f5.2)
 
 !   call system_clock(start)
-!   call setupNetCDF (nclFilenm3, ncid, vrids, s, prsz1, prsz2, prsz3, prsz4, &
+!   call setupNetCDF (nclFilenm3, ncid, vrids, prsz1, prsz2, prsz3, prsz4, &
 !        x1id, x2id, x3id, x4id, NF90_CLOBBER, 20)
-!   call setupNetCDF (nclFilenm4, ncid, vridt, t, prsz1, prsz2, prsz3, prsz4, &
+!   call setupNetCDF (nclFilenm4, ncid, vridt, prsz1, prsz2, prsz3, prsz4, &
 !        x1id, x2id, x3id, x4id, NF90_CLOBBER, 30)
-!   call setupNetCDF (nclFilenm5, ncid, vridu, u, prsz1, prsz2, prsz3, prsz4, &
+!   call setupNetCDF (nclFilenm5, ncid, vridu, prsz1, prsz2, prsz3, prsz4, &
 !        x1id, x2id, x3id, x4id, NF90_CLOBBER, 40)
-!   call setupNetCDF (nclFilenm6, ncid, vridv, v, prsz1, prsz2, prsz3, prsz4, &
+!   call setupNetCDF (nclFilenm6, ncid, vridv, prsz1, prsz2, prsz3, prsz4, &
 !        x1id, x2id, x3id, x4id, NF90_CLOBBER, 50)
-!   call setupNetCDF (nclFilenm7, ncid, vridw, w, prsz1, prsz2, prsz3, prsz4, &
+!   call setupNetCDF (nclFilenm7, ncid, vridw, prsz1, prsz2, prsz3, prsz4, &
 !        x1id, x2id, x3id, x4id, NF90_CLOBBER, 60)
-!   call setupNetCDF (nclFilenm8, ncid, vridx, x, prsz1, prsz2, prsz3, prsz4, &
+!   call setupNetCDF (nclFilenm8, ncid, vridx, prsz1, prsz2, prsz3, prsz4, &
 !        x1id, x2id, x3id, x4id, NF90_CLOBBER, 70)
-!   call setupNetCDF (nclFilenm9, ncid, vridy, y, prsz1, prsz2, prsz3, prsz4, &
+!   call setupNetCDF (nclFilenm9, ncid, vridy, prsz1, prsz2, prsz3, prsz4, &
 !        x1id, x2id, x3id, x4id, NF90_CLOBBER, 80)
-!   call setupNetCDF (nclFilenm10, ncid, vridz, z, prsz1, prsz2, prsz3, prsz4, &
+!   call setupNetCDF (nclFilenm10, ncid, vridz, prsz1, prsz2, prsz3, prsz4, &
 !        x1id, x2id, x3id, x4id, NF90_CLOBBER, 90)
 !   call check (NF90_PUT_VAR(ncid, vrids, s), 118)
 !   call check (NF90_PUT_VAR(ncid, vridt, t), 119)
@@ -160,7 +160,7 @@ contains
     endif
   end subroutine check
 
-  subroutine setupNetCDF(fn, nc, vr, vrnam, d1, d2, d3, d4, do1, do2, &
+  subroutine setupNetCDF(fn, nc, vr, d1, d2, d3, d4, do1, do2, &
        do3, do4, stat, deb)
     integer, intent(in) :: d1, d2, d3, d4, stat, deb
     integer, intent(out) :: do1, do2, do3, do4, vr
@@ -168,7 +168,6 @@ contains
     integer, dimension(4) :: dimids (4)
 
     character(len = *), intent(in) :: fn
-    real, dimension (d1, d2, d3, d4), intent (in) :: vrnam
 
     call check (NF90_CREATE (fn, stat, nc), deb + 1)
     call check (NF90_DEF_DIM(nc, "d1", d1, do1), deb + 2)
