@@ -39,6 +39,11 @@ nf_misc.f90 nf_genatt.f90 nf_geninq.f90 nf_genvar.f90 nf_vario.F90	\
 nf_var1io.F90 nf_varaio.F90 nf_varmio.F90 nf_varsio.F90			\
 nf_logging.F90 nf_nc.f90
 
+# The respective objects depend on the netcdf_nc_interfaces module.
+￼nf_attio.lo nf_control.lo nf_dim.lo nf_genatt.lo nf_geninq.lo nf_genvar.lo    \
+￼nf_misc.lo nf_var1io.lo nf_varaio.lo nf_vario.lo nf_varmio.lo                 \
+￼nf_varsio.lo: $(netcdf_nc_interfaces_mod)
+
 # Different source for the netcdf.mod is used for netcdf classic
 # vs. netcdf4.
 if USE_NETCDF4
@@ -100,6 +105,7 @@ noinst_LTLIBRARIES += libnetcdf_fortv2_c_interfaces.la
 libnetcdf_fortv2_c_interfaces_la_SOURCES = module_netcdf_fortv2_c_interfaces.f90
 netcdf_fortv2_c_interfaces.mod: module_netcdf_fortv2_c_interfaces.$(OBJEXT)
 module_netcdf_fortv2_c_interfaces.$(OBJEXT): netcdf_nc_interfaces.mod
+nf_fortv2.$(OBJEXT): $(netcdf_fortv2_c_interfaces_mod) $(netcdf_nc_interfaces_mod)
 MODFILES += netcdf_fortv2_c_interfaces.mod
 libnetcdff_la_SOURCES += nf_v2compat.c nf_fortv2.f90
 libnetcdff_la_LIBADD += libnetcdf_fortv2_c_interfaces.la
