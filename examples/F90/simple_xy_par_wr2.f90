@@ -7,20 +7,20 @@
 ! and "y", and a netCDF variable, called "data". It uses parallel I/O
 ! to write the file from all processors at the same time.
 
-! This program is part of the netCDF tutorial:
-! https://www.unidata.ucar.edu/software/netcdf/docs/tutorial_8dox.html
-
-! Full documentation of the netCDF Fortran 90 API can be found at:
-! https://www.unidata.ucar.edu/software/netcdf/docs-fortran/f90_The-NetCDF-Fortran-90-Interface-Guide.html
-
-! Ed Hartnett
-
 ! Reto Stockli: added (to demonstrate parallel bug)
 ! - added unlimited time dimension (3)
 ! - added chunk size for unlimited variable writes
 ! - use of MPI module instead of include file
 ! - exclude first process from writing data (test independent write). 
 ! - include first process for opening/metadata/closing file
+
+! This program is part of the netCDF tutorial:
+! https://www.unidata.ucar.edu/software/netcdf/docs/tutorial_8dox.html
+
+! Full documentation of the netCDF Fortran 90 API can be found at:
+! https://www.unidata.ucar.edu/software/netcdf/docs-fortran/f90_The-NetCDF-Fortran-90-Interface-Guide.html
+
+! Russ Rew, Marshall Ward, Ed Hartnett
 
 program simple_xy_par_wr2
 
