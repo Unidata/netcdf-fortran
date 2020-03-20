@@ -320,6 +320,43 @@ fi
 AC_LANG_POP(Fortran)
 ])])
 
+AC_DEFUN([AX_F90_MODULE_NAMING],[
+AC_MSG_CHECKING([fortran 90 module naming])
+AS_IF([AS_VAR_TEST_SET([ax_cv_f90_modnaming_upper]) && AS_VAR_TEST_SET([ax_cv_f90_modnaming_ext])],
+[AS_ECHO_N(["(cached) "]) >&AS_MESSAGE_FD],
+[AC_LANG_PUSH(Fortran)
+i=0
+while test \( -f tmpdir_$i \) -o \( -d tmpdir_$i \) ; do
+  i=`expr $i + 1`
+done
+mkdir tmpdir_$i
+cd tmpdir_$i
+AC_COMPILE_IFELSE([AC_LANG_SOURCE([module conftest_module
+   contains
+   subroutine conftest_routine
+   write(*,'(a)') 'gotcha!'
+   end subroutine conftest_routine
+   end module conftest_module])],
+[ax_cv_f90_modnaming_ext=`ls | sed -n 's,conftest_module\.,,p'`
+AS_VAR_IF([ax_cv_f90_modnaming_ext], [],
+[ax_cv_f90_modnaming_ext=`ls | sed -n 's,CONFTEST_MODULE\.,,p'`
+AS_VAR_IF([ax_cv_f90_modnaming_ext], [],
+[ax_cv_f90_modnaming_ext=unknown
+ax_cv_f90_modnaming_upper=unknown],
+[ax_cv_f90_modnaming_upper=yes])],
+[ax_cv_f90_modnaming_upper=no])],
+[ax_cv_f90_modnaming_ext=unknown
+ax_cv_f90_modnaming_upper=unknown])
+cd ..
+rm -fr tmpdir_$i
+AC_LANG_POP(Fortran)])
+AS_IF([test x"$ax_cv_f90_modnaming_upper" = xunknown || test x"$ax_cv_f90_modnaming_ext" = xunknown],
+[AC_MSG_RESULT([unknown])
+AC_MSG_FAILURE([unable to detect Fortran compiler module file naming scheme])],
+[AS_VAR_IF([ax_cv_f90_modnaming_upper], [yes],
+[AC_MSG_RESULT([NAME.$ax_cv_f90_modnaming_ext])],
+[AC_MSG_RESULT([name.$ax_cv_f90_modnaming_ext])])
+$1])])
 
 # ===========================================================================
 #    https://www.gnu.org/software/autoconf-archive/ax_valgrind_check.html
