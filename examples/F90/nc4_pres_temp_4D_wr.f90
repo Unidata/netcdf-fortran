@@ -8,12 +8,12 @@
 ! to read the netCDF data file created by this program.
 
 ! This program is part of the netCDF tutorial:
-! http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-tutorial
+! http://www.unidata.ucar.edu/software/netcdf/docs/tutorial_8dox.html
 
 ! Full documentation of the netCDF Fortran 90 API can be found at:
-! http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-f90
+! http://www.unidata.ucar.edu/software/netcdf/docs-fortran/f90_The-NetCDF-Fortran-90-Interface-Guide.html
 
-! $Id: nc4_pres_temp_4D_wr.f90,v 1.10 2010/04/06 19:32:09 ed Exp $
+! Ed Hartnett
 
 program nc4_pres_temp_4D_wr
   use netcdf
