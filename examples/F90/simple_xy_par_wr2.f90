@@ -1,5 +1,5 @@
-! This is part of the netCDF package.  Copyright 2006 University
-! Corporation for Atmospheric Research/Unidata.  See COPYRIGHT file
+! This is part of the netCDF package. Copyright 2006 University
+! Corporation for Atmospheric Research/Unidata. See COPYRIGHT file
 ! for conditions of use.
 
 ! This is a very simple example which writes a 2D array of sample
@@ -7,7 +7,7 @@
 ! and "y", and a netCDF variable, called "data". It uses parallel I/O
 ! to write the file from all processors at the same time.
 
-! Reto Stockli: added (to demonstrate parallel bug)
+! This example is like simple_xy_par_wr.f90, except:
 ! - added unlimited time dimension (3)
 ! - added chunk size for unlimited variable writes
 ! - use of MPI module instead of include file
