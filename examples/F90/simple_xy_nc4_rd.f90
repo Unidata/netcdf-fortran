@@ -5,15 +5,13 @@
 ! This is a simple example which reads a small dummy array, from a
 ! netCDF data file created by the companion program simple_xy_wr.f90.
       
-! This is intended to illustrate the use of the netCDF fortran 77
-! API. This example program is part of the netCDF tutorial, which can
-! be found at:
-! http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-tutorial
-      
-! Full documentation of the netCDF Fortran 90 API can be found at:
-! http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-f90
+! This program is part of the netCDF tutorial:
+! https://www.unidata.ucar.edu/software/netcdf/docs/tutorial_8dox.html
 
-! $Id: simple_xy_nc4_rd.f90,v 1.3 2009/02/25 12:23:45 ed Exp $
+! Full documentation of the netCDF Fortran 90 API can be found at:
+! https://www.unidata.ucar.edu/software/netcdf/docs-fortran/f90_The-NetCDF-Fortran-90-Interface-Guide.html
+
+! Ed Hartnett
 
 program simple_xy_rd
   use netcdf

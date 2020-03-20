@@ -1,21 +1,19 @@
-!     This is part of the netCDF package.
-!     Copyright 2006 University Corporation for Atmospheric Research/Unidata.
-!     See COPYRIGHT file for conditions of use.
+! This is part of the netCDF package.  Copyright 2006 University
+! Corporation for Atmospheric Research/Unidata.  See COPYRIGHT file
+! for conditions of use.
 
-!     This is a very simple example which writes a 2D array of sample
-!     data. To handle this in netCDF we create two shared dimensions,
-!     "x" and "y", and a netCDF variable, called "data". It uses
-!     parallel I/O to write the file from all processors at the same
-!     time.
+! This is a very simple example which writes a 2D array of sample
+! data. To handle this in netCDF we create two shared dimensions, "x"
+! and "y", and a netCDF variable, called "data". It uses parallel I/O
+! to write the file from all processors at the same time.
 
-!     This example demonstrates the netCDF Fortran 90 API. This is part
-!     of the netCDF tutorial, which can be found at:
-!     http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-tutorial
-      
-!     Full documentation of the netCDF Fortran 90 API can be found at:
-!     http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-f90
+! This program is part of the netCDF tutorial:
+! https://www.unidata.ucar.edu/software/netcdf/docs/tutorial_8dox.html
 
-!     $Id: simple_xy_par_wr.f90,v 1.3 2010/06/01 15:34:49 ed Exp $
+! Full documentation of the netCDF Fortran 90 API can be found at:
+! https://www.unidata.ucar.edu/software/netcdf/docs-fortran/f90_The-NetCDF-Fortran-90-Interface-Guide.html
+
+! Ed Hartnett
 
 ! Reto Stockli: added (to demonstrate parallel bug)
 ! - added unlimited time dimension (3)
@@ -24,7 +22,7 @@
 ! - exclude first process from writing data (test independent write). 
 ! - include first process for opening/metadata/closing file
 
-program simple_xy_par_wr
+program simple_xy_par_wr2
 
   use netcdf
   use mpi
@@ -136,5 +134,5 @@ contains
       stop 2
     end if
   end subroutine check  
-end program simple_xy_par_wr
+end program simple_xy_par_wr2
 
