@@ -5,15 +5,13 @@ C     See COPYRIGHT file for conditions of use.
 C     This is a simple example which reads a small dummy array, from a
 C     netCDF data file created by the companion program simple_xy_wr.f.
       
-C     This is intended to illustrate the use of the netCDF fortran 77
-C     API. This example program is part of the netCDF tutorial, which can
-C     be found at:
-C     http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-tutorial
-      
-C     Full documentation of the netCDF Fortran 77 API can be found at:
-C     http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-f77
+C     This program is part of the netCDF tutorial:
+C     https://www.unidata.ucar.edu/software/netcdf/docs/tutorial_8dox.html
 
-C     $Id: simple_xy_nc4_rd.f,v 1.1 2007/05/04 13:33:20 ed Exp $
+C     Full documentation of the netCDF Fortran 77 API can be found at:
+C     https://www.unidata.ucar.edu/software/netcdf/docs-fortran/nc_f77_interface_guide.html
+
+C     Ed Hartnett
 
       program simple_xy_rd
       implicit none

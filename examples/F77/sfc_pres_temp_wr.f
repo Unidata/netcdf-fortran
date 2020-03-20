@@ -8,12 +8,12 @@ C     companion program sfc_pres_temp_rd.f shows how to read the netCDF
 C     data file created by this program.
 
 C     This program is part of the netCDF tutorial:
-C     http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-tutorial
+C     https://www.unidata.ucar.edu/software/netcdf/docs/tutorial_8dox.html
 
 C     Full documentation of the netCDF Fortran 77 API can be found at:
-C     http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-f77
+C     https://www.unidata.ucar.edu/software/netcdf/docs-fortran/nc_f77_interface_guide.html
 
-C     $Id: sfc_pres_temp_wr.f,v 1.10 2007/02/14 20:59:20 ed Exp $
+C     Ed Hartnett
 
       program sfc_pres_temp_wr
       implicit none

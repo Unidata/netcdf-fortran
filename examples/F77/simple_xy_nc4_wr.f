@@ -6,14 +6,13 @@ C     This is a very simple example which writes a 2D array of
 C     sample data. To handle this in netCDF we create two shared
 C     dimensions, "x" and "y", and a netCDF variable, called "data".
 
-C     This example demonstrates the netCDF Fortran 77 API. This is part
-C     of the netCDF tutorial, which can be found at:
-C     http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-tutorial
+C     This program is part of the netCDF tutorial:
+C     https://www.unidata.ucar.edu/software/netcdf/docs/tutorial_8dox.html
 
 C     Full documentation of the netCDF Fortran 77 API can be found at:
-C     http://www.unidata.ucar.edu/software/netcdf/docs/netcdf-f77
+C     https://www.unidata.ucar.edu/software/netcdf/docs-fortran/nc_f77_interface_guide.html
 
-C     $Id: simple_xy_nc4_wr.f,v 1.5 2008/02/19 22:01:49 ed Exp $
+C     Ed Hartnett
 
       program simple_xy_wr
       implicit none
