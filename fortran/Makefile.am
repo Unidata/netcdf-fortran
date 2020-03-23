@@ -45,9 +45,9 @@ nf_var1io.F90 nf_varaio.F90 nf_varmio.F90 nf_varsio.F90			\
 nf_logging.F90 nf_nc.f90
 
 # The respective objects depend on the netcdf_nc_interfaces module.
-￼nf_attio.lo nf_control.lo nf_dim.lo nf_genatt.lo nf_geninq.lo nf_genvar.lo    \
-￼nf_misc.lo nf_var1io.lo nf_varaio.lo nf_vario.lo nf_varmio.lo                 \
-￼nf_varsio.lo: $(netcdf_nc_interfaces_mod)
+nf_attio.lo nf_control.lo nf_dim.lo nf_genatt.lo nf_geninq.lo nf_genvar.lo    \
+nf_misc.lo nf_var1io.lo nf_varaio.lo nf_vario.lo nf_varmio.lo                 \
+nf_varsio.lo: netcdf_nc_interfaces.mod
 
 # Different source for the netcdf.mod is used for netcdf classic
 # vs. netcdf4.
@@ -55,17 +55,15 @@ if USE_NETCDF4
 
 # Use the netCDF-4 F90 code.
 libnetcdfm_la_SOURCES = netcdf4.f90
-netcdf4.$(OBJEXT): typesizes.mod $(COMMON_CODES) $(NETCDF4_CODES)
-netcdf.mod: netcdf4.$(OBJEXT)
-EXTRA_libnetcdfm_la_DEPENDENCIES = $(COMMON_CODES) $(NETCDF4_CODES)
+netcdf4.lo: typesizes.mod $(COMMON_CODES) $(NETCDF4_CODES)
+netcdf.mod: netcdf4.lo
 
 else # classic-only build
 
 # Use the netCDF classic F90 code.
 libnetcdfm_la_SOURCES = netcdf.f90
-netcdf.$(OBJEXT): typesizes.mod $(COMMON_CODES) $(NETCDF3_CODES)
-netcdf.mod: netcdf.$(OBJEXT)
-EXTRA_libnetcdfm_la_DEPENDENCIES = $(COMMON_CODES)
+netcdf.lo: typesizes.mod $(COMMON_CODES) $(NETCDF3_CODES)
+netcdf.mod: netcdf.lo
 libnetcdff_la_SOURCES += netcdf3_file.f90
 
 endif # USE_NETCDF4
@@ -78,23 +76,22 @@ libnetcdf_nc_interfaces_la_SOURCES = module_netcdf_nc_interfaces.f90
 libnetcdf_nf_interfaces_la_SOURCES = module_netcdf_nf_interfaces.F90
 libnetcdf_f03_la_SOURCES = module_netcdf_f03.f90
 
-# Each mod file depends on the .o file.
-typesizes.mod: typeSizes.$(OBJEXT)
-netcdf_nc_data.mod: module_netcdf_nc_data.$(OBJEXT)
-netcdf_nf_data.mod: module_netcdf_nf_data.$(OBJEXT)
-netcdf_nc_interfaces.mod: module_netcdf_nc_interfaces.$(OBJEXT)
-netcdf_nf_interfaces.mod: module_netcdf_nf_interfaces.$(OBJEXT)
-netcdf_f03.mod: module_netcdf_f03.$(OBJEXT)
+# Each mod file depends on the .lo file.
+typesizes.mod: typeSizes.lo
+netcdf_nc_data.mod: module_netcdf_nc_data.lo
+netcdf_nf_data.mod: module_netcdf_nf_data.lo
+netcdf_nc_interfaces.mod: module_netcdf_nc_interfaces.lo
+netcdf_nf_interfaces.mod: module_netcdf_nf_interfaces.lo
+netcdf_f03.mod: module_netcdf_f03.lo
 
 # Some mods are dependant on other mods in this dir.
-module_netcdf_nf_data.$(OBJEXT): netcdf_nc_data.mod
-module_netcdf_nc_interfaces.$(OBJEXT): netcdf_nc_data.mod
-module_netcdf_nf_interfaces.$(OBJEXT): netcdf_nf_data.mod
-module_netcdf_f03.$(OBJEXT): netcdf_nf_data.mod netcdf_nf_interfaces.mod
-nf_nc.$(OBJEXT): netcdf_nc_interfaces.mod
+module_netcdf_nf_data.lo: netcdf_nc_data.mod
+module_netcdf_nc_interfaces.lo: netcdf_nc_data.mod
+module_netcdf_nf_interfaces.lo: netcdf_nf_data.mod
+module_netcdf_f03.lo: netcdf_nf_data.mod netcdf_nf_interfaces.mod
+nf_nc.lo: netcdf_nc_interfaces.mod
 
-# Mod files are built and then installed as headers. Order is
-# significant in this list of modfiles.
+# Mod files are built and then installed as headers.
 MODFILES = typesizes.mod netcdf_nc_data.mod netcdf_nf_data.mod	\
 netcdf_nc_interfaces.mod netcdf_nf_interfaces.mod
 
@@ -107,9 +104,9 @@ libnetcdf_nf_interfaces.la libnetcdfm.la libnetcdf_f03.la
 if BUILD_V2
 noinst_LTLIBRARIES += libnetcdf_fortv2_c_interfaces.la
 libnetcdf_fortv2_c_interfaces_la_SOURCES = module_netcdf_fortv2_c_interfaces.f90
-netcdf_fortv2_c_interfaces.mod: module_netcdf_fortv2_c_interfaces.$(OBJEXT)
-module_netcdf_fortv2_c_interfaces.$(OBJEXT): netcdf_nc_interfaces.mod
-nf_fortv2.$(OBJEXT): $(netcdf_fortv2_c_interfaces_mod) $(netcdf_nc_interfaces_mod)
+netcdf_fortv2_c_interfaces.mod: module_netcdf_fortv2_c_interfaces.lo
+module_netcdf_fortv2_c_interfaces.lo: netcdf_nc_interfaces.mod
+nf_fortv2.lo: netcdf_fortv2_c_interfaces.mod netcdf_nc_interfaces.mod
 MODFILES += netcdf_fortv2_c_interfaces.mod
 libnetcdff_la_SOURCES += nf_v2compat.c nf_fortv2.f90
 libnetcdff_la_LIBADD += libnetcdf_fortv2_c_interfaces.la
@@ -131,15 +128,15 @@ libnetcdf4_nc_interfaces_la_SOURCES = module_netcdf4_nc_interfaces.f90
 libnetcdf4_nf_interfaces_la_SOURCES = module_netcdf4_nf_interfaces.F90
 libnetcdf4_f03_la_SOURCES = module_netcdf4_f03.f90
 
-# Each mod file depends on the .o file.
-netcdf4_nc_interfaces.mod: module_netcdf4_nc_interfaces.$(OBJEXT)
-netcdf4_nf_interfaces.mod: module_netcdf4_nf_interfaces.$(OBJEXT)
-netcdf4_f03.mod: module_netcdf4_f03.$(OBJEXT)
+# Each mod file depends on the .lo file.
+netcdf4_nc_interfaces.mod: module_netcdf4_nc_interfaces.lo
+netcdf4_nf_interfaces.mod: module_netcdf4_nf_interfaces.lo
+netcdf4_f03.mod: module_netcdf4_f03.lo
 
 # Some mods are dependant on other mods in this dir.
-module_netcdf4_nf_interfaces.$(OBJEXT): netcdf4_nc_interfaces.mod netcdf_nf_data.mod 
-module_netcdf4_nc_interfaces.$(OBJEXT): netcdf_nc_interfaces.mod 
-module_netcdf4_f03.$(OBJEXT): netcdf_nf_data.mod netcdf_nf_interfaces.mod netcdf4_nf_interfaces.mod
+module_netcdf4_nf_interfaces.lo: netcdf4_nc_interfaces.mod netcdf_nf_data.mod
+module_netcdf4_nc_interfaces.lo: netcdf_nc_interfaces.mod
+module_netcdf4_f03.lo: netcdf_nf_data.mod netcdf_nf_interfaces.mod netcdf4_nf_interfaces.mod
 
 # Add the netcdf4 mod files to the list.
 MODFILES += netcdf4_nc_interfaces.mod netcdf4_nf_interfaces.mod	\
@@ -186,7 +183,7 @@ if USE_LOGGING
 	echo '      external nf_set_log_level' >> netcdf.inc
 endif
 
-EXTRA_DIST = $(COMMON_CODES) $(NETCDF4_CODES) CMakeLists.txt	\
+EXTRA_DIST = $(COMMON_CODES) $(NETCDF4_CODES) $(NETCDF3_CODES) CMakeLists.txt	\
 netcdf2.inc netcdf3.inc netcdf4.inc
 
 CLEANFILES = *.mod netcdf.inc

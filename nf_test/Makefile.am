@@ -69,6 +69,10 @@ nf03_error.F nf03_test.F test03_read.F test03_write.F util03.F		\
 f03lib.c
 nf03_test_LDADD = libtests.la ${top_builddir}/fortran/libnetcdff.la
 
+test03_get.$(OBJEXT) test03_put.$(OBJEXT) nf03_error.$(OBJEXT)          \
+nf03_test.$(OBJEXT) test03_read.$(OBJEXT) test03_write.$(OBJEXT)        \
+util03.$(OBJEXT): tests.mod
+
 # If the V2 API is being built, then make copies of the two V2 F77 API
 # tests, modified to use the fortran module.
 if BUILD_V2
@@ -78,6 +82,7 @@ f03test_SOURCES = f03test.F
 f03test_LDADD = libtests.la ${top_builddir}/fortran/libnetcdff.la
 tst03_f77_v2_SOURCES = tst03_f77_v2.F
 tst03_f77_v2_LDADD = libtests.la ${top_builddir}/fortran/libnetcdff.la
+tst03_f77_v2.$(OBJEXT): tests.mod
 endif # BUILD_V2
 
 # Note that all these fortran programs are built at compile-time on
