@@ -43,7 +43,7 @@ program f90tst_vars2
   integer :: endianness_in, deflate_level_in
   logical :: shuffle_in, fletcher32_in, contiguous_in
   integer (kind = EightByteInt) :: toe_san_in
-  integer :: cache_size_in, cache_nelems_in, cache_preemption_in
+  integer :: cache_size_in, cache_nelems_in, cache_preemption_in  
 
   print *, ''
   print *,'*** Testing definition of netCDF-4 vars from Fortran 90.'
@@ -111,8 +111,8 @@ program f90tst_vars2
   if (chunksizes_in(1) /= chunksizes(1) .or. chunksizes_in(2) /= chunksizes(2)) &
        stop 4
   if (endianness_in .ne. nf90_endian_big) stop 5
-  ! print *, 'cache_size_in =', cache_size_in, 'cache_nelems_in =', cache_nelems_in, &
-  !      'cache_preemption_in =', cache_preemption
+  if (cache_size_in .ne. 16 .or. cache_nelems_in .ne. 4133 .or. &
+       cache_preemption .ne. CACHE_PREEMPTION) stop 555
 
   ! Check variable 2.
   call check(nf90_inquire_variable(ncid, varid2_in, name_in, xtype_in, ndims_in, dimids_in, &
