@@ -5,7 +5,7 @@ C     See COPYRIGHT file for conditions of use.
 C     This program tests netCDF-4 variable functions from fortran,
 C     testing chunking and deflate settings.
 
-C     $Id: ftst_vars.F,v 1.19 2009/09/27 21:25:23 ed Exp $
+C     Ed Hartnett
 
       program ftst_vars
       implicit none
@@ -35,6 +35,11 @@ C     For checking our data file to make sure it's correct.
       integer endianness
 
 C     Cache size stuff.
+      integer DEFAULT_CACHE_SIZE, DEFAULT_CACHE_NELEMS
+      integer DEFAULT_CACHE_PREEMPTION
+      parameter (DEFAULT_CACHE_SIZE = 16777216)
+      parameter (DEFAULT_CACHE_NELEMS = 4133)
+      parameter (DEFAULT_CACHE_PREEMPTION = 75)
       integer CACHE_SIZE, CACHE_NELEMS, CACHE_PREEMPTION
       parameter (CACHE_SIZE = 8000, CACHE_NELEMS = 500)
       parameter (CACHE_PREEMPTION = 50)
@@ -52,6 +57,14 @@ C     Create some pretend data.
 
       print *, ''
       print *,'*** Testing definition of netCDF-4 vars from Fortran 77.'
+
+C     Check default chunk cache sizes.
+      retval = nf_get_chunk_cache(cache_size_in, cache_nelems_in, 
+     &     cache_preemption_in)
+      if (retval .ne. nf_noerr) stop 1
+      if (cache_size_in .ne. DEFAULT_CACHE_SIZE .or. 
+     &     cache_nelems_in .ne. DEFAULT_CACHE_NELEMS .or. 
+     &     cache_preemption_in .ne. DEFAULT_CACHE_PREEMPTION) stop 4
 
 C     Change the cache size for the files created/opened in this program.
       retval = nf_set_chunk_cache(CACHE_SIZE, CACHE_NELEMS, 
