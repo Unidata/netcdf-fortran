@@ -92,8 +92,8 @@ module_netcdf_f03.lo: netcdf_nf_data.mod netcdf_nf_interfaces.mod
 nf_nc.lo: netcdf_nc_interfaces.mod
 
 # Mod files are built and then installed as headers.
-MODFILES = typesizes.mod netcdf_nc_data.mod netcdf_nf_data.mod	\
-netcdf_nc_interfaces.mod netcdf_nf_interfaces.mod
+MODFILES = typesizes.mod netcdf_nc_data.mod netcdf_nf_data.mod		\
+netcdf_nc_interfaces.mod netcdf_nf_interfaces.mod netcdf_f03.mod
 
 # Add our convenience libraries to the netCDF fortran library.
 libnetcdff_la_LIBADD = libtypeSizes.la libnetcdf_nc_data.la	\
@@ -156,6 +156,20 @@ BUILT_SOURCES = $(MODFILES)
 
 # Mod files are installed, but not distrubuted.
 nodist_fmod_DATA = $(MODFILES)
+
+# If a module file is accidentally deleted, delete the corresponding
+# object and rebuild it.
+$(MODFILES):
+	@if test -z $<; then \
+	  echo "Cannot find Fortran source file declaring module '$(basename $(@F))'." >&2; \
+	elif test ! -f $@; then \
+	  rm -f $<; $(MAKE) $(AM_MAKEFLAGS) $<; \
+	fi
+
+# If the rule above rebuilds an object in a subprocess of make, the
+# current process might not know about it. Therefore, to enforce
+# regeneration of the library, we introduce the following dependency.
+EXTRA_libnetcdff_la_DEPENDENCIES = $(MODFILES)
 
 # The netcdf.inc file is built on the user machine, and installed as
 # a header.
