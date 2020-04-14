@@ -200,5 +200,5 @@ endif
 EXTRA_DIST = $(COMMON_CODES) $(NETCDF4_CODES) $(NETCDF3_CODES) CMakeLists.txt	\
 netcdf2.inc netcdf3.inc netcdf4.inc
 
-CLEANFILES = *.mod netcdf.inc
+MOSTLYCLEANFILES = *.mod netcdf.inc
 
