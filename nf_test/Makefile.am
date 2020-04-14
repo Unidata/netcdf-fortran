@@ -45,8 +45,9 @@ noinst_LTLIBRARIES = libtests.la
 # Each convenience library depends on its source.
 libtests_la_SOURCES = module_tests.F90
 
-# Each mod file depends on the .o file.
+# Rebuild the tests.mod file if needed.
 tests.mod: module_tests.$(OBJEXT)
+	@if test ! -f $@; then rm -f $<; $(MAKE) $<; fi
 
 # Mod files are built sources.
 BUILT_SOURCES = tests.mod
