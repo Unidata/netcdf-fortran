@@ -45,8 +45,9 @@ noinst_LTLIBRARIES = libtests.la
 # Each convenience library depends on its source.
 libtests_la_SOURCES = module_tests.F90
 
-# Each mod file depends on the .o file.
+# Rebuild the tests.mod file if needed.
 tests.mod: module_tests.$(OBJEXT)
+	@if test ! -f $@; then rm -f $<; $(MAKE) $<; fi
 
 # Mod files are built sources.
 BUILT_SOURCES = tests.mod
@@ -142,11 +143,16 @@ endif #USE_SED
 EXTRA_DIST = test_get.F test_put.F fills.cdl ref_fills.nc	\
 CMakeLists.txt
 
-# Cleaning up files created during the process.
-CLEANFILES = scratch*.nc test*.nc copy*.nc tst_*.nc ftst_*.nc	\
-f90tst_*.nc f03test*.nc *.tmp *.tmp2 fort.* tst03*.nc	\
-f03tst*.nc ftest.nc fcopy.nc *.mod $(F03_TEST_CODES)
+# As per autotools convention, mod files get mostly cleaned.
+MOSTLYCLEANFILES = *.mod  
 
+# Cleaning up files created during the process.
+CLEANFILES = scratch*.nc test*.nc copy*.nc tst_*.nc ftst_*.nc		\
+f90tst_*.nc f03test*.nc *.tmp *.tmp2 fort.* tst03*.nc f03tst*.nc	\
+ftest.nc fcopy.nc $(F03_TEST_CODES)
+
+# This file gets copied to build dir by configure.
 DISTCLEANFILES = fills.nc
 
+# These are shipped with code, but can be rebuilt from m4 if needed.
 MAINTAINERCLEANFILES = test_get.F test_put.F
