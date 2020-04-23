@@ -5,8 +5,13 @@ Release Notes {#nf_release_notes}
 
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
+## 4.5.4 - TBD
 
-## 4.5.3 - TBD
+### Requirements
+
+* netCDF-C: 4.7.4+
+
+## 4.5.3 - April 24, 2020
 
 ### Requirements
 
