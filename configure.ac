@@ -27,7 +27,7 @@ AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
 
 # This call is required by automake.
-AM_INIT_AUTOMAKE([foreign dist-zip subdir-objects])
+AM_INIT_AUTOMAKE([1.13 foreign dist-zip subdir-objects])
 
 AC_MSG_NOTICE([checking user options])
 
