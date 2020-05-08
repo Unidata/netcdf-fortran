@@ -92,7 +92,7 @@ INCLUDE(GNUInstallDirs)
 INCLUDE(CheckCSourceCompiles)
 
 # By default install Fortran modules into include directory
-OPTION(Fortran_INSTALL_MODDIR "Fortran module install directory" "${CMAKE_INSTALL_INCLUDEDIR}")
+SET(Fortran_INSTALL_MODDIR "${CMAKE_INSTALL_INCLUDEDIR}" CACHE STRING "Fortran module install directory")
 
 IF(MSVC)
   SET(GLOBAL PROPERTY USE_FOLDERS ON)
