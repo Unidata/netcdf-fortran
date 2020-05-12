@@ -11,7 +11,7 @@ Entries are in reverse chronological order (most recent first).
 
 * netCDF-C: 4.7.4+
 
-## 4.5.3 - April 24, 2020
+## 4.5.3 - TBD
 
 ### Requirements
 
