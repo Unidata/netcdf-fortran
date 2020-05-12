@@ -107,6 +107,8 @@ INCLUDE (CheckCXXSourceCompiles)
 INCLUDE (TestBigEndian)
 INCLUDE (CheckSymbolExists)
 INCLUDE (GetPrerequisites)
+INCLUDE (CheckFortranSourceCompiles)
+INCLUDE (CheckFortranCompilerFlag)
 FIND_PACKAGE(PkgConfig QUIET)
 
 # Enable 'dist and distcheck'.
@@ -544,6 +546,18 @@ ENDIF()
 # TODO: Replace these with automatically-determined
 # checks, like in configure.ac.
 ###
+
+##
+# Check to see if compiler supports
+# -fallow-argument-mismatch-flag introduced in gcc 10.
+#
+# See https://github.com/Unidata/netcdf-fortran/issues/212
+##
+check_Fortran_compiler_flag("-fallow-argument-mismatch" COMPILER_HAS_ALLOW_ARGUMENT_MISMATCH)
+
+IF(COMPILER_HAS_ALLOW_ARGUMENT_MISMATCH)
+  SET(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fallow-argument-mismatch")
+ENDIF(COMPILER_HAS_ALLOW_ARGUMENT_MISMATCH)
 
 CHECK_FUNCTION_EXISTS(alloca HAVE_ALLOCA)
 
