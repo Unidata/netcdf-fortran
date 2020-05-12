@@ -272,11 +272,35 @@ EOF
   fi
 fi
 
+# Test to see if fortran compiler supports the flag
+# -fallow-argument-mismatch flag introduced in gfortran 10.
+#
+# See https://github.com/Unidata/netcdf-fortran/issues/212
+ac_save_FCFLAGS="$FCFLAGS"
+AC_MSG_CHECKING([if Fortran compiler supports allow-mismatch flag])
+cat <<EOF >conftest.f90
+Program test
+USE ISO_C_BINDING, ONLY: C_PTRDIFF_T
+End Program
+EOF
+doit='$FC -c ${FCFLAGS} ${FCFLAGS_f90} -fallow-argument-mismatch conftest.f90'
+if AC_TRY_EVAL(doit); then
+   nf_allow_mismatch=yes
+   FCFLAGS="${FCFLAGS} -fallow-argument-mismatch"
+  else
+   nf_allow_mismatch=no
+fi
+AC_MSG_RESULT([$nf_allow_mismatch])
+
+
+# End testing of gfortan allow-mismatch flags.
+
 # We must have F2003 ISO bindings to build.
 if test "x$nc_iso_c_binding" = xno; then
   AC_MSG_FAILURE([Fortran 2003 interface not supported])
 fi
 nc_build_f03=yes
+
 
 # Does the user want to check into fortran type information?
 AC_MSG_CHECKING([whether fortran type sizes should be checked])
