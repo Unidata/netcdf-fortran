@@ -652,25 +652,25 @@ ENDIF()
 # Determine C library setting for NC_RELAX_COORD_BOUND
 try_compile(NF_RELAX_COORD_BOUND ${CMAKE_CURRENT_BINARY_DIR}
   "${CMAKE_CURRENT_SOURCE_DIR}/CMakeExtras/check_relax_coord_bound.c"
-  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${NETCDF_INCLUDE_DIR}"
+  LINK_LIBRARIES netCDF::netcdf
   )
 
 # Determine C library setting for NC_HAS_CDF5
 try_compile(ENABLE_CDF5 ${CMAKE_CURRENT_BINARY_DIR}
   "${CMAKE_CURRENT_SOURCE_DIR}/CMakeExtras/check_cdf5.c"
-  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${NETCDF_INCLUDE_DIR}"
+  LINK_LIBRARIES netCDF::netcdf
   )
 
 # Determine C library setting for NC_HAS_PNETCDF
 try_compile(NF_HAS_PNETCDF ${CMAKE_CURRENT_BINARY_DIR}
   "${CMAKE_CURRENT_SOURCE_DIR}/CMakeExtras/check_pnetcdf.c"
-  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${NETCDF_INCLUDE_DIR}"
+  LINK_LIBRARIES netCDF::netcdf
   )
 
 # Determine C library setting for NC_HAS_PARALLEL4
 try_compile(NF_HAS_PARALLEL4 ${CMAKE_CURRENT_BINARY_DIR}
   "${CMAKE_CURRENT_SOURCE_DIR}/CMakeExtras/check_parallel4.c"
-  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${NETCDF_INCLUDE_DIR}"
+  LINK_LIBRARIES netCDF::netcdf
   )
 
 IF(NF_HAS_PARALLEL4)
