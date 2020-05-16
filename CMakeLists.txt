@@ -417,22 +417,40 @@ ENDIF()
 # Seek out netcdf library file and include path.
 ###
 
-IF(NOT NETCDF_C_LIBRARY)
-  FIND_LIBRARY(NETCDF_C_LIBRARY NAMES netcdf)
-  IF(NOT NETCDF_C_LIBRARY)
-    MESSAGE(FATAL_ERROR "libnetcdf not found.")
-  ENDIF()
+IF(NOT netCDF_LIBRARIES AND NOT netCDF_INCLUDE_DIR)
+  FIND_PACKAGE(netCDF QUIET)
+ELSE()
+  SET(netCDF_FOUND TRUE)
 ENDIF()
-MESSAGE(STATUS "Found netcdf library: ${NETCDF_C_LIBRARY}")
 
-IF(NOT NETCDF_INCLUDE_DIR)
-  FIND_PATH(NETCDF_INCLUDE_DIR NAMES netcdf.h)
-  IF(NOT NETCDF_INCLUDE_DIR)
-    MESSAGE(FATAL_ERROR "netcdf.h not found.")
+IF (netCDF_FOUND)
+  SET(NETCDF_C_LIBRARY ${netCDF_LIBRARIES})
+  SET(NETCDF_C_INCLUDE_DIR ${netCDF_INCLUDE_DIR})
+  message(STATUS "Found netCDF CMake package: ${NETCDF_C_LIBRARY}")
+ELSE()
+  # netCDF not properly packaged. Try to find it manually.
+  FIND_LIBRARY(NETCDF_C_LIBRARY NAMES netcdf libnetcdf)
+  IF(NOT NETCDF_C_LIBRARY)
+    MESSAGE(FATAL_ERROR "libnetcdf not found. Please reinstall and try again.")
+  ELSE()
+    FIND_PATH(NETCDF_C_INCLUDE_DIR "netcdf.h")
+    MESSAGE(STATUS "Found netcdf: ${NETCDF_C_LIBRARY}")
+    IF(NOT NETCDF_C_INCLUDE_DIR)
+      MESSAGE(FATAL_ERROR "Directory containing netcdf.h cannot be found. Please reinstall and try again.")
+    ELSE()
+      GET_FILENAME_COMPONENT(netCDF_LIB_DIR "${NETCDF_C_LIBRARY}" REALPATH)
+    ENDIF()
   ENDIF()
 ENDIF()
-MESSAGE(STATUS "Found netcdf.h in ${NETCDF_INCLUDE_DIR}")
-INCLUDE_DIRECTORIES(SYSTEM ${NETCDF_INCLUDE_DIR})
+
+
+if (NOT TARGET netCDF::netcdf)
+  add_library(netCDF::netcdf UNKNOWN IMPORTED)
+  set_target_properties(netCDF::netcdf PROPERTIES
+    IMPORTED_LOCATION "${NETCDF_C_LIBRARY}"
+    INTERFACE_INCLUDE_DIRECTORIES "${NETCDF_C_INCLUDE_DIR}"
+  )
+endif()
 
 ###
 # End 'Seek out netcdf library file and include path.'
