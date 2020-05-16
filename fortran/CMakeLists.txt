@@ -1,9 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 SET(CMAKE_VERBOSE_MAKEFILE OFF)
-SET(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-INCLUDE_DIRECTORIES("." "${NC4F_BINARY_DIR}/libsrc")
 
 SET(netcdff_SOURCES
   typeSizes.f90 module_netcdf_nc_data.F90 module_netcdf_nc_interfaces.f90
@@ -119,8 +116,6 @@ if (${USE_LOGGING})
 endif (${USE_LOGGING})
 
 SET(BUILT_SOURCES ${BUILT_SOURCES} netcdf.inc)
-
-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/libsrc)
 
 # Default to shared libs on
 OPTION(BUILD_SHARED_LIBS "Configure netCDF as a shared library." ON)

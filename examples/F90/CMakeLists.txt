@@ -14,7 +14,7 @@ ENDFOREACH()
 SET(prefix F90_tests)
 FOREACH(F ${example_F90_tests})
   ADD_EXECUTABLE(${prefix}_${F} ${F}.f90)
-  TARGET_LINK_LIBRARIES(${prefix}_${F} netcdff ${NETCDF_C_LIBRARY})
+  TARGET_LINK_LIBRARIES(${prefix}_${F} netcdff)
   IF(MSVC)
     SET_TARGET_PROPERTIES(${prefix}_${F}
       PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"

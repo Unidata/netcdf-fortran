@@ -56,25 +56,6 @@ if (USE_NETCDF4)
 
 endif(USE_NETCDF4)
 
-FIND_LIBRARY(NETCDF_C_LIBRARY NAMES netcdf libnetcdf)
-FIND_PATH(NETCDF_C_INCLUDE_DIR netcdf.h)
-IF(NOT NETCDF_C_LIBRARY)
-  MESSAGE(FATAL_ERROR "Cannot find netCDF C library, needed for netCDF Fortran tests.")
-ENDIF()
-
-INCLUDE_DIRECTORIES(BEFORE
-  ${CMAKE_CURRENT_BINARY_DIR}
-  ${CMAKE_BINARY_DIR}/fortran
-  ${CMAKE_SOURCE_DIR}
-  ${CMAKE_SOURCE_DIR}/fortran)
-
-INCLUDE_DIRECTORIES(
-  ${CMAKE_CPP_FLAGS}
-  ${NETCDF_C_INCLUDE_DIR})
-
-LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/fortran
-  ${NC4F_BINARY_DIR}/fortran)
-
 # If szip write capability exists in the C library, run the szip test.
 IF (HAVE_SZIP_WRITE)
   SET(check_PROGRAMS ${check_PROGRAMS} ftst_var_szip)

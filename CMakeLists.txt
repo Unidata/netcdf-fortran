@@ -692,7 +692,6 @@ IF(NF_HAS_PNETCDF OR NF_HAS_PARALLEL4)
      "  I/O feature disabled. Abort.\n"
      " -----------------------------------------------------------------------")
   ENDIF(NOT MPI_Fortran_FOUND)
-  INCLUDE_DIRECTORIES(${MPI_Fortran_INCLUDE_PATH})
   SET(BUILD_PARALLEL ON)
   SET(HAVE_NC_USE_PARALLEL_ENABLED TRUE)
 ELSE(NF_HAS_PNETCDF OR NF_HAS_PARALLEL4)
@@ -945,7 +944,6 @@ INSTALL(PROGRAMS ${NC4F_BINARY_DIR}/nf-config
         DESTINATION "${CMAKE_INSTALL_BINDIR}"
         COMPONENT utilities)
 
-INCLUDE_DIRECTORIES(${NC4F_BINARY_DIR})
 # End autotools-style checks for config.h
 
 # Recurse into other subdirectories.
