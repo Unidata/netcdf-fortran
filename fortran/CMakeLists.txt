@@ -137,12 +137,21 @@ ENDIF()
 # ADD_LIBRARY(netcdff STATIC SHARED ${netcdff_SOURCES})
 # Builds only static, not shared
 ADD_LIBRARY(netcdff ${netcdff_SOURCES})
-TARGET_LINK_LIBRARIES(netcdff ${NETCDF_C_LIBRARY})
-TARGET_LINK_LIBRARIES(netcdff ${EXTRA_DEPS})
+TARGET_LINK_LIBRARIES(netcdff PUBLIC netCDF::netcdf)
+TARGET_LINK_LIBRARIES(netcdff PUBLIC ${EXTRA_DEPS})
 SET_TARGET_PROPERTIES(netcdff PROPERTIES
                       VERSION ${NC4F_LIB_VERSION}
                       SOVERSION ${NC4F_SO_VERSION}
                       )
+target_include_directories(netcdff PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+  $<INSTALL_INTERFACE:include>
+  )
+
+if (HAVE_NC_USE_PARALLEL_ENABLED)
+  target_link_libraries(netcdff PUBLIC MPI::MPI_Fortran)
+endif()
 
 ##
 # Configuration for post-install RPath
@@ -171,6 +180,7 @@ ENDIF()
 
 # Installation of the program
 INSTALL(TARGETS netcdff
+    EXPORT netcdffTargets
     RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT bin
     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT shlib
     ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT shlib

@@ -966,3 +966,35 @@ IF(BUILD_EXAMPLES)
 ENDIF(BUILD_EXAMPLES)
 ADD_SUBDIRECTORY(docs)
 print_conf_summary()
+
+include(CMakePackageConfigHelpers)
+
+set(ConfigPackageLocation "${CMAKE_INSTALL_LIBDIR}/cmake/netCDF")
+
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/netCDF-FortranConfigVersion.cmake"
+  VERSION ${NC4F_VERSION}
+  COMPATIBILITY SameMajorVersion
+  )
+
+install(
+  EXPORT netcdffTargets
+  FILE netcdffTargets.cmake
+  NAMESPACE netCDF::
+  DESTINATION ${ConfigPackageLocation}
+  )
+
+configure_package_config_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/netCDF-FortranConfig.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/netCDF-FortranConfig.cmake"
+  INSTALL_DESTINATION "${ConfigPackageLocation}"
+  )
+
+
+install(
+  FILES
+  "${CMAKE_CURRENT_BINARY_DIR}/netCDF-FortranConfig.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/netCDF-FortranConfigVersion.cmake"
+  DESTINATION "${ConfigPackageLocation}"
+  COMPONENT headers
+  )
