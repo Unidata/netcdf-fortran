@@ -417,22 +417,40 @@ ENDIF()
 # Seek out netcdf library file and include path.
 ###
 
-IF(NOT NETCDF_C_LIBRARY)
-  FIND_LIBRARY(NETCDF_C_LIBRARY NAMES netcdf)
-  IF(NOT NETCDF_C_LIBRARY)
-    MESSAGE(FATAL_ERROR "libnetcdf not found.")
-  ENDIF()
+IF(NOT netCDF_LIBRARIES AND NOT netCDF_INCLUDE_DIR)
+  FIND_PACKAGE(netCDF QUIET)
+ELSE()
+  SET(netCDF_FOUND TRUE)
 ENDIF()
-MESSAGE(STATUS "Found netcdf library: ${NETCDF_C_LIBRARY}")
 
-IF(NOT NETCDF_INCLUDE_DIR)
-  FIND_PATH(NETCDF_INCLUDE_DIR NAMES netcdf.h)
-  IF(NOT NETCDF_INCLUDE_DIR)
-    MESSAGE(FATAL_ERROR "netcdf.h not found.")
+IF (netCDF_FOUND)
+  SET(NETCDF_C_LIBRARY ${netCDF_LIBRARIES})
+  SET(NETCDF_C_INCLUDE_DIR ${netCDF_INCLUDE_DIR})
+  message(STATUS "Found netCDF CMake package: ${NETCDF_C_LIBRARY}")
+ELSE()
+  # netCDF not properly packaged. Try to find it manually.
+  FIND_LIBRARY(NETCDF_C_LIBRARY NAMES netcdf libnetcdf)
+  IF(NOT NETCDF_C_LIBRARY)
+    MESSAGE(FATAL_ERROR "libnetcdf not found. Please reinstall and try again.")
+  ELSE()
+    FIND_PATH(NETCDF_C_INCLUDE_DIR "netcdf.h")
+    MESSAGE(STATUS "Found netcdf: ${NETCDF_C_LIBRARY}")
+    IF(NOT NETCDF_C_INCLUDE_DIR)
+      MESSAGE(FATAL_ERROR "Directory containing netcdf.h cannot be found. Please reinstall and try again.")
+    ELSE()
+      GET_FILENAME_COMPONENT(netCDF_LIB_DIR "${NETCDF_C_LIBRARY}" REALPATH)
+    ENDIF()
   ENDIF()
 ENDIF()
-MESSAGE(STATUS "Found netcdf.h in ${NETCDF_INCLUDE_DIR}")
-INCLUDE_DIRECTORIES(SYSTEM ${NETCDF_INCLUDE_DIR})
+
+
+if (NOT TARGET netCDF::netcdf)
+  add_library(netCDF::netcdf UNKNOWN IMPORTED)
+  set_target_properties(netCDF::netcdf PROPERTIES
+    IMPORTED_LOCATION "${NETCDF_C_LIBRARY}"
+    INTERFACE_INCLUDE_DIRECTORIES "${NETCDF_C_INCLUDE_DIR}"
+  )
+endif()
 
 ###
 # End 'Seek out netcdf library file and include path.'
@@ -634,25 +652,25 @@ ENDIF()
 # Determine C library setting for NC_RELAX_COORD_BOUND
 try_compile(NF_RELAX_COORD_BOUND ${CMAKE_CURRENT_BINARY_DIR}
   "${CMAKE_CURRENT_SOURCE_DIR}/CMakeExtras/check_relax_coord_bound.c"
-  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${NETCDF_INCLUDE_DIR}"
+  LINK_LIBRARIES netCDF::netcdf
   )
 
 # Determine C library setting for NC_HAS_CDF5
 try_compile(ENABLE_CDF5 ${CMAKE_CURRENT_BINARY_DIR}
   "${CMAKE_CURRENT_SOURCE_DIR}/CMakeExtras/check_cdf5.c"
-  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${NETCDF_INCLUDE_DIR}"
+  LINK_LIBRARIES netCDF::netcdf
   )
 
 # Determine C library setting for NC_HAS_PNETCDF
 try_compile(NF_HAS_PNETCDF ${CMAKE_CURRENT_BINARY_DIR}
   "${CMAKE_CURRENT_SOURCE_DIR}/CMakeExtras/check_pnetcdf.c"
-  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${NETCDF_INCLUDE_DIR}"
+  LINK_LIBRARIES netCDF::netcdf
   )
 
 # Determine C library setting for NC_HAS_PARALLEL4
 try_compile(NF_HAS_PARALLEL4 ${CMAKE_CURRENT_BINARY_DIR}
   "${CMAKE_CURRENT_SOURCE_DIR}/CMakeExtras/check_parallel4.c"
-  CMAKE_FLAGS "-DINCLUDE_DIRECTORIES=${NETCDF_INCLUDE_DIR}"
+  LINK_LIBRARIES netCDF::netcdf
   )
 
 IF(NF_HAS_PARALLEL4)
@@ -674,7 +692,6 @@ IF(NF_HAS_PNETCDF OR NF_HAS_PARALLEL4)
      "  I/O feature disabled. Abort.\n"
      " -----------------------------------------------------------------------")
   ENDIF(NOT MPI_Fortran_FOUND)
-  INCLUDE_DIRECTORIES(${MPI_Fortran_INCLUDE_PATH})
   SET(BUILD_PARALLEL ON)
   SET(HAVE_NC_USE_PARALLEL_ENABLED TRUE)
 ELSE(NF_HAS_PNETCDF OR NF_HAS_PARALLEL4)
@@ -927,7 +944,6 @@ INSTALL(PROGRAMS ${NC4F_BINARY_DIR}/nf-config
         DESTINATION "${CMAKE_INSTALL_BINDIR}"
         COMPONENT utilities)
 
-INCLUDE_DIRECTORIES(${NC4F_BINARY_DIR})
 # End autotools-style checks for config.h
 
 # Recurse into other subdirectories.
@@ -948,3 +964,35 @@ IF(BUILD_EXAMPLES)
 ENDIF(BUILD_EXAMPLES)
 ADD_SUBDIRECTORY(docs)
 print_conf_summary()
+
+include(CMakePackageConfigHelpers)
+
+set(ConfigPackageLocation "${CMAKE_INSTALL_LIBDIR}/cmake/netCDF")
+
+write_basic_package_version_file(
+  "${CMAKE_CURRENT_BINARY_DIR}/netCDF-FortranConfigVersion.cmake"
+  VERSION ${NC4F_VERSION}
+  COMPATIBILITY SameMajorVersion
+  )
+
+install(
+  EXPORT netcdffTargets
+  FILE netcdffTargets.cmake
+  NAMESPACE netCDF::
+  DESTINATION ${ConfigPackageLocation}
+  )
+
+configure_package_config_file(
+  "${CMAKE_CURRENT_SOURCE_DIR}/netCDF-FortranConfig.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/netCDF-FortranConfig.cmake"
+  INSTALL_DESTINATION "${ConfigPackageLocation}"
+  )
+
+
+install(
+  FILES
+  "${CMAKE_CURRENT_BINARY_DIR}/netCDF-FortranConfig.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/netCDF-FortranConfigVersion.cmake"
+  DESTINATION "${ConfigPackageLocation}"
+  COMPONENT headers
+  )

@@ -5,10 +5,7 @@ SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 SET(TESTS)
 
 # Need some stuff from ../nf_test
-INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/nf_test ${NC4F_BINARY_DIR}/libsrc
-   ${NC4F_BINARY_DIR}/fortran)
-# All tests need to link to fortran and C libraries.
-LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/fortran)
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/nf_test)
 
 SET(check_PROGRAMS ${check_PROGRAMS} tst_f90 tst_fill_int64)
 SET(TESTS ${TESTS} tst_f90 tst_fill_int64)

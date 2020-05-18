@@ -4,12 +4,10 @@ FOREACH(F ${example_F77_tests})
   SET(example_F77_tests_source ${example_F77_test_source} ${F}.f)
 ENDFOREACH()
 
-include_directories(../../fortran)
-
 SET(prefix F77_tests)
 FOREACH(F ${example_F77_tests})
   ADD_EXECUTABLE(${prefix}_${F} ${F}.f)
-  TARGET_LINK_LIBRARIES(${prefix}_${F} netcdff ${NETCDF_C_LIBRARY})
+  TARGET_LINK_LIBRARIES(${prefix}_${F} netcdff)
   IF(MSVC)
     SET_TARGET_PROPERTIES(${prefix}_${F} 
       PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"
