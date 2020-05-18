@@ -595,6 +595,11 @@ CHECK_C_SOURCE_COMPILES("
 #endif
 int main() {return 0;}" HAVE_SZIP_WRITE)
 
+CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nc_def_var_szip "" HAVE_DEF_VAR_SZIP)
+if (NOT HAVE_DEF_VAR_SZIP)
+  message(FATAL_ERROR "netcdf-c version 4.7.4 or greater is required")
+endif()
+
 SET(HAS_NC4 FALSE)
 IF(USE_NETCDF4)
   SET(NC_BUILD_V4 TRUE)
