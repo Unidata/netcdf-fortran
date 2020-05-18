@@ -89,8 +89,6 @@ if test "x$nc_has_parallel4" = xyes; then
 fi
 AC_MSG_RESULT([$nc_has_parallel4])
 
-# Starting with version 4.7.4, netcdf-c has function nc_def_var_szip().
-AC_SEARCH_LIBS([nc_def_var_szip], [netcdf], [], [AC_MSG_ERROR([netcdf-c version 4.7.4 or greater is required])])
 AC_MSG_CHECKING([if netCDF was built with support for szip writes])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
 #include <netcdf_meta.h>
@@ -426,10 +424,16 @@ AC_SEARCH_LIBS([dlopen], [dl dld], [], [])
 
 # Find the netCDF header and library.
 AC_CHECK_HEADERS([netcdf.h], [], [AC_MSG_ERROR([netcdf.h could not be found. Please set CPPFLAGS.])])
-AC_SEARCH_LIBS([nc_open], [netcdf], [], [AC_MSG_ERROR([Could not link to netcdf C library. Please set LDFLAGS.])])
+AC_SEARCH_LIBS([nc_open], [netcdf], [],
+			  [AC_MSG_ERROR([Could not link to netcdf C library. Please set LDFLAGS; for static builds set LIBS to the results of nc-config --libs.])])
 
 # See if various functions are available
-AC_CHECK_FUNCS([nc_def_opaque nccreate nc_set_log_level oc_open])
+AC_CHECK_FUNCS([nc_def_opaque nccreate nc_set_log_level oc_open nc_def_var_szip])
+
+# Starting with version 4.7.4, netcdf-c has function nc_def_var_szip().
+if test "x$ac_cv_func_nc_def_var_szip" != xyes; then
+   AC_MSG_ERROR([netcdf-c version 4.7.4 or greater is required])
+fi
 
 nc_build_v2=no
 nc_build_v4=no
