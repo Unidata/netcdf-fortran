@@ -554,6 +554,7 @@ AC_MSG_NOTICE([generating header files and makefiles])
 AC_CONFIG_FILES([Makefile
                  nf-config
                  netcdf-fortran.pc
+                 libnetcdff.settings
                  docs/Makefile
                  fortran/Makefile
                  nf_test/Makefile
