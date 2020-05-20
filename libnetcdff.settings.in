@@ -4,30 +4,25 @@
 # General
 -------
 NetCDF-Fortran Version:		@PACKAGE_VERSION@
-Configured On:		@CONFIG_DATE@
-Host System:		@host_cpu@-@host_vendor@-@host_os@
-Build Directory: 	@abs_top_builddir@
-Install Prefix:         @prefix@
+Configured On:		        @CONFIG_DATE@
+Host System:		        @host_cpu@-@host_vendor@-@host_os@
+Build Directory: 	        @abs_top_builddir@
+Install Prefix:                 @prefix@
 
 # Compiling Options
 -----------------
-C Compiler:         @CC@
-Fortran Compiler:   @FC@
-CFLAGS:			  @CFLAGS@
-CPPFLAGS:		  @CPPFLAGS@
-LDFLAGS:		  @LDFLAGS@
-AM_CFLAGS:		  @AM_CFLAGS@
-AM_CPPFLAGS:            @AM_CPPFLAGS@
-AM_LDFLAGS:		        @AM_LDFLAGS@
-Shared Library:		    @enable_shared@
-Static Library:		    @enable_static@
-Extra libraries:	    @LIBS@
+Fortran Compiler:               @FC_VERSION@
+FFLAGS:                         @FFLAGS@
+LDFLAGS:		        @LDFLAGS@
+AM_LDFLAGS:                     @AM_LDFLAGS@
+Shared Library:		        @enable_shared@
+Static Library:		        @enable_static@
+Extra libraries:	        @LIBS@
 
 # Features
 --------
-F90: @HAS_F90@
-F03: @HAS_F03@
-Dap Support: @HAS_DAP@
-NetCDF-2 API: @HAS_NC2@
-NetCDF-4 API: @HAS_NC4@
-SZIP Write Support:     @HAS_SZLIB_WRITE@
+F03:                            @HAS_F03@
+Dap Support:                    @HAS_DAP@
+NetCDF-2 API:                   @HAS_NC2@
+NetCDF-4 API:                   @HAS_NC4@
+SZIP Write Support:             @HAS_SZIP_WRITE@
