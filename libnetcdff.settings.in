@@ -1,9 +1,9 @@
-# NetCDF C Configuration Summary
+# NetCDF Fortran Configuration Summary
 ==============================
 
 # General
 -------
-NetCDF-Fortran Version:		@PACKAGE_VERSION@
+Library Version:		@PACKAGE_VERSION@
 Configured On:		        @CONFIG_DATE@
 Host System:		        @host_cpu@-@host_vendor@-@host_os@
 Build Directory: 	        @abs_top_builddir@

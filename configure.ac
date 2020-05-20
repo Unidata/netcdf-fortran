@@ -597,3 +597,5 @@ AC_CONFIG_FILES([Makefile
 		 [test -f  nf-config && chmod 755 nf-config ])
 
 AC_OUTPUT()
+
+cat libnetcdff.settings
