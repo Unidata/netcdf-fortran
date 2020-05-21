@@ -1031,7 +1031,10 @@ is_enabled(USE_NETCDF_V2 HAS_NC2)
 is_enabled(USE_NETCDF4 HAS_NC4)
 is_enabled(USE_SZIP HAS_SZIP_WRITE)
 is_enabled(USE_LOGGING HAS_LOGGING)
-
+is_enabled(ENABLE_CDF5 HAS_CDF5)
+is_enabled(BUILD_PARALLEL HAS_PARALLEL)
+is_enabled(NF_HAS_PARALLEL4 HAS_NC4_PARALLEL)
+is_enabled(NF_HAS_PNETCDF HAS_PNETCDF)
 # Generate file from template.
 CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/libnetcdff.settings.in"
   "${CMAKE_CURRENT_BINARY_DIR}/libnetcdff.settings"
