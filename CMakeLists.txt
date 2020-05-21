@@ -882,14 +882,6 @@ CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/CTestConfig.cmake.in"
 # Fortran compiler flag for the (module) include directory. Used for generating nf-config.
 SET(MOD_FLAG -I)
 
-
-# Generate nf-config form template.
-CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/nf-config.cmake.in"
-  "${CMAKE_BINARY_DIR}/tmp/nf-config" @ONLY
-  NEWLINE_STYLE LF)
-FILE(COPY "${CMAKE_BINARY_DIR}/tmp/nf-config"
-  DESTINATION ${CMAKE_BINARY_DIR}/
-  FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 ###
 # Allow the user to specify libraries
 # to link against, similar to automakes 'LIBS' variable.
@@ -1022,6 +1014,36 @@ SET(FC_VERSION "${CMAKE_Fortran_COMPILER}")
 SET(FFLAGS "${CMAKE_Fortran_FLAGS} ${CMAKE_Fortran_FLAGS_${CMAKE_BUILD_TYPE}}")
 SET(LDFLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${CMAKE_SHARED_LINKER_FLAGS_${CMAKE_BUILD_TYPE}}")
 
+SET(NC_FLIBS "")
+
+get_target_property(ALL_TLL_LIBS netcdff LINK_LIBRARIES)
+
+FOREACH(_LIB ${ALL_TLL_LIBS})
+  GET_FILENAME_COMPONENT(_LIB_NAME ${_LIB} NAME_WE)
+  STRING(REGEX REPLACE "^lib" "" _NAME ${_LIB_NAME})
+  LIST(APPEND NC_FLIBS "-l${_NAME}")
+  GET_FILENAME_COMPONENT(_LIB_DIR ${_LIB} PATH)
+  LIST(APPEND LINKFLAGS "-L${_LIB_DIR}")
+ENDFOREACH()
+
+IF(NC_FLIBS)
+  STRING(REPLACE ";" " " NC_FLIBS "${NC_FLIBS}")
+  STRING(REPLACE "-lhdf5::hdf5-shared" "-lhdf5" NC_FLIBS ${NC_FLIBS})
+  STRING(REPLACE "-lhdf5::hdf5_hl-shared" "-lhdf5_hl" NC_FLIBS ${NC_FLIBS})
+  STRING(REPLACE "-lhdf5::hdf5-static" "-lhdf5" NC_FLIBS ${NC_FLIBS})
+  STRING(REPLACE "-lhdf5::hdf5_hl-static" "-lhdf5_hl" NC_FLIBS ${NC_FLIBS})
+  STRING(REPLACE "-lnetCDF::netcdf" "-lnetcdf" NC_FLIBS ${NC_FLIBS})
+ENDIF()
+
+STRING(REPLACE ";" " " LINKFLAGS "${LINKFLAGS}")
+
+LIST(REMOVE_DUPLICATES NC_FLIBS)
+LIST(REMOVE_DUPLICATES LINKFLAGS)
+
+SET(LIBS ${NC_FLIBS})
+SET(NC_FLIBS "-lnetcdff ${NC_FLIBS}")
+
+
 is_disabled(BUILD_SHARED_LIBS enable_static)
 is_enabled(BUILD_SHARED_LIBS enable_shared)
 
@@ -1056,6 +1078,14 @@ INSTALL(FILES "${CMAKE_BINARY_DIR}/libnetcdff.settings"
 #####
 # End libnetcdff.settings section.
 #####
+
+# Generate nf-config form template.
+CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/nf-config.cmake.in"
+  "${CMAKE_BINARY_DIR}/tmp/nf-config" @ONLY
+  NEWLINE_STYLE LF)
+FILE(COPY "${CMAKE_BINARY_DIR}/tmp/nf-config"
+  DESTINATION ${CMAKE_BINARY_DIR}/
+  FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 
 include(CMakePackageConfigHelpers)

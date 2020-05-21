@@ -558,7 +558,7 @@ xsolaris*)
 *);;
 esac
 
-NC_FLIBS="-lnetcdff $NC_LIBS"
+NC_FLIBS="-lnetcdff $NC_FLIBS"
 
 AC_SUBST([enable_shared])
 AC_SUBST([enable_static])
