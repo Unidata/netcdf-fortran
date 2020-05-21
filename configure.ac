@@ -571,6 +571,10 @@ AC_SUBST(HAS_NC2,[$nc_build_v2])
 AC_SUBST(HAS_NC4,[$nc_build_v4])
 AC_SUBST(HAS_SZIP_WRITE,[$nc_has_szip_write])
 AC_SUBST(HAS_LOGGING,[$nc_has_logging])
+AC_SUBST(HAS_CDF5,[$nc_has_cdf5])
+AC_SUBST(HAS_PNETCDF,[$nc_has_pnetcdf])
+AC_SUBST(HAS_NC4_PARALLEL,[$nc_has_parallel4])
+AC_SUBST(HAS_PARALLEL,[$nc_has_parallel])
 AC_SUBST([AM_LDFLAGS])
 
 # Some files need to exist in build directories that do not correspond

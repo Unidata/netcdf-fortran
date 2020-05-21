@@ -26,4 +26,8 @@ Dap Support:                    @HAS_DAP@
 Logging Support:                @HAS_LOGGING@
 NetCDF-2 API:                   @HAS_NC2@
 NetCDF-4 API:                   @HAS_NC4@
+CDF5 Support:                   @HAS_CDF5@
+Parallel IO:                    @HAS_PARALLEL@
+NetCDF4 Parallel IO:            @HAS_NC4_PARALLEL@
+PnetCDF Parallel IO:            @HAS_PNETCDF@
 SZIP Write Support:             @HAS_SZIP_WRITE@
