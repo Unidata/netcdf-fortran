@@ -362,6 +362,38 @@ MACRO(specify_static_crt_flag)
 
 ENDMACRO()
 
+# A function used to create autotools-style 'yes/no' definitions.
+# If a variable is set, it 'yes' is returned. Otherwise, 'no' is
+# returned.
+#
+# Also creates a version of the ret_val prepended with 'NC',
+# when feature is true, which is used to generate netcdf_meta.h.
+FUNCTION(is_enabled feature ret_val)
+  IF(${feature})
+    SET(${ret_val} "yes" PARENT_SCOPE)
+    SET("NC_${ret_val}" 1 PARENT_SCOPE)
+  ELSE()
+    SET(${ret_val} "no" PARENT_SCOPE)
+    SET("NC_${ret_val}" 0 PARENT_SCOPE)
+  ENDIF(${feature})
+ENDFUNCTION()
+
+# A function used to create autotools-style 'yes/no' definitions.
+# If a variable is set, it 'yes' is returned. Otherwise, 'no' is
+# returned.
+#
+# Also creates a version of the ret_val prepended with 'NC',
+# when feature is true, which is used to generate netcdf_meta.h.
+FUNCTION(is_disabled feature ret_val)
+  IF(${feature})
+    SET(${ret_val} "no" PARENT_SCOPE)
+  ELSE()
+    SET(${ret_val} "yes" PARENT_SCOPE)
+    SET("NC_${ret_val}" 1 PARENT_SCOPE)
+  ENDIF(${feature})
+ENDFUNCTION()
+
+
 ################################
 # End Macro Definitions
 ################################
@@ -584,6 +616,7 @@ CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nccreate "" USE_NETCDF_V2)
 CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nc_set_log_level "" USE_LOGGING)
 CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} oc_open "" BUILD_DAP)
 
+
 ###
 # Check to see if szip write capability is present in netcdf-c.
 ###
@@ -752,7 +785,7 @@ OPTION(ENABLE_FILTER_TEST "Enable filter test." OFF)
 # Set the default fortran builds; default is to build f03
 SET(BUILD_F90 "ON")
 SET(BUILD_V2 "ON")
-SET(BUILD_F03 "OFF")
+SET(BUILD_F03 "ON")
 
 IF(BUILD_F90)
   SET(HAS_F90 TRUE)
@@ -969,6 +1002,58 @@ IF(BUILD_EXAMPLES)
 ENDIF(BUILD_EXAMPLES)
 ADD_SUBDIRECTORY(docs)
 print_conf_summary()
+
+#####
+# Configure and print the libnetcdff.settings file.
+#####
+
+# Set variables to mirror those used by autoconf.
+# This way we don't need to maintain two separate template
+# files.
+SET(host_cpu "${cpu}")
+SET(host_vendor "${osname}")
+SET(host_os "${osrel}")
+SET(abs_top_builddir "${CMAKE_CURRENT_BINARY_DIR}")
+SET(abs_top_srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
+
+SET(FC_VERSION "${CMAKE_Fortran_COMPILER}")
+
+# Build *FLAGS for libnetcdf.settings.
+SET(FFLAGS "${CMAKE_Fortran_FLAGS} ${CMAKE_Fortran_FLAGS_${CMAKE_BUILD_TYPE}}")
+SET(LDFLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${CMAKE_SHARED_LINKER_FLAGS_${CMAKE_BUILD_TYPE}}")
+
+is_disabled(BUILD_SHARED_LIBS enable_static)
+is_enabled(BUILD_SHARED_LIBS enable_shared)
+
+is_enabled(BUILD_F03 HAS_F03)
+is_enabled(ENABLE_DAP HAS_DAP)
+is_enabled(USE_NETCDF_V2 HAS_NC2)
+is_enabled(USE_NETCDF4 HAS_NC4)
+is_enabled(USE_SZIP HAS_SZIP_WRITE)
+is_enabled(USE_LOGGING HAS_LOGGING)
+
+# Generate file from template.
+CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/libnetcdff.settings.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/libnetcdff.settings"
+  @ONLY)
+
+# Read in settings file, print out.
+# Avoid using system-specific calls so that this
+# might also work on Windows.
+FILE(READ "${CMAKE_CURRENT_BINARY_DIR}/libnetcdff.settings"
+  LIBNETCDFF_SETTINGS)
+MESSAGE(${LIBNETCDFF_SETTINGS})
+
+# Install libnetcdf.settings file into same location
+# as the libraries.
+INSTALL(FILES "${CMAKE_BINARY_DIR}/libnetcdff.settings"
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  COMPONENT libraries)
+
+#####
+# End libnetcdff.settings section.
+#####
+
 
 include(CMakePackageConfigHelpers)
 

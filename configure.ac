@@ -494,6 +494,7 @@ AC_MSG_RESULT($enable_filter_test)
 
 AM_CONDITIONAL([USE_NETCDF4], [test "x$nc_build_v4" = xyes])
 AM_CONDITIONAL([BUILD_V2], [test "x$nc_build_v2" = xyes])
+AM_CONDITIONAL([HAS_LOGGING], [test "x$nc_has_logging" = xyes])
 AM_CONDITIONAL([USE_LOGGING], [test "x$nc_has_logging" = xyes])
 AM_CONDITIONAL([BUILD_DAP], [test "x$nc_has_dap" = xyes])
 AM_CONDITIONAL([BUILD_PNETCDF], [test "x$nc_has_pnetcdf" = xyes])
@@ -569,6 +570,7 @@ AC_SUBST(HAS_DAP,[$nc_has_dap])
 AC_SUBST(HAS_NC2,[$nc_build_v2])
 AC_SUBST(HAS_NC4,[$nc_build_v4])
 AC_SUBST(HAS_SZIP_WRITE,[$nc_has_szip_write])
+AC_SUBST(HAS_LOGGING,[$nc_has_logging])
 AC_SUBST([AM_LDFLAGS])
 
 # Some files need to exist in build directories that do not correspond
