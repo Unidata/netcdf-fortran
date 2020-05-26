@@ -362,6 +362,38 @@ MACRO(specify_static_crt_flag)
 
 ENDMACRO()
 
+# A function used to create autotools-style 'yes/no' definitions.
+# If a variable is set, it 'yes' is returned. Otherwise, 'no' is
+# returned.
+#
+# Also creates a version of the ret_val prepended with 'NC',
+# when feature is true, which is used to generate netcdf_meta.h.
+FUNCTION(is_enabled feature ret_val)
+  IF(${feature})
+    SET(${ret_val} "yes" PARENT_SCOPE)
+    SET("NC_${ret_val}" 1 PARENT_SCOPE)
+  ELSE()
+    SET(${ret_val} "no" PARENT_SCOPE)
+    SET("NC_${ret_val}" 0 PARENT_SCOPE)
+  ENDIF(${feature})
+ENDFUNCTION()
+
+# A function used to create autotools-style 'yes/no' definitions.
+# If a variable is set, it 'yes' is returned. Otherwise, 'no' is
+# returned.
+#
+# Also creates a version of the ret_val prepended with 'NC',
+# when feature is true, which is used to generate netcdf_meta.h.
+FUNCTION(is_disabled feature ret_val)
+  IF(${feature})
+    SET(${ret_val} "no" PARENT_SCOPE)
+  ELSE()
+    SET(${ret_val} "yes" PARENT_SCOPE)
+    SET("NC_${ret_val}" 1 PARENT_SCOPE)
+  ENDIF(${feature})
+ENDFUNCTION()
+
+
 ################################
 # End Macro Definitions
 ################################
@@ -584,6 +616,7 @@ CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nccreate "" USE_NETCDF_V2)
 CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nc_set_log_level "" USE_LOGGING)
 CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} oc_open "" BUILD_DAP)
 
+
 ###
 # Check to see if szip write capability is present in netcdf-c.
 ###
@@ -752,7 +785,7 @@ OPTION(ENABLE_FILTER_TEST "Enable filter test." OFF)
 # Set the default fortran builds; default is to build f03
 SET(BUILD_F90 "ON")
 SET(BUILD_V2 "ON")
-SET(BUILD_F03 "OFF")
+SET(BUILD_F03 "ON")
 
 IF(BUILD_F90)
   SET(HAS_F90 TRUE)
@@ -849,14 +882,6 @@ CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/CTestConfig.cmake.in"
 # Fortran compiler flag for the (module) include directory. Used for generating nf-config.
 SET(MOD_FLAG -I)
 
-
-# Generate nf-config form template.
-CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/nf-config.cmake.in"
-  "${CMAKE_BINARY_DIR}/tmp/nf-config" @ONLY
-  NEWLINE_STYLE LF)
-FILE(COPY "${CMAKE_BINARY_DIR}/tmp/nf-config"
-  DESTINATION ${CMAKE_BINARY_DIR}/
-  FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 ###
 # Allow the user to specify libraries
 # to link against, similar to automakes 'LIBS' variable.
@@ -969,6 +994,99 @@ IF(BUILD_EXAMPLES)
 ENDIF(BUILD_EXAMPLES)
 ADD_SUBDIRECTORY(docs)
 print_conf_summary()
+
+#####
+# Configure and print the libnetcdff.settings file.
+#####
+
+# Set variables to mirror those used by autoconf.
+# This way we don't need to maintain two separate template
+# files.
+SET(host_cpu "${cpu}")
+SET(host_vendor "${osname}")
+SET(host_os "${osrel}")
+SET(abs_top_builddir "${CMAKE_CURRENT_BINARY_DIR}")
+SET(abs_top_srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
+
+SET(FC_VERSION "${CMAKE_Fortran_COMPILER}")
+
+# Build *FLAGS for libnetcdf.settings.
+SET(FFLAGS "${CMAKE_Fortran_FLAGS} ${CMAKE_Fortran_FLAGS_${CMAKE_BUILD_TYPE}}")
+SET(LDFLAGS "${CMAKE_SHARED_LINKER_FLAGS} ${CMAKE_SHARED_LINKER_FLAGS_${CMAKE_BUILD_TYPE}}")
+
+SET(NC_FLIBS "")
+
+get_target_property(ALL_TLL_LIBS netcdff LINK_LIBRARIES)
+
+FOREACH(_LIB ${ALL_TLL_LIBS})
+  GET_FILENAME_COMPONENT(_LIB_NAME ${_LIB} NAME_WE)
+  STRING(REGEX REPLACE "^lib" "" _NAME ${_LIB_NAME})
+  LIST(APPEND NC_FLIBS "-l${_NAME}")
+  GET_FILENAME_COMPONENT(_LIB_DIR ${_LIB} PATH)
+  LIST(APPEND LINKFLAGS "-L${_LIB_DIR}")
+ENDFOREACH()
+
+IF(NC_FLIBS)
+  STRING(REPLACE ";" " " NC_FLIBS "${NC_FLIBS}")
+  STRING(REPLACE "-lhdf5::hdf5-shared" "-lhdf5" NC_FLIBS ${NC_FLIBS})
+  STRING(REPLACE "-lhdf5::hdf5_hl-shared" "-lhdf5_hl" NC_FLIBS ${NC_FLIBS})
+  STRING(REPLACE "-lhdf5::hdf5-static" "-lhdf5" NC_FLIBS ${NC_FLIBS})
+  STRING(REPLACE "-lhdf5::hdf5_hl-static" "-lhdf5_hl" NC_FLIBS ${NC_FLIBS})
+  STRING(REPLACE "-lnetCDF::netcdf" "-lnetcdf" NC_FLIBS ${NC_FLIBS})
+ENDIF()
+
+STRING(REPLACE ";" " " LINKFLAGS "${LINKFLAGS}")
+
+LIST(REMOVE_DUPLICATES NC_FLIBS)
+LIST(REMOVE_DUPLICATES LINKFLAGS)
+
+SET(LIBS ${NC_FLIBS})
+SET(NC_FLIBS "-lnetcdff ${NC_FLIBS}")
+
+
+is_disabled(BUILD_SHARED_LIBS enable_static)
+is_enabled(BUILD_SHARED_LIBS enable_shared)
+
+is_enabled(BUILD_F03 HAS_F03)
+is_enabled(ENABLE_DAP HAS_DAP)
+is_enabled(USE_NETCDF_V2 HAS_NC2)
+is_enabled(USE_NETCDF4 HAS_NC4)
+is_enabled(HAVE_SZIP_WRITE HAS_SZIP_WRITE)
+is_enabled(USE_LOGGING HAS_LOGGING)
+is_enabled(ENABLE_CDF5 HAS_CDF5)
+is_enabled(BUILD_PARALLEL HAS_PARALLEL)
+is_enabled(NF_HAS_PARALLEL4 HAS_NC4_PARALLEL)
+is_enabled(NF_HAS_PNETCDF HAS_PNETCDF)
+# Generate file from template.
+CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/libnetcdff.settings.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/libnetcdff.settings"
+  @ONLY)
+
+# Read in settings file, print out.
+# Avoid using system-specific calls so that this
+# might also work on Windows.
+FILE(READ "${CMAKE_CURRENT_BINARY_DIR}/libnetcdff.settings"
+  LIBNETCDFF_SETTINGS)
+MESSAGE(${LIBNETCDFF_SETTINGS})
+
+# Install libnetcdf.settings file into same location
+# as the libraries.
+INSTALL(FILES "${CMAKE_BINARY_DIR}/libnetcdff.settings"
+  DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  COMPONENT libraries)
+
+#####
+# End libnetcdff.settings section.
+#####
+
+# Generate nf-config form template.
+CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/nf-config.cmake.in"
+  "${CMAKE_BINARY_DIR}/tmp/nf-config" @ONLY
+  NEWLINE_STYLE LF)
+FILE(COPY "${CMAKE_BINARY_DIR}/tmp/nf-config"
+  DESTINATION ${CMAKE_BINARY_DIR}/
+  FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+
 
 include(CMakePackageConfigHelpers)
 

@@ -17,6 +17,13 @@ echo -n AC_PACKAGE_VERSION>VERSION
 AC_SUBST(PACKAGE_VERSION)
 AC_MSG_NOTICE([netCDF-Fortran AC_PACKAGE_VERSION])
 
+# Configuration Date
+if test "x$SOURCE_DATE_EPOCH" != "x" ; then
+    AC_SUBST([CONFIG_DATE]) CONFIG_DATE="`date -u -d "${SOURCE_DATE_EPOCH}"`"
+else
+    AC_SUBST([CONFIG_DATE]) CONFIG_DATE="`date`"
+fi
+
 # Keep libtool macros in an m4 directory.
 AC_CONFIG_MACRO_DIR([m4])
 
@@ -191,8 +198,26 @@ AM_CONDITIONAL(USE_SED, [test -n "${SED+1}"])
 # has told us not to recover from a missing compiler, then bail out
 # right here.
 AC_MSG_NOTICE([finding Fortran compiler])
+
 AC_PROG_FC
 AC_PROG_F77($FC)
+
+## Compiler with version information. This consists of the full path
+## name of the compiler and the reported version number.
+AC_SUBST([FC_VERSION])
+## Strip anything that looks like a flag off of $FC
+FC_NOFLAGS=`echo $FC | sed 's/ -.*//'`
+
+if `echo $FC_NOFLAGS | grep ^/ >/dev/null 2>&1`; then
+  FC_VERSION="$FC"
+else
+  FC_VERSION="$FC"
+  FC_VERSION="$(dirname $(which $FC))/$FC"
+fi
+if test -n "$fc_version_info"; then
+  FC_VERSION="$FC_VERSION ( $fc_version_info)"
+fi
+
 
 # If we couldn't find an F90 compiler, deal with it.
 if test "${FC+set}" = set && test "x$FC" = x; then
@@ -469,6 +494,7 @@ AC_MSG_RESULT($enable_filter_test)
 
 AM_CONDITIONAL([USE_NETCDF4], [test "x$nc_build_v4" = xyes])
 AM_CONDITIONAL([BUILD_V2], [test "x$nc_build_v2" = xyes])
+AM_CONDITIONAL([HAS_LOGGING], [test "x$nc_has_logging" = xyes])
 AM_CONDITIONAL([USE_LOGGING], [test "x$nc_has_logging" = xyes])
 AM_CONDITIONAL([BUILD_DAP], [test "x$nc_has_dap" = xyes])
 AM_CONDITIONAL([BUILD_PNETCDF], [test "x$nc_has_pnetcdf" = xyes])
@@ -532,8 +558,10 @@ xsolaris*)
 *);;
 esac
 
-NC_FLIBS="-lnetcdff $NC_LIBS"
+NC_FLIBS="-lnetcdff $NC_FLIBS"
 
+AC_SUBST([enable_shared])
+AC_SUBST([enable_static])
 AC_SUBST(NC_LIBS,[$NC_LIBS])
 AC_SUBST(NC_FLIBS,[$NC_FLIBS])
 AC_SUBST(HAS_F90,[$nc_build_f90])
@@ -542,6 +570,12 @@ AC_SUBST(HAS_DAP,[$nc_has_dap])
 AC_SUBST(HAS_NC2,[$nc_build_v2])
 AC_SUBST(HAS_NC4,[$nc_build_v4])
 AC_SUBST(HAS_SZIP_WRITE,[$nc_has_szip_write])
+AC_SUBST(HAS_LOGGING,[$nc_has_logging])
+AC_SUBST(HAS_CDF5,[$nc_has_cdf5])
+AC_SUBST(HAS_PNETCDF,[$nc_has_pnetcdf])
+AC_SUBST(HAS_NC4_PARALLEL,[$nc_has_parallel4])
+AC_SUBST(HAS_PARALLEL,[$nc_has_parallel])
+AC_SUBST([AM_LDFLAGS])
 
 # Some files need to exist in build directories that do not correspond
 # to their source directory, or the test program makes an assumption
@@ -554,6 +588,7 @@ AC_MSG_NOTICE([generating header files and makefiles])
 AC_CONFIG_FILES([Makefile
                  nf-config
                  netcdf-fortran.pc
+                 libnetcdff.settings
                  docs/Makefile
                  fortran/Makefile
                  nf_test/Makefile
@@ -568,3 +603,5 @@ AC_CONFIG_FILES([Makefile
 		 [test -f  nf-config && chmod 755 nf-config ])
 
 AC_OUTPUT()
+
+cat libnetcdff.settings

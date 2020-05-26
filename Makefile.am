@@ -25,6 +25,10 @@ docs examples CMakeExtras
 # The nf-config script helps the user build programs with netCDF.
 bin_SCRIPTS = nf-config
 
+# install libnetcdff.settings in lib directory.
+settingsdir = $(libdir)
+settings_DATA = libnetcdff.settings
+
 check_nc_config:
 	$(F03) `./nf-config --fflags` test_prog.f03 -o test_prog `./nf-config --libs`
 	./test_prog
@@ -32,10 +36,11 @@ check_nc_config:
 # These files get added to the distribution.
 EXTRA_DIST = README.md RELEASE_NOTES.md netcdf-fortran.pc.in	\
 F03Interfaces_LICENSE CMakeLists.txt COPYRIGHT nf-config.in	\
-config.h.cmake.in CTestConfig.cmake.in nf-config.cmake.in
+config.h.cmake.in CTestConfig.cmake.in nf-config.cmake.in \
+libnetcdff.settings.in
 
 # Remove these generated files, for a distclean.
-DISTCLEANFILES = VERSION
+DISTCLEANFILES = VERSION libnetcdf.settings
 
 install-data-hook:
 	@echo ''
