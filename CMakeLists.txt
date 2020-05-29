@@ -569,13 +569,22 @@ ENDIF()
 # Check to see if compiler supports
 # -fallow-argument-mismatch-flag introduced in gcc 10.
 #
+# Also check for NAG option -mismatch_all
+#
 # See https://github.com/Unidata/netcdf-fortran/issues/212
+# See https://github.com/Unidata/netcdf-fortran/issues/218
 ##
 check_Fortran_compiler_flag("-fallow-argument-mismatch" COMPILER_HAS_ALLOW_ARGUMENT_MISMATCH)
 
 IF(COMPILER_HAS_ALLOW_ARGUMENT_MISMATCH)
   SET(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fallow-argument-mismatch")
 ENDIF(COMPILER_HAS_ALLOW_ARGUMENT_MISMATCH)
+
+check_Fortran_compiler_flag("-mismatch_all" COMPILER_HAS_MISMATCH_ALL)
+
+IF(COMPILER_HAS_MISMATCH_ALL)
+  SET(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -mismatch_all")
+ENDIF(COMPILER_HAS_MISMATCH_ALL)
 
 CHECK_FUNCTION_EXISTS(alloca HAVE_ALLOCA)
 
