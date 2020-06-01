@@ -9,7 +9,7 @@
 AC_PREREQ([2.59])
 
 # Initialize with name, version, and support email address.
-AC_INIT([netCDF-Fortran], [4.5.3-development], [support-netcdf@unidata.ucar.edu])
+AC_INIT([netCDF-Fortran], [4.5.4-development], [support-netcdf@unidata.ucar.edu])
 
 # Create the VERSION file, which contains the package version from
 # AC_INIT.
