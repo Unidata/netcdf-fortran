@@ -1,9 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 
 SET(CMAKE_VERBOSE_MAKEFILE OFF)
-SET(CMAKE_INCLUDE_CURRENT_DIR ON)
-
-INCLUDE_DIRECTORIES("." "${NC4F_BINARY_DIR}/libsrc")
 
 SET(netcdff_SOURCES
   typeSizes.f90 module_netcdf_nc_data.F90 module_netcdf_nc_interfaces.f90
@@ -120,8 +117,6 @@ endif (${USE_LOGGING})
 
 SET(BUILT_SOURCES ${BUILT_SOURCES} netcdf.inc)
 
-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/libsrc)
-
 # Default to shared libs on
 OPTION(BUILD_SHARED_LIBS "Configure netCDF as a shared library." ON)
 SET (LIB_TYPE STATIC)
@@ -137,12 +132,21 @@ ENDIF()
 # ADD_LIBRARY(netcdff STATIC SHARED ${netcdff_SOURCES})
 # Builds only static, not shared
 ADD_LIBRARY(netcdff ${netcdff_SOURCES})
-TARGET_LINK_LIBRARIES(netcdff ${NETCDF_C_LIBRARY})
-TARGET_LINK_LIBRARIES(netcdff ${EXTRA_DEPS})
+TARGET_LINK_LIBRARIES(netcdff PUBLIC netCDF::netcdf)
+TARGET_LINK_LIBRARIES(netcdff PUBLIC ${EXTRA_DEPS})
 SET_TARGET_PROPERTIES(netcdff PROPERTIES
                       VERSION ${NC4F_LIB_VERSION}
                       SOVERSION ${NC4F_SO_VERSION}
                       )
+target_include_directories(netcdff PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>
+  $<INSTALL_INTERFACE:include>
+  )
+
+if (HAVE_NC_USE_PARALLEL_ENABLED)
+  target_link_libraries(netcdff PUBLIC MPI::MPI_Fortran)
+endif()
 
 ##
 # Configuration for post-install RPath
@@ -171,6 +175,7 @@ ENDIF()
 
 # Installation of the program
 INSTALL(TARGETS netcdff
+    EXPORT netcdffTargets
     RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT bin
     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT shlib
     ARCHIVE DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT shlib

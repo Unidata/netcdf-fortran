@@ -1,0 +1,33 @@
+# NetCDF Fortran Configuration Summary
+==============================
+
+# General
+-------
+Library Version:		@PACKAGE_VERSION@
+Configured On:		        @CONFIG_DATE@
+Host System:		        @host_cpu@-@host_vendor@-@host_os@
+Build Directory: 	        @abs_top_builddir@
+Install Prefix:                 @prefix@
+
+# Compiling Options
+-----------------
+Fortran Compiler:               @FC_VERSION@
+FFLAGS:                         @FFLAGS@
+LDFLAGS:		        @LDFLAGS@
+AM_LDFLAGS:                     @AM_LDFLAGS@
+Shared Library:		        @enable_shared@
+Static Library:		        @enable_static@
+Extra libraries:	        @LIBS@
+
+# Features
+--------
+F03:                            @HAS_F03@
+Dap Support:                    @HAS_DAP@
+Logging Support:                @HAS_LOGGING@
+NetCDF-2 API:                   @HAS_NC2@
+NetCDF-4 API:                   @HAS_NC4@
+CDF5 Support:                   @HAS_CDF5@
+Parallel IO:                    @HAS_PARALLEL@
+NetCDF4 Parallel IO:            @HAS_NC4_PARALLEL@
+PnetCDF Parallel IO:            @HAS_PNETCDF@
+SZIP Write Support:             @HAS_SZIP_WRITE@

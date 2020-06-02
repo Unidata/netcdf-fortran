@@ -9,13 +9,20 @@
 AC_PREREQ([2.59])
 
 # Initialize with name, version, and support email address.
-AC_INIT([netCDF-Fortran], [4.5.3-development], [support-netcdf@unidata.ucar.edu])
+AC_INIT([netCDF-Fortran], [4.5.4-development], [support-netcdf@unidata.ucar.edu])
 
 # Create the VERSION file, which contains the package version from
 # AC_INIT.
 echo -n AC_PACKAGE_VERSION>VERSION
 AC_SUBST(PACKAGE_VERSION)
 AC_MSG_NOTICE([netCDF-Fortran AC_PACKAGE_VERSION])
+
+# Configuration Date
+if test "x$SOURCE_DATE_EPOCH" != "x" ; then
+    AC_SUBST([CONFIG_DATE]) CONFIG_DATE="`date -u -d "${SOURCE_DATE_EPOCH}"`"
+else
+    AC_SUBST([CONFIG_DATE]) CONFIG_DATE="`date`"
+fi
 
 # Keep libtool macros in an m4 directory.
 AC_CONFIG_MACRO_DIR([m4])
@@ -27,7 +34,7 @@ AC_CANONICAL_HOST
 AC_CANONICAL_TARGET
 
 # This call is required by automake.
-AM_INIT_AUTOMAKE([foreign dist-zip subdir-objects])
+AM_INIT_AUTOMAKE([1.13 foreign dist-zip subdir-objects])
 
 AC_MSG_NOTICE([checking user options])
 
@@ -191,8 +198,26 @@ AM_CONDITIONAL(USE_SED, [test -n "${SED+1}"])
 # has told us not to recover from a missing compiler, then bail out
 # right here.
 AC_MSG_NOTICE([finding Fortran compiler])
+
 AC_PROG_FC
 AC_PROG_F77($FC)
+
+## Compiler with version information. This consists of the full path
+## name of the compiler and the reported version number.
+AC_SUBST([FC_VERSION])
+## Strip anything that looks like a flag off of $FC
+FC_NOFLAGS=`echo $FC | sed 's/ -.*//'`
+
+if `echo $FC_NOFLAGS | grep ^/ >/dev/null 2>&1`; then
+  FC_VERSION="$FC"
+else
+  FC_VERSION="$FC"
+  FC_VERSION="$(dirname $(which $FC))/$FC"
+fi
+if test -n "$fc_version_info"; then
+  FC_VERSION="$FC_VERSION ( $fc_version_info)"
+fi
+
 
 # If we couldn't find an F90 compiler, deal with it.
 if test "${FC+set}" = set && test "x$FC" = x; then
@@ -270,11 +295,58 @@ EOF
   fi
 fi
 
+# Test to see if fortran compiler supports the flag
+# -fallow-argument-mismatch flag introduced in gfortran 10.
+#
+# Also allow support for NAG compiler using the -mismatch_all flag.
+#
+# See https://github.com/Unidata/netcdf-fortran/issues/212
+# See https://github.com/Unidata/netcdf-fortran/issues/218
+ac_save_FCFLAGS="$FCFLAGS"
+AC_MSG_CHECKING([if Fortran compiler supports allow-mismatch flag])
+cat <<EOF >conftest.f90
+Program test
+USE ISO_C_BINDING, ONLY: C_PTRDIFF_T
+End Program
+EOF
+doit='$FC -c ${FCFLAGS} ${FCFLAGS_f90} -fallow-argument-mismatch conftest.f90'
+if AC_TRY_EVAL(doit); then
+   nf_allow_mismatch=yes
+   FCFLAGS="${FCFLAGS} -fallow-argument-mismatch"
+  else
+   nf_allow_mismatch=no
+fi
+AC_MSG_RESULT([$nf_allow_mismatch])
+# End testing of gfortan allow-mismatch flags.
+
+AC_MSG_CHECKING([if Fortran compiler supports mismatch_all flag])
+cat <<EOF >conftest.f90
+Program test
+USE ISO_C_BINDING, ONLY: C_PTRDIFF_T
+End Program
+EOF
+doit='$FC -c ${FCFLAGS} ${FCFLAGS_f90} -mismatch_all conftest.f90'
+if AC_TRY_EVAL(doit); then
+   nf_mismatch_all=yes
+   FCFLAGS="${FCFLAGS} -mismatch_all"
+  else
+   nf_mismatch_all=no
+fi
+AC_MSG_RESULT([$nf_mismatch_all])
+
+#end testing of NAG mismatch_all flag.
+
+##
+# End mismatch checks
+##
+
+
 # We must have F2003 ISO bindings to build.
 if test "x$nc_iso_c_binding" = xno; then
   AC_MSG_FAILURE([Fortran 2003 interface not supported])
 fi
 nc_build_f03=yes
+
 
 # Does the user want to check into fortran type information?
 AC_MSG_CHECKING([whether fortran type sizes should be checked])
@@ -445,6 +517,7 @@ AC_MSG_RESULT($enable_filter_test)
 
 AM_CONDITIONAL([USE_NETCDF4], [test "x$nc_build_v4" = xyes])
 AM_CONDITIONAL([BUILD_V2], [test "x$nc_build_v2" = xyes])
+AM_CONDITIONAL([HAS_LOGGING], [test "x$nc_has_logging" = xyes])
 AM_CONDITIONAL([USE_LOGGING], [test "x$nc_has_logging" = xyes])
 AM_CONDITIONAL([BUILD_DAP], [test "x$nc_has_dap" = xyes])
 AM_CONDITIONAL([BUILD_PNETCDF], [test "x$nc_has_pnetcdf" = xyes])
@@ -508,8 +581,10 @@ xsolaris*)
 *);;
 esac
 
-NC_FLIBS="-lnetcdff $NC_LIBS"
+NC_FLIBS="-lnetcdff $NC_FLIBS"
 
+AC_SUBST([enable_shared])
+AC_SUBST([enable_static])
 AC_SUBST(NC_LIBS,[$NC_LIBS])
 AC_SUBST(NC_FLIBS,[$NC_FLIBS])
 AC_SUBST(HAS_F90,[$nc_build_f90])
@@ -518,6 +593,12 @@ AC_SUBST(HAS_DAP,[$nc_has_dap])
 AC_SUBST(HAS_NC2,[$nc_build_v2])
 AC_SUBST(HAS_NC4,[$nc_build_v4])
 AC_SUBST(HAS_SZIP_WRITE,[$nc_has_szip_write])
+AC_SUBST(HAS_LOGGING,[$nc_has_logging])
+AC_SUBST(HAS_CDF5,[$nc_has_cdf5])
+AC_SUBST(HAS_PNETCDF,[$nc_has_pnetcdf])
+AC_SUBST(HAS_NC4_PARALLEL,[$nc_has_parallel4])
+AC_SUBST(HAS_PARALLEL,[$nc_has_parallel])
+AC_SUBST([AM_LDFLAGS])
 
 # Some files need to exist in build directories that do not correspond
 # to their source directory, or the test program makes an assumption
@@ -530,6 +611,7 @@ AC_MSG_NOTICE([generating header files and makefiles])
 AC_CONFIG_FILES([Makefile
                  nf-config
                  netcdf-fortran.pc
+                 libnetcdff.settings
                  docs/Makefile
                  fortran/Makefile
                  nf_test/Makefile
@@ -544,3 +626,5 @@ AC_CONFIG_FILES([Makefile
 		 [test -f  nf-config && chmod 755 nf-config ])
 
 AC_OUTPUT()
+
+cat libnetcdff.settings
