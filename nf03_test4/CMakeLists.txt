@@ -36,13 +36,14 @@ if (USE_NETCDF4)
   # Test parallel I/O.
   IF (TEST_PARALLEL)
     SET(check_PROGRAMS ${check_PROGRAMS} f90tst_parallel f90tst_parallel2 f90tst_parallel3
-      f90tst_nc4_par f90tst_parallel_fill)
+      f90tst_nc4_par f90tst_parallel_fill f90tst_parallel_compressed)
 
     build_bin_test(f90tst_parallel ".F90")
     build_bin_test(f90tst_parallel2 ".F90")
     build_bin_test(f90tst_parallel3 ".F90")
     build_bin_test(f90tst_nc4_par ".F90")
     build_bin_test(f90tst_parallel_fill ".f90")
+    build_bin_test(f90tst_parallel_compressed ".f90")
 
     add_sh_test(F90_tests run_f90_par_test)
   ENDIF (TEST_PARALLEL)
