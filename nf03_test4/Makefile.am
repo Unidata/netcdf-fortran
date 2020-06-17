@@ -59,7 +59,7 @@ f90tst_parallel2_SOURCES = f90tst_parallel2.F90
 f90tst_parallel3_SOURCES = f90tst_parallel3.F90
 f90tst_nc4_par_SOURCES = f90tst_nc4_par.F90
 f90tst_parallel_fill_SOURCES = f90tst_parallel_fill.f90
-f90tst_parallel_compressed_SOURCES = f90tst_parallel_compressed.f90
+f90tst_parallel_compressed_SOURCES = f90tst_parallel_compressed.F90
 endif # TEST_PARALLEL
 
 # Test szip if write capability is present in C library.
