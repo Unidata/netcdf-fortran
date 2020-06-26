@@ -36,9 +36,8 @@ program f90tst_parallel_compressed
        nf90_double, nf90_float, nf90_float, nf90_double, nf90_float /)
   integer :: var_ndims(NUM_VARS) = (/ 1, 2, 1, 2, 1, 1, 1, 4 /)
   integer :: ideflate = 4
-  real*8 :: value_time = 3.14
+  real*8 :: value_time = 2.0, value_time_in
   real, allocatable :: value_phalf(:)
-  real, allocatable :: value_phalf_loc(:), value_phalf_loc_in(:)
   real, allocatable :: value_pfull(:)
   real, allocatable :: value_grid_xt(:)
   real, allocatable :: value_grid_yt(:)
@@ -46,6 +45,9 @@ program f90tst_parallel_compressed
   real, allocatable :: value_lat(:,:)
   real, allocatable :: value_clwmr(:,:,:,:)
   integer :: phalf_loc_size, phalf_start
+  real, allocatable :: value_phalf_loc(:), value_phalf_loc_in(:)
+  integer :: pfull_loc_size, pfull_start
+  real, allocatable :: value_pfull_loc(:), value_pfull_loc_in(:)
 
   ! These are for checking file contents.
   character (len = 128) :: name_in
@@ -64,18 +66,28 @@ program f90tst_parallel_compressed
 
   ! There must be 4 or 40 procs for this test.
   if (npes .ne. 4 .and. npes .ne. 40) then
-     print *, 'Sorry, this test program must be run on four processors.'
+     print *, 'Sorry, this test program must be run on 4 or 40 processors.'
      stop 1
   endif
 
+  ! Size of local (i.e. for this pe) pfull data.
+  pfull_loc_size = dim_len(3)/npes;
+  pfull_start = my_rank * pfull_loc_size + 1
+  if (my_rank .eq. npes - 1) then
+     pfull_loc_size = pfull_loc_size + mod(dim_len(3), npes)
+  endif
+  !print *, my_rank, 'pfull', dim_len(3), pfull_start, pfull_loc_size
+  
   ! Size of local (i.e. for this pe) phalf data.
   phalf_loc_size = dim_len(4)/npes;
   phalf_start = my_rank * phalf_loc_size + 1
   if (my_rank .eq. npes - 1) then
      phalf_loc_size = phalf_loc_size + mod(dim_len(4), npes)
   endif
-  print *, my_rank, dim_len(4), phalf_start, phalf_loc_size
+  !print *, my_rank, 'phalf', dim_len(4), phalf_start, phalf_loc_size
 
+  allocate(value_pfull_loc(pfull_loc_size))
+  allocate(value_pfull_loc_in(pfull_loc_size))
   allocate(value_phalf_loc(phalf_loc_size))
   allocate(value_phalf_loc_in(phalf_loc_size))
   
@@ -88,6 +100,9 @@ program f90tst_parallel_compressed
   allocate(value_clwmr(dim_len(1), dim_len(2), dim_len(3), dim_len(5)))
 
   ! Some fake data to write.
+  do i = 1, pfull_loc_size
+     value_pfull_loc(i) = my_rank * 100 + i;
+  end do
   do i = 1, phalf_loc_size
      value_phalf_loc(i) = my_rank * 100 + i;
   end do
@@ -151,7 +166,8 @@ program f90tst_parallel_compressed
   call check(nf90_def_var(ncid, trim(var_name(5)), var_type(5), dimids=(/dimid(3)/), varid=varid(5)))
   call check(nf90_var_par_access(ncid, varid(5), NF90_INDEPENDENT))
   call check(nf90_enddef(ncid))
-  call check(nf90_put_var(ncid, varid(5), values=value_pfull))
+!  call check(nf90_put_var(ncid, varid(5), values=value_pfull))
+  call check(nf90_put_var(ncid, varid(5), start=(/pfull_start/), count=(/pfull_loc_size/), values=value_pfull_loc))
   call check(nf90_redef(ncid))
 
   ! Define dimension phalf.
@@ -172,7 +188,10 @@ program f90tst_parallel_compressed
   call check(nf90_def_var(ncid, trim(var_name(7)), var_type(7), dimids=(/dimid(5)/), varid=varid(7)))
   call check(nf90_var_par_access(ncid, varid(7), NF90_INDEPENDENT))
   call check(nf90_enddef(ncid))
-  call check(nf90_put_var(ncid, varid(7), values=value_time))  
+  ! In NOAA code, do all processors write the single time value?
+  if (my_rank .eq. 0) then
+     call check(nf90_put_var(ncid, varid(7), values=value_time))
+  endif
   call check(nf90_redef(ncid))
 
   ! Write variable grid_xt data.
@@ -229,16 +248,29 @@ program f90tst_parallel_compressed
      if (ndims_in .ne. var_ndims(i)) stop 112
   end do
 
+  ! Check the pfull data.
+  call check(nf90_get_var(ncid, varid(5), start=(/pfull_start/), count=(/pfull_loc_size/), values=value_pfull_loc_in))
+  do i = 1, pfull_loc_size
+     !print *, value_pfull_loc_in(i), value_pfull_loc(i)
+     if (value_pfull_loc_in(i) .ne. value_pfull_loc(i)) stop 199
+  end do
+
   ! Check the phalf data.
   call check(nf90_get_var(ncid, varid(6), start=(/phalf_start/), count=(/phalf_loc_size/), values=value_phalf_loc_in))
   do i = 1, phalf_loc_size
      if (value_phalf_loc_in(i) .ne. value_phalf_loc(i)) stop 200
   end do
 
+  ! Check the time value.
+  call check(nf90_get_var(ncid, varid(7), values=value_time_in))
+  if (value_time_in .ne. value_time) stop 300
+
   ! Close the file.
   call check(nf90_close(ncid))
 
   ! Free resources.
+  deallocate(value_pfull_loc)
+  deallocate(value_pfull_loc_in)
   deallocate(value_phalf_loc)
   deallocate(value_phalf_loc_in)
   deallocate(value_pfull)
