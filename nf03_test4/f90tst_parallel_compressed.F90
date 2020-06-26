@@ -37,8 +37,6 @@ program f90tst_parallel_compressed
   integer :: var_ndims(NUM_VARS) = (/ 1, 2, 1, 2, 1, 1, 1, 4 /)
   integer :: ideflate = 4
   real*8 :: value_time = 2.0, value_time_in
-  real, allocatable :: value_grid_xt(:)
-  real, allocatable :: value_grid_yt(:)
   real, allocatable :: value_lon(:,:)
   real, allocatable :: value_lat(:,:)
   real, allocatable :: value_clwmr(:,:,:,:)
@@ -48,6 +46,8 @@ program f90tst_parallel_compressed
   real, allocatable :: value_pfull_loc(:), value_pfull_loc_in(:)
   integer :: grid_xt_loc_size, grid_xt_start
   real, allocatable :: value_grid_xt_loc(:), value_grid_xt_loc_in(:)
+  integer :: grid_yt_loc_size, grid_yt_start
+  real, allocatable :: value_grid_yt_loc(:), value_grid_yt_loc_in(:)
 
   ! These are for checking file contents.
   character (len = 128) :: name_in
@@ -70,6 +70,22 @@ program f90tst_parallel_compressed
      stop 1
   endif
 
+  ! Size of local (i.e. for this pe) grid_xt data.
+  grid_xt_loc_size = dim_len(1)/npes;
+  grid_xt_start = my_rank * grid_xt_loc_size + 1
+  if (my_rank .eq. npes - 1) then
+     grid_xt_loc_size = grid_xt_loc_size + mod(dim_len(1), npes)
+  endif
+  !print *, my_rank, 'grid_xt', dim_len(3), grid_xt_start, grid_xt_loc_size
+
+  ! Size of local (i.e. for this pe) grid_yt data.
+  grid_yt_loc_size = dim_len(2)/npes;
+  grid_yt_start = my_rank * grid_yt_loc_size + 1
+  if (my_rank .eq. npes - 1) then
+     grid_yt_loc_size = grid_yt_loc_size + mod(dim_len(2), npes)
+  endif
+  !print *, my_rank, 'grid_yt', dim_len(3), grid_yt_start, grid_yt_loc_size
+
   ! Size of local (i.e. for this pe) pfull data.
   pfull_loc_size = dim_len(3)/npes;
   pfull_start = my_rank * pfull_loc_size + 1
@@ -86,23 +102,15 @@ program f90tst_parallel_compressed
   endif
   !print *, my_rank, 'phalf', dim_len(4), phalf_start, phalf_loc_size
 
-  ! Size of local (i.e. for this pe) grid_xt data.
-  grid_xt_loc_size = dim_len(3)/npes;
-  grid_xt_start = my_rank * grid_xt_loc_size + 1
-  if (my_rank .eq. npes - 1) then
-     grid_xt_loc_size = grid_xt_loc_size + mod(dim_len(3), npes)
-  endif
-  !print *, my_rank, 'grid_xt', dim_len(3), grid_xt_start, grid_xt_loc_size
-
   allocate(value_grid_xt_loc(grid_xt_loc_size))
   allocate(value_grid_xt_loc_in(grid_xt_loc_size))
+  allocate(value_grid_yt_loc(grid_yt_loc_size))
+  allocate(value_grid_yt_loc_in(grid_yt_loc_size))
   allocate(value_pfull_loc(pfull_loc_size))
   allocate(value_pfull_loc_in(pfull_loc_size))
   allocate(value_phalf_loc(phalf_loc_size))
   allocate(value_phalf_loc_in(phalf_loc_size))
   
-  allocate(value_grid_xt(dim_len(1)))
-  allocate(value_grid_yt(dim_len(2)))
   allocate(value_lat(dim_len(1), dim_len(2)))
   allocate(value_lon(dim_len(1), dim_len(2)))
   allocate(value_clwmr(dim_len(1), dim_len(2), dim_len(3), dim_len(5)))
@@ -177,7 +185,6 @@ program f90tst_parallel_compressed
   call check(nf90_def_var(ncid, trim(var_name(6)), var_type(6), dimids=(/dimid(4)/), varid=varid(6)))
   call check(nf90_var_par_access(ncid, varid(6), NF90_INDEPENDENT))
   call check(nf90_enddef(ncid))
-!  call check(nf90_put_var(ncid, varid(6), values=value_phalf))
   call check(nf90_put_var(ncid, varid(6), start=(/phalf_start/), count=(/phalf_loc_size/), values=value_phalf_loc))
   call check(nf90_redef(ncid))
 
@@ -196,7 +203,7 @@ program f90tst_parallel_compressed
 
   ! Write variable grid_xt data.
   call check(nf90_enddef(ncid))
-  call check(nf90_put_var(ncid, varid(1), values=value_grid_xt))
+  call check(nf90_put_var(ncid, varid(1), start=(/grid_xt_start/), count=(/grid_xt_loc_size/), values=value_grid_xt_loc))  
   call check(nf90_redef(ncid))
 
   ! Write lon data.
@@ -206,7 +213,7 @@ program f90tst_parallel_compressed
 
   ! Write grid_yt data.
   call check(nf90_enddef(ncid))
-  call check(nf90_put_var(ncid, varid(3), values=value_grid_yt))
+  call check(nf90_put_var(ncid, varid(3), start=(/grid_yt_start/), count=(/grid_yt_loc_size/), values=value_grid_yt_loc))  
   call check(nf90_redef(ncid))
 
   ! Write lat data.
@@ -248,6 +255,20 @@ program f90tst_parallel_compressed
      if (ndims_in .ne. var_ndims(i)) stop 112
   end do
 
+  ! Check the grid_xt data.
+  call check(nf90_get_var(ncid, varid(1), start=(/grid_xt_start/), count=(/grid_xt_loc_size/), values=value_grid_xt_loc_in))
+  do i = 1, grid_xt_loc_size
+     !print *, value_grid_xt_loc_in(i), value_grid_xt_loc(i)
+     if (value_grid_xt_loc_in(i) .ne. value_grid_xt_loc(i)) stop 199
+  end do
+
+  ! Check the grid_yt data.
+  call check(nf90_get_var(ncid, varid(3), start=(/grid_yt_start/), count=(/grid_yt_loc_size/), values=value_grid_yt_loc_in))
+  do i = 1, grid_yt_loc_size
+     !print *, value_grid_yt_loc_in(i), value_grid_yt_loc(i)
+     if (value_grid_yt_loc_in(i) .ne. value_grid_yt_loc(i)) stop 199
+  end do
+
   ! Check the pfull data.
   call check(nf90_get_var(ncid, varid(5), start=(/pfull_start/), count=(/pfull_loc_size/), values=value_pfull_loc_in))
   do i = 1, pfull_loc_size
@@ -271,12 +292,12 @@ program f90tst_parallel_compressed
   ! Free resources.
   deallocate(value_grid_xt_loc)
   deallocate(value_grid_xt_loc_in)
+  deallocate(value_grid_yt_loc)
+  deallocate(value_grid_yt_loc_in)
   deallocate(value_pfull_loc)
   deallocate(value_pfull_loc_in)
   deallocate(value_phalf_loc)
   deallocate(value_phalf_loc_in)
-  deallocate(value_grid_xt)
-  deallocate(value_grid_yt)
   deallocate(value_lat)
   deallocate(value_lon)
 
