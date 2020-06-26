@@ -39,7 +39,7 @@ program f90tst_parallel_compressed
   real, allocatable :: value_grid_yt(:)
   real, allocatable :: value_lon(:,:)
   real, allocatable :: value_lat(:,:)
-  
+
   ! These are for checking file contents.
   character (len = 128) :: name_in
   integer :: dim_len_in, xtype_in, ndims_in
@@ -65,9 +65,9 @@ program f90tst_parallel_compressed
   allocate(value_phalf(dim_len(4)))
   allocate(value_grid_xt(dim_len(1)))
   allocate(value_grid_yt(dim_len(2)))
-  allocate(value_lat(dim_len(2), dim_len(1)))
-  allocate(value_lon(dim_len(2), dim_len(1)))
-  
+  allocate(value_lat(dim_len(1), dim_len(2)))
+  allocate(value_lon(dim_len(1), dim_len(2)))
+
   ! Some fake data to write.
   do i = 1, dim_len(3)
      value_pfull(i) = i
@@ -87,7 +87,7 @@ program f90tst_parallel_compressed
         value_lon(i, j) = i + j
      end do
   end do
-    
+
   ! Create the netCDF file.
   call check(nf90_create(FILE_NAME, nf90_netcdf4, ncid, comm = MPI_COMM_WORLD, &
        info = MPI_INFO_NULL))
@@ -108,10 +108,10 @@ program f90tst_parallel_compressed
 
   ! Define variable lat and write data(?)
   call check(nf90_def_var(ncid, trim(var_name(2)), var_type(2), dimids=(/dimid(1),  dimid(2)/), varid=varid(2)))
-  ! call check(nf90_var_par_access(ncid, varid(2), NF90_INDEPENDENT))
-  ! call check(nf90_enddef(ncid))
-  ! call check(nf90_put_var(ncid, varid(2), values=value_lat))
-  ! call check(nf90_redef(ncid))
+  call check(nf90_var_par_access(ncid, varid(2), NF90_INDEPENDENT))
+  call check(nf90_enddef(ncid))
+  call check(nf90_put_var(ncid, varid(2), values=value_lat))
+  call check(nf90_redef(ncid))
 
   ! Define variable grid_yt and write data.
   call check(nf90_def_var(ncid, trim(var_name(3)), var_type(3), dimids=(/dimid(2)/), varid=varid(3)))
@@ -122,10 +122,10 @@ program f90tst_parallel_compressed
 
   ! Define variable lon and write data (?)
   call check(nf90_def_var(ncid, trim(var_name(4)), var_type(4), dimids=(/dimid(1), dimid(2)/), varid=varid(4)))
-  ! call check(nf90_var_par_access(ncid, varid(4), NF90_INDEPENDENT))
-  ! call check(nf90_enddef(ncid))
-  ! call check(nf90_put_var(ncid, varid(1), values=value_lon))
-  ! call check(nf90_redef(ncid))
+  call check(nf90_var_par_access(ncid, varid(4), NF90_INDEPENDENT))
+  call check(nf90_enddef(ncid))
+  call check(nf90_put_var(ncid, varid(1), values=value_lon))
+  call check(nf90_redef(ncid))
 
   ! Define dimension pfull.
   call check(nf90_def_dim(ncid, trim(dim_name(3)), dim_len(3), dimid(3)))
@@ -139,7 +139,7 @@ program f90tst_parallel_compressed
 
   ! Define dimension phalf.
   call check(nf90_def_dim(ncid, trim(dim_name(4)), dim_len(4), dimid(4)))
-  
+
   ! Define variable phalf and write data.
   call check(nf90_def_var(ncid, trim(var_name(6)), var_type(6), dimids=(/dimid(4)/), varid=varid(6)))
   call check(nf90_var_par_access(ncid, varid(6), NF90_INDEPENDENT))
@@ -215,34 +215,4 @@ contains
     endif
   end subroutine check
 
-  function add_dim(ncid, dim_name, dimid, length)
-    implicit none
-    integer, intent(in) :: ncid
-    character(*), intent(in) :: dim_name
-    integer, intent(out) :: dimid
-    integer, intent(in) :: length
-    integer :: add_dim
-
-    call check(nf90_def_dim(ncid, dim_name, length, dimid))
-    add_dim = 0
-  end function add_dim
-
-  function add_var(ncid, var_name, xtype, ndims, dimids, varid)
-    implicit none
-    integer, intent(in) :: ncid
-    character(*), intent(in) :: var_name
-    integer, intent(in) :: xtype
-    integer, intent(in) :: ndims
-    integer, dimension(*), intent(in) :: dimids
-    integer, intent(out) :: varid
-    integer, dimension(1) :: dimids_1d
-    integer :: add_var
-
-    if (ndims .eq. 1) then
-       dimids_1d(1) = dimids(1)
-       call check(nf90_def_var(ncid, var_name, xtype, dimids=dimids_1d, varid=varid))
-    endif
-
-    add_var = 0
-  end function add_var
 end program f90tst_parallel_compressed
