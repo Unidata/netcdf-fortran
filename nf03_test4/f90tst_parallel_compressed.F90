@@ -33,6 +33,7 @@ program f90tst_parallel_compressed
   integer :: var_type(NUM_VARS) = (/ nf90_double, nf90_double, nf90_double, &
        nf90_double, nf90_float, nf90_float, nf90_double, nf90_float /)
   integer :: var_ndims(NUM_VARS) = (/ 1, 2, 1, 2, 1, 1, 1, 4 /)
+  real*8 :: value_time = 3.14
   real, allocatable :: value_phalf(:)
   real, allocatable :: value_pfull(:)
   real, allocatable :: value_grid_xt(:)
@@ -154,6 +155,7 @@ program f90tst_parallel_compressed
   call check(nf90_def_var(ncid, trim(var_name(7)), var_type(7), dimids=(/dimid(5)/), varid=varid(7)))
   call check(nf90_var_par_access(ncid, varid(7), NF90_INDEPENDENT))
   call check(nf90_enddef(ncid))
+  call check(nf90_put_var(ncid, varid(6), values=value_time))  
   call check(nf90_redef(ncid))
 
   ! Define variable clwmr and write data (?)
