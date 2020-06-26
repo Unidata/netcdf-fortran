@@ -38,34 +38,47 @@ program f90tst_parallel_compressed
   integer :: ideflate = 4
   real*8 :: value_time = 3.14
   real, allocatable :: value_phalf(:)
+  real, allocatable :: value_phalf_loc(:), value_phalf_loc_in(:)
   real, allocatable :: value_pfull(:)
   real, allocatable :: value_grid_xt(:)
   real, allocatable :: value_grid_yt(:)
   real, allocatable :: value_lon(:,:)
   real, allocatable :: value_lat(:,:)
   real, allocatable :: value_clwmr(:,:,:,:)
+  integer :: phalf_loc_size, phalf_start
 
   ! These are for checking file contents.
   character (len = 128) :: name_in
   integer :: dim_len_in, xtype_in, ndims_in
   integer :: nvars, ngatts, ndims, unlimdimid, file_format
   integer :: x, y, v
-  integer :: p, my_rank, i, j, k, ierr
+  integer :: npes, my_rank, i, j, k, ierr
 
   call MPI_Init(ierr)
   call MPI_Comm_rank(MPI_COMM_WORLD, my_rank, ierr)
-  call MPI_Comm_size(MPI_COMM_WORLD, p, ierr)
+  call MPI_Comm_size(MPI_COMM_WORLD, npes, ierr)
 
   if (my_rank .eq. 0) then
      print *, '*** Testing compressed data writes with parallel I/O.'
   endif
 
-  ! There must be 4 procs for this test.
-  ! if (p .ne. 4) then
-  !    print *, 'Sorry, this test program must be run on four processors.'
-  !    stop 1
-  ! endif
+  ! There must be 4 or 40 procs for this test.
+  if (npes .ne. 4 .and. npes .ne. 40) then
+     print *, 'Sorry, this test program must be run on four processors.'
+     stop 1
+  endif
 
+  ! Size of local (i.e. for this pe) phalf data.
+  phalf_loc_size = dim_len(4)/npes;
+  phalf_start = my_rank * phalf_loc_size + 1
+  if (my_rank .eq. npes - 1) then
+     phalf_loc_size = phalf_loc_size + mod(dim_len(4), npes)
+  endif
+  print *, my_rank, dim_len(4), phalf_start, phalf_loc_size
+
+  allocate(value_phalf_loc(phalf_loc_size))
+  allocate(value_phalf_loc_in(phalf_loc_size))
+  
   allocate(value_pfull(dim_len(3)))
   allocate(value_phalf(dim_len(4)))
   allocate(value_grid_xt(dim_len(1)))
@@ -75,27 +88,32 @@ program f90tst_parallel_compressed
   allocate(value_clwmr(dim_len(1), dim_len(2), dim_len(3), dim_len(5)))
 
   ! Some fake data to write.
-  do i = 1, dim_len(3)
-     value_pfull(i) = i
+  do i = 1, phalf_loc_size
+     value_phalf_loc(i) = my_rank * 100 + i;
   end do
-  do i = 1, dim_len(4)
-     value_phalf(i) = i
-  end do
-  do i = 1, dim_len(1)
-     value_grid_xt(i) = i
-  end do
-  do i = 1, dim_len(2)
-     value_grid_yt(i) = i
-  end do
-  do i = 1, dim_len(1)
-     do j = 1, dim_len(2)
-        value_lat(i, j) = i + j
-        value_lon(i, j) = i + j
-        do k = 1, dim_len(3)
-           value_clwmr(i, j, k, 1) = k
-        end do
-     end do
-  end do
+
+  ! Some fake data to write.
+  ! do i = 1, dim_len(3)
+  !    value_pfull(i) = i
+  ! end do
+  ! do i = 1, dim_len(4)
+  !    value_phalf(i) = i
+  ! end do
+  ! do i = 1, dim_len(1)
+  !    value_grid_xt(i) = i
+  ! end do
+  ! do i = 1, dim_len(2)
+  !    value_grid_yt(i) = i
+  ! end do
+  ! do i = 1, dim_len(1)
+  !    do j = 1, dim_len(2)
+  !       value_lat(i, j) = i + j
+  !       value_lon(i, j) = i + j
+  !       do k = 1, dim_len(3)
+  !          value_clwmr(i, j, k, 1) = k
+  !       end do
+  !    end do
+  ! end do
 
   ! Create the netCDF file using parallel I/O.
   call check(nf90_create(FILE_NAME, nf90_netcdf4, ncid, comm = MPI_COMM_WORLD, &
@@ -143,7 +161,8 @@ program f90tst_parallel_compressed
   call check(nf90_def_var(ncid, trim(var_name(6)), var_type(6), dimids=(/dimid(4)/), varid=varid(6)))
   call check(nf90_var_par_access(ncid, varid(6), NF90_INDEPENDENT))
   call check(nf90_enddef(ncid))
-  call check(nf90_put_var(ncid, varid(6), values=value_phalf))
+!  call check(nf90_put_var(ncid, varid(6), values=value_phalf))
+  call check(nf90_put_var(ncid, varid(6), start=(/phalf_start/), count=(/phalf_loc_size/), values=value_phalf_loc))
   call check(nf90_redef(ncid))
 
   ! Define dimension time.
@@ -153,7 +172,7 @@ program f90tst_parallel_compressed
   call check(nf90_def_var(ncid, trim(var_name(7)), var_type(7), dimids=(/dimid(5)/), varid=varid(7)))
   call check(nf90_var_par_access(ncid, varid(7), NF90_INDEPENDENT))
   call check(nf90_enddef(ncid))
-  call check(nf90_put_var(ncid, varid(6), values=value_time))  
+  call check(nf90_put_var(ncid, varid(7), values=value_time))  
   call check(nf90_redef(ncid))
 
   ! Write variable grid_xt data.
@@ -161,9 +180,9 @@ program f90tst_parallel_compressed
   call check(nf90_put_var(ncid, varid(1), values=value_grid_xt))
   call check(nf90_redef(ncid))
 
-  ! Write lat data.
+  ! Write lon data.
   call check(nf90_enddef(ncid))
-  call check(nf90_put_var(ncid, varid(2), values=value_lat))
+  call check(nf90_put_var(ncid, varid(2), values=value_lon))
   call check(nf90_redef(ncid))
 
   ! Write grid_yt data.
@@ -171,9 +190,9 @@ program f90tst_parallel_compressed
   call check(nf90_put_var(ncid, varid(3), values=value_grid_yt))
   call check(nf90_redef(ncid))
 
-  ! Write lon data.
+  ! Write lat data.
   call check(nf90_enddef(ncid))
-  call check(nf90_put_var(ncid, varid(1), values=value_lon))
+  call check(nf90_put_var(ncid, varid(4), values=value_lat))
   call check(nf90_redef(ncid))
 
   ! Define variable clwmr and write data (?)
@@ -210,10 +229,18 @@ program f90tst_parallel_compressed
      if (ndims_in .ne. var_ndims(i)) stop 112
   end do
 
+  ! Check the phalf data.
+  call check(nf90_get_var(ncid, varid(6), start=(/phalf_start/), count=(/phalf_loc_size/), values=value_phalf_loc_in))
+  do i = 1, phalf_loc_size
+     if (value_phalf_loc_in(i) .ne. value_phalf_loc(i)) stop 200
+  end do
+
   ! Close the file.
   call check(nf90_close(ncid))
 
   ! Free resources.
+  deallocate(value_phalf_loc)
+  deallocate(value_phalf_loc_in)
   deallocate(value_pfull)
   deallocate(value_phalf)
   deallocate(value_grid_xt)
