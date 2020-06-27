@@ -48,6 +48,8 @@ program f90tst_parallel_compressed
   real, allocatable :: value_grid_xt_loc(:), value_grid_xt_loc_in(:)
   integer :: grid_yt_loc_size, grid_yt_start
   real, allocatable :: value_grid_yt_loc(:), value_grid_yt_loc_in(:)
+  integer :: lon_xt_loc_size, lon_xt_start, lon_yt_loc_size, lon_yt_start
+  real, allocatable :: value_lon_loc(:,:), value_lon_loc_in(:,:)
 
   ! These are for checking file contents.
   character (len = 128) :: name_in
@@ -102,6 +104,23 @@ program f90tst_parallel_compressed
   endif
   !print *, my_rank, 'phalf', dim_len(4), phalf_start, phalf_loc_size
 
+  ! Size of local arrays (i.e. for this pe) lon data.
+  if (npes .eq. 4) then
+     lon_xt_loc_size = 2
+     if (my_rank .eq. 0 .or. my_rank .eq. 2) then
+        lon_xt_start = 1
+     else
+        lon_xt_start = 3
+     endif
+     lon_yt_loc_size = 2
+     if (my_rank .eq. 0 .or. my_rank .eq. 1) then
+        lon_yt_start = 1
+     else
+        lon_yt_start = 3
+     endif
+  endif
+  print *, my_rank, 'lon_xt_start', lon_xt_start, 'lon_yt_start', lon_yt_start
+
   allocate(value_grid_xt_loc(grid_xt_loc_size))
   allocate(value_grid_xt_loc_in(grid_xt_loc_size))
   allocate(value_grid_yt_loc(grid_yt_loc_size))
@@ -110,6 +129,8 @@ program f90tst_parallel_compressed
   allocate(value_pfull_loc_in(pfull_loc_size))
   allocate(value_phalf_loc(phalf_loc_size))
   allocate(value_phalf_loc_in(phalf_loc_size))
+  allocate(value_lon_loc(lon_xt_loc_size, lon_yt_loc_size))
+  allocate(value_lon_loc_in(lon_xt_loc_size, lon_yt_loc_size))
   
   allocate(value_lat(dim_len(1), dim_len(2)))
   allocate(value_lon(dim_len(1), dim_len(2)))
@@ -122,13 +143,12 @@ program f90tst_parallel_compressed
   do i = 1, phalf_loc_size
      value_phalf_loc(i) = my_rank * 100 + i;
   end do
+  do i = 1, lon_xt_loc_size
+     do j = 1, lon_yt_loc_size
+        value_lon_loc(i, j) = my_rank * 100 + i +j
+     end do
+  end do
 
-  ! do i = 1, dim_len(1)
-  !    value_grid_xt(i) = i
-  ! end do
-  ! do i = 1, dim_len(2)
-  !    value_grid_yt(i) = i
-  ! end do
   ! do i = 1, dim_len(1)
   !    do j = 1, dim_len(2)
   !       value_lat(i, j) = i + j
@@ -298,6 +318,8 @@ program f90tst_parallel_compressed
   deallocate(value_pfull_loc_in)
   deallocate(value_phalf_loc)
   deallocate(value_phalf_loc_in)
+  deallocate(value_lon_loc)
+  deallocate(value_lon_loc_in)
   deallocate(value_lat)
   deallocate(value_lon)
 
