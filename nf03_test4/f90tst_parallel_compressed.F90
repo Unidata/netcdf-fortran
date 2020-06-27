@@ -37,8 +37,6 @@ program f90tst_parallel_compressed
   integer :: var_ndims(NUM_VARS) = (/ 1, 2, 1, 2, 1, 1, 1, 4 /)
   integer :: ideflate = 4
   real*8 :: value_time = 2.0, value_time_in
-  real, allocatable :: value_lon(:,:)
-  real, allocatable :: value_lat(:,:)
   real, allocatable :: value_clwmr(:,:,:,:)
   integer :: phalf_loc_size, phalf_start
   real, allocatable :: value_phalf_loc(:), value_phalf_loc_in(:)
@@ -50,6 +48,8 @@ program f90tst_parallel_compressed
   real, allocatable :: value_grid_yt_loc(:), value_grid_yt_loc_in(:)
   integer :: lon_xt_loc_size, lon_xt_start, lon_yt_loc_size, lon_yt_start
   real, allocatable :: value_lon_loc(:,:), value_lon_loc_in(:,:)
+  integer :: lat_xt_loc_size, lat_xt_start, lat_yt_loc_size, lat_yt_start
+  real, allocatable :: value_lat_loc(:,:), value_lat_loc_in(:,:)
 
   ! These are for checking file contents.
   character (len = 128) :: name_in
@@ -104,22 +104,29 @@ program f90tst_parallel_compressed
   endif
   !print *, my_rank, 'phalf', dim_len(4), phalf_start, phalf_loc_size
 
-  ! Size of local arrays (i.e. for this pe) lon data.
+  ! Size of local arrays (i.e. for this pe) lon and lat data.
   if (npes .eq. 4) then
-     lon_xt_loc_size = 2
+     lon_xt_loc_size = 1536
+     lat_xt_loc_size = 1536
      if (my_rank .eq. 0 .or. my_rank .eq. 2) then
         lon_xt_start = 1
+        lat_xt_start = 1
      else
-        lon_xt_start = 3
+        lon_xt_start = 1537
+        lat_xt_start = 1537
      endif
-     lon_yt_loc_size = 2
+     lon_yt_loc_size = 768
+     lat_yt_loc_size = 768
      if (my_rank .eq. 0 .or. my_rank .eq. 1) then
         lon_yt_start = 1
+        lat_yt_start = 1
      else
-        lon_yt_start = 3
+        lon_yt_start = 769
+        lat_yt_start = 769
      endif
   endif
   print *, my_rank, 'lon_xt_start', lon_xt_start, 'lon_yt_start', lon_yt_start
+  print *, my_rank, 'lon_xt_loc_size', lon_xt_loc_size, 'lon_yt_loc_size', lon_yt_loc_size
 
   allocate(value_grid_xt_loc(grid_xt_loc_size))
   allocate(value_grid_xt_loc_in(grid_xt_loc_size))
@@ -131,9 +138,9 @@ program f90tst_parallel_compressed
   allocate(value_phalf_loc_in(phalf_loc_size))
   allocate(value_lon_loc(lon_xt_loc_size, lon_yt_loc_size))
   allocate(value_lon_loc_in(lon_xt_loc_size, lon_yt_loc_size))
+  allocate(value_lat_loc(lat_xt_loc_size, lat_yt_loc_size))
+  allocate(value_lat_loc_in(lat_xt_loc_size, lat_yt_loc_size))
   
-  allocate(value_lat(dim_len(1), dim_len(2)))
-  allocate(value_lon(dim_len(1), dim_len(2)))
   allocate(value_clwmr(dim_len(1), dim_len(2), dim_len(3), dim_len(5)))
 
   ! Some fake data to write.
@@ -146,13 +153,12 @@ program f90tst_parallel_compressed
   do i = 1, lon_xt_loc_size
      do j = 1, lon_yt_loc_size
         value_lon_loc(i, j) = my_rank * 100 + i +j
+        value_lat_loc(i, j) = my_rank * 100 + i +j
      end do
   end do
 
   ! do i = 1, dim_len(1)
   !    do j = 1, dim_len(2)
-  !       value_lat(i, j) = i + j
-  !       value_lon(i, j) = i + j
   !       do k = 1, dim_len(3)
   !          value_clwmr(i, j, k, 1) = k
   !       end do
@@ -228,7 +234,8 @@ program f90tst_parallel_compressed
 
   ! Write lon data.
   call check(nf90_enddef(ncid))
-  call check(nf90_put_var(ncid, varid(2), values=value_lon))
+  call check(nf90_put_var(ncid, varid(2), start=(/lon_xt_start, lon_yt_start/), count=(/lon_xt_loc_size, lon_yt_loc_size/), &
+       values=value_lon_loc))  
   call check(nf90_redef(ncid))
 
   ! Write grid_yt data.
@@ -238,7 +245,9 @@ program f90tst_parallel_compressed
 
   ! Write lat data.
   call check(nf90_enddef(ncid))
-  call check(nf90_put_var(ncid, varid(4), values=value_lat))
+!  call check(nf90_put_var(ncid, varid(4), values=value_lat))
+  call check(nf90_put_var(ncid, varid(4), start=(/lat_xt_start, lat_yt_start/), count=(/lat_xt_loc_size, lat_yt_loc_size/), &
+       values=value_lat_loc))  
   call check(nf90_redef(ncid))
 
   ! Define variable clwmr and write data (?)
@@ -320,8 +329,8 @@ program f90tst_parallel_compressed
   deallocate(value_phalf_loc_in)
   deallocate(value_lon_loc)
   deallocate(value_lon_loc_in)
-  deallocate(value_lat)
-  deallocate(value_lon)
+  deallocate(value_lat_loc)
+  deallocate(value_lat_loc_in)
 
   if (my_rank .eq. 0) print *,'*** SUCCESS!'
 
