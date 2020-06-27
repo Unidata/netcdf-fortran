@@ -245,7 +245,6 @@ program f90tst_parallel_compressed
 
   ! Write lat data.
   call check(nf90_enddef(ncid))
-!  call check(nf90_put_var(ncid, varid(4), values=value_lat))
   call check(nf90_put_var(ncid, varid(4), start=(/lat_xt_start, lat_yt_start/), count=(/lat_xt_loc_size, lat_yt_loc_size/), &
        values=value_lat_loc))  
   call check(nf90_redef(ncid))
@@ -288,21 +287,39 @@ program f90tst_parallel_compressed
   call check(nf90_get_var(ncid, varid(1), start=(/grid_xt_start/), count=(/grid_xt_loc_size/), values=value_grid_xt_loc_in))
   do i = 1, grid_xt_loc_size
      !print *, value_grid_xt_loc_in(i), value_grid_xt_loc(i)
-     if (value_grid_xt_loc_in(i) .ne. value_grid_xt_loc(i)) stop 199
+     if (value_grid_xt_loc_in(i) .ne. value_grid_xt_loc(i)) stop 170
   end do
 
+  ! Check the lon data.
+  call check(nf90_get_var(ncid, varid(2), start=(/lon_xt_start, lon_yt_start/), count=(/lon_xt_loc_size, lon_yt_loc_size/), &
+       values=value_lon_loc_in))  
+  do i = 1, lon_xt_loc_size
+     do j = 1, lon_yt_loc_size
+        if (value_lon_loc_in(i, j) .ne. value_lon_loc(i, j)) stop 180
+     end do
+  end do
+  
   ! Check the grid_yt data.
   call check(nf90_get_var(ncid, varid(3), start=(/grid_yt_start/), count=(/grid_yt_loc_size/), values=value_grid_yt_loc_in))
   do i = 1, grid_yt_loc_size
      !print *, value_grid_yt_loc_in(i), value_grid_yt_loc(i)
-     if (value_grid_yt_loc_in(i) .ne. value_grid_yt_loc(i)) stop 199
+     if (value_grid_yt_loc_in(i) .ne. value_grid_yt_loc(i)) stop 181
+  end do
+
+  ! Check the lon data.
+  call check(nf90_get_var(ncid, varid(4), start=(/lat_xt_start, lat_yt_start/), count=(/lat_xt_loc_size, lat_yt_loc_size/), &
+       values=value_lat_loc_in))  
+  do i = 1, lat_xt_loc_size
+     do j = 1, lat_yt_loc_size
+        if (value_lat_loc_in(i, j) .ne. value_lat_loc(i, j)) stop 180
+     end do
   end do
 
   ! Check the pfull data.
   call check(nf90_get_var(ncid, varid(5), start=(/pfull_start/), count=(/pfull_loc_size/), values=value_pfull_loc_in))
   do i = 1, pfull_loc_size
      !print *, value_pfull_loc_in(i), value_pfull_loc(i)
-     if (value_pfull_loc_in(i) .ne. value_pfull_loc(i)) stop 199
+     if (value_pfull_loc_in(i) .ne. value_pfull_loc(i)) stop 185
   end do
 
   ! Check the phalf data.
