@@ -50,7 +50,8 @@ program f90tst_parallel_compressed
   real, allocatable :: value_lon_loc(:,:), value_lon_loc_in(:,:)
   integer :: lat_xt_loc_size, lat_xt_start, lat_yt_loc_size, lat_yt_start
   real, allocatable :: value_lat_loc(:,:), value_lat_loc_in(:,:)
-
+  real, allocatable :: value_clwmr_loc(:,:,:,:), value_clwmr_loc_in(:,:,:,:)
+  
   ! These are for checking file contents.
   character (len = 128) :: name_in
   integer :: dim_len_in, xtype_in, ndims_in
@@ -66,9 +67,9 @@ program f90tst_parallel_compressed
      print *, '*** Testing compressed data writes with parallel I/O.'
   endif
 
-  ! There must be 4 or 40 procs for this test.
-  if (npes .ne. 4 .and. npes .ne. 40) then
-     print *, 'Sorry, this test program must be run on 4 or 40 processors.'
+  ! There must be 4 procs for this test.
+  if (npes .ne. 4) then
+     print *, 'Sorry, this test program must be run on 4 processors.'
      stop 1
   endif
 
@@ -104,30 +105,30 @@ program f90tst_parallel_compressed
   endif
   !print *, my_rank, 'phalf', dim_len(4), phalf_start, phalf_loc_size
 
-  ! Size of local arrays (i.e. for this pe) lon and lat data.
-  if (npes .eq. 4) then
-     lon_xt_loc_size = 1536
-     lat_xt_loc_size = 1536
-     if (my_rank .eq. 0 .or. my_rank .eq. 2) then
-        lon_xt_start = 1
-        lat_xt_start = 1
-     else
-        lon_xt_start = 1537
-        lat_xt_start = 1537
-     endif
-     lon_yt_loc_size = 768
-     lat_yt_loc_size = 768
-     if (my_rank .eq. 0 .or. my_rank .eq. 1) then
-        lon_yt_start = 1
-        lat_yt_start = 1
-     else
-        lon_yt_start = 769
-        lat_yt_start = 769
-     endif
+  ! Size of local arrays (i.e. for this pe) lon and lat data. This is
+  ! specific to 4 pes.
+  lon_xt_loc_size = 1536
+  lat_xt_loc_size = 1536
+  if (my_rank .eq. 0 .or. my_rank .eq. 2) then
+     lon_xt_start = 1
+     lat_xt_start = 1
+  else
+     lon_xt_start = 1537
+     lat_xt_start = 1537
   endif
-  print *, my_rank, 'lon_xt_start', lon_xt_start, 'lon_yt_start', lon_yt_start
-  print *, my_rank, 'lon_xt_loc_size', lon_xt_loc_size, 'lon_yt_loc_size', lon_yt_loc_size
+  lon_yt_loc_size = 768
+  lat_yt_loc_size = 768
+  if (my_rank .eq. 0 .or. my_rank .eq. 1) then
+     lon_yt_start = 1
+     lat_yt_start = 1
+  else
+     lon_yt_start = 769
+     lat_yt_start = 769
+  endif
+  !  print *, my_rank, 'lon_xt_start', lon_xt_start, 'lon_yt_start', lon_yt_start
+  !  print *, my_rank, 'lon_xt_loc_size', lon_xt_loc_size, 'lon_yt_loc_size', lon_yt_loc_size
 
+  ! Allocate space on this pe to hold the data for this pe.
   allocate(value_grid_xt_loc(grid_xt_loc_size))
   allocate(value_grid_xt_loc_in(grid_xt_loc_size))
   allocate(value_grid_yt_loc(grid_yt_loc_size))
@@ -140,10 +141,10 @@ program f90tst_parallel_compressed
   allocate(value_lon_loc_in(lon_xt_loc_size, lon_yt_loc_size))
   allocate(value_lat_loc(lat_xt_loc_size, lat_yt_loc_size))
   allocate(value_lat_loc_in(lat_xt_loc_size, lat_yt_loc_size))
+  allocate(value_clwmr_loc(lat_xt_loc_size, lat_yt_loc_size, pfull_loc_size, 1))
+  allocate(value_clwmr_loc_in(lat_xt_loc_size, lat_yt_loc_size, pfull_loc_size, 1))
   
-  allocate(value_clwmr(dim_len(1), dim_len(2), dim_len(3), dim_len(5)))
-
-  ! Some fake data to write.
+  ! Some fake data for this pe to write.
   do i = 1, pfull_loc_size
      value_pfull_loc(i) = my_rank * 100 + i;
   end do
@@ -154,16 +155,11 @@ program f90tst_parallel_compressed
      do j = 1, lon_yt_loc_size
         value_lon_loc(i, j) = my_rank * 100 + i +j
         value_lat_loc(i, j) = my_rank * 100 + i +j
+        do k = 1, pfull_loc_size
+           value_clwmr_loc(i, j, k, 1) = my_rank * 100 + i + j + k
+        end do
      end do
   end do
-
-  ! do i = 1, dim_len(1)
-  !    do j = 1, dim_len(2)
-  !       do k = 1, dim_len(3)
-  !          value_clwmr(i, j, k, 1) = k
-  !       end do
-  !    end do
-  ! end do
 
   ! Create the netCDF file using parallel I/O.
   call check(nf90_create(FILE_NAME, nf90_netcdf4, ncid, comm = MPI_COMM_WORLD, &
@@ -255,6 +251,8 @@ program f90tst_parallel_compressed
   call check(nf90_var_par_access(ncid, varid(8), NF90_COLLECTIVE))
   call check(nf90_enddef(ncid))
 !  call check(nf90_put_var(ncid, varid(8), values=value_clwmr))  
+  call check(nf90_put_var(ncid, varid(8), start=(/lat_xt_start, lat_yt_start, pfull_start, 1/), &
+       count=(/lat_xt_loc_size, lat_yt_loc_size, pfull_loc_size, 1/), values=value_clwmr_loc))  
   call check(nf90_redef(ncid))
 
   ! Close the file.
@@ -332,6 +330,17 @@ program f90tst_parallel_compressed
   call check(nf90_get_var(ncid, varid(7), values=value_time_in))
   if (value_time_in .ne. value_time) stop 300
 
+  ! Check the clwmr value.
+  call check(nf90_get_var(ncid, varid(8), start=(/lat_xt_start, lat_yt_start, pfull_start, 1/), &
+       count=(/lat_xt_loc_size, lat_yt_loc_size, pfull_loc_size, 1/), values=value_clwmr_loc_in))  
+  do i = 1, lat_xt_loc_size
+     do j = 1, lat_yt_loc_size
+        do k = 1, pfull_loc_size
+           if (value_clwmr_loc_in(i, j, k, 1) .ne. value_clwmr_loc(i, j, k, 1)) stop 300
+        end do
+     end do
+  end do
+
   ! Close the file.
   call check(nf90_close(ncid))
 
@@ -348,6 +357,8 @@ program f90tst_parallel_compressed
   deallocate(value_lon_loc_in)
   deallocate(value_lat_loc)
   deallocate(value_lat_loc_in)
+  deallocate(value_clwmr_loc)
+  deallocate(value_clwmr_loc_in)
 
   if (my_rank .eq. 0) print *,'*** SUCCESS!'
 
