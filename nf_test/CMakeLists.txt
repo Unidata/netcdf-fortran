@@ -10,9 +10,11 @@ foreach (f ${m4_SOURCES})
 		   GEN_m4(${f})
 endforeach(f)
 
+# Separate C and Fortran Sources
 SET(nf_test_SOURCES
   f03lib_f_interfaces.f90 test_get.F test_put.F nf_error.F nf_test.F
-  test_read.F test_write.F util.F f03lib.c tests.inc)
+  test_read.F test_write.F util.F tests.inc)
+SET(nf_test_C_SOURCES f03lib.c)
 
 SET(tst_int64_SOURCES tst_int64.F)
 
@@ -26,7 +28,8 @@ IF (BUILD_V2)
 # to generate its input file.
   SET(check_PROGRAMS ${check_PROGRAMS} ftest)
   SET(TESTS ${TESTS} ftest)
-  SET(ftest_SOURCES ftest.F f03lib.c)
+  SET(ftest_SOURCES ftest.F)
+  SET(ftest_C_SOURCES f03lib.c)
 ENDIF(BUILD_V2)
 
 FIND_LIBRARY(NETCDF_C_LIBRARY NAMES netcdf libnetcdf)
@@ -39,9 +42,33 @@ ENDIF()
 execute_process(COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/ref_fills.nc
   ${CMAKE_CURRENT_BINARY_DIR}/fills.nc)
 
+INCLUDE_DIRECTORIES(BEFORE
+  ${CMAKE_CURRENT_BINARY_DIR}
+  ${CMAKE_BINARY_DIR}/fortran
+  ${CMAKE_BINARY_DIR}/libsrc
+  ${CMAKE_SOURCE_DIR}
+  ${CMAKE_SOURCE_DIR}/fortran
+  ${CMAKE_SOURCE_DIR}/libsrc)
+
+INCLUDE_DIRECTORIES(
+  ${CMAKE_CPP_FLAGS}
+  ${NETCDF_C_INCLUDE_DIR})
+
+LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/fortran ${CMAKE_SOURCE_DIR}/libsrc
+  ${NC4F_BINARY_DIR}/fortran)
+
 # Create pre-compiled tests.
+message ("Create pre-compiled tests.")
 FOREACH(t ${TESTS})
   ADD_EXECUTABLE(${t} ${${t}_SOURCES})
+  message("  " ${t} " C_SOURCES: " ${${t}_C_SOURCES})
+  IF(${t}_C_SOURCES)
+    message ("Adding C code for Test ${t} to Library")
+    ADD_LIBRARY(${t}_c OBJECT ${${t}_C_SOURCES})
+    install(TARGETS ${t}_c DESTINATION lib)
+    SET(${t}_C_LIBRARY ${t}_c)
+    TARGET_LINK_LIBRARIES(${t} ${${t}_C_LIBRARY})
+  ENDIF()
   TARGET_LINK_LIBRARIES(${t} netcdff)
   ADD_TEST(${t} ${t})
 ENDFOREACH()

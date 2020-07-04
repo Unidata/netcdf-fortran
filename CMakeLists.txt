@@ -458,6 +458,7 @@ ENDIF()
 IF (netCDF_FOUND)
   SET(NETCDF_C_LIBRARY ${netCDF_LIBRARIES})
   SET(NETCDF_C_INCLUDE_DIR ${netCDF_INCLUDE_DIR})
+  include_directories(${NETCDF_C_INCLUDE_DIR})
   message(STATUS "Found netCDF CMake package: ${NETCDF_C_LIBRARY}")
 ELSE()
   # netCDF not properly packaged. Try to find it manually.
@@ -490,7 +491,6 @@ endif()
 
 ###
 # Check for various header files
-###
 CHECK_INCLUDE_FILE("alloca.h"  HAVE_ALLOCA_H)
 CHECK_INCLUDE_FILE("malloc.h"    HAVE_MALLOC_H)
 CHECK_INCLUDE_FILE("ctype.h"   HAVE_CTYPE_H)
@@ -522,6 +522,7 @@ CHECK_INCLUDE_FILE("endian.h" HAVE_ENDIAN_H)
 CHECK_INCLUDE_FILE("BaseTsd.h"  HAVE_BASETSD_H)
 CHECK_INCLUDE_FILE("stddef.h"   HAVE_STDDEF_H)
 CHECK_INCLUDE_FILE("memory.h" HAVE_MEMORY_H)
+SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_C_INCLUDE_DIR})
 CHECK_INCLUDE_FILE("netcdf.h" HAVE_NETCDF_H)
 
 
