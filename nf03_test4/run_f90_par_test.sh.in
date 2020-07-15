@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# This shell runs some parallel I/O tests for the F90 API.
+
+# Ed Hartnett, 2009
+
+set -e
+echo "Testing netCDF parallel I/O through the F90 API."
+@MPIEXEC@ -n 4 ./f90tst_parallel
+@MPIEXEC@ -n 4 ./f90tst_parallel2
+@MPIEXEC@ -n 4 ./f90tst_parallel3
+@MPIEXEC@ -n 8 ./f90tst_nc4_par
+@MPIEXEC@ -n 4 ./f90tst_parallel_fill
+@MPIEXEC@ -n 4 ./f90tst_parallel_compressed
+
+echo "SUCCESS!!!"
+exit 0
+
+
