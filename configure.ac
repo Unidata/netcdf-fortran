@@ -614,6 +614,8 @@ AC_SUBST(HAS_PARALLEL,[$nc_has_parallel])
 # link/copy files if an out-of-source build is happening.
 AC_CONFIG_LINKS([nf_test/fills.nc:nf_test/ref_fills.nc])
 
+AC_CONFIG_FILES([nf03_test4/run_f90_par_tests.sh.in], [chmod ugo+x nf03_test4/run_f90_par_tests.sh])
+
 AC_MSG_NOTICE([generating header files and makefiles])
 
 AC_CONFIG_FILES([Makefile
