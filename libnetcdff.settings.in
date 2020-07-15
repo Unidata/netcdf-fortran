@@ -14,7 +14,6 @@ Install Prefix:                 @prefix@
 Fortran Compiler:               @FC_VERSION@
 FFLAGS:                         @FFLAGS@
 LDFLAGS:		        @LDFLAGS@
-AM_LDFLAGS:                     @AM_LDFLAGS@
 C Compiler:                     @CC@
 CPPFLAGS:                       @CPPFLAGS@
 CFLAGS:                         @CFLAGS@
