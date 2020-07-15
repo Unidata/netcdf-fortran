@@ -15,6 +15,11 @@ Fortran Compiler:               @FC_VERSION@
 FFLAGS:                         @FFLAGS@
 LDFLAGS:		        @LDFLAGS@
 AM_LDFLAGS:                     @AM_LDFLAGS@
+C Compiler:                     @CC@
+CPPFLAGS:                       @CPPFLAGS@
+CFLAGS:                         @CFLAGS@
+AM_CPPFLAGS:                    @AM_CPPFLAGS@
+AM_CFLAGS:                      @AM_CFLAGS@
 Shared Library:		        @enable_shared@
 Static Library:		        @enable_static@
 Extra libraries:	        @LIBS@
