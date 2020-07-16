@@ -1,7 +1,10 @@
-! This program provides an elementary check of some of the parts of the 
-!   Fortran 90 interface to netCDF 3.5. It is a Fortran 90 implementation
-!   of the nctst.cpp program provided with the C++ interface to netcdf
-!   (in the src/cxx directory of the netcdf distribution). 
+! This program provides an elementary check of some of the parts of
+! the Fortran 90 interface to netCDF 3.5. It is a Fortran 90
+! implementation of the nctst.cpp program provided with the C++
+! interface to netcdf (in the src/cxx directory of the netcdf
+! distribution).
+!
+! Russ Rew
 !
 program netcdfTest
   use typeSizes
