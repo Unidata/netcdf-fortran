@@ -11,6 +11,9 @@ Entries are in reverse chronological order (most recent first).
 
 * netCDF-C: 4.7.4+
 
+### Changes
+* Added nf90_inq_format to the F90 API. See [Github #263](https://github.com/Unidata/netcdf-fortran/issues/263).
+
 ## 4.5.3 - June 2, 2020
 
 ### Requirements
