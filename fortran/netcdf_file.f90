@@ -155,6 +155,7 @@ end function nf90_inq_path
 function nf90_inq_format(ncid, format_type)
   integer,            intent(in)    :: ncid
   integer,            intent(out)   :: format_type
+  integer                           :: nf90_inq_format
 
   nf90_inq_format = nf_inq_format(ncid, format_type)
 
