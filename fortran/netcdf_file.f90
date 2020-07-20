@@ -4,7 +4,7 @@
 ! This file contains the netcdf file functions that are shared by
 ! netcdf-3 and netcdf-4.
 
-! $Id: netcdf4_constants.f90,v 1.14 2010/05/25 13:53:00 ed Exp $
+! Ed Hartnett, 2010
 ! -------
 function nf90_inq_libvers()
   character(len = 80) :: nf90_inq_libvers
@@ -142,7 +142,6 @@ function nf90_inquire(ncid, nDimensions, nVariables, nAttributes, unlimitedDimId
 end function nf90_inquire
 
 function nf90_inq_path(ncid, pathlen, path)
-
   integer,            intent(in)    :: ncid
   integer,            intent(inout) :: pathlen
   character(len = *), intent(inout) :: path
@@ -152,4 +151,13 @@ function nf90_inq_path(ncid, pathlen, path)
   nf90_inq_path = nf_inq_path(ncid, pathlen, path)
 
 end function nf90_inq_path
+
+function nf90_inq_format(ncid, format_type)
+  integer,            intent(in)    :: ncid
+  integer,            intent(out)   :: format_type
+  integer                           :: nf90_inq_format
+
+  nf90_inq_format = nf_inq_format(ncid, format_type)
+
+end function nf90_inq_format
 

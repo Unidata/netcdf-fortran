@@ -1,7 +1,10 @@
-! This program provides an elementary check of some of the parts of the 
-!   Fortran 90 interface to netCDF 3.5. It is a Fortran 90 implementation
-!   of the nctst.cpp program provided with the C++ interface to netcdf
-!   (in the src/cxx directory of the netcdf distribution). 
+! This program provides an elementary check of some of the parts of
+! the Fortran 90 interface to netCDF 3.5. It is a Fortran 90
+! implementation of the nctst.cpp program provided with the C++
+! interface to netcdf (in the src/cxx directory of the netcdf
+! distribution).
+!
+! Russ Rew
 !
 program netcdfTest
   use typeSizes
@@ -18,6 +21,7 @@ program netcdfTest
   integer, parameter :: numLats = 4, numLons = 3, &
                         numFrTimes = 2, timeStringLen = 20, mxStrLen=80
   character (len = *), parameter :: fileName = "tst_f90.nc"
+  integer :: fmt
   integer :: counter, i
   real, dimension(numLons, numLats, numFrTimes) :: pressure
   integer (kind = FourByteInt), dimension(numFrTimes) :: frTimeVals
@@ -39,6 +43,10 @@ program netcdfTest
     
   ! Create the file
   call check(nf90_create(path = trim(fileName), cmode = nf90_clobber, ncid = ncFileID))
+
+  ! Check the format.
+  call check(nf90_inq_format(ncFileID, fmt))
+  if (fmt .ne. nf90_format_classic) stop 2
   
   ! Define the dimensions
   call check(nf90_def_dim(ncid = ncFileID, name = "lat",     len = numLats,        dimid = latDimID))
