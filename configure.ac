@@ -598,7 +598,6 @@ AC_SUBST(HAS_CDF5,[$nc_has_cdf5])
 AC_SUBST(HAS_PNETCDF,[$nc_has_pnetcdf])
 AC_SUBST(HAS_NC4_PARALLEL,[$nc_has_parallel4])
 AC_SUBST(HAS_PARALLEL,[$nc_has_parallel])
-AC_SUBST([AM_LDFLAGS])
 
 # Some files need to exist in build directories that do not correspond
 # to their source directory, or the test program makes an assumption
