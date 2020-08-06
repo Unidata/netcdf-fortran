@@ -127,6 +127,15 @@ if test $enable_parallel_tests = yes -a "x$nc_has_pnetcdf" = xno -a "x$nc_has_pa
 fi
 AM_CONDITIONAL(TEST_PARALLEL, [test "x$enable_parallel_tests" = xyes])
 
+# Did the user specify an MPI launcher other than mpiexec?
+AC_MSG_CHECKING([whether a user specified program to run mpi programs])
+AC_ARG_WITH([mpiexec],
+              [AS_HELP_STRING([--with-mpiexec=<command>],
+                              [Specify command to launch MPI parallel tests.])],
+            [MPIEXEC=$with_mpiexec], [MPIEXEC=mpiexec])
+AC_MSG_RESULT([$MPIEXEC])
+AC_SUBST([MPIEXEC], [$MPIEXEC])
+
 # Determine if we want to enable doxygen-generated documentation. Any
 # new documentation input files should be inserted into
 # docs/Doxyfile.in and possibly docs/Makefile.am
@@ -604,6 +613,8 @@ AC_SUBST(HAS_PARALLEL,[$nc_has_parallel])
 # about where files live.  AC_CONFIG_LINKS provides a mechanism to
 # link/copy files if an out-of-source build is happening.
 AC_CONFIG_LINKS([nf_test/fills.nc:nf_test/ref_fills.nc])
+
+AC_CONFIG_FILES([nf03_test4/run_f90_par_test.sh], [chmod ugo+x nf03_test4/run_f90_par_test.sh])
 
 AC_MSG_NOTICE([generating header files and makefiles])
 

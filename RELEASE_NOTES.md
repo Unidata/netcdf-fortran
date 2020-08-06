@@ -7,6 +7,8 @@ This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 ## 4.5.4 - TBD
 
+* Now allow setting of parallel I/O test launcher to something other than mpiexec with the --with-mpiexec= option on configure. See [Github #262](https://github.com/Unidata/netcdf-fortran/issues/262).
+
 ### Requirements
 
 * netCDF-C: 4.7.4+
