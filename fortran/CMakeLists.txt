@@ -12,15 +12,26 @@ SET(netcdff_SOURCES
   nf_varmio.F90 nf_varsio.F90
 )
 
-SET(netcdff_SOURCES ${netcdff_SOURCES} nf_nc.f90)
+# Check if netcdf-c has parallel I/O functions
+check_symbol_exists(nc_create_par "netcdf.h" HAVE_PARALLEL)
+message (STATUS "found netcdf-c parallel support: ${HAVE_PARALLEL}")
+IF (${USE_NETCDF4} AND HAVE_PARALLEL)
+  SET(netcdff_SOURCES ${netcdff_SOURCES} nf_nc.f90)
+  message (STATUS "including netcdf-f parallel support")
+ELSE ()
+  SET(netcdff_SOURCES ${netcdff_SOURCES} nf_nc_noparallel.f90)
+  message (STATUS "no netcdf-f parallel support")
+ENDIF(${USE_NETCDF4} AND HAVE_PARALLEL)
 
 IF (USE_NETCDF4)
   SET(netcdff_SOURCES ${netcdff_SOURCES}
     module_netcdf4_nc_interfaces.f90
     module_netcdf4_nf_interfaces.F90 module_netcdf4_f03.f90
-    nf_lib.c nf_nc4.f90
+    nf_nc4.f90
     )
+  SET(netcdff_C_SOURCES ${netcdff_C_SOURCES} nf_lib.c)
 ENDIF(USE_NETCDF4)
+
 
 IF (${USE_LOGGING})
   SET(netcdff_SOURCES ${netcdff_SOURCES}
@@ -52,8 +63,9 @@ ENDIF(${USE_NETCDF4})
 
 if (${BUILD_V2})
   SET(netcdff_SOURCES ${netcdff_SOURCES}
-    nf_v2compat.c module_netcdf_fortv2_c_interfaces.f90 nf_fortv2.f90
+    module_netcdf_fortv2_c_interfaces.f90 nf_fortv2.f90
     )
+  SET(netcdff_C_SOURCES ${netcdff_C_SOURCES} nf_v2compat.c )
 endif (${BUILD_V2})
 
 if (${BUILD_F03})
@@ -117,6 +129,8 @@ endif (${USE_LOGGING})
 
 SET(BUILT_SOURCES ${BUILT_SOURCES} netcdf.inc)
 
+include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/libsrc)
+
 # Default to shared libs on
 OPTION(BUILD_SHARED_LIBS "Configure netCDF as a shared library." ON)
 SET (LIB_TYPE STATIC)
@@ -131,8 +145,19 @@ ENDIF()
 # This just builds SHARED, even though STATIC is also specified
 # ADD_LIBRARY(netcdff STATIC SHARED ${netcdff_SOURCES})
 # Builds only static, not shared
+# Compile C-code to object, then link with Fortran
+ADD_LIBRARY(netcdff_c OBJECT ${netcdff_C_SOURCES})
+install(TARGETS netcdff_c OBJECTS DESTINATION lib)
+# or is this better?   list(APPEND NETCDF_C_LIBRARY netcdff_c)
+SET(NETCDF_C_LIBRARY ${NETCDF_C_LIBRARY} netcdff_c)
+set_target_properties(netcdff_c PROPERTIES
+    INTERFACE_INCLUDE_DIRECTORIES "${NETCDF_C_INCLUDE_DIR}"
+  )
+target_include_directories(netcdff_c PUBLIC "${NETCDF_C_INCLUDE_DIR}")
+
 ADD_LIBRARY(netcdff ${netcdff_SOURCES})
 TARGET_LINK_LIBRARIES(netcdff PUBLIC netCDF::netcdf)
+TARGET_LINK_LIBRARIES(netcdff PRIVATE ${NETCDF_C_LIBRARY})
 TARGET_LINK_LIBRARIES(netcdff PUBLIC ${EXTRA_DEPS})
 SET_TARGET_PROPERTIES(netcdff PROPERTIES
                       VERSION ${NC4F_LIB_VERSION}
@@ -147,6 +172,15 @@ target_include_directories(netcdff PUBLIC
 if (HAVE_NC_USE_PARALLEL_ENABLED)
   target_link_libraries(netcdff PUBLIC MPI::MPI_Fortran)
 endif()
+
+# copied from netcdf-c... Changed from ADD_DEFINITIONS to TARGET_COMPILE_DEFINITIONS
+# Option to Build DLL
+IF(WIN32)
+  OPTION(LINK_TO_SHARED_LIBS "Link to netcdf-c shared library" ON)
+  IF(LINK_TO_SHARED_LIBS)
+    TARGET_COMPILE_DEFINITIONS(netcdff_c PRIVATE DLL_NETCDF)
+  ENDIF()
+ENDIF()
 
 ##
 # Configuration for post-install RPath
@@ -174,7 +208,7 @@ IF(NOT MSVC)
 ENDIF()
 
 # Installation of the program
-INSTALL(TARGETS netcdff
+INSTALL(TARGETS netcdff netcdff_c
     EXPORT netcdffTargets
     RUNTIME DESTINATION "${CMAKE_INSTALL_BINDIR}" COMPONENT bin
     LIBRARY DESTINATION "${CMAKE_INSTALL_LIBDIR}" COMPONENT shlib
