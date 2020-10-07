@@ -15,12 +15,14 @@ SET(netcdff_SOURCES
 # Check if netcdf-c has parallel I/O functions
 check_symbol_exists(nc_create_par "netcdf.h" HAVE_PARALLEL)
 message (STATUS "found netcdf-c parallel support: ${HAVE_PARALLEL}")
-IF (USE_NETCDF4 AND HAVE_PARALLEL)
+IF (${USE_NETCDF4}
+IF(HAVE_PARALLEL)
   SET(netcdff_SOURCES ${netcdff_SOURCES} nf_nc.f90)
   message (STATUS "including netcdf-f parallel support")
 ELSE ()
   SET(netcdff_SOURCES ${netcdff_SOURCES} nf_nc_noparallel.f90)
   message (STATUS "no netcdf-f parallel support")
+ENDIF(HAVE_PARALLEL)
 ENDIF(${USE_NETCDF4} AND HAVE_PARALLEL)
 
 IF (USE_NETCDF4)
