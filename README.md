@@ -51,7 +51,7 @@ To install this package, please see the document:
 Additional Documentation
 ------------------------
 
-Previous varsions of the netCDF-3 C and FORTRAN-77 interfaces are
+Previous versions of the netCDF-3 C and FORTRAN-77 interfaces are
 documented at
 
 * http://www.unidata.ucar.edu/netcdf/documentation/historic/
