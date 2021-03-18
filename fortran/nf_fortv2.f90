@@ -34,6 +34,8 @@
 !                         wasn't caught by checks since no checks for
 !                         the routines that use them exist. Changed name
 !                         processing to reflect change in addCNullchar
+! Version 5: Mar   2021 - Change ncvgtc to just call nf_get_vara_text to
+!                         store multi-char variable support
 
 ! ------------------------------- ncpopt -------------------------------------- 
  Subroutine ncpopt(ncopts)
@@ -1105,8 +1107,7 @@
 ! ------------------------------- ncvgtc -------------------------------------- 
  Subroutine ncvgtc(ncid, varid, start, counts, string, lenstr, rcode) 
 
- USE netcdf_nc_interfaces, ONLY: NC_NOERR, nc_inq_varndims
- USE netcdf_fortv2_c_interfaces
+ USE netcdf_nf_interfaces
 
  Implicit NONE
 
@@ -1115,58 +1116,7 @@
  Character(LEN=*), Intent(INOUT) :: string
  Integer,          Intent(OUT)   :: rcode
 
- Integer(C_INT)          :: cncid, crcode, cvarid, cstatus, cndims, &
-                            clenstr
- Type(C_PTR)             :: cstartptr, ccountsptr
- Character(LEN=lenstr+1) :: cstring
- Integer                 :: ndims, slen
-
- Integer(C_SIZE_T), ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
-
- cncid   = ncid
- cvarid  = varid - 1
- clenstr = lenstr
- crcode  = 0
- rcode   = 0
- cndims  = 0
- ndims   = 0
- string  = REPEAT(" ", LEN(string))
- cstring = REPEAT(" ", LEN(cstring))
-
- cstatus = nc_inq_varndims(cncid, cvarid, cndims)
-
- cstartptr  = C_NULL_PTR
- ccountsptr = C_NULL_PTR
- ndims      = cndims
- 
- If (cstatus == NC_NOERR) Then ! mimic f2c_coords, etc. in C code
-   If (ndims > 0) Then
-     ALLOCATE(cstart(ndims))
-     ALLOCATE(ccounts(ndims))
-     cstart(1:ndims)  = start(ndims:1:-1) - 1
-     ccounts(1:ndims) = counts(ndims:1:-1)
-     cstartptr        = C_LOC(cstart)
-     ccountsptr       = C_LOC(ccounts)
-   Endif
- Endif
-
- Call c_ncvgtc(cncid, cvarid, cstartptr, ccountsptr, cstring, clenstr, crcode)
-
- If (LEN(string) >= lenstr) Then
-   string(1:lenstr) = cstring(1:lenstr)
- Else
-   slen           = LEN(string)
-   string(1:slen) = cstring(1:slen)
- EndIf
-
- rcode = crcode
-
-! Make sure there are no dangling pointers or allocated values
-
- cstartptr   = C_NULL_PTR
- ccountsptr  = C_NULL_PTR
- If (ALLOCATED(ccounts))  DEALLOCATE(ccounts)
- If (ALLOCATED(cstart))   DEALLOCATE(cstart)
+ rcode = nf_get_vara_text(ncid, varid, start, counts, string)
 
  End Subroutine ncvgtc
 ! ------------------------------- ncvgtg -------------------------------------- 
