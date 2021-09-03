@@ -94,6 +94,12 @@
       integer nf_collective
       parameter (nf_collective = 1)
 
+!     For NF_DEF_VAR_QUANTIZE.
+      integer nf_noquantize
+      parameter (nf_noquantize = 0)
+      integer nf_quantize_bitgroom
+      parameter (nf_quantize_bitgroom = 1)
+
 !     New error codes.
       integer nf_ehdferr        ! Error at HDF5 layer. 
       parameter (nf_ehdferr = -101)
@@ -210,6 +216,12 @@
 
       integer nf_inq_var_szip
       external nf_inq_var_szip
+
+      integer nf_def_var_quantize
+      external nf_def_var_quantize
+
+      integer nf_inq_var_quantize
+      external nf_inq_var_quantize
 
       integer nf_def_var_fletcher32
       external nf_def_var_fletcher32
