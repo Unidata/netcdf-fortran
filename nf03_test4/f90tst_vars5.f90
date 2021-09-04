@@ -50,6 +50,8 @@ program f90tst_vars5
   real*8 double_data_in(DIM_LEN_5)
   real real_data_expected(DIM_LEN_5)
   real*8 double_data_expected(DIM_LEN_5)
+  real diff
+  real, parameter :: EPSILON  = .01
 
   print *, ''
   print *,'*** Testing use of quantize feature on netCDF-4 vars from Fortran 90.'
@@ -121,6 +123,7 @@ program f90tst_vars5
        quantize_mode = quantize_mode_in, nsd = nsd_in))
   if (name_in .ne. VAR1_NAME .or. xtype_in .ne. NF90_FLOAT .or. ndims_in .ne. NDIM1 .or. &
        natts_in .ne. 1 .or. dimids_in(1) .ne. dimids(1)) stop 3
+  if (quantize_mode_in .ne. nf90_quantize_bitgroom .or. nsd_in .ne. 3) stop 3
 
   ! Check variable 2.
   call check(nf90_inquire_variable(ncid, varid2_in, name_in, xtype_in, ndims_in, dimids_in, &
@@ -130,33 +133,22 @@ program f90tst_vars5
   if (name_in .ne. VAR2_NAME .or. xtype_in .ne. NF90_DOUBLE .or. ndims_in .ne. NDIM1 .or. &
        natts_in .ne. 1 .or. dimids_in(1) .ne. dimids(1)) stop 6
   if (deflate_level_in .ne. 0 .or. .not. contiguous_in .or. fletcher32_in .or. shuffle_in) stop 7
+  if (quantize_mode_in .ne. nf90_quantize_bitgroom .or. nsd_in .ne. 3) stop 3
 
-  ! ! Check the data.
-  ! call check(nf90_get_var(ncid, varid1_in, data_in))
-  ! do x = 1, DIM_LEN_5
-  !    do y = 1, NY
-  !       if (data_out(y, x) .ne. data_in(y, x)) stop 12
-  !    end do
-  ! end do
-  ! call check(nf90_get_var(ncid, varid2_in, data_in))
-  ! do x = 1, DIM_LEN_5
-  !    do y = 1, NY
-  !       if (data_out(y, x) .ne. data_in(y, x)) stop 13
-  !    end do
-  ! end do
-  ! call check(nf90_get_var(ncid, varid3_in, toe_san_in))
-  ! if (toe_san_in .ne. TOE_SAN_VALUE) stop 14
-  ! call check(nf90_get_var(ncid, varid4_in, data_in_1d))
-  ! do x = 1, DIM_LEN_5
-  !    if (data_out_1d(x) .ne. data_in_1d(x)) stop 15
-  ! end do
-  ! call check(nf90_get_var(ncid, varid5_in, data_in))
-  ! do x = 1, DIM_LEN_5
-  !    do y = 1, NY
-  !       if (data_out(y, x) .ne. data_in(y, x)) stop 12
-  !    end do
-  ! end do
+  ! Check the data.
+  call check(nf90_get_var(ncid, varid1_in, real_data_in))
+  call check(nf90_get_var(ncid, varid2_in, double_data_in))
 
+  ! Check the data. 
+  do x = 1, DIM_LEN_5
+     diff = abs(real_data_in(x) - real_data_expected(x))
+     if (diff .gt. EPSILON) stop 23
+     diff = abs(double_data_in(x) - double_data_expected(x))
+     ! print *, double_data_in(x), double_data_expected(x)
+     ! print *, 'x = ', x, ' diff = ', diff
+     if (diff .gt. EPSILON) stop 24
+  end do
+  
   ! Close the file. 
   call check(nf90_close(ncid))
 
