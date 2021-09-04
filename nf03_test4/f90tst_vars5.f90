@@ -44,7 +44,12 @@ program f90tst_vars5
   integer :: endianness_in, deflate_level_in
   logical :: shuffle_in, fletcher32_in, contiguous_in
   integer (kind = EightByteInt) :: toe_san_in
-  integer :: cache_size_in, cache_nelems_in, cache_preemption_in  
+  integer :: cache_size_in, cache_nelems_in, cache_preemption_in
+  integer :: quantize_mode_in, nsd_in
+  real real_data_in(DIM_LEN_5)
+  real*8 double_data_in(DIM_LEN_5)
+  real real_data_expected(DIM_LEN_5)
+  real*8 double_data_expected(DIM_LEN_5)
 
   print *, ''
   print *,'*** Testing use of quantize feature on netCDF-4 vars from Fortran 90.'
@@ -77,73 +82,54 @@ program f90tst_vars5
        & varid2, contiguous = .TRUE., quantize_mode =&
        & nf90_quantize_bitgroom, nsd = 3))
 
-  ! ! Write the pretend data to the file.
-  ! call check(nf90_put_var(ncid, varid1, data_out))
-  ! call check(nf90_put_var(ncid, varid2, data_out))
-  ! call check(nf90_put_var(ncid, varid3, TOE_SAN_VALUE))
-  ! call check(nf90_put_var(ncid, varid4, data_out_1d))
-  ! call check(nf90_put_var(ncid, varid5, data_out))
+  ! Write the pretend data to the file.
+  call check(nf90_put_var(ncid, varid1, real_data))
+  call check(nf90_put_var(ncid, varid2, double_data))
 
   ! Close the file. 
   call check(nf90_close(ncid))
 
+  ! What we expect to get back.
+  real_data_expected(1) = 1.11084
+  real_data_expected(2) = 1.000488
+  real_data_expected(3) = 10
+  real_data_expected(4) = 12348
+  real_data_expected(5) = 0.1234436
+  double_data_expected(1) = 1.11083984375
+  double_data_expected(2) = 1.00048828125
+  double_data_expected(3) = 10
+  double_data_expected(4) = 1234698240
+  double_data_expected(5) = 1234173952
+
   ! Reopen the file.
   call check(nf90_open(FILE_NAME, nf90_nowrite, ncid))
   
-  ! ! Check some stuff out.
-  ! call check(nf90_inquire(ncid, ndims, nvars, ngatts, unlimdimid, file_format))
-  ! if (ndims /= 2 .or. nvars /= 5 .or. ngatts /= 0 .or. unlimdimid /= -1 .or. &
-  !      file_format /= nf90_format_netcdf4) stop 2
+  ! Check some stuff out.
+  call check(nf90_inquire(ncid, ndims, nvars, ngatts, unlimdimid, file_format))
+  if (ndims /= 1 .or. nvars /= 2 .or. ngatts /= 0 .or. unlimdimid /= -1 .or. &
+       file_format /= nf90_format_netcdf4) stop 2
 
-  ! ! Get varids.
-  ! call check(nf90_inq_varid(ncid, VAR1_NAME, varid1_in))
-  ! call check(nf90_inq_varid(ncid, VAR2_NAME, varid2_in))
-  ! call check(nf90_inq_varid(ncid, VAR3_NAME, varid3_in))
-  ! call check(nf90_inq_varid(ncid, VAR4_NAME, varid4_in))
-  ! call check(nf90_inq_varid(ncid, VAR5_NAME, varid5_in))
+  ! Get varids.
+  call check(nf90_inq_varid(ncid, VAR1_NAME, varid1_in))
+  call check(nf90_inq_varid(ncid, VAR2_NAME, varid2_in))
 
-  ! ! Check variable 1.
-  ! call check(nf90_inquire_variable(ncid, varid1_in, name_in, xtype_in, ndims_in, dimids_in, &
-  !      natts_in, chunksizes = chunksizes_in, endianness = endianness_in, fletcher32 = fletcher32_in, &
-  !      deflate_level = deflate_level_in, shuffle = shuffle_in, cache_size = cache_size_in, &
-  !      cache_nelems = cache_nelems_in, cache_preemption = cache_preemption_in))
-  ! if (name_in .ne. VAR1_NAME .or. xtype_in .ne. NF90_INT .or. ndims_in .ne. NDIM1 .or. &
-  !      natts_in .ne. 0 .or. dimids_in(1) .ne. dimids(1) .or. dimids_in(2) .ne. dimids(2)) stop 3
-  ! if (chunksizes_in(1) /= chunksizes(1) .or. chunksizes_in(2) /= chunksizes(2)) &
-  !      stop 4
-  ! if (endianness_in .ne. nf90_endian_big) stop 5
+  ! Check variable 1.
+  call check(nf90_inquire_variable(ncid, varid1_in, name_in, xtype_in, ndims_in, dimids_in, &
+       natts_in, chunksizes = chunksizes_in, endianness = endianness_in, fletcher32 = fletcher32_in, &
+       deflate_level = deflate_level_in, shuffle = shuffle_in, cache_size = cache_size_in, &
+       cache_nelems = cache_nelems_in, cache_preemption = cache_preemption_in, &
+       quantize_mode = quantize_mode_in, nsd = nsd_in))
+  if (name_in .ne. VAR1_NAME .or. xtype_in .ne. NF90_FLOAT .or. ndims_in .ne. NDIM1 .or. &
+       natts_in .ne. 1 .or. dimids_in(1) .ne. dimids(1)) stop 3
 
-  ! ! This test code commented out because it fails parallel builds,
-  ! ! which don't use the cache, so don't get the same size
-  ! ! settings. Since we are not (yet) using a preprocessor on the
-  ! ! fortran code, there's no way to ifdef out these tests.
-  ! ! print *, cache_size_in, cache_nelems_in, cache_preemption
-  ! ! if (cache_size_in .ne. 16 .or. cache_nelems_in .ne. 4133 .or. &
-  ! !      cache_preemption .ne. CACHE_PREEMPTION) stop 555
-
-  ! ! Check variable 2.
-  ! call check(nf90_inquire_variable(ncid, varid2_in, name_in, xtype_in, ndims_in, dimids_in, &
-  !      natts_in, contiguous = contiguous_in, endianness = endianness_in, fletcher32 = fletcher32_in, &
-  !      deflate_level = deflate_level_in, shuffle = shuffle_in))
-  ! if (name_in .ne. VAR2_NAME .or. xtype_in .ne. NF90_INT .or. ndims_in .ne. NDIM1 .or. &
-  !      natts_in .ne. 0 .or. dimids_in(1) .ne. dimids(1) .or. dimids_in(2) .ne. dimids(2)) stop 6
-  ! if (deflate_level_in .ne. 0 .or. .not. contiguous_in .or. fletcher32_in .or. shuffle_in) stop 7
-
-  ! ! Check variable 3.
-  ! call check(nf90_inquire_variable(ncid, varid3_in, name_in, xtype_in, ndims_in, dimids_in, &
-  !      natts_in, contiguous = contiguous_in, endianness = endianness_in, fletcher32 = fletcher32_in, &
-  !      deflate_level = deflate_level_in, shuffle = shuffle_in))
-  ! if (name_in .ne. VAR3_NAME .or. xtype_in .ne. NF90_INT64 .or. ndims_in .ne. 0 .or. &
-  !      natts_in .ne. 0) stop 8
-  ! if (deflate_level_in .ne. 0 .or. .not. contiguous_in .or. fletcher32_in .or. shuffle_in) stop 9
-  
-  ! ! Check variable 4.
-  ! call check(nf90_inquire_variable(ncid, varid4_in, name_in, xtype_in, ndims_in, dimids_in, &
-  !      natts_in, contiguous = contiguous_in, endianness = endianness_in, fletcher32 = fletcher32_in, &
-  !      deflate_level = deflate_level_in, shuffle = shuffle_in))
-  ! if (name_in .ne. VAR4_NAME .or. xtype_in .ne. NF90_INT .or. ndims_in .ne. 1 .or. &
-  !      natts_in .ne. 0 .or. dimids_in(1) .ne. x_dimid) stop 10
-  ! if (deflate_level_in .ne. 0 .or. .not. contiguous_in .or. fletcher32_in .or. shuffle_in) stop 11
+  ! Check variable 2.
+  call check(nf90_inquire_variable(ncid, varid2_in, name_in, xtype_in, ndims_in, dimids_in, &
+       natts_in, contiguous = contiguous_in, endianness = endianness_in, fletcher32 = fletcher32_in, &
+       deflate_level = deflate_level_in, shuffle = shuffle_in, &
+       quantize_mode = quantize_mode_in, nsd = nsd_in))
+  if (name_in .ne. VAR2_NAME .or. xtype_in .ne. NF90_DOUBLE .or. ndims_in .ne. NDIM1 .or. &
+       natts_in .ne. 1 .or. dimids_in(1) .ne. dimids(1)) stop 6
+  if (deflate_level_in .ne. 0 .or. .not. contiguous_in .or. fletcher32_in .or. shuffle_in) stop 7
 
   ! ! Check the data.
   ! call check(nf90_get_var(ncid, varid1_in, data_in))

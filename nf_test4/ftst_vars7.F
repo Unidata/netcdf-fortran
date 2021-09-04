@@ -97,17 +97,17 @@ C     Close the file.
       retval = nf_close(ncid)
       if (retval .ne. nf_noerr) stop 4
 
-c$$$C     Reopen the file.
-c$$$      retval = nf_open(FILE_NAME, NF_NOWRITE, ncid)
-c$$$      if (retval .ne. nf_noerr) stop 5
-c$$$
-c$$$C     Check it out. 
-c$$$      retval = check_file(ncid, var_name, var_type, dim_name)
-c$$$      if (retval .ne. 0) stop 6
-c$$$
-c$$$C     Close the file. 
-c$$$      retval = nf_close(ncid)
-c$$$      if (retval .ne. nf_noerr) stop 7
+C     Reopen the file.
+      retval = nf_open(FILE_NAME, NF_NOWRITE, ncid)
+      if (retval .ne. nf_noerr) stop 5
+
+C     Check it out. 
+      retval = check_file(ncid, var_name, var_type, dim_name)
+      if (retval .ne. 0) stop 6
+
+C     Close the file. 
+      retval = nf_close(ncid)
+      if (retval .ne. nf_noerr) stop 7
 
       print *,'*** SUCCESS!'
       end

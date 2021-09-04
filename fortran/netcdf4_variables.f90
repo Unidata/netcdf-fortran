@@ -288,7 +288,7 @@
   ! ----- 
   function nf90_inquire_variable(ncid, varid, name, xtype, ndims, dimids, nAtts, &
        contiguous, chunksizes, deflate_level, shuffle, fletcher32, endianness, &
-       cache_size, cache_nelems, cache_preemption)
+       cache_size, cache_nelems, cache_preemption, quantize_mode, nsd)
     integer, intent(in) :: ncid, varid
     character (len = *), optional, intent(out) :: name
     integer, optional, intent(out) :: xtype, ndims 
@@ -300,6 +300,7 @@
     logical, optional, intent(out) :: shuffle, fletcher32
     integer, optional, intent(out) :: endianness
     integer, optional, intent(out) :: cache_size, cache_nelems, cache_preemption
+    integer, optional, intent(out) :: quantize_mode, nsd
     integer :: nf90_inquire_variable
     
     ! Local variables
@@ -372,6 +373,13 @@
        if (present(cache_nelems)) cache_nelems = nelems1
        if (present(cache_preemption)) cache_preemption = preemption1
     endif
+
+    ! And the quantization...
+    if (present(quantize_mode)) then
+       nf90_inquire_variable = nf_inq_var_quantize(ncid, varid, quantize_mode, nsd)
+       if (nf90_inquire_variable .ne. nf90_noerr) return
+    endif
+    
   end function nf90_inquire_variable
   ! ----- 
   function nf90_rename_var(ncid, varid, newname)
