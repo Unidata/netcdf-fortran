@@ -43,6 +43,7 @@ jobs:
         set -x
         git clone https://github.com/Unidata/netcdf-c.git
         pushd netcdf-c
+        autoreconf -i
         ./configure --prefix=/home/runner/netcdf-c --disable-dap --disable-utilities
         make -j
         sudo make install
