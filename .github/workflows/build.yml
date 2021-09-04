@@ -38,20 +38,11 @@ jobs:
         make
         sudo make install
         popd
-    - name: cache-netcdf-c
-      id: cache-netcdf-c
-      uses: actions/cache@v2
-      with:
-        path: ~/netcdf-c
-        key: netcdf-c-${{ runner.os }}-4.7.4
-
     - name: build-netcdf-c
-      if: steps.cache-netcdf-c.outputs.cache-hit != 'true'
       run: |
         set -x
-        wget https://www.unidata.ucar.edu/downloads/netcdf/ftp/netcdf-c-4.7.4.tar.gz &> /dev/null
-        tar -xzf netcdf-c-4.7.4.tar.gz
-        pushd netcdf-c-4.7.4
+        git clone https://github.com/Unidata/netcdf-c.git
+        pushd netcdf-c
         ./configure --prefix=/home/runner/netcdf-c --disable-dap --disable-utilities
         make -j
         sudo make install
@@ -60,7 +51,6 @@ jobs:
       run: |
         set -x
         gcc --version
-        source .bashrc
         export LD_LIBRARY_PATH="/home/runner/netcdf-c/lib:/home/runner/hdf5/lib:$LD_LIBRARY_PATH"
         mkdir build
         cd build
