@@ -38,33 +38,32 @@ jobs:
         make
         sudo make install
         popd
-    - name: build-netcdf-c
-      run: |
-        set -x
-        git clone https://github.com/Unidata/netcdf-c.git
-        pushd netcdf-c
-        ./configure --prefix=/home/runner/netcdf-c --disable-dap --disable-utilities
-        make -j
-        sudo make install
-        popd
-    - name: cmake build
-      run: |
-        set -x
-        gcc --version
-        export LD_LIBRARY_PATH="/home/runner/netcdf-c/lib:/home/runner/hdf5/lib:$LD_LIBRARY_PATH"
-        mkdir build
-        cd build
-        cmake -Wno-dev -DNetCDF_C_LIBRARY=/home/runner/netcdf-c/lib/libnetcdf.so -DNetCDF_C_INCLUDE_DIR=/home/runner/netcdf-c/include .. || (cat CMakeFiles/CMakeOutput.log && cat CMakeFiles/CMakeError.log)
-        make VERBOSE=1
-        make tests VERBOSE=1
+    # - name: build-netcdf-c
+    #   run: |
+    #     set -x
+    #     git clone https://github.com/Unidata/netcdf-c.git
+    #     pushd netcdf-c
+    #     ./configure --prefix=/home/runner/netcdf-c --disable-dap --disable-utilities
+    #     make -j
+    #     sudo make install
+    #     popd
+    # - name: cmake build
+    #   run: |
+    #     set -x
+    #     gcc --version
+    #     export LD_LIBRARY_PATH="/home/runner/netcdf-c/lib:/home/runner/hdf5/lib:$LD_LIBRARY_PATH"
+    #     mkdir build
+    #     cd build
+    #     cmake -Wno-dev -DNetCDF_C_LIBRARY=/home/runner/netcdf-c/lib/libnetcdf.so -DNetCDF_C_INCLUDE_DIR=/home/runner/netcdf-c/include .. || (cat CMakeFiles/CMakeOutput.log && cat CMakeFiles/CMakeError.log)
+    #     make VERBOSE=1
+    #     make tests VERBOSE=1
 #        ctest -VV
     - name: autotools build
       run: |
         set -x
         gcc --version
-        source .bashrc
-        autoreconf -i
-        ./configure
-        make -j check
+        # autoreconf -i
+        # ./configure
+        # make -j check
         
         
