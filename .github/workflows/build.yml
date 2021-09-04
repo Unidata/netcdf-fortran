@@ -38,15 +38,15 @@ jobs:
         make
         sudo make install
         popd
-    # - name: build-netcdf-c
-    #   run: |
-    #     set -x
-    #     git clone https://github.com/Unidata/netcdf-c.git
-    #     pushd netcdf-c
-    #     ./configure --prefix=/home/runner/netcdf-c --disable-dap --disable-utilities
-    #     make -j
-    #     sudo make install
-    #     popd
+    - name: build-netcdf-c
+      run: |
+        set -x
+        git clone https://github.com/Unidata/netcdf-c.git
+        pushd netcdf-c
+        ./configure --prefix=/home/runner/netcdf-c --disable-dap --disable-utilities
+        make -j
+        sudo make install
+        popd
     # - name: cmake build
     #   run: |
     #     set -x
@@ -62,8 +62,8 @@ jobs:
       run: |
         set -x
         gcc --version
-        # autoreconf -i
-        # ./configure
-        # make -j check
+        autoreconf -i
+        ./configure
+        make -j check
         
         
