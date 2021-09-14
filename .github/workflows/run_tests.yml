@@ -54,9 +54,8 @@ jobs:
           make -j
           make install -j
           popd
-          git clone https://github.com/Unidata/netcdf-c
+          git clone -b ${{ matrix.netcdf}} https://github.com/Unidata/netcdf-c
           pushd netcdf-c
-          git checkout ${{ matrix.netcdf }}
           autoreconf -if
           ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
           make -j
