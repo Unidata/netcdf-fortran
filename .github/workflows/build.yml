@@ -34,14 +34,15 @@ jobs:
         wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/hdf5-1.10.7/src/hdf5-1.10.7.tar.gz &> /dev/null
         tar -xzf hdf5-1.10.7.tar.gz
         pushd hdf5-1.10.7
-        ./configure --prefix=/home/runner/hdf5 --disable-tools --disable-fortran --disable-cxx 
+        ./configure --prefix=/home/runner/hdf5 --disable-tools --disable-fortran --disable-cxx
         make
         sudo make install
         popd
     - name: build-netcdf-c
       run: |
         set -x
-        git clone -b ejh_quantize_2 https://github.com/edwardhartnett/netcdf-c.git
+        #git clone -b ejh_quantize_2 https://github.com/edwardhartnett/netcdf-c.git
+        git clone -b v4.8.1 https://github.com/Unidata/netcdf-c
         pushd netcdf-c
         autoreconf -i
         ./configure --prefix=/home/runner/netcdf-c --disable-dap --disable-utilities
@@ -66,5 +67,3 @@ jobs:
         autoreconf -i
         ./configure
         make -j check
-        
-        
