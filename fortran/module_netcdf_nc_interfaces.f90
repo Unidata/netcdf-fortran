@@ -2540,6 +2540,19 @@ Interface
  End Function nc_def_var_szip
 End Interface
 
+!---------------------------------- nc_def_var_quantize ---------------------------------
+Interface
+ Function nc_def_var_quantize(ncid, varid, quantize_mode, nsd) BIND(C)
+
+ USE ISO_C_BINDING, ONLY: C_CHAR, C_INT
+
+ Integer(C_INT), VALUE :: ncid, varid, quantize_mode, nsd
+
+ Integer(C_INT) :: nc_def_var_quantize
+
+ End Function nc_def_var_quantize
+End Interface
+
 !---------------------------- Start of module procedures ---------------------
 CONTAINS
 

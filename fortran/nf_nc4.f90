@@ -1569,6 +1569,55 @@
 
  End Function nf_inq_var_szip
 
+!-------------------------------- nf_def_var_quantize --------------------------
+ Function nf_def_var_quantize(ncid, varid, quantize_mode, nsd) &
+      RESULT (status)
+! define variable deflation
+ USE netcdf4_nc_interfaces
+ Implicit NONE
+ Integer, Intent(IN) :: ncid, varid, quantize_mode, nsd
+ Integer :: status
+ Integer(C_INT) :: cncid, cvarid, cquantize_mode, cnsd, cstatus
+
+ cncid = ncid
+ cvarid = varid-1
+ cquantize_mode = quantize_mode
+ cnsd = nsd
+
+ cstatus = nc_def_var_quantize(cncid, cvarid, cquantize_mode, cnsd)
+ status = cstatus
+
+ End Function nf_def_var_quantize
+!-------------------------------- nf_inq_var_quantize -----------------------------
+ Function nf_inq_var_quantize(ncid, varid, quantize_mode, nsd) RESULT(status)
+
+! get quantize variables
+ 
+ USE netcdf4_nc_interfaces
+
+ Implicit NONE
+
+ Integer, Intent(IN)    :: ncid, varid
+ Integer, Intent(INOUT) :: quantize_mode, nsd
+
+ Integer                :: status
+
+ Integer(C_INT) :: cncid, cvarid, cquantize_mode, cnsd, cstatus
+
+ cncid  = ncid
+ cvarid = varid-1
+
+ cstatus = nc_inq_var_quantize(cncid, cvarid, cquantize_mode, cnsd)
+
+ If (cstatus == NC_NOERR) Then
+    quantize_mode     = cquantize_mode
+    nsd = cnsd
+ EndIf
+
+ status = cstatus
+
+ End Function nf_inq_var_quantize
+
 !-------------------------------- nf_def_var_fletcher32 -----------------------
  Function nf_def_var_fletcher32( ncid, varid, fletcher32) RESULT(status)
 
