@@ -15,7 +15,7 @@ jobs:
     strategy:
       matrix:
         hdf5: [ 1.10.7 ]
-        netcdf: [ v4.8.1 ]
+        netcdf: [ v4.8.1, main ]
 
     steps:
 
@@ -71,7 +71,7 @@ jobs:
     strategy:
       matrix:
         hdf5: [ 1.10.7 ]
-        netcdf: [ v4.8.1 ]
+        netcdf: [ v4.8.1, main ]
 
     steps:
 
@@ -152,7 +152,7 @@ jobs:
     strategy:
       matrix:
         hdf5: [ 1.10.7 ]
-        netcdf: [ v4.8.1 ]
+        netcdf: [ v4.8.1, main ]
 
     steps:
 
