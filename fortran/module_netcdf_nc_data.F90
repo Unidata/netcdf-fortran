@@ -405,10 +405,6 @@ Module netcdf_nc_data
  Integer(C_INT), Parameter :: NC_ECANTEXTEND    = -130
  Integer(C_INT), Parameter :: NC_EMPI           = -131
 
-! Quantize feature 
- Integer(C_INT), Parameter :: NC_NOQUANTIZE           = 0
- Integer(C_INT), Parameter :: NC_QUANTIZE_BITGROOM    = 1
-
 #endif
 
 !------------------------------------------------------------------------------

@@ -1,4 +1,5 @@
 CTestConfig.cmake
+build*
 \#.\#
 *.*~
 html
