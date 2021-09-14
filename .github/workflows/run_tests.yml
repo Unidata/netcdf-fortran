@@ -39,19 +39,19 @@ jobs:
       - name: Build libhdf5-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
         if: steps.cache-hdf5.outputs.cache-hit != 'true'
         run: |
-              wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-$(echo ${{ matrix.hdf5 }}) | cut -d. -f 1,2)/hdf5-${{ matrix.hdf5 }}/src/hdf5-${{ matrix.hdf5 }}.tar.bz2
-              tar -jxf hdf5-${{ matrix.hdf5 }}.tar.bz2
-              pushd hdf5-${{ matrix.hdf5 }}
-              ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }} --enable-hl --with-szlib
-              make -j
-              make install -j
-              popd
-              git clone -b ${{ matrix.netcdf}} https://github.com/Unidata/netcdf-c
-              pushd netcdf-c
-              autoreconf -if
-              ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
-              make -j
-              make install -j popd
+          wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-$(echo ${{ matrix.hdf5 }} | cut -d. -f 1,2)/hdf5-${{ matrix.hdf5 }}/src/hdf5-${{ matrix.hdf5 }}.tar.bz2
+          tar -jxf hdf5-${{ matrix.hdf5 }}.tar.bz2
+          pushd hdf5-${{ matrix.hdf5 }}
+          ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }} --enable-hl --with-szlib
+          make -j
+          make install -j
+          popd
+          git clone -b ${{ matrix.netcdf}} https://github.com/Unidata/netcdf-c
+          pushd netcdf-c
+          autoreconf -if
+          ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
+          make -j
+          make install -j popd
 
 
   nf-autotools:
