@@ -39,7 +39,7 @@ jobs:
       - name: Build libhdf5-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
         if: steps.cache-hdf5.outputs.cache-hit != 'true'
         run: |
-          set -x
+          #set -x
           #wget https://support.hdfgroup.org/ftp/HDF/releases/HDF4.2.15/src/hdf-4.2.15.tar.bz2
           #tar -jxf hdf-4.2.15.tar.bz2
           #pushd hdf-4.2.15
