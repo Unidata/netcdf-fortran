@@ -127,7 +127,8 @@ in a netCDF-4/HDF5 file.
    integer, optional, intent(in) :: deflate_level
    logical, optional, intent(in) :: shuffle, fletcher32
    integer, optional, intent(in) :: endianness
-    integer, optional, intent(in) :: cache_size, cache_nelems, cache_preemption
+   integer, optional, intent(in) :: cache_size, cache_nelems, cache_preemption
+   integer, optional, intent(in) :: quantize_mode, nsd
    integer                                      :: nf90_def_var
 
 
@@ -250,7 +251,19 @@ in a netCDF-4/HDF5 file.
     while a value of 100 means fully read chunks are always preempted
     before other chunks.
 
+`quantize_mode`
 
+:   Set to nf90_noquantize (0) for no quantization (the default), or
+    nf90_quantize_bitgroom (1) for bitgroom quantization. Quantization
+    allows users to specify a number of significant digits (NSD) in
+    nf90_float and nf90_double variables. Bits beyond those needed to
+    maintain the NSD are set to zero or one (alternating). This causes
+    the data to compress better when compression is applied.
+
+`nsd`
+
+:   If quantize_mode is set to nf90_quantize_bitgroom, then this is the
+    number of significant digits to be maintained in the data.
 
 ## Return Codes
 
@@ -723,6 +736,7 @@ netCDF-4/HDF5 file.
     integer, optional, intent(out) :: deflate_level
     logical, optional, intent(out) :: shuffle, fletcher32
     integer, optional, intent(out) :: endianness
+    integer, optional, intent(in) :: quantize_mode, nsd
     integer :: nf90_inquire_variable
 
 
@@ -797,6 +811,22 @@ netCDF-4/HDF5 file.
     little-endian format, NF90\_ENDIAN\_BIG if it is stored in
     big-endian format, and NF90\_ENDIAN\_NATIVE if the endianness is not
     set, and the variable is not created yet.
+
+`quantize_mode`
+
+:   Will be set to nf90_noquantize (0) for no quantization, or
+    nf90_quantize_bitgroom (1) for bitgroom quantization. Quantization
+    allows users to specify a number of significant digits (NSD) in
+    nf90_float and nf90_double variables. Bits beyond those needed to
+    maintain the NSD are set to zero or one (alternating). This causes
+    the data to compress better when compression is applied.
+
+`nsd`
+
+:   If quantize_mode is set to nf90_quantize_bitgroom, then this will be
+    set to the number of significant digits to be maintained in the
+    data.
+
 
 These functions return the value NF90\_NOERR if no errors occurred.
 Otherwise, the returned status indicates an error. Possible causes of
