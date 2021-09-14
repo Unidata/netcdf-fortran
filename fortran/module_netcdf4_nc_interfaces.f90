@@ -724,19 +724,6 @@ Interface
 
  End Function nc_inq_var_szip
 End Interface
-!------------------------------- nc_inq_var_quantize ------------------------------
-Interface
- Function nc_inq_var_quantize(ncid, varid, quantize_mode, nsd) BIND(C)
-
- USE ISO_C_BINDING, ONLY: C_INT
-
- Integer(C_INT), VALUE         :: ncid, varid
- Integer(C_INT), Intent(INOUT) :: quantize_mode, nsd 
-
- Integer(C_INT)                :: nc_inq_var_quantize
-
- End Function nc_inq_var_quantize
-End Interface
 !------------------------------- nc_def_var_fletcher32 ------------------------
 Interface
  Function nc_def_var_fletcher32(ncid, varid, fletcher32) BIND(C)
