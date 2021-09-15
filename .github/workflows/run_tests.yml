@@ -46,6 +46,7 @@ jobs:
       - name: Build libhdf5-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
         if: steps.cache-hdf5.outputs.cache-hit != 'true'
         run: |
+          pushd $HOME
           wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-$(echo ${{ matrix.hdf5 }} | cut -d. -f 1,2)/hdf5-${{ matrix.hdf5 }}/src/hdf5-${{ matrix.hdf5 }}.tar.bz2
           tar -jxf hdf5-${{ matrix.hdf5 }}.tar.bz2
           pushd hdf5-${{ matrix.hdf5 }}
@@ -58,7 +59,9 @@ jobs:
           autoreconf -if
           CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
           make -j
-          make install -j popd
+          make install -j
+          popd
+          popd
 
 
   nf-autotools:
