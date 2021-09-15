@@ -26,6 +26,13 @@ jobs:
         run: sudo apt update && sudo apt install -y libaec-dev zlib1g-dev automake autoconf libcurl4-openssl-dev libjpeg-dev wget curl bzip2 m4 flex bison cmake libzip-dev gfortran
 
         ###
+        # Set Environmental Variables
+        ###
+      - run: echo "CFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
+      - run: echo "LDFLAGS=-L${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
+      - run: echo "LD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
+
+        ###
         # Installing libhdf4 and libhdf5
         ###
       - name: Cache libhdf5-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
@@ -49,14 +56,14 @@ jobs:
           git clone -b ${{ matrix.netcdf}} https://github.com/Unidata/netcdf-c
           pushd netcdf-c
           autoreconf -if
-          ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
+          CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
           make -j
           make install -j popd
 
 
   nf-autotools:
 
-    needs: build-deps
+    needs: build-deps-netcdf
     runs-on: ubuntu-latest
 
     strategy:
