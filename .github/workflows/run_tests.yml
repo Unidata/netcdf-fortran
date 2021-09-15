@@ -63,7 +63,7 @@ jobs:
 
   nf-autotools:
 
-    needs: build-deps-netcdf
+    needs: build-deps
     runs-on: ubuntu-latest
 
     strategy:
