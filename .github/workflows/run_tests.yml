@@ -217,3 +217,8 @@ jobs:
               cd build
               LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ctest -j 12 .
         if: ${{ success() }}
+
+      - name: Look at LastTest.log if error
+        shell: bash -l {0}
+        run: cat /home/runner/work/netcdf-fortran/netcdf-fortran/build/Testing/Temporary/LastTest.log
+        if: ${{ failure() }}
