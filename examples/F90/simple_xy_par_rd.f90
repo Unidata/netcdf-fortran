@@ -7,10 +7,10 @@
 ! simple_xy_par_wr.f90. The data are read using parallel I/O.
       
 ! This program is part of the netCDF tutorial:
-! http://www.unidata.ucar.edu/software/netcdf/docs/tutorial_8dox.html
+! https://docs.unidata.ucar.edu/netcdf-c/current/tutorial_8dox.html
 
 ! Full documentation of the netCDF Fortran 90 API can be found at:
-! http://www.unidata.ucar.edu/software/netcdf/docs-fortran/f90_The-NetCDF-Fortran-90-Interface-Guide.html
+! https://docs.unidata.ucar.edu/netcdf-fortran/current/f90_The-NetCDF-Fortran-90-Interface-Guide.html
 
 ! Ed Hartnett
 
