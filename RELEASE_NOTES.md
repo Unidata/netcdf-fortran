@@ -5,15 +5,17 @@ Release Notes {#nf_release_notes}
 
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
-## 4.5.4 - TBD
 
-* Now allow setting of parallel I/O test launcher to something other than mpiexec with the --with-mpiexec= option on configure. See [Github #262](https://github.com/Unidata/netcdf-fortran/issues/262).
+## 4.5.4 - January 6, 2022
 
 ### Requirements
 
 * netCDF-C: 4.7.4+
 
 ### Changes
+
+* Various bug fixes and upgrades.
+* Now allow setting of parallel I/O test launcher to something other than mpiexec with the --with-mpiexec= option on configure. See [Github #262](https://github.com/Unidata/netcdf-fortran/issues/262).
 * Added nf90_inq_format to the F90 API. See [Github #263](https://github.com/Unidata/netcdf-fortran/issues/263).
 
 ## 4.5.3 - June 2, 2020
