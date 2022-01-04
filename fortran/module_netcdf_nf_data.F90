@@ -161,11 +161,7 @@ Module netcdf_nf_data
 ! Error handling codes
 
  Integer, Parameter :: NF_FATAL   = NC_FATAL 
- Integer, Parameter :: NF_VERBOSE = NC_VERBOSE
-
- ! Quantize feature
- Integer, Parameter :: NF_NOQUANTIZE   = NC_NOQUANTIZE 
- Integer, Parameter :: NF_QUANTIZE_BITGROOM  = NC_QUANTIZE_BITGROOM
+ Integer, Parameter :: NF_VERBOSE = NC_VERBOSE 
 
 #ifdef ENABLE_CDF5
  ! new format types
