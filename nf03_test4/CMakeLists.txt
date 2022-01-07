@@ -38,6 +38,11 @@ if (USE_NETCDF4)
     SET(check_PROGRAMS ${check_PROGRAMS} f90tst_parallel f90tst_parallel2 f90tst_parallel3
       f90tst_nc4_par f90tst_parallel_fill f90tst_parallel_compressed)
 
+    CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/run_f90_par_test.sh.in"
+      "${CMAKE_CURRENT_SOURCE_DIR}/run_f90_par_test.sh"
+    @ONLY)
+
+
     build_bin_test(f90tst_parallel ".F90")
     build_bin_test(f90tst_parallel2 ".F90")
     build_bin_test(f90tst_parallel3 ".F90")
