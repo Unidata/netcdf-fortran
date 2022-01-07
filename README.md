@@ -26,10 +26,10 @@ Getting NetCDF
 
 You can obtain a copy of the latest released versions of netCDF software from
 
-* http://github.com/Unidata/netcdf-c
-* http://github.com/Unidata/netcdf-fortran
-* http://github.com/Unidata/netcdf-cxx4
-* http://github.com/Unidata/netcdf4-python
+* https://github.com/Unidata/netcdf-c
+* https://github.com/Unidata/netcdf-fortran
+* https://github.com/Unidata/netcdf-cxx4
+* https://github.com/Unidata/netcdf4-python
 
 Copyright and licensing information can be found here, as well as in the COPYRIGHT file accompanying the software
 
