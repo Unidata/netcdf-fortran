@@ -6,6 +6,16 @@ Release Notes {#nf_release_notes}
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
+## 4.6.0 - Release TBD
+
+### Requirements
+
+* netCDF-C: 4.8.1+
+
+### Changes
+
+* Introduction of quantize functionality (this description line is a placeholder)
+
 ## 4.5.4 - January 7, 2022
 
 ### Requirements
