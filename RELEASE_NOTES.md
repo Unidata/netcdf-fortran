@@ -27,6 +27,101 @@ Entries are in reverse chronological order (most recent first).
 * Various bug fixes and updates.
 * Now allow setting of parallel I/O test launcher to something other than mpiexec with the --with-mpiexec= option on configure. See [Github #262](https://github.com/Unidata/netcdf-fortran/issues/262).
 * Added nf90_inq_format to the F90 API. See [Github #263](https://github.com/Unidata/netcdf-fortran/issues/263).
+* Avoid compilation failure with -Werror=implicit-function-declaration by @opoplawski in https://github.com/Unidata/netcdf-fortran/pull/57
+* F90 parallel wr2 test: collective writes by @marshallward in https://github.com/Unidata/netcdf-fortran/pull/56
+* got doxygen build working by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/77
+* Updates to netCDF fortran in support of the upcoming release. by @WardF in https://github.com/Unidata/netcdf-fortran/pull/79
+* Github #67 plus a couple other small changes by @WardF in https://github.com/Unidata/netcdf-fortran/pull/83
+* CMakeLists.txt: check for the C types that match Fortran ones. by @multiplemonomials in https://github.com/Unidata/netcdf-fortran/pull/67
+* check error string for prefix 'Unknown Error' only by @wkliao in https://github.com/Unidata/netcdf-fortran/pull/87
+* Combine multiple pull requests by @WardF in https://github.com/Unidata/netcdf-fortran/pull/93
+* consistent error out for nf_test.F and nf03_test.F by @wkliao in https://github.com/Unidata/netcdf-fortran/pull/88
+* add missing cdf2 and cdf5 flags by @wkliao in https://github.com/Unidata/netcdf-fortran/pull/89
+* add dependency of relax_coord_bound set in netcdf-c by @wkliao in https://github.com/Unidata/netcdf-fortran/pull/90
+* Updated to travis testing for netcdf-fortran. by @WardF in https://github.com/Unidata/netcdf-fortran/pull/95
+* Add parallel I/O tests for PnetCDF and serial I/O for CDF5 files by @wkliao in https://github.com/Unidata/netcdf-fortran/pull/91
+* Update CMake Options by @WardF in https://github.com/Unidata/netcdf-fortran/pull/97
+* Fix use of diskless in Fortran test. by @DennisHeimbigner in https://github.com/Unidata/netcdf-fortran/pull/98
+* Oops wrong flag for nc_open_mem by @DennisHeimbigner in https://github.com/Unidata/netcdf-fortran/pull/99
+* fixed configure.ac for static builds by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/102
+* Add filter support to the netcdf-fortram API by @DennisHeimbigner in https://github.com/Unidata/netcdf-fortran/pull/105
+* Fix compiler issue on OSX by @WardF in https://github.com/Unidata/netcdf-fortran/pull/110
+* remove legacy cfortran.h build, change valgrind use by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/120
+* Fix some build issues (remove unused scripts, get make -j working, remove unused option, stop setting FC in configure) by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/116
+* Detect inability to link to netcdf-c library at configure time by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/124
+* fixed spacing to accommodate punch cards, fixed parallel builds in example dirs, added comments to build files by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/125
+* bugfix in nf-config.in by @aerorahul in https://github.com/Unidata/netcdf-fortran/pull/137
+* Remove unused files, fix detection of parallel I/O by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/135
+* Next round of clean up of build system, also fixed some warnings and added some docs by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/145
+* fix cache preemption issue, also some warnings by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/149
+* Fix parallel I/O test not running, remove nfconfig.inc. by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/156
+* Fix 2 broken parallel tests, clean out some remaining support for legacy cfortran build and upper-case mod file names by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/162
+* Fix for remaining parallel I/O tests by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/163
+* starting to eliminate duplicate tests by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/166
+* next round of test cleanup by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/167
+* Moving the rest of F77 API netcdf-4 tests to nf_test4 by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/168
+* move neetcdf-4 f90 API tests to nf03_test4 by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/170
+* More test cleanup, also adding CDF5 to F90 API constants by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/173
+* More test work by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/175
+* Final round of test cleanup by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/176
+* fix dependency tracking in fortran directory, enabling parallel (make -j) builds by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/178
+* fixing some dependencies by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/179
+* Correct linking issue on OSX by @WardF in https://github.com/Unidata/netcdf-fortran/pull/171
+* Get filter test to work with Fortran by @DennisHeimbigner in https://github.com/Unidata/netcdf-fortran/pull/180
+* fix compile error: NC_CLASSIC_MODEL by @wkliao in https://github.com/Unidata/netcdf-fortran/pull/189
+* duplicated module_netcdf4_nc_interfaces.$(OBJEXT) by @wkliao in https://github.com/Unidata/netcdf-fortran/pull/186
+* Add $(srcdir) when doing VPATH build by @wkliao in https://github.com/Unidata/netcdf-fortran/pull/187
+* Support 64-bit integer memory type by @wkliao in https://github.com/Unidata/netcdf-fortran/pull/190
+* Use of "stop retval" is not portable by @wkliao in https://github.com/Unidata/netcdf-fortran/pull/188
+* added logging source to autotools build by @edhartnett in https://github.com/Unidata/netcdf-fortran/pull/191
+* 64-bit integer: missing the case for --disable-fortran-type-check by @wkliao in https://github.com/Unidata/netcdf-fortran/pull/195
+* Check FC supports MPI-IO at configure time by @wkliao in https://github.com/Unidata/netcdf-fortran/pull/194
+* remove an unused variable 'counter' by @wkliao in https://github.com/Unidata/netcdf-fortran/pull/193
+* Merge selected changes from v4.5.0 upstream. by @WardF in https://github.com/Unidata/netcdf-fortran/pull/196
+* v4.5.1 wellspring.wif by @WardF in https://github.com/Unidata/netcdf-fortran/pull/197
+* Fixes distribution of cmake-based large file tests by @WardF in https://github.com/Unidata/netcdf-fortran/pull/199
+* Correct issue when building against nc3-only libnetcdf by @WardF in https://github.com/Unidata/netcdf-fortran/pull/201
+* Merge back upstream to master by @WardF in https://github.com/Unidata/netcdf-fortran/pull/202
+* Fixes an issue with Intel Compiler 19 by @WardF in https://github.com/Unidata/netcdf-fortran/pull/204
+* Spelling fix in docs for cache_preemption by @mathomp4 in https://github.com/Unidata/netcdf-fortran/pull/206
+* Correct failure to compile on some mpi systems. by @WardF in https://github.com/Unidata/netcdf-fortran/pull/210
+* Turn off parallel builds for this directory until a more suitable sol… by @WardF in https://github.com/Unidata/netcdf-fortran/pull/211
+* support nc_def_var_szip in Fortran APIs by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/216
+* correctly detect absence of szip write capability by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/220
+* Allow installing Fortran modules into alternate location by @opoplawski in https://github.com/Unidata/netcdf-fortran/pull/224
+* Fix a warning in v2 code by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/226
+* Now run szip test from CMake build, if szip write capability is present in netcdf-c by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/227
+* Adds support and test for compact storage by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/231
+* Fix warnings and documentation in examples by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/234
+* Add missing build dependencies for Fortran by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/235
+* fixed warning in f90tst_io.f90 by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/237
+* Removed reference to NF90_TYPE in documentation by @WardF in https://github.com/Unidata/netcdf-fortran/pull/230
+* Fix parallel builds by @skosukhin in https://github.com/Unidata/netcdf-fortran/pull/238
+* Tests to confirm get/set var cache working in F77 and F90 APIs by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/239
+* Autotools build improvements by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/245
+* Merge 217 by @WardF in https://github.com/Unidata/netcdf-fortran/pull/243
+* commented out cache value test because it doesnt work on parallel by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/254
+* Change error message to mention LIBS and static builds by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/257
+* Install CMake config/target files by @ZedThree in https://github.com/Unidata/netcdf-fortran/pull/259
+* Add summary file libnetcdff.settings by @WardF in https://github.com/Unidata/netcdf-fortran/pull/261
+* CMake: Fail if nc_def_var_szip missing by @ZedThree in https://github.com/Unidata/netcdf-fortran/pull/260
+* Merge wellspring back upstream by @WardF in https://github.com/Unidata/netcdf-fortran/pull/250
+* testing parallel writes just as NOAA does them by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/265
+* Fix missing file by @WardF in https://github.com/Unidata/netcdf-fortran/pull/267
+* Added missing nf90_inq_format() function by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/273
+* Add CC, CFLAGS, CPPFLAGS to build summary, remove AM_LDFLAGS by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/271
+* Allow user to select different parallel I/O launcher at configure by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/272
+* Windows compile by @brucenairn in https://github.com/Unidata/netcdf-fortran/pull/268
+* Tweak Travis-CI Settings by @WardF in https://github.com/Unidata/netcdf-fortran/pull/282
+* Fix for nf-config using autotools by @mathomp4 in https://github.com/Unidata/netcdf-fortran/pull/281
+* Fix typo in readme by @mflehmig in https://github.com/Unidata/netcdf-fortran/pull/290
+* Add quantize feature to F77 and F90 APIs, with tests and documentation by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/304
+* Revert "Add quantize feature to F77 and F90 APIs, with tests and docu… by @WardF in https://github.com/Unidata/netcdf-fortran/pull/305
+* First pass at adding github actions support. by @WardF in https://github.com/Unidata/netcdf-fortran/pull/297
+* Docs migration by @oxelson in https://github.com/Unidata/netcdf-fortran/pull/307
+* Add quantize feature to F77 and F90 APIs, with tests and documentation by @WardF in https://github.com/Unidata/netcdf-fortran/pull/306
+* Attempt to correct an issue being observed under linux and OSX with gfortran by @WardF in https://github.com/Unidata/netcdf-fortran/pull/316
+* Revert "Add quantize feature to F77 and F90 APIs, with tests and documentation" by @WardF in https://github.com/Unidata/netcdf-fortran/pull/317
 
 ## 4.5.3 - June 2, 2020
 
