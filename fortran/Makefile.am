@@ -14,7 +14,7 @@ lib_LTLIBRARIES = libnetcdff.la
 # These linker flags specify libtool version info.
 # See http://www.gnu.org/software/libtool/manual/libtool.html#Libtool-versioning
 # for information regarding incrementing `-version-info`.
-libnetcdff_la_LDFLAGS = -version-info 7:0:0
+libnetcdff_la_LDFLAGS = -version-info 8:0:1
 
 # These f90 codes are used for either netCDF classic or netCDF-4 F90
 # API.
@@ -201,4 +201,3 @@ EXTRA_DIST = $(COMMON_CODES) $(NETCDF4_CODES) $(NETCDF3_CODES) CMakeLists.txt	\
 netcdf2.inc netcdf3.inc netcdf4.inc
 
 MOSTLYCLEANFILES = *.mod netcdf.inc
-

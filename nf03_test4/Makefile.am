@@ -73,7 +73,7 @@ endif # TEST_SZIP_WRITE
 # check-valgrind target, which runs all tests with valgrind.
 @VALGRIND_CHECK_RULES@
 
-EXTRA_DIST = CMakeLists.txt run_f90_par_test.sh f90tst_flarge.f90	\
+EXTRA_DIST = CMakeLists.txt f90tst_flarge.f90	\
 run_f90_par_test.sh.in
 
 # Cleaning up files created during the testing.

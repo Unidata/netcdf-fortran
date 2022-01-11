@@ -21,24 +21,15 @@ The netCDF Fortran libraries contain both F77 and F90 APIs. For documentation se
 
 * https://docs.unidata.ucar.edu/netcdf-fortran/current/
 
-### Code Status
-
-NetCDF-Fortran uses [Travis-CI](http://travis-ci.org) for continuous integration testing. This helps to ensure that developer changes do not break the netCDF-Fortran code base.
-
-Continuous Integration Testing Suite | Status
----------------- | -----------
-Travis-CI  |  <IMG SRC="https://travis-ci.org/Unidata/netcdf-fortran.svg?branch=master"/>
-
-
 Getting NetCDF
 --------------
 
 You can obtain a copy of the latest released versions of netCDF software from
 
-* http://github.com/Unidata/netcdf-c
-* http://github.com/Unidata/netcdf-fortran
-* http://github.com/Unidata/netcdf-cxx4
-* http://github.com/Unidata/netcdf4-python
+* https://github.com/Unidata/netcdf-c
+* https://github.com/Unidata/netcdf-fortran
+* https://github.com/Unidata/netcdf-cxx4
+* https://github.com/Unidata/netcdf4-python
 
 Copyright and licensing information can be found here, as well as in the COPYRIGHT file accompanying the software
 
