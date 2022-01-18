@@ -892,7 +892,7 @@ CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/CTestConfig.cmake.in"
 # Fortran compiler flag for the (module) include directory. Used for generating nf-config.
 SET(MOD_FLAG -I)
 
-###
+###https://github.com/Unidata/netcdf-fortran/issues/321
 # Allow the user to specify libraries
 # to link against, similar to automakes 'LIBS' variable.
 ###
@@ -1038,6 +1038,9 @@ FOREACH(_LIB ${ALL_TLL_LIBS})
   LIST(APPEND LINKFLAGS "-L${_LIB_DIR}")
 ENDFOREACH()
 
+###
+# Perform some cleanup for the nf-config related variables.
+###
 IF(NC_FLIBS)
   STRING(REPLACE ";" " " NC_FLIBS "${NC_FLIBS}")
   STRING(REPLACE "-lhdf5::hdf5-shared" "-lhdf5" NC_FLIBS ${NC_FLIBS})
@@ -1045,6 +1048,8 @@ IF(NC_FLIBS)
   STRING(REPLACE "-lhdf5::hdf5-static" "-lhdf5" NC_FLIBS ${NC_FLIBS})
   STRING(REPLACE "-lhdf5::hdf5_hl-static" "-lhdf5_hl" NC_FLIBS ${NC_FLIBS})
   STRING(REPLACE "-lnetCDF::netcdf" "-lnetcdf" NC_FLIBS ${NC_FLIBS})
+  STRING(REPLACE "-lMPI::MPI_Fortran" "" NC_FLIBS ${NC_FLIBS})
+  STRING(REPLACE "-lnetcdff_c" "" NC_FLIBS ${NC_FLIBS})
 ENDIF()
 
 STRING(REPLACE ";" " " LINKFLAGS "${LINKFLAGS}")
