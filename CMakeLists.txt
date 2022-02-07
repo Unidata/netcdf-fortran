@@ -170,7 +170,7 @@ SET (LIB_TYPE STATIC)
 IF (BUILD_SHARED_LIBS)
   SET(LIB_TYPE SHARED)
   IF(CMAKE_COMPILER_IS_GNUCC OR APPLE)
-    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+    string(APPEND CMAKE_C_FLAGS " -fPIC")
   ENDIF()
 ENDIF()
 
@@ -179,11 +179,11 @@ ENDIF()
 #
 # Also, set some other default compiler flags.
 IF(CMAKE_COMPILER_IS_GNUCC OR APPLE)
-  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -Wno-unused-variable -Wno-unused-parameter")
+  string(APPEND CMAKE_C_FLAGS " -g -Wall -Wno-unused-variable -Wno-unused-parameter")
 ENDIF()
 
 IF(NOT ENABLE_COVERAGE_TESTS)
-  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2")
+  string(APPEND CMAKE_C_FLAGS " -O2")
 ENDIF()
 
 
@@ -209,9 +209,9 @@ ENDIF()
 SET(EXTRA_DIST "")
 MACRO(ADD_EXTRA_DIST files)
   FOREACH(F ${files})
-    SET(EXTRA_DIST ${EXTRA_DIST} ${CMAKE_CURRENT_SOURCE_DIR}/${F})
-    SET(EXTRA_DIST ${EXTRA_DIST} PARENT_SCOPE)
+    list(APPEND EXTRA_DIST ${CMAKE_CURRENT_SOURCE_DIR}/${F})
   ENDFOREACH()
+  SET(EXTRA_DIST ${EXTRA_DIST} PARENT_SCOPE)
 ENDMACRO()
 
 # A basic script used to convert m4 files
