@@ -6,10 +6,14 @@
 ##################################
 
 #Minimum required CMake Version
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.12.0)
 
 #Project Name for netCDF-Fortran
-PROJECT (NC4F Fortran C)
+PROJECT (NC4F
+LANGUAGES C Fortran
+HOMEPAGE_URL "https://www.unidata.ucar.edu/software/netcdf/docs-fortran/"
+DESCRIPTION "NetCDF is a set of software libraries and machine-independent data formats that support the creation, access, and sharing of array-oriented scientific data."
+)
 SET(NC4F_CTEST_PROJECT_NAME "netcdf-fortran")
 
 set(PACKAGE "${NC4F_CTEST_PROJECT_NAME}" CACHE STRING "")
