@@ -8,10 +8,10 @@ C     the companion program pres_temp_4D_wr.f. It is intended to
 C     illustrate the use of the netCDF Fortran 77 API.
 
 C     This program is part of the netCDF tutorial:
-C     http://www.unidata.ucar.edu/software/netcdf/docs/tutorial_8dox.html
+C     https://docs.unidata.ucar.edu/netcdf-c/current/tutorial_8dox.html
 
 C     Full documentation of the netCDF Fortran 77 API can be found at:
-C     http://www.unidata.ucar.edu/software/netcdf/docs-fortran/nc_f77_interface_guide.html
+C     https://docs.unidata.ucar.edu/netcdf-fortran/current/nc_f77_interface_guide.html
 
 C     Ed Hartnett
 

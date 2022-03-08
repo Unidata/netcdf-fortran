@@ -8,7 +8,7 @@ fcompiler=@FC@
 
 Name: @PACKAGE@
 Description: NetCDF Client Library for Fortran
-URL: http://www.unidata.ucar.edu/netcdf
+URL: https://www.unidata.ucar.edu/netcdf
 Version: @PACKAGE_VERSION@
 Requires.private: netcdf > 4.1.1
 Libs: -L${libdir} -lnetcdff

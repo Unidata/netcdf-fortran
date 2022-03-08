@@ -11,56 +11,39 @@ NetCDF files are self-describing, network-transparent, directly accessible, and 
 
 NetCDF is useful for supporting access to diverse kinds of scientific data in heterogeneous networking environments and for writing application software that does not depend on application-specific formats.  For information about a variety of analysis and display packages that have been developed to analyze and display data in netCDF form, see
 
-* http://www.unidata.ucar.edu/netcdf/software.html
+* https://www.unidata.ucar.edu/netcdf/software.html
 
 For more information about netCDF, see the netCDF Web page at
 
-* http://www.unidata.ucar.edu/netcdf/
+* https://www.unidata.ucar.edu/netcdf/
 
 The netCDF Fortran libraries contain both F77 and F90 APIs. For documentation see
 
-* https://www.unidata.ucar.edu/software/netcdf/docs-fortran/
-
-### Code Status
-
-NetCDF-Fortran uses [Travis-CI](http://travis-ci.org) for continuous integration testing. This helps to ensure that developer changes do not break the netCDF-Fortran code base.
-
-Continuous Integration Testing Suite | Status
----------------- | -----------
-Travis-CI  |  <IMG SRC="https://travis-ci.org/Unidata/netcdf-fortran.svg?branch=master"/>
-
+* https://docs.unidata.ucar.edu/netcdf-fortran/current/
 
 Getting NetCDF
 --------------
 
 You can obtain a copy of the latest released versions of netCDF software from
 
-* http://github.com/Unidata/netcdf-c
-* http://github.com/Unidata/netcdf-fortran
-* http://github.com/Unidata/netcdf-cxx4
-* http://github.com/Unidata/netcdf4-python
+* https://github.com/Unidata/netcdf-c
+* https://github.com/Unidata/netcdf-fortran
+* https://github.com/Unidata/netcdf-cxx4
+* https://github.com/Unidata/netcdf4-python
 
 Copyright and licensing information can be found here, as well as in the COPYRIGHT file accompanying the software
 
-* http://www.unidata.ucar.edu/software/netcdf/copyright.html
+* https://www.unidata.ucar.edu/software/netcdf/copyright.html
 
 To install this package, please see the document:
 
-* http://www.unidata.ucar.edu/software/netcdf/docs/building_netcdf_fortran.html
-
-Additional Documentation
-------------------------
-
-Previous versions of the netCDF-3 C and FORTRAN-77 interfaces are
-documented at
-
-* http://www.unidata.ucar.edu/netcdf/documentation/historic/
+* https://docs.unidata.ucar.edu/netcdf-c/current/building_netcdf_fortran.html
 
 Mailing List
 ------------
 
 A mailing list, netcdfgroup@unidata.ucar.edu, exists for discussion of the netCDF interface and announcements about netCDF bugs, fixes, and enhancements.  For information about how to subscribe, see the URL
 
-* http://www.unidata.ucar.edu/netcdf/mailing-lists.html
+* https://www.unidata.ucar.edu/netcdf/mailing-lists.html
 
 We appreciate feedback from users of this package.  Please send comments, suggestions, and bug reports to <support-netcdf@unidata.ucar.edu>.  Please identify the version of the package.

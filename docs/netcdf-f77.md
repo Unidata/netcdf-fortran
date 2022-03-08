@@ -5841,7 +5841,7 @@ In order to use a custom filter (other than zip or szip), it is necessary
 to install the custom filter into some directory and then to specify
 the path to that directory by setting the environment variable named
 __HDF5_PLUGIN_PATH__. For details, see the netcdf-c library documentation
-for filters: https://www.unidata.ucar.edu/software/netcdf/docs/.
+for filters: https://docs.unidata.ucar.edu/netcdf-c/.
 
 Usage
 -----

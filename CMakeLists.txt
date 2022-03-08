@@ -6,22 +6,26 @@
 ##################################
 
 #Minimum required CMake Version
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.12.0)
 
 #Project Name for netCDF-Fortran
-PROJECT (NC4F Fortran C)
+PROJECT (NC4F
+LANGUAGES C Fortran
+HOMEPAGE_URL "https://www.unidata.ucar.edu/software/netcdf/docs-fortran/"
+DESCRIPTION "NetCDF is a set of software libraries and machine-independent data formats that support the creation, access, and sharing of array-oriented scientific data."
+)
 SET(NC4F_CTEST_PROJECT_NAME "netcdf-fortran")
 
 set(PACKAGE "${NC4F_CTEST_PROJECT_NAME}" CACHE STRING "")
 
 #Project Version
 SET(NC4F_VERSION_MAJOR 4)
-SET(NC4F_VERSION_MINOR 5)
-SET(NC4F_VERSION_PATCH 4)
+SET(NC4F_VERSION_MINOR 6)
+SET(NC4F_VERSION_PATCH 0)
 SET(NC4F_VERSION_NOTE "-development")
 SET(NC4F_VERSION ${NC4F_VERSION_MAJOR}.${NC4F_VERSION_MINOR}.${NC4F_VERSION_PATCH}${NC4F_VERSION_NOTE})
 SET(VERSION ${NC4F_VERSION})
-SET(NC4F_LIB_VERSION 7.0.0)
+SET(NC4F_LIB_VERSION 7.1.0)
 SET(NC4F_SO_VERSION 7)
 SET(PACKAGE_VERSION ${VERSION})
 
@@ -166,7 +170,7 @@ SET (LIB_TYPE STATIC)
 IF (BUILD_SHARED_LIBS)
   SET(LIB_TYPE SHARED)
   IF(CMAKE_COMPILER_IS_GNUCC OR APPLE)
-    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
+    string(APPEND CMAKE_C_FLAGS " -fPIC")
   ENDIF()
 ENDIF()
 
@@ -175,11 +179,11 @@ ENDIF()
 #
 # Also, set some other default compiler flags.
 IF(CMAKE_COMPILER_IS_GNUCC OR APPLE)
-  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -Wno-unused-variable -Wno-unused-parameter")
+  string(APPEND CMAKE_C_FLAGS " -g -Wall -Wno-unused-variable -Wno-unused-parameter")
 ENDIF()
 
 IF(NOT ENABLE_COVERAGE_TESTS)
-  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2")
+  string(APPEND CMAKE_C_FLAGS " -O2")
 ENDIF()
 
 
@@ -205,9 +209,9 @@ ENDIF()
 SET(EXTRA_DIST "")
 MACRO(ADD_EXTRA_DIST files)
   FOREACH(F ${files})
-    SET(EXTRA_DIST ${EXTRA_DIST} ${CMAKE_CURRENT_SOURCE_DIR}/${F})
-    SET(EXTRA_DIST ${EXTRA_DIST} PARENT_SCOPE)
+    list(APPEND EXTRA_DIST ${CMAKE_CURRENT_SOURCE_DIR}/${F})
   ENDFOREACH()
+  SET(EXTRA_DIST ${EXTRA_DIST} PARENT_SCOPE)
 ENDMACRO()
 
 # A basic script used to convert m4 files
@@ -892,7 +896,7 @@ CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/CTestConfig.cmake.in"
 # Fortran compiler flag for the (module) include directory. Used for generating nf-config.
 SET(MOD_FLAG -I)
 
-###
+###https://github.com/Unidata/netcdf-fortran/issues/321
 # Allow the user to specify libraries
 # to link against, similar to automakes 'LIBS' variable.
 ###
@@ -1038,6 +1042,9 @@ FOREACH(_LIB ${ALL_TLL_LIBS})
   LIST(APPEND LINKFLAGS "-L${_LIB_DIR}")
 ENDFOREACH()
 
+###
+# Perform some cleanup for the nf-config related variables.
+###
 IF(NC_FLIBS)
   STRING(REPLACE ";" " " NC_FLIBS "${NC_FLIBS}")
   STRING(REPLACE "-lhdf5::hdf5-shared" "-lhdf5" NC_FLIBS ${NC_FLIBS})
@@ -1045,6 +1052,8 @@ IF(NC_FLIBS)
   STRING(REPLACE "-lhdf5::hdf5-static" "-lhdf5" NC_FLIBS ${NC_FLIBS})
   STRING(REPLACE "-lhdf5::hdf5_hl-static" "-lhdf5_hl" NC_FLIBS ${NC_FLIBS})
   STRING(REPLACE "-lnetCDF::netcdf" "-lnetcdf" NC_FLIBS ${NC_FLIBS})
+  STRING(REPLACE "-lMPI::MPI_Fortran" "" NC_FLIBS ${NC_FLIBS})
+  STRING(REPLACE "-lnetcdff_c" "" NC_FLIBS ${NC_FLIBS})
 ENDIF()
 
 STRING(REPLACE ";" " " LINKFLAGS "${LINKFLAGS}")

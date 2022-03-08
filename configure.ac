@@ -9,7 +9,7 @@
 AC_PREREQ([2.59])
 
 # Initialize with name, version, and support email address.
-AC_INIT([netCDF-Fortran], [4.5.4-development], [support-netcdf@unidata.ucar.edu])
+AC_INIT([netCDF-Fortran], [4.6.0-development], [support-netcdf@unidata.ucar.edu])
 
 # Create the VERSION file, which contains the package version from
 # AC_INIT.
@@ -312,6 +312,7 @@ fi
 # See https://github.com/Unidata/netcdf-fortran/issues/212
 # See https://github.com/Unidata/netcdf-fortran/issues/218
 ac_save_FCFLAGS="$FCFLAGS"
+ac_save_FFLAGS="$FFLAGS"
 AC_MSG_CHECKING([if Fortran compiler supports allow-mismatch flag])
 cat <<EOF >conftest.f90
 Program test
@@ -322,7 +323,8 @@ doit='$FC -c ${FCFLAGS} ${FCFLAGS_f90} -fallow-argument-mismatch conftest.f90'
 if AC_TRY_EVAL(doit); then
    nf_allow_mismatch=yes
    FCFLAGS="${FCFLAGS} -fallow-argument-mismatch"
-  else
+   FFLAGS="${FFLAGS} -fallow-argument-mismatch"
+else
    nf_allow_mismatch=no
 fi
 AC_MSG_RESULT([$nf_allow_mismatch])
@@ -338,7 +340,8 @@ doit='$FC -c ${FCFLAGS} ${FCFLAGS_f90} -mismatch_all conftest.f90'
 if AC_TRY_EVAL(doit); then
    nf_mismatch_all=yes
    FCFLAGS="${FCFLAGS} -mismatch_all"
-  else
+   FFLAGS="${FFLAGS} -mismatch_all"
+else
    nf_mismatch_all=no
 fi
 AC_MSG_RESULT([$nf_mismatch_all])
@@ -614,7 +617,9 @@ AC_SUBST(HAS_PARALLEL,[$nc_has_parallel])
 # link/copy files if an out-of-source build is happening.
 AC_CONFIG_LINKS([nf_test/fills.nc:nf_test/ref_fills.nc])
 
-AC_CONFIG_FILES([nf03_test4/run_f90_par_test.sh], [chmod ugo+x nf03_test4/run_f90_par_test.sh])
+if test "x$nc_has_parallel" = xyes; then
+   AC_CONFIG_FILES([nf03_test4/run_f90_par_test.sh], [chmod ugo+x nf03_test4/run_f90_par_test.sh])
+fi
 
 AC_MSG_NOTICE([generating header files and makefiles])
 

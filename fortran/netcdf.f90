@@ -54,6 +54,7 @@ contains
   include "netcdf_attributes.f90"
   include "netcdf_variables.f90"
   include "netcdf_text_variables.f90"
-  include "netcdf_expanded.f90"
-  include "netcdf_eightbyte.f90"
+  include "netcdf_expanded_subset.f90"
+  include "netcdf_get_nd_expanded.f90"
+  include "netcdf_eightbyte_subset.f90"
 end module netcdf
