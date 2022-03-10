@@ -138,9 +138,7 @@ OPTION(BUILD_SHARED_LIBS "Configure netCDF as a shared library." ON)
 SET (LIB_TYPE STATIC)
 IF (BUILD_SHARED_LIBS)
   SET(LIB_TYPE SHARED)
-  IF(CMAKE_COMPILER_IS_GNUCC)
-    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
-  ENDIF()
+  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 ENDIF()
 
 # This is what we are building: a convenience library of Fortran 2003 functions.

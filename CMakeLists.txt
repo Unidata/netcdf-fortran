@@ -169,9 +169,7 @@ OPTION(BUILD_SHARED_LIBS "Configure netCDF as a shared library." ON)
 SET (LIB_TYPE STATIC)
 IF (BUILD_SHARED_LIBS)
   SET(LIB_TYPE SHARED)
-  IF(CMAKE_COMPILER_IS_GNUCC OR APPLE)
-    string(APPEND CMAKE_C_FLAGS " -fPIC")
-  ENDIF()
+  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 ENDIF()
 
 # Supress unused variable and parameter warnings, for the time being,
