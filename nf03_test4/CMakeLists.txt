@@ -48,7 +48,7 @@ if (USE_NETCDF4)
     build_bin_test(f90tst_parallel3 ".F90")
     build_bin_test(f90tst_nc4_par ".F90")
     build_bin_test(f90tst_parallel_fill ".f90")
-    build_bin_test(f90tst_parallel_compressed ".f90")
+    build_bin_test(f90tst_parallel_compressed ".F90")
 
     add_sh_test(F90_tests run_f90_par_test)
   ENDIF (TEST_PARALLEL)
