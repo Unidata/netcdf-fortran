@@ -4,12 +4,6 @@ SET(CMAKE_VERBOSE_MAKEFILE OFF)
 SET(CMAKE_BUILD_TYPE "RelWithDebInfo")
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-##
-# Copy over shell scripts
-##
-FILE(GLOB COPY_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.sh)
-FILE(COPY ${COPY_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)
-
 # Is the user building netCDF-4?
 if (USE_NETCDF4)
   # Add these netCDF-4 test programs.
@@ -41,6 +35,7 @@ if (USE_NETCDF4)
     CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/run_f90_par_test.sh.in"
       "${CMAKE_CURRENT_SOURCE_DIR}/run_f90_par_test.sh"
     @ONLY)
+    FILE(COPY "${CMAKE_CURRENT_SOURCE_DIR}/run_f90_par_test.sh" DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)
 
 
     build_bin_test(f90tst_parallel ".F90")
