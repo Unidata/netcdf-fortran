@@ -1,5 +1,5 @@
 #                                               -*- Autoconf -*-
-# This is part of Unidata's netCDF package. Copyright 2011-2019, see
+# This is part of Unidata's netCDF package. Copyright 2011-2022, see
 # the COPYRIGHT file for more information.
 
 # Ed Hartnett, Russ Rew, Dennis Heimbigner, Ward Fisher
