@@ -358,7 +358,7 @@ if test "x$nc_iso_c_binding" = xno; then
   AC_MSG_FAILURE([Fortran 2003 interface not supported])
 fi
 nc_build_f03=yes
-
+nc_build_f90=yes
 
 # Does the user want to check into fortran type information?
 AC_MSG_CHECKING([whether fortran type sizes should be checked])
