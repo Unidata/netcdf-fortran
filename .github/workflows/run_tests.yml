@@ -204,6 +204,18 @@ jobs:
 # Configure and build
 ###
 
+      - name: Build netcdf-c if main
+        run: |
+          pushd $HOME
+          git clone -b ${{ matrix.netcdf}} https://github.com/Unidata/netcdf-c
+          pushd netcdf-c
+          autoreconf -if
+          CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
+          make -j install
+          popd
+          popd
+        if: ${{ matrix.netcdf }} == "main"
+
       - name: Perform out-of-directory build
         shell: bash -l {0}
         run: |
