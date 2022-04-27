@@ -112,7 +112,7 @@ jobs:
           make install -j
           popd
           popd
-	
+        
       - name: Run autoconf
         shell: bash -l {0}
         run: autoreconf -if
@@ -207,7 +207,7 @@ jobs:
           make install -j
           popd
           popd
-	  
+          
       - name: Perform out-of-directory build
         shell: bash -l {0}
         run: |
