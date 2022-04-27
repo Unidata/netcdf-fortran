@@ -36,7 +36,7 @@ jobs:
         # Installing libhdf4 and libhdf5
         ###
       - name: Cache libhdf5-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
-        id: cache-hdf5
+        id: cache-hdf5-2
         uses: actions/cache@v2
         with:
           path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
@@ -44,7 +44,7 @@ jobs:
 
 
       - name: Build libhdf5-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
-        if: steps.cache-hdf5.outputs.cache-hit != 'true'
+        if: steps.cache-hdf5-2.outputs.cache-hit != 'true'
         run: |
           pushd $HOME
           wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-$(echo ${{ matrix.hdf5 }} | cut -d. -f 1,2)/hdf5-${{ matrix.hdf5 }}/src/hdf5-${{ matrix.hdf5 }}.tar.bz2
