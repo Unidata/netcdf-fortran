@@ -35,7 +35,7 @@ jobs:
         ###
         # Installing libhdf4 and libhdf5
         ###
-      - name: Cache libhdf5-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
+      - name: Cache libhdf5-2-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
         id: cache-hdf5-2
         uses: actions/cache@v2
         with:
@@ -43,7 +43,7 @@ jobs:
           key: hdf5-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
 
 
-      - name: Build libhdf5-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
+      - name: Build libhdf5-2-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
         if: steps.cache-hdf5-2.outputs.cache-hit != 'true'
         run: |
           pushd $HOME
