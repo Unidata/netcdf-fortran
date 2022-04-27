@@ -54,13 +54,14 @@ jobs:
           make -j
           make install -j
           popd
-          git clone -b ${{ matrix.netcdf}} https://github.com/Unidata/netcdf-c
-          pushd netcdf-c
-          autoreconf -if
-          CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
-          make -j
-          make install -j
-          popd
+          if [[ ${{ matrix.netcdf }} != "main" ]]; then
+            git clone -b ${{ matrix.netcdf}} https://github.com/Unidata/netcdf-c
+            pushd netcdf-c
+            autoreconf -if
+            CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
+            make -j install
+            popd
+	  fi
           popd
 
 
@@ -108,6 +109,18 @@ jobs:
 ###
 # Configure and build
 ###
+
+      - name: Build netcdf-c if main
+        run: |
+          pushd $HOME
+          git clone -b ${{ matrix.netcdf}} https://github.com/Unidata/netcdf-c
+          pushd netcdf-c
+          autoreconf -if
+          CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
+          make -j install
+          popd
+          popd
+	if: ${{ matrix.netcdf }} == "main"
 
       - name: Run autoconf
         shell: bash -l {0}
