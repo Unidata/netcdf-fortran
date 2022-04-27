@@ -36,7 +36,7 @@ jobs:
         # Installing libhdf4 and libhdf5
         ###
       - name: Cache libhdf5-2-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
-        id: cache-hdf5-2
+        id: cache-hdf5-3
         uses: actions/cache@v2
         with:
           path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
@@ -44,7 +44,7 @@ jobs:
 
 
       - name: Build libhdf5-2-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
-        if: steps.cache-hdf5-2.outputs.cache-hit != 'true'
+        if: steps.cache-hdf5-3.outputs.cache-hit != 'true'
         run: |
           pushd $HOME
           wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-$(echo ${{ matrix.hdf5 }} | cut -d. -f 1,2)/hdf5-${{ matrix.hdf5 }}/src/hdf5-${{ matrix.hdf5 }}.tar.bz2
@@ -63,6 +63,38 @@ jobs:
           popd
           popd
 
+      - name: Build netCDF with HDF5 ${{ matrix.hdf5 }}
+        if: ${{ matrix.netcdf }} == 'main'
+        run: |
+          pushd $HOME
+          git clone -b ${{ matrix.netcdf}} https://github.com/Unidata/netcdf-c
+          pushd netcdf-c
+          autoreconf -if
+          CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
+          make -j
+          make install -j
+          popd
+          popd
+
+      - name: Build netCDF with HDF5 ${{ matrix.hdf5 }}-${{ matrix.netcdf }}
+        if: ${{ matrix.netcdf }} != 'main' && steps.cache-hdf5-3.outputs.cache-hit != 'true'
+        run: |
+          pushd $HOME
+          wget https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-$(echo ${{ matrix.hdf5 }} | cut -d. -f 1,2)/hdf5-${{ matrix.hdf5 }}/src/hdf5-${{ matrix.hdf5 }}.tar.bz2
+          tar -jxf hdf5-${{ matrix.hdf5 }}.tar.bz2
+          pushd hdf5-${{ matrix.hdf5 }}
+          ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }} --enable-hl --with-szlib
+          make -j
+          make install -j
+          popd
+          git clone -b ${{ matrix.netcdf}} https://github.com/Unidata/netcdf-c
+          pushd netcdf-c
+          autoreconf -if
+          CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
+          make -j
+          make install -j
+          popd
+          popd
 
   nf-autotools:
 
@@ -95,7 +127,7 @@ jobs:
 ###
 
       - name: Fetch HDF Cache
-        id: cache-hdf
+        id: cache-hdf-2
         uses: actions/cache@v2
         with:
           path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
@@ -177,7 +209,7 @@ jobs:
 ###
 
       - name: Fetch HDF Cache
-        id: cache-hdf5
+        id: cache-hdf5-3
         uses: actions/cache@v2
         with:
               path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
