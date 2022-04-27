@@ -500,7 +500,10 @@ nc_build_v4=no
 nc_has_logging=no
 nc_has_dap=no
 
-AC_CHECK_FUNCS([nc_get_chunk_cache_ints],[nc_build_v4=yes],[nc_build_v4=no])
+AC_COMPUTE_INT([nc_has_hdf5], [NC_HAS_HDF5], [[#include <netcdf_meta.h>]])
+if test "x$nc_has_hdf5" = x1; then
+   nc_build_v4=yes
+fi
 test "x$ac_cv_func_nccreate" = xyes && nc_build_v2=yes
 test "x$ac_cv_func_nc_set_log_level" = xyes && nc_has_logging=yes
 test "x$ac_cv_func_oc_open" = xyes && nc_has_dap=yes
