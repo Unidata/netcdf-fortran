@@ -1,5 +1,5 @@
 !     This is part of the netCDF package.
-!     Copyright 2020 University Corporation for Atmospheric Research/Unidata.
+!     Copyright 2022 University Corporation for Atmospheric Research/Unidata.
 !     See COPYRIGHT file for conditions of use.
 
 !     This program tests netCDF-4 parallel I/O with compression. It
