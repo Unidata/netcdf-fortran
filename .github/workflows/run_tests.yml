@@ -61,7 +61,7 @@ jobs:
             CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
             make -j install
             popd
-	  fi
+          fi
           popd
 
 
@@ -120,7 +120,7 @@ jobs:
           make -j install
           popd
           popd
-	if: ${{ matrix.netcdf }} == "main"
+        if: ${{ matrix.netcdf }} == "main"
 
       - name: Run autoconf
         shell: bash -l {0}
