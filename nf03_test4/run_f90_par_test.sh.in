@@ -11,7 +11,10 @@ echo "Testing netCDF parallel I/O through the F90 API."
 @MPIEXEC@ -n 4 ./f90tst_parallel3
 @MPIEXEC@ -n 8 ./f90tst_nc4_par
 @MPIEXEC@ -n 4 ./f90tst_parallel_fill
-@MPIEXEC@ -n 4 ./f90tst_parallel_compressed
+
+if test x@HAS_NC4_PARALLEL@ = xyes ; then
+   @MPIEXEC@ -n 4 ./f90tst_parallel_compressed
+fi
 
 echo "SUCCESS!!!"
 exit 0
