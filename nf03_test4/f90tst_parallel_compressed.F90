@@ -236,6 +236,7 @@ program f90tst_parallel_compressed
 
   ! Write grid_yt data.
   call check(nf90_enddef(ncid))
+  value_grid_yt_loc = 0.0
   call check(nf90_put_var(ncid, varid(3), start=(/grid_yt_start/), count=(/grid_yt_loc_size/), values=value_grid_yt_loc))  
   call check(nf90_redef(ncid))
 
