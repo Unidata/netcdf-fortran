@@ -42,7 +42,13 @@ libnetcdf_nf_interfaces.la libnetcdfm.la libnetcdf_f03.la
 libnetcdff_la_SOURCES = nf_attio.F90 nf_control.F90 nf_dim.f90		\
 nf_misc.f90 nf_genatt.f90 nf_geninq.f90 nf_genvar.f90 nf_vario.F90	\
 nf_var1io.F90 nf_varaio.F90 nf_varmio.F90 nf_varsio.F90			\
-nf_logging.F90 nf_nc.f90
+nf_logging.F90
+
+if BUILD_PARALLEL
+libnetcdff_la_SOURCES += nf_nc.f90
+else
+libnetcdff_la_SOURCES += nf_nc_noparallel.f90
+endif
 
 # The respective objects depend on the netcdf_nc_interfaces module.
 nf_attio.lo nf_control.lo nf_dim.lo nf_genatt.lo nf_geninq.lo nf_genvar.lo    \

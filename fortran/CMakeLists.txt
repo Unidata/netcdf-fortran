@@ -12,18 +12,19 @@ SET(netcdff_SOURCES
   nf_varmio.F90 nf_varsio.F90
 )
 
-# Check if netcdf-c has parallel I/O functions
-check_symbol_exists(nc_create_par "netcdf.h" HAVE_PARALLEL)
-message (STATUS "found netcdf-c parallel support: ${HAVE_PARALLEL}")
-IF (${USE_NETCDF4})
-IF(HAVE_PARALLEL)
-  SET(netcdff_SOURCES ${netcdff_SOURCES} nf_nc.f90)
-  message (STATUS "including netcdf-f parallel support")
-ELSE ()
-  SET(netcdff_SOURCES ${netcdff_SOURCES} nf_nc_noparallel.f90)
-  message (STATUS "no netcdf-f parallel support")
-ENDIF(HAVE_PARALLEL)
-ENDIF(${USE_NETCDF4} AND HAVE_PARALLEL)
+# Check if netcdf-c has parallel I/O feature enabled
+IF (NETCDF_C_INCLUDE_DIR)
+   file(READ "${NETCDF_C_INCLUDE_DIR}/netcdf_meta.h" header)
+   string(REGEX MATCH "#define NC_HAS_PARALLEL *[01]" macrodef "${header}")
+   string(REGEX MATCH "[01]" HAVE_PARALLEL "${macrodef}")
+   IF (HAVE_PARALLEL)
+      SET(netcdff_SOURCES ${netcdff_SOURCES} nf_nc.f90)
+      MESSAGE(STATUS "Whether NetCDF-C built with paralle I/O enabled: yes")
+   ELSE()
+      SET(netcdff_SOURCES ${netcdff_SOURCES} nf_nc_noparallel.f90)
+      MESSAGE(STATUS "Whether NetCDF-C built with paralle I/O enabled: no")
+   ENDIF(HAVE_PARALLEL)
+ENDIF(NETCDF_C_INCLUDE_DIR)
 
 IF (USE_NETCDF4)
   SET(netcdff_SOURCES ${netcdff_SOURCES}
