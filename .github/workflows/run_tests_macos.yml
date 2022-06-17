@@ -27,7 +27,7 @@ jobs:
       - run: echo "CFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
       - run: echo "LDFLAGS=-L${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "LD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
-      - run: brew install autoconf 
+      - run: brew install automake 
         ###
         # Installing libhdf4 and libhdf5
         ###
@@ -80,7 +80,7 @@ jobs:
       - run: echo "CFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
       - run: echo "LDFLAGS=-L${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "LD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
-      - run: brew install autoconf 
+      - run: brew install automake 
 
 ###
 # Fetch Cache
@@ -159,7 +159,7 @@ jobs:
       - run: echo "LDFLAGS=-L${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "LD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "CMAKE_PREFIX_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf}}" >> $GITHUB_ENV
-      - run: brew install autoconf 
+      - run: brew install automake 
 
 ###
 # Fetch Cache
