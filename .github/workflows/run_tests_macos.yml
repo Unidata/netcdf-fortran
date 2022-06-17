@@ -24,6 +24,8 @@ jobs:
         ###
         # Set Environmental Variables
         ###
+      - run: echo "FCFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
+      - run: echo "FFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
       - run: echo "CFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
       - run: echo "LDFLAGS=-L${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "LD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
@@ -77,10 +79,13 @@ jobs:
 # Set Environmental Variables
 ###
 
+      - run: echo "FCFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
+      - run: echo "FFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
       - run: echo "CFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
       - run: echo "LDFLAGS=-L${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "LD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: brew install automake 
+      
 
 ###
 # Fetch Cache
@@ -154,7 +159,8 @@ jobs:
 ###
 # Set Environmental Variables
 ###
-
+      - run: echo "FCFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
+      - run: echo "FFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
       - run: echo "CFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
       - run: echo "LDFLAGS=-L${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "LD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
