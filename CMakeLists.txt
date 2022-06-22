@@ -6,10 +6,14 @@
 ##################################
 
 #Minimum required CMake Version
-cmake_minimum_required(VERSION 3.0.0)
+cmake_minimum_required(VERSION 3.12.0)
 
 #Project Name for netCDF-Fortran
-PROJECT (NC4F Fortran C)
+PROJECT (NC4F
+LANGUAGES C Fortran
+HOMEPAGE_URL "https://www.unidata.ucar.edu/software/netcdf/docs-fortran/"
+DESCRIPTION "NetCDF is a set of software libraries and machine-independent data formats that support the creation, access, and sharing of array-oriented scientific data."
+)
 SET(NC4F_CTEST_PROJECT_NAME "netcdf-fortran")
 
 set(PACKAGE "${NC4F_CTEST_PROJECT_NAME}" CACHE STRING "")
@@ -165,9 +169,7 @@ OPTION(BUILD_SHARED_LIBS "Configure netCDF as a shared library." ON)
 SET (LIB_TYPE STATIC)
 IF (BUILD_SHARED_LIBS)
   SET(LIB_TYPE SHARED)
-  IF(CMAKE_COMPILER_IS_GNUCC OR APPLE)
-    SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
-  ENDIF()
+  set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 ENDIF()
 
 # Supress unused variable and parameter warnings, for the time being,
@@ -175,11 +177,11 @@ ENDIF()
 #
 # Also, set some other default compiler flags.
 IF(CMAKE_COMPILER_IS_GNUCC OR APPLE)
-  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -g -Wall -Wno-unused-variable -Wno-unused-parameter")
+  string(APPEND CMAKE_C_FLAGS " -g -Wall -Wno-unused-variable -Wno-unused-parameter")
 ENDIF()
 
 IF(NOT ENABLE_COVERAGE_TESTS)
-  SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O2")
+  string(APPEND CMAKE_C_FLAGS " -O2")
 ENDIF()
 
 
@@ -205,9 +207,9 @@ ENDIF()
 SET(EXTRA_DIST "")
 MACRO(ADD_EXTRA_DIST files)
   FOREACH(F ${files})
-    SET(EXTRA_DIST ${EXTRA_DIST} ${CMAKE_CURRENT_SOURCE_DIR}/${F})
-    SET(EXTRA_DIST ${EXTRA_DIST} PARENT_SCOPE)
+    list(APPEND EXTRA_DIST ${CMAKE_CURRENT_SOURCE_DIR}/${F})
   ENDFOREACH()
+  SET(EXTRA_DIST ${EXTRA_DIST} PARENT_SCOPE)
 ENDMACRO()
 
 # A basic script used to convert m4 files
