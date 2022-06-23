@@ -12,7 +12,7 @@ endforeach(f)
 
 # Separate C and Fortran Sources
 SET(nf_test_SOURCES
-  f03lib_f_interfaces.f90 test_get.F test_put.F nf_error.F nf_test.F
+  f03lib_f_interfaces.F90 test_get.F test_put.F nf_error.F nf_test.F
   test_read.F test_write.F util.F tests.inc)
 SET(nf_test_C_SOURCES f03lib.c)
 
