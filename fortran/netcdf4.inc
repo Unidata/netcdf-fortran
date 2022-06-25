@@ -151,6 +151,8 @@
       parameter (nf_edimscale = -124)
       integer nf_enogrp       ! No group found.
       parameter (nf_enogrp = -125)
+      integer nf_enotbuilt       ! NetCDF feature not built.
+      parameter (nf_enotbuilt = -128)
 
 
 !     New functions.
