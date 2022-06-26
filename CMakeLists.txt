@@ -640,6 +640,17 @@ CHECK_C_SOURCE_COMPILES("
 #endif
 int main() {return 0;}" HAVE_SZIP_WRITE)
 
+###
+# Check to see if quantize capability is present in netcdf-c.
+###
+SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_INCLUDE_DIR})
+CHECK_C_SOURCE_COMPILES("
+#include <netcdf_meta.h>
+#if !NC_HAS_QUANTIZE
+      choke me
+#endif
+int main() {return 0;}" HAVE_QUANTIZE)
+
 CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nc_def_var_szip "" HAVE_DEF_VAR_SZIP)
 if (NOT HAVE_DEF_VAR_SZIP)
   message(FATAL_ERROR "netcdf-c version 4.7.4 or greater is required")
@@ -1071,6 +1082,7 @@ is_enabled(ENABLE_DAP HAS_DAP)
 is_enabled(USE_NETCDF_V2 HAS_NC2)
 is_enabled(USE_NETCDF4 HAS_NC4)
 is_enabled(HAVE_SZIP_WRITE HAS_SZIP_WRITE)
+is_enabled(HAVE_QUANTIZE HAS_QUANTIZE)
 is_enabled(USE_LOGGING HAS_LOGGING)
 is_enabled(ENABLE_CDF5 HAS_CDF5)
 is_enabled(BUILD_PARALLEL HAS_PARALLEL)
