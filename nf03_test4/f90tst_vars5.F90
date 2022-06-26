@@ -10,6 +10,7 @@ program f90tst_vars5
   use typeSizes
   use netcdf
   implicit none
+  include "netcdf.inc"
   
   ! This is the name of the data file we will create.
   character (len = *), parameter :: FILE_NAME = "f90tst_vars5.nc"
@@ -36,6 +37,7 @@ program f90tst_vars5
   character (len = *), parameter :: VAR5_NAME = "Yul-Guk"
   integer, parameter :: CACHE_SIZE = 8, CACHE_NELEMS = 571
   integer, parameter :: CACHE_PREEMPTION = 66
+  integer :: ierr
 
   ! Information read back from the file to check correctness.
   integer :: varid1_in, varid2_in, varid3_in, varid4_in, varid5_in
@@ -68,6 +70,7 @@ program f90tst_vars5
   double_data(4) = 1234567890.12345
   double_data(5) = 1234567890
 
+  ierr = nf_set_log_level(3)
   ! Create the netCDF file. 
   call check(nf90_create(FILE_NAME, nf90_netcdf4, ncid, cache_nelems = CACHE_NELEMS, &
        cache_size = CACHE_SIZE))
