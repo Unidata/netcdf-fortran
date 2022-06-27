@@ -544,6 +544,28 @@ Interface
 
  End Function nf_inq_var_szip
 End Interface
+!-------------------------------- nf_def_var_quantize --------------------------
+Interface
+ Function nf_def_var_quantize( ncid, varid, quantize_mode, nsd) &
+                               RESULT (status)
+
+ Integer, Intent(IN) :: ncid, varid, quantize_mode, nsd
+ Integer             :: status
+
+ End Function nf_def_var_quantize
+End Interface
+!-------------------------------- nf_inq_var_quantize -----------------------------
+Interface
+ Function nf_inq_var_quantize(ncid, varid, quantize_mode, nsd) RESULT(status)
+
+ Implicit NONE
+
+ Integer, Intent(IN)    :: ncid, varid
+ Integer, Intent(INOUT) :: quantize_mode, nsd
+ Integer                :: status
+
+ End Function nf_inq_var_quantize
+End Interface
 !-------------------------------- nf_def_var_fletcher32 ------------------------
 Interface
  Function nf_def_var_fletcher32( ncid, varid, fletcher32) RESULT(status)

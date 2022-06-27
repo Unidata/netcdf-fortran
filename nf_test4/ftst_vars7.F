@@ -78,9 +78,11 @@ C         Turn on quantize.
      $         NF_QUANTIZE_BITGROOM, NSD_3)
           if (retval .ne. nf_noerr) stop 3
 
+
 C         Turn on zlib compression. 
           retval = nf_def_var_deflate(ncid, varid(x), 0, 1, 1)
           if (retval .ne. nf_noerr) stop 3
+
       end do
 
 C     Write some data (which automatically calls nf_enddef).
