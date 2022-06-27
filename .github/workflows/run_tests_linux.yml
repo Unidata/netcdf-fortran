@@ -70,8 +70,8 @@ jobs:
 
     strategy:
       matrix:
-        hdf5: [ 1.10.9, 1.12.2 ]
-        netcdf: [ v4.7.4, v4.8.1, main ]
+        hdf5: [ 1.12.2 ]
+        netcdf: [ 4.9.0, main ]
 
     steps:
 
@@ -222,8 +222,8 @@ jobs:
 
     strategy:
       matrix:
-        hdf5: [ 1.10.9, 1.12.2 ]
-        netcdf: [ v4.7.4, v4.8.1, main ]
+        hdf5: [ 1.12.2 ]
+        netcdf: [ v4.99.0, main ]
 
     steps:
 
