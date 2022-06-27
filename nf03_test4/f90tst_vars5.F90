@@ -70,7 +70,6 @@ program f90tst_vars5
   double_data(4) = 1234567890.12345
   double_data(5) = 1234567890
 
-  ierr = nf_set_log_level(3)
   ! Create the netCDF file. 
   call check(nf90_create(FILE_NAME, nf90_netcdf4, ncid, cache_nelems = CACHE_NELEMS, &
        cache_size = CACHE_SIZE))

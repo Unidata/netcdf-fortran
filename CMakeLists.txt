@@ -650,6 +650,9 @@ CHECK_C_SOURCE_COMPILES("
       choke me
 #endif
 int main() {return 0;}" HAVE_QUANTIZE)
+if (HAVE_QUANTIZE)
+   ADD_DEFINITIONS(-DNF_HAS_QUANTIZE)
+endif()
 
 CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nc_def_var_szip "" HAVE_DEF_VAR_SZIP)
 if (NOT HAVE_DEF_VAR_SZIP)
