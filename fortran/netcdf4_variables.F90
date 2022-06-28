@@ -19,7 +19,7 @@
   ! ----- 
   function nf90_def_var_oneDim(ncid, name, xtype, dimids, varid, contiguous, &
        chunksizes, deflate_level, shuffle, fletcher32, endianness, &
-       cache_size, cache_nelems, cache_preemption)
+       cache_size, cache_nelems, cache_preemption, quantize_mode, nsd)
     integer, intent( in) :: ncid
     character (len = *), intent( in) :: name
     integer, intent(in) :: xtype
@@ -31,6 +31,7 @@
     logical, optional, intent(in) :: shuffle, fletcher32
     integer, optional, intent(in) :: endianness
     integer, optional, intent(in) :: cache_size, cache_nelems, cache_preemption
+    integer, optional, intent(in) :: quantize_mode, nsd
     integer :: nf90_def_var_oneDim
     
     integer, dimension(1) :: dimidsA, chunksizes1
@@ -123,11 +124,23 @@
        if (nf90_def_var_oneDim .ne. nf90_noerr) return
     endif
 
+    ! Set quantize if the user wants to.
+    if (present(quantize_mode)) then
+       if (.not. present(nsd)) then
+          nf90_def_var_oneDim = nf90_einval
+          return
+       endif
+       nf90_def_var_oneDim = nf_def_var_quantize(ncid, varid, quantize_mode, nsd)
+       if (nf90_def_var_oneDim .ne. nf90_noerr) return
+       
+    endif
+       
+
   end function nf90_def_var_oneDim
   ! ----- 
   function nf90_def_var_ManyDims(ncid, name, xtype, dimids, varid, contiguous, &
        chunksizes, deflate_level, shuffle, fletcher32, endianness, cache_size, &
-       cache_nelems, cache_preemption)
+       cache_nelems, cache_preemption, quantize_mode, nsd)
     integer, intent(in) :: ncid
     character (len = *), intent(in) :: name
     integer, intent( in) :: xtype
@@ -139,6 +152,7 @@
     logical, optional, intent(in) :: shuffle, fletcher32
     integer, optional, intent(in) :: endianness
     integer, optional, intent(in) :: cache_size, cache_nelems, cache_preemption
+    integer, optional, intent(in) :: quantize_mode, nsd
     integer :: nf90_def_var_ManyDims
 
     ! Local variables.
@@ -239,6 +253,16 @@
        if (nf90_def_var_ManyDims .ne. nf90_noerr) return
     endif
 
+    ! Set quantize if the user wants to.
+    if (present(quantize_mode)) then
+       if (.not. present(nsd)) then
+          nf90_def_var_ManyDims = nf90_einval
+          return
+       endif
+       nf90_def_var_ManyDims = nf_def_var_quantize(ncid, varid, quantize_mode, nsd)
+       if (nf90_def_var_ManyDims .ne. nf90_noerr) return
+    endif
+       
   end function nf90_def_var_ManyDims
   ! ----- 
   function nf90_inq_varid(ncid, name, varid)
@@ -264,7 +288,7 @@
   ! ----- 
   function nf90_inquire_variable(ncid, varid, name, xtype, ndims, dimids, nAtts, &
        contiguous, chunksizes, deflate_level, shuffle, fletcher32, endianness, &
-       cache_size, cache_nelems, cache_preemption)
+       cache_size, cache_nelems, cache_preemption, quantize_mode, nsd)
     integer, intent(in) :: ncid, varid
     character (len = *), optional, intent(out) :: name
     integer, optional, intent(out) :: xtype, ndims 
@@ -276,6 +300,7 @@
     logical, optional, intent(out) :: shuffle, fletcher32
     integer, optional, intent(out) :: endianness
     integer, optional, intent(out) :: cache_size, cache_nelems, cache_preemption
+    integer, optional, intent(out) :: quantize_mode, nsd
     integer :: nf90_inquire_variable
     
     ! Local variables
@@ -348,6 +373,13 @@
        if (present(cache_nelems)) cache_nelems = nelems1
        if (present(cache_preemption)) cache_preemption = preemption1
     endif
+
+    ! And the quantization...
+    if (present(quantize_mode)) then
+       nf90_inquire_variable = nf_inq_var_quantize(ncid, varid, quantize_mode, nsd)
+       if (nf90_inquire_variable .ne. nf90_noerr) return
+    endif
+    
   end function nf90_inquire_variable
   ! ----- 
   function nf90_rename_var(ncid, varid, newname)

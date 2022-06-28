@@ -16,22 +16,22 @@ lib_LTLIBRARIES = libnetcdff.la
 # for information regarding incrementing `-version-info`.
 libnetcdff_la_LDFLAGS = -version-info 8:0:1
 
-# These f90 codes are used for either netCDF classic or netCDF-4 F90
+# These F90 codes are used for either netCDF classic or netCDF-4 F90
 # API.
-COMMON_CODES = netcdf_constants.f90 netcdf_externals.f90	\
-netcdf_dims.f90 netcdf_attributes.f90 netcdf_overloads.f90	\
-netcdf_visibility.f90 netcdf_file.f90 netcdf_text_variables.f90	\
-netcdf_expanded.f90
+COMMON_CODES = netcdf_constants.F90 netcdf_externals.F90	\
+netcdf_dims.F90 netcdf_attributes.F90 netcdf_overloads.F90	\
+netcdf_visibility.F90 netcdf_file.F90 netcdf_text_variables.F90	\
+netcdf_expanded.F90
 
-# These f90 codes are used for the netCDF-4 F90 API.
-NETCDF4_CODES = netcdf4_externals.f90 netcdf4_visibility.f90	\
-netcdf4_func.f90 netcdf4_overloads.f90 netcdf4_file.f90		\
-netcdf4_eightbyte.f90 netcdf4_variables.f90
+# These F90 codes are used for the netCDF-4 F90 API.
+NETCDF4_CODES = netcdf4_externals.F90 netcdf4_visibility.F90	\
+netcdf4_func.F90 netcdf4_overloads.F90 netcdf4_file.F90		\
+netcdf4_eightbyte.F90 netcdf4_variables.F90
 
-# These f90 codes are used in the netCDF classic API, when netCDF/HDF5
+# These F90 codes are used in the netCDF classic API, when netCDF/HDF5
 # is not being built.
-NETCDF3_CODES = netcdf_eightbyte.f90 netcdf3_file.f90	\
-netcdf_variables.f90
+NETCDF3_CODES = netcdf_eightbyte.F90 netcdf3_file.F90	\
+netcdf_variables.F90
 
 # Build these uninstalled convenience libraries.
 noinst_LTLIBRARIES = libtypeSizes.la libnetcdf_nc_data.la	\
@@ -39,10 +39,16 @@ libnetcdf_nf_data.la libnetcdf_nc_interfaces.la			\
 libnetcdf_nf_interfaces.la libnetcdfm.la libnetcdf_f03.la
 
 # These are the ource for the F77 API.
-libnetcdff_la_SOURCES = nf_attio.F90 nf_control.F90 nf_dim.f90		\
-nf_misc.f90 nf_genatt.f90 nf_geninq.f90 nf_genvar.f90 nf_vario.F90	\
+libnetcdff_la_SOURCES = nf_attio.F90 nf_control.F90 nf_dim.F90		\
+nf_misc.F90 nf_genatt.F90 nf_geninq.F90 nf_genvar.F90 nf_vario.F90	\
 nf_var1io.F90 nf_varaio.F90 nf_varmio.F90 nf_varsio.F90			\
-nf_logging.F90 nf_nc.f90
+nf_logging.F90
+
+if BUILD_PARALLEL
+libnetcdff_la_SOURCES += nf_nc.F90
+else
+libnetcdff_la_SOURCES += nf_nc_noparallel.F90
+endif
 
 # The respective objects depend on the netcdf_nc_interfaces module.
 nf_attio.lo nf_control.lo nf_dim.lo nf_genatt.lo nf_geninq.lo nf_genvar.lo    \
@@ -54,27 +60,27 @@ nf_varsio.lo: netcdf_nc_interfaces.mod
 if USE_NETCDF4
 
 # Use the netCDF-4 F90 code.
-libnetcdfm_la_SOURCES = netcdf4.f90
+libnetcdfm_la_SOURCES = netcdf4.F90
 netcdf4.lo: typesizes.mod $(COMMON_CODES) $(NETCDF4_CODES)
 netcdf.mod: netcdf4.lo
 
 else # classic-only build
 
 # Use the netCDF classic F90 code.
-libnetcdfm_la_SOURCES = netcdf.f90
+libnetcdfm_la_SOURCES = netcdf.F90
 netcdf.lo: typesizes.mod $(COMMON_CODES) $(NETCDF3_CODES)
 netcdf.mod: netcdf.lo
-libnetcdff_la_SOURCES += netcdf3_file.f90
+libnetcdff_la_SOURCES += netcdf3_file.F90
 
 endif # USE_NETCDF4
 
 # Each convenience library depends on its source.
-libtypeSizes_la_SOURCES = typeSizes.f90
+libtypeSizes_la_SOURCES = typeSizes.F90
 libnetcdf_nc_data_la_SOURCES = module_netcdf_nc_data.F90
 libnetcdf_nf_data_la_SOURCES = module_netcdf_nf_data.F90
-libnetcdf_nc_interfaces_la_SOURCES = module_netcdf_nc_interfaces.f90
+libnetcdf_nc_interfaces_la_SOURCES = module_netcdf_nc_interfaces.F90
 libnetcdf_nf_interfaces_la_SOURCES = module_netcdf_nf_interfaces.F90
-libnetcdf_f03_la_SOURCES = module_netcdf_f03.f90
+libnetcdf_f03_la_SOURCES = module_netcdf_f03.F90
 
 # Each mod file depends on the .lo file.
 typesizes.mod: typeSizes.lo
@@ -103,12 +109,12 @@ libnetcdf_nf_interfaces.la libnetcdfm.la libnetcdf_f03.la
 # Add the V2 F77 API.
 if BUILD_V2
 noinst_LTLIBRARIES += libnetcdf_fortv2_c_interfaces.la
-libnetcdf_fortv2_c_interfaces_la_SOURCES = module_netcdf_fortv2_c_interfaces.f90
+libnetcdf_fortv2_c_interfaces_la_SOURCES = module_netcdf_fortv2_c_interfaces.F90
 netcdf_fortv2_c_interfaces.mod: module_netcdf_fortv2_c_interfaces.lo
 module_netcdf_fortv2_c_interfaces.lo: netcdf_nc_interfaces.mod
 nf_fortv2.lo: netcdf_fortv2_c_interfaces.mod netcdf_nc_interfaces.mod
 MODFILES += netcdf_fortv2_c_interfaces.mod
-libnetcdff_la_SOURCES += nf_v2compat.c nf_fortv2.f90
+libnetcdff_la_SOURCES += nf_v2compat.c nf_fortv2.F90
 libnetcdff_la_LIBADD += libnetcdf_fortv2_c_interfaces.la
 endif # BUILD_V2
 
@@ -116,7 +122,7 @@ endif # BUILD_V2
 if USE_NETCDF4
 
 # Add additional source files to the library to support netCDF4.
-libnetcdff_la_SOURCES += nf_lib.c nf_nc4.f90
+libnetcdff_la_SOURCES += nf_lib.c nf_nc4.F90
 nf_nc4.$(OBJEXT): netcdf4_nc_interfaces.mod
 
 # Add these uninstalled convenience libraries for netcdf-4.
@@ -124,9 +130,9 @@ noinst_LTLIBRARIES += libnetcdf4_nc_interfaces.la	\
 libnetcdf4_nf_interfaces.la libnetcdf4_f03.la
 
 # Each convenience library depends on its source.
-libnetcdf4_nc_interfaces_la_SOURCES = module_netcdf4_nc_interfaces.f90
+libnetcdf4_nc_interfaces_la_SOURCES = module_netcdf4_nc_interfaces.F90
 libnetcdf4_nf_interfaces_la_SOURCES = module_netcdf4_nf_interfaces.F90
-libnetcdf4_f03_la_SOURCES = module_netcdf4_f03.f90
+libnetcdf4_f03_la_SOURCES = module_netcdf4_f03.F90
 
 # Each mod file depends on the .lo file.
 netcdf4_nc_interfaces.mod: module_netcdf4_nc_interfaces.lo

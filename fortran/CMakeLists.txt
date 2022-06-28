@@ -3,33 +3,34 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 SET(CMAKE_VERBOSE_MAKEFILE OFF)
 
 SET(netcdff_SOURCES
-  typeSizes.f90 module_netcdf_nc_data.F90 module_netcdf_nc_interfaces.f90
+  typeSizes.F90 module_netcdf_nc_data.F90 module_netcdf_nc_interfaces.F90
   module_netcdf_nf_data.F90 module_netcdf_nf_interfaces.F90
-  module_netcdf_f03.f90
-  nf_attio.F90 nf_control.F90 nf_dim.f90 nf_misc.f90
-  nf_genatt.f90 nf_geninq.f90 nf_genvar.f90
+  module_netcdf_f03.F90
+  nf_attio.F90 nf_control.F90 nf_dim.F90 nf_misc.F90
+  nf_genatt.F90 nf_geninq.F90 nf_genvar.F90
   nf_vario.F90 nf_var1io.F90 nf_varaio.F90
   nf_varmio.F90 nf_varsio.F90
 )
 
-# Check if netcdf-c has parallel I/O functions
-check_symbol_exists(nc_create_par "netcdf.h" HAVE_PARALLEL)
-message (STATUS "found netcdf-c parallel support: ${HAVE_PARALLEL}")
-IF (${USE_NETCDF4})
-IF(HAVE_PARALLEL)
-  SET(netcdff_SOURCES ${netcdff_SOURCES} nf_nc.f90)
-  message (STATUS "including netcdf-f parallel support")
-ELSE ()
-  SET(netcdff_SOURCES ${netcdff_SOURCES} nf_nc_noparallel.f90)
-  message (STATUS "no netcdf-f parallel support")
-ENDIF(HAVE_PARALLEL)
-ENDIF(${USE_NETCDF4} AND HAVE_PARALLEL)
+# Check if netcdf-c has parallel I/O feature enabled
+IF (NETCDF_C_INCLUDE_DIR)
+   file(READ "${NETCDF_C_INCLUDE_DIR}/netcdf_meta.h" header)
+   string(REGEX MATCH "#define NC_HAS_PARALLEL *[01]" macrodef "${header}")
+   string(REGEX MATCH "[01]" HAVE_PARALLEL "${macrodef}")
+   IF (HAVE_PARALLEL)
+      SET(netcdff_SOURCES ${netcdff_SOURCES} nf_nc.F90)
+      MESSAGE(STATUS "Whether NetCDF-C built with paralle I/O enabled: yes")
+   ELSE()
+      SET(netcdff_SOURCES ${netcdff_SOURCES} nf_nc_noparallel.F90)
+      MESSAGE(STATUS "Whether NetCDF-C built with paralle I/O enabled: no")
+   ENDIF(HAVE_PARALLEL)
+ENDIF(NETCDF_C_INCLUDE_DIR)
 
 IF (USE_NETCDF4)
   SET(netcdff_SOURCES ${netcdff_SOURCES}
-    module_netcdf4_nc_interfaces.f90
-    module_netcdf4_nf_interfaces.F90 module_netcdf4_f03.f90
-    nf_nc4.f90
+    module_netcdf4_nc_interfaces.F90
+    module_netcdf4_nf_interfaces.F90 module_netcdf4_f03.F90
+    nf_nc4.F90
     )
   SET(netcdff_C_SOURCES ${netcdff_C_SOURCES} nf_lib.c)
 ENDIF(USE_NETCDF4)
@@ -42,30 +43,30 @@ IF (${USE_LOGGING})
 ENDIF(${USE_LOGGING})
 
 # SET(netcdff_DEPENDENCIES
-#   netcdf_attributes.f90 netcdf_constants.f90 netcdf_dims.f90
-#   netcdf_expanded.f90 netcdf_externals.f90 netcdf_file.f90
-#   netcdf_overloads.f90 netcdf_text_variables.f90 netcdf_variables.f90
-#   netcdf_visibility.f90 netcdf_eightbyte.f90
+#   netcdf_attributes.F90 netcdf_constants.F90 netcdf_dims.F90
+#   netcdf_expanded.F90 netcdf_externals.F90 netcdf_file.F90
+#   netcdf_overloads.F90 netcdf_text_variables.F90 netcdf_variables.F90
+#   netcdf_visibility.F90 netcdf_eightbyte.F90
 #   )
 
 IF (${USE_NETCDF4})
   SET(netcdff_SOURCES ${netcdff_SOURCES}
-    netcdf4.f90
+    netcdf4.F90
     )
   # SET(netcdff_DEPENDENCIES ${netcdff_DEPENDENCIES}
-  #   netcdf4_func.f90 netcdf4_externals.f90 netcdf4_visibility.f90
-  #   netcdf4.f90 netcdf4_eightbyte.f90
-  #   netcdf4_variables.f90 netcdf4_file.f90
+  #   netcdf4_func.F90 netcdf4_externals.F90 netcdf4_visibility.F90
+  #   netcdf4.F90 netcdf4_eightbyte.F90
+  #   netcdf4_variables.F90 netcdf4_file.F90
   #   )
 ELSE ()
   SET(netcdff_SOURCES ${netcdff_SOURCES}
-    netcdf.f90 netcdf3_file.f90
+    netcdf.F90 netcdf3_file.F90
     )
 ENDIF(${USE_NETCDF4})
 
 if (${BUILD_V2})
   SET(netcdff_SOURCES ${netcdff_SOURCES}
-    module_netcdf_fortv2_c_interfaces.f90 nf_fortv2.f90
+    module_netcdf_fortv2_c_interfaces.F90 nf_fortv2.F90
     )
   SET(netcdff_C_SOURCES ${netcdff_C_SOURCES} nf_v2compat.c )
 endif (${BUILD_V2})
