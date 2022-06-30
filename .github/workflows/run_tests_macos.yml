@@ -29,6 +29,7 @@ jobs:
       - run: echo "CFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
       - run: echo "LDFLAGS=-L${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "LD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
+      - run: echo "DYLD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: brew install automake libaec 
         ###
         # Installing libhdf4 and libhdf5
@@ -84,6 +85,7 @@ jobs:
       - run: echo "CFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
       - run: echo "LDFLAGS=-L${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "LD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
+      - run: echo "DYLD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: brew install automake 
       
 
@@ -112,7 +114,7 @@ jobs:
 
       - name: Configure
         shell: bash -l {0}
-        run: CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure
+        run: CFLAGS=${CFLAGS} LDFLAGS=$(nc-config --libs --static) LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure
 
       - name: Look at config.log if error
         shell: bash -l {0}
