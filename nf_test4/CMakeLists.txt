@@ -8,8 +8,12 @@ SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 if (USE_NETCDF4)
   # Add these netCDF-4 test programs.
   SET(nc4_check_PROGRAMS ftst_groups ftst_vars ftst_vars2 ftst_vars3
-    ftst_vars4 ftst_vars5 ftst_vars6 ftst_vars7 ftst_types ftst_types2
+    ftst_vars4 ftst_vars5 ftst_vars6 ftst_types ftst_types2
     ftst_types3 ftst_path ftst_rengrps f03tst_open_mem ftst_var_compact)
+  # Only run this test if quantize is present (i.e. netcdf-c is 4.9.0 or greater).
+  IF (HAVE_QUANTIZE)
+    SET(nc4_check_PROGRAMS ${nc4_check_PROGRAMS} ftst_vars7)    
+  ENDIF()  
   SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_check_PROGRAMS})
   SET(TESTS ${TESTS} ${nc4_check_PROGRAMS})
 
