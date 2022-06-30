@@ -126,13 +126,16 @@
 
     ! Set quantize if the user wants to.
     if (present(quantize_mode)) then
+#ifdef NF_HAS_QUANTIZE
        if (.not. present(nsd)) then
           nf90_def_var_oneDim = nf90_einval
           return
        endif
        nf90_def_var_oneDim = nf_def_var_quantize(ncid, varid, quantize_mode, nsd)
        if (nf90_def_var_oneDim .ne. nf90_noerr) return
-       
+#else
+       nf90_def_var_oneDim = nf90_enotbuilt
+#endif
     endif
        
 
@@ -255,12 +258,16 @@
 
     ! Set quantize if the user wants to.
     if (present(quantize_mode)) then
+#ifdef NF_HAS_QUANTIZE
        if (.not. present(nsd)) then
           nf90_def_var_ManyDims = nf90_einval
           return
        endif
        nf90_def_var_ManyDims = nf_def_var_quantize(ncid, varid, quantize_mode, nsd)
        if (nf90_def_var_ManyDims .ne. nf90_noerr) return
+#else
+       nf90_def_var_ManyDims = nf90_enotbuilt
+#endif
     endif
        
   end function nf90_def_var_ManyDims
@@ -376,8 +383,14 @@
 
     ! And the quantization...
     if (present(quantize_mode)) then
+#ifdef NF_HAS_QUANTIZE       
        nf90_inquire_variable = nf_inq_var_quantize(ncid, varid, quantize_mode, nsd)
        if (nf90_inquire_variable .ne. nf90_noerr) return
+#else
+       quantize_mode = 0
+       nsd = 0
+       nf90_inquire_variable = nf90_noerr
+#endif
     endif
     
   end function nf90_inquire_variable

@@ -14,8 +14,13 @@ LDADD = ${top_builddir}/fortran/libnetcdff.la
 
 # tst_f90_nc4
 NC4_F90_TESTS = f90tst_vars f90tst_vars_vlen f90tst_grps f90tst_fill	\
-f90tst_fill2 f90tst_vars2 f90tst_vars3 f90tst_vars4 f90tst_vars5	\
-f90tst_path f90tst_rengrps f90tst_nc4 f90tst_types f90tst_types2
+f90tst_fill2 f90tst_vars2 f90tst_vars3 f90tst_vars4 f90tst_path		\
+f90tst_rengrps f90tst_nc4 f90tst_types f90tst_types2
+
+if TEST_QUANTIZE
+NC4_F90_TESTS += f90tst_vars5
+endif
+
 check_PROGRAMS = $(NC4_F90_TESTS)
 TESTS = $(NC4_F90_TESTS)
 
