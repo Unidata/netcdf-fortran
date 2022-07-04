@@ -787,6 +787,31 @@ Interface
 
  End Function nc_inq_var_deflate
 End Interface
+!------------------------------- nc_def_var_zstandard ---------------------------
+Interface
+ Function nc_def_var_zstandard(ncid, varid, zstandard_level) BIND(C)
+
+ USE ISO_C_BINDING, ONLY: C_INT
+
+ Integer(C_INT), VALUE :: ncid, varid, zstandard_level
+
+ Integer(C_INT)        :: nc_def_var_zstandard
+
+ End Function nc_def_var_zstandard
+End Interface
+!------------------------------- nc_inq_var_zstandard ---------------------------
+Interface
+ Function nc_inq_var_zstandard(ncid, varid, zstandard, zstandard_level) BIND(C)
+
+ USE ISO_C_BINDING, ONLY: C_INT
+
+ Integer(C_INT), VALUE         :: ncid, varid
+ Integer(C_INT), Intent(INOUT) :: zstandard, zstandard_level
+
+ Integer(C_INT)                :: nc_inq_var_zstandard
+
+ End Function nc_inq_var_zstandard
+End Interface
 !------------------------------- nc_def_var_chunking --------------------------
 Interface
  Function nc_def_var_chunking(ncid, varid, contiguousp, chunksizesp) BIND(C)

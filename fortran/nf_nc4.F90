@@ -1520,6 +1520,48 @@
  
  End Function nf_inq_var_deflate
 
+ !-------------------------------- nf_def_var_zstandard --------------------------
+ Function nf_def_var_zstandard( ncid, varid, zstandard_level) RESULT (status)
+   ! Define variable zstandard compression.
+   USE netcdf4_nc_interfaces
+   Implicit NONE
+
+   Integer, Intent(IN) :: ncid, varid, zstandard_level
+   Integer :: status
+   Integer(C_INT) :: cncid, cvarid, czstandard_level, cstatus
+
+   cncid = ncid
+   cvarid = varid - 1
+   czstandard_level = zstandard_level
+
+   cstatus = nc_def_var_zstandard(cncid, cvarid, czstandard_level)
+   status = cstatus
+
+ End Function nf_def_var_zstandard
+ !-------------------------------- nf_inq_var_zstandard -------------------------
+ Function nf_inq_var_zstandard( ncid, varid, zstandard, zstandard_level) RESULT (status)
+   ! inquire variable deflation
+   USE netcdf4_nc_interfaces
+   Implicit NONE
+
+   Integer, Intent(IN)  :: ncid, varid
+   Integer, Intent(OUT) :: zstandard, zstandard_level
+   Integer :: status
+   Integer(C_INT) :: cncid, cvarid, czstandard, czstandard_level, cstatus
+
+   cncid = ncid
+   cvarid = varid - 1
+
+   cstatus = nc_inq_var_zstandard(cncid, cvarid, czstandard, czstandard_level)
+
+   If (cstatus == NC_NOERR) Then
+      zstandard = czstandard
+      zstandard_level = czstandard_level
+   EndIf
+   status = cstatus
+
+ End Function nf_inq_var_zstandard
+
 !-------------------------------- nf_def_var_szip --------------------------
  Function nf_def_var_szip(ncid, varid, options_mask, pixels_per_block) &
       RESULT (status)

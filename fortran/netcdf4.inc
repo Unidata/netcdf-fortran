@@ -211,6 +211,12 @@
       integer nf_inq_var_deflate
       external nf_inq_var_deflate
 
+      integer nf_def_var_zstandard
+      external nf_def_var_zstandard
+
+      integer nf_inq_var_zstandard
+      external nf_inq_var_zstandard
+
       integer nf_def_var_szip
       external nf_def_var_szip
 

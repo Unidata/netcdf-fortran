@@ -58,6 +58,17 @@ if test "x$nc_has_cdf5" = xyes; then
 fi
 AC_MSG_RESULT([$nc_has_cdf5])
 
+AC_MSG_CHECKING([if netCDF was built with Zstandard compression])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
+#include <netcdf_meta.h>
+#if !defined(NC_HAS_ZSTD) || NC_HAS_ZSTD == 0
+      choke me
+#endif]])], [nc_has_zstd=yes], [nc_has_zstd=no])
+if test "x$nc_has_zstd" = xyes; then
+   AC_DEFINE([ENABLE_ZSTD], [1], [Enable Zstandard compression support])
+fi
+AC_MSG_RESULT([$nc_has_zstd])
+
 AC_MSG_CHECKING([if netCDF was built with pnetcdf])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
 #include <netcdf_meta.h>
@@ -84,6 +95,7 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
       choke me
 #endif]])], [nc_has_parallel=yes], [nc_has_parallel=no])
 AC_MSG_RESULT([$nc_has_parallel])
+
 
 # Version 4.6.1 does not have NC_HAS_PARALLEL4 but does have
 # NC_HAS_PARALLEL.
@@ -605,6 +617,7 @@ AC_SUBST(HAS_DAP,[$nc_has_dap])
 AC_SUBST(HAS_NC2,[$nc_build_v2])
 AC_SUBST(HAS_NC4,[$nc_build_v4])
 AC_SUBST(HAS_SZIP_WRITE,[$nc_has_szip_write])
+AC_SUBST(HAS_ZSTD,[$nc_has_zstd])
 AC_SUBST(HAS_LOGGING,[$nc_has_logging])
 AC_SUBST(HAS_CDF5,[$nc_has_cdf5])
 AC_SUBST(HAS_PNETCDF,[$nc_has_pnetcdf])
