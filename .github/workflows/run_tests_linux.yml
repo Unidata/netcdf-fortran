@@ -217,7 +217,7 @@ jobs:
 
   nf-autotools-par:
 
-    needs: build-deps-par
+    needs: build-deps-par 
     runs-on: ubuntu-latest
 
     strategy:
