@@ -1534,7 +1534,12 @@
    cvarid = varid - 1
    czstandard_level = zstandard_level
 
+#ifdef ENABLE_ZSTD
    cstatus = nc_def_var_zstandard(cncid, cvarid, czstandard_level)
+#else
+   cstatus = nf_enotbuilt
+#endif
+
    status = cstatus
 
  End Function nf_def_var_zstandard
@@ -1552,7 +1557,11 @@
    cncid = ncid
    cvarid = varid - 1
 
+#ifdef ENABLE_ZSTD
    cstatus = nc_inq_var_zstandard(cncid, cvarid, czstandard, czstandard_level)
+#else
+   cstatus = nf_enotbuilt
+#endif
 
    If (cstatus == NC_NOERR) Then
       zstandard = czstandard
