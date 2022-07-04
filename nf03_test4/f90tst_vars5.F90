@@ -4,12 +4,13 @@
 
 !     This program tests netCDF-4 variable functions from fortran.
 
-!     $Id: f90tst_vars2.f90,v 1.7 2010/01/25 21:01:07 ed Exp $
+!     Ed Hartnett 2010/01/25
 
 program f90tst_vars5
   use typeSizes
   use netcdf
   implicit none
+  include "netcdf.inc"
   
   ! This is the name of the data file we will create.
   character (len = *), parameter :: FILE_NAME = "f90tst_vars5.nc"
@@ -36,6 +37,7 @@ program f90tst_vars5
   character (len = *), parameter :: VAR5_NAME = "Yul-Guk"
   integer, parameter :: CACHE_SIZE = 8, CACHE_NELEMS = 571
   integer, parameter :: CACHE_PREEMPTION = 66
+  integer :: ierr
 
   ! Information read back from the file to check correctness.
   integer :: varid1_in, varid2_in, varid3_in, varid4_in, varid5_in
@@ -76,7 +78,7 @@ program f90tst_vars5
   call check(nf90_def_dim(ncid, "x", DIM_LEN_5, x_dimid))
   dimids =  (/ x_dimid /)
 
-  ! Define some variables. 
+  ! Define some variables.
   call check(nf90_def_var(ncid, VAR1_NAME, NF90_FLOAT, dimids, varid1&
        &, deflate_level = DEFLATE_LEVEL, quantize_mode =&
        & nf90_quantize_bitgroom, nsd = 3))
@@ -134,7 +136,7 @@ program f90tst_vars5
        natts_in .ne. 1 .or. dimids_in(1) .ne. dimids(1)) stop 6
   if (deflate_level_in .ne. 0 .or. .not. contiguous_in .or. fletcher32_in .or. shuffle_in) stop 7
   if (quantize_mode_in .ne. nf90_quantize_bitgroom .or. nsd_in .ne. 3) stop 3
-
+  
   ! Check the data.
   call check(nf90_get_var(ncid, varid1_in, real_data_in))
   call check(nf90_get_var(ncid, varid2_in, double_data_in))

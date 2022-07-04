@@ -13,8 +13,13 @@ LDADD = ${top_builddir}/fortran/libnetcdff.la
 
 # These programs test the F77 netCDF-4 API using include netcdf.inc.
 NF77_TESTS = ftst_groups ftst_vars ftst_vars2 ftst_vars3 ftst_vars4	\
-ftst_vars5 ftst_vars6 ftst_vars7 ftst_types ftst_types2 ftst_types3	\
-ftst_path ftst_rengrps f03tst_open_mem ftst_var_compact
+ftst_vars5 ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_path	\
+ftst_rengrps f03tst_open_mem ftst_var_compact
+
+# Only build and run this test if quantize feature is supported.
+if TEST_QUANTIZE
+NF77_TESTS += ftst_vars7
+endif
 
 # Compile and run the F77 API tests.
 check_PROGRAMS = $(NF77_TESTS)
@@ -74,12 +79,18 @@ if USE_SED
 # These test fortran codes will be created using sed.
 F03_TEST_CODES = f03tst_groups.F f03tst_vars.F f03tst_vars2.F	\
 f03tst_vars3.F f03tst_vars4.F f03tst_vars5.F f03tst_vars6.F	\
-f03tst_vars7.F f03tst_types.F f03tst_types2.F f03tst_types3.F
+f03tst_types.F f03tst_types2.F f03tst_types3.F
 
 # The fortran codes will compile into these tests.
 F03_TESTS = f03tst_groups f03tst_vars f03tst_vars2 f03tst_vars3		\
-f03tst_vars4 f03tst_vars5 f03tst_vars6 f03tst_vars7 f03tst_types	\
-f03tst_types2 f03tst_types3
+f03tst_vars4 f03tst_vars5 f03tst_vars6 f03tst_types f03tst_types2	\
+f03tst_types3
+
+# If quantize is available, run this test.
+if TEST_QUANTIZE
+F03_TEST_CODES += f03tst_vars7.F
+F03_TESTS +=  f03tst_vars7
+endif
 
 # This is a netCDF-4 V2 F77 test program.
 if BUILD_V2

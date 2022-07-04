@@ -1626,7 +1626,11 @@
  cquantize_mode = quantize_mode
  cnsd = nsd
 
+#ifdef NF_HAS_QUANTIZE 
  cstatus = nc_def_var_quantize(cncid, cvarid, cquantize_mode, cnsd)
+#else
+ cstatus = nc_enotbuilt
+#endif
  status = cstatus
 
  End Function nf_def_var_quantize
@@ -1649,7 +1653,11 @@
  cncid  = ncid
  cvarid = varid-1
 
+#ifdef NF_HAS_QUANTIZE
  cstatus = nc_inq_var_quantize(cncid, cvarid, cquantize_mode, cnsd)
+#else
+ cstatus = nc_enotbuilt
+#endif
 
  If (cstatus == NC_NOERR) Then
     quantize_mode     = cquantize_mode

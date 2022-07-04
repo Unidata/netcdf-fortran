@@ -43,18 +43,18 @@
   !
   ! Update the dependencies in the Makefile.am when modifying the list of
   !     included files.
-  include "netcdf_constants.f90"
-  include "netcdf_externals.f90"
-  include "netcdf_overloads.f90"
-  include "netcdf_visibility.f90"
+#include "netcdf_constants.f90"
+#include "netcdf_externals.f90"
+#include "netcdf_overloads.f90"
+#include "netcdf_visibility.f90"
 contains
-  include "netcdf_file.f90"
-  include "netcdf3_file.f90"
-  include "netcdf_dims.f90"
-  include "netcdf_attributes.f90"
-  include "netcdf_variables.f90"
-  include "netcdf_text_variables.f90"
-  include "netcdf_expanded_subset.f90"
-  include "netcdf_get_nd_expanded.f90"
-  include "netcdf_eightbyte_subset.f90"
+#include "netcdf_file.f90"
+#include "netcdf3_file.f90"
+#include "netcdf_dims.f90"
+#include "netcdf_attributes.f90"
+#include "netcdf_variables.f90"
+#include "netcdf_text_variables.f90"
+#include "netcdf_expanded_subset.f90"
+#include "netcdf_get_nd_expanded.f90"
+#include "netcdf_eightbyte_subset.f90"
 end module netcdf

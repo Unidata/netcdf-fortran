@@ -117,6 +117,18 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
 AC_MSG_RESULT([$nc_has_szip_write])
 AM_CONDITIONAL(TEST_SZIP_WRITE, [test "x$nc_has_szip_write" = xyes])
 
+AC_MSG_CHECKING([if netCDF was built with support for quantize])
+AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
+#include <netcdf_meta.h>
+#if !defined(NC_HAS_QUANTIZE) || NC_HAS_QUANTIZE == 0
+      choke me
+#endif]])], [nc_has_quantize=yes], [nc_has_quantize=no])
+if test "x$nc_has_quantize" = xyes; then
+   AC_DEFINE([NF_HAS_QUANTIZE], [1], [Support for quantize feature.])
+fi
+AC_MSG_RESULT([$nc_has_quantize])
+AM_CONDITIONAL(TEST_QUANTIZE, [test "x$nc_has_quantize" = xyes])
+
 # Find valgrind, if available, and add targets for it (ex:
 # check-valgrind).
 AX_VALGRIND_DFLT([sgcheck], [off])
@@ -618,6 +630,7 @@ AC_SUBST(HAS_NC2,[$nc_build_v2])
 AC_SUBST(HAS_NC4,[$nc_build_v4])
 AC_SUBST(HAS_SZIP_WRITE,[$nc_has_szip_write])
 AC_SUBST(HAS_ZSTD,[$nc_has_zstd])
+AC_SUBST(HAS_QUANTIZE,[$nc_has_quantize])
 AC_SUBST(HAS_LOGGING,[$nc_has_logging])
 AC_SUBST(HAS_CDF5,[$nc_has_cdf5])
 AC_SUBST(HAS_PNETCDF,[$nc_has_pnetcdf])

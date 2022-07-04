@@ -34,3 +34,4 @@ NetCDF4 Parallel IO:            @HAS_NC4_PARALLEL@
 PnetCDF Parallel IO:            @HAS_PNETCDF@
 SZIP Write Support:             @HAS_SZIP_WRITE@
 Zstandard Support:              @HAS_ZSTD@
+Quantize:  			@HAS_QUANTIZE@

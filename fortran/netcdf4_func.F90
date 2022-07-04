@@ -538,7 +538,11 @@
     integer, intent(in) :: nsd
     integer :: nf90_def_var_quantize
 
+#ifdef NF_HAS_QUANTIZE
     nf90_def_var_quantize = nf_def_var_quantize(ncid, varid, quantize_mode, nsd)
+#else
+    nf90_def_var_quantize = nf90_enotbuilt
+#endif
   end function nf90_def_var_quantize
   ! -----------
   function nf90_def_var_fletcher32(ncid, varid, fletcher32)
@@ -588,7 +592,11 @@
     integer, intent(out) :: nsd
     integer :: nf90_inq_var_quantize
 
+#ifdef NF_HAS_QUANTIZE
     nf90_inq_var_quantize = nf_inq_var_quantize(ncid, varid, quantize_mode, nsd)
+#else
+    nf90_inq_var_quantize = nf90_enotbuilt
+#endif
   end function nf90_inq_var_quantize
   ! -----------
   function nf90_inq_var_fletcher32(ncid, varid, fletcher32)
