@@ -173,7 +173,7 @@ jobs:
           git clone -b ${{ matrix.netcdf}} https://github.com/Unidata/netcdf-c
           pushd netcdf-c
           autoreconf -if
-          CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
+          CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }} --with-plugin-dir=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib
           make -j install
           popd
           popd
@@ -268,7 +268,7 @@ jobs:
           git clone -b ${{ matrix.netcdf}} https://github.com/Unidata/netcdf-c
           pushd netcdf-c
           autoreconf -if
-          CC=${CC} CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
+          CC=${CC} CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}  --with-plugin-dir=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib
           make -j install
           popd
           popd
@@ -362,7 +362,7 @@ jobs:
           git clone -b ${{ matrix.netcdf}} https://github.com/Unidata/netcdf-c
           pushd netcdf-c
           autoreconf -if
-          CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
+          CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}  --with-plugin-dir=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib
           make -j install
           popd
           popd
