@@ -1537,7 +1537,7 @@
 #ifdef ENABLE_ZSTD
    cstatus = nc_def_var_zstandard(cncid, cvarid, czstandard_level)
 #else
-   cstatus = nf_enotbuilt
+   cstatus = nc_enotbuilt
 #endif
 
    status = cstatus
@@ -1560,7 +1560,7 @@
 #ifdef ENABLE_ZSTD
    cstatus = nc_inq_var_zstandard(cncid, cvarid, czstandard, czstandard_level)
 #else
-   cstatus = nf_enotbuilt
+   cstatus = nc_enotbuilt
 #endif
 
    If (cstatus == NC_NOERR) Then
