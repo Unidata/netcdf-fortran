@@ -308,7 +308,8 @@
   ! ----- 
   function nf90_inquire_variable(ncid, varid, name, xtype, ndims, dimids, nAtts, &
        contiguous, chunksizes, deflate_level, shuffle, fletcher32, endianness, &
-       cache_size, cache_nelems, cache_preemption, quantize_mode, nsd)
+       cache_size, cache_nelems, cache_preemption, quantize_mode, nsd, zstandard, &
+       zstandard_level)
     integer, intent(in) :: ncid, varid
     character (len = *), optional, intent(out) :: name
     integer, optional, intent(out) :: xtype, ndims 
@@ -321,6 +322,7 @@
     integer, optional, intent(out) :: endianness
     integer, optional, intent(out) :: cache_size, cache_nelems, cache_preemption
     integer, optional, intent(out) :: quantize_mode, nsd
+    integer, optional, intent(out) :: zstandard, zstandard_level
     integer :: nf90_inquire_variable
     
     ! Local variables
@@ -331,6 +333,7 @@
     integer :: deflate1, deflate_level1, contiguous1, shuffle1, fletcher321
     integer, dimension(nf90_max_dims) :: chunksizes1
     integer :: size1, nelems1, preemption1
+    integer :: zstandard1, zstandard_level1
     integer :: d
 
     ! Learn the basic facts.
@@ -404,6 +407,14 @@
        nsd = 0
        nf90_inquire_variable = nf90_noerr
 #endif
+    endif
+
+    ! Learn about zstandard compression.
+    if (present(zstandard) .or. present(zstandard_level)) then
+       nf90_inquire_variable = nf_inq_var_zstandard(ncid, varid, zstandard1, zstandard_level1)
+       if (nf90_inquire_variable .ne. nf90_noerr) return
+       if (present(zstandard)) zstandard = zstandard1
+       if (present(zstandard_level)) zstandard_level = zstandard_level1
     endif
     
   end function nf90_inquire_variable
