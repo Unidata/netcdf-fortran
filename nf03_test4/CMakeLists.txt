@@ -15,7 +15,7 @@ if (USE_NETCDF4)
   # Add these netCDF-4 test programs.
   SET(nc4_check_PROGRAMS f90tst_vars f90tst_vars_vlen f90tst_grps
     f90tst_fill f90tst_fill2 f90tst_vars3 f90tst_vars4 f90tst_vars2
-    f90tst_path f90tst_rengrps f90tst_nc4 f90tst_types f90tst_types2)
+    f90tst_path f90tst_rengrps f90tst_nc4 f90tst_types f90tst_types2 f90tst_zstandard)
   # Only run this test if quantize is present (i.e. netcdf-c is 4.9.0 or greater).
   IF (HAVE_QUANTIZE)
     SET(nc4_check_PROGRAMS ${nc4_check_PROGRAMS} f90tst_vars5)
@@ -37,6 +37,7 @@ if (USE_NETCDF4)
   SET(f90tst_nc4_SOURCES f90tst_nc4.F90)
   SET(f90tst_types_SOURCES f90tst_types.F90)
   SET(f90tst_types2_SOURCES f90tst_types2.F90)
+  SET(f90tst_zstandard_SOURCES f90tst_zstandard.F90)
 
   # Test parallel I/O.
   IF (TEST_PARALLEL)
