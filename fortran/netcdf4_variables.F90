@@ -19,7 +19,7 @@
   ! ----- 
   function nf90_def_var_oneDim(ncid, name, xtype, dimids, varid, contiguous, &
        chunksizes, deflate_level, shuffle, fletcher32, endianness, &
-       cache_size, cache_nelems, cache_preemption, quantize_mode, nsd)
+       cache_size, cache_nelems, cache_preemption, quantize_mode, nsd, zstandard_level)
     integer, intent( in) :: ncid
     character (len = *), intent( in) :: name
     integer, intent(in) :: xtype
@@ -32,6 +32,7 @@
     integer, optional, intent(in) :: endianness
     integer, optional, intent(in) :: cache_size, cache_nelems, cache_preemption
     integer, optional, intent(in) :: quantize_mode, nsd
+    integer, optional, intent(in) :: zstandard_level
     integer :: nf90_def_var_oneDim
     
     integer, dimension(1) :: dimidsA, chunksizes1
@@ -137,13 +138,18 @@
        nf90_def_var_oneDim = nf90_enotbuilt
 #endif
     endif
-       
 
+    ! Set zstandard if the user wants to.
+    if (present(zstandard_level)) then
+       nf90_def_var_oneDim = nf_def_var_zstandard(ncid, varid, zstandard_level)
+       if (nf90_def_var_oneDim .ne. nf90_noerr) return
+    endif
+       
   end function nf90_def_var_oneDim
   ! ----- 
   function nf90_def_var_ManyDims(ncid, name, xtype, dimids, varid, contiguous, &
        chunksizes, deflate_level, shuffle, fletcher32, endianness, cache_size, &
-       cache_nelems, cache_preemption, quantize_mode, nsd)
+       cache_nelems, cache_preemption, quantize_mode, nsd, zstandard_level)
     integer, intent(in) :: ncid
     character (len = *), intent(in) :: name
     integer, intent( in) :: xtype
@@ -156,6 +162,7 @@
     integer, optional, intent(in) :: endianness
     integer, optional, intent(in) :: cache_size, cache_nelems, cache_preemption
     integer, optional, intent(in) :: quantize_mode, nsd
+    integer, optional, intent(in) :: zstandard_level
     integer :: nf90_def_var_ManyDims
 
     ! Local variables.
@@ -270,6 +277,12 @@
 #endif
     endif
        
+    ! Set zstandard if the user wants to.
+    if (present(zstandard_level)) then
+       nf90_def_var_manyDims = nf_def_var_zstandard(ncid, varid, zstandard_level)
+       if (nf90_def_var_manyDims .ne. nf90_noerr) return
+    endif
+
   end function nf90_def_var_ManyDims
   ! ----- 
   function nf90_inq_varid(ncid, name, varid)
