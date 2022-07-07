@@ -48,6 +48,8 @@ program f90tst_zstandard
   real diff
   real, parameter :: EPSILON  = .01
 
+  integer :: m, cflags
+
   print *, ''
   print *,'*** Testing use of zstandard feature on netCDF-4 vars from Fortran 90.'
 
@@ -63,87 +65,93 @@ program f90tst_zstandard
   double_data(4) = 1234567890.12345
   double_data(5) = 1234567890
 
-  ! Create the netCDF file. 
-  call check(nf90_create(FILE_NAME, ior(nf90_netcdf4, nf90_clobber), ncid))
+  ! Check with and without nf90_classic_model flag.
+  cflags = ior(nf90_netcdf4, nf90_clobber)
+  do m = 1, 2
+     if (m .eq. 2) cflags = ior(cflags, nf90_classic_model)
 
-  ! Define the dimension.
-  call check(nf90_def_dim(ncid, "x", DIM_LEN_5, x_dimid))
-  dimids =  (/ x_dimid /)
+     ! Create the netCDF file. 
+     call check(nf90_create(FILE_NAME, cflags, ncid))
 
-  ! Define some variables.
+     ! Define the dimension.
+     call check(nf90_def_dim(ncid, "x", DIM_LEN_5, x_dimid))
+     dimids =  (/ x_dimid /)
+
+     ! Define some variables.
 #ifdef ENABLE_ZSTD
-  call check(nf90_def_var(ncid, VAR1_NAME, NF90_FLOAT, dimids, varid1, &
-       zstandard_level = 4))
+     call check(nf90_def_var(ncid, VAR1_NAME, NF90_FLOAT, dimids, varid1, &
+          zstandard_level = 4))
 #else
-  ! This will fail because we don't have zstandard. But the var will
-  ! be created, only without zstandard compression.
-  ierr = nf90_def_var(ncid, VAR1_NAME, NF90_FLOAT, dimids, varid1, &
-       zstandard_level = 4)
-  if (ierr .ne. nf90_enotbuilt) stop 55
+     ! This will fail because we don't have zstandard. But the var will
+     ! be created, only without zstandard compression.
+     ierr = nf90_def_var(ncid, VAR1_NAME, NF90_FLOAT, dimids, varid1, &
+          zstandard_level = 4)
+     if (ierr .ne. nf90_enotbuilt) stop 55
 #endif
-  call check(nf90_def_var(ncid, VAR2_NAME, NF90_DOUBLE, dimids, &
-       varid2))
+     call check(nf90_def_var(ncid, VAR2_NAME, NF90_DOUBLE, dimids, varid2))
+     call check(nf90_enddef(ncid))
 
-  ! Write the pretend data to the file.
-  call check(nf90_put_var(ncid, varid1, real_data))
-  call check(nf90_put_var(ncid, varid2, double_data))
+     ! Write the pretend data to the file.
+     call check(nf90_put_var(ncid, varid1, real_data))
+     call check(nf90_put_var(ncid, varid2, double_data))
 
-  ! Close the file. 
-  call check(nf90_close(ncid))
+     ! Close the file. 
+     call check(nf90_close(ncid))
 
-  ! Reopen the file.
-  call check(nf90_open(FILE_NAME, nf90_nowrite, ncid))
-  
-  ! Check some stuff out.
-  call check(nf90_inquire(ncid, ndims, nvars, ngatts, unlimdimid, file_format))
-  if (ndims /= 1 .or. nvars /= 2 .or. ngatts /= 0 .or. unlimdimid /= -1 .or. &
-       file_format /= nf90_format_netcdf4) stop 200
+     ! Reopen the file.
+     call check(nf90_open(FILE_NAME, nf90_nowrite, ncid))
 
-  ! Get varids.
-  call check(nf90_inq_varid(ncid, VAR1_NAME, varid1_in))
-  call check(nf90_inq_varid(ncid, VAR2_NAME, varid2_in))
+     ! Check some stuff out.
+     call check(nf90_inquire(ncid, ndims, nvars, ngatts, unlimdimid, file_format))
+     if (ndims /= 1 .or. nvars /= 2 .or. ngatts /= 0 .or. unlimdimid /= -1) stop 200
+     if (m .eq. 1 .and. file_format /= nf90_format_netcdf4) stop 200
+     if (m .eq. 2 .and. file_format /= nf90_format_netcdf4_classic) stop 200
 
-  ! Check variable 1.
-  call check(nf90_inquire_variable(ncid, varid1_in, name_in, xtype_in, ndims_in, dimids_in, &
-       natts_in, chunksizes = chunksizes_in, endianness = endianness_in, fletcher32 = fletcher32_in, &
-       deflate_level = deflate_level_in, shuffle = shuffle_in, &
-       zstandard = zstandard_in, zstandard_level = zstandard_level_in))
+     ! Get varids.
+     call check(nf90_inq_varid(ncid, VAR1_NAME, varid1_in))
+     call check(nf90_inq_varid(ncid, VAR2_NAME, varid2_in))
+
+     ! Check variable 1.
+     call check(nf90_inquire_variable(ncid, varid1_in, name_in, xtype_in, ndims_in, dimids_in, &
+          natts_in, chunksizes = chunksizes_in, endianness = endianness_in, fletcher32 = fletcher32_in, &
+          deflate_level = deflate_level_in, shuffle = shuffle_in, &
+          zstandard = zstandard_in, zstandard_level = zstandard_level_in))
 #ifdef ENABLE_ZSTD
-  if (zstandard_in .eq. 0 .or. zstandard_level_in .ne. 4) stop 4
+     if (zstandard_in .eq. 0 .or. zstandard_level_in .ne. 4) stop 4
 #else
-  if (zstandard_in .ne. 0) stop 4
+     if (zstandard_in .ne. 0) stop 4
 #endif
-  if (natts_in .ne. 0) stop 301
-  if (name_in .ne. VAR1_NAME .or. xtype_in .ne. NF90_FLOAT .or. ndims_in .ne. NDIM1 .or. &
-       dimids_in(1) .ne. dimids(1)) stop 302
+     if (natts_in .ne. 0) stop 301
+     if (name_in .ne. VAR1_NAME .or. xtype_in .ne. NF90_FLOAT .or. ndims_in .ne. NDIM1 .or. &
+          dimids_in(1) .ne. dimids(1)) stop 302
 
-  ! Check variable 2.
-  call check(nf90_inquire_variable(ncid, varid2_in, name_in, xtype_in, ndims_in, dimids_in, &
-       natts_in, contiguous = contiguous_in, endianness = endianness_in, fletcher32 = fletcher32_in, &
-       deflate_level = deflate_level_in, shuffle = shuffle_in, &
-       quantize_mode = quantize_mode_in, nsd = nsd_in, zstandard = zstandard_in, &
-       zstandard_level = zstandard_level_in))
-  if (name_in .ne. VAR2_NAME .or. xtype_in .ne. NF90_DOUBLE .or. ndims_in .ne. NDIM1 .or. &
-       natts_in .ne. 0 .or. dimids_in(1) .ne. dimids(1)) stop 6
-  if (deflate_level_in .ne. 0 .or. .not. contiguous_in .or. fletcher32_in .or. shuffle_in) stop 7
-  if (quantize_mode_in .ne. 0) stop 303
-  if (zstandard_in .ne. 0) stop 14
-  
-  ! Check the data.
-  call check(nf90_get_var(ncid, varid1_in, real_data_in))
-  call check(nf90_get_var(ncid, varid2_in, double_data_in))
+     ! Check variable 2.
+     call check(nf90_inquire_variable(ncid, varid2_in, name_in, xtype_in, ndims_in, dimids_in, &
+          natts_in, contiguous = contiguous_in, endianness = endianness_in, fletcher32 = fletcher32_in, &
+          deflate_level = deflate_level_in, shuffle = shuffle_in, &
+          quantize_mode = quantize_mode_in, nsd = nsd_in, zstandard = zstandard_in, &
+          zstandard_level = zstandard_level_in))
+     if (name_in .ne. VAR2_NAME .or. xtype_in .ne. NF90_DOUBLE .or. ndims_in .ne. NDIM1 .or. &
+          natts_in .ne. 0 .or. dimids_in(1) .ne. dimids(1)) stop 6
+     if (deflate_level_in .ne. 0 .or. .not. contiguous_in .or. fletcher32_in .or. shuffle_in) stop 7
+     if (quantize_mode_in .ne. 0) stop 303
+     if (zstandard_in .ne. 0) stop 14
 
-  ! Check the data. 
-  do x = 1, DIM_LEN_5
-     diff = abs(real_data_in(x) - real_data(x))
-     if (diff .gt. EPSILON) stop 23
-     diff = abs(double_data_in(x) - double_data(x))
-     if (diff .gt. EPSILON) stop 24
+     ! Check the data.
+     call check(nf90_get_var(ncid, varid1_in, real_data_in))
+     call check(nf90_get_var(ncid, varid2_in, double_data_in))
+
+     ! Check the data. 
+     do x = 1, DIM_LEN_5
+        diff = abs(real_data_in(x) - real_data(x))
+        if (diff .gt. EPSILON) stop 23
+        diff = abs(double_data_in(x) - double_data(x))
+        if (diff .gt. EPSILON) stop 24
+     end do
+
+     ! Close the file. 
+     call check(nf90_close(ncid))
   end do
-  
-  ! Close the file. 
-  call check(nf90_close(ncid))
-
   print *,'*** SUCCESS!'
 
 contains
