@@ -110,13 +110,12 @@ program f90tst_zstandard
        zstandard = zstandard_in, zstandard_level = zstandard_level_in))
 #ifdef ENABLE_ZSTD
   if (zstandard_in .eq. 0 .or. zstandard_level_in .ne. 4) stop 4
-  if (natts_in .ne. 1) stop 3
 #else
   if (zstandard_in .ne. 0) stop 4
-  if (natts_in .ne. 0) stop 3
 #endif
+  if (natts_in .ne. 0) stop 301
   if (name_in .ne. VAR1_NAME .or. xtype_in .ne. NF90_FLOAT .or. ndims_in .ne. NDIM1 .or. &
-       dimids_in(1) .ne. dimids(1)) stop 3
+       dimids_in(1) .ne. dimids(1)) stop 302
 
   ! Check variable 2.
   call check(nf90_inquire_variable(ncid, varid2_in, name_in, xtype_in, ndims_in, dimids_in, &
@@ -127,7 +126,7 @@ program f90tst_zstandard
   if (name_in .ne. VAR2_NAME .or. xtype_in .ne. NF90_DOUBLE .or. ndims_in .ne. NDIM1 .or. &
        natts_in .ne. 0 .or. dimids_in(1) .ne. dimids(1)) stop 6
   if (deflate_level_in .ne. 0 .or. .not. contiguous_in .or. fletcher32_in .or. shuffle_in) stop 7
-  if (quantize_mode_in .ne. 0) stop 3
+  if (quantize_mode_in .ne. 0) stop 303
   if (zstandard_in .ne. 0) stop 14
   
   ! Check the data.
