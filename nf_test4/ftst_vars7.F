@@ -3,7 +3,7 @@ C     Copyright 2008 University Corporation for Atmospheric Research/Unidata.
 C     See COPYRIGHT file for conditions of use.
 
 C     This program tests netCDF-4 variable functions from fortran,
-C     checking the quantize feature.
+C     checking the quantize and zstandard features.
 
 C     Ed Hartnett, 9/3/21
 
@@ -23,6 +23,8 @@ C     This is the name of the data file we will create.
       integer check_file
       integer NSD_3
       parameter (NSD_3 = 3)
+      integer ZSTD_LEVEL
+      parameter (ZSTD_LEVEL = 3)
 
       integer ncid, varid(NVARS), dimids(NDIM1)
       character*(10) var_name(NVARS)
@@ -38,6 +40,9 @@ C     Loop index and error handling.
 
       print *, ''
       print *,'*** Testing quantize feature.'
+#ifdef ENABLE_ZSTD
+      print *,'*** (and zstandard compression)'
+#endif
 
 C     Set up var names.
       var_name(1) = 'var__float'
@@ -78,10 +83,18 @@ C         Turn on quantize.
      $         NF_QUANTIZE_BITGROOM, NSD_3)
           if (retval .ne. nf_noerr) stop 3
 
-
-C         Turn on zlib compression. 
+          
+C         Turn on zstandard compression if available, zlib otherwise.
+#ifdef ENABLE_ZSTD
+          retval = nf_def_var_zstandard(ncid, varid(x), ZSTD_LEVEL)
+          if (retval .ne. nf_noerr) then
+             print *, nf_strerror(retval)
+             stop 3
+          endif
+#else
           retval = nf_def_var_deflate(ncid, varid(x), 0, 1, 1)
           if (retval .ne. nf_noerr) stop 3
+#endif
 
       end do
 
@@ -145,6 +158,7 @@ C     Values that are read in, to check the file.
       integer ndims_in, nvars_in, ngatts_in, unlimdimid_in
       integer xtype_in, dimids_in(NDIM1), natts_in
       integer varid_in(NVARS), dimid_in, quantize_mode_in, nsd_in
+      integer zstandard, zstandard_level_in
       character*(10) var_name_in
       real real_data_in(DIM_LEN_5)
       real*8 double_data_in(DIM_LEN_5)
@@ -187,7 +201,8 @@ C     Get the varids and the dimid.
 C     These things are the same for all variables, except natts_in is
 C     different for quantize vars after the file is written, there is an
 C     extra attribute.
-      do x = 1, NVARS      
+      do x = 1, NVARS
+C        Check quantize settings.
          retval = nf_inq_var(ncid, varid_in(x), var_name_in, xtype_in,
      $        ndims_in, dimids_in, natts_in)
          if (retval .ne. nf_noerr) stop 17
@@ -195,8 +210,18 @@ C     extra attribute.
      $        dimids_in(1).ne. dimid_in) stop 18
          retval = nf_inq_var_quantize(ncid, varid_in(x),
      $        quantize_mode_in, nsd_in)
+         if (retval .ne. nf_noerr) stop 17         
          if (quantize_mode_in .ne. nf_quantize_bitgroom) stop 20
          if (nsd_in .ne. NSD_3) stop 20
+
+C        Check compression settings.
+#ifdef ENABLE_ZSTD
+         retval = nf_inq_var_zstandard(ncid, varid_in(x), zstandard,
+     $        zstandard_level_in)
+         if (retval .ne. nf_noerr) stop 87
+         if (zstandard_level_in .ne. 3 .or. zstandard .eq. 0) stop 88
+#endif
+         
       end do
 
 C     Get the data.
