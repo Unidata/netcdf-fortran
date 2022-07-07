@@ -143,6 +143,9 @@
     if (present(zstandard_level)) then
        nf90_def_var_oneDim = nf_def_var_zstandard(ncid, varid, zstandard_level)
        if (nf90_def_var_oneDim .ne. nf90_noerr) return
+       if (present(shuffle) .and. shuffle) then
+          nf90_def_var_oneDim = nf_def_var_deflate(ncid, varid, 1, 0, 0)
+       endif
     endif
        
   end function nf90_def_var_oneDim
@@ -281,6 +284,9 @@
     if (present(zstandard_level)) then
        nf90_def_var_manyDims = nf_def_var_zstandard(ncid, varid, zstandard_level)
        if (nf90_def_var_manyDims .ne. nf90_noerr) return
+       if (present(shuffle) .and. shuffle) then
+          nf90_def_var_ManyDims = nf_def_var_deflate(ncid, varid, 1, 0, 0)
+       endif
     endif
 
   end function nf90_def_var_ManyDims
