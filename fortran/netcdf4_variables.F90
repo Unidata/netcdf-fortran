@@ -412,7 +412,14 @@
     ! Learn about zstandard compression.
     if (present(zstandard) .or. present(zstandard_level)) then
        nf90_inquire_variable = nf_inq_var_zstandard(ncid, varid, zstandard1, zstandard_level1)
-       if (nf90_inquire_variable .ne. nf90_noerr) return
+       ! If netcdf-c was built without zstandard, then return 0 for zstandard settings.
+       if (nf90_inquire_variable .eq. nf90_enotbuilt) then
+          zstandard1 = 0
+          zstandard_level1 = 0
+          nf90_inquire_variable = nf90_noerr
+       else
+          if (nf90_inquire_variable .ne. nf90_noerr) return
+       endif
        if (present(zstandard)) zstandard = zstandard1
        if (present(zstandard_level)) zstandard_level = zstandard_level1
     endif
