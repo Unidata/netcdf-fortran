@@ -10,18 +10,18 @@ Entries are in reverse chronological order (most recent first).
 
 ### Requirements
 
-* netCDF-C: 4.8.1+
+* netCDF-C: 4.9.0+
 
-### Changes
+### Notable Changes
 
-* Introduction of quantize functionality (this description line is a placeholder)
+* Introduction of Quantize functionality (this description line is a placeholder)
+### Other Changes
 
 ## 4.5.4 - January 7, 2022
 
 ### Requirements
 
 * netCDF-C: 4.7.4+
-
 ### Changes
 
 * Various bug fixes and updates.
