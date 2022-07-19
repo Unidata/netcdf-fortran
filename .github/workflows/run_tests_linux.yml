@@ -382,7 +382,7 @@ jobs:
         run: |
               mkdir build
               cd build
-              LD_LIBRARY_PATH=${LD_LIBRARY_PATH} cmake .. -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
+              HDF5_PLUGIN_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib LD_LIBRARY_PATH=${LD_LIBRARY_PATH} cmake .. -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
 
       - name: Print Summary
         shell: bash -l {0}
@@ -394,14 +394,14 @@ jobs:
         shell: bash -l {0}
         run: |
               cd build
-              LD_LIBRARY_PATH=${LD_LIBRARY_PATH} make -j 12
+              HDF5_PLUGIN_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib LD_LIBRARY_PATH=${LD_LIBRARY_PATH} make -j 12
         if: ${{ success() }}
 
       - name: Run Tests
         shell: bash -l {0}
         run: |
               cd build
-              LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ctest -j 1 .
+              HDF5_PLUGIN_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ctest -j 1 .
         if: ${{ success() }}
 
       - name: Look at LastTest.log if error
