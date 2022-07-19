@@ -320,6 +320,8 @@ jobs:
 
     needs: build-deps
     runs-on: ubuntu-latest
+    env:
+      HDF5_PLUGIN_PATH: ${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib
 
     strategy:
       matrix:
