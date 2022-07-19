@@ -81,19 +81,24 @@ C     Create some variables.
 C         Turn on quantize. 
           retval = nf_def_var_quantize(ncid, varid(x),
      $         NF_QUANTIZE_BITGROOM, NSD_3)
-          if (retval .ne. nf_noerr) stop 3
+          if (retval .ne. nf_noerr) stop 4
 
           
 C         Turn on zstandard compression if available, zlib otherwise.
 #ifdef ENABLE_ZSTD
           retval = nf_def_var_zstandard(ncid, varid(x), ZSTD_LEVEL)
           if (retval .ne. nf_noerr) then
-             print *, nf_strerror(retval)
-             stop 3
+             if (retval .eq. nf_enofilter) then
+                print *, 'Zstandard filter not found.'
+                print *, 'Set HDF5_PLUGIN_PATH and try again.'
+             else
+                print *, nf_strerror(retval)
+             endif
+             stop 5
           endif
 #else
           retval = nf_def_var_deflate(ncid, varid(x), 0, 1, 1)
-          if (retval .ne. nf_noerr) stop 3
+          if (retval .ne. nf_noerr) stop 6
 #endif
 
       end do
@@ -103,30 +108,30 @@ C     Write some data (which automatically calls nf_enddef).
       count(1) = DIM_LEN_5
       retval = nf_put_vara_real(ncid, varid(1), start, count,
      $     real_data)
-      if (retval .ne. 0) stop 200
+      if (retval .ne. 0) stop 7
       retval = nf_put_vara_double(ncid, varid(2), start, count,
      $     double_data)
-      if (retval .ne. 0) stop 200
+      if (retval .ne. 0) stop 8
 
 C     Check it out.
       retval = check_file(ncid, var_name, var_type, dim_name)      
-      if (retval .ne. 0) stop 2
+      if (retval .ne. 0) stop 9
 
 C     Close the file. 
       retval = nf_close(ncid)
-      if (retval .ne. nf_noerr) stop 4
+      if (retval .ne. nf_noerr) stop 20
 
 C     Reopen the file.
       retval = nf_open(FILE_NAME, NF_NOWRITE, ncid)
-      if (retval .ne. nf_noerr) stop 5
+      if (retval .ne. nf_noerr) stop 21
 
 C     Check it out. 
       retval = check_file(ncid, var_name, var_type, dim_name)
-      if (retval .ne. 0) stop 6
+      if (retval .ne. 0) stop 22
 
 C     Close the file. 
       retval = nf_close(ncid)
-      if (retval .ne. nf_noerr) stop 7
+      if (retval .ne. nf_noerr) stop 23
 
       print *,'*** SUCCESS!'
       end
@@ -184,19 +189,19 @@ C     What we expect to get back.
 C     Check it out.
       retval = nf_inq(ncid, ndims_in, nvars_in, ngatts_in,
      $     unlimdimid_in)
-      if (retval .ne. nf_noerr) stop 11
+      if (retval .ne. nf_noerr) stop 30
       if (ndims_in .ne. 1 .or. nvars_in .ne. NVARS .or. ngatts_in .ne. 0
-     $     .or. unlimdimid_in .ne. -1) stop 12
+     $     .or. unlimdimid_in .ne. -1) stop 31
 
 C     Get the varids and the dimid.
       do x = 1, NVARS      
          retval = nf_inq_varid(ncid, var_name(x), varid_in(x))
-         if (retval .ne. nf_noerr) stop 13
-         if (varid_in(x) .ne. x) stop 14
+         if (retval .ne. nf_noerr) stop 32
+         if (varid_in(x) .ne. x) stop 33
       end do
       retval = nf_inq_dimid(ncid, dim_name, dimid_in)
-      if (retval .ne. nf_noerr) stop 15
-      if (dimid_in .ne. 1) stop 16
+      if (retval .ne. nf_noerr) stop 34
+      if (dimid_in .ne. 1) stop 35
 
 C     These things are the same for all variables, except natts_in is
 C     different for quantize vars after the file is written, there is an
@@ -205,39 +210,39 @@ C     extra attribute.
 C        Check quantize settings.
          retval = nf_inq_var(ncid, varid_in(x), var_name_in, xtype_in,
      $        ndims_in, dimids_in, natts_in)
-         if (retval .ne. nf_noerr) stop 17
+         if (retval .ne. nf_noerr) stop 40
          if (ndims_in .ne. 1 .or. xtype_in .ne. var_type(x) .or.
-     $        dimids_in(1).ne. dimid_in) stop 18
+     $        dimids_in(1).ne. dimid_in) stop 41
          retval = nf_inq_var_quantize(ncid, varid_in(x),
      $        quantize_mode_in, nsd_in)
-         if (retval .ne. nf_noerr) stop 17         
-         if (quantize_mode_in .ne. nf_quantize_bitgroom) stop 20
-         if (nsd_in .ne. NSD_3) stop 20
+         if (retval .ne. nf_noerr) stop 42
+         if (quantize_mode_in .ne. nf_quantize_bitgroom) stop 43
+         if (nsd_in .ne. NSD_3) stop 44
 
 C        Check compression settings.
 #ifdef ENABLE_ZSTD
          retval = nf_inq_var_zstandard(ncid, varid_in(x), zstandard,
      $        zstandard_level_in)
-         if (retval .ne. nf_noerr) stop 87
-         if (zstandard_level_in .ne. 3 .or. zstandard .eq. 0) stop 88
+         if (retval .ne. nf_noerr) stop 50
+         if (zstandard_level_in .ne. 3 .or. zstandard .eq. 0) stop 51
 #endif
          
       end do
 
 C     Get the data.
       retval = nf_get_var_real(ncid, varid_in(1), real_data_in)
-      if (retval .ne. nf_noerr) stop 1
+      if (retval .ne. nf_noerr) stop 60
       retval = nf_get_var_double(ncid, varid_in(2), double_data_in)
-      if (retval .ne. nf_noerr) stop 1
+      if (retval .ne. nf_noerr) stop 61
 
 C     Check the data. 
       do x = 1, DIM_LEN_5
           diff = abs(real_data_in(x) - real_data_expected(x))
-          if (diff .gt. EPSILON) stop 23
+          if (diff .gt. EPSILON) stop 70
           diff = abs(double_data_in(x) - double_data_expected(x))
 c$$$          print *, double_data_in(x), double_data_expected(x)
 c$$$          print *, 'x = ', x, ' diff = ', diff
-          if (diff .gt. EPSILON) stop 24
+          if (diff .gt. EPSILON) stop 71
       end do
 
       check_file = 0

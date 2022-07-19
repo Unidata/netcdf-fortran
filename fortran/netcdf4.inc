@@ -151,8 +151,40 @@
       parameter (nf_edimscale = -124)
       integer nf_enogrp       ! No group found.
       parameter (nf_enogrp = -125)
+      integer nf_estorage ! Can't specify both contiguous and chunking. 
+      parameter (nf_estorage = -126)    
+      integer nf_ebadchunk ! Bad chunksize. 
+      parameter (nf_ebadchunk = -127)    
       integer nf_enotbuilt       ! NetCDF feature not built.
       parameter (nf_enotbuilt = -128)
+      integer nf_ediskless ! Error in using diskless  access. 
+      parameter (nf_ediskless = -129)    
+      integer nf_ecantextend ! Attempt to extend dataset during ind. I/O operation. 
+      parameter (nf_ecantextend = -130)    
+      integer nf_empi ! MPI operation failed. 
+      parameter (nf_empi = -131)    
+      integer nf_efilter ! Filter operation failed. 
+      parameter (nf_efilter = -132)    
+      integer nf_ercfile ! RC file failure 
+      parameter (nf_ercfile = -133)    
+      integer nf_enullpad ! Header Bytes not Null-Byte padded 
+      parameter (nf_enullpad = -134)    
+      integer nf_einmemory ! In-memory file error 
+      parameter (nf_einmemory = -135)    
+      integer nf_enofilter ! Filter not defined on variable. 
+      parameter (nf_enofilter = -136)    
+      integer nf_enczarr ! Error at NCZarr layer. 
+      parameter (nf_enczarr = -137)    
+      integer nf_es3 ! Generic S3 error 
+      parameter (nf_es3 = -138)    
+      integer nf_eempty ! Attempt to read empty NCZarr map key 
+      parameter (nf_eempty = -139)    
+      integer nf_eobject ! Some object exists when it should not 
+      parameter (nf_eobject = -140)    
+      integer nf_enoobject ! Some object not found 
+      parameter (nf_enoobject = -141)    
+      integer nf_eplugin ! Unclassified failure in accessing a dynamically loaded plugin> 
+      parameter (nf_eplugin = -142)    
 
 
 !     New functions.
