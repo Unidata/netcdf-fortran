@@ -148,6 +148,7 @@ jobs:
       - run: echo "LDFLAGS=-L${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "LD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "HDF5_PLUGIN_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
+      - run: echo "HDF5_PLUGIN_DIR=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       
 ###
 # Fetch Cache
@@ -246,7 +247,7 @@ jobs:
       - run: echo "LDFLAGS=-L${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "LD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "HDF5_PLUGIN_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
-
+      - run: echo "HDF5_PLUGIN_DIR=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
 ###
 # Fetch Cache
 ###
@@ -320,8 +321,6 @@ jobs:
 
     needs: build-deps
     runs-on: ubuntu-latest
-    env:
-      HDF5_PLUGIN_PATH: ${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib
 
     strategy:
       matrix:
@@ -345,6 +344,7 @@ jobs:
       - run: echo "LD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "CMAKE_PREFIX_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf}}" >> $GITHUB_ENV
       - run: echo "HDF5_PLUGIN_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
+      - run: echo "HDF5_PLUGIN_DIR=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       
 ###
 # Fetch Cache
@@ -384,7 +384,7 @@ jobs:
         run: |
               mkdir build
               cd build
-              HDF5_PLUGIN_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib LD_LIBRARY_PATH=${LD_LIBRARY_PATH} cmake .. -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH} -DHDF5_PLUGIN_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib
+              LD_LIBRARY_PATH=${LD_LIBRARY_PATH} cmake .. -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
 
       - name: Print Summary
         shell: bash -l {0}
@@ -396,14 +396,14 @@ jobs:
         shell: bash -l {0}
         run: |
               cd build
-              HDF5_PLUGIN_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib LD_LIBRARY_PATH=${LD_LIBRARY_PATH} make -j 12
+              LD_LIBRARY_PATH=${LD_LIBRARY_PATH} make -j 12
         if: ${{ success() }}
 
       - name: Run Tests
         shell: bash -l {0}
         run: |
               cd build
-              HDF5_PLUGIN_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ctest -j 1 .
+              LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ctest -j 1 .
         if: ${{ success() }}
 
       - name: Look at LastTest.log if error
