@@ -64,7 +64,13 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
 #if !defined(NC_HAS_ZSTD) || NC_HAS_ZSTD == 0
       choke me
 #endif]])], [nc_has_zstd=yes], [nc_has_zstd=no])
+
 if test "x$nc_has_zstd" = xyes; then
+
+   if test "x${HDF5_PLUGIN_PATH}" = "x"; then
+      AC_MSG_ERROR([libnetcdf was built with zstd support, but HDF5_PLUGIN_PATH is not set.  Please set the HDF5_PLUGIN_PATH environmental variable, and re-run configure])
+   fi
+
    AC_DEFINE([ENABLE_ZSTD], [1], [Enable Zstandard compression support])
 fi
 AC_MSG_RESULT([$nc_has_zstd])
@@ -127,6 +133,7 @@ if test "x$nc_has_quantize" = xyes; then
    AC_DEFINE([NF_HAS_QUANTIZE], [1], [Support for quantize feature.])
 fi
 AC_MSG_RESULT([$nc_has_quantize])
+
 AM_CONDITIONAL(TEST_QUANTIZE, [test "x$nc_has_quantize" = xyes])
 
 # Find valgrind, if available, and add targets for it (ex:

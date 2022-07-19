@@ -679,6 +679,14 @@ CHECK_C_SOURCE_COMPILES("
 #endif
 int main() {return 0;}" HAVE_ZSTD)
 
+IF(HAVE_ZSTD)
+  MESSAGE(STATUS "Checking for HDF5_PLUGIN_DIR: " $ENV{HDF5_PLUGIN_DIR})
+  IF(NOT DEFINED ENV{HDF5_PLUGIN_DIR})
+    MESSAGE(FATAL_ERROR "libnetcdf was built with zstd support, but HDF5_PLUGIN_PATH is not set.  Please set the HDF5_PLUGIN_PATH environmental variable, and re-run cmake.")
+  ENDIF()
+ENDIF(HAVE_ZSTD)
+
+
 SET(HAS_NC4 FALSE)
 IF(USE_NETCDF4)
   SET(NC_BUILD_V4 TRUE)
