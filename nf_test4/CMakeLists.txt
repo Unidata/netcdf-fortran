@@ -1,5 +1,3 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
-
 SET(CMAKE_VERBOSE_MAKEFILE OFF)
 SET(CMAKE_BUILD_TYPE "RelWithDebInfo")
 SET(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -12,8 +10,8 @@ if (USE_NETCDF4)
     ftst_types3 ftst_path ftst_rengrps f03tst_open_mem ftst_var_compact)
   # Only run this test if quantize is present (i.e. netcdf-c is 4.9.0 or greater).
   IF (HAVE_QUANTIZE)
-    SET(nc4_check_PROGRAMS ${nc4_check_PROGRAMS} ftst_zstandard)    
-  ENDIF()  
+    SET(nc4_check_PROGRAMS ${nc4_check_PROGRAMS} ftst_zstandard)
+  ENDIF()
   SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_check_PROGRAMS})
   SET(TESTS ${TESTS} ${nc4_check_PROGRAMS})
 
