@@ -84,7 +84,7 @@ if test "x$enable_zstandard_plugin" = xyes; then
 
    if test "x$nc_has_zstd" = xyes; then
       if test "x${HDF5_PLUGIN_PATH}" = "x"; then
-         AC_MSG_([libnetcdf was built with zstd support, but HDF5_PLUGIN_PATH is not set.  Either set the HDF5_PLUGIN_PATH environmental variable if zstandard tests fail, or use --disable-zstandard-plugin when running configure.])
+         AC_MSG_ERROR([libnetcdf was built with zstd support, but HDF5_PLUGIN_PATH is not set.  Either set the HDF5_PLUGIN_PATH environmental variable if zstandard tests fail, or use --disable-zstandard-plugin when running configure.])
       fi
    fi
 else
