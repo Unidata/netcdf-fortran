@@ -67,13 +67,15 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
 
 if test "x$nc_has_zstd" = xyes; then
 
-   if test "x${HDF5_PLUGIN_PATH}" = "x"; then
-      AC_MSG_ERROR([libnetcdf was built with zstd support, but HDF5_PLUGIN_PATH is not set.  Please set the HDF5_PLUGIN_PATH environmental variable, and re-run configure])
-   fi
-
    AC_DEFINE([ENABLE_ZSTD], [1], [Enable Zstandard compression support])
 fi
 AC_MSG_RESULT([$nc_has_zstd])
+
+if test "x$nc_has_zstd" = xyes; then
+   if test "x${HDF5_PLUGIN_PATH}" = "x"; then
+      AC_MSG_ERROR([libnetcdf was built with zstd support, but HDF5_PLUGIN_PATH is not set.  Please set the HDF5_PLUGIN_PATH environmental variable, and re-run configure])
+   fi
+fi
 
 AC_MSG_CHECKING([if netCDF was built with pnetcdf])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
