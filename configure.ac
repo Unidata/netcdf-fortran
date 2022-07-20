@@ -58,24 +58,41 @@ if test "x$nc_has_cdf5" = xyes; then
 fi
 AC_MSG_RESULT([$nc_has_cdf5])
 
-AC_MSG_CHECKING([if netCDF was built with Zstandard compression])
-AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
-#include <netcdf_meta.h>
-#if !defined(NC_HAS_ZSTD) || NC_HAS_ZSTD == 0
-      choke me
-#endif]])], [nc_has_zstd=yes], [nc_has_zstd=no])
+###
+# Zstandard logic stanza
+###
+AC_ARG_ENABLE([zstandard_plugin],
+               [AS_HELP_STRING([--disable-zstandard-plugin],
+                               [disable zstandard detection and functionality, even if libnetcdf was compiled with plugin support])])
 
-if test "x$nc_has_zstd" = xyes; then
+test "x$enable_zstandard_plugin" = xno || enable_zstandard_plugin=yes
 
-   AC_DEFINE([ENABLE_ZSTD], [1], [Enable Zstandard compression support])
-fi
-AC_MSG_RESULT([$nc_has_zstd])
+if test "x$enable_zstandard_plugin" = xyes; then
 
-if test "x$nc_has_zstd" = xyes; then
-   if test "x${HDF5_PLUGIN_PATH}" = "x"; then
-      AC_MSG_ERROR([libnetcdf was built with zstd support, but HDF5_PLUGIN_PATH is not set.  Please set the HDF5_PLUGIN_PATH environmental variable, and re-run configure])
+   AC_MSG_CHECKING([if netCDF was built with Zstandard compression])
+   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
+   #include <netcdf_meta.h>
+   #if !defined(NC_HAS_ZSTD) || NC_HAS_ZSTD == 0
+         choke me
+   #endif]])], [nc_has_zstd=yes], [nc_has_zstd=no])
+
+   if test "x$nc_has_zstd" = xyes; then
+
+      AC_DEFINE([ENABLE_ZSTD], [1], [Enable Zstandard compression support])
    fi
+   AC_MSG_RESULT([$nc_has_zstd])
+
+   if test "x$nc_has_zstd" = xyes; then
+      if test "x${HDF5_PLUGIN_PATH}" = "x"; then
+         AC_MSG_([libnetcdf was built with zstd support, but HDF5_PLUGIN_PATH is not set.  Either set the HDF5_PLUGIN_PATH environmental variable if zstandard tests fail, or use --disable-zstandard-plugin when running configure.])
+      fi
+   fi
+else
+   nc_has_zstd=no
 fi
+###
+# End Zstandard logic stanza
+###
 
 AC_MSG_CHECKING([if netCDF was built with pnetcdf])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
