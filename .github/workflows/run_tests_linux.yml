@@ -148,6 +148,7 @@ jobs:
       - run: echo "LDFLAGS=-L${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "LD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "HDF5_PLUGIN_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
+      - run: echo "HDF5_PLUGIN_DIR=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       
 ###
 # Fetch Cache
@@ -246,7 +247,7 @@ jobs:
       - run: echo "LDFLAGS=-L${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "LD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "HDF5_PLUGIN_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
-
+      - run: echo "HDF5_PLUGIN_DIR=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
 ###
 # Fetch Cache
 ###
@@ -343,6 +344,7 @@ jobs:
       - run: echo "LD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "CMAKE_PREFIX_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf}}" >> $GITHUB_ENV
       - run: echo "HDF5_PLUGIN_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
+      - run: echo "HDF5_PLUGIN_DIR=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       
 ###
 # Fetch Cache
