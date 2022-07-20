@@ -669,22 +669,36 @@ if (NOT HAVE_DEF_VAR_SZIP)
 endif()
 
 ###
+# ZStd Stanza
+###
+
+###
 # Check to see if zstandard compression capability is present in netcdf-c.
 ###
-SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_INCLUDE_DIR})
-CHECK_C_SOURCE_COMPILES("
-#include <netcdf_meta.h>
-#if !NC_HAS_ZSTD
-      choke me
-#endif
-int main() {return 0;}" HAVE_ZSTD)
 
-IF(HAVE_ZSTD)
-  MESSAGE(STATUS "Checking for HDF5_PLUGIN_DIR: " $ENV{HDF5_PLUGIN_DIR})
-  IF(NOT DEFINED ENV{HDF5_PLUGIN_DIR})
-    MESSAGE(FATAL_ERROR "libnetcdf was built with zstd support, but HDF5_PLUGIN_PATH is not set.  Please set the HDF5_PLUGIN_PATH environmental variable, and re-run cmake.")
-  ENDIF()
-ENDIF(HAVE_ZSTD)
+OPTION(DISABLE_ZSTANDARD_PLUGIN "Disable ZStandard plugin detection and functionality, even if libnetcdf was compiled with plugin support" OFF)
+
+IF(NOT DISABLE_ZSTANDARD_PLUGIN) 
+  SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_INCLUDE_DIR})
+  CHECK_C_SOURCE_COMPILES("
+  #include <netcdf_meta.h>
+  #if !NC_HAS_ZSTD
+        choke me
+  #endif
+  int main() {return 0;}" HAVE_ZSTD)
+
+  IF(HAVE_ZSTD)
+    MESSAGE(STATUS "Checking for HDF5_PLUGIN_PATH: " $ENV{HDF5_PLUGIN_PATH})
+    IF(NOT DEFINED ENV{HDF5_PLUGIN_PATH})
+      MESSAGE(WARNING "libnetcdf was built with zstd support, but HDF5_PLUGIN_PATH is not set.  Please set the HDF5_PLUGIN_PATH environmental variable if zstandard tests fail, or pass -DDISABLE_ZSTANDARD_PLUGIN=TRUE when running cmake.")
+    ENDIF()
+  ENDIF(HAVE_ZSTD)
+ELSE()
+  SET(HAVE_ZSTD FALSE)
+ENDIF(NOT DISABLE_ZSTANDARD_PLUGIN)
+###
+# End ZStd Stanza
+###
 
 
 SET(HAS_NC4 FALSE)
