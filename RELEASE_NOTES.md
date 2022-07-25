@@ -5,15 +5,6 @@ Release Notes {#nf_release_notes}
 
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
-
-## 4.6.1 - TBD
-
-### Requirements
-
-### Notable Changes
-
-### Other Changes
-
 ## 4.6.0 - July 27, 2022
 
 ### Requirements
