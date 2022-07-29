@@ -276,6 +276,18 @@ Module netcdf_nf_data
  Integer, Parameter :: NF_EDISKLESS      = NC_EDISKLESS
  Integer, Parameter :: NF_ECANTEXTEND    = NC_ECANTEXTEND
  Integer, Parameter :: NF_EMPI           = NC_EMPI
+ Integer, Parameter :: NF_EFILTER        = NC_EFILTER
+ Integer, Parameter :: NF_ERCFILE        = NC_ERCFILE
+ Integer, Parameter :: NF_ENULLPAD       = NC_ENULLPAD
+ Integer, Parameter :: NF_EINMEMORY      = NC_EINMEMORY
+ Integer, Parameter :: NF_ENOFILTER      = NC_ENOFILTER
+ Integer, Parameter :: NF_ENCZARR        = NC_ENCZARR
+ Integer, Parameter :: NF_ES3            = NC_ES3
+ Integer, Parameter :: NF_EEMPTY         = NC_EEMPTY
+ Integer, Parameter :: NF_EOBJECT        = NC_EOBJECT
+ Integer, Parameter :: NF_ENOOBJECT      = NC_ENOOBJECT
+ Integer, Parameter :: NF_EPLUGIN        = NC_EPLUGIN
+ 
 
 #endif
 
