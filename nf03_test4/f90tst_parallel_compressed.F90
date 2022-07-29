@@ -9,6 +9,8 @@
 !     https://github.com/NOAA-EMC/fv3atm/blob/develop/io/module_write_netcdf_parallel.F90
 
 !     Ed Hartnett, 6/16/20
+!     Ward Fisher, 7/29/22 - Explicity assign values to an array, avoiding a
+!                            platform-specific failure. 
 
 program f90tst_parallel_compressed
   use typeSizes

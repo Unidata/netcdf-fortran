@@ -14,7 +14,7 @@ Entries are in reverse chronological order (most recent first).
 
 ### Other Changes
 
-## 4.6.0 - July 27, 2022
+## 4.6.0 - July 29, 2022
 
 ### Requirements
 
