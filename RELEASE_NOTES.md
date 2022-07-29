@@ -5,19 +5,50 @@ Release Notes {#nf_release_notes}
 
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
-## 4.6.0 - July 27, 2022
+## 4.6.0 - July 29, 2022
 
 ### Requirements
 
 * netCDF-C: 4.9.0+
-
 ### Notable Changes
 
-* Introduction of Quantize functionality (this description line is a placeholder)
-* Plugin Support (this description line is a placeholder)
+* We've added API support to take advantage of the Quantize functionality provided by libnetcdf 4.9.0+. [See this conversation](https://github.com/Unidata/netcdf-c/issues/1548) for more information.
+* We've added API support to take advantage of ZStandard compression functionality, [as described here](https://github.com/Unidata/netcdf-c/issues/2173).  Note that you can suppress this with the new options `--disable-zstandard-plugin` (for `configure`) and `-DDISABLE_ZSTANDARD_PLUGIN` (for `cmake`).
 ### Other Changes
 
-* Will be generated via GitHub automation. 
+* Merge 4.5.4 changes back upstream by @WardF in https://github.com/Unidata/netcdf-fortran/pull/319
+* Fix error in cmake-generated nf-config by @WardF in https://github.com/Unidata/netcdf-fortran/pull/322
+* Wire in new tests in to PR #294 by @WardF in https://github.com/Unidata/netcdf-fortran/pull/325
+* Update of netcdf f90 get interface to handle arrays with total size >… by @m214089 in https://github.com/Unidata/netcdf-fortran/pull/294
+* Rationalize CMake minimum version to 3.12 by @scivision in https://github.com/Unidata/netcdf-fortran/pull/323
+* Fix hdf5 version mismatch. by @WardF in https://github.com/Unidata/netcdf-fortran/pull/331
+* adding v2 api test by @WardF in https://github.com/Unidata/netcdf-fortran/pull/332
+* adding v2 api test by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/330
+* set 'CMAKE_POSITION_INDEPENDENT_CODE ON' for shared lib by @MuellerSeb in https://github.com/Unidata/netcdf-fortran/pull/334
+* bug fix: when all parallel features are disabled in netcdf-c by @wkliao in https://github.com/Unidata/netcdf-fortran/pull/352
+* Updating github actions. by @WardF in https://github.com/Unidata/netcdf-fortran/pull/362
+* Untangle conflicts caused by PR merge/reversions by @WardF in https://github.com/Unidata/netcdf-fortran/pull/324
+* Gh318.wif by @WardF in https://github.com/Unidata/netcdf-fortran/pull/364
+* "Add quantize feature to F77 and F90 APIs, with tests and documentation" by @WardF in https://github.com/Unidata/netcdf-fortran/pull/318
+* convert to F90 and F by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/365
+* Fix f90tst_parallel_compressed.F90 extension in CMake builds by @ArchangeGabriel in https://github.com/Unidata/netcdf-fortran/pull/339
+* protect quantize code with preprocessor directives by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/366
+* initialize value_grid_yt_loc to zeros by @wkliao in https://github.com/Unidata/netcdf-fortran/pull/357
+* CI improvements: don't try to cache netcdf-c main build, add parallel I/O testing, and add testing with HDF5-1.12.2 by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/351
+* fix warning of status may be used uninitialized by @wkliao in https://github.com/Unidata/netcdf-fortran/pull/356
+* check if netcdf4 is enabled in netcdf-c by @wkliao in https://github.com/Unidata/netcdf-fortran/pull/353
+* Github 292 by @WardF in https://github.com/Unidata/netcdf-fortran/pull/368
+* Update nf_fortv2.90 by @LeonABenjamin in https://github.com/Unidata/netcdf-fortran/pull/292
+* CMake build: fix handling of run_f90_par_test.sh by @ArchangeGabriel in https://github.com/Unidata/netcdf-fortran/pull/341
+* Add support for zstandard compression by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/367
+* HDF5_PLUGIN_DIR verbosity by @WardF in https://github.com/Unidata/netcdf-fortran/pull/372
+
+## New Contributors
+* @m214089 made their first contribution in https://github.com/Unidata/netcdf-fortran/pull/294
+* @scivision made their first contribution in https://github.com/Unidata/netcdf-fortran/pull/323
+* @MuellerSeb made their first contribution in https://github.com/Unidata/netcdf-fortran/pull/334
+* @ArchangeGabriel made their first contribution in https://github.com/Unidata/netcdf-fortran/pull/339
+* @LeonABenjamin made their first contribution in https://github.com/Unidata/netcdf-fortran/pull/292
 
 ## 4.5.4 - January 7, 2022
 
