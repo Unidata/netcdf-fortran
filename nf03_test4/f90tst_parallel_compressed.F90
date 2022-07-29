@@ -145,6 +145,9 @@ program f90tst_parallel_compressed
   allocate(value_clwmr_loc_in(lat_xt_loc_size, lat_yt_loc_size, pfull_loc_size, 1))
   
   ! Some fake data for this pe to write.
+  do i = 1, grid_xt_loc_size
+     value_grid_xt_loc(i) = i;
+  end do 
   do i = 1, pfull_loc_size
      value_pfull_loc(i) = my_rank * 100 + i;
   end do
