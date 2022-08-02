@@ -1462,7 +1462,7 @@ c_ncapt (
     int*        rcode           /* returned error code */
     )
 {
-    int         status;
+    int         status = NC_NOERR;
 
     switch (datatype)
     {

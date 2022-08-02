@@ -531,6 +531,15 @@
     nf90_def_var_szip = nf_def_var_szip(ncid, varid, options_mask, pixels_per_block)
   end function nf90_def_var_szip
   ! -----------
+  function nf90_def_var_zstandard(ncid, varid, zstandard_level)
+    integer, intent(in) :: ncid
+    integer, intent(in) :: varid
+    integer, intent(in) :: zstandard_level
+    integer :: nf90_def_var_zstandard
+
+    nf90_def_var_zstandard = nf_def_var_zstandard(ncid, varid, zstandard_level)
+  end function nf90_def_var_zstandard
+  ! -----------
   function nf90_def_var_quantize(ncid, varid, quantize_mode, nsd)
     integer, intent(in) :: ncid
     integer, intent(in) :: varid
@@ -584,6 +593,16 @@
 
     nf90_inq_var_szip = nf_inq_var_szip(ncid, varid, options_mask, pixels_per_block)
   end function nf90_inq_var_szip
+  ! -----------
+  function nf90_inq_var_zstandard(ncid, varid, zstandard, zstandard_level)
+    integer, intent(in) :: ncid
+    integer, intent(in) :: varid
+    integer, intent(out) :: zstandard
+    integer, intent(out) :: zstandard_level
+    integer :: nf90_inq_var_zstandard
+
+    nf90_inq_var_zstandard = nf_inq_var_zstandard(ncid, varid, zstandard, zstandard_level)
+  end function nf90_inq_var_zstandard
   ! -----------
   function nf90_inq_var_quantize(ncid, varid, quantize_mode, nsd)
     integer, intent(in) :: ncid

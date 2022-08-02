@@ -9,6 +9,8 @@
 !     https://github.com/NOAA-EMC/fv3atm/blob/develop/io/module_write_netcdf_parallel.F90
 
 !     Ed Hartnett, 6/16/20
+!     Ward Fisher, 7/29/22 - Explicity assign values to an array, avoiding a
+!                            platform-specific failure. 
 
 program f90tst_parallel_compressed
   use typeSizes
@@ -145,6 +147,9 @@ program f90tst_parallel_compressed
   allocate(value_clwmr_loc_in(lat_xt_loc_size, lat_yt_loc_size, pfull_loc_size, 1))
   
   ! Some fake data for this pe to write.
+  do i = 1, grid_xt_loc_size
+     value_grid_xt_loc(i) = i;
+  end do 
   do i = 1, pfull_loc_size
      value_pfull_loc(i) = my_rank * 100 + i;
   end do
@@ -236,6 +241,7 @@ program f90tst_parallel_compressed
 
   ! Write grid_yt data.
   call check(nf90_enddef(ncid))
+  value_grid_yt_loc = 0.0
   call check(nf90_put_var(ncid, varid(3), start=(/grid_yt_start/), count=(/grid_yt_loc_size/), values=value_grid_yt_loc))  
   call check(nf90_redef(ncid))
 
