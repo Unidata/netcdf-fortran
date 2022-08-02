@@ -19,7 +19,7 @@
   ! ----- 
   function nf90_def_var_oneDim(ncid, name, xtype, dimids, varid, contiguous, &
        chunksizes, deflate_level, shuffle, fletcher32, endianness, &
-       cache_size, cache_nelems, cache_preemption, quantize_mode, nsd)
+       cache_size, cache_nelems, cache_preemption, quantize_mode, nsd, zstandard_level)
     integer, intent( in) :: ncid
     character (len = *), intent( in) :: name
     integer, intent(in) :: xtype
@@ -32,6 +32,7 @@
     integer, optional, intent(in) :: endianness
     integer, optional, intent(in) :: cache_size, cache_nelems, cache_preemption
     integer, optional, intent(in) :: quantize_mode, nsd
+    integer, optional, intent(in) :: zstandard_level
     integer :: nf90_def_var_oneDim
     
     integer, dimension(1) :: dimidsA, chunksizes1
@@ -137,13 +138,21 @@
        nf90_def_var_oneDim = nf90_enotbuilt
 #endif
     endif
-       
 
+    ! Set zstandard if the user wants to.
+    if (present(zstandard_level)) then
+       nf90_def_var_oneDim = nf_def_var_zstandard(ncid, varid, zstandard_level)
+       if (nf90_def_var_oneDim .ne. nf90_noerr) return
+       if (present(shuffle) .and. shuffle) then
+          nf90_def_var_oneDim = nf_def_var_deflate(ncid, varid, 1, 0, 0)
+       endif
+    endif
+       
   end function nf90_def_var_oneDim
   ! ----- 
   function nf90_def_var_ManyDims(ncid, name, xtype, dimids, varid, contiguous, &
        chunksizes, deflate_level, shuffle, fletcher32, endianness, cache_size, &
-       cache_nelems, cache_preemption, quantize_mode, nsd)
+       cache_nelems, cache_preemption, quantize_mode, nsd, zstandard_level)
     integer, intent(in) :: ncid
     character (len = *), intent(in) :: name
     integer, intent( in) :: xtype
@@ -156,6 +165,7 @@
     integer, optional, intent(in) :: endianness
     integer, optional, intent(in) :: cache_size, cache_nelems, cache_preemption
     integer, optional, intent(in) :: quantize_mode, nsd
+    integer, optional, intent(in) :: zstandard_level
     integer :: nf90_def_var_ManyDims
 
     ! Local variables.
@@ -270,6 +280,15 @@
 #endif
     endif
        
+    ! Set zstandard if the user wants to.
+    if (present(zstandard_level)) then
+       nf90_def_var_manyDims = nf_def_var_zstandard(ncid, varid, zstandard_level)
+       if (nf90_def_var_manyDims .ne. nf90_noerr) return
+       if (present(shuffle) .and. shuffle) then
+          nf90_def_var_ManyDims = nf_def_var_deflate(ncid, varid, 1, 0, 0)
+       endif
+    endif
+
   end function nf90_def_var_ManyDims
   ! ----- 
   function nf90_inq_varid(ncid, name, varid)
@@ -295,7 +314,8 @@
   ! ----- 
   function nf90_inquire_variable(ncid, varid, name, xtype, ndims, dimids, nAtts, &
        contiguous, chunksizes, deflate_level, shuffle, fletcher32, endianness, &
-       cache_size, cache_nelems, cache_preemption, quantize_mode, nsd)
+       cache_size, cache_nelems, cache_preemption, quantize_mode, nsd, zstandard, &
+       zstandard_level)
     integer, intent(in) :: ncid, varid
     character (len = *), optional, intent(out) :: name
     integer, optional, intent(out) :: xtype, ndims 
@@ -308,6 +328,7 @@
     integer, optional, intent(out) :: endianness
     integer, optional, intent(out) :: cache_size, cache_nelems, cache_preemption
     integer, optional, intent(out) :: quantize_mode, nsd
+    integer, optional, intent(out) :: zstandard, zstandard_level
     integer :: nf90_inquire_variable
     
     ! Local variables
@@ -318,6 +339,7 @@
     integer :: deflate1, deflate_level1, contiguous1, shuffle1, fletcher321
     integer, dimension(nf90_max_dims) :: chunksizes1
     integer :: size1, nelems1, preemption1
+    integer :: zstandard1, zstandard_level1
     integer :: d
 
     ! Learn the basic facts.
@@ -391,6 +413,21 @@
        nsd = 0
        nf90_inquire_variable = nf90_noerr
 #endif
+    endif
+
+    ! Learn about zstandard compression.
+    if (present(zstandard) .or. present(zstandard_level)) then
+       nf90_inquire_variable = nf_inq_var_zstandard(ncid, varid, zstandard1, zstandard_level1)
+       ! If netcdf-c was built without zstandard, then return 0 for zstandard settings.
+       if (nf90_inquire_variable .eq. nf90_enotbuilt) then
+          zstandard1 = 0
+          zstandard_level1 = 0
+          nf90_inquire_variable = nf90_noerr
+       else
+          if (nf90_inquire_variable .ne. nf90_noerr) return
+       endif
+       if (present(zstandard)) zstandard = zstandard1
+       if (present(zstandard_level)) zstandard_level = zstandard_level1
     endif
     
   end function nf90_inquire_variable

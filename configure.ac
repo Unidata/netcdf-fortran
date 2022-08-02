@@ -9,7 +9,7 @@
 AC_PREREQ([2.59])
 
 # Initialize with name, version, and support email address.
-AC_INIT([netCDF-Fortran], [4.6.0-development], [support-netcdf@unidata.ucar.edu])
+AC_INIT([netCDF-Fortran], [4.6.1-development], [support-netcdf@unidata.ucar.edu])
 
 # Create the VERSION file, which contains the package version from
 # AC_INIT.
@@ -58,6 +58,46 @@ if test "x$nc_has_cdf5" = xyes; then
 fi
 AC_MSG_RESULT([$nc_has_cdf5])
 
+###
+# Zstandard logic stanza
+###
+AC_ARG_ENABLE([zstandard_plugin],
+               [AS_HELP_STRING([--disable-zstandard-plugin],
+                               [disable zstandard detection and functionality, even if libnetcdf was compiled with plugin support])])
+
+test "x$enable_zstandard_plugin" = xno || enable_zstandard_plugin=yes
+
+if test "x$enable_zstandard_plugin" = xyes; then
+
+   AC_MSG_CHECKING([if netCDF was built with Zstandard compression])
+   AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
+   #include <netcdf_meta.h>
+   #if !defined(NC_HAS_ZSTD) || NC_HAS_ZSTD == 0
+         choke me
+   #endif]])], [nc_has_zstd=yes], [nc_has_zstd=no])
+
+   if test "x$nc_has_zstd" = xyes; then
+
+      AC_DEFINE([ENABLE_ZSTD], [1], [Enable Zstandard compression support])
+   fi
+   AC_MSG_RESULT([$nc_has_zstd])
+
+   if test "x$nc_has_zstd" = xyes; then
+      if test "x${HDF5_PLUGIN_PATH}" = "x"; then
+         AC_MSG_WARN([ ])
+         AC_MSG_WARN([------------------------------------------])
+         AC_MSG_WARN([libnetcdf was built with zstd support, but HDF5_PLUGIN_PATH is not set.  Either set the HDF5_PLUGIN_PATH environmental variable if zstandard tests fail, or use --disable-zstandard-plugin when running configure.])
+         AC_MSG_WARN([------------------------------------------])
+         AC_MSG_WARN([ ])
+      fi
+   fi
+else
+   nc_has_zstd=no
+fi
+###
+# End Zstandard logic stanza
+###
+
 AC_MSG_CHECKING([if netCDF was built with pnetcdf])
 AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
 #include <netcdf_meta.h>
@@ -84,6 +124,7 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([], [[
       choke me
 #endif]])], [nc_has_parallel=yes], [nc_has_parallel=no])
 AC_MSG_RESULT([$nc_has_parallel])
+
 
 # Version 4.6.1 does not have NC_HAS_PARALLEL4 but does have
 # NC_HAS_PARALLEL.
@@ -115,6 +156,7 @@ if test "x$nc_has_quantize" = xyes; then
    AC_DEFINE([NF_HAS_QUANTIZE], [1], [Support for quantize feature.])
 fi
 AC_MSG_RESULT([$nc_has_quantize])
+
 AM_CONDITIONAL(TEST_QUANTIZE, [test "x$nc_has_quantize" = xyes])
 
 # Find valgrind, if available, and add targets for it (ex:
@@ -512,7 +554,10 @@ nc_build_v4=no
 nc_has_logging=no
 nc_has_dap=no
 
-AC_CHECK_FUNCS([nc_get_chunk_cache_ints],[nc_build_v4=yes],[nc_build_v4=no])
+AC_COMPUTE_INT([nc_has_hdf5], [NC_HAS_HDF5], [[#include <netcdf_meta.h>]])
+if test "x$nc_has_hdf5" = x1; then
+   nc_build_v4=yes
+fi
 test "x$ac_cv_func_nccreate" = xyes && nc_build_v2=yes
 test "x$ac_cv_func_nc_set_log_level" = xyes && nc_has_logging=yes
 test "x$ac_cv_func_oc_open" = xyes && nc_has_dap=yes
@@ -617,6 +662,7 @@ AC_SUBST(HAS_DAP,[$nc_has_dap])
 AC_SUBST(HAS_NC2,[$nc_build_v2])
 AC_SUBST(HAS_NC4,[$nc_build_v4])
 AC_SUBST(HAS_SZIP_WRITE,[$nc_has_szip_write])
+AC_SUBST(HAS_ZSTD,[$nc_has_zstd])
 AC_SUBST(HAS_QUANTIZE,[$nc_has_quantize])
 AC_SUBST(HAS_LOGGING,[$nc_has_logging])
 AC_SUBST(HAS_CDF5,[$nc_has_cdf5])
