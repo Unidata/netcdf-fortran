@@ -166,18 +166,7 @@ integer, parameter, public :: &
     nf90_ediskless    = -129,    & ! Error in using diskless  access. 
     nf90_ecantextend  = -130,    & ! Attempt to extend dataset during ind. I/O operation. 
     nf90_empi         = -131,    & ! MPI operation failed. 
-    nf90_efilter      = -132,    & ! Filter operation failed.
-    nf90_ercfile      = -133,    & ! RC file failure
-    nf90_enullpad     = -134,    & ! Header Bytes not Null-Byte padded
-    nf90_einmemory    = -135,    & ! In-memory file error
-    nf90_enofilter    = -136,    & ! Filter not defined on variable.
-    nf90_enczarr      = -137,    & ! Error at NCZarr layer.
-    nf90_es3          = -138,    & ! Generic S3 error
-    nf90_eempty       = -139,    & ! Attempt to read empty NCZarr map key
-    nf90_eobject      = -140,    & ! Some object exists when it should not
-    nf90_enoobject    = -141,    & ! Some object not found
-    nf90_eplugin      = -142,    & ! Unclassified failure in accessing a dynamically loaded plugin>
-    nf904_last_error  = -142
+    nf904_last_error  = -131
 
   !
   ! error handling modes:
@@ -252,9 +241,7 @@ integer, parameter, public :: &
      nf90_noshuffle = 0, &
      nf90_shuffle = 1, &
      nf90_szip_ec_option_mask = 4, &
-     nf90_szip_nn_option_mask = 32, &
-     nf90_noquantize = 0, &
-     nf90_quantize_bitgroom = 1
+     nf90_szip_nn_option_mask = 32
 
 ! This is the position of NC_NETCDF4 in cmode, counting from the
 ! right, starting (uncharacteristically for fortran) at 0. It's needed

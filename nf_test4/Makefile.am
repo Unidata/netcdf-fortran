@@ -16,11 +16,6 @@ NF77_TESTS = ftst_groups ftst_vars ftst_vars2 ftst_vars3 ftst_vars4	\
 ftst_vars5 ftst_vars6 ftst_types ftst_types2 ftst_types3 ftst_path	\
 ftst_rengrps f03tst_open_mem ftst_var_compact
 
-# Only build and run this test if quantize feature is supported.
-if TEST_QUANTIZE
-NF77_TESTS += ftst_zstandard
-endif
-
 # Compile and run the F77 API tests.
 check_PROGRAMS = $(NF77_TESTS)
 TESTS = $(NF77_TESTS)
@@ -33,7 +28,6 @@ ftst_vars3_SOURCES = ftst_vars3.F
 ftst_vars4_SOURCES = ftst_vars4.F
 ftst_vars5_SOURCES = ftst_vars5.F
 ftst_vars6_SOURCES = ftst_vars6.F
-ftst_zstandard_SOURCES = ftst_zstandard.F
 ftst_types_SOURCES = ftst_types.F
 ftst_types2_SOURCES = ftst_types2.F
 ftst_types3_SOURCES = ftst_types3.F
@@ -86,12 +80,6 @@ F03_TESTS = f03tst_groups f03tst_vars f03tst_vars2 f03tst_vars3		\
 f03tst_vars4 f03tst_vars5 f03tst_vars6 f03tst_types f03tst_types2	\
 f03tst_types3
 
-# If quantize is available, run this test.
-if TEST_QUANTIZE
-F03_TEST_CODES += f03tst_zstandard.F
-F03_TESTS +=  f03tst_zstandard
-endif
-
 # This is a netCDF-4 V2 F77 test program.
 if BUILD_V2
 F03_TEST_CODES += f03tst_v2.F
@@ -130,7 +118,6 @@ f03tst_vars3_SOURCES = f03tst_vars3.F
 f03tst_vars4_SOURCES = f03tst_vars4.F
 f03tst_vars5_SOURCES = f03tst_vars5.F
 f03tst_vars6_SOURCES = f03tst_vars6.F
-f03tst_zstandard_SOURCES = f03tst_zstandard.F
 f03tst_types_SOURCES = f03tst_types.F
 f03tst_types2_SOURCES = f03tst_types2.F
 f03tst_types3_SOURCES = f03tst_types3.F
@@ -170,11 +157,6 @@ f03tst_vars6.F: ftst_vars6.F
 	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
 	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
 	$(SED) "s|ftst_vars6.nc|f03tst_vars6.nc|" $@.tmp2 > $@
-
-f03tst_zstandard.F: ftst_zstandard.F
-	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
-	$(SED) "s|include 'netcdf.inc'|implicit none|" $@.tmp > $@.tmp2
-	$(SED) "s|ftst_zstandard.nc|f03tst_zstandard.nc|" $@.tmp2 > $@
 
 f03tst_types.F: ftst_types.F
 	$(SED) "s|implicit none|USE netcdf4_f03|" $< > $@.tmp
