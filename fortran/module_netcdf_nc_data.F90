@@ -404,6 +404,21 @@ Module netcdf_nc_data
  Integer(C_INT), Parameter :: NC_EDISKLESS      = -129
  Integer(C_INT), Parameter :: NC_ECANTEXTEND    = -130
  Integer(C_INT), Parameter :: NC_EMPI           = -131
+ Integer(C_INT), Parameter :: NC_EFILTER        = -132
+ Integer(C_INT), Parameter :: NC_ERCFILE        = -133
+ Integer(C_INT), Parameter :: NC_ENULLPAD       = -134
+ Integer(C_INT), Parameter :: NC_EINMEMORY      = -135
+ Integer(C_INT), Parameter :: NC_ENOFILTER      = -136
+ Integer(C_INT), Parameter :: NC_ENCZARR        = -137
+ Integer(C_INT), Parameter :: NC_ES3            = -138
+ Integer(C_INT), Parameter :: NC_EEMPTY         = -139
+ Integer(C_INT), Parameter :: NC_EOBJECT        = -140
+ Integer(C_INT), Parameter :: NC_ENOOBJECT      = -141
+ Integer(C_INT), Parameter :: NC_EPLUGIN        = -142
+
+! Quantize feature 
+ Integer(C_INT), Parameter :: NC_NOQUANTIZE           = 0
+ Integer(C_INT), Parameter :: NC_QUANTIZE_BITGROOM    = 1
 
 #endif
 

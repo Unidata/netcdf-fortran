@@ -8,12 +8,12 @@ FILE(GLOB COPY_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.sh)
 FILE(COPY ${COPY_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)
 
 FOREACH(F ${example_F90_tests})
-  SET(example_F90_tests_source ${example_F90_test_source} ${F}.f90)
+  SET(example_F90_tests_source ${example_F90_test_source} ${F}.F90)
 ENDFOREACH()
 
 SET(prefix F90_tests)
 FOREACH(F ${example_F90_tests})
-  ADD_EXECUTABLE(${prefix}_${F} ${F}.f90)
+  ADD_EXECUTABLE(${prefix}_${F} ${F}.F90)
   TARGET_LINK_LIBRARIES(${prefix}_${F} netcdff)
   IF(MSVC)
     SET_TARGET_PROPERTIES(${prefix}_${F}
@@ -27,9 +27,9 @@ FOREACH(F ${example_F90_tests})
 ENDFOREACH()
 
 IF(TEST_PARALLEL)
-  build_bin_test(simple_xy_par_wr .f90)
-  build_bin_test(simple_xy_par_rd .f90)
-  build_bin_test(simple_xy_par_wr2 .f90)
+  build_bin_test(simple_xy_par_wr .F90)
+  build_bin_test(simple_xy_par_rd .F90)
+  build_bin_test(simple_xy_par_wr2 .F90)
   add_sh_test(f90_tests run_f90_par_examples)
 ENDIF(TEST_PARALLEL)
 

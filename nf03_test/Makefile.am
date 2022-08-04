@@ -15,7 +15,7 @@ LDADD = ${top_builddir}/fortran/libnetcdff.la
 # The F90 API tests.
 check_PROGRAMS = tst_f90 tst_fill_int64
 TESTS = tst_f90 tst_fill_int64
-tst_f90_SOURCES = tst_f90.f90
+tst_f90_SOURCES = tst_f90.F90
 tst_fill_int64_SOURCES = tst_fill_int64.F90
 
 # If valgrind is present on this machine, this will enable

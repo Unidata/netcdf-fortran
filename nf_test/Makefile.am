@@ -21,7 +21,7 @@ LDADD = ${top_builddir}/fortran/libnetcdff.la
 # nf_test is the main test program for classic netCDF F77 API.
 check_PROGRAMS = nf_test tst_int64
 TESTS = nf_test tst_int64
-nf_test_SOURCES = f03lib_f_interfaces.f90 test_get.m4 test_put.m4	\
+nf_test_SOURCES = f03lib_f_interfaces.F90 test_get.m4 test_put.m4	\
 nf_error.F nf_test.F test_read.F test_write.F util.F f03lib.c		\
 tests.inc
 tst_int64_SOURCES = tst_int64.F
@@ -65,7 +65,7 @@ nf03_test.F test03_get.F
 # tests.inc. These files proved too difficult to generate with sed,
 # so, we just store slightly modified copies of these codes in the
 # repo.
-nf03_test_SOURCES = f03lib_f_interfaces.f90 test03_get.F test03_put.F	\
+nf03_test_SOURCES = f03lib_f_interfaces.F90 test03_get.F test03_put.F	\
 nf03_error.F nf03_test.F test03_read.F test03_write.F util03.F		\
 f03lib.c
 nf03_test_LDADD = libtests.la ${top_builddir}/fortran/libnetcdff.la

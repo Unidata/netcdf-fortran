@@ -2,36 +2,37 @@
 # Build hdf4, hdf5 dependencies and cache them in a combined directory.
 ###
 
-name: Run netCDF-Fortran Tests
+name: Run netCDF-Fortran MacOS tests
 
-on: [pull_request]
+on: [ workflow_dispatch ]
 
 jobs:
 
   build-deps:
 
-    runs-on: ubuntu-latest
+    runs-on: macos-11
 
     strategy:
       matrix:
-        hdf5: [ 1.10.8 ]
-        netcdf: [ v4.7.4, v4.8.1, main ]
+        hdf5: [ 1.12.2 ]
+        netcdf: [ v4.9.0, main ]
 
     steps:
 
       - uses: actions/checkout@v2
 
-      - name: Install System dependencies
-        shell: bash -l {0}
-        run: sudo apt update && sudo apt install -y libaec-dev zlib1g-dev automake autoconf libcurl4-openssl-dev libjpeg-dev wget curl bzip2 m4 flex bison cmake libzip-dev gfortran
-
         ###
         # Set Environmental Variables
         ###
+      - run: echo "FCFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
+      - run: echo "FFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
       - run: echo "CFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
+      - run: echo "CPPFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
       - run: echo "LDFLAGS=-L${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "LD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
-
+      - run: echo "DYLD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
+      - run: echo "PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/bin:${PATH}" >> $GITHUB_ENV
+      - run: brew install automake libaec 
         ###
         # Installing libhdf4 and libhdf5
         ###
@@ -71,24 +72,26 @@ jobs:
 
     strategy:
       matrix:
-        hdf5: [ 1.10.8 ]
-        netcdf: [ v4.7.4, v4.8.1, main ]
+        hdf5: [ 1.12.2 ]
+        netcdf: [ v4.9.0, main ]
 
     steps:
 
       - uses: actions/checkout@v2
-
-      - name: Install System dependencies
-        shell: bash -l {0}
-        run: sudo apt update && sudo apt install -y libaec-dev zlib1g-dev automake autoconf libcurl4-openssl-dev libjpeg-dev wget curl bzip2 m4 flex bison cmake libzip-dev
-
 ###
 # Set Environmental Variables
 ###
 
+      - run: echo "FCFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
+      - run: echo "FFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
       - run: echo "CFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
+      - run: echo "CPPFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV      
       - run: echo "LDFLAGS=-L${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "LD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
+      - run: echo "DYLD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
+      - run: echo "PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/bin:${PATH}" >> $GITHUB_ENV
+      - run: brew install automake 
+      
 
 ###
 # Fetch Cache
@@ -115,7 +118,7 @@ jobs:
 
       - name: Configure
         shell: bash -l {0}
-        run: CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure
+        run: CFLAGS=${CFLAGS} LDFLAGS=$(nc-config --libs) LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure
 
       - name: Look at config.log if error
         shell: bash -l {0}
@@ -152,25 +155,24 @@ jobs:
 
     strategy:
       matrix:
-        hdf5: [ 1.10.8 ]
-        netcdf: [ v4.7.4, v4.8.1, main ]
+        hdf5: [ 1.12.2 ]
+        netcdf: [ v4.9.0, main ]
 
     steps:
 
       - uses: actions/checkout@v2
 
-      - name: Install System dependencies
-        shell: bash -l {0}
-        run: sudo apt update && sudo apt install -y libaec-dev zlib1g-dev automake autoconf libcurl4-openssl-dev libjpeg-dev wget curl bzip2 m4 flex bison cmake libzip-dev
-
 ###
 # Set Environmental Variables
 ###
-
-      - run: echo "CFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
+      - run: echo "FCFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
+      - run: echo "FFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
+      - run: echo "CPPFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV      
       - run: echo "LDFLAGS=-L${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "LD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "CMAKE_PREFIX_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf}}" >> $GITHUB_ENV
+      - run: echo "PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/bin:${PATH}" >> $GITHUB_ENV
+      - run: brew install automake 
 
 ###
 # Fetch Cache
