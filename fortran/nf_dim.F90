@@ -54,7 +54,6 @@
  cncid = ncid
  cdlen = dlen
 
-!  dimid  = -1
  cdimid = -1
 
 ! Check to see if a C null character was appended in FORTRAN
@@ -130,7 +129,6 @@
  Integer                      :: ie
 
  cncid = ncid
-!  dimid  =  0 
  cdimid = -1
 
 ! Check to see if a C null character was appended in FORTRAN
