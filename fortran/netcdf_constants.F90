@@ -254,7 +254,9 @@ integer, parameter, public :: &
      nf90_szip_ec_option_mask = 4, &
      nf90_szip_nn_option_mask = 32, &
      nf90_noquantize = 0, &
-     nf90_quantize_bitgroom = 1
+     nf90_quantize_bitgroom = 1, &
+     nf90_quantize_granularbr = 2, &
+     nf90_quantize_bitround = 1
 
 ! This is the position of NC_NETCDF4 in cmode, counting from the
 ! right, starting (uncharacteristically for fortran) at 0. It's needed
