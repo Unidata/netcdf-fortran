@@ -85,10 +85,10 @@ program f90tst_vars5
         qmode = nf90_quantize_bitgroom
         qnsd = 3
      else if (t .eq. 2) then
-        qmode = nf90_quantize_bitgroom
+        qmode = nf90_quantize_granularbr
         qnsd = 3
      else
-        qmode = nf90_quantize_bitgroom
+        qmode = nf90_quantize_bitround
         qnsd = 3
      endif
 
