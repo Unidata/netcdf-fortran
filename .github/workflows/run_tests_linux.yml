@@ -136,6 +136,13 @@ jobs:
 
       - uses: actions/checkout@v2
 
+      - name: firebuild
+        uses: firebuild/firebuild-action@v3
+        with:
+          key: ${{ github.job }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
+        # pass through environment variable set up in GITHUB_ENV for the build steps
+      - run: $(which sudo) sed -i 's/pass_through = \[/pass_through = ["CC", "CFLAGS", "CMAKE_PREFIX_PATH", "FC", "HDF5_PLUGIN_DIR", "HDF5_PLUGIN_PATH", "LDFLAGS", /' /etc/firebuild.conf
+
       - name: Install System dependencies
         shell: bash -l {0}
         run: sudo apt update && sudo apt install -y libaec-dev zlib1g-dev automake autoconf libcurl4-openssl-dev libjpeg-dev wget curl bzip2 m4 flex bison cmake libzip-dev libzstd-dev
@@ -176,9 +183,9 @@ jobs:
           pushd netcdf-c
           autoreconf -if
 
-          CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }} --with-plugin-dir=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib
+          firebuild env CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }} --with-plugin-dir=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib
 
-          make -j install
+          firebuild make -j install
           popd
           popd
         if: ${{ matrix.netcdf }} == "main"
@@ -189,7 +196,7 @@ jobs:
 
       - name: Configure
         shell: bash -l {0}
-        run: CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure
+        run: firebuild env CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure
 
       - name: Look at config.log if error
         shell: bash -l {0}
@@ -202,12 +209,12 @@ jobs:
 
       - name: Build Library and Utilities
         shell: bash -l {0}
-        run: CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} make -j
+        run: firebuild env CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} make -j
         if: ${{ success() }}
 
       - name: Build Tests
         shell: bash -l {0}
-        run: CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} make check TESTS="" -j
+        run: firebuild env CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} make check TESTS="" -j
         if: ${{ success() }}
 
       - name: Run Tests
@@ -232,6 +239,13 @@ jobs:
     steps:
 
       - uses: actions/checkout@v2
+
+      - name: firebuild
+        uses: firebuild/firebuild-action@v3
+        with:
+          key: ${{ github.job }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
+        # pass through environment variable set up in GITHUB_ENV for the build steps
+      - run: $(which sudo) sed -i 's/pass_through = \[/pass_through = ["CC", "CFLAGS", "CMAKE_PREFIX_PATH", "FC", "HDF5_PLUGIN_DIR", "HDF5_PLUGIN_PATH", "LDFLAGS", /' /etc/firebuild.conf
 
       - name: Install System dependencies
         shell: bash -l {0}
@@ -274,9 +288,9 @@ jobs:
           pushd netcdf-c
           autoreconf -if
 
-          CC=${CC} CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}  --with-plugin-dir=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib
+          firebuild env CC=${CC} CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure --disable-static --enable-shared --prefix=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}  --with-plugin-dir=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib
 
-          make -j install
+          firebuild make -j install
           popd
           popd
         if: ${{ matrix.netcdf }} == "main"
@@ -287,7 +301,7 @@ jobs:
 
       - name: Configure
         shell: bash -l {0}
-        run: CC=${CC} CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure --enable-parallel-tests
+        run: firebuild env CC=${CC} CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ./configure --enable-parallel-tests
 
       - name: Look at config.log if error
         shell: bash -l {0}
@@ -300,12 +314,12 @@ jobs:
 
       - name: Build Library and Utilities
         shell: bash -l {0}
-        run: CC=${CC} CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} make -j
+        run: firebuild env CC=${CC} CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} make -j
         if: ${{ success() }}
 
       - name: Build Tests
         shell: bash -l {0}
-        run: CC=${CC} CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} make check TESTS="" -j
+        run: firebuild env CC=${CC} CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} make check TESTS="" -j
         if: ${{ success() }}
 
       - name: Run Tests
