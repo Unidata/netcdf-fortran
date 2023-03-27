@@ -2,7 +2,7 @@
 # Build hdf4, hdf5 dependencies and cache them in a combined directory.
 ###
 
-name: Run netCDF-Fortran Tests
+name: Run netCDF-Fortran Linux tests
 
 on: [pull_request, workflow_dispatch]
 
