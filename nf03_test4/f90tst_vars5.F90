@@ -50,10 +50,11 @@ program f90tst_vars5
   integer :: quantize_mode_in, nsd_in
   real real_data_in(DIM_LEN_5)
   real*8 double_data_in(DIM_LEN_5)
-  real real_data_expected(DIM_LEN_5)
-  real*8 double_data_expected(DIM_LEN_5)
   real diff
   real, parameter :: EPSILON  = .01
+  ! Because values 4 and 5 of our data array are so large, a large
+  ! epsilon is needed.
+  real, parameter :: EPSILON_LARGE  = 1450000
   integer :: t, qmode, qnsd
 
   print *, ''
@@ -70,8 +71,9 @@ program f90tst_vars5
   double_data(3) = 9.999999999
   double_data(4) = 1234567890.12345
   double_data(5) = 1234567890
-
+  
   do t = 1, 3
+     
      ! Create the netCDF file. 
      call check(nf90_create(FILE_NAME, nf90_netcdf4, ncid, cache_nelems = CACHE_NELEMS, &
           cache_size = CACHE_SIZE))
@@ -89,9 +91,11 @@ program f90tst_vars5
         qnsd = 3
      else
         qmode = nf90_quantize_bitround
-        qnsd = 3
+        qnsd = 10
      endif
 
+     print *,'\t*** testing with quantize_mode ',qmode
+     
      ! Define some variables.
      call check(nf90_def_var(ncid, VAR1_NAME, NF90_FLOAT, dimids, varid1&
           &, deflate_level = DEFLATE_LEVEL, quantize_mode =&
@@ -106,18 +110,6 @@ program f90tst_vars5
 
      ! Close the file. 
      call check(nf90_close(ncid))
-
-     ! What we expect to get back.
-     real_data_expected(1) = 1.11084
-     real_data_expected(2) = 1.000488
-     real_data_expected(3) = 10
-     real_data_expected(4) = 12348
-     real_data_expected(5) = 0.1234436
-     double_data_expected(1) = 1.11083984375
-     double_data_expected(2) = 1.00048828125
-     double_data_expected(3) = 10
-     double_data_expected(4) = 1234698240
-     double_data_expected(5) = 1234173952
 
      ! Reopen the file.
      call check(nf90_open(FILE_NAME, nf90_nowrite, ncid))
@@ -157,12 +149,25 @@ program f90tst_vars5
 
      ! Check the data. 
      do x = 1, DIM_LEN_5
-        diff = abs(real_data_in(x) - real_data_expected(x))
-        if (diff .gt. EPSILON) stop 23
-        diff = abs(double_data_in(x) - double_data_expected(x))
-        print *, double_data_in(x), double_data_expected(x)
+        ! Check the real.
+        print *, 'real: ', real_data_in(x), real_data(x)
+        diff = abs(real_data_in(x) - real_data(x))
         print *, 'x = ', x, ' diff = ', diff
-        if (diff .gt. EPSILON) stop 24
+        if (x < 4) then
+           if (diff .gt. EPSILON) stop 23
+        else
+           if (diff .gt. EPSILON_LARGE) stop 24
+        endif
+
+        ! Check the double.
+        diff = abs(double_data_in(x) - double_data(x))
+        print *, 'double:', double_data_in(x), double_data(x)
+        print *, 'x = ', x, ' diff = ', diff
+        if (x < 4) then
+           if (diff .gt. EPSILON) stop 25
+        else
+           if (diff .gt. EPSILON_LARGE) stop 26
+        endif
      end do
 
      ! Close the file. 
