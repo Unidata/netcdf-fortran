@@ -99,6 +99,10 @@
       parameter (nf_noquantize = 0)
       integer nf_quantize_bitgroom
       parameter (nf_quantize_bitgroom = 1)
+      integer nf_quantize_granularbr
+      parameter (nf_quantize_granularbr = 2)
+      integer nf_quantize_bitround
+      parameter (nf_quantize_bitround = 3)
 
 !     New error codes.
       integer nf_ehdferr        ! Error at HDF5 layer. 
