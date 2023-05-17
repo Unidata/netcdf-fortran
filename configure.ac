@@ -702,3 +702,22 @@ AC_CONFIG_FILES([Makefile
 AC_OUTPUT()
 
 cat libnetcdff.settings
+
+##
+# This can be done more elegantly, but for the sake of expediency
+# we will do it this way.
+##
+if test "x$nc_has_zstd" = xyes; then
+      if test "x${HDF5_PLUGIN_PATH}" = "x"; then
+         echo ""
+         AC_MSG_WARN([ ])
+         AC_MSG_WARN([------------------------------------------])
+         AC_MSG_WARN([libnetcdf was built with zstd support, but HDF5_PLUGIN_PATH is not set.  Either set the HDF5_PLUGIN_PATH environmental variable if zstandard tests fail, or use --disable-zstandard-plugin when running configure.])
+         echo ""
+         AC_MSG_WARN([You can use `nc-config --plugindir` to determine the appropriate value for HDF5_PLUGIN_PATH])
+         AC_MSG_WARN([------------------------------------------])
+         AC_MSG_WARN([ ])
+      fi
+fi
+
+
