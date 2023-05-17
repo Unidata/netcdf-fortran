@@ -1145,6 +1145,14 @@ CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/libnetcdff.settings.in"
 FILE(READ "${CMAKE_CURRENT_BINARY_DIR}/libnetcdff.settings"
   LIBNETCDFF_SETTINGS)
 MESSAGE(${LIBNETCDFF_SETTINGS})
+IF(HAVE_ZSTD)
+    MESSAGE(STATUS "ATTENTION: NO HDF5_PLUGIN_PATH SET")
+    IF(NOT DEFINED ENV{HDF5_PLUGIN_PATH})
+      MESSAGE(WARNING "libnetcdf was built with zstd support, but HDF5_PLUGIN_PATH is not set.  Please set the HDF5_PLUGIN_PATH environmental variable if zstandard tests fail, or pass -DDISABLE_ZSTANDARD_PLUGIN=TRUE when running cmake.")
+      MESSAGE(WARNING "You can use `nc-config --plugindir` to determine the appropriate value for HDF5_PLUGIN_PATH")
+    ENDIF()
+ENDIF(HAVE_ZSTD)
+
 
 # Install libnetcdf.settings file into same location
 # as the libraries.
