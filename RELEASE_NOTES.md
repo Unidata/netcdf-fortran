@@ -12,9 +12,24 @@ Entries are in reverse chronological order (most recent first).
 
 * netCDF-C: 4.9.0+
 
-### Notable Changes
+  Note: to enable `libzstd` support, you need to satisfy the following requirements.
+  
+  1. `libnetcdf.so` installed with `libzstd` support.
+  2. The environmental variable `HDF5_LIBRARY_PATH` needs to be specified to the same location used when installing `libnetcdf`.  This can be determined after-the-fact using `nc-config --plugindir`.  
 
-### Other Changes
+
+### What's Changed
+* Add quantize constants and test by @edwardhartnett in https://github.com/Unidata/netcdf-fortran/pull/383
+* Merge v4.6.0-wellspring.wif back upstream into `main` by @WardF in https://github.com/Unidata/netcdf-fortran/pull/374
+* delete unuseful code by @DragonPara in https://github.com/Unidata/netcdf-fortran/pull/377
+* Adding MacOS tests. by @WardF in https://github.com/Unidata/netcdf-fortran/pull/363
+* Newbranch by @LeonABenjamin in https://github.com/Unidata/netcdf-fortran/pull/336
+
+
+## New Contributors
+* @DragonPara made their first contribution in https://github.com/Unidata/netcdf-fortran/pull/377
+
+**Full Changelog**: https://github.com/Unidata/netcdf-fortran/compare/v4.6.0...v4.9.1
 
 ## 4.6.0 - July 29, 2022
 
