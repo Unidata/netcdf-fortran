@@ -92,6 +92,8 @@ if test "x$enable_zstandard_plugin" = xyes; then
          nc_hdf5_plugin_path="(HDF5_PLUGIN_PATH: ${HDF5_PLUGIN_PATH})"
          AC_DEFINE([ENABLE_ZSTD], [1], [Enable Zstandard compression support])   
       fi
+   else
+      nf_has_zstd=no
    fi
 else
    nf_has_zstd=no
