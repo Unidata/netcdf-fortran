@@ -9,7 +9,7 @@
 AC_PREREQ([2.59])
 
 # Initialize with name, version, and support email address.
-AC_INIT([netCDF-Fortran], [4.6.1-development], [support-netcdf@unidata.ucar.edu])
+AC_INIT([netCDF-Fortran], [4.6.2-development], [support-netcdf@unidata.ucar.edu])
 
 # Create the VERSION file, which contains the package version from
 # AC_INIT.
@@ -76,10 +76,6 @@ if test "x$enable_zstandard_plugin" = xyes; then
          choke me
    #endif]])], [nc_has_zstd=yes], [nc_has_zstd=no])
 
-   if test "x$nc_has_zstd" = xyes; then
-
-      AC_DEFINE([ENABLE_ZSTD], [1], [Enable Zstandard compression support])
-   fi
    AC_MSG_RESULT([$nc_has_zstd])
 
    if test "x$nc_has_zstd" = xyes; then
@@ -89,10 +85,18 @@ if test "x$enable_zstandard_plugin" = xyes; then
          AC_MSG_WARN([libnetcdf was built with zstd support, but HDF5_PLUGIN_PATH is not set.  Either set the HDF5_PLUGIN_PATH environmental variable if zstandard tests fail, or use --disable-zstandard-plugin when running configure.])
          AC_MSG_WARN([------------------------------------------])
          AC_MSG_WARN([ ])
+         nf_has_zstd=no
+         nc_hdf5_plugin_path=""
+      else
+         nf_has_zstd=yes
+         nc_hdf5_plugin_path="(HDF5_PLUGIN_PATH: ${HDF5_PLUGIN_PATH})"
+         AC_DEFINE([ENABLE_ZSTD], [1], [Enable Zstandard compression support])   
       fi
+   else
+      nf_has_zstd=no
    fi
 else
-   nc_has_zstd=no
+   nf_has_zstd=no
 fi
 ###
 # End Zstandard logic stanza
@@ -594,6 +598,7 @@ AM_CONDITIONAL([BUILD_PARALLEL4], [test "x$nc_has_parallel4" = xyes])
 AM_CONDITIONAL([BUILD_PARALLEL], [test "x$nc_has_pnetcdf" = xyes -o "x$nc_has_parallel4" = xyes])
 AM_CONDITIONAL([TEST_FILTERS], [test "x$enable_filter_test" = xyes])
 
+
 AC_CHECK_HEADER(stdlib.h, ,AC_DEFINE([NO_STDLIB_H], [], [no stdlib.h]))
 AC_CHECK_HEADER(sys/types.h, ,AC_DEFINE([NO_SYS_TYPES_H], [], [no sys_types.h]))
 AC_CHECK_HEADERS([sys/param.h])
@@ -662,13 +667,14 @@ AC_SUBST(HAS_DAP,[$nc_has_dap])
 AC_SUBST(HAS_NC2,[$nc_build_v2])
 AC_SUBST(HAS_NC4,[$nc_build_v4])
 AC_SUBST(HAS_SZIP_WRITE,[$nc_has_szip_write])
-AC_SUBST(HAS_ZSTD,[$nc_has_zstd])
+AC_SUBST(HAS_ZSTD,[$nf_has_zstd])
 AC_SUBST(HAS_QUANTIZE,[$nc_has_quantize])
 AC_SUBST(HAS_LOGGING,[$nc_has_logging])
 AC_SUBST(HAS_CDF5,[$nc_has_cdf5])
 AC_SUBST(HAS_PNETCDF,[$nc_has_pnetcdf])
 AC_SUBST(HAS_NC4_PARALLEL,[$nc_has_parallel4])
 AC_SUBST(HAS_PARALLEL,[$nc_has_parallel])
+AC_SUBST(NF_HDF5_PLUGIN_PATH, [$nc_hdf5_plugin_path])
 
 # Some files need to exist in build directories that do not correspond
 # to their source directory, or the test program makes an assumption
@@ -702,3 +708,24 @@ AC_CONFIG_FILES([Makefile
 AC_OUTPUT()
 
 cat libnetcdff.settings
+
+##
+# This can be done more elegantly, but for the sake of expediency
+# we will do it this way.
+##
+if test "x$nc_has_zstd" = xyes; then
+   if test "x$nf_has_zstd" = xno; then
+      if test "x${HDF5_PLUGIN_PATH}" = "x"; then
+         echo ""
+         AC_MSG_WARN([ ])
+         AC_MSG_WARN([------------------------------------------])
+         AC_MSG_WARN([libnetcdf was built with zstd support, but HDF5_PLUGIN_PATH is not set, so zstd support is not enabled in libnetcdff. Set HDF5_PLUGIN_PATH and re-run configure if you want to enable zstd support.])
+         echo ""
+         AC_MSG_WARN([You can use `nc-config --plugindir` to determine the appropriate value for HDF5_PLUGIN_PATH])
+         AC_MSG_WARN([------------------------------------------])
+         AC_MSG_WARN([ ])
+      fi
+   fi
+fi
+
+
