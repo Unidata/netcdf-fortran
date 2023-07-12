@@ -8,6 +8,8 @@
 #Minimum required CMake Version
 cmake_minimum_required(VERSION 3.12.0)
 
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
 #Project Name for netCDF-Fortran
 PROJECT (NC4F
 LANGUAGES C Fortran
@@ -338,7 +340,7 @@ ENDMACRO()
 # CRT libs, MT tells VS to use the static CRT libs.
 #
 # Taken From:
-# 	http://www.cmake.org/Wiki/CMake_FAQ#How_can_I_build_my_MSVC_application_with_a_static_runtime.3F
+#   http://www.cmake.org/Wiki/CMake_FAQ#How_can_I_build_my_MSVC_application_with_a_static_runtime.3F
 #
 MACRO(specify_static_crt_flag)
 
@@ -641,7 +643,7 @@ CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} oc_open "" BUILD_DAP)
 ###
 # Check to see if szip write capability is present in netcdf-c.
 ###
-SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_INCLUDE_DIR})
+SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_C_INCLUDE_DIR})
 CHECK_C_SOURCE_COMPILES("
 #include <netcdf_meta.h>
 #if !NC_HAS_SZIP_WRITE
@@ -652,7 +654,7 @@ int main() {return 0;}" HAVE_SZIP_WRITE)
 ###
 # Check to see if quantize capability is present in netcdf-c.
 ###
-SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_INCLUDE_DIR})
+SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_C_INCLUDE_DIR})
 CHECK_C_SOURCE_COMPILES("
 #include <netcdf_meta.h>
 #if !NC_HAS_QUANTIZE
@@ -678,8 +680,8 @@ endif()
 
 OPTION(DISABLE_ZSTANDARD_PLUGIN "Disable ZStandard plugin detection and functionality, even if libnetcdf was compiled with plugin support" OFF)
 
-IF(NOT DISABLE_ZSTANDARD_PLUGIN) 
-  SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_INCLUDE_DIR})
+IF(NOT DISABLE_ZSTANDARD_PLUGIN)
+  SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_C_INCLUDE_DIR})
   CHECK_C_SOURCE_COMPILES("
   #include <netcdf_meta.h>
   #if !NC_HAS_ZSTD
