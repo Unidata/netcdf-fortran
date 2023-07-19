@@ -3,13 +3,13 @@ Module netcdf_nc_data
 ! Data types and flags for Fortran2003 interfaces to NetCDF C routines
 !
 ! Written by: Richard Weed, Ph.D.
-!             Center for Advanced Vehicular Systems     
+!             Center for Advanced Vehicular Systems
 !             Mississippi State University
 !             rweed@cavs.msstate.edu
 
 
 ! License (and other Lawyer Language)
- 
+
 ! This software is released under the Apache 2.0 Open Source License. The
 ! full text of the License can be viewed at :
 !
@@ -43,7 +43,7 @@ Module netcdf_nc_data
 ! kind variables contained in Fortran 2008 ISO_FORTRAN_ENV module when
 ! compilers support it. Actually most of the major compilers (and even
 ! the latest gfortran) support these now (Feb. 2012)
- 
+
 #ifdef HAVE_F2008
  USE ISO_FORTRAN_ENV, ONLY: REAL32, REAL64, INT8, INT16, INT32, INT64
 #endif
@@ -54,11 +54,11 @@ Module netcdf_nc_data
 ! module
 
 #ifndef HAVE_F2008
- 
+
 ! Create our own REAL32, REAL64, INT8, INT16, INT32, INT64 if we don't have F2008
 ! ISO_FORTRAN_ENV module
 
- Integer, Parameter, PRIVATE :: REAL32 = SELECTED_REAL_KIND(P=6,  R=37)   ! float 
+ Integer, Parameter, PRIVATE :: REAL32 = SELECTED_REAL_KIND(P=6,  R=37)   ! float
  Integer, Parameter, PRIVATE :: REAL64 = SELECTED_REAL_KIND(P=13, R=307)  ! double
  Integer, Parameter, PRIVATE :: INT8   = SELECTED_INT_KIND( 2)
  Integer, Parameter, PRIVATE :: INT16  = SELECTED_INT_KIND( 4)
@@ -74,14 +74,14 @@ Module netcdf_nc_data
  Integer, Parameter :: IK2 = INT16
  Integer, Parameter :: IK4 = INT32
  Integer, Parameter :: IK8 = INT64
- 
+
 ! Define processor/compiler dependent parameters for ptrdiff_t, signed char,
 ! and short types. Note prtdiff_t was not defined in the FORTRAN 2003
 ! standard as an interoperable type in ISO_C_BINDING but was added as part of
-! the recent TS29113 Technical Specification "Futher Interoperability with C" 
+! the recent TS29113 Technical Specification "Futher Interoperability with C"
 ! passed in 2012. For now we will make our own using C_INT32_T or C_INT64_T
-! but allow users to use the default definition for compilers that support 
-! TS29113 (like gfortran 4.8). Default will be C_INTPTR_T 
+! but allow users to use the default definition for compilers that support
+! TS29113 (like gfortran 4.8). Default will be C_INTPTR_T
 
 #ifndef HAVE_TS29113_SUPPORT
 #if (SIZEOF_PTRDIFF_T == 4)
@@ -93,7 +93,7 @@ Module netcdf_nc_data
 #endif
 #endif
 
-! Set KIND parameters for 1 and 2 byte integers if the system 
+! Set KIND parameters for 1 and 2 byte integers if the system
 ! supports them based on what is set by configure in nfconfig.inc.
 ! The routines that use these values will issue an EBADTYPE error
 ! and exit if C_SIGNED_CHAR and C_SHORT are not supported in
@@ -139,11 +139,14 @@ Module netcdf_nc_data
 ! Set Fortran default integer kind. This
 ! should take care of the case were default
 ! integer is a 64 bit int (ala prehistoric
-! CRAYS) 
+! CRAYS)
 
-#ifdef NF_INT_IS_C_LONG
+#ifdef NF_INT_IS_C_LONG_LONG
+ Integer, Parameter :: CINT = C_LONG_LONG
+ Integer, Parameter :: NFINT = IK8
+#elif NF_INT_IS_C_LONG
  Integer, Parameter :: CINT = C_LONG
- Integer, Parameter :: NFINT = IK8 
+ Integer, Parameter :: NFINT = IK8
 #else
  Integer, Parameter :: CINT = C_INT
  Integer, Parameter :: NFINT = IK4
@@ -164,7 +167,7 @@ Module netcdf_nc_data
 
 ! Set Fortran default real kind. This should
 ! take care of the case were the default real
-! type is a 64 bit real (ala prehistoric CRAYs) 
+! type is a 64 bit real (ala prehistoric CRAYs)
 
 #ifdef NF_REAL_IS_C_DOUBLE
   Integer, Parameter :: NFREAL = RK8
@@ -178,8 +181,8 @@ Module netcdf_nc_data
 
 ! This will eventually be used to replace the current integer values in the
 ! interfaces with something that should be consistent with C enum data
-! types. Mostly this is cosmetic to identify in the code that we are 
-! passing something that is a enumerator member in C. 
+! types. Mostly this is cosmetic to identify in the code that we are
+! passing something that is a enumerator member in C.
 
  Enum, BIND(C)
    Enumerator :: dummy
@@ -189,15 +192,15 @@ Module netcdf_nc_data
 
  Integer, Parameter :: C_ENUM = KIND(dummy)
 
- 
+
 !--------- Define default C interface parameters from netcdf.h   ---------------
 
-! This is not a complete impementation of the C header files but 
+! This is not a complete impementation of the C header files but
 ! defines NC_ values equivalent to the values in the netcdf.inc files
 ! excluding the V2 values
 
 !                     NETCDF3 data
-!               
+!
 ! Define enumerator nc_type data as integers
 
  Integer(C_INT), Parameter :: NC_NAT    = 0
@@ -210,7 +213,7 @@ Module netcdf_nc_data
 
 ! Default fill values
 
- Character(KIND=C_CHAR), Parameter :: NC_FILL_CHAR   = C_NULL_CHAR 
+ Character(KIND=C_CHAR), Parameter :: NC_FILL_CHAR   = C_NULL_CHAR
  Integer(C_SIGNED_CHAR), Parameter :: NC_FILL_BYTE   = -127_C_SIGNED_CHAR
  Integer(C_SHORT),       Parameter :: NC_FILL_SHORT  = -32767_C_SHORT
  Integer(C_INT),         Parameter :: NC_FILL_INT    = -2147483647_C_INT
@@ -245,14 +248,14 @@ Module netcdf_nc_data
 ! Unlimited dimension size argument and global attibute ID
 
  Integer(C_INT),  Parameter :: NC_UNLIMITED = 0
- Integer(C_INT),  Parameter :: NC_GLOBAL    = 0 
+ Integer(C_INT),  Parameter :: NC_GLOBAL    = 0
 
 ! Implementation limits (WARNING!  SHOULD BE THE SAME AS C INTERFACE)
 
- Integer(C_INT), Parameter :: NC_MAX_DIMS     = 1024 
- Integer(C_INT), Parameter :: NC_MAX_ATTRS    = 8192 
- Integer(C_INT), Parameter :: NC_MAX_VARS     = 8192 
- Integer(C_INT), Parameter :: NC_MAX_NAME     = 256 
+ Integer(C_INT), Parameter :: NC_MAX_DIMS     = 1024
+ Integer(C_INT), Parameter :: NC_MAX_ATTRS    = 8192
+ Integer(C_INT), Parameter :: NC_MAX_VARS     = 8192
+ Integer(C_INT), Parameter :: NC_MAX_NAME     = 256
  Integer(C_INT), Parameter :: NC_MAX_VAR_DIMS = NC_MAX_DIMS
 
 ! Error codes
@@ -327,10 +330,10 @@ Module netcdf_nc_data
 
  Integer(C_INT), Parameter :: NC_LONG     = NC_INT
  Integer(C_INT), Parameter :: NC_UBYTE    = 7
- Integer(C_INT), Parameter :: NC_USHORT   = 8 
+ Integer(C_INT), Parameter :: NC_USHORT   = 8
  Integer(C_INT), Parameter :: NC_UINT     = 9
- Integer(C_INT), Parameter :: NC_INT64    = 10 
- Integer(C_INT), Parameter :: NC_UINT64   = 11 
+ Integer(C_INT), Parameter :: NC_INT64    = 10
+ Integer(C_INT), Parameter :: NC_UINT64   = 11
  Integer(C_INT), Parameter :: NC_STRING   = 12
  Integer(C_INT), Parameter :: NC_VLEN     = 13
  Integer(C_INT), Parameter :: NC_OPAQUE   = 14
@@ -344,14 +347,14 @@ Module netcdf_nc_data
  Integer(C_LONG_LONG), Parameter :: NC_FILL_UINT   = 4294967295_C_LONG_LONG
  Integer(C_LONG_LONG), Parameter :: NC_FILL_INT64  = -9223372036854775806_C_LONG_LONG
 
-! extra netcdf4 variable flags 
+! extra netcdf4 variable flags
 
- Integer(C_INT), Parameter :: NC_CHUNK_SEQ      = 0 
- Integer(C_INT), Parameter :: NC_CHUNK_SUB      = 1 
- Integer(C_INT), Parameter :: NC_CHUNK_SIZES    = 2 
- Integer(C_INT), Parameter :: NC_ENDIAN_NATIVE  = 0 
- Integer(C_INT), Parameter :: NC_ENDIAN_LITTLE  = 1 
- Integer(C_INT), Parameter :: NC_ENDIAN_BIG     = 2 
+ Integer(C_INT), Parameter :: NC_CHUNK_SEQ      = 0
+ Integer(C_INT), Parameter :: NC_CHUNK_SUB      = 1
+ Integer(C_INT), Parameter :: NC_CHUNK_SIZES    = 2
+ Integer(C_INT), Parameter :: NC_ENDIAN_NATIVE  = 0
+ Integer(C_INT), Parameter :: NC_ENDIAN_LITTLE  = 1
+ Integer(C_INT), Parameter :: NC_ENDIAN_BIG     = 2
  Integer(C_INT), Parameter :: NC_CHUNKED        = 0
  Integer(C_INT), Parameter :: NC_NOTCONTIGUOUS  = 0
  Integer(C_INT), Parameter :: NC_CONTIGUOUS     = 1
@@ -366,7 +369,7 @@ Module netcdf_nc_data
 
  Integer(C_INT), Parameter :: NC_MPIIO          = 8192
  Integer(C_INT), Parameter :: NC_MPIPOSIX       = 16384
- Integer(C_INT), Parameter :: NC_PNETCDF        = NC_MPIIO 
+ Integer(C_INT), Parameter :: NC_PNETCDF        = NC_MPIIO
 
  Integer(C_INT), Parameter :: NC_SZIP_EC_OPTION_MASK = 4
  Integer(C_INT), Parameter :: NC_SZIP_NN_OPTION_MASK = 32
@@ -416,7 +419,7 @@ Module netcdf_nc_data
  Integer(C_INT), Parameter :: NC_ENOOBJECT      = -141
  Integer(C_INT), Parameter :: NC_EPLUGIN        = -142
 
-! Quantize feature 
+! Quantize feature
  Integer(C_INT), Parameter :: NC_NOQUANTIZE           = 0
  Integer(C_INT), Parameter :: NC_QUANTIZE_BITGROOM    = 1
 

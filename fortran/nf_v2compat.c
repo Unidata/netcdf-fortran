@@ -84,6 +84,8 @@ v2data_size(nc_type datatype)
         size = sizeof(int);
 #elif NF_INT_IS_C_LONG
         size = sizeof(long);
+#elif NF_INT_IS_C_LONG_LONG
+        size = sizeof(long long);
 #endif
         break;
     case NC_FLOAT:
@@ -187,6 +189,8 @@ f2c_v2imap(int ncid, int varid, const int* fimap, ptrdiff_t* cimap)
             size = sizeof(int);
 #               elif NF_INT_IS_C_LONG
             size = sizeof(long);
+#               elif NF_INT_IS_C_LONG_LONG
+            size = sizeof(long long);
 #               endif
             break;
         case NC_FLOAT:
@@ -662,6 +666,9 @@ c_ncvpt1 (
 #           elif NF_INT_IS_C_LONG
             status = nc_put_var1_long(ncid, varid, indices,
                                       (const long*)value);
+#           elif NF_INT_IS_C_LONG_LONG
+            status = nc_put_var1_longlong(ncid, varid, indices,
+                                      (const long long*)value);
 #           endif
             break;
         case NC_FLOAT:
@@ -783,6 +790,9 @@ c_ncvpt (
 #           elif NF_INT_IS_C_LONG
             status = nc_put_vara_long(ncid, varid, start, count,
                                       (const long*)value);
+#           elif NF_INT_IS_C_LONG_LONG
+            status = nc_put_vara_longlong(ncid, varid, start, count,
+                                      (const long long *)value);
 #           endif
             break;
         case NC_FLOAT:
@@ -933,6 +943,10 @@ c_ncvptg (
             status = nc_put_varm_long(ncid, varid, start, count,
                                       strides, imap,
                                       (const long*)value);
+#           elif NF_INT_IS_C_LONG_LONG
+            status = nc_put_varm_longlong(ncid, varid, start, count,
+                                      strides, imap,
+                                      (const long long *)value);
 #           endif
             break;
         case NC_FLOAT:
@@ -1072,6 +1086,9 @@ c_ncvgt1 (
 #           elif NF_INT_IS_C_LONG
             status = nc_get_var1_long(ncid, varid, indices,
                                       (long*)value);
+#           elif NF_INT_IS_C_LONG_LONG
+            status = nc_get_var1_longlong(ncid, varid, indices,
+                                      (long long *)value);
 #           endif
             break;
         case NC_FLOAT:
@@ -1202,6 +1219,9 @@ c_ncvgt(
 #           elif NF_INT_IS_C_LONG
             status = nc_get_vara_long(ncid, varid, start, count,
                                       (long*)value);
+#           elif NF_INT_IS_C_LONG_LONG
+            status = nc_get_vara_longlong(ncid, varid, start, count,
+                                      (long long *)value);
 #           endif
             break;
         case NC_FLOAT:
@@ -1350,6 +1370,10 @@ c_ncvgtg (
             status = nc_get_varm_long(ncid, varid, start, count,
                                       strides, imap,
                                       (long*)value);
+#           elif NF_INT_IS_C_LONG_LONG
+            status = nc_get_varm_longlong(ncid, varid, start, count,
+                                      strides, imap,
+                                      (long long*)value);
 #           endif
             break;
         case NC_FLOAT:
@@ -1503,6 +1527,9 @@ c_ncapt (
 #       elif NF_INT_IS_C_LONG
         status = nc_put_att_long(ncid, varid, attname, datatype,
                                  attlen, (const long*)value);
+#       elif NF_INT_IS_C_LONG_LONG
+        status = nc_put_att_longlong(ncid, varid, attname, datatype,
+                                 attlen, (const long long *)value);
 #       endif
         break;
     case NC_FLOAT:
@@ -1640,6 +1667,9 @@ c_ncagt(
 #           elif NF_INT_IS_C_LONG
             status = nc_get_att_long(ncid, varid, attname,
                                      (long*)value);
+#           elif NF_INT_IS_C_LONG_LONG
+            status = nc_get_att_longlong(ncid, varid, attname,
+                                     (long long*)value);
 #           endif
             break;
         case NC_FLOAT:

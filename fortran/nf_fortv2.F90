@@ -1446,13 +1446,14 @@
  Character(LEN=*), Intent(INOUT) :: string 
  Integer,          Intent(OUT)   :: rcode
 
- Integer(C_INT)                 :: cncid, cvarid, crcode
+ Integer(C_INT)                 :: cncid, cvarid, clenstr, crcode
  Character(LEN=(LEN(attnam)+1)) :: cattnam
  Character(LEN=(lenstr+1))      :: cstring
  Integer                        :: ilen
 
  cncid   = ncid
  cvarid  = varid - 1
+ clenstr = lenstr
  rcode   = 0
  string  = REPEAT(" ", LEN(string))
  cstring = REPEAT(" ", LEN(cstring))
@@ -1461,7 +1462,7 @@
 
  cattnam = addCNullChar(attnam, ilen)
  
- Call c_ncagtc(cncid, cvarid, cattnam(1:ilen), cstring, lenstr, &
+ Call c_ncagtc(cncid, cvarid, cattnam(1:ilen), cstring, clenstr, &
                crcode)
 
  string(1:lenstr) = cstring(1:lenstr)

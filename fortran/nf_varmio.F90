@@ -9,7 +9,7 @@
 
 
 ! License (and other Lawyer Language)
- 
+
 ! This software is released under the Apache 2.0 Open Source License. The
 ! full text of the License can be viewed at :
 !
@@ -44,12 +44,12 @@
 
  Integer,          Intent(IN) :: ncid, varid
  Integer,          Intent(IN) :: start(*), counts(*), strides(*), maps(*)
- Character(LEN=*), Intent(IN) :: text 
+ Character(LEN=*), Intent(IN) :: text
 
  Integer                      :: status
 
  Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
- Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr, cmapsptr 
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr, cmapsptr
  Integer        :: ndims
 
  Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
@@ -152,7 +152,7 @@
  EndIf
 
  cstatus = nc_put_varm_text(cncid, cvarid, cstartptr, ccountsptr, &
-                            cstridesptr, cmapsptr, text) 
+                            cstridesptr, cmapsptr, text)
 
  status = cstatus
 
@@ -226,16 +226,16 @@
 
 #if NF_INT1_IS_C_SIGNED_CHAR
  cstatus = nc_put_varm_schar(cncid, cvarid, cstartptr, ccountsptr, &
-                             cstridesptr, cmapsptr, i1vals) 
+                             cstridesptr, cmapsptr, i1vals)
 #elif NF_INT1_IS_C_SHORT
  cstatus = nc_put_varm_short(cncid, cvarid, cstartptr, ccountsptr, &
-                             cstridesptr, cmapsptr, i1vals) 
+                             cstridesptr, cmapsptr, i1vals)
 #elif NF_INT1_IS_C_INT
  cstatus = nc_put_varm_int(cncid, cvarid, cstartptr, ccountsptr, &
-                           cstridesptr, cmapsptr, i1vals) 
+                           cstridesptr, cmapsptr, i1vals)
 #elif NF_INT1_IS_C_LONG
  cstatus = nc_put_varm_long(cncid, cvarid, cstartptr, ccountsptr, &
-                            cstridesptr, cmapsptr, i1vals) 
+                            cstridesptr, cmapsptr, i1vals)
 #endif
 
  status = cstatus
@@ -310,14 +310,14 @@
 
 #if NF_INT2_IS_C_SHORT
  cstatus = nc_put_varm_short(cncid, cvarid, cstartptr, ccountsptr, &
-                             cstridesptr, cmapsptr, i2vals) 
+                             cstridesptr, cmapsptr, i2vals)
 #elif NF_INT2_IS_C_INT
  cstatus = nc_put_varm_int(cncid, cvarid, cstartptr, ccountsptr, &
-                           cstridesptr, cmapsptr, i2vals) 
+                           cstridesptr, cmapsptr, i2vals)
 #elif NF_INT2_IS_C_LONG
  cstatus = nc_put_varm_long(cncid, cvarid, cstartptr, ccountsptr, &
                             cstridesptr, cmapsptr, i2vals)
-#endif 
+#endif
 
  status = cstatus
 
@@ -386,10 +386,13 @@
 
 #if NF_INT_IS_C_INT
  cstatus = nc_put_varm_int(cncid, cvarid, cstartptr, ccountsptr, &
-                           cstridesptr, cmapsptr, ivals) 
+                           cstridesptr, cmapsptr, ivals)
 #elif NF_INT_IS_C_LONG
  cstatus = nc_put_varm_long(cncid, cvarid, cstartptr, ccountsptr, &
-                            cstridesptr, cmapsptr, ivals) 
+                            cstridesptr, cmapsptr, ivals)
+#elif NF_INT_IS_C_LONG_LONG
+ cstatus = nc_put_varm_longlong(cncid, cvarid, cstartptr, ccountsptr, &
+                            cstridesptr, cmapsptr, ivals)
 #endif
 
  status = cstatus
@@ -459,10 +462,10 @@
 
 #if NF_REAL_IS_C_DOUBLE
  cstatus = nc_put_varm_double(cncid, cvarid, cstartptr, ccountsptr, &
-                              cstridesptr, cmapsptr, rvals) 
+                              cstridesptr, cmapsptr, rvals)
 #else
  cstatus = nc_put_varm_float(cncid, cvarid, cstartptr, ccountsptr, &
-                             cstridesptr, cmapsptr, rvals) 
+                             cstridesptr, cmapsptr, rvals)
 #endif
 
  status = cstatus
@@ -529,9 +532,9 @@
      cmapsptr          = C_LOC(cmaps)
    EndIf
  EndIf
-  
+
  cstatus = nc_put_varm_double(cncid, cvarid, cstartptr, ccountsptr, &
-                              cstridesptr, cmapsptr, dvals) 
+                              cstridesptr, cmapsptr, dvals)
 
  status = cstatus
 
@@ -627,7 +630,7 @@
 
  Integer,          Intent(IN)  :: ncid, varid
  Integer,          Intent(IN)  :: start(*), counts(*), strides(*), maps(*)
- Character(LEN=*), Intent(OUT) :: text 
+ Character(LEN=*), Intent(OUT) :: text
 
  Integer                       :: status
 
@@ -668,7 +671,7 @@
  EndIf
 
  cstatus = nc_get_varm_text(cncid, cvarid, cstartptr, ccountsptr, &
-                            cstridesptr, cmapsptr, text) 
+                            cstridesptr, cmapsptr, text)
 
  status = cstatus
 
@@ -696,7 +699,7 @@
 
  Integer,          Intent(IN)  :: ncid, varid
  Integer,          Intent(IN)  :: start(*), counts(*), strides(*), maps(*)
- Character(LEN=1), Intent(OUT) :: text(*) 
+ Character(LEN=1), Intent(OUT) :: text(*)
 
  Integer                       :: status
 
@@ -736,7 +739,7 @@
  EndIf
 
  cstatus = nc_get_varm_text(cncid, cvarid, cstartptr, ccountsptr, &
-                            cstridesptr, cmapsptr, text) 
+                            cstridesptr, cmapsptr, text)
 
  status = cstatus
 
@@ -810,16 +813,16 @@
 
 #if NF_INT1_IS_C_SIGNED_CHAR
  cstatus = nc_get_varm_schar(cncid, cvarid, cstartptr, ccountsptr, &
-                             cstridesptr, cmapsptr, i1vals) 
+                             cstridesptr, cmapsptr, i1vals)
 #elif NF_INT1_IS_C_SHORT
  cstatus = nc_get_varm_short(cncid, cvarid, cstartptr, ccountsptr, &
-                             cstridesptr, cmapsptr, i1vals) 
+                             cstridesptr, cmapsptr, i1vals)
 #elif NF_INT1_IS_C_INT
  cstatus = nc_get_varm_int(cncid, cvarid, cstartptr, ccountsptr, &
-                           cstridesptr, cmapsptr, i1vals) 
+                           cstridesptr, cmapsptr, i1vals)
 #elif NF_INT1_IS_C_LONG
  cstatus = nc_get_varm_long(cncid, cvarid, cstartptr, ccountsptr, &
-                            cstridesptr, cmapsptr, i1vals) 
+                            cstridesptr, cmapsptr, i1vals)
 #endif
 
  status = cstatus
@@ -894,14 +897,14 @@
 
 #if NF_INT2_IS_C_SHORT
  cstatus = nc_get_varm_short(cncid, cvarid, cstartptr, ccountsptr, &
-                             cstridesptr, cmapsptr, i2vals) 
+                             cstridesptr, cmapsptr, i2vals)
 #elif NF_INT2_IS_C_INT
  cstatus = nc_get_varm_int(cncid, cvarid, cstartptr, ccountsptr, &
-                           cstridesptr, cmapsptr, i2vals) 
+                           cstridesptr, cmapsptr, i2vals)
 #elif NF_INT2_IS_C_LONG
  cstatus = nc_get_varm_long(cncid, cvarid, cstartptr, ccountsptr, &
                             cstridesptr, cmapsptr, i2vals)
-#endif 
+#endif
 
  status = cstatus
 
@@ -934,7 +937,7 @@
  Integer                     :: status
 
  Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
- Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr, cmapsptr 
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr, cmapsptr
  Integer        :: ndims
 
  Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
@@ -970,11 +973,14 @@
 
 #if NF_INT_IS_C_INT
  cstatus = nc_get_varm_int(cncid, cvarid, cstartptr, ccountsptr, &
-                           cstridesptr, cmapsptr, ivals) 
+                           cstridesptr, cmapsptr, ivals)
 #elif NF_INT_IS_C_LONG
  cstatus = nc_get_varm_long(cncid, cvarid, cstartptr, ccountsptr, &
                             cstridesptr, cmapsptr, ivals)
-#endif 
+#elif NF_INT_IS_C_LONG_LONG
+ cstatus = nc_get_varm_longlong(cncid, cvarid, cstartptr, ccountsptr, &
+                            cstridesptr, cmapsptr, ivals)
+#endif
 
  status = cstatus
 
@@ -1043,10 +1049,10 @@
 
 #if NF_REAL_IS_C_DOUBLE
  cstatus = nc_get_varm_double(cncid, cvarid, cstartptr, ccountsptr, &
-                              cstridesptr, cmapsptr, rvals) 
+                              cstridesptr, cmapsptr, rvals)
 #else
  cstatus = nc_get_varm_float(cncid, cvarid, cstartptr, ccountsptr, &
-                             cstridesptr, cmapsptr, rvals) 
+                             cstridesptr, cmapsptr, rvals)
 #endif
 
  status = cstatus
@@ -1080,7 +1086,7 @@
  Integer                :: status
 
  Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
- Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr, cmapsptr 
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr, cmapsptr
  Integer        :: ndims
 
  Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
@@ -1115,7 +1121,7 @@
  EndIf
 
  cstatus = nc_get_varm_double(cncid, cvarid, cstartptr, ccountsptr, &
-                              cstridesptr, cmapsptr, dvals) 
+                              cstridesptr, cmapsptr, dvals)
 
  status = cstatus
 

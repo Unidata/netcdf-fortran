@@ -147,7 +147,7 @@
 
 
 !
-!  Does x == y, where one is internal and other external (netCDF)?  
+!  Does x == y, where one is internal and other external (netCDF)?
 !  Use tolerant comparison based on IEEE FLT_EPSILON or DBL_EPSILON.
 !
       function equal(x, y, extType, itype)
@@ -205,7 +205,7 @@
       integer roll
       doubleprecision   udrand
       external          udrand
-      
+
 1     roll = (udrand(0) * (n-1)) + 0.5
       if (roll .ge. n) goto 1
       end
@@ -305,7 +305,7 @@
 
 #ifdef USE_EXTREME_NUMBERS
 ! Generate data values as function of type, rank (-1 for attribute), index */
-      function hash(type, rank, index) 
+      function hash(type, rank, index)
       use tests, ONLY: NF_CHAR, NF_BYTE, NF_SHORT, NF_INT, NF_FLOAT,    &
      &                 NF_DOUBLE, X_CHAR_MIN, X_CHAR_MAX, X_BYTE_MIN,   &
      &                 X_BYTE_MAX, X_SHORT_MIN, X_SHORT_MAX, X_INT_MIN, &
@@ -428,7 +428,7 @@
 #define SANE_DOUBLE 1000.0
 
 ! Generate data values as function of type, rank (-1 for attribute), index */
-      function hash(type, rank, index) 
+      function hash(type, rank, index)
       use tests, ONLY: NF_CHAR, NF_BYTE, NF_SHORT, NF_INT, NF_FLOAT,    &
      &                 NF_DOUBLE, X_CHAR_MIN, X_CHAR_MAX, X_BYTE_MIN,   &
      &                 X_BYTE_MAX, X_SHORT_MIN, X_SHORT_MAX, X_INT_MIN, &
@@ -557,7 +557,7 @@
       real(RK8) hash4
 
       hash4 = hash( type, rank, index )
-      if ((itype .eq. NFT_CHAR) .and. (type .eq. NF_BYTE) .and. 
+      if ((itype .eq. NFT_CHAR) .and. (type .eq. NF_BYTE) .and.
      +    (hash4 .ge. -128) .and. (hash4 .lt. 0)) hash4 = hash4 + 256
       end
 
@@ -636,11 +636,11 @@
 
 !
 !   define global variables:
-!   dim_name, dim_len, 
+!   dim_name, dim_len,
 !   var_name, var_type, var_rank, var_shape, var_natts, var_dimid, var_nels
 !   att_name, gatt_name, att_type, gatt_type, att_len, gatt_len
 !
-        subroutine init_gvars 
+        subroutine init_gvars
         use tests, NTYPESP=>NTYPES, MAX_DIM_LENP=>MAX_DIM_LEN,          &
      &             NVARSP=>NVARS
         implicit        none
@@ -702,7 +702,7 @@
                     end if
 
                     do 4, ac = 1, var_natts(vn)
-                        attname(ac,vn) = 
+                        attname(ac,vn) =
      +                      type_letter(1+mod(an, NTYPESP))
                         attlen(ac,vn) = an
                         atttype(ac,vn) =
@@ -724,7 +724,7 @@
                         if (var_dimid(dn,vn) .gt. 9) then
                             stop 2
                         end if
-                        var_name(vn)(rank+2-dn:rank+2-dn) = 
+                        var_name(vn)(rank+2-dn:rank+2-dn) =
      +                      digit(var_dimid(dn,vn))
                         if (var_dimid(dn,vn) .ne. RECDIM) then
                             var_shape(dn,vn) = var_dimid(dn,vn) - 1
@@ -780,7 +780,7 @@
         integer         var_id
 
         do 1, i = 1, NVARS
-            err = nf_def_var(ncid, var_name(i), var_type(i), 
+            err = nf_def_var(ncid, var_name(i), var_type(i),
      +                       var_rank(i), var_dimid(1,i), var_id)
             if (err .ne. 0) then
                 call errore('nf_def_var: ', err)
@@ -796,7 +796,7 @@
         integer         ncid
 
         integer                 err             !/* netCDF status */
-        integer                 i               !/* variable index (0 => global 
+        integer                 i               !/* variable index (0 => global
                                                 ! * attribute */
         integer                 k               !/* attribute index */
         integer                 j               !/* index of attribute */
@@ -812,7 +812,7 @@
                     catt = ' '
                     do 3, k = 1, ATT_LEN(j,i)
                         ndx(1) = k
-                        catt(k:k) = char(int(hash(ATT_TYPE(j,i), -1, 
+                        catt(k:k) = char(int(hash(ATT_TYPE(j,i), -1,
      +                                   ndx)))
 3                   continue
 !                   /*
@@ -825,7 +825,7 @@
                     catt(ATT_LEN(j,i)+1:ATT_LEN(j,i)+1) = char(1)
                     catt(ATT_LEN(j,i)+2:ATT_LEN(j,i)+2) = char(0)
 
-                    err = nf_put_att_text(ncid, varid(i), 
+                    err = nf_put_att_text(ncid, varid(i),
      +                                    ATT_NAME(j,i),
      +                                    ATT_LEN(j,i), catt)
                     if (err .ne. 0) then
@@ -882,14 +882,14 @@
         do 2, i = 1, NVARS
             allInRange = .true.
             do 3, j = 1, var_nels(i)
-                err = index2indexes(j, var_rank(i), var_shape(1,i), 
+                err = index2indexes(j, var_rank(i), var_shape(1,i),
      +                              index)
                 if (err .ne. 0) then
                     call errori(
      +                  'Error calling index2indexes() for var ', j)
                 end if
                 if (var_name(i)(1:1) .eq. 'c') then
-                    text(j:j) = 
+                    text(j:j) =
      +                  char(int(hash(var_type(i), var_rank(i), index)))
                 else
                     value(j)  = hash(var_type(i), var_rank(i), index)
@@ -907,7 +907,7 @@
 !                */
                 text(var_nels(i)+1:var_nels(i)+1) = char(1)
                 text(var_nels(i)+2:var_nels(i)+2) = char(0)
-                err = nf_put_vara_text(ncid, i, start, var_shape(1:,i), & 
+                err = nf_put_vara_text(ncid, i, start, var_shape(1:,i), &
      &                                 text)
                 if (err .ne. 0) then
                     call errore('nf_put_vara_text: ', err)
@@ -921,8 +921,8 @@
                     end if
                 else
                     if (err .ne. NF_ERANGE) then                        &
-                        call errore(                                    & 
-     &                      'type-conversion range error: status = ',   & 
+                        call errore(                                    &
+     &                      'type-conversion range error: status = ',   &
      &                      err)
                     end if
                 end if
@@ -932,7 +932,7 @@
 
 
 ! Create & write all of specified file using global variables */
-        subroutine write_file(filename) 
+        subroutine write_file(filename)
         use tests
         implicit        none
         character*(*)   filename
@@ -1017,7 +1017,7 @@
 
         do 1, i = 1, NVARS
             isChar = var_type(i) .eq. NF_CHAR
-            err = nf_inq_var(ncid, i, name, datatype, ndims, dimids, 
+            err = nf_inq_var(ncid, i, name, datatype, ndims, dimids,
      +          natt)
             if (err .ne. 0) then
                 call errore('nf_inq_var: ', err)
@@ -1041,7 +1041,7 @@
                 end if
 2           continue
             do 3, j = 1, var_nels(i)
-                err = index2indexes(j, var_rank(i), var_shape(1,i), 
+                err = index2indexes(j, var_rank(i), var_shape(1,i),
      +                  index)
                 if (err .ne. 0)  then
                     call errori('error in index2indexes() 2, variable ',
@@ -1084,7 +1084,7 @@
 !
 ! check attributes of specified file have expected name, type, length & values
 !
-        subroutine check_atts(ncid) 
+        subroutine check_atts(ncid)
         use tests
         implicit        none
         integer         ncid
@@ -1136,7 +1136,7 @@
                     end if
                     do 3, k = 1, ATT_LEN(j,i)
                         ndx(1) = k
-                        if (ichar(text(k:k)) .ne. hash(datatype, -1, 
+                        if (ichar(text(k:k)) .ne. hash(datatype, -1,
      +                                                 ndx))
      +                  then
                             call errori(
@@ -1171,7 +1171,7 @@
 
 
 ! Check file (dims, vars, atts) corresponds to global variables */
-        subroutine check_file(filename) 
+        subroutine check_file(filename)
         use tests
         implicit        none
         character*(*)   filename
@@ -1202,7 +1202,7 @@
 !
 
       FUNCTION VARID(VID)
-      use tests, ONLY: NF_GLOBAL 
+      use tests, ONLY: NF_GLOBAL
       IMPLICIT NONE
       INTEGER VID
       INTEGER VARID
@@ -1303,19 +1303,22 @@
         else if (type .eq. NFT_INT2) then
 #if NF_INT2_IS_C_SHORT
             internal_min = min_short()
-#endif            
+#endif
 #if NF_INT2_IS_C_INT
             internal_min = min_int()
-#endif            
+#endif
 #if NF_INT2_IS_C_LONG
             internal_min = min_long()
 #endif
         else if (type .eq. NFT_INT) then
 #if NF_INT_IS_C_INT
             internal_min = min_int()
-#endif            
+#endif
 #if NF_INT_IS_C_LONG
             internal_min = min_long()
+#endif
+#if NF_INT_IS_C_LONG_LONG
+            internal_min = min_longlong()
 #endif
         else if (type .eq. NFT_REAL) then
 #if NF_REAL_IS_C_FLOAT
@@ -1384,6 +1387,9 @@
 #if NF_INT_IS_C_LONG
             internal_max = max_long()
 #endif
+#if NF_INT_IS_C_LONG_LONG
+            internal_max = max_longlong()
+#endif
         else if (type .eq. NFT_REAL) then
 #if NF_REAL_IS_C_FLOAT
             internal_max = max_float()
@@ -1394,7 +1400,7 @@
         else if (type .eq. NFT_DOUBLE) then
 #if NF_DOUBLEPRECISION_IS_C_DOUBLE
             internal_max = max_double()
-#endif            
+#endif
 #if NF_DOUBLEPRECISION_IS_C_FLOAT
             internal_max = max_float()
 #endif

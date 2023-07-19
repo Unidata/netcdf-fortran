@@ -70,7 +70,7 @@ Interface
  End Function nc_inq_ncid
 End Interface
 !------------------------------- nc_inq_numgrps ------------------------------
-!**** NOT a Netcdf C function. Added to nf_lib.c support Fortran interaces
+!**** NOT a Netcdf C function. Added to nf_lib.c support Fortran interfaces
 Interface
  Function nc_inq_numgrps(ncid, numgrps) BIND(C)
 
@@ -83,7 +83,7 @@ Interface
  End Function nc_inq_numgrps
 End Interface
 !------------------------------- nc_inq_numtypes ------------------------------
-!**** NOT a Netcdf C function. Added to nf_lib.c support Fortran interaces
+!**** NOT a Netcdf C function. Added to nf_lib.c support Fortran interfaces
 Interface
  Function nc_inq_numtypes(ncid, numtypes) BIND(C)
 
@@ -190,9 +190,9 @@ Interface
 
  End Function nc_inq_grp_ncid
 End Interface
-!------------------------------- nc_inq_varids_f ------------------------------
+!------------------------------- nc_inq_varids --------------------------------
 Interface
- Function nc_inq_varids_f(ncid, nvars, varids) BIND(C)
+ Function nc_inq_varids(ncid, nvars, varids) BIND(C)
 
  USE ISO_C_BINDING, ONLY: C_INT
 
@@ -200,13 +200,13 @@ Interface
  Integer(C_INT), Intent(INOUT) :: nvars
  Integer(C_INT), Intent(INOUT) :: varids(*)
 
- Integer(C_INT)                :: nc_inq_varids_f
+ Integer(C_INT)                :: nc_inq_varids
 
- End Function nc_inq_varids_f
+ End Function nc_inq_varids
 End Interface
-!------------------------------- nc_inq_dimids_f ------------------------------
+!------------------------------- nc_inq_dimids ------------------------------
 Interface
- Function nc_inq_dimids_f(ncid, ndims, dimids, parent) BIND(C)
+ Function nc_inq_dimids(ncid, ndims, dimids, parent) BIND(C)
 
  USE ISO_C_BINDING, ONLY: C_INT
 
@@ -214,9 +214,22 @@ Interface
  Integer(C_INT), Intent(INOUT) :: ndims
  Integer(C_INT), Intent(INOUT) :: dimids(*)
 
- Integer(C_INT)                :: nc_inq_dimids_f
+ Integer(C_INT)                :: nc_inq_dimids
 
- End Function nc_inq_dimids_f
+ End Function nc_inq_dimids
+End Interface
+!------------------------------- nc_inq_numdimids -----------------------------
+!**** NOT a Netcdf C function. Added to nf_lib.c support Fortran interfaces
+Interface
+ Function nc_inq_numdimids(ncid, ndims, parent) BIND(C)
+
+ USE ISO_C_BINDING, ONLY: C_INT
+
+ Integer(C_INT), VALUE         :: ncid, parent
+ Integer(C_INT), Intent(INOUT) :: ndims
+
+ Integer(C_INT)                 :: nc_inq_numdimids
+ End Function nc_inq_numdimids
 End Interface
 !------------------------------- nc_inq_typeids -------------------------------
 Interface
@@ -303,9 +316,9 @@ Interface
 
  End Function nc_insert_compound
 End Interface
-!------------------------------- nc_insert_array_compound_f -------------------
+!------------------------------- nc_insert_array_compound -------------------
 Interface
- Function nc_insert_array_compound_f(ncid, xtype, name, offset, field_typeid, &
+ Function nc_insert_array_compound(ncid, xtype, name, offset, field_typeid, &
                                      ndims, dim_sizes) BIND(C)
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_CHAR
@@ -314,11 +327,11 @@ Interface
  Integer(C_INT),         VALUE         :: xtype, field_typeid  ! nc_type in C
  Integer(C_SIZE_T),      VALUE         :: offset
  Character(KIND=C_CHAR), Intent(IN)    :: name(*)
- Integer(C_INT),         Intent(INOUT) :: dim_sizes(*)
+ Integer(C_INT),         Intent(IN)    :: dim_sizes(*)
 
- Integer(C_INT)                        :: nc_insert_array_compound_f
+ Integer(C_INT)                        :: nc_insert_array_compound
 
- End Function nc_insert_array_compound_f
+ End Function nc_insert_array_compound
 End Interface
 !------------------------------- nc_inq_type ----------------------------------
 Interface
@@ -393,7 +406,7 @@ Interface
  End Function nc_inq_compound_nfields
 End Interface
 !------------------------------- nc_inq_compound_field_ndims ------------------
-!**** NOT a Netcdf C function. Added to nf_lib.c support Fortran interaces
+!**** NOT a Netcdf C function. Added to nf_lib.c support Fortran interfaces
 Interface
  Function nc_inq_compound_field_ndims(ncid, xtype, fieldid, ndims) BIND(C)
   
@@ -408,13 +421,11 @@ Interface
  End Function nc_inq_compound_field_ndims
 
 End Interface
-
-!------------------------------- nc_inq_compound_field_f ----------------------
+!------------------------------- nc_inq_compound_field ------------------------
 Interface
- Function nc_inq_compound_field_f(ncid, xtype, fieldid, name, offsetp, &
-                                  field_typeidp, ndimsp, dim_sizesp) BIND(C)
+ Function nc_inq_compound_field(ncid, xtype, fieldid, name, offsetp, &
+                                field_typeidp, ndimsp, dim_sizesp) BIND(C)
  
-
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_CHAR
 
  Integer(C_INT),         VALUE         :: ncid, fieldid
@@ -425,9 +436,9 @@ Interface
  Integer(C_INT),         Intent(INOUT) :: ndimsp
  Integer(C_INT),         Intent(INOUT) :: dim_sizesp(*)
 
- Integer(C_INT)                   :: nc_inq_compound_field_f
+ Integer(C_INT)                        :: nc_inq_compound_field
 
- End Function nc_inq_compound_field_f
+ End Function nc_inq_compound_field
 End Interface
 !------------------------------- nc_inq_compound_fieldoffset ------------------
 Interface
@@ -698,7 +709,7 @@ Interface
  End Function nc_inq_var_fill
 End Interface
 !------------------------------- nc_inq_varnparams ------------------------------
-!**** NOT a Netcdf C function. Added to nf_lib.c support Fortran interaces
+!**** NOT a Netcdf C function. Added to nf_lib.c support Fortran interfaces
 Interface
  Function nc_inq_varnparams(ncid, varid, nparamsp) BIND(C)
 

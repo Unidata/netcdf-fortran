@@ -4,13 +4,13 @@
 ! Replacement for fort-varaio.c
 
 ! Written by: Richard Weed, Ph.D.
-!             Center for Advanced Vehicular Systems 
+!             Center for Advanced Vehicular Systems
 !             Mississippi State University
 !             rweed@cavs.msstate.edu
 
 
 ! License (and other Lawyer Language)
- 
+
 ! This software is released under the Apache 2.0 Open Source License. The
 ! full text of the License can be viewed at :
 !
@@ -31,7 +31,7 @@
 !                          Added preprocessor test for int and real types
 ! Version 5.: Jan.  2016 - Replaced automatic arrays for cstart and ccounts
 !                          with allocatable arrays and general code cleanup
- 
+
 !--------------------------------- nf_put_vara_text ----------------------
  Function nf_put_vara_text(ncid, varid, start, counts, text) RESULT(status)
 
@@ -193,7 +193,7 @@
 #elif NF_INT1_IS_C_LONG
  cstatus = nc_put_vara_long(cncid, cvarid, cstartptr, ccountsptr, i1vals)
 #endif
- 
+
  status = cstatus
 
 ! Make sure there are no dangling pointers or and allocated arrays
@@ -313,6 +313,8 @@
  cstatus = nc_put_vara_int(cncid, cvarid, cstartptr, ccountsptr, ivals)
 #elif NF_INT_IS_C_LONG
  cstatus = nc_put_vara_long(cncid, cvarid, cstartptr, ccountsptr, ivals)
+#elif NF_INT_IS_C_LONG_LONG
+ cstatus = nc_put_vara_longlong(cncid, cvarid, cstartptr, ccountsptr, ivals)
 #endif
 
  status = cstatus
@@ -494,7 +496,7 @@
 
 ! Write out an array of any type. We use a C interop character string to
 ! pass values. Therefore, an explicit interface to nf_put_vara should not
-! be used in the calling routine. Just use external. 
+! be used in the calling routine. Just use external.
 
  USE netcdf_nc_interfaces
 
@@ -549,7 +551,7 @@
 !--------------------------------- nf_get_vara_text ----------------------
  Function nf_get_vara_text(ncid, varid, start, counts, text) RESULT(status)
 
-! Read in a character string from dataset for given start and count vectors 
+! Read in a character string from dataset for given start and count vectors
 
  USE netcdf_nc_interfaces
 
@@ -603,7 +605,7 @@
 !--------------------------------- nf_get_vara_text_a ----------------------
  Function nf_get_vara_text_a(ncid, varid, start, counts, text) RESULT(status)
 
-! Read in an array of characters for given start and count vectors 
+! Read in an array of characters for given start and count vectors
 
  USE netcdf_nc_interfaces
 
@@ -656,7 +658,7 @@
 !--------------------------------- nf_get_vara_int1 ------------------------
  Function nf_get_vara_int1(ncid, varid, start, counts, i1vals) RESULT(status)
 
-! Read in 8 bit integer array from dataset for given start and count vectors 
+! Read in 8 bit integer array from dataset for given start and count vectors
 
  USE netcdf_nc_interfaces
 
@@ -786,7 +788,7 @@
 !--------------------------------- nf_get_vara_int -------------------------
  Function nf_get_vara_int(ncid, varid, start, counts, ivals) RESULT(status)
 
-! Read in default integer array from dataset for given start and count vectors 
+! Read in default integer array from dataset for given start and count vectors
 
  USE netcdf_nc_interfaces
 
@@ -826,8 +828,10 @@
 
 #if NF_INT_IS_C_INT
  cstatus = nc_get_vara_int(cncid, cvarid, cstartptr, ccountsptr, ivals)
-#elif NF_INT_IS_C_LONG 
+#elif NF_INT_IS_C_LONG
  cstatus = nc_get_vara_long(cncid, cvarid, cstartptr, ccountsptr, ivals)
+#elif NF_INT_IS_C_LONG_LONG
+ cstatus = nc_get_vara_longlong(cncid, cvarid, cstartptr, ccountsptr, ivals)
 #endif
 
  status = cstatus
@@ -1009,7 +1013,7 @@
 
 ! Read in an array of any type. We use a C interop character string to
 ! pass values. Therefore, an explicit interface to nf_put_vara should not
-! be used in the calling routine. Just use external. 
+! be used in the calling routine. Just use external.
 
  USE netcdf_nc_interfaces
 

@@ -31,7 +31,8 @@ C     This is the name of the data file we will create.
       character*(4) var_name(NVARS)
       character*(4) dim_name
       parameter (dim_name = 'dim1')
-      integer NO_FILL, MY_FILL_VALUE
+      integer NO_FILL
+      integer*4 MY_FILL_VALUE
       parameter (NO_FILL = 1)
       parameter (MY_FILL_VALUE = 42)
 
@@ -60,7 +61,7 @@ C     Create a dimension.
       if (retval .ne. nf_noerr) stop 1
 
 C     Create a few integer variables.
-      do x = 1, NVARS      
+      do x = 1, NVARS
          retval = nf_def_var(ncid, var_name(x), NF_INT, NDIMS, dimids,
      $        varid(x))
          if (retval .ne. nf_noerr) stop 1
@@ -74,11 +75,11 @@ C     Set an alternative fill value for the third variable.
       retval = nf_def_var_fill(ncid, varid(3), 0, MY_FILL_VALUE)
       if (retval .ne. 0) stop 3
 
-C     Check it out. 
+C     Check it out.
 c      retval = check_file(ncid, var_name, dim_name)
 c      if (retval .ne. 0) stop 2
 
-C     Close the file. 
+C     Close the file.
       retval = nf_close(ncid)
       if (retval .ne. nf_noerr) stop 1
 
@@ -86,11 +87,11 @@ C     Reopen the file.
       retval = nf_open(FILE_NAME, NF_NOWRITE, ncid)
       if (retval .ne. nf_noerr) stop 1
 
-C     Check it out. 
+C     Check it out.
       retval = check_file(ncid, var_name, dim_name)
       if (retval .ne. 0) stop 4
 
-C     Close the file. 
+C     Close the file.
       retval = nf_close(ncid)
       if (retval .ne. nf_noerr) stop 1
 
@@ -111,7 +112,7 @@ C     I need these in both here and the main program.
       parameter (NVARS = 3)
       integer DATA_LEN
       parameter (DATA_LEN = 2)
-      integer MY_FILL_VALUE
+      integer*4 MY_FILL_VALUE
       parameter (MY_FILL_VALUE = 42)
 
 C     Parameters
@@ -122,7 +123,8 @@ C     Parameters
 C     Values that are read in, to check the file.
       integer ndims_in, nvars_in, ngatts_in, unlimdimid_in
       integer xtype_in, dimids_in(NDIMS), natts_in
-      integer varid_in(NVARS), dimid_in, no_fill_in, fill_value_in
+      integer varid_in(NVARS), dimid_in, no_fill_in
+      integer*4 fill_value_in
       character*(4) var_name_in
       integer int_data_in(DIM_LEN)
 
@@ -136,7 +138,7 @@ C     Check it out.
      $     .or. unlimdimid_in .ne. -1) stop 5
 
 C     Get the varids and the dimid.
-      do x = 1, NVARS      
+      do x = 1, NVARS
          retval = nf_inq_varid(ncid, var_name(x), varid_in(x))
          if (retval .ne. nf_noerr) stop 1
          if (varid_in(x) .ne. x) stop 6
@@ -147,7 +149,7 @@ C     Get the varids and the dimid.
 
 C     These things are the same for all three variables, except
 C     natts_in..
-      do x = 1, NVARS      
+      do x = 1, NVARS
          retval = nf_inq_var(ncid, varid_in(x), var_name_in, xtype_in,
      $        ndims_in, dimids_in, natts_in)
          if (retval .ne. nf_noerr) stop 1
@@ -201,4 +203,4 @@ C         print *, int_data_in(x)
       end do
 
       check_file = 0
-      end 
+      end

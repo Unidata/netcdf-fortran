@@ -34,7 +34,7 @@ C     Information for the vlen type we will define.
 C     Some data about and for the vlen.
       integer vlen_len, vlen_len_in
       parameter (vlen_len = 5)
-      integer data1(vlen_len), data1_in(vlen_len)
+      integer*4 data1(vlen_len), data1_in(vlen_len)
 
 C     These must be big enough to hold the struct nc_vlen in netcdf.h.
       integer*8 vlen(10), vlen_in(10)

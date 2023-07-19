@@ -9,7 +9,7 @@
 
 
 ! License (and other Lawyer Language)
- 
+
 ! This software is released under the Apache 2.0 Open Source License. The
 ! full text of the License can be viewed at :
 !
@@ -44,7 +44,7 @@
 
  Integer,          Intent(IN) :: ncid, varid
  Integer,          Intent(IN) :: start(*), counts(*), strides(*)
- Character(LEN=*), Intent(IN) :: text 
+ Character(LEN=*), Intent(IN) :: text
 
  Integer                      :: status
 
@@ -98,7 +98,7 @@
 
  Integer,          Intent(IN) :: ncid, varid
  Integer,          Intent(IN) :: start(*), counts(*), strides(*)
- Character(LEN=1), Intent(IN) :: text(*) 
+ Character(LEN=1), Intent(IN) :: text(*)
 
  Integer                      :: status
 
@@ -344,6 +344,9 @@
 #elif NF_INT_IS_C_LONG
  cstatus = nc_put_vars_long(cncid, cvarid, cstartptr, ccountsptr, &
                             cstridesptr, ivals)
+#elif NF_INT_IS_C_LONG_LONG
+ cstatus = nc_put_vars_longlong(cncid, cvarid, cstartptr, ccountsptr, &
+                            cstridesptr, ivals)
 #endif
 
  status = cstatus
@@ -555,7 +558,7 @@
 
 ! Write out a variable of any type. We use a C interop character string to
 ! hold the values. Therefore, an explicit interface to nf_put_vars should NOT
-! be used in the calling program. Just use external 
+! be used in the calling program. Just use external
 
  USE netcdf_nc_interfaces
 
@@ -563,11 +566,11 @@
 
  Integer,                Intent(IN)         :: ncid, varid
  Integer,                Intent(IN)         :: start(*), counts(*), strides(*)
- Character(KIND=C_CHAR), Intent(IN), TARGET :: values(*) 
+ Character(KIND=C_CHAR), Intent(IN), TARGET :: values(*)
  Integer                                    :: status
 
  Integer(C_INT) :: cncid, cvarid, cndims, cstat1, cstatus
- Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr, cvaluesptr 
+ Type(C_PTR)    :: cstartptr, ccountsptr, cstridesptr, cvaluesptr
  Integer        :: ndims
 
  Integer(C_SIZE_T),    ALLOCATABLE, TARGET :: cstart(:), ccounts(:)
@@ -626,7 +629,7 @@
 
  Integer,          Intent(IN)  :: ncid, varid
  Integer,          Intent(IN)  :: start(*), counts(*), strides(*)
- Character(LEN=*), Intent(OUT) :: text 
+ Character(LEN=*), Intent(OUT) :: text
 
  Integer                       :: status
 
@@ -945,6 +948,9 @@
 #elif NF_INT_IS_C_LONG
  cstatus = nc_get_vars_long(cncid, cvarid, cstartptr, ccountsptr, &
                             cstridesptr, ivals)
+#elif NF_INT_IS_C_LONG_LONG
+ cstatus = nc_get_vars_longlong(cncid, cvarid, cstartptr, ccountsptr, &
+                            cstridesptr, ivals)
 #endif
 
  status = cstatus
@@ -1155,7 +1161,7 @@
 
 ! Read in a variable of any type. We use a C interop character string to
 ! hold the values. Therefore, an explicit interface to nf_put_vars should NOT
-! be used in the calling program. Just use external 
+! be used in the calling program. Just use external
 
  USE netcdf_nc_interfaces
 

@@ -287,7 +287,7 @@
 
 #ifdef USE_EXTREME_NUMBERS
 !     Generate data values as function of type, rank (-1 for attribute), index */
-      function hash(type, rank, index) 
+      function hash(type, rank, index)
       implicit  none
       integer   type
       integer   rank
@@ -405,7 +405,7 @@
 #define SANE_DOUBLE 1000.0
 
 !     Generate data values as function of type, rank (-1 for attribute), index */
-      function hash(type, rank, index) 
+      function hash(type, rank, index)
       implicit  none
       integer   type
       integer   rank
@@ -528,7 +528,7 @@
 #include "tests.inc"
 
       hash4 = hash( type, rank, index )
-      if ((itype .eq. NFT_CHAR) .and. (type .eq. NF_BYTE) .and. 
+      if ((itype .eq. NFT_CHAR) .and. (type .eq. NF_BYTE) .and.
      +     (hash4 .ge. -128) .and. (hash4 .lt. 0)) hash4 = hash4 + 256
       end
 
@@ -1240,12 +1240,12 @@
       function internal_min(type)
       implicit        none
       integer         type
-      doubleprecision	min_schar
-      doubleprecision	min_short
-      doubleprecision	min_int
-      doubleprecision	min_long
-      doubleprecision	max_float
-      doubleprecision	max_double
+      doubleprecision   min_schar
+      doubleprecision   min_short
+      doubleprecision   min_int
+      doubleprecision   min_long, min_longlong
+      doubleprecision   max_float
+      doubleprecision   max_double
 #include "tests.inc"
 
       if (type .eq. NFT_CHAR) then
@@ -1266,19 +1266,22 @@
       else if (type .eq. NFT_INT2) then
 #if NF_INT2_IS_C_SHORT
          internal_min = min_short()
-#endif            
+#endif
 #if NF_INT2_IS_C_INT
          internal_min = min_int()
-#endif            
+#endif
 #if NF_INT2_IS_C_LONG
          internal_min = min_long()
 #endif
       else if (type .eq. NFT_INT) then
 #if NF_INT_IS_C_INT
          internal_min = min_int()
-#endif            
+#endif
 #if NF_INT_IS_C_LONG
          internal_min = min_long()
+#endif
+#if NF_INT_IS_C_LONG_LONG
+         internal_min = min_longlong()
 #endif
       else if (type .eq. NFT_REAL) then
 #if NF_REAL_IS_C_FLOAT
@@ -1306,12 +1309,12 @@
       function internal_max(type)
       implicit        none
       integer         type
-      doubleprecision	max_schar
-      doubleprecision	max_short
-      doubleprecision	max_int
-      doubleprecision	max_long
-      doubleprecision	max_float
-      doubleprecision	max_double
+      doubleprecision   max_schar
+      doubleprecision   max_short
+      doubleprecision   max_int
+      doubleprecision   max_long, max_longlong
+      doubleprecision   max_float
+      doubleprecision   max_double
 #include "tests.inc"
 
       if (type .eq. NFT_CHAR) then
@@ -1346,6 +1349,9 @@
 #if NF_INT_IS_C_LONG
          internal_max = max_long()
 #endif
+#if NF_INT_IS_C_LONG_LONG
+         internal_max = max_longlong()
+#endif
       else if (type .eq. NFT_REAL) then
 #if NF_REAL_IS_C_FLOAT
          internal_max = max_float()
@@ -1356,7 +1362,7 @@
       else if (type .eq. NFT_DOUBLE) then
 #if NF_DOUBLEPRECISION_IS_C_DOUBLE
          internal_max = max_double()
-#endif            
+#endif
 #if NF_DOUBLEPRECISION_IS_C_FLOAT
          internal_max = max_float()
 #endif

@@ -9,7 +9,7 @@
 
 
 ! License (and other Lawyer Language)
- 
+
 ! This software is released under the Apache 2.0 Open Source License. The
 ! full text of the License can be viewed at :
 !
@@ -30,13 +30,13 @@
  USE ISO_C_BINDING, ONLY: C_INT
  Implicit NONE
 
- 
+
  Integer, Intent(IN) :: status
  Integer(KIND=C_INT) :: cstatus
  Interface
   Subroutine exit(status) BIND(C)
   USE ISO_C_BINDING, ONLY: C_INT
-  Integer(KIND=C_INT), VALUE :: status  
+  Integer(KIND=C_INT), VALUE :: status
   End Subroutine exit
  End Interface
 
@@ -76,7 +76,7 @@
  End Interface
 
  ciflag = iflag
-  
+
  crannum = myrand(ciflag)
  rannum = crannum
 
@@ -89,20 +89,20 @@
  Implicit NONE
 
  Integer, Intent(IN) :: ivalue, amount
- Integer(KIND=C_INT) :: cvalue, camount 
- Integer :: shiftval 
+ Integer(KIND=C_INT) :: cvalue, camount
+ Integer :: shiftval
  Integer(KIND=C_INT) :: cshiftval
  Interface
   Function myshift(cvalue, camount) BIND(C)
    USE ISO_C_BINDING, ONLY: C_INT
-   Integer(KIND=C_INT), VALUE :: cvalue, camount 
+   Integer(KIND=C_INT), VALUE :: cvalue, camount
    Integer(KIND=C_INT) :: myshift
   End Function myshift
  End Interface
 
  cvalue = ivalue
  camount = amount
-  
+
  cshiftval = myshift(cvalue, camount)
  shiftval = cshiftval
 
@@ -114,13 +114,13 @@
 
  Implicit NONE
 
- Integer, Intent(IN) :: idoit 
- Integer(KIND=C_INT) :: cdoit 
+ Integer, Intent(IN) :: idoit
+ Integer(KIND=C_INT) :: cdoit
  Interface
   Subroutine nc_ignorefpe(cdoit) BIND(C)
    USE ISO_C_BINDING, ONLY: C_INT
-   Integer(KIND=C_INT), VALUE :: cdoit 
-  End Subroutine nc_ignorefpe 
+   Integer(KIND=C_INT), VALUE :: cdoit
+  End Subroutine nc_ignorefpe
  End Interface
 
  cdoit = idoit
@@ -307,6 +307,46 @@
  cmax = ccmax
 
  End Function max_long
+!-------------------------------  min_longlong  ----------------------------------
+ Function min_longlong() RESULT(cmin)
+
+ USE ISO_C_BINDING
+
+ Implicit NONE
+ Integer, Parameter :: RK8=SELECTED_REAL_KIND(P=13, R=307)  ! double
+ Real(RK8) :: cmin
+ Real(KIND=C_DOUBLE) :: ccmin
+ Interface
+  Function cmin_longlong() BIND(C)
+   USE ISO_C_BINDING, ONLY: C_DOUBLE
+   Real(KIND=C_DOUBLE) :: cmin_longlong
+  End Function cmin_longlong
+ End Interface
+
+ ccmin = cmin_longlong()
+ cmin = ccmin
+
+ End Function min_longlong
+!-------------------------------  max_longlong  ----------------------------------
+ Function max_longlong() RESULT(cmax)
+
+ USE ISO_C_BINDING
+
+ Implicit NONE
+ Integer, Parameter :: RK8=SELECTED_REAL_KIND(P=13, R=307)  ! double
+ Real(RK8) :: cmax
+ Real(KIND=C_DOUBLE) :: ccmax
+ Interface
+  Function cmax_longlong() BIND(C)
+   USE ISO_C_BINDING, ONLY: C_DOUBLE
+   Real(KIND=C_DOUBLE) :: cmax_longlong
+  End Function cmax_longlong
+ End Interface
+
+ ccmax = cmax_longlong()
+ cmax = ccmax
+
+ End Function max_longlong
 !-------------------------------  max_float  ----------------------------------
  Function max_float() RESULT(cmax)
 

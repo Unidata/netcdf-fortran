@@ -103,6 +103,15 @@ extern double cmax_long()
     return LONG_MAX;
 }
 
+extern double cmin_longlong()
+{
+  return LLONG_MIN;
+}
+
+extern double cmax_longlong()
+{
+  return LLONG_MAX;
+}
 extern double cmax_float()
 {
     return FLT_MAX;
