@@ -3,10 +3,10 @@ function nf90_put_var_1D_EightByteInt(ncid, varid, values, start, count, stride,
   integer (kind = EightByteInt), dimension(:), intent( in) :: values
   integer, dimension(:), optional, intent( in) :: start, count, stride, map
   integer                                      :: nf90_put_var_1D_EightByteInt
-  
+
   integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
   integer                               :: numDims, counter, format_num
-  
+
   ! Set local arguments to default values
   numDims                 = size(shape(values))
   localStart (:         ) = 1
@@ -14,7 +14,7 @@ function nf90_put_var_1D_EightByteInt(ncid, varid, values, start, count, stride,
   localCount (numDims+1:) = 1
   localStride(:         ) = 1
   localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
-  
+
   if(present(start))  localStart (:size(start) )  = start(:)
   if(present(count))  localCount (:size(count) )  = count(:)
   if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -376,14 +376,15 @@ function nf90_get_var_1D_EightByteInt(ncid, varid, values, start, count, stride,
   integer                                      :: nf90_get_var_1D_EightByteInt
 
   integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
-  integer                               :: numDims, counter, format_num
-  integer, dimension(size(values))      :: defaultIntArray
-  integer (kind = EightByteInt), dimension(size(values))      :: defaultInt8Array
+  integer                               :: numDims, counter, format_num, shapeValues(1)
+  integer, dimension(:), allocatable    :: defaultIntArray
+  integer (kind = EightByteInt), dimension(:), allocatable :: defaultInt8Array
 
   ! Set local arguments to default values
-  numDims                 = size(shape(values))
+  shapeValues             = shape(values)
+  numDims                 = size(shapeValues)
   localStart (:         ) = 1
-  localCount (:numDims  ) = shape(values)
+  localCount (:numDims  ) = shapeValues
   localCount (numDims+1:) = 1
   localStride(:         ) = 1
   localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
@@ -395,6 +396,7 @@ function nf90_get_var_1D_EightByteInt(ncid, varid, values, start, count, stride,
   if (nf90_get_var_1D_EightByteInt .eq. nf90_noerr) then
      if (format_num .eq. nf90_format_netcdf4 .OR. &
          format_num .eq. nf90_format_cdf5) then
+        allocate(defaultInt8Array(size(values)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_1D_EightByteInt = &
@@ -406,8 +408,10 @@ function nf90_get_var_1D_EightByteInt(ncid, varid, values, start, count, stride,
            nf90_get_var_1D_EightByteInt = &
                 nf_get_vara_int64(ncid, varid, localStart, localCount, defaultInt8Array)
         end if
-        values(:) = reshape(defaultInt8Array(:), shape(values))
+        values(:) = reshape(defaultInt8Array(:), shapeValues)
+        if (allocated(defaultInt8Array)) deallocate(defaultInt8Array)
      else
+        allocate(defaultIntArray(size(values)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_1D_EightByteInt = &
@@ -419,7 +423,8 @@ function nf90_get_var_1D_EightByteInt(ncid, varid, values, start, count, stride,
            nf90_get_var_1D_EightByteInt = &
                 nf_get_vara_int(ncid, varid, localStart, localCount, defaultIntArray)
         end if
-        values(:) = reshape(defaultIntArray(:), shape(values))
+        values(:) = reshape(defaultIntArray(:), shapeValues)
+        if (allocated(defaultIntArray)) deallocate(defaultIntArray)
      endif
   endif
 end function nf90_get_var_1D_EightByteInt
@@ -433,14 +438,15 @@ function nf90_get_var_2D_EightByteInt(ncid, varid, values, start, count, stride,
   integer                                      :: nf90_get_var_2D_EightByteInt
 
   integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
-  integer                               :: numDims, counter, format_num
-  integer, dimension(size(values))      :: defaultIntArray
-  integer (kind = EightByteInt), dimension(size(values))      :: defaultInt8Array
+  integer                               :: numDims, counter, format_num, shapeValues(2)
+  integer, dimension(:), allocatable    :: defaultIntArray
+  integer (kind = EightByteInt), dimension(:), allocatable :: defaultInt8Array
 
   ! Set local arguments to default values
-  numDims                 = size(shape(values))
+  shapeValues             = shape(values)
+  numDims                 = size(shapeValues)
   localStart (:         ) = 1
-  localCount (:numDims  ) = shape(values)
+  localCount (:numDims  ) = shapeValues
   localCount (numDims+1:) = 1
   localStride(:         ) = 1
   localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
@@ -452,6 +458,7 @@ function nf90_get_var_2D_EightByteInt(ncid, varid, values, start, count, stride,
   if (nf90_get_var_2D_EightByteInt .eq. nf90_noerr) then
      if (format_num .eq. nf90_format_netcdf4 .OR. &
          format_num .eq. nf90_format_cdf5) then
+        allocate(defaultInt8Array(size(values)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_2D_EightByteInt = &
@@ -463,8 +470,10 @@ function nf90_get_var_2D_EightByteInt(ncid, varid, values, start, count, stride,
            nf90_get_var_2D_EightByteInt = &
                 nf_get_vara_int64(ncid, varid, localStart, localCount, defaultInt8Array)
         end if
-        values(:, :) = reshape(defaultInt8Array(:), shape(values))
+        values(:, :) = reshape(defaultInt8Array(:), shapeValues)
+        if (allocated(defaultInt8Array)) deallocate(defaultInt8Array)
      else
+        allocate(defaultIntArray(size(values)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_2D_EightByteInt = &
@@ -476,7 +485,8 @@ function nf90_get_var_2D_EightByteInt(ncid, varid, values, start, count, stride,
            nf90_get_var_2D_EightByteInt = &
                 nf_get_vara_int(ncid, varid, localStart, localCount, defaultIntArray)
         end if
-        values(:, :) = reshape(defaultIntArray(:), shape(values))
+        values(:, :) = reshape(defaultIntArray(:), shapeValues)
+        if (allocated(defaultIntArray)) deallocate(defaultIntArray)
      end if
   end if
 end function nf90_get_var_2D_EightByteInt
@@ -490,14 +500,15 @@ function nf90_get_var_3D_EightByteInt(ncid, varid, values, start, count, stride,
   integer                                      :: nf90_get_var_3D_EightByteInt
 
   integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
-  integer                               :: numDims, counter, format_num
-  integer, dimension(size(values))      :: defaultIntArray
-  integer (kind = EightByteInt), dimension(size(values))      :: defaultInt8Array
+  integer                               :: numDims, counter, format_num, shapeValues(3)
+  integer, dimension(:), allocatable    :: defaultIntArray
+  integer (kind = EightByteInt), dimension(:), allocatable :: defaultInt8Array
 
   ! Set local arguments to default values
-  numDims                 = size(shape(values))
+  shapeValues             = shape(values)
+  numDims                 = size(shapeValues)
   localStart (:         ) = 1
-  localCount (:numDims  ) = shape(values)
+  localCount (:numDims  ) = shapeValues
   localCount (numDims+1:) = 1
   localStride(:         ) = 1
   localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
@@ -509,6 +520,7 @@ function nf90_get_var_3D_EightByteInt(ncid, varid, values, start, count, stride,
   if (nf90_get_var_3D_EightByteInt .eq. nf90_noerr) then
      if (format_num .eq. nf90_format_netcdf4 .OR. &
          format_num .eq. nf90_format_cdf5) then
+        allocate(defaultInt8Array(size(values)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_3D_EightByteInt = &
@@ -520,8 +532,10 @@ function nf90_get_var_3D_EightByteInt(ncid, varid, values, start, count, stride,
            nf90_get_var_3D_EightByteInt = &
                 nf_get_vara_int64(ncid, varid, localStart, localCount, defaultInt8Array)
         end if
-        values(:, :, :) = reshape(defaultInt8Array(:), shape(values))
+        values(:, :, :) = reshape(defaultInt8Array(:), shapeValues)
+        if (allocated(defaultInt8Array)) deallocate(defaultInt8Array)
      else
+        allocate(defaultIntArray(size(values)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_3D_EightByteInt = &
@@ -533,7 +547,8 @@ function nf90_get_var_3D_EightByteInt(ncid, varid, values, start, count, stride,
            nf90_get_var_3D_EightByteInt = &
                 nf_get_vara_int(ncid, varid, localStart, localCount, defaultIntArray)
         end if
-        values(:, :, :) = reshape(defaultIntArray(:), shape(values))
+        values(:, :, :) = reshape(defaultIntArray(:), shapeValues)
+        if (allocated(defaultIntArray)) deallocate(defaultIntArray)
      end if
   end if
 end function nf90_get_var_3D_EightByteInt
@@ -547,14 +562,15 @@ function nf90_get_var_4D_EightByteInt(ncid, varid, values, start, count, stride,
   integer                                      :: nf90_get_var_4D_EightByteInt
 
   integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
-  integer                               :: numDims, counter, format_num
-  integer, dimension(size(values))      :: defaultIntArray
-  integer (kind = EightByteInt), dimension(size(values))      :: defaultInt8Array
+  integer                               :: numDims, counter, format_num, shapeValues(4)
+  integer, dimension(:), allocatable    :: defaultIntArray
+  integer (kind = EightByteInt), dimension(:), allocatable :: defaultInt8Array
 
   ! Set local arguments to default values
-  numDims                 = size(shape(values))
+  shapeValues             = shape(values)
+  numDims                 = size(shapeValues)
   localStart (:         ) = 1
-  localCount (:numDims  ) = shape(values)
+  localCount (:numDims  ) = shapeValues
   localCount (numDims+1:) = 1
   localStride(:         ) = 1
   localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
@@ -566,6 +582,7 @@ function nf90_get_var_4D_EightByteInt(ncid, varid, values, start, count, stride,
   if (nf90_get_var_4D_EightByteInt .eq. nf90_noerr) then
      if (format_num .eq. nf90_format_netcdf4 .OR. &
          format_num .eq. nf90_format_cdf5) then
+        allocate(defaultInt8Array(size(values)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_4D_EightByteInt = &
@@ -577,8 +594,10 @@ function nf90_get_var_4D_EightByteInt(ncid, varid, values, start, count, stride,
            nf90_get_var_4D_EightByteInt = &
                 nf_get_vara_int64(ncid, varid, localStart, localCount, defaultInt8Array)
         end if
-        values(:, :, :, :) = reshape(defaultInt8Array(:), shape(values))
+        values(:, :, :, :) = reshape(defaultInt8Array(:), shapeValues)
+        if (allocated(defaultInt8Array)) deallocate(defaultInt8Array)
      else
+        allocate(defaultIntArray(size(values)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_4D_EightByteInt = &
@@ -590,7 +609,8 @@ function nf90_get_var_4D_EightByteInt(ncid, varid, values, start, count, stride,
            nf90_get_var_4D_EightByteInt = &
                 nf_get_vara_int(ncid, varid, localStart, localCount, defaultIntArray)
         end if
-        values(:, :, :, :) = reshape(defaultIntArray(:), shape(values))
+        values(:, :, :, :) = reshape(defaultIntArray(:), shapeValues)
+        if (allocated(defaultIntArray)) deallocate(defaultIntArray)
      end if
   end if
 end function nf90_get_var_4D_EightByteInt
@@ -604,14 +624,15 @@ function nf90_get_var_5D_EightByteInt(ncid, varid, values, start, count, stride,
   integer                                      :: nf90_get_var_5D_EightByteInt
 
   integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
-  integer                               :: numDims, counter, format_num
-  integer, dimension(size(values))      :: defaultIntArray
-  integer (kind = EightByteInt), dimension(size(values))      :: defaultInt8Array
+  integer                               :: numDims, counter, format_num, shapeValues(5)
+  integer, dimension(:), allocatable    :: defaultIntArray
+  integer (kind = EightByteInt), dimension(:), allocatable :: defaultInt8Array
 
   ! Set local arguments to default values
-  numDims                 = size(shape(values))
+  shapeValues             = shape(values)
+  numDims                 = size(shapeValues)
   localStart (:         ) = 1
-  localCount (:numDims  ) = shape(values)
+  localCount (:numDims  ) = shapeValues
   localCount (numDims+1:) = 1
   localStride(:         ) = 1
   localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
@@ -623,6 +644,7 @@ function nf90_get_var_5D_EightByteInt(ncid, varid, values, start, count, stride,
   if (nf90_get_var_5D_EightByteInt .eq. nf90_noerr) then
      if (format_num .eq. nf90_format_netcdf4 .OR. &
          format_num .eq. nf90_format_cdf5) then
+        allocate(defaultInt8Array(size(values)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_5D_EightByteInt = &
@@ -634,8 +656,10 @@ function nf90_get_var_5D_EightByteInt(ncid, varid, values, start, count, stride,
            nf90_get_var_5D_EightByteInt = &
                 nf_get_vara_int64(ncid, varid, localStart, localCount, defaultInt8Array)
         end if
-        values(:, :, :, :, :) = reshape(defaultInt8Array(:), shape(values))
+        values(:, :, :, :, :) = reshape(defaultInt8Array(:), shapeValues)
+        if (allocated(defaultInt8Array)) deallocate(defaultInt8Array)
      else
+        allocate(defaultIntArray(size(values)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_5D_EightByteInt = &
@@ -647,7 +671,8 @@ function nf90_get_var_5D_EightByteInt(ncid, varid, values, start, count, stride,
            nf90_get_var_5D_EightByteInt = &
                 nf_get_vara_int(ncid, varid, localStart, localCount, defaultIntArray)
         end if
-        values(:, :, :, :, :) = reshape(defaultIntArray(:), shape(values))
+        values(:, :, :, :, :) = reshape(defaultIntArray(:), shapeValues)
+        if (allocated(defaultIntArray)) deallocate(defaultIntArray)
      end if
   end if
 end function nf90_get_var_5D_EightByteInt
@@ -661,14 +686,15 @@ function nf90_get_var_6D_EightByteInt(ncid, varid, values, start, count, stride,
   integer                                      :: nf90_get_var_6D_EightByteInt
 
   integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
-  integer                               :: numDims, counter, format_num
-  integer, dimension(size(values))      :: defaultIntArray
-  integer (kind = EightByteInt), dimension(size(values))      :: defaultInt8Array
+  integer                               :: numDims, counter, format_num, shapeValues(6)
+  integer, dimension(:), allocatable    :: defaultIntArray
+  integer (kind = EightByteInt), dimension(:), allocatable :: defaultInt8Array
 
   ! Set local arguments to default values
-  numDims                 = size(shape(values))
+  shapeValues             = shape(values)
+  numDims                 = size(shapeValues)
   localStart (:         ) = 1
-  localCount (:numDims  ) = shape(values)
+  localCount (:numDims  ) = shapeValues
   localCount (numDims+1:) = 1
   localStride(:         ) = 1
   localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
@@ -680,6 +706,7 @@ function nf90_get_var_6D_EightByteInt(ncid, varid, values, start, count, stride,
   if (nf90_get_var_6D_EightByteInt .eq. nf90_noerr) then
      if (format_num .eq. nf90_format_netcdf4 .OR. &
          format_num .eq. nf90_format_cdf5) then
+        allocate(defaultInt8Array(size(values)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_6D_EightByteInt = &
@@ -691,8 +718,10 @@ function nf90_get_var_6D_EightByteInt(ncid, varid, values, start, count, stride,
            nf90_get_var_6D_EightByteInt = &
                 nf_get_vara_int64(ncid, varid, localStart, localCount, defaultInt8Array)
         end if
-        values(:, :, :, :, :, :) = reshape(defaultInt8Array(:), shape(values))
+        values(:, :, :, :, :, :) = reshape(defaultInt8Array(:), shapeValues)
+        if (allocated(defaultInt8Array)) deallocate(defaultInt8Array)
      else
+        allocate(defaultIntArray(size(values)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_6D_EightByteInt = &
@@ -704,7 +733,8 @@ function nf90_get_var_6D_EightByteInt(ncid, varid, values, start, count, stride,
            nf90_get_var_6D_EightByteInt = &
                 nf_get_vara_int(ncid, varid, localStart, localCount, defaultIntArray)
         end if
-        values(:, :, :, :, :, :) = reshape(defaultIntArray(:), shape(values))
+        values(:, :, :, :, :, :) = reshape(defaultIntArray(:), shapeValues)
+        if (allocated(defaultIntArray)) deallocate(defaultIntArray)
      end if
   end if
 end function nf90_get_var_6D_EightByteInt
@@ -718,14 +748,15 @@ function nf90_get_var_7D_EightByteInt(ncid, varid, values, start, count, stride,
   integer                                      :: nf90_get_var_7D_EightByteInt
 
   integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
-  integer                               :: numDims, counter, format_num
-  integer, dimension(size(values))      :: defaultIntArray
-  integer (kind = EightByteInt), dimension(size(values))      :: defaultInt8Array
+  integer                               :: numDims, counter, format_num, shapeValues(7)
+  integer, dimension(:), allocatable    :: defaultIntArray
+  integer (kind = EightByteInt), dimension(:), allocatable :: defaultInt8Array
 
   ! Set local arguments to default values
-  numDims                 = size(shape(values))
+  shapeValues             = shape(values)
+  numDims                 = size(shapeValues)
   localStart (:         ) = 1
-  localCount (:numDims  ) = shape(values)
+  localCount (:numDims  ) = shapeValues
   localCount (numDims+1:) = 1
   localStride(:         ) = 1
   localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
@@ -737,6 +768,7 @@ function nf90_get_var_7D_EightByteInt(ncid, varid, values, start, count, stride,
   if (nf90_get_var_7D_EightByteInt .eq. nf90_noerr) then
      if (format_num .eq. nf90_format_netcdf4 .OR. &
          format_num .eq. nf90_format_cdf5) then
+        allocate(defaultInt8Array(size(values)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_7D_EightByteInt = &
@@ -748,8 +780,10 @@ function nf90_get_var_7D_EightByteInt(ncid, varid, values, start, count, stride,
            nf90_get_var_7D_EightByteInt = &
                 nf_get_vara_int64(ncid, varid, localStart, localCount, defaultInt8Array)
         end if
-        values(:, :, :, :, :, :, :) = reshape(defaultInt8Array(:), shape(values))
+        values(:, :, :, :, :, :, :) = reshape(defaultInt8Array(:), shapeValues)
+        if (allocated(defaultInt8Array)) deallocate(defaultInt8Array)
      else
+        allocate(defaultIntArray(size(values)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_7D_EightByteInt = &
@@ -761,10 +795,11 @@ function nf90_get_var_7D_EightByteInt(ncid, varid, values, start, count, stride,
            nf90_get_var_7D_EightByteInt = &
                 nf_get_vara_int(ncid, varid, localStart, localCount, defaultIntArray)
         end if
-        values(:, :, :, :, :, :, :) = reshape(defaultIntArray(:), shape(values))
+        values(:, :, :, :, :, :, :) = reshape(defaultIntArray(:), shapeValues)
+        if (allocated(defaultIntArray)) deallocate(defaultIntArray)
      end if
   end if
-  
+
 end function nf90_get_var_7D_EightByteInt
 
 
