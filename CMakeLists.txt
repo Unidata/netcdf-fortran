@@ -46,6 +46,9 @@ IF(UNAME)
   set(TMP_BUILDNAME        "${osname}-${osrel}-${cpu}" CACHE STRING "Build name variable for CDash")
 ENDIF()
 
+# For CMAKE_INSTALL_LIBDIR
+INCLUDE(GNUInstallDirs)
+
 ###
 # Allow for some customization of the buildname.
 # This will make it easier to identify different builds,
