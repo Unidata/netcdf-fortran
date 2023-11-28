@@ -50,10 +50,12 @@ program f90tst_vars5
   integer :: quantize_mode_in, nsd_in
   real real_data_in(DIM_LEN_5)
   real*8 double_data_in(DIM_LEN_5)
-  real real_data_expected(DIM_LEN_5)
-  real*8 double_data_expected(DIM_LEN_5)
   real diff
   real, parameter :: EPSILON  = .01
+  ! Because values 4 and 5 of our data array are so large, a large
+  ! epsilon is needed.
+  real, parameter :: EPSILON_LARGE  = 1450000
+  integer :: t, qmode, qnsd
 
   print *, ''
   print *,'*** Testing use of quantize feature on netCDF-4 vars from Fortran 90.'
@@ -69,91 +71,109 @@ program f90tst_vars5
   double_data(3) = 9.999999999
   double_data(4) = 1234567890.12345
   double_data(5) = 1234567890
-
-  ! Create the netCDF file. 
-  call check(nf90_create(FILE_NAME, nf90_netcdf4, ncid, cache_nelems = CACHE_NELEMS, &
-       cache_size = CACHE_SIZE))
-
-  ! Define the dimension.
-  call check(nf90_def_dim(ncid, "x", DIM_LEN_5, x_dimid))
-  dimids =  (/ x_dimid /)
-
-  ! Define some variables.
-  call check(nf90_def_var(ncid, VAR1_NAME, NF90_FLOAT, dimids, varid1&
-       &, deflate_level = DEFLATE_LEVEL, quantize_mode =&
-       & nf90_quantize_bitgroom, nsd = 3))
-  call check(nf90_def_var(ncid, VAR2_NAME, NF90_DOUBLE, dimids,&
-       & varid2, contiguous = .TRUE., quantize_mode =&
-       & nf90_quantize_bitgroom, nsd = 3))
-
-  ! Write the pretend data to the file.
-  call check(nf90_put_var(ncid, varid1, real_data))
-  call check(nf90_put_var(ncid, varid2, double_data))
-
-  ! Close the file. 
-  call check(nf90_close(ncid))
-
-  ! What we expect to get back.
-  real_data_expected(1) = 1.11084
-  real_data_expected(2) = 1.000488
-  real_data_expected(3) = 10
-  real_data_expected(4) = 12348
-  real_data_expected(5) = 0.1234436
-  double_data_expected(1) = 1.11083984375
-  double_data_expected(2) = 1.00048828125
-  double_data_expected(3) = 10
-  double_data_expected(4) = 1234698240
-  double_data_expected(5) = 1234173952
-
-  ! Reopen the file.
-  call check(nf90_open(FILE_NAME, nf90_nowrite, ncid))
   
-  ! Check some stuff out.
-  call check(nf90_inquire(ncid, ndims, nvars, ngatts, unlimdimid, file_format))
-  if (ndims /= 1 .or. nvars /= 2 .or. ngatts /= 0 .or. unlimdimid /= -1 .or. &
-       file_format /= nf90_format_netcdf4) stop 2
+  do t = 1, 3
+     
+     ! Create the netCDF file. 
+     call check(nf90_create(FILE_NAME, nf90_netcdf4, ncid, cache_nelems = CACHE_NELEMS, &
+          cache_size = CACHE_SIZE))
 
-  ! Get varids.
-  call check(nf90_inq_varid(ncid, VAR1_NAME, varid1_in))
-  call check(nf90_inq_varid(ncid, VAR2_NAME, varid2_in))
+     ! Define the dimension.
+     call check(nf90_def_dim(ncid, "x", DIM_LEN_5, x_dimid))
+     dimids =  (/ x_dimid /)
 
-  ! Check variable 1.
-  call check(nf90_inquire_variable(ncid, varid1_in, name_in, xtype_in, ndims_in, dimids_in, &
-       natts_in, chunksizes = chunksizes_in, endianness = endianness_in, fletcher32 = fletcher32_in, &
-       deflate_level = deflate_level_in, shuffle = shuffle_in, cache_size = cache_size_in, &
-       cache_nelems = cache_nelems_in, cache_preemption = cache_preemption_in, &
-       quantize_mode = quantize_mode_in, nsd = nsd_in))
-  if (name_in .ne. VAR1_NAME .or. xtype_in .ne. NF90_FLOAT .or. ndims_in .ne. NDIM1 .or. &
-       natts_in .ne. 1 .or. dimids_in(1) .ne. dimids(1)) stop 3
-  if (quantize_mode_in .ne. nf90_quantize_bitgroom .or. nsd_in .ne. 3) stop 3
+     ! Test with all three quantize modes.
+     if (t .eq. 1) then
+        qmode = nf90_quantize_bitgroom
+        qnsd = 3
+     else if (t .eq. 2) then
+        qmode = nf90_quantize_granularbr
+        qnsd = 3
+     else
+        qmode = nf90_quantize_bitround
+        qnsd = 10
+     endif
 
-  ! Check variable 2.
-  call check(nf90_inquire_variable(ncid, varid2_in, name_in, xtype_in, ndims_in, dimids_in, &
-       natts_in, contiguous = contiguous_in, endianness = endianness_in, fletcher32 = fletcher32_in, &
-       deflate_level = deflate_level_in, shuffle = shuffle_in, &
-       quantize_mode = quantize_mode_in, nsd = nsd_in))
-  if (name_in .ne. VAR2_NAME .or. xtype_in .ne. NF90_DOUBLE .or. ndims_in .ne. NDIM1 .or. &
-       natts_in .ne. 1 .or. dimids_in(1) .ne. dimids(1)) stop 6
-  if (deflate_level_in .ne. 0 .or. .not. contiguous_in .or. fletcher32_in .or. shuffle_in) stop 7
-  if (quantize_mode_in .ne. nf90_quantize_bitgroom .or. nsd_in .ne. 3) stop 3
-  
-  ! Check the data.
-  call check(nf90_get_var(ncid, varid1_in, real_data_in))
-  call check(nf90_get_var(ncid, varid2_in, double_data_in))
+     print *,'\t*** testing with quantize_mode ',qmode
+     
+     ! Define some variables.
+     call check(nf90_def_var(ncid, VAR1_NAME, NF90_FLOAT, dimids, varid1&
+          &, deflate_level = DEFLATE_LEVEL, quantize_mode =&
+          & qmode, nsd = qnsd))
+     call check(nf90_def_var(ncid, VAR2_NAME, NF90_DOUBLE, dimids,&
+          & varid2, contiguous = .TRUE., quantize_mode =&
+          & qmode, nsd = qnsd))
 
-  ! Check the data. 
-  do x = 1, DIM_LEN_5
-     diff = abs(real_data_in(x) - real_data_expected(x))
-     if (diff .gt. EPSILON) stop 23
-     diff = abs(double_data_in(x) - double_data_expected(x))
-     ! print *, double_data_in(x), double_data_expected(x)
-     ! print *, 'x = ', x, ' diff = ', diff
-     if (diff .gt. EPSILON) stop 24
+     ! Write the pretend data to the file.
+     call check(nf90_put_var(ncid, varid1, real_data))
+     call check(nf90_put_var(ncid, varid2, double_data))
+
+     ! Close the file. 
+     call check(nf90_close(ncid))
+
+     ! Reopen the file.
+     call check(nf90_open(FILE_NAME, nf90_nowrite, ncid))
+
+     ! Check some stuff out.
+     call check(nf90_inquire(ncid, ndims, nvars, ngatts, unlimdimid, file_format))
+     if (ndims /= 1 .or. nvars /= 2 .or. ngatts /= 0 .or. unlimdimid /= -1 .or. &
+          file_format /= nf90_format_netcdf4) stop 2
+
+     ! Get varids.
+     call check(nf90_inq_varid(ncid, VAR1_NAME, varid1_in))
+     call check(nf90_inq_varid(ncid, VAR2_NAME, varid2_in))
+
+     ! Check variable 1.
+     call check(nf90_inquire_variable(ncid, varid1_in, name_in, xtype_in, ndims_in, dimids_in, &
+          natts_in, chunksizes = chunksizes_in, endianness = endianness_in, fletcher32 = fletcher32_in, &
+          deflate_level = deflate_level_in, shuffle = shuffle_in, cache_size = cache_size_in, &
+          cache_nelems = cache_nelems_in, cache_preemption = cache_preemption_in, &
+          quantize_mode = quantize_mode_in, nsd = nsd_in))
+     if (name_in .ne. VAR1_NAME .or. xtype_in .ne. NF90_FLOAT .or. ndims_in .ne. NDIM1 .or. &
+          natts_in .ne. 1 .or. dimids_in(1) .ne. dimids(1)) stop 3
+     if (quantize_mode_in .ne. qmode .or. nsd_in .ne. qnsd) stop 3
+
+     ! Check variable 2.
+     call check(nf90_inquire_variable(ncid, varid2_in, name_in, xtype_in, ndims_in, dimids_in, &
+          natts_in, contiguous = contiguous_in, endianness = endianness_in, fletcher32 = fletcher32_in, &
+          deflate_level = deflate_level_in, shuffle = shuffle_in, &
+          quantize_mode = quantize_mode_in, nsd = nsd_in))
+     if (name_in .ne. VAR2_NAME .or. xtype_in .ne. NF90_DOUBLE .or. ndims_in .ne. NDIM1 .or. &
+          natts_in .ne. 1 .or. dimids_in(1) .ne. dimids(1)) stop 6
+     if (deflate_level_in .ne. 0 .or. .not. contiguous_in .or. fletcher32_in .or. shuffle_in) stop 7
+     if (quantize_mode_in .ne. qmode .or. nsd_in .ne. qnsd) stop 3
+
+     ! Check the data.
+     call check(nf90_get_var(ncid, varid1_in, real_data_in))
+     call check(nf90_get_var(ncid, varid2_in, double_data_in))
+
+     ! Check the data. 
+     do x = 1, DIM_LEN_5
+        ! Check the real.
+        print *, 'real: ', real_data_in(x), real_data(x)
+        diff = abs(real_data_in(x) - real_data(x))
+        print *, 'x = ', x, ' diff = ', diff
+        if (x < 4) then
+           if (diff .gt. EPSILON) stop 23
+        else
+           if (diff .gt. EPSILON_LARGE) stop 24
+        endif
+
+        ! Check the double.
+        diff = abs(double_data_in(x) - double_data(x))
+        print *, 'double:', double_data_in(x), double_data(x)
+        print *, 'x = ', x, ' diff = ', diff
+        if (x < 4) then
+           if (diff .gt. EPSILON) stop 25
+        else
+           if (diff .gt. EPSILON_LARGE) stop 26
+        endif
+     end do
+
+     ! Close the file. 
+     call check(nf90_close(ncid))
   end do
   
-  ! Close the file. 
-  call check(nf90_close(ncid))
-
   print *,'*** SUCCESS!'
 
 contains

@@ -14,7 +14,7 @@ lib_LTLIBRARIES = libnetcdff.la
 # These linker flags specify libtool version info.
 # See http://www.gnu.org/software/libtool/manual/libtool.html#Libtool-versioning
 # for information regarding incrementing `-version-info`.
-libnetcdff_la_LDFLAGS = -version-info 8:0:1
+libnetcdff_la_LDFLAGS = -version-info 9:0:2
 
 # These F90 codes are used for either netCDF classic or netCDF-4 F90
 # API.

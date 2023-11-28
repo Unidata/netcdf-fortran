@@ -12,6 +12,9 @@ C     This program will bail out in the event of a netcdf error.
 
 C     Ed Hartnett, 2009
 
+C     MODS
+C     Leon Benjamin, 2022 -- Add test multi-dimensional char variables
+
       PROGRAM tst_f77_v2
       IMPLICIT NONE
       include 'netcdf.inc'
@@ -22,8 +25,8 @@ C     Ed Hartnett, 2009
       INTEGER start(n_dim), count(n_dim)
       integer char_len
       parameter(char_len = 14)
-      character*14 char_string
-      INTEGER start_1d(1), count_1d(1)      
+      character*14 char_string(2)
+      INTEGER start_1d(2), count_1d(2)      
       INTEGER ncid, errcode
       INTEGER x_id, y_id, z_id, arr_id, char_id, char_dim_id
       REAL array(x_dim,y_dim,z_dim)
@@ -35,7 +38,7 @@ C     Ed Hartnett, 2009
       integer var_type_in, nvdims_in
       integer vdims_in(3)
       integer natts_in
-      character*14 char_string_in
+      character*14 char_string_in(2)
       integer char_len_in
       char_len_in = 14
 
@@ -49,7 +52,8 @@ C     Put something into the array.
       ENDDO
 
 C     Put something into the character string.      
-      char_string = 'dirty_old_town'
+      char_string(1) = 'dirty_old_town'
+      char_string(2) = 'clean_new_town'
 
       print *, ''
       print *, ' *** Testing netCDF v2 api for F77.'
@@ -75,15 +79,15 @@ C     Create a float variable.
 C     Create Dimension for char array.
       char_dim_id = NCDDEF(ncid, 'string_len', char_len, errcode)
       if (errcode .ne. 0) stop 2
-      
-C     Assign dimensions to array.
       dim_array(1) = char_dim_id
-
-C     Create a char variable.
-      char_id = NCVDEF(ncid, 'Dublin_song', NCCHAR, 1, dim_array,
-     &     errcode)
+C     Create Dimension for char array.
+      dim_array(2) = NCDDEF(ncid, 'list_size', 2, errcode)
       if (errcode .ne. 0) stop 2
 
+      char_id = NCVDEF(ncid, 'Dublin_song', NCCHAR, 2, dim_array,
+     &     errcode)
+      if (errcode .ne. 0) stop 2
+      
 C     Leave define mode.
       CALL NCENDF(ncid, errcode)
       if (errcode .ne. 0) stop 2
@@ -101,8 +105,10 @@ C     Write float data to file.
 C     Write char data to file.
       start_1d(1) = 1
       count_1d(1) = char_len
+      start_1d(2) = 1
+      count_1d(2) = 2
       CALL NCVPTC(ncid, char_id, start_1d, count_1d, char_string,
-     &     char_len, errcode)
+     &     char_len*2, errcode)
       if (errcode .ne. 0) stop 2
 
 C     Close the file.
@@ -126,17 +132,21 @@ C     Learn about the char array data.
       if (errcode .ne. 0) stop 2
       if (char_var_name_in .ne. 'Dublin_song') stop 5
       if (var_type_in .ne. NCCHAR) stop 6
-      if (nvdims_in .ne. 1) stop 7
+      if (nvdims_in .ne. 2) stop 7
       if (vdims_in(1) .ne. 4) stop 8
       if (natts_in .ne. 0) stop 9
 
 C     Read the data in the char array.
       start_1d(1) = 1
       count_1d(1) = char_len
+      start_1d(2) = 1
+      count_1d(2) = 2
+      char_len_in = char_len*2
       CALL NCVGTC(ncid, char_id, start_1d, count_1d, char_string_in,
      &     char_len_in, errcode)
       if (errcode .ne. 0) stop 2
-      if (char_string_in .ne. 'dirty_old_town') stop 10
+      if (char_string_in(1) .ne. 'dirty_old_town') stop 10
+      if (char_string_in(2) .ne. 'clean_new_town') stop 11
       
 C     Close the file.
       CALL NCCLOS(ncid, errcode)

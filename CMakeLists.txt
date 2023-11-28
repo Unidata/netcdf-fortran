@@ -21,7 +21,8 @@ set(PACKAGE "${NC4F_CTEST_PROJECT_NAME}" CACHE STRING "")
 #Project Version
 SET(NC4F_VERSION_MAJOR 4)
 SET(NC4F_VERSION_MINOR 6)
-SET(NC4F_VERSION_PATCH 0)
+
+SET(NC4F_VERSION_PATCH 2)
 SET(NC4F_VERSION_NOTE "-development")
 SET(NC4F_VERSION ${NC4F_VERSION_MAJOR}.${NC4F_VERSION_MINOR}.${NC4F_VERSION_PATCH}${NC4F_VERSION_NOTE})
 SET(VERSION ${NC4F_VERSION})
@@ -688,16 +689,22 @@ IF(NOT DISABLE_ZSTANDARD_PLUGIN)
   #if !NC_HAS_ZSTD
         choke me
   #endif
-  int main() {return 0;}" HAVE_ZSTD)
+  int main() {return 0;}" NC_HAVE_ZSTD)
 
-  IF(HAVE_ZSTD)
-    MESSAGE(STATUS "Checking for HDF5_PLUGIN_PATH: " $ENV{HDF5_PLUGIN_PATH})
+  IF(NC_HAVE_ZSTD)
     IF(NOT DEFINED ENV{HDF5_PLUGIN_PATH})
       MESSAGE(WARNING "libnetcdf was built with zstd support, but HDF5_PLUGIN_PATH is not set.  Please set the HDF5_PLUGIN_PATH environmental variable if zstandard tests fail, or pass -DDISABLE_ZSTANDARD_PLUGIN=TRUE when running cmake.")
+      SET(NF_HAVE_ZSTD FALSE)
+      SET(NF_HDF5_PLUGIN_PATH "")
+    ELSE()
+      MESSAGE(STATUS "HDF5_PLUGIN_PATH: $ENV{HDF5_PLUGIN_PATH}")
+      SET(NF_HAVE_ZSTD TRUE)
+      SET(NF_HDF5_PLUGIN_PATH "(HDF5_PLUGIN_PATH: $ENV{HDF5_PLUGIN_PATH}")
     ENDIF()
-  ENDIF(HAVE_ZSTD)
-ELSE()
-  SET(HAVE_ZSTD FALSE)
+  ENDIF(NC_HAVE_ZSTD)
+ELSE(NOT DISABLE_ZSTANDARD_PLUGIN)
+  SET(NF_HAVE_ZSTD FALSE)
+  SET(NF_HDF5_PLUGIN_PATH "")
 ENDIF(NOT DISABLE_ZSTANDARD_PLUGIN)
 ###
 # End ZStd Stanza
@@ -1130,7 +1137,7 @@ is_enabled(ENABLE_DAP HAS_DAP)
 is_enabled(USE_NETCDF_V2 HAS_NC2)
 is_enabled(USE_NETCDF4 HAS_NC4)
 is_enabled(HAVE_SZIP_WRITE HAS_SZIP_WRITE)
-is_enabled(HAVE_ZSTD HAS_ZSTD)
+is_enabled(NF_HAVE_ZSTD HAS_ZSTD)
 is_enabled(HAVE_QUANTIZE HAS_QUANTIZE)
 is_enabled(USE_LOGGING HAS_LOGGING)
 is_enabled(ENABLE_CDF5 HAS_CDF5)
@@ -1148,6 +1155,16 @@ CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/libnetcdff.settings.in"
 FILE(READ "${CMAKE_CURRENT_BINARY_DIR}/libnetcdff.settings"
   LIBNETCDFF_SETTINGS)
 MESSAGE(${LIBNETCDFF_SETTINGS})
+IF(NC_HAVE_ZSTD)
+  IF(NOT NF_HAVE_ZSTD)
+    MESSAGE(STATUS "ATTENTION: NO HDF5_PLUGIN_PATH SET")
+    IF(NOT DEFINED ENV{HDF5_PLUGIN_PATH})
+      MESSAGE(WARNING "libnetcdf was built with zstd support, but HDF5_PLUGIN_PATH is not set.  Please set the HDF5_PLUGIN_PATH environmental variable if zstandard tests fail.")
+      MESSAGE(WARNING "You can use `nc-config --plugindir` to determine the appropriate value for HDF5_PLUGIN_PATH")
+    ENDIF()
+  ENDIF(NOT NF_HAVE_ZSTD)
+ENDIF(NC_HAVE_ZSTD)
+
 
 # Install libnetcdf.settings file into same location
 # as the libraries.
