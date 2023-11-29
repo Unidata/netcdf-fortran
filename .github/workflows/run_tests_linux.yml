@@ -6,6 +6,10 @@ name: Run netCDF-Fortran Linux tests
 
 on: [pull_request, workflow_dispatch]
 
+concurrency:  
+  group: ${{ github.workflow}}-${{ github.head_ref }}  
+  cancel-in-progress: true
+
 jobs:
 
   build-deps:
@@ -15,7 +19,7 @@ jobs:
     strategy:
       matrix:
         hdf5: [ 1.12.2 ]
-        netcdf: [ v4.7.4, v4.8.1, v4.9.0, main ]
+        netcdf: [ v4.7.4, v4.8.1, v4.9.0 ]
 
     steps:
 
@@ -71,7 +75,7 @@ jobs:
     strategy:
       matrix:
         hdf5: [ 1.12.2 ]
-        netcdf: [ v4.7.4, v4.8.1, v4.9.0, main ]
+        netcdf: [ v4.7.4, v4.8.1, v4.9.0 ]
 
     steps:
 
@@ -130,7 +134,7 @@ jobs:
     strategy:
       matrix:
         hdf5: [ 1.12.2 ]
-        netcdf: [ v4.7.4, v4.8.1, v4.9.0, main ]
+        netcdf: [ v4.7.4, v4.8.1, v4.9.0 ]
 
     steps:
 
@@ -227,7 +231,7 @@ jobs:
     strategy:
       matrix:
         hdf5: [ 1.12.2 ]
-        netcdf: [ v4.7.4, v4.8.1, v4.9.0, main ]
+        netcdf: [ v4.7.4, v4.8.1, v4.9.0 ]
 
     steps:
 
@@ -325,7 +329,7 @@ jobs:
     strategy:
       matrix:
         hdf5: [ 1.12.2 ]
-        netcdf: [ v4.7.4, v4.8.1, v4.9.0, main ]
+        netcdf: [ v4.7.4, v4.8.1, v4.9.0 ]
 
     steps:
 

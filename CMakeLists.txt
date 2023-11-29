@@ -21,6 +21,7 @@ set(PACKAGE "${NC4F_CTEST_PROJECT_NAME}" CACHE STRING "")
 #Project Version
 SET(NC4F_VERSION_MAJOR 4)
 SET(NC4F_VERSION_MINOR 6)
+
 SET(NC4F_VERSION_PATCH 2)
 SET(NC4F_VERSION_NOTE "-development")
 SET(NC4F_VERSION ${NC4F_VERSION_MAJOR}.${NC4F_VERSION_MINOR}.${NC4F_VERSION_PATCH}${NC4F_VERSION_NOTE})
@@ -45,6 +46,9 @@ IF(UNAME)
   getuname(cpu    -m)
   set(TMP_BUILDNAME        "${osname}-${osrel}-${cpu}" CACHE STRING "Build name variable for CDash")
 ENDIF()
+
+# For CMAKE_INSTALL_LIBDIR
+INCLUDE(GNUInstallDirs)
 
 ###
 # Allow for some customization of the buildname.
@@ -922,16 +926,16 @@ IF(NOT MSVC)
     SET(CMAKE_MACOSX_RPATH ON)
   ENDIF()
 
-  SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+  SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 
   # add the automatically determined parts of the RPATH
   # which point to directories outside the build tree to the install RPATH
   SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
   # the RPATH to be used when installing, but only if it's not a system directory
-  LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+  LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" isSystemDir)
   IF("${isSystemDir}" STREQUAL "-1")
-    SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+    SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
   ENDIF("${isSystemDir}" STREQUAL "-1")
 ENDIF()
 
