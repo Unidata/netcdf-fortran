@@ -35,10 +35,12 @@ C     For checking our data file to make sure it's correct.
       integer endianness
 
 C     Cache size stuff.
-      integer DEFAULT_CACHE_SIZE, DEFAULT_CACHE_NELEMS
+      integer DEFAULT_CACHE_SIZE, DEFAULT_CACHE_NELEMS_OLD
+      integer DEFAULT_CACHE_NELEMS_NEW
       integer DEFAULT_CACHE_PREEMPTION
       parameter (DEFAULT_CACHE_SIZE = 16777216)
-      parameter (DEFAULT_CACHE_NELEMS = 4133)
+      parameter (DEFAULT_CACHE_NELEMS_OLD = 4133)
+      parameter (DEFAULT_CACHE_NELEMS_NEW = 1000)
       parameter (DEFAULT_CACHE_PREEMPTION = 75)
       integer CACHE_SIZE, CACHE_NELEMS, CACHE_PREEMPTION
       parameter (CACHE_SIZE = 8000, CACHE_NELEMS = 500)
@@ -63,7 +65,8 @@ C     Check default chunk cache sizes.
      &     cache_preemption_in)
       if (retval .ne. nf_noerr) stop 1
       if (cache_size_in .ne. DEFAULT_CACHE_SIZE .or. 
-     &     cache_nelems_in .ne. DEFAULT_CACHE_NELEMS .or. 
+     &     (cache_nelems_in .ne. DEFAULT_CACHE_NELEMS_OLD .and.
+     &      cache_nelems_in .ne. DEFAULT_CACHE_NELEMS_NEW) .or. 
      &     cache_preemption_in .ne. DEFAULT_CACHE_PREEMPTION) stop 4
 
 C     Change the cache size for the files created/opened in this program.
