@@ -37,7 +37,7 @@ AC_CANONICAL_TARGET
 
 # This call is required by automake.
 AM_INIT_AUTOMAKE([1.13 foreign dist-zip subdir-objects])
-AM_MAINTAINER_MODE()
+#AM_MAINTAINER_MODE()
 
 AC_MSG_NOTICE([checking user options])
 
