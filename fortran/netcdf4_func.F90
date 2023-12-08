@@ -183,7 +183,7 @@
     integer, intent(in) :: ncid
     integer, intent(out) :: ndims
     integer, dimension(:), intent(out) :: dimids
-    integer, intent(out) :: include_parents
+    integer, intent(in) :: include_parents
     integer :: nf90_inq_dimids
   
     nf90_inq_dimids = nf_inq_dimids(ncid, ndims, dimids, include_parents)
@@ -255,7 +255,7 @@
     integer, intent(in) :: offset
     integer, intent(in) :: field_typeid
     integer, intent(in) :: ndims
-    integer, intent(in) :: dim_sizes
+    integer, dimension(:), intent(in) :: dim_sizes
     integer :: nf90_insert_array_compound
   
     nf90_insert_array_compound = nf_insert_array_compound(ncid, xtype, name, &
@@ -319,7 +319,7 @@
     integer, intent(out) :: offset
     integer, intent(out) :: field_typeid
     integer, intent(out) :: ndims
-    integer, intent(out) :: dim_sizes
+    integer, dimension(:), intent(out) :: dim_sizes
     integer :: nf90_inq_compound_field
   
     nf90_inq_compound_field = nf_inq_compound_field(ncid, xtype, fieldid, name, offset, &
@@ -380,7 +380,7 @@
     integer, intent(in) :: ncid
     integer, intent(in) :: xtype
     integer, intent(in) :: fieldid
-    integer, intent(out) :: dim_sizes
+    integer, dimension(:), intent(out) :: dim_sizes
     integer :: nf90_inq_cmp_fielddim_sizes
   
     nf90_inq_cmp_fielddim_sizes = nf_inq_compound_fielddim_sizes(ncid, xtype, fieldid, dim_sizes)
@@ -464,20 +464,20 @@
     integer, intent(in) :: xtype
     integer, intent(in) :: idx
     character (len = *), intent(out) :: name
-    integer, intent(in) :: value
+    integer, intent(out) :: value
     integer :: nf90_inq_enum_member
   
     nf90_inq_enum_member = nf_inq_enum_member(ncid, xtype, idx, name, value)
   end function nf90_inq_enum_member
   ! -----------
-  function nf90_inq_enum_ident(ncid, xtype, value, idx)
+  function nf90_inq_enum_ident(ncid, xtype, value, identifier)
     integer, intent(in) :: ncid
     integer, intent(in) :: xtype
     integer, intent(in) :: value
-    integer, intent(out) :: idx
+    character (len = *), intent(out) :: identifier
     integer :: nf90_inq_enum_ident
   
-    nf90_inq_enum_ident = nf_inq_enum_ident(ncid, xtype, value, idx)
+    nf90_inq_enum_ident = nf_inq_enum_ident(ncid, xtype, value, identifier)
   end function nf90_inq_enum_ident
   ! -----------
   function nf90_def_opaque(ncid, size, name, xtype)
