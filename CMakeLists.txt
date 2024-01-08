@@ -1187,7 +1187,7 @@ FILE(COPY "${CMAKE_BINARY_DIR}/tmp/nf-config"
 
 include(CMakePackageConfigHelpers)
 
-set(ConfigPackageLocation "${CMAKE_INSTALL_LIBDIR}/cmake/netCDF")
+set(ConfigPackageLocation "${CMAKE_INSTALL_LIBDIR}/cmake/netCDF-Fortran")
 
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/netCDF-FortranConfigVersion.cmake"
