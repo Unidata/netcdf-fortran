@@ -314,6 +314,7 @@ Module netcdf_nc_data
  Integer(C_INT), Parameter :: NC_FATAL   = 1
  Integer(C_INT), Parameter :: NC_VERBOSE = 2
 
+#define USE_NETCDF4
 #ifdef USE_NETCDF4
 
 !                          NETCDF4 data
