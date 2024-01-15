@@ -3,13 +3,13 @@
 ! Replacement for fort-attio.c
 
 ! Written by: Richard Weed, Ph.D.
-!             Center for Advanced Vehicular Systems 
+!             Center for Advanced Vehicular Systems
 !             Mississippi State University
 !             rweed@cavs.msstate.edu
 
 
 ! License (and other Lawyer Language)
- 
+
 ! This software is released under the Apache 2.0 Open Source License. The
 ! full text of the License can be viewed at :
 !
@@ -23,12 +23,12 @@
 
 ! Version 1.: Sept. 2005 - Initial Cray X1 version
 ! Version 2.: May 2006   - Updated to support g95
-! Version 3.: April 2009 - Updated to Netcdf 4.0.1 
-! Version 4.: April 2010 - Updated to Netcdf 4.1.1 
+! Version 3.: April 2009 - Updated to Netcdf 4.0.1
+! Version 4.: April 2010 - Updated to Netcdf 4.1.1
 ! Version 5.: Feb.  2013 - bug fixes for fortran 4.4
 ! Version 6:  Jan.  2016 - General code cleanup. Changed processing of
 !                          name strings to reflect change to addCNullChar
-          
+
 !--------------------------------- nf_put_att_text ---------------------------
  Function nf_put_att_text(ncid, varid, name, nlen, text) RESULT(status)
 
@@ -53,7 +53,7 @@
  cnlen  = nlen
 
  cname = addCNullChar(name, ie)
- 
+
  cstatus = nc_put_att_text(cncid, cvarid, cname(1:ie), cnlen, &
            text)
 
@@ -86,7 +86,7 @@
  cnlen  = nlen
 
  cname = addCNullChar(name, ie)
- 
+
  cstatus = nc_put_att_text(cncid, cvarid, cname(1:ie), cnlen, &
                            text)
 
@@ -118,19 +118,19 @@
    status = NC_EBADTYPE
    RETURN
  EndIf
- 
+
  cncid  = ncid
  cvarid = varid -1 ! Subtract 1 to get C varid
  cnlen  = nlen
  cxtype = xtype
 
 ! Check for C null char on name and add one
- 
+
  cname = addCNullChar(name, ie)
 
-#if NF_INT1_IS_C_SIGNED_CHAR 
+#if NF_INT1_IS_C_SIGNED_CHAR
  cstatus = nc_put_att_schar(cncid, cvarid, cname(1:ie), &
-                           cxtype, cnlen, i1vals) 
+                           cxtype, cnlen, i1vals)
 #elif NF_INT1_IS_C_SHORT
  cstatus = nc_put_att_short(cncid, cvarid, cname(1:ie), &
                             cxtype, cnlen, i1vals)
@@ -169,7 +169,7 @@
    status = NC_EBADTYPE
    Return
  EndIf
- 
+
  cncid  = ncid
  cvarid = varid -1 ! Subtract 1 to get C varid
  cnlen  = nlen
@@ -177,16 +177,16 @@
 
  cname = addCNullChar(name, ie)
 
-#if NF_INT2_IS_C_SHORT 
+#if NF_INT2_IS_C_SHORT
  cstatus = nc_put_att_short(cncid, cvarid, cname(1:ie), &
-                            cxtype, cnlen, i2vals) 
-#elif NF_INT2_IS_C_INT 
+                            cxtype, cnlen, i2vals)
+#elif NF_INT2_IS_C_INT
  cstatus = nc_put_att_int(cncid, cvarid, cname(1:ie), &
                            cxtype, cnlen, i2vals)
-#elif NF_INT2_IS_C_LONG 
+#elif NF_INT2_IS_C_LONG
  cstatus = nc_put_att_long(cncid, cvarid, cname(1:ie), &
                            cxtype, cnlen, i2vals)
-#endif 
+#endif
  status = cstatus
 
  End Function nf_put_att_int2
@@ -220,12 +220,15 @@
 
  cname = addCNullChar(name, ie)
 
-#if NF_INT_IS_C_INT 
+#if NF_INT_IS_C_INT
  cstatus = nc_put_att_int(cncid, cvarid, cname(1:ie), &
-                          cxtype, cnlen, ivals) 
-#elif NF_INT_IS_C_LONG 
+                          cxtype, cnlen, ivals)
+#elif NF_INT_IS_C_LONG
  cstatus = nc_put_att_long(cncid, cvarid, cname(1:ie), &
-                          cxtype, cnlen, ivals) 
+                          cxtype, cnlen, ivals)
+#elif NF_INT_IS_C_LONG_LONG
+ cstatus = nc_put_att_longlong(cncid, cvarid, cname(1:ie), &
+                          cxtype, cnlen, ivals)
 #endif
  status = cstatus
 
@@ -301,15 +304,15 @@
  cxtype = xtype
 
 ! Check for C null char and add one if missing
- 
+
  cname = addCNullChar(name, ie)
 
-#if NF_REAL_IS_C_DOUBLE 
+#if NF_REAL_IS_C_DOUBLE
  cstatus = nc_put_att_double(cncid, cvarid, cname(1:ie), &
-                             cxtype, cnlen, rvals) 
+                             cxtype, cnlen, rvals)
 #else
  cstatus = nc_put_att_float(cncid, cvarid, cname(1:ie), &
-                            cxtype, cnlen, rvals) 
+                            cxtype, cnlen, rvals)
 #endif
  status = cstatus
 
@@ -343,9 +346,9 @@
 ! Check for C null char and add one if missing
 
  cname = addCNullChar(name, ie)
- 
+
  cstatus = nc_put_att_double(cncid, cvarid, cname(1:ie), &
-                             cxtype, cnlen, dvals) 
+                             cxtype, cnlen, dvals)
 
  status = cstatus
 
@@ -411,7 +414,7 @@
 ! Check for C null char and add one if missing
 
  cname = addCNullChar(name, ie)
- 
+
  cstatus = nc_get_att_text(cncid, cvarid, cname(1:ie), text)
 
  status = cstatus
@@ -443,7 +446,7 @@
 ! Check for C null char and add one if missing
 
  cname = addCNullChar(name, ie)
- 
+
  cstatus = nc_get_att_text(cncid, cvarid, cname(1:ie), text)
 
  status = cstatus
@@ -472,7 +475,7 @@
    status = NC_EBADTYPE
    RETURN
  EndIf
- 
+
  cncid  = ncid
  cvarid = varid -1 ! Subtract 1 to get C varid
 
@@ -480,7 +483,7 @@
 
  cname = addCNullChar(name, ie)
 
-#if NF_INT1_IS_C_SIGNED_CHAR 
+#if NF_INT1_IS_C_SIGNED_CHAR
  cstatus = nc_get_att_schar(cncid, cvarid, cname(1:ie), i1vals)
 #elif NF_INT1_IS_C_SHORT
  cstatus = nc_get_att_short(cncid, cvarid, cname(1:ie), i1vals)
@@ -515,20 +518,20 @@
    status = NC_EBADTYPE
    RETURN
  EndIf
- 
+
  cncid  = ncid
  cvarid = varid -1 ! Subtract 1 to get C varid
 
 ! Check for C null char and add one if missing
 
  cname = addCNullChar(name, ie)
- 
+
 #if NF_INT2_IS_C_SHORT
- cstatus = nc_get_att_short(cncid, cvarid, cname(1:ie), i2vals) 
+ cstatus = nc_get_att_short(cncid, cvarid, cname(1:ie), i2vals)
 #elif NF_INT2_IS_C_INT
- cstatus = nc_get_att_int(cncid, cvarid, cname(1:ie), i2vals) 
+ cstatus = nc_get_att_int(cncid, cvarid, cname(1:ie), i2vals)
 #elif NF_INT2_IS_C_LONG
- cstatus = nc_get_att_long(cncid, cvarid, cname(1:ie), i2vals) 
+ cstatus = nc_get_att_long(cncid, cvarid, cname(1:ie), i2vals)
 #endif
  status = cstatus
 
@@ -559,10 +562,12 @@
 
  cname = addCNullChar(name, ie)
 
-#if NF_INT_IS_C_INT 
+#if NF_INT_IS_C_INT
  cstatus = nc_get_att_int(cncid, cvarid, cname(1:ie), ivals)
 #elif NF_INT_IS_C_LONG
  cstatus = nc_get_att_long(cncid, cvarid, cname(1:ie), ivals)
+#elif NF_INT_IS_C_LONG_LONG
+ cstatus = nc_get_att_longlong(cncid, cvarid, cname(1:ie), ivals)
 #endif
  status = cstatus
 
@@ -631,10 +636,10 @@
 
  cname = addCNullChar(name, ie)
 
-#if NF_REAL_IS_C_DOUBLE 
- cstatus = nc_get_att_double(cncid, cvarid, cname(1:ie), rvals) 
+#if NF_REAL_IS_C_DOUBLE
+ cstatus = nc_get_att_double(cncid, cvarid, cname(1:ie), rvals)
 #else
- cstatus = nc_get_att_float(cncid, cvarid, cname(1:ie), rvals) 
+ cstatus = nc_get_att_float(cncid, cvarid, cname(1:ie), rvals)
 #endif
  status = cstatus
 
@@ -664,7 +669,7 @@
 ! Check for C null char and add one if missing
 
  cname = addCNullChar(name, ie)
- 
+
  cstatus = nc_get_att_double(cncid, cvarid, cname(1:ie), dvals)
 
  status = cstatus

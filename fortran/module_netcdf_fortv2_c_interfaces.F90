@@ -605,7 +605,7 @@ Subroutine convert_v2_imap(cncid, cvarid, fmap, cmap, inullp)
  Implicit NONE
 
  Integer(C_INT),       Intent(IN)    :: cncid, cvarid
- Integer(C_INT),       Intent(IN)    :: fmap(*)
+ Integer,              Intent(IN)    :: fmap(*)
  Integer(C_PTRDIFF_T), Intent(INOUT) :: cmap(:)
  Integer,              Intent(OUT)   :: inullp
 

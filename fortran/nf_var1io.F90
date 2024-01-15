@@ -3,13 +3,13 @@
 ! Replacement for fort-var1io.c
 
 ! Written by: Richard Weed, Ph.D
-!             Center for Advanced Vehicular Systems 
+!             Center for Advanced Vehicular Systems
 !             Mississippi State University
 !             rweed@cavs.msstate.edu
 
 
 ! License (and other Lawyer Language)
- 
+
 ! This software is released under the Apache 2.0 Open Source License. The
 ! full text of the License can be viewed at :
 !
@@ -29,7 +29,7 @@
 !                          Added preprocessor test for int and real types
 ! Version 5.: Jan.  2016 - Replace automatic array for cndex with allocatable
 !                          array and general code cleanup
- 
+
 !--------------------------------- nf_put_var1_text ------------------------
  Function nf_put_var1_text(ncid, varid, ndex, chval) RESULT(status)
 
@@ -53,7 +53,7 @@
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract one to get C varid
- 
+
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
  cndexptr = C_NULL_PTR
@@ -61,7 +61,7 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then ! reverse array order and subtract 1 to get C index
-     ALLOCATE(cndex(ndims)) 
+     ALLOCATE(cndex(ndims))
      cndex(1:ndims) = ndex(ndims:1:-1) - 1
      cndexptr       = C_LOC(cndex)
    EndIf
@@ -114,8 +114,8 @@
  ndims    = cndims
 
  If (cstat1 == NC_NOERR) Then
-   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     ALLOCATE(cndex(ndims)) 
+   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index
+     ALLOCATE(cndex(ndims))
      cndex(1:ndims) = ndex(ndims:1:-1) - 1
      cndexptr       = C_LOC(cndex)
    EndIf
@@ -176,8 +176,8 @@
  ndims    = cndims
 
  If (cstat1 == NC_NOERR) Then
-   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     ALLOCATE(cndex(ndims)) 
+   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index
+     ALLOCATE(cndex(ndims))
      cndex(1:ndims) = ndex(ndims:1:-1) - 1
      cndexptr       = C_LOC(cndex)
    EndIf
@@ -231,8 +231,8 @@
  ndims    = cndims
 
  If (cstat1 == NC_NOERR) Then
-   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     ALLOCATE(cndex(ndims)) 
+   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index
+     ALLOCATE(cndex(ndims))
      cndex(1:ndims) = ndex(ndims:1:-1) - 1
      cndexptr       = C_LOC(cndex)
    EndIf
@@ -242,6 +242,8 @@
  cstatus = nc_put_var1_int(cncid, cvarid, cndexptr, cival)
 #elif NF_INT_IS_C_LONG
  cstatus = nc_put_var1_long(cncid, cvarid, cndexptr, cival)
+#elif NF_INT_IS_C_LONG_LONG
+ cstatus = nc_put_var1_longlong(cncid, cvarid, cndexptr, cival)
 #endif
 
  status = cstatus
@@ -282,8 +284,8 @@
  ndims    = cndims
 
  If (cstat1 == NC_NOERR) Then
-   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     ALLOCATE(cndex(ndims)) 
+   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index
+     ALLOCATE(cndex(ndims))
      cndex(1:ndims) = ndex(ndims:1:-1) - 1
      cndexptr       = C_LOC(cndex)
    EndIf
@@ -334,7 +336,7 @@
 
  If (cstat1 == NC_NOERR) Then
    If (ndims > 0) Then
-     ALLOCATE(cndex(ndims)) 
+     ALLOCATE(cndex(ndims))
      cndex(1:ndims) = ndex(ndims:1:-1) - 1
      cndexptr       = C_LOC(cndex)
    EndIf
@@ -429,15 +431,15 @@
 
  cncid  = ncid
  cvarid = varid - 1 ! Subtract one to get C varid
- 
+
  cstat1 = nc_inq_varndims(cncid, cvarid, cndims)
 
  cndexptr = C_NULL_PTR
  ndims    = cndims
 
  If (cstat1 == NC_NOERR) Then
-   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     ALLOCATE(cndex(ndims)) 
+   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index
+     ALLOCATE(cndex(ndims))
      cndex(1:ndims) = ndex(ndims:1:-1) - 1
      cndexptr       = C_LOC(cndex)
    Else
@@ -490,13 +492,13 @@
  ndims    = cndims
 
  If (cstat1 == NC_NOERR) Then
-   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     ALLOCATE(cndex(ndims)) 
+   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index
+     ALLOCATE(cndex(ndims))
      cndex(1:ndims) = ndex(ndims:1:-1) -1
      cndexptr       = C_LOC(cndex)
    EndIf
   EndIf
- 
+
  cstatus = nc_get_var1_text(cncid, cvarid, cndexptr, chval)
 
  status = cstatus
@@ -543,8 +545,8 @@
  ndims    = cndims
 
  If (cstat1 == NC_NOERR) Then
-   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     ALLOCATE(cndex(ndims)) 
+   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index
+     ALLOCATE(cndex(ndims))
      cndex(1:ndims) = ndex(ndims:1:-1) - 1
      cndexptr       = C_LOC(cndex)
    EndIf
@@ -559,7 +561,7 @@
 #elif NF_INT1_IS_C_LONG
  cstatus = nc_get_var1_long(cncid, cvarid, cndexptr, cival)
 #endif
- 
+
  ival   = cival
  status = cstatus
 
@@ -605,8 +607,8 @@
  ndims    = cndims
 
  If (cstat1 == NC_NOERR) Then
-   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     ALLOCATE(cndex(ndims)) 
+   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index
+     ALLOCATE(cndex(ndims))
      cndex(1:ndims) = ndex(ndims:1:-1) - 1
      cndexptr       = C_LOC(cndex)
    EndIf
@@ -619,7 +621,7 @@
 #elif NF_INT2_IS_C_LONG
  cstatus = nc_get_var1_long(cncid, cvarid, cndexptr, cival)
 #endif
- 
+
  ival   = cival
  status = cstatus
 
@@ -660,8 +662,8 @@
  ndims    = cndims
 
  If (cstat1 == NC_NOERR) Then
-   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     ALLOCATE(cndex(ndims)) 
+   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index
+     ALLOCATE(cndex(ndims))
      cndex(1:ndims) = ndex(ndims:1:-1) - 1
      cndexptr       = C_LOC(cndex)
    EndIf
@@ -671,6 +673,8 @@
  cstatus = nc_get_var1_int(cncid, cvarid, cndexptr, cival)
 #elif NF_INT_IS_C_LONG
  cstatus = nc_get_var1_long(cncid, cvarid, cndexptr, cival)
+#elif NF_INT_IS_C_LONG_LONG
+ cstatus = nc_get_var1_longlong(cncid, cvarid, cndexptr, cival)
 #endif
 
  ival   = cival
@@ -712,8 +716,8 @@
  ndims    = cndims
 
  If (cstat1 == NC_NOERR) Then
-   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     ALLOCATE(cndex(ndims)) 
+   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index
+     ALLOCATE(cndex(ndims))
      cndex(1:ndims) = ndex(ndims:1:-1) - 1
      cndexptr       = C_LOC(cndex)
    EndIf
@@ -763,8 +767,8 @@
  ndims    = cndims
 
  If (cstat1 == NC_NOERR) Then
-   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     ALLOCATE(cndex(ndims)) 
+   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index
+     ALLOCATE(cndex(ndims))
      cndex(1:ndims) = ndex(ndims:1:-1) - 1
      cndexptr       = C_LOC(cndex)
    EndIf
@@ -862,8 +866,8 @@
  ndims    = cndims
 
  If (cstat1 == NC_NOERR) Then
-   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index 
-     ALLOCATE(cndex(ndims)) 
+   If (ndims > 0) Then ! reverse array order and subtract 1 to get C index
+     ALLOCATE(cndex(ndims))
      cndex(1:ndims) = ndex(ndims:1:-1) - 1
      cndexptr       = C_LOC(cndex)
    EndIf

@@ -33,7 +33,7 @@ C     Information for the compound type we will define.
       parameter (int1_name = 'int1', int2_name = 'int2')
       integer compound_len, compound_len_in
       parameter (compound_len = 2)
-      integer data1(compound_len), data1_in(compound_len)
+      integer*4 data1(compound_len), data1_in(compound_len)
       character*(4) att_name
       parameter (att_name = 'att1')
 

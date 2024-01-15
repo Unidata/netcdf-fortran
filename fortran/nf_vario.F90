@@ -3,13 +3,13 @@
 ! Replacement for fort-vario.c
 
 ! Written by: Richard Weed, Ph.D.
-!             Center For Advanced Vehicular Systems 
+!             Center For Advanced Vehicular Systems
 !             Mississippi State University
 !             rweed@cavs.msstate.edu
-  
+
 
 ! License (and other Lawyer Language)
- 
+
 ! This software is released under the Apache 2.0 Open Source License. The
 ! full text of the License can be viewed at :
 !
@@ -171,6 +171,8 @@
  cstatus = nc_put_var_int(cncid, cvarid, ivals)
 #elif NF_INT_IS_C_LONG
  cstatus = nc_put_var_long(cncid, cvarid, ivals)
+#elif NF_INT_IS_C_LONG_LONG
+ cstatus = nc_put_var_longlong(cncid, cvarid, ivals)
 #endif
 
  status = cstatus
@@ -396,6 +398,8 @@
  cstatus = nc_get_var_int(cncid, cvarid, ivals)
 #elif NF_INT_IS_C_LONG
  cstatus = nc_get_var_long(cncid, cvarid, ivals)
+#elif NF_INT_IS_C_LONG_LONG
+ cstatus = nc_get_var_longlong(cncid, cvarid, ivals)
 #endif
 
  status = cstatus

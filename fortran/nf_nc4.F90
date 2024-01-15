@@ -3,13 +3,13 @@
 ! Replacement for fort-nc4.c
 
 ! Written by: Richard Weed, Ph.D.
-!             Center for Advanced Vehicular Systems  
-!             Mississippi State University 
+!             Center for Advanced Vehicular Systems
+!             Mississippi State University
 !             rweed@cavs.msstate.edu
 
 
 ! License (and other Lawyer Language)
- 
+
 ! This software is released under the Apache 2.0 Open Source License. The
 ! full text of the License can be viewed at :
 !
@@ -36,7 +36,7 @@
 !-------------------------------- nf_inq_ncid ---------------------------------
  Function nf_inq_ncid(ncid, name, groupid) RESULT (status)
 
-! inquire ncid  
+! inquire ncid
 
  USE netcdf4_nc_interfaces
 
@@ -94,14 +94,14 @@
 
  cstatus1 = nc_inq_numgrps(cncid, cnumgrps)
 
- If (cnumgrps > 0) Then 
+ If (cnumgrps > 0) Then
    ALLOCATE(cncids(cnumgrps))
  Else
    ALLOCATE(cncids(1))
  EndIf
 
  cncids = 0
- 
+
  cstatus  = nc_inq_grps(cncid, cnumgrps, cncids)
  If (cstatus == NC_NOERR) Then
    numgrps = cnumgrps
@@ -118,7 +118,7 @@
 !-------------------------------- nf_inq_grpname ------------------------------
  Function nf_inq_grpname( ncid, name) RESULT (status)
 
-! inquire group name 
+! inquire group name
 
  USE netcdf4_nc_interfaces
 
@@ -137,11 +137,11 @@
  nlen  = LEN(name)
  name  = REPEAT(" ",LEN(name))
  cname = REPEAT(" ",LEN(cname))
- 
+
  cstatus = nc_inq_grpname(cncid, cname)
 
  If (cstatus == NC_NOERR) Then
-    name = stripCNullChar(cname,nlen) ! Strip null char and trailing blanks 
+    name = stripCNullChar(cname,nlen) ! Strip null char and trailing blanks
  EndIf
  status = cstatus
 
@@ -149,7 +149,7 @@
 !-------------------------------- nf_inq_grpname_full -------------------------
  Function nf_inq_grpname_full( ncid, nlen, name) RESULT (status)
 
-! inquire full group name and length 
+! inquire full group name and length
 
  USE netcdf4_nc_interfaces
 
@@ -170,7 +170,7 @@
  nl     = LEN(name)
  name   = REPEAT(" ",LEN(name))
  cname  = REPEAT(" ",LEN(cname))
- 
+
  cstatus = nc_inq_grpname_full(cncid, clen, cname)
 
  If (cstatus == NC_NOERR) Then
@@ -198,11 +198,11 @@
  Integer(C_SIZE_T) :: clen
 
  cncid  = ncid
- 
+
  cstatus = nc_inq_grpname_len(cncid, clen)
 
  If (cstatus == NC_NOERR) Then
-    ! Return name length 
+    ! Return name length
      nlen = int(clen)
  EndIf
  status = cstatus
@@ -237,7 +237,7 @@
 !-------------------------------- nf_inq_grp_ncid -----------------------------
  Function nf_inq_grp_ncid( ncid, grp_name, parent_ncid) RESULT (status)
 
-! inquire parent_ncid given group name 
+! inquire parent_ncid given group name
 
  USE netcdf4_nc_interfaces
 
@@ -268,7 +268,7 @@
 !-------------------------------- nf_inq_grp_full_ncid ------------------------
  Function nf_inq_grp_full_ncid( ncid, name, grp_ncid) RESULT (status)
 
-! inquire grp ncid given full group name 
+! inquire grp ncid given full group name
 
  USE netcdf4_nc_interfaces
 
@@ -299,35 +299,53 @@
 !-------------------------------- nf_inq_varids -------------------------------
  Function nf_inq_varids( ncid, nvars, varids) RESULT (status)
 
-! inquire number of vars and varids 
+! inquire number of vars and varids
 
  USE netcdf4_nc_interfaces
+ USE netcdf_nf_interfaces
 
  Implicit NONE
 
  Integer, Intent(IN)    :: ncid
- Integer, Intent(OUT)   :: nvars 
+ Integer, Intent(OUT)   :: nvars
  Integer, Intent(INOUT) :: varids(*)
 
  Integer                :: status
 
  Integer(C_INT) :: cncid, cnvars, cstatus
- 
- cncid     = ncid
- varids(1) = 0
- 
- cstatus = nc_inq_varids_f(cncid, cnvars, varids)
+ Integer(C_INT), ALLOCATABLE :: cvarids(:)
+ Integer :: nvars1
 
- If (cstatus == NC_NOERR) Then
-    nvars  = cnvars 
+ cncid = ncid
+ nvars = 0
+ varids(1) = 0
+
+ status = nf_inq_nvars(ncid, nvars1)
+
+ If (status == NC_NOERR) Then
+   If (nvars1 > 0) Then
+     ALLOCATE(cvarids(nvars1))
+     cvarids = 0
+     cnvars = nvars1
+
+     cstatus = nc_inq_varids(cncid, cnvars, cvarids)
+
+     status = cstatus
+     If (status == NC_NOERR) Then
+       nvars = cnvars
+       ! Add one to each, for fortran
+       varids(1:nvars) = cvarids(1:nvars) + 1
+     EndIf
+   EndIf
  EndIf
- status = cstatus
+
+ If (ALLOCATED(cvarids)) DEALLOCATE(cvarids)
 
  End Function nf_inq_varids
 !-------------------------------- nf_inq_dimids -------------------------------
  Function nf_inq_dimids( ncid, ndims, dimids, parent) RESULT (status)
 
-! inquire number of dimids 
+! inquire number of dimids
 
  USE netcdf4_nc_interfaces
 
@@ -340,23 +358,39 @@
  Integer                :: status
 
  Integer(C_INT) :: cncid, cndims, cparent, cstatus
+ Integer(C_INT), ALLOCATABLE :: cdimids(:)
 
  cncid     = ncid
+ ndims     = 0
  dimids(1) = 0
- cparent = parent
+ cparent   = parent
 
- cstatus = nc_inq_dimids_f(cncid, cndims, dimids, cparent)
+ cstatus = nc_inq_numdimids(cncid, cndims, cparent)
 
  If (cstatus == NC_NOERR) Then
-    ndims  = cndims
+   If (cndims > 0) Then
+     ALLOCATE(cdimids(cndims))
+     cdimids = 0
+
+     cstatus = nc_inq_dimids(cncid, cndims, cdimids, cparent)
+
+     If (cstatus == NC_NOERR) Then
+       ndims  = cndims
+       ! Add one to each, for fortran
+       dimids(1:ndims) = cdimids(1:ndims) + 1
+     EndIf
+   EndIf
  EndIf
+
+ If (ALLOCATED(cdimids)) DEALLOCATE(cdimids)
+
  status = cstatus
 
  End Function nf_inq_dimids
 !-------------------------------- nf_inq_typeids ------------------------------
  Function nf_inq_typeids( ncid, ntypes, typeids) RESULT (status)
 
-! inquire number of types and typeids 
+! inquire number of types and typeids
 
  USE netcdf4_nc_interfaces
 
@@ -402,7 +436,7 @@
 !-------------------------------- nf_inq_typeid -------------------------------
  Function nf_inq_typeid(ncid, name, typeid) RESULT (status)
 
-! inquire typeid for given name 
+! inquire typeid for given name
 
  USE netcdf4_nc_interfaces
 
@@ -434,7 +468,7 @@
 !-------------------------------- nf_def_grp ---------------------------------
  Function nf_def_grp( parent_ncid, name, new_ncid) RESULT (status)
 
-! define new group given name 
+! define new group given name
 
  USE netcdf4_nc_interfaces
 
@@ -457,7 +491,7 @@
  cstatus = nc_def_grp(cncid, cname(1:ie), cnew_ncid)
 
  If (cstatus == NC_NOERR) Then
-    new_ncid = cnew_ncid 
+    new_ncid = cnew_ncid
  EndIf
  status   = cstatus
 
@@ -492,14 +526,14 @@
 !-------------------------------- nf_def_compound -----------------------------
  Function nf_def_compound( ncid, isize, name, typeid) RESULT (status)
 
-! define a compound variable given name and size 
+! define a compound variable given name and size
 
  USE netcdf4_nc_interfaces
 
  Implicit NONE
 
  Integer,          Intent(IN)  :: ncid, isize
- Integer,          Intent(OUT) :: typeid 
+ Integer,          Intent(OUT) :: typeid
  Character(LEN=*), Intent(IN)  :: name
 
  Integer                       :: status
@@ -519,7 +553,7 @@
  If (cstatus == NC_NOERR) Then
     typeid = ctypeid
  EndIf
- 
+
  status = cstatus
 
  End Function nf_def_compound
@@ -527,13 +561,13 @@
  Function nf_insert_compound( ncid, xtype, name, offset, field_typeid) &
                               RESULT (status)
 
-! Insert compound name offset field_typeid etc 
+! Insert compound name offset field_typeid etc
 
  USE netcdf4_nc_interfaces
 
  Implicit NONE
 
- Integer,          Intent(IN) :: ncid, xtype, field_typeid, offset 
+ Integer,          Intent(IN) :: ncid, xtype, field_typeid, offset
  Character(LEN=*), Intent(IN) :: name
 
  Integer                      :: status
@@ -560,7 +594,7 @@
  Function nf_insert_array_compound( ncid, xtype, name, offset, field_typeid, &
                                     ndims, dim_sizes) RESULT (status)
 
-! Insert name type fieldid and dim_sizes array into compound 
+! Insert name type fieldid and dim_sizes array into compound
 
  USE netcdf4_nc_interfaces
 
@@ -577,6 +611,8 @@
  Character(LEN=(LEN(name)+1)) :: cname
  Integer                      :: ie
 
+ Integer(C_INT), ALLOCATABLE  :: cdim_sizes(:)
+
  cncid   = ncid
  cxtype  = xtype
  ctypeid = field_typeid
@@ -585,8 +621,19 @@
  cname   = REPEAT(" ",LEN(cname))
  cname   = addCNullChar(name, ie)
 
- cstatus = nc_insert_array_compound_f(cncid, cxtype, cname(1:ie), &
-                                      coffset, ctypeid, cndims, dim_sizes)
+ If (ndims > 0) Then
+   ALLOCATE(cdim_sizes(ndims))
+   ! Reverse order for Fortran
+   cdim_sizes(1:ndims) = dim_sizes(ndims:1:-1)
+ Else
+   ALLOCATE(cdim_sizes(1))
+   cdim_sizes(1) = 0
+ EndIf
+
+ cstatus = nc_insert_array_compound(cncid, cxtype, cname(1:ie), &
+                                    coffset, ctypeid, cndims, cdim_sizes)
+
+ If (ALLOCATED(cdim_sizes)) DEALLOCATE(cdim_sizes)
 
  status = cstatus
 
@@ -663,7 +710,7 @@
 !-------------------------------- nf_inq_compound_name ------------------------
  Function nf_inq_compound_name( ncid, xtype, name) RESULT (status)
 
-! inquire compound name 
+! inquire compound name
 
  USE netcdf4_nc_interfaces
 
@@ -683,7 +730,7 @@
  nlen   = LEN(name)
  name   = REPEAT(" ",LEN(name))
  cname  = REPEAT(" ",LEN(cname))
- 
+
  cstatus = nc_inq_compound_name(cncid, cxtype, cname)
 
  If (cstatus == NC_NOERR) Then
@@ -724,14 +771,14 @@
 !-------------------------------- nf_inq_compound_nfields ----------------------
  Function nf_inq_compound_nfields( ncid, xtype, nfields) RESULT (status)
 
-! return number of fields for compound 
+! return number of fields for compound
 
  USE netcdf4_nc_interfaces
 
  Implicit NONE
 
  Integer, Intent(IN)    :: ncid, xtype
- Integer, Intent(INOUT) :: nfields 
+ Integer, Intent(INOUT) :: nfields
 
  Integer                :: status
 
@@ -754,7 +801,7 @@
  Function nf_inq_compound_field( ncid, xtype, fieldid, name, offset, &
                                 field_typeid, ndims, dim_sizes) RESULT (status)
 
-! inquire compound field info. Use Fortran specific version of C interface
+! inquire compound field info.
 
  USE netcdf4_nc_interfaces
 
@@ -781,7 +828,10 @@
  nlen     = LEN(name)
  name     = REPEAT(" ",LEN(name))
  cname    = REPEAT(" ",LEN(cname))
+ offset       = 0
+ field_typeid = 0
  dim_sizes(1) = 0
+ ndims        = 0
 
  cstatus1 = nc_inq_compound_field_ndims(cncid, cxtype, cfieldid, cndims)
 
@@ -793,27 +843,29 @@
 
  cdim_sizes = 0
 
- cstatus = nc_inq_compound_field_f(cncid, cxtype, cfieldid, cname, coffset, &
+ cstatus = nc_inq_compound_field(cncid, cxtype, cfieldid, cname, coffset, &
                                    cfield_typeid, cndims, cdim_sizes)
  If (cstatus == NC_NOERR) Then
    name               = stripCNullChar(cname, nlen)
    offset             = int(coffset)
    field_typeid       = cfield_typeid
    ndims              = cndims
+
    If (ndims > 0) Then
-     dim_sizes(1:ndims) = cdim_sizes(1:ndims)
+     ! Reverse order for Fortran
+     dim_sizes(1:ndims) = cdim_sizes(ndims:1:-1)
    EndIf
  EndIf
 
- status = cstatus
-
  If (ALLOCATED(cdim_sizes)) DEALLOCATE(cdim_sizes)
+
+ status = cstatus
 
  End Function nf_inq_compound_field
 !-------------------------------- nf_inq_compound_fieldname -------------------
  Function nf_inq_compound_fieldname(ncid, xtype, fieldid, name) RESULT(status)
 
-! inquire compound field name 
+! inquire compound field name
 
  USE netcdf4_nc_interfaces
 
@@ -834,7 +886,7 @@
  nlen     = LEN(name)
  name     = REPEAT(" ",LEN(name))
  cname    = REPEAT(" ",LEN(cname))
- 
+
  cstatus = nc_inq_compound_fieldname(cncid, cxtype, cfieldid, cname)
 
  If (cstatus == NC_NOERR) Then
@@ -847,7 +899,7 @@
 !-------------------------------- nf_inq_compound_fieldindex ------------------
  Function nf_inq_compound_fieldindex( ncid, xtype, name, fieldid) RESULT (status)
 
-! inquire compound field index id 
+! inquire compound field index id
 
  USE netcdf4_nc_interfaces
 
@@ -881,7 +933,7 @@
  Function nf_inq_compound_fieldoffset( ncid, xtype, fieldid, offset)&
                                        RESULT (status)
 
-! inquire compound field offset 
+! inquire compound field offset
 
  USE netcdf4_nc_interfaces
 
@@ -912,7 +964,7 @@
  Function nf_inq_compound_fieldtype( ncid, xtype, fieldid, field_typeid) &
                                     RESULT (status)
 
-! inquire compound field typeid 
+! inquire compound field typeid
 
  USE netcdf4_nc_interfaces
 
@@ -927,7 +979,7 @@
 
  cncid    = ncid
  cxtype   = xtype
- cfieldid = fieldid -1 
+ cfieldid = fieldid -1
 
  cstatus = nc_inq_compound_fieldtype(cncid, cxtype, cfieldid, cfield_typeid)
 
@@ -941,7 +993,7 @@
 !-------------------------------- nf_inq_compound_fieldndims ------------------
  Function nf_inq_compound_fieldndims( ncid, xtype, fieldid, ndims) RESULT (status)
 
-! Inquire compound field dim_size ndims 
+! Inquire compound field dim_size ndims
 
  USE netcdf4_nc_interfaces
 
@@ -961,7 +1013,7 @@
  cstatus = nc_inq_compound_fieldndims(cncid, cxtype, cfieldid, cndims)
 
  If (cstatus == NC_NOERR) Then
-    ndims = cndims 
+    ndims = cndims
  EndIf
 
  status = cstatus
@@ -971,9 +1023,11 @@
  Function nf_inq_compound_fielddim_sizes( ncid, xtype, fieldid, dim_sizes) &
                                           RESULT (status)
 
-! inq compound field dimension sizes 
+! inq compound field dimension sizes
 
  USE netcdf4_nc_interfaces
+
+ USE ISO_C_BINDING, ONLY: C_INT
 
  Implicit NONE
 
@@ -982,13 +1036,40 @@
 
  Integer                :: status
 
- Integer(C_INT) :: cncid, cxtype, cfieldid, cstatus 
+ Integer(C_INT) :: cncid, cxtype, cfieldid, cndims, cstatus
+ Integer(C_INT), ALLOCATABLE :: cdim_sizes(:)
+ Integer :: ndims
 
  cncid    = ncid
  cxtype   = xtype
- cfieldid = fieldid - 1 
+ cfieldid = fieldid - 1
+ dim_sizes(1) = 0
+ cndims = 0
+ ndims = 0
 
- cstatus = nc_inq_compound_fielddim_sizes(cncid, cxtype, cfieldid, dim_sizes)
+ cstatus = nc_inq_compound_field_ndims(cncid, cxtype, cfieldid, cndims)
+
+ If (cstatus == NC_NOERR) Then
+   ndims = cndims
+   If (ndims > 0) Then
+     ALLOCATE(cdim_sizes(ndims))
+   Else
+     ALLOCATE(cdim_sizes(1))
+   EndIf
+
+   cdim_sizes = 0
+
+   cstatus = nc_inq_compound_fielddim_sizes(cncid, cxtype, cfieldid, &
+                                            cdim_sizes)
+   If (cstatus == NC_NOERR) Then
+     If (ndims > 0) Then
+       ! Reverse order for Fortran
+       dim_sizes(1:ndims) = cdim_sizes(ndims:1:-1)
+     EndIf
+   EndIf
+ EndIf
+
+ If (ALLOCATED(cdim_sizes)) DEALLOCATE(cdim_sizes)
 
  status = cstatus
 
@@ -996,13 +1077,13 @@
 !-------------------------------- nf_def_vlen ---------------------------------
  Function nf_def_vlen( ncid, name, base_typeid, xtype) RESULT (status)
 
-! define variable length data 
+! define variable length data
 
  USE netcdf4_nc_interfaces
 
  Implicit NONE
 
- Integer,          Intent(IN)  :: ncid, base_typeid 
+ Integer,          Intent(IN)  :: ncid, base_typeid
  Character(LEN=*), Intent(IN)  :: name
  Integer,          Intent(OUT) :: xtype
 
@@ -1028,9 +1109,9 @@
 
  End Function nf_def_vlen
 !-------------------------------- nf_inq_vlen ---------------------------------
- Function nf_inq_vlen( ncid, xtype, name, datum_size, base_type) RESULT(status) 
+ Function nf_inq_vlen( ncid, xtype, name, datum_size, base_type) RESULT(status)
 
-! inquire variable length array info 
+! inquire variable length array info
 
  USE netcdf4_nc_interfaces
 
@@ -1052,13 +1133,13 @@
  nlen   = LEN(name)
  name   = REPEAT(" ",LEN(name))
  cname  = REPEAT(" ",LEN(cname))
- 
+
  cstatus = nc_inq_vlen(cncid, cxtype, cname, cdatum_size, cbase_type)
 
  If (cstatus == NC_NOERR) Then
     name       = stripCNullChar(cname, nlen)
     datum_size = int(cdatum_size)
-    base_type  = cbase_type 
+    base_type  = cbase_type
  EndIf
 
  status = cstatus
@@ -1068,7 +1149,7 @@
  Function nf_inq_user_type( ncid, xtype, name, isize, base_type, nfields, &
                             iclass) RESULT (status)
 
-! return size and nfield, class, and base type for user type given 
+! return size and nfield, class, and base type for user type given
 ! ncid, xtype, and name
 
  USE netcdf4_nc_interfaces
@@ -1091,7 +1172,7 @@
  nlen   = LEN(name)
  name   = REPEAT(" ",LEN(name))
  cname  = REPEAT(" ",LEN(cname))
- 
+
 
  cstatus = nc_inq_user_type(cncid, cxtype, cname, csize, cbase_type, cnfields, &
                            cclass)
@@ -1110,13 +1191,13 @@
 !-------------------------------- nf_def_enum ---------------------------------
  Function nf_def_enum( ncid, base_typeid, name, typeid) RESULT (status)
 
-! define an enumerator typeid 
+! define an enumerator typeid
 
  USE netcdf4_nc_interfaces
 
  Implicit NONE
 
- Integer,          Intent(IN)  :: ncid, base_typeid 
+ Integer,          Intent(IN)  :: ncid, base_typeid
  Character(LEN=*), Intent(IN)  :: name
  Integer,          Intent(OUT) :: typeid
 
@@ -1153,7 +1234,7 @@
 
  Implicit NONE
 
- Integer,                Intent(IN)         :: ncid, xtype 
+ Integer,                Intent(IN)         :: ncid, xtype
  Character(LEN=*),       Intent(IN)         :: name
  Character(KIND=C_CHAR), Intent(IN), TARGET :: value(*)
 
@@ -1180,7 +1261,7 @@
  Function nf_inq_enum( ncid, xtype, name, base_nf_type, base_size, &
                        num_members) RESULT (status)
 
-! get information about an enum. 
+! get information about an enum.
 
  USE netcdf4_nc_interfaces
 
@@ -1228,7 +1309,7 @@
 
  Implicit NONE
 
- Integer,                Intent(IN)  :: ncid, xtype, idx 
+ Integer,                Intent(IN)  :: ncid, xtype, idx
  Character(LEN=*),       Intent(OUT) :: name
  Character(KIND=C_CHAR), Intent(OUT) :: value(*)
 
@@ -1269,7 +1350,7 @@
  Integer                         :: status
 
  Integer(C_INT)               :: cncid, cxtype, cstatus
- Integer(C_LONG_LONG)         :: cvalue  
+ Integer(C_LONG_LONG)         :: cvalue
  Character(LEN=NC_MAX_NAME+1) :: cname
  Integer                      :: nlen
 
@@ -1318,7 +1399,7 @@
  cstatus = nc_def_opaque(cncid, csize, cname(1:ie), cxtype)
 
  If (cstatus == NC_NOERR) Then
-    xtype  = cxtype 
+    xtype  = cxtype
  EndIf
 
  status = cstatus
@@ -1412,7 +1493,7 @@
 !-------------------------------- nf_inq_var_chunking -------------------------
  Function nf_inq_var_chunking( ncid, varid, contiguous, chunksizes) RESULT(status)
 
-! inquire variable chunking 
+! inquire variable chunking
 
  USE netcdf4_nc_interfaces
 
@@ -1437,16 +1518,16 @@
  cstat1  = nc_inq_varndims(cncid, cvarid, cndims)
  status  = cstat1
 
- If (cndims > 0) Then 
+ If (cndims > 0) Then
    ALLOCATE(cchunksizes(cndims))
  Else
    ALLOCATE(cchunksizes(1))
- EndIf 
+ EndIf
 
  cchunksizes = 0
 
  cstatus = nc_inq_var_chunking_ints(cncid, cvarid, ccontiguous, &
-                                    cchunksizes) 
+                                    cchunksizes)
  ndims = cndims
  If (cstatus == NC_NOERR) Then
    If (ndims > 0) Then
@@ -1464,7 +1545,7 @@
  Function nf_def_var_deflate( ncid, varid, shuffle, deflate, deflate_level) &
                                RESULT (status)
 
-! define variable deflation 
+! define variable deflation
 
  USE netcdf4_nc_interfaces
 
@@ -1483,7 +1564,7 @@
  cdeflate       = deflate
  cdeflate_level = deflate_level
 
- cstatus = nc_def_var_deflate(cncid, cvarid, cshuffle, cdeflate, cdeflate_level) 
+ cstatus = nc_def_var_deflate(cncid, cvarid, cshuffle, cdeflate, cdeflate_level)
  status = cstatus
 
  End Function nf_def_var_deflate
@@ -1491,7 +1572,7 @@
  Function nf_inq_var_deflate( ncid, varid, shuffle, deflate, deflate_level) &
                                RESULT (status)
 
-! inquire variable deflation 
+! inquire variable deflation
 
  USE netcdf4_nc_interfaces
 
@@ -1508,7 +1589,7 @@
  cncid  = ncid
  cvarid = varid-1
 
- cstatus = nc_inq_var_deflate(cncid, cvarid, cshuffle, cdeflate, cdeflate_level) 
+ cstatus = nc_inq_var_deflate(cncid, cvarid, cshuffle, cdeflate, cdeflate_level)
 
  If (cstatus == NC_NOERR) Then
     shuffle       = cshuffle
@@ -1517,7 +1598,7 @@
  EndIf
 
  status = cstatus
- 
+
  End Function nf_inq_var_deflate
 
  !-------------------------------- nf_def_var_zstandard --------------------------
@@ -1594,7 +1675,7 @@
  Function nf_inq_var_szip(ncid, varid, options_mask, pixels_per_block) RESULT(status)
 
 ! get szip variables
- 
+
  USE netcdf4_nc_interfaces
 
  Implicit NONE
@@ -1635,7 +1716,7 @@
  cquantize_mode = quantize_mode
  cnsd = nsd
 
-#ifdef NF_HAS_QUANTIZE 
+#ifdef NF_HAS_QUANTIZE
  cstatus = nc_def_var_quantize(cncid, cvarid, cquantize_mode, cnsd)
 #else
  cstatus = nc_enotbuilt
@@ -1647,7 +1728,7 @@
  Function nf_inq_var_quantize(ncid, varid, quantize_mode, nsd) RESULT(status)
 
 ! get quantize variables
- 
+
  USE netcdf4_nc_interfaces
 
  Implicit NONE
@@ -1680,7 +1761,7 @@
 !-------------------------------- nf_def_var_fletcher32 -----------------------
  Function nf_def_var_fletcher32( ncid, varid, fletcher32) RESULT(status)
 
-! define var for fletcher32 
+! define var for fletcher32
 
  USE netcdf4_nc_interfaces
 
@@ -1694,17 +1775,17 @@
 
  cncid       = ncid
  cvarid      = varid-1
- cfletcher32 = fletcher32 
+ cfletcher32 = fletcher32
 
  cstatus = nc_def_var_fletcher32(cncid, cvarid, cfletcher32)
- 
+
  status = cstatus
 
  End Function nf_def_var_fletcher32
 !-------------------------------- nf_inq_var_fletcher32 ------------------------
  Function nf_inq_var_fletcher32( ncid, varid, fletcher32) RESULT(status)
 
-! get var for fletcher 32 
+! get var for fletcher 32
 
  USE netcdf4_nc_interfaces
 
@@ -1723,16 +1804,16 @@
  cstatus = nc_inq_var_fletcher32(cncid, cvarid, cfletcher32)
 
  If (cstatus == NC_NOERR) Then
-    fletcher32 = cfletcher32 
+    fletcher32 = cfletcher32
  EndIf
- 
+
  status = cstatus
 
  End Function nf_inq_var_fletcher32
 !-------------------------------- nf_def_var_fill -----------------------------
  Function nf_def_var_fill( ncid, varid, no_fill, fill_value) RESULT(status)
 
-! define fill variable 
+! define fill variable
 
  USE netcdf4_nc_interfaces
 
@@ -1760,7 +1841,7 @@
 !-------------------------------- nf_inq_var_fill -----------------------------
  Function nf_inq_var_fill( ncid, varid, no_fill, fill_value) RESULT(status)
 
-! get fill variable 
+! get fill variable
 
  USE netcdf4_nc_interfaces
 
@@ -1780,7 +1861,7 @@
  cstatus = nc_inq_var_fill(cncid, cvarid, cno_fill, fill_value)
 
  If (cstatus == NC_NOERR) Then
-    no_fill = cno_fill 
+    no_fill = cno_fill
  EndIf
 
  status  = cstatus
@@ -1789,7 +1870,7 @@
 !-------------------------------- nf_def_var_endian ---------------------------
  Function nf_def_var_endian( ncid, varid, endiann) RESULT(status)
 
-! define variable endian 
+! define variable endian
 
  USE netcdf4_nc_interfaces
 
@@ -1813,7 +1894,7 @@
 !-------------------------------- nf_inq_var_endian ---------------------------
  Function nf_inq_var_endian( ncid, varid, endiann) RESULT(status)
 
-! get variable endian 
+! get variable endian
 
  USE netcdf4_nc_interfaces
 
@@ -1839,9 +1920,10 @@
 
  End Function nf_inq_var_endian
 !-------------------------------- nf_def_var_filter ---------------------------
- Function nf_def_var_filter( ncid, varid, filterid, nparams, params) RESULT(status)
+ Function nf_def_var_filter( ncid, varid, filterid, &
+                             nparams, params) RESULT(status)
 
-! define variable filter 
+! define variable filter
 
  USE netcdf4_nc_interfaces
 
@@ -1854,13 +1936,24 @@
 
  Integer(C_INT) :: cncid, cvarid, cfilterid, cstatus
  Integer(C_SIZE_T) :: cnparams
+ Integer(C_INT), ALLOCATABLE :: cparams(:)
 
  cncid    = ncid
  cvarid   = varid-1
  cfilterid = filterid
  cnparams = nparams
 
- cstatus = nc_def_var_filter(cncid, cvarid, cfilterid, cnparams, params)
+ If (nparams > 0) Then
+   ALLOCATE(cparams(nparams))
+   cparams(1:nparams) = params(1:nparams)
+ Else
+   ALLOCATE(cparams(1))
+   cparams(1) = 0
+ EndIf
+
+ cstatus = nc_def_var_filter(cncid, cvarid, cfilterid, cnparams, cparams)
+
+ If (ALLOCATED(cparams)) DEALLOCATE(cparams)
 
  status = cstatus
 
@@ -1869,7 +1962,7 @@
  Function nf_inq_var_filter(ncid, varid, filterid, nparams, params) RESULT(status)
 
 ! get filter variables
- 
+
  USE netcdf4_nc_interfaces
 
  Implicit NONE
@@ -1906,6 +1999,8 @@
    EndIf
  EndIf
 
+ If (ALLOCATED(cparams)) DEALLOCATE(cparams)
+
  status = cstatus
 
  End Function nf_inq_var_filter
@@ -1936,7 +2031,7 @@
 
  cncid     = ncid
  cxtype    = xtype
- cnlen     = nlen 
+ cnlen     = nlen
  cvalueptr = C_LOC(value)
 
  cstatus = nc_put_vlen_element(cncid, cxtype, vlen_element, cnlen,&
@@ -2038,7 +2133,7 @@ End Function nf_free_vlens
 !--------------------------------- nf_free_string -----------------------------
  Function nf_free_string(ilen, vl) RESULT(status)
 
-! Free memory for string array 
+! Free memory for string array
 ! C_CHAR string is used as the dummy arguments for vl. Don't supply calling
 ! program with an explicit interface. Just use external
 
@@ -2068,8 +2163,8 @@ End Function nf_free_string
  Function nf_put_var(ncid, varid, values) RESULT(status)
 
 ! Write out a variable of any type. We use a C_CHAR character string
-! to hold values. Therefore, an explicit interface to nf_put_var should NOT 
-! be used in the calling routine. Use an external instead. 
+! to hold values. Therefore, an explicit interface to nf_put_var should NOT
+! be used in the calling routine. Use an external instead.
 ! Defined in  fort-vario.c but only used in 4.0.1 for NETCDF4 builds
 
  USE netcdf4_nc_interfaces
@@ -2099,9 +2194,9 @@ End Function nf_free_string
 
 ! Read in a variable of any type. We use a C_CHAR character string
 ! to hold values. Therefore, an explicit interface to nf_get_var should NOT
-! be used in the calling routine. Just use external 
+! be used in the calling routine. Just use external
 ! Defined in  fort-vario.c but only used in 4.0.1 for NETCDF4 builds
-  
+
  USE netcdf4_nc_interfaces
 
  Implicit NONE
@@ -2132,7 +2227,7 @@ End Function nf_free_string
 
  Implicit NONE
 
- Integer, Intent(IN) :: chunk_size, nelems, preemption 
+ Integer, Intent(IN) :: chunk_size, nelems, preemption
 
  Integer             :: status
 
@@ -2158,7 +2253,7 @@ End Function nf_free_string
 
  Implicit NONE
 
- Integer, Intent(INOUT) :: chunk_size, nelems, preemption 
+ Integer, Intent(INOUT) :: chunk_size, nelems, preemption
 
  Integer                :: status
 
@@ -2184,7 +2279,7 @@ End Function nf_free_string
 
  Implicit NONE
 
- Integer, Intent(IN) :: ncid, varid, chunk_size, nelems, preemption 
+ Integer, Intent(IN) :: ncid, varid, chunk_size, nelems, preemption
 
  Integer             :: status
 
@@ -2207,14 +2302,14 @@ End Function nf_free_string
  Function nf_get_var_chunk_cache(ncid, varid, chunk_size, nelems, preemption) RESULT(status)
 
 ! get chunk cache size. Note this follows the fort-nc4 version which uses
-! uses nc_get_var_chunk_cache_ints to avoid size_t issues with fortran. 
+! uses nc_get_var_chunk_cache_ints to avoid size_t issues with fortran.
 
  USE netcdf4_nc_interfaces
 
  Implicit NONE
 
- Integer, Intent(IN)    :: ncid, varid 
- Integer, Intent(INOUT) :: chunk_size, nelems, preemption 
+ Integer, Intent(IN)    :: ncid, varid
+ Integer, Intent(INOUT) :: chunk_size, nelems, preemption
 
  Integer                :: status
 
