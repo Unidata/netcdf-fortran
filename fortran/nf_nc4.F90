@@ -566,11 +566,11 @@
 
  Implicit NONE
 
- Integer,          Intent(IN)    :: ncid, xtype, field_typeid, offset, ndims
- Character(LEN=*), Intent(IN)    :: name
- Integer,          Intent(INOUT) :: dim_sizes(*)
+ Integer,          Intent(IN) :: ncid, xtype, field_typeid, offset, ndims
+ Character(LEN=*), Intent(IN) :: name
+ Integer,          Intent(IN) :: dim_sizes(*)
 
- Integer                         :: status
+ Integer                      :: status
 
  Integer(C_INT)               :: cncid, cxtype, ctypeid, cndims, cstatus
  Integer(C_SIZE_T)            :: coffset
@@ -1370,10 +1370,10 @@
 
  Implicit NONE
 
- Integer, Intent(IN)    :: ncid, varid, contiguous
- Integer, Intent(INOUT) :: chunksizes(*)
+ Integer, Intent(IN) :: ncid, varid, contiguous
+ Integer, Intent(IN) :: chunksizes(*)
 
- Integer                :: status
+ Integer             :: status
 
  Integer(C_INT) :: cncid, cvarid, ccontiguous, cstat1, cstatus, &
                    cndims
