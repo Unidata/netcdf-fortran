@@ -310,13 +310,13 @@ Interface
 
  USE ISO_C_BINDING, ONLY: C_INT, C_SIZE_T, C_CHAR
 
- Integer(C_INT),         VALUE         :: ncid, ndims
- Integer(C_INT),         VALUE         :: xtype, field_typeid  ! nc_type in C
- Integer(C_SIZE_T),      VALUE         :: offset
- Character(KIND=C_CHAR), Intent(IN)    :: name(*)
- Integer(C_INT),         Intent(INOUT) :: dim_sizes(*)
+ Integer(C_INT),         VALUE      :: ncid, ndims
+ Integer(C_INT),         VALUE      :: xtype, field_typeid  ! nc_type in C
+ Integer(C_SIZE_T),      VALUE      :: offset
+ Character(KIND=C_CHAR), Intent(IN) :: name(*)
+ Integer(C_INT),         Intent(IN) :: dim_sizes(*)
 
- Integer(C_INT)                        :: nc_insert_array_compound_f
+ Integer(C_INT)                     :: nc_insert_array_compound_f
 
  End Function nc_insert_array_compound_f
 End Interface
