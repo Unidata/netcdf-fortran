@@ -553,7 +553,7 @@ AC_CHECK_FUNCS([nc_def_opaque nccreate nc_set_log_level oc_open nc_def_var_szip]
 
 # Starting with version 4.7.4, netcdf-c has function nc_def_var_szip().
 if test "x$ac_cv_func_nc_def_var_szip" != xyes; then
-   AC_MSG_ERROR([netcdf-c version 4.7.4 or greater is required])
+   AC_MSG_ERROR([netcdf-c version 4.7.4 or greater is required, built with underlying szip support.])
 fi
 
 nc_build_v2=no
