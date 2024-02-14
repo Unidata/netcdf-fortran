@@ -1,5 +1,5 @@
 define(NVES, dnl
-`define(`NUMDIMS',0)dnl # not used, but permits sharing f90aux.m4 
+`define(`NUMDIMS',0)dnl # not used, but permits sharing f90aux.m4
 define(`KINDVALUE',$1)dnl
 define(`PUTORGET', $2)dnl
 include(f90aux.m4)dnl
@@ -7,7 +7,7 @@ include(nves.m4)
 ')dnl
 
 define(NVESPUT48, dnl
-`define(`NUMDIMS',0)dnl # not used, but permits sharing f90aux.m4 
+`define(`NUMDIMS',0)dnl # not used, but permits sharing f90aux.m4
 define(`KINDVALUE',$1)dnl
 define(`PUTORGET', $2)dnl
 include(f90aux.m4)dnl
@@ -15,7 +15,7 @@ include(nvesput48.m4)
 ')dnl
 
 define(NVESGET48, dnl
-`define(`NUMDIMS',0)dnl # not used, but permits sharing f90aux.m4 
+`define(`NUMDIMS',0)dnl # not used, but permits sharing f90aux.m4
 define(`KINDVALUE',$1)dnl
 define(`PUTORGET', $2)dnl
 include(f90aux.m4)dnl
@@ -49,13 +49,11 @@ include(nveaget48.m4)
 NVES(OneByteInt, put)
 NVES(TwoByteInt, put)
 NVESPUT48(FourByteInt, put)
-NVESPUT48(EightByteInt, put)
 NVES(FourByteReal, put)
 NVES(EightByteReal, put)
 NVES(OneByteInt, get)
 NVES(TwoByteInt, get)
 NVESGET48(FourByteInt, get)
-NVESGET48(EightByteInt, get)
 NVES(FourByteReal, get)
 NVES(EightByteReal, get)
 
@@ -80,13 +78,6 @@ NVEAPUT48(4, FourByteInt, put)
 NVEAPUT48(5, FourByteInt, put)
 NVEAPUT48(6, FourByteInt, put)
 NVEAPUT48(7, FourByteInt, put)
-NVEAPUT48(1, EightByteInt, put)
-NVEAPUT48(2, EightByteInt, put)
-NVEAPUT48(3, EightByteInt, put)
-NVEAPUT48(4, EightByteInt, put)
-NVEAPUT48(5, EightByteInt, put)
-NVEAPUT48(6, EightByteInt, put)
-NVEAPUT48(7, EightByteInt, put)
 NVEA(1, FourByteReal, put)
 NVEA(2, FourByteReal, put)
 NVEA(3, FourByteReal, put)
@@ -122,13 +113,6 @@ NVEAGET48(4, FourByteInt, get)
 NVEAGET48(5, FourByteInt, get)
 NVEAGET48(6, FourByteInt, get)
 NVEAGET48(7, FourByteInt, get)
-NVEAGET48(1, EightByteInt, get)
-NVEAGET48(2, EightByteInt, get)
-NVEAGET48(3, EightByteInt, get)
-NVEAGET48(4, EightByteInt, get)
-NVEAGET48(5, EightByteInt, get)
-NVEAGET48(6, EightByteInt, get)
-NVEAGET48(7, EightByteInt, get)
 NVEA(1, FourByteReal, get)
 NVEA(2, FourByteReal, get)
 NVEA(3, FourByteReal, get)
@@ -143,3 +127,23 @@ NVEA(4, EightByteReal, get)
 NVEA(5, EightByteReal, get)
 NVEA(6, EightByteReal, get)
 NVEA(7, EightByteReal, get)
+
+NVEAPUT48(1, EightByteInt, put)
+NVEAPUT48(2, EightByteInt, put)
+NVEAPUT48(3, EightByteInt, put)
+NVEAPUT48(4, EightByteInt, put)
+NVEAPUT48(5, EightByteInt, put)
+NVEAPUT48(6, EightByteInt, put)
+NVEAPUT48(7, EightByteInt, put)
+
+NVEAGET48(1, EightByteInt, get)
+NVEAGET48(2, EightByteInt, get)
+NVEAGET48(3, EightByteInt, get)
+NVEAGET48(4, EightByteInt, get)
+NVEAGET48(5, EightByteInt, get)
+NVEAGET48(6, EightByteInt, get)
+NVEAGET48(7, EightByteInt, get)
+
+NVESPUT48(EightByteInt, put)
+NVESGET48(EightByteInt, get)
+

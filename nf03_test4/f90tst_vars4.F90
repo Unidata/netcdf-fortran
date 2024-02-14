@@ -16,7 +16,7 @@ program f90tst_vars4
 
   integer, parameter :: MAX_DIMS = 2
   integer, parameter :: NX = 40, NY = 4096
-  integer :: data_out(NY, NX), data_in(NY, NX)
+  integer, dimension(:,:), allocatable :: data_out, data_in
 
   ! We need these ids and other gunk for netcdf.
   integer :: ncid, varid, dimids(MAX_DIMS), chunksizes(MAX_DIMS)
@@ -33,6 +33,8 @@ program f90tst_vars4
 
   print *, ''
   print *,'*** Testing definition of netCDF-4 vars from Fortran 90.'
+
+  allocate(data_out(NY, NX), data_in(NY, NX))
 
   ! Create some pretend data.
   do x = 1, NX
@@ -95,6 +97,8 @@ program f90tst_vars4
 
   print *,'*** SUCCESS!'
 
+  if (allocated(data_in)) deallocate(data_in)
+  if (allocated(data_out)) deallocate(data_out)
 
 contains
 !     This subroutine handles errors by printing an error message and

@@ -4,13 +4,13 @@
      integer (kind = OneByteInt), intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start
      integer                                      :: nf90_put_var_OneByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localIndex
 
      ! Set local arguments to default values
      localIndex(:) = 1
      if(present(start)) localIndex(:size(start)) = start(:)
- 
+
      nf90_put_var_OneByteInt = nf_put_var1_int1(ncid, varid, localIndex, values)
    end function nf90_put_var_OneByteInt
 
@@ -20,13 +20,13 @@
      integer (kind = TwoByteInt), intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start
      integer                                      :: nf90_put_var_TwoByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localIndex
 
      ! Set local arguments to default values
      localIndex(:) = 1
      if(present(start)) localIndex(:size(start)) = start(:)
- 
+
      nf90_put_var_TwoByteInt = nf_put_var1_int2(ncid, varid, localIndex, values)
    end function nf90_put_var_TwoByteInt
 
@@ -36,13 +36,13 @@
      integer (kind = FourByteInt), intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start
      integer                                      :: nf90_put_var_FourByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localIndex
 
      ! Set local arguments to default values
      localIndex(:) = 1
      if(present(start)) localIndex(:size(start)) = start(:)
- 
+
      nf90_put_var_FourByteInt = nf_put_var1_int(ncid, varid, localIndex, int(values))
    end function nf90_put_var_FourByteInt
 
@@ -52,13 +52,13 @@
      real (kind = FourByteReal), intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start
      integer                                      :: nf90_put_var_FourByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localIndex
 
      ! Set local arguments to default values
      localIndex(:) = 1
      if(present(start)) localIndex(:size(start)) = start(:)
- 
+
      nf90_put_var_FourByteReal = nf_put_var1_real(ncid, varid, localIndex, values)
    end function nf90_put_var_FourByteReal
 
@@ -68,13 +68,13 @@
      real (kind = EightByteReal), intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start
      integer                                      :: nf90_put_var_EightByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localIndex
 
      ! Set local arguments to default values
      localIndex(:) = 1
      if(present(start)) localIndex(:size(start)) = start(:)
- 
+
      nf90_put_var_EightByteReal = nf_put_var1_double(ncid, varid, localIndex, values)
    end function nf90_put_var_EightByteReal
 
@@ -84,13 +84,13 @@
      integer (kind = OneByteInt), intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start
      integer                                      :: nf90_get_var_OneByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localIndex
 
      ! Set local arguments to default values
      localIndex(:) = 1
      if(present(start)) localIndex(:size(start)) = start(:)
- 
+
      nf90_get_var_OneByteInt = nf_get_var1_int1(ncid, varid, localIndex, values)
    end function nf90_get_var_OneByteInt
 
@@ -100,13 +100,13 @@
      integer (kind = TwoByteInt), intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start
      integer                                      :: nf90_get_var_TwoByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localIndex
 
      ! Set local arguments to default values
      localIndex(:) = 1
      if(present(start)) localIndex(:size(start)) = start(:)
- 
+
      nf90_get_var_TwoByteInt = nf_get_var1_int2(ncid, varid, localIndex, values)
    end function nf90_get_var_TwoByteInt
 
@@ -116,14 +116,14 @@
      integer (kind = FourByteInt), intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start
      integer                                      :: nf90_get_var_FourByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localIndex
      integer                               :: defaultInteger
-     
+
      ! Set local arguments to default values
      localIndex(:) = 1
      if(present(start)) localIndex(:size(start)) = start(:)
- 
+
      nf90_get_var_FourByteInt = nf_get_var1_int(ncid, varid, localIndex, defaultInteger)
      values = defaultInteger
    end function nf90_get_var_FourByteInt
@@ -134,13 +134,13 @@
      real (kind = FourByteReal), intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start
      integer                                      :: nf90_get_var_FourByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localIndex
 
      ! Set local arguments to default values
      localIndex(:) = 1
      if(present(start)) localIndex(:size(start)) = start(:)
- 
+
      nf90_get_var_FourByteReal = nf_get_var1_real(ncid, varid, localIndex, values)
    end function nf90_get_var_FourByteReal
 
@@ -150,13 +150,13 @@
      real (kind = EightByteReal), intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start
      integer                                      :: nf90_get_var_EightByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localIndex
 
      ! Set local arguments to default values
      localIndex(:) = 1
      if(present(start)) localIndex(:size(start)) = start(:)
- 
+
      nf90_get_var_EightByteReal = nf_get_var1_double(ncid, varid, localIndex, values)
    end function nf90_get_var_EightByteReal
 
@@ -168,10 +168,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_1D_OneByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -179,7 +179,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -203,10 +203,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_2D_OneByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -214,7 +214,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -238,10 +238,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_3D_OneByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -249,7 +249,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -273,10 +273,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_4D_OneByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -284,7 +284,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -308,10 +308,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_5D_OneByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -319,7 +319,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -343,10 +343,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_6D_OneByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -354,7 +354,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -378,10 +378,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_7D_OneByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -389,7 +389,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -413,10 +413,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_1D_TwoByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -424,7 +424,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -448,10 +448,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_2D_TwoByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -459,7 +459,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -483,10 +483,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_3D_TwoByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -494,7 +494,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -518,10 +518,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_4D_TwoByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -529,7 +529,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -553,10 +553,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_5D_TwoByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -564,7 +564,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -588,10 +588,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_6D_TwoByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -599,7 +599,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -623,10 +623,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_7D_TwoByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -634,7 +634,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -658,10 +658,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_1D_FourByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -669,7 +669,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -693,10 +693,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_2D_FourByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -704,20 +704,20 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
      if(present(map))  then
-        localMap   (:size(map))    = map(:)
-        nf90_put_var_2D_FourByteInt = &
-             nf_put_varm_int(ncid, varid, localStart, localCount, localStride, localMap, int(values))
+       localMap   (:size(map))    = map(:)
+       nf90_put_var_2D_FourByteInt = &
+          nf_put_varm_int(ncid, varid, localStart, localCount, localStride, localMap, int(values))
      else if(present(stride)) then
-        nf90_put_var_2D_FourByteInt = &
-             nf_put_vars_int(ncid, varid, localStart, localCount, localStride, int(values))
+       nf90_put_var_2D_FourByteInt = &
+          nf_put_vars_int(ncid, varid, localStart, localCount, localStride, int(values))
      else
-        nf90_put_var_2D_FourByteInt = &
-             nf_put_vara_int(ncid, varid, localStart, localCount, values)
+       nf90_put_var_2D_FourByteInt = &
+          nf_put_vara_int(ncid, varid, localStart, localCount, values)
      end if
    end function nf90_put_var_2D_FourByteInt
 
@@ -728,10 +728,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_3D_FourByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -739,7 +739,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -763,10 +763,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_4D_FourByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -774,7 +774,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -798,10 +798,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_5D_FourByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -809,7 +809,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -833,10 +833,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_6D_FourByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -844,7 +844,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -868,10 +868,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_7D_FourByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -879,7 +879,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -897,16 +897,16 @@
    end function nf90_put_var_7D_FourByteInt
 
 
-    function nf90_put_var_1D_FourByteReal(ncid, varid, values, start, count, stride, map)
+   function nf90_put_var_1D_FourByteReal(ncid, varid, values, start, count, stride, map)
      integer,                         intent( in) :: ncid, varid
      real (kind = FourByteReal), dimension(:), &
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_1D_FourByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -914,7 +914,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -938,10 +938,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_2D_FourByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -949,7 +949,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -973,10 +973,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_3D_FourByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -984,7 +984,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1008,10 +1008,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_4D_FourByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1019,7 +1019,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1043,10 +1043,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_5D_FourByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1054,7 +1054,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1078,10 +1078,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_6D_FourByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1089,7 +1089,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1113,10 +1113,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_7D_FourByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1124,7 +1124,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1148,10 +1148,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_1D_EightByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1159,7 +1159,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1183,10 +1183,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_2D_EightByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1194,7 +1194,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1218,10 +1218,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_3D_EightByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1229,7 +1229,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1253,10 +1253,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_4D_EightByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1264,7 +1264,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1288,10 +1288,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_5D_EightByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1299,7 +1299,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1323,10 +1323,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_6D_EightByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1334,7 +1334,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1358,10 +1358,10 @@
                                       intent( in) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_put_var_7D_EightByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1369,7 +1369,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1393,10 +1393,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_1D_OneByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1404,7 +1404,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1428,10 +1428,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_2D_OneByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1439,7 +1439,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1463,10 +1463,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_3D_OneByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1474,7 +1474,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1498,10 +1498,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_4D_OneByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1509,7 +1509,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1533,10 +1533,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_5D_OneByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1544,7 +1544,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1568,10 +1568,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_6D_OneByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1579,7 +1579,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1603,10 +1603,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_7D_OneByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1614,7 +1614,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1638,10 +1638,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_1D_TwoByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1649,7 +1649,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1673,10 +1673,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_2D_TwoByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1684,7 +1684,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1708,10 +1708,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_3D_TwoByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1719,7 +1719,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1743,10 +1743,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_4D_TwoByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1754,7 +1754,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1778,10 +1778,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_5D_TwoByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1789,7 +1789,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1813,10 +1813,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_6D_TwoByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1824,7 +1824,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1848,10 +1848,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_7D_TwoByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -1859,7 +1859,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1883,19 +1883,22 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_1D_FourByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
-     integer                               :: numDims, counter
-     integer, dimension(size(values))      :: defaultIntArray
- 
+     integer                               :: numDims, counter, shapeValues(1)
+     integer, dimension(:), allocatable    :: defaultIntArray
+
+     allocate(defaultIntArray(size(values)))
+
      ! Set local arguments to default values
-     numDims                 = size(shape(values))
+     shapeValues             = shape(values)
+     numDims                 = size(shapeValues)
      localStart (:         ) = 1
-     localCount (:numDims  ) = shape(values)
+     localCount (:numDims  ) = shapeValues
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1910,7 +1913,8 @@
        nf90_get_var_1D_FourByteInt = &
           nf_get_vara_int(ncid, varid, localStart, localCount, defaultIntArray)
      end if
-     values(:) = reshape(defaultIntArray(:), shape(values))
+     values(:) = reshape(defaultIntArray(:), shapeValues)
+     if (allocated(defaultIntArray)) deallocate(defaultIntArray)
    end function nf90_get_var_1D_FourByteInt
 
 
@@ -1920,19 +1924,22 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_2D_FourByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
-     integer                               :: numDims, counter
-     integer, dimension(size(values))      :: defaultIntArray
- 
+     integer                               :: numDims, counter, shapeValues(2)
+     integer, dimension(:), allocatable    :: defaultIntArray
+
+     allocate(defaultIntArray(size(values)))
+
      ! Set local arguments to default values
-     numDims                 = size(shape(values))
+     shapeValues             = shape(values)
+     numDims                 = size(shapeValues)
      localStart (:         ) = 1
-     localCount (:numDims  ) = shape(values)
+     localCount (:numDims  ) = shapeValues
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1947,7 +1954,8 @@
        nf90_get_var_2D_FourByteInt = &
           nf_get_vara_int(ncid, varid, localStart, localCount, defaultIntArray)
      end if
-     values(:, :) = reshape(defaultIntArray(:), shape(values))
+     values(:, :) = reshape(defaultIntArray(:), shapeValues)
+     if (allocated(defaultIntArray)) deallocate(defaultIntArray)
    end function nf90_get_var_2D_FourByteInt
 
 
@@ -1957,19 +1965,22 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_3D_FourByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
-     integer                               :: numDims, counter
-     integer, dimension(size(values))      :: defaultIntArray
- 
+     integer                               :: numDims, counter, shapeValues(3)
+     integer, dimension(:), allocatable    :: defaultIntArray
+
+     allocate(defaultIntArray(size(values)))
+
      ! Set local arguments to default values
-     numDims                 = size(shape(values))
+     shapeValues             = shape(values)
+     numDims                 = size(shapeValues)
      localStart (:         ) = 1
-     localCount (:numDims  ) = shape(values)
+     localCount (:numDims  ) = shapeValues
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -1984,7 +1995,8 @@
        nf90_get_var_3D_FourByteInt = &
           nf_get_vara_int(ncid, varid, localStart, localCount, defaultIntArray)
      end if
-     values(:, :, :) = reshape(defaultIntArray(:), shape(values))
+     values(:, :, :) = reshape(defaultIntArray(:), shapeValues)
+     if (allocated(defaultIntArray)) deallocate(defaultIntArray)
    end function nf90_get_var_3D_FourByteInt
 
 
@@ -1994,19 +2006,22 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_4D_FourByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
-     integer                               :: numDims, counter
-     integer, dimension(size(values))      :: defaultIntArray
- 
+     integer                               :: numDims, counter, shapeValues(4)
+     integer, dimension(:), allocatable    :: defaultIntArray
+
+     allocate(defaultIntArray(size(values)))
+
      ! Set local arguments to default values
-     numDims                 = size(shape(values))
+     shapeValues             = shape(values)
+     numDims                 = size(shapeValues)
      localStart (:         ) = 1
-     localCount (:numDims  ) = shape(values)
+     localCount (:numDims  ) = shapeValues
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -2021,7 +2036,8 @@
        nf90_get_var_4D_FourByteInt = &
           nf_get_vara_int(ncid, varid, localStart, localCount, defaultIntArray)
      end if
-     values(:, :, :, :) = reshape(defaultIntArray(:), shape(values))
+     values(:, :, :, :) = reshape(defaultIntArray(:), shapeValues)
+     if (allocated(defaultIntArray)) deallocate(defaultIntArray)
    end function nf90_get_var_4D_FourByteInt
 
 
@@ -2031,19 +2047,22 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_5D_FourByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
-     integer                               :: numDims, counter
-     integer, dimension(size(values))      :: defaultIntArray
- 
+     integer                               :: numDims, counter, shapeValues(5)
+     integer, dimension(:), allocatable    :: defaultIntArray
+
+     allocate(defaultIntArray(size(values)))
+
      ! Set local arguments to default values
-     numDims                 = size(shape(values))
+     shapeValues             = shape(values)
+     numDims                 = size(shapeValues)
      localStart (:         ) = 1
-     localCount (:numDims  ) = shape(values)
+     localCount (:numDims  ) = shapeValues
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -2058,7 +2077,8 @@
        nf90_get_var_5D_FourByteInt = &
           nf_get_vara_int(ncid, varid, localStart, localCount, defaultIntArray)
      end if
-     values(:, :, :, :, :) = reshape(defaultIntArray(:), shape(values))
+     values(:, :, :, :, :) = reshape(defaultIntArray(:), shapeValues)
+     if (allocated(defaultIntArray)) deallocate(defaultIntArray)
    end function nf90_get_var_5D_FourByteInt
 
 
@@ -2068,19 +2088,22 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_6D_FourByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
-     integer                               :: numDims, counter
-     integer, dimension(size(values))      :: defaultIntArray
- 
+     integer                               :: numDims, counter, shapeValues(6)
+     integer, dimension(:), allocatable    :: defaultIntArray
+
+     allocate(defaultIntArray(size(values)))
+
      ! Set local arguments to default values
-     numDims                 = size(shape(values))
+     shapeValues             = shape(values)
+     numDims                 = size(shapeValues)
      localStart (:         ) = 1
-     localCount (:numDims  ) = shape(values)
+     localCount (:numDims  ) = shapeValues
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -2095,7 +2118,8 @@
        nf90_get_var_6D_FourByteInt = &
           nf_get_vara_int(ncid, varid, localStart, localCount, defaultIntArray)
      end if
-     values(:, :, :, :, :, :) = reshape(defaultIntArray(:), shape(values))
+     values(:, :, :, :, :, :) = reshape(defaultIntArray(:), shapeValues)
+     if (allocated(defaultIntArray)) deallocate(defaultIntArray)
    end function nf90_get_var_6D_FourByteInt
 
 
@@ -2105,19 +2129,22 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_7D_FourByteInt
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
-     integer                               :: numDims, counter
-     integer, dimension(size(values))      :: defaultIntArray
- 
+     integer                               :: numDims, counter, shapeValues(7)
+     integer, dimension(:), allocatable    :: defaultIntArray
+
+     allocate(defaultIntArray(size(values)))
+
      ! Set local arguments to default values
-     numDims                 = size(shape(values))
+     shapeValues             = shape(values)
+     numDims                 = size(shapeValues)
      localStart (:         ) = 1
-     localCount (:numDims  ) = shape(values)
+     localCount (:numDims  ) = shapeValues
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -2132,7 +2159,8 @@
        nf90_get_var_7D_FourByteInt = &
           nf_get_vara_int(ncid, varid, localStart, localCount, defaultIntArray)
      end if
-     values(:, :, :, :, :, :, :) = reshape(defaultIntArray(:), shape(values))
+     values(:, :, :, :, :, :, :) = reshape(defaultIntArray(:), shapeValues)
+     if (allocated(defaultIntArray)) deallocate(defaultIntArray)
    end function nf90_get_var_7D_FourByteInt
 
 
@@ -2142,10 +2170,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_1D_FourByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -2153,7 +2181,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -2177,10 +2205,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_2D_FourByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -2188,7 +2216,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -2212,10 +2240,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_3D_FourByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -2223,7 +2251,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -2247,10 +2275,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_4D_FourByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -2258,7 +2286,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -2282,10 +2310,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_5D_FourByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -2293,7 +2321,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -2317,10 +2345,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_6D_FourByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -2328,7 +2356,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -2352,10 +2380,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_7D_FourByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -2363,7 +2391,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -2387,10 +2415,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_1D_EightByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -2398,7 +2426,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -2422,10 +2450,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_2D_EightByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -2433,7 +2461,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -2457,10 +2485,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_3D_EightByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -2468,7 +2496,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -2492,10 +2520,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_4D_EightByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -2503,7 +2531,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -2527,10 +2555,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_5D_EightByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -2538,7 +2566,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -2562,10 +2590,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_6D_EightByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -2573,7 +2601,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)
@@ -2597,10 +2625,10 @@
                                       intent(out) :: values
      integer, dimension(:), optional, intent( in) :: start, count, stride, map
      integer                                      :: nf90_get_var_7D_EightByteReal
- 
+
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
      integer                               :: numDims, counter
- 
+
      ! Set local arguments to default values
      numDims                 = size(shape(values))
      localStart (:         ) = 1
@@ -2608,7 +2636,7 @@
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
- 
+
      if(present(start))  localStart (:size(start) )  = start(:)
      if(present(count))  localCount (:size(count) )  = count(:)
      if(present(stride)) localStride(:size(stride)) = stride(:)

@@ -8,6 +8,8 @@
 #Minimum required CMake Version
 cmake_minimum_required(VERSION 3.12.0)
 
+set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
 #Project Name for netCDF-Fortran
 PROJECT (NC4F
 LANGUAGES C Fortran
@@ -188,6 +190,11 @@ IF(NOT ENABLE_COVERAGE_TESTS)
   string(APPEND CMAKE_C_FLAGS " -O2")
 ENDIF()
 
+IF(CMAKE_Fortran_COMPILER_ID MATCHES Intel)
+  IF(MSVC)
+    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} /heap-arrays:1")
+  ENDIF()
+ENDIF()
 
 ADD_DEFINITIONS()
 
@@ -342,7 +349,7 @@ ENDMACRO()
 # CRT libs, MT tells VS to use the static CRT libs.
 #
 # Taken From:
-# 	http://www.cmake.org/Wiki/CMake_FAQ#How_can_I_build_my_MSVC_application_with_a_static_runtime.3F
+#   http://www.cmake.org/Wiki/CMake_FAQ#How_can_I_build_my_MSVC_application_with_a_static_runtime.3F
 #
 MACRO(specify_static_crt_flag)
 
@@ -488,6 +495,7 @@ IF (NETCDF_C_INCLUDE_DIR)
    string(REGEX MATCH "[01]" USE_NETCDF4 "${macrodef}")
    IF (USE_NETCDF4)
       MESSAGE(STATUS "Whether NetCDF-C built with HDF5 enabled: yes")
+      FIND_PACKAGE(HDF5 COMPONENTS C HL REQUIRED)
    ELSE()
       MESSAGE(STATUS "Whether NetCDF-C built with HDF5 enabled: no")
    ENDIF()
@@ -645,7 +653,7 @@ CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} oc_open "" BUILD_DAP)
 ###
 # Check to see if szip write capability is present in netcdf-c.
 ###
-SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_INCLUDE_DIR})
+SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_C_INCLUDE_DIR})
 CHECK_C_SOURCE_COMPILES("
 #include <netcdf_meta.h>
 #if !NC_HAS_SZIP_WRITE
@@ -656,7 +664,7 @@ int main() {return 0;}" HAVE_SZIP_WRITE)
 ###
 # Check to see if quantize capability is present in netcdf-c.
 ###
-SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_INCLUDE_DIR})
+SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_C_INCLUDE_DIR})
 CHECK_C_SOURCE_COMPILES("
 #include <netcdf_meta.h>
 #if !NC_HAS_QUANTIZE
@@ -687,8 +695,8 @@ endif()
 
 OPTION(DISABLE_ZSTANDARD_PLUGIN "Disable ZStandard plugin detection and functionality, even if libnetcdf was compiled with plugin support" OFF)
 
-IF(NOT DISABLE_ZSTANDARD_PLUGIN) 
-  SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_INCLUDE_DIR})
+IF(NOT DISABLE_ZSTANDARD_PLUGIN)
+  SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_C_INCLUDE_DIR})
   CHECK_C_SOURCE_COMPILES("
   #include <netcdf_meta.h>
   #if !NC_HAS_ZSTD

@@ -5,7 +5,7 @@ SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Process these files with m4.
 SET(m4_SOURCES test_get test_put)
 foreach (f ${m4_SOURCES})
-		   GEN_m4(${f})
+       GEN_m4(${f})
 endforeach(f)
 
 # Separate C and Fortran Sources
@@ -37,7 +37,9 @@ IF(NOT NETCDF_C_LIBRARY)
 ENDIF()
 
 # Need a copy of ref_fills.nc for ftest
-execute_process(COMMAND cp ${CMAKE_CURRENT_SOURCE_DIR}/ref_fills.nc
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/ref_fills.nc
+          DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+file(RENAME ${CMAKE_CURRENT_BINARY_DIR}/ref_fills.nc
   ${CMAKE_CURRENT_BINARY_DIR}/fills.nc)
 
 INCLUDE_DIRECTORIES(BEFORE
@@ -74,8 +76,8 @@ ENDFOREACH()
 # Copy test scripts in to current directory.
 FILE(GLOB COPY_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.sh)
 FILE(COPY ${COPY_FILES}
-	  DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/
-	  FILE_PERMISSIONS OWNER_WRITE OWNER_READ OWNER_EXECUTE)
+    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/
+    FILE_PERMISSIONS OWNER_WRITE OWNER_READ OWNER_EXECUTE)
 
 # Add script-based tests.
 FOREACH(t ${SCRIPT_TESTS})
