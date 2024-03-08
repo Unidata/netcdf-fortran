@@ -39,7 +39,7 @@ if (USE_NETCDF4)
     CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/run_f90_par_test.sh.in"
       "${CMAKE_CURRENT_SOURCE_DIR}/run_f90_par_test.sh"
     @ONLY)
-    FILE(COPY "${CMAKE_CURRENT_SOURCE_DIR}/run_f90_par_test.sh" 
+    FILE(COPY "${CMAKE_CURRENT_SOURCE_DIR}/run_f90_par_test.sh"
       DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/
       FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
 
@@ -74,7 +74,7 @@ if (USE_NETCDF4)
 endif(USE_NETCDF4)
 
 # Create pre-compiled tests.
-FOREACH(t ${TESTS})
+FOREACH(t IN LISTS TESTS)
   ADD_EXECUTABLE(${t} ${${t}_SOURCES})
   TARGET_LINK_LIBRARIES(${t} netcdff)
   ADD_TEST(${t} ${t})
