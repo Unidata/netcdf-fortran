@@ -32,20 +32,7 @@ SET(PACKAGE_VERSION ${VERSION})
 
 # Set known dependencies.
 SET(EXTRA_DEPS "")
-# Get system configuration,
-# Use it to determine osname,
-# os release, cpu. These will be used
-# when committing to CDash.
-find_program(UNAME NAMES uname)
-IF(UNAME)
-  macro(getuname name flag)
-    exec_program("${UNAME}" ARGS "${flag}" OUTPUT_VARIABLE "${name}")
-  endmacro(getuname)
-  getuname(osname -s)
-  getuname(osrel  -r)
-  getuname(cpu    -m)
-  set(TMP_BUILDNAME        "${osname}-${osrel}-${cpu}" CACHE STRING "Build name variable for CDash")
-ENDIF()
+set(TMP_BUILDNAME        "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_VERSION}-${CMAKE_SYSTEM_PROCESSOR}" CACHE STRING "Build name variable for CDash")
 
 # For CMAKE_INSTALL_LIBDIR
 INCLUDE(GNUInstallDirs)
@@ -687,7 +674,7 @@ endif()
 
 OPTION(DISABLE_ZSTANDARD_PLUGIN "Disable ZStandard plugin detection and functionality, even if libnetcdf was compiled with plugin support" OFF)
 
-IF(NOT DISABLE_ZSTANDARD_PLUGIN) 
+IF(NOT DISABLE_ZSTANDARD_PLUGIN)
   SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_INCLUDE_DIR})
   CHECK_C_SOURCE_COMPILES("
   #include <netcdf_meta.h>
@@ -1085,9 +1072,9 @@ print_conf_summary()
 # Set variables to mirror those used by autoconf.
 # This way we don't need to maintain two separate template
 # files.
-SET(host_cpu "${cpu}")
-SET(host_vendor "${osname}")
-SET(host_os "${osrel}")
+SET(host_cpu "${CMAKE_SYSTEM_PROCESSOR}")
+SET(host_vendor "${CMAKE_SYSTEM_NAME}")
+SET(host_os "${CMAKE_SYSTEM_VERSION}")
 SET(abs_top_builddir "${CMAKE_CURRENT_BINARY_DIR}")
 SET(abs_top_srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
 
