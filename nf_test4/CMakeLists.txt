@@ -67,7 +67,7 @@ IF (HAVE_SZIP_WRITE)
 ENDIF()
 
 # Create pre-compiled tests.
-FOREACH(t ${TESTS})
+FOREACH(t IN LISTS TESTS)
   ADD_EXECUTABLE(${t} ${${t}_SOURCES})
   TARGET_LINK_LIBRARIES(${t} netcdff)
   ADD_TEST(${t} ${t})
