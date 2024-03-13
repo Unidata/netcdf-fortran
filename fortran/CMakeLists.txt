@@ -11,18 +11,24 @@ SET(netcdff_SOURCES
 )
 
 # Check if netcdf-c has parallel I/O feature enabled
-IF (NETCDF_C_INCLUDE_DIR)
+if (NETCDF_C_INCLUDE_DIR)
    file(READ "${NETCDF_C_INCLUDE_DIR}/netcdf_meta.h" header)
    string(REGEX MATCH "#define NC_HAS_PARALLEL *[01]" macrodef "${header}")
    string(REGEX MATCH "[01]" HAVE_PARALLEL "${macrodef}")
-   IF (HAVE_PARALLEL)
-      SET(netcdff_SOURCES ${netcdff_SOURCES} nf_nc.F90)
-      MESSAGE(STATUS "Whether NetCDF-C built with paralle I/O enabled: yes")
-   ELSE()
-      SET(netcdff_SOURCES ${netcdff_SOURCES} nf_nc_noparallel.F90)
-      MESSAGE(STATUS "Whether NetCDF-C built with paralle I/O enabled: no")
-   ENDIF(HAVE_PARALLEL)
-ENDIF(NETCDF_C_INCLUDE_DIR)
+else()
+  # Probably using CMake config file directly
+  set(HAVE_PARALLEL ${netCDF_HAS_PARALLEL})
+endif(NETCDF_C_INCLUDE_DIR)
+
+if (HAVE_PARALLEL)
+  set(netcdff_SOURCES ${netcdff_SOURCES} nf_nc.F90)
+  # Just for a more readable message
+  set(HAVE_PARALLEL "yes")
+else()
+  set(netcdff_SOURCES ${netcdff_SOURCES} nf_nc_noparallel.F90)
+  set(HAVE_PARALLEL "no")
+endif(HAVE_PARALLEL)
+message(STATUS "Whether NetCDF-C built with parallel I/O enabled: ${HAVE_PARALLEL}")
 
 IF (USE_NETCDF4)
   SET(netcdff_SOURCES ${netcdff_SOURCES}
