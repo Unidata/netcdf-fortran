@@ -1165,8 +1165,17 @@ INSTALL(FILES "${CMAKE_BINARY_DIR}/libnetcdff.settings"
 # End libnetcdff.settings section.
 #####
 
+set(prefix "${CMAKE_INSTALL_PREFIX}")
+set(exec_prefix "${CMAKE_INSTALL_PREFIX}")
+set(libdir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+set(includedir "${CMAKE_INSTALL_PREFIX}/include")
+set(fmoddir "${CMAKE_INSTALL_PREFIX}/${Fortran_INSTALL_MODDIR}")
+set(CC "${CMAKE_C_COMPILER}")
+set(FC "${CMAKE_Fortran_COMPILER}")
+set(CPPFLAGS "${CMAKE_C_FLAGS} ${CMAKE_CPP_FLAGS}")
+
 # Generate nf-config form template.
-CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/nf-config.cmake.in"
+CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/nf-config.in"
   "${CMAKE_BINARY_DIR}/tmp/nf-config" @ONLY
   NEWLINE_STYLE LF)
 FILE(COPY "${CMAKE_BINARY_DIR}/tmp/nf-config"
