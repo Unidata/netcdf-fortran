@@ -1021,26 +1021,6 @@ IF(CMAKE_LINK_FLAGS)
   SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${CMAKE_LINK_FLAGS}")
 ENDIF()
 
-# Set
-SET(prefix ${CMAKE_INSTALL_PREFIX})
-SET(exec_prefix ${CMAKE_INSTALL_PREFIX})
-SET(libdir ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
-SET(includedir ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR})
-SET(CC ${CMAKE_C_COMPILER})
-SET(FC ${CMAKE_Fortran_COMPILER})
-
-configure_file(
-        ${CMAKE_SOURCE_DIR}/netcdf-fortran.pc.in
-        ${CMAKE_BINARY_DIR}/netcdf-fortran.pc @ONLY)
-
-INSTALL(FILES ${CMAKE_BINARY_DIR}/netcdf-fortran.pc
-              DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
-              COMPONENT utilities)
-
-INSTALL(PROGRAMS ${NC4F_BINARY_DIR}/nf-config
-        DESTINATION "${CMAKE_INSTALL_BINDIR}"
-        COMPONENT utilities)
-
 # End autotools-style checks for config.h
 
 # Recurse into other subdirectories.
@@ -1165,23 +1145,35 @@ INSTALL(FILES "${CMAKE_BINARY_DIR}/libnetcdff.settings"
 # End libnetcdff.settings section.
 #####
 
+# Set variables used in nf-config and pkgconfig templates
 set(prefix "${CMAKE_INSTALL_PREFIX}")
 set(exec_prefix "${CMAKE_INSTALL_PREFIX}")
 set(libdir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-set(includedir "${CMAKE_INSTALL_PREFIX}/include")
+set(includedir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}")
 set(fmoddir "${CMAKE_INSTALL_PREFIX}/${Fortran_INSTALL_MODDIR}")
 set(CC "${CMAKE_C_COMPILER}")
 set(FC "${CMAKE_Fortran_COMPILER}")
 set(CPPFLAGS "${CMAKE_C_FLAGS} ${CMAKE_CPP_FLAGS}")
 
-# Generate nf-config form template.
-CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/nf-config.in"
+# Generate nf-config from template
+configure_file("${CMAKE_SOURCE_DIR}/nf-config.in"
   "${CMAKE_BINARY_DIR}/tmp/nf-config" @ONLY
   NEWLINE_STYLE LF)
-FILE(COPY "${CMAKE_BINARY_DIR}/tmp/nf-config"
+file(COPY "${CMAKE_BINARY_DIR}/tmp/nf-config"
   DESTINATION ${CMAKE_BINARY_DIR}/
   FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
+configure_file(
+        ${CMAKE_SOURCE_DIR}/netcdf-fortran.pc.in
+        ${CMAKE_BINARY_DIR}/netcdf-fortran.pc @ONLY)
+
+install(FILES ${CMAKE_BINARY_DIR}/netcdf-fortran.pc
+              DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
+              COMPONENT utilities)
+
+install(PROGRAMS ${NC4F_BINARY_DIR}/nf-config
+        DESTINATION "${CMAKE_INSTALL_BINDIR}"
+        COMPONENT utilities)
 
 include(CMakePackageConfigHelpers)
 
