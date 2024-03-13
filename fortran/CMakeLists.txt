@@ -141,24 +141,17 @@ IF (BUILD_SHARED_LIBS)
 ENDIF()
 
 # This is what we are building: a convenience library of Fortran 2003 functions.
-# This just builds SHARED, even though STATIC is also specified
-# ADD_LIBRARY(netcdff STATIC SHARED ${netcdff_SOURCES})
-# Builds only static, not shared
 # Compile C-code to object, then link with Fortran
-ADD_LIBRARY(netcdff_c OBJECT ${netcdff_C_SOURCES})
+add_library(netcdff_c OBJECT ${netcdff_C_SOURCES})
 install(TARGETS netcdff_c OBJECTS DESTINATION lib)
-# or is this better?   list(APPEND NETCDF_C_LIBRARY netcdff_c)
-SET(NETCDF_C_LIBRARY ${NETCDF_C_LIBRARY} netcdff_c)
-set_target_properties(netcdff_c PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${NETCDF_C_INCLUDE_DIR}"
-  )
-target_include_directories(netcdff_c PUBLIC "${NETCDF_C_INCLUDE_DIR}")
+target_link_libraries(netcdff_c PUBLIC netCDF::netcdf)
 
-ADD_LIBRARY(netcdff ${netcdff_SOURCES})
-TARGET_LINK_LIBRARIES(netcdff PUBLIC netCDF::netcdf)
-TARGET_LINK_LIBRARIES(netcdff PRIVATE ${NETCDF_C_LIBRARY})
-TARGET_LINK_LIBRARIES(netcdff PUBLIC ${EXTRA_DEPS})
-SET_TARGET_PROPERTIES(netcdff PROPERTIES
+add_library(netcdff ${netcdff_SOURCES})
+target_link_libraries(netcdff
+  PUBLIC netCDF::netcdf ${EXTRA_DEPS}
+  PRIVATE netcdff_c
+)
+set_target_properties(netcdff PROPERTIES
                       VERSION ${NC4F_LIB_VERSION}
                       SOVERSION ${NC4F_SO_VERSION}
                       )
