@@ -36,7 +36,6 @@ Entries are in reverse chronological order (most recent first).
 ### Requirements
 
 * netCDF-C: 4.9.0+
-
 ### Notable Changes
 
 * We've added API support to take advantage of the Quantize functionality provided by libnetcdf 4.9.0+. [See this conversation](https://github.com/Unidata/netcdf-c/issues/1548) for more information.

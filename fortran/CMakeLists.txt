@@ -11,18 +11,24 @@ SET(netcdff_SOURCES
 )
 
 # Check if netcdf-c has parallel I/O feature enabled
-IF (NETCDF_C_INCLUDE_DIR)
+if (NETCDF_C_INCLUDE_DIR)
    file(READ "${NETCDF_C_INCLUDE_DIR}/netcdf_meta.h" header)
    string(REGEX MATCH "#define NC_HAS_PARALLEL *[01]" macrodef "${header}")
    string(REGEX MATCH "[01]" HAVE_PARALLEL "${macrodef}")
-   IF (HAVE_PARALLEL)
-      SET(netcdff_SOURCES ${netcdff_SOURCES} nf_nc.F90)
-      MESSAGE(STATUS "Whether NetCDF-C built with paralle I/O enabled: yes")
-   ELSE()
-      SET(netcdff_SOURCES ${netcdff_SOURCES} nf_nc_noparallel.F90)
-      MESSAGE(STATUS "Whether NetCDF-C built with paralle I/O enabled: no")
-   ENDIF(HAVE_PARALLEL)
-ENDIF(NETCDF_C_INCLUDE_DIR)
+else()
+  # Probably using CMake config file directly
+  set(HAVE_PARALLEL ${netCDF_HAS_PARALLEL})
+endif(NETCDF_C_INCLUDE_DIR)
+
+if (HAVE_PARALLEL)
+  set(netcdff_SOURCES ${netcdff_SOURCES} nf_nc.F90)
+  # Just for a more readable message
+  set(HAVE_PARALLEL "yes")
+else()
+  set(netcdff_SOURCES ${netcdff_SOURCES} nf_nc_noparallel.F90)
+  set(HAVE_PARALLEL "no")
+endif(HAVE_PARALLEL)
+message(STATUS "Whether NetCDF-C built with parallel I/O enabled: ${HAVE_PARALLEL}")
 
 IF (USE_NETCDF4)
   SET(netcdff_SOURCES ${netcdff_SOURCES}
@@ -141,24 +147,17 @@ IF (BUILD_SHARED_LIBS)
 ENDIF()
 
 # This is what we are building: a convenience library of Fortran 2003 functions.
-# This just builds SHARED, even though STATIC is also specified
-# ADD_LIBRARY(netcdff STATIC SHARED ${netcdff_SOURCES})
-# Builds only static, not shared
 # Compile C-code to object, then link with Fortran
-ADD_LIBRARY(netcdff_c OBJECT ${netcdff_C_SOURCES})
+add_library(netcdff_c OBJECT ${netcdff_C_SOURCES})
 install(TARGETS netcdff_c OBJECTS DESTINATION lib)
-# or is this better?   list(APPEND NETCDF_C_LIBRARY netcdff_c)
-SET(NETCDF_C_LIBRARY ${NETCDF_C_LIBRARY} netcdff_c)
-set_target_properties(netcdff_c PROPERTIES
-    INTERFACE_INCLUDE_DIRECTORIES "${NETCDF_C_INCLUDE_DIR}"
-  )
-target_include_directories(netcdff_c PUBLIC "${NETCDF_C_INCLUDE_DIR}")
+target_link_libraries(netcdff_c PUBLIC netCDF::netcdf)
 
-ADD_LIBRARY(netcdff ${netcdff_SOURCES})
-TARGET_LINK_LIBRARIES(netcdff PUBLIC netCDF::netcdf)
-TARGET_LINK_LIBRARIES(netcdff PRIVATE ${NETCDF_C_LIBRARY})
-TARGET_LINK_LIBRARIES(netcdff PUBLIC ${EXTRA_DEPS})
-SET_TARGET_PROPERTIES(netcdff PROPERTIES
+add_library(netcdff ${netcdff_SOURCES})
+target_link_libraries(netcdff
+  PUBLIC netCDF::netcdf ${EXTRA_DEPS}
+  PRIVATE netcdff_c
+)
+set_target_properties(netcdff PROPERTIES
                       VERSION ${NC4F_LIB_VERSION}
                       SOVERSION ${NC4F_SO_VERSION}
                       )
@@ -193,16 +192,16 @@ IF(NOT MSVC)
   # (but later on when installing)
   SET(CMAKE_BUILD_WITH_INSTALL_RPATH FALSE)
 
-  SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+  SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 
   # add the automatically determined parts of the RPATH
   # which point to directories outside the build tree to the install RPATH
   SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
   # the RPATH to be used when installing, but only if it's not a system directory
-  LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+  LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" isSystemDir)
   IF("${isSystemDir}" STREQUAL "-1")
-    SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+    SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
   ENDIF("${isSystemDir}" STREQUAL "-1")
 ENDIF()
 

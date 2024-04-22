@@ -4,8 +4,8 @@ SET(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 # Process these files with m4.
 SET(m4_SOURCES test_get test_put)
-foreach (f ${m4_SOURCES})
-       GEN_m4(${f})
+foreach (f IN LISTS m4_SOURCES)
+		   GEN_m4(${f})
 endforeach(f)
 
 # Separate C and Fortran Sources
@@ -59,7 +59,7 @@ LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/fortran ${CMAKE_SOURCE_DIR}/libsrc
 
 # Create pre-compiled tests.
 message ("Create pre-compiled tests.")
-FOREACH(t ${TESTS})
+FOREACH(t IN LISTS TESTS)
   ADD_EXECUTABLE(${t} ${${t}_SOURCES})
   message("  " ${t} " C_SOURCES: " ${${t}_C_SOURCES})
   IF(${t}_C_SOURCES)
@@ -80,7 +80,7 @@ FILE(COPY ${COPY_FILES}
     FILE_PERMISSIONS OWNER_WRITE OWNER_READ OWNER_EXECUTE)
 
 # Add script-based tests.
-FOREACH(t ${SCRIPT_TESTS})
+FOREACH(t IN LISTS SCRIPT_TESTS)
   add_sh_test(nf_test ${t})
 ENDFOREACH()
 

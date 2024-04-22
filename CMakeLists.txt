@@ -23,6 +23,7 @@ set(PACKAGE "${NC4F_CTEST_PROJECT_NAME}" CACHE STRING "")
 #Project Version
 SET(NC4F_VERSION_MAJOR 4)
 SET(NC4F_VERSION_MINOR 6)
+
 SET(NC4F_VERSION_PATCH 2)
 SET(NC4F_VERSION_NOTE "-development")
 SET(NC4F_VERSION ${NC4F_VERSION_MAJOR}.${NC4F_VERSION_MINOR}.${NC4F_VERSION_PATCH}${NC4F_VERSION_NOTE})
@@ -33,20 +34,10 @@ SET(PACKAGE_VERSION ${VERSION})
 
 # Set known dependencies.
 SET(EXTRA_DEPS "")
-# Get system configuration,
-# Use it to determine osname,
-# os release, cpu. These will be used
-# when committing to CDash.
-find_program(UNAME NAMES uname)
-IF(UNAME)
-  macro(getuname name flag)
-    exec_program("${UNAME}" ARGS "${flag}" OUTPUT_VARIABLE "${name}")
-  endmacro(getuname)
-  getuname(osname -s)
-  getuname(osrel  -r)
-  getuname(cpu    -m)
-  set(TMP_BUILDNAME        "${osname}-${osrel}-${cpu}" CACHE STRING "Build name variable for CDash")
-ENDIF()
+set(TMP_BUILDNAME        "${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_VERSION}-${CMAKE_SYSTEM_PROCESSOR}" CACHE STRING "Build name variable for CDash")
+
+# For CMAKE_INSTALL_LIBDIR
+INCLUDE(GNUInstallDirs)
 
 ###
 # Allow for some customization of the buildname.
@@ -192,12 +183,10 @@ IF(CMAKE_Fortran_COMPILER_ID MATCHES Intel)
   ENDIF()
 ENDIF()
 
-ADD_DEFINITIONS()
-
 # Supress CRT Warnings.
 # Only necessary for Windows
 IF(MSVC)
-  ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
+  add_compile_definitions(_CRT_SECURE_NO_WARNINGS)
 ENDIF()
 
 
@@ -213,7 +202,7 @@ ENDIF()
 # Macro to append files to the EXTRA_DIST files.
 SET(EXTRA_DIST "")
 MACRO(ADD_EXTRA_DIST files)
-  FOREACH(F ${files})
+  FOREACH(F IN LISTS files)
     list(APPEND EXTRA_DIST ${CMAKE_CURRENT_SOURCE_DIR}/${F})
   ENDFOREACH()
   SET(EXTRA_DIST ${EXTRA_DIST} PARENT_SCOPE)
@@ -323,7 +312,7 @@ MACRO(print_conf_summary)
 
   SET(ALL_DEP_LIBS "${NETCDF_C_LIBRARY};${EXTRA_DEPS}")
   MESSAGE(STATUS "\tLinking against:\t\t" "${ALL_DEP_LIBS}")
-  FOREACH(_LIB ${EXTRA_DEPS})
+  FOREACH(_LIB IN LISTS EXTRA_DEPS)
     GET_FILENAME_COMPONENT(_LIB_NAME ${_LIB} NAME_WE)
     STRING(REGEX REPLACE "^lib" "" _NAME ${_LIB_NAME})
     LIST(APPEND NCF_LIBS "-l${_NAME}")
@@ -358,13 +347,13 @@ MACRO(specify_static_crt_flag)
     CMAKE_CXX_FLAGS_RELEASE CMAKE_CXX_FLAGS_MINSIZEREL
     CMAKE_CXX_FLAGS_RELWITHDEBINFO)
 
-  FOREACH(flag_var ${vars})
+  FOREACH(flag_var IN LISTS vars)
     IF(${flag_var} MATCHES "/MD")
       STRING(REGEX REPLACE "/MD" "/MT" ${flag_var} "${${flag_var}}")
     ENDIF()
   ENDFOREACH()
 
-  FOREACH(flag_var ${vars})
+  FOREACH(flag_var IN LISTS vars)
     MESSAGE(STATUS " '${flag_var}': ${${flag_var}}")
   ENDFOREACH()
   MESSAGE(STATUS "")
@@ -550,26 +539,26 @@ CHECK_INCLUDE_FILE("netcdf.h" HAVE_NETCDF_H)
 # End Check for various system header files.
 ###
 
-ADD_DEFINITIONS(-DNCSHORT_T=integer*2)
-ADD_DEFINITIONS(-DNCBYTE_T=byte)
-ADD_DEFINITIONS(-DNF_RELAX_COORD_BOUND)
-ADD_DEFINITIONS(-DNF_HAS_PARALLEL4)
-ADD_DEFINITIONS(-DNF_HAS_PNETCDF)
-#ADD_DEFINITIONS(-DENABLE_CDF5)
-ADD_DEFINITIONS(-DNF_INT1_IS_C_SIGNED_CHAR)
-#ADD_DEFINITIONS(-DNF_INT1_IS_C_SHORT)
-#ADD_DEFINITIONS(-DNF_INT1_IS_C_INT)
-#ADD_DEFINITIONS(-DNF_INT1_IS_C_LONG)
-ADD_DEFINITIONS(-DNF_INT2_IS_C_SHORT)
-#ADD_DEFINITIONS(-DNF_INT2_IS_C_INT)
-#ADD_DEFINITIONS(-DNF_INT2_IS_C_LONG)
-ADD_DEFINITIONS(-DNF_INT_IS_C_INT)
-#ADD_DEFINITIONS(-DNF_INT_IS_C_LONG)
-ADD_DEFINITIONS(-DNF_INT8_IS_C_LONG_LONG)
-ADD_DEFINITIONS(-DNF_REAL_IS_C_FLOAT)
-#ADD_DEFINITIONS(-DNF_REAL_IS_C_DOUBLE)
-ADD_DEFINITIONS(-DNF_DOUBLEPRECISION_IS_C_DOUBLE)
-#ADD_DEFINITIONS(-DNF_DOUBLEPRECISION_IS_C_FLOAT)
+add_compile_definitions(NCSHORT_T=integer*2)
+add_compile_definitions(NCBYTE_T=byte)
+add_compile_definitions(NF_RELAX_COORD_BOUND)
+add_compile_definitions(NF_HAS_PARALLEL4)
+add_compile_definitions(NF_HAS_PNETCDF)
+#add_compile_definitions(ENABLE_CDF5)
+add_compile_definitions(NF_INT1_IS_C_SIGNED_CHAR)
+#add_compile_definitions(NF_INT1_IS_C_SHORT)
+#add_compile_definitions(NF_INT1_IS_C_INT)
+#add_compile_definitions(NF_INT1_IS_C_LONG)
+add_compile_definitions(NF_INT2_IS_C_SHORT)
+#add_compile_definitions(NF_INT2_IS_C_INT)
+#add_compile_definitions(NF_INT2_IS_C_LONG)
+add_compile_definitions(NF_INT_IS_C_INT)
+#add_compile_definitions(NF_INT_IS_C_LONG)
+add_compile_definitions(NF_INT8_IS_C_LONG_LONG)
+add_compile_definitions(NF_REAL_IS_C_FLOAT)
+#add_compile_definitions(NF_REAL_IS_C_DOUBLE)
+add_compile_definitions(NF_DOUBLEPRECISION_IS_C_DOUBLE)
+#add_compile_definitions(NF_DOUBLEPRECISION_IS_C_FLOAT)
 
 ###
 # Type checks
@@ -668,12 +657,17 @@ CHECK_C_SOURCE_COMPILES("
 #endif
 int main() {return 0;}" HAVE_QUANTIZE)
 if (HAVE_QUANTIZE)
-   ADD_DEFINITIONS(-DNF_HAS_QUANTIZE)
+   add_compile_definitions(NF_HAS_QUANTIZE)
 endif()
 
 CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nc_def_var_szip "" HAVE_DEF_VAR_SZIP)
 if (NOT HAVE_DEF_VAR_SZIP)
-  message(FATAL_ERROR "netcdf-c version 4.7.4 or greater is required")
+  message(FATAL_ERROR "netcdf-c version 4.7.4 or greater is required."
+                      "If netCDF-C 4.7.4 is present but is built statically, you *must* specify all dependencies"
+                      "by setting the LDFLAGS environmental variable.\n"
+                      "Example:\n"
+                      "    $ export LDFLAGS=$(nc-config --libs)"
+                      )
 endif()
 
 ###
@@ -755,12 +749,12 @@ ENDIF(BUILD_DAP)
 SET(ENABLE_NETCDF4 OFF)
 IF(USE_NETCDF4)
   SET(ENABLE_NETCDF4 ON)
-  ADD_DEFINITIONS(-DUSE_NETCDF4)
+  add_compile_definitions(USE_NETCDF4)
   SET(ENABLE_NETCDF4 ON CACHE BOOL "")
 ENDIF()
 
 IF (UNIX AND ${CMAKE_SIZEOF_VOID_P} MATCHES "8")
-  ADD_DEFINITIONS(-DLONGLONG_IS_LONG)
+  add_compile_definitions(LONGLONG_IS_LONG)
   # for easier debugging of cfortran.h
   IF (APPLE)
     IF(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
@@ -794,10 +788,10 @@ try_compile(NF_HAS_PARALLEL4 ${CMAKE_CURRENT_BINARY_DIR}
   )
 
 IF(NF_HAS_PARALLEL4)
-  ADD_DEFINITIONS(-DNF_HAS_PARALLEL4)
+  add_compile_definitions(NF_HAS_PARALLEL4)
 ENDIF()
 IF(NF_HAS_PNETCDF)
-  ADD_DEFINITIONS(-DNF_HAS_PNETCDF)
+  add_compile_definitions(NF_HAS_PNETCDF)
 ENDIF()
 
 IF(NF_HAS_PNETCDF OR NF_HAS_PARALLEL4)
@@ -825,7 +819,7 @@ try_compile(COMPILE_SUCCESS ${CMAKE_CURRENT_BINARY_DIR}
   "${CMAKE_CURRENT_SOURCE_DIR}/CMakeExtras/test_c_ptrdiff_t.f90"
   )
 IF (COMPILE_SUCCESS)
-  ADD_DEFINITIONS(-DHAVE_TS29113_SUPPORT)
+  add_compile_definitions(HAVE_TS29113_SUPPORT)
   SET(HAVE_TS29113_SUPPORT TRUE)
 ELSE ()
   # If the compile fails, PTRDIFF_T is not defined.
@@ -844,7 +838,7 @@ ELSE ()
     IF (SIZEOF_RESULT)
       MESSAGE (FATAL_ERROR "UNABLE TO DETERMINE SIZEOF PTRDIFF_T")
     ELSE (SIZEOF_RESULT)
-      ADD_DEFINITIONS(-DSIZEOF_PTRDIFF_T=${SIZEOF_PTRDIFF_T})
+      add_compile_definitions(SIZEOF_PTRDIFF_T=${SIZEOF_PTRDIFF_T})
     ENDIF (SIZEOF_RESULT)
   ELSE()
     MESSAGE(FATAL_ERROR "Unable to compile ptrdiff")
@@ -930,16 +924,16 @@ IF(NOT MSVC)
     SET(CMAKE_MACOSX_RPATH ON)
   ENDIF()
 
-  SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+  SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 
   # add the automatically determined parts of the RPATH
   # which point to directories outside the build tree to the install RPATH
   SET(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
   # the RPATH to be used when installing, but only if it's not a system directory
-  LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/lib" isSystemDir)
+  LIST(FIND CMAKE_PLATFORM_IMPLICIT_LINK_DIRECTORIES "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}" isSystemDir)
   IF("${isSystemDir}" STREQUAL "-1")
-    SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/lib")
+    SET(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
   ENDIF("${isSystemDir}" STREQUAL "-1")
 ENDIF()
 
@@ -971,7 +965,7 @@ SET(MOD_FLAG -I)
 SET(NC_EXTRA_DEPS "" CACHE STRING "Additional libraries to link against.")
 IF(NC_EXTRA_DEPS)
   STRING(REPLACE " " ";" DEPS_LIST ${NC_EXTRA_DEPS})
-  FOREACH(_DEP ${DEPS_LIST})
+  FOREACH(_DEP IN LISTS DEPS_LIST)
     STRING(REGEX REPLACE "^-l" "" _LIB ${_DEP})
     FIND_LIBRARY("${_LIB}_DEP" NAMES "${_LIB}" "lib${_LIB}")
     # MESSAGE(${${_LIB}_DEP})
@@ -1036,26 +1030,6 @@ IF(CMAKE_LINK_FLAGS)
   SET(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${CMAKE_LINK_FLAGS}")
 ENDIF()
 
-# Set
-SET(prefix ${CMAKE_INSTALL_PREFIX})
-SET(exec_prefix ${CMAKE_INSTALL_PREFIX})
-SET(libdir ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR})
-SET(includedir ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR})
-SET(CC ${CMAKE_C_COMPILER})
-SET(FC ${CMAKE_Fortran_COMPILER})
-
-configure_file(
-        ${CMAKE_SOURCE_DIR}/netcdf-fortran.pc.in
-        ${CMAKE_BINARY_DIR}/netcdf-fortran.pc @ONLY)
-
-INSTALL(FILES ${CMAKE_BINARY_DIR}/netcdf-fortran.pc
-              DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
-              COMPONENT utilities)
-
-INSTALL(PROGRAMS ${NC4F_BINARY_DIR}/nf-config
-        DESTINATION "${CMAKE_INSTALL_BINDIR}"
-        COMPONENT utilities)
-
 # End autotools-style checks for config.h
 
 # Recurse into other subdirectories.
@@ -1084,9 +1058,9 @@ print_conf_summary()
 # Set variables to mirror those used by autoconf.
 # This way we don't need to maintain two separate template
 # files.
-SET(host_cpu "${cpu}")
-SET(host_vendor "${osname}")
-SET(host_os "${osrel}")
+SET(host_cpu "${CMAKE_SYSTEM_PROCESSOR}")
+SET(host_vendor "${CMAKE_SYSTEM_NAME}")
+SET(host_os "${CMAKE_SYSTEM_VERSION}")
 SET(abs_top_builddir "${CMAKE_CURRENT_BINARY_DIR}")
 SET(abs_top_srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
 
@@ -1102,7 +1076,7 @@ SET(NC_FLIBS "")
 
 get_target_property(ALL_TLL_LIBS netcdff LINK_LIBRARIES)
 
-FOREACH(_LIB ${ALL_TLL_LIBS})
+FOREACH(_LIB IN LISTS ALL_TLL_LIBS)
   GET_FILENAME_COMPONENT(_LIB_NAME ${_LIB} NAME_WE)
   STRING(REGEX REPLACE "^lib" "" _NAME ${_LIB_NAME})
   LIST(APPEND NC_FLIBS "-l${_NAME}")
@@ -1180,18 +1154,39 @@ INSTALL(FILES "${CMAKE_BINARY_DIR}/libnetcdff.settings"
 # End libnetcdff.settings section.
 #####
 
-# Generate nf-config form template.
-CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/nf-config.cmake.in"
+# Set variables used in nf-config and pkgconfig templates
+set(prefix "${CMAKE_INSTALL_PREFIX}")
+set(exec_prefix "${CMAKE_INSTALL_PREFIX}")
+set(libdir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+set(includedir "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}")
+set(fmoddir "${CMAKE_INSTALL_PREFIX}/${Fortran_INSTALL_MODDIR}")
+set(CC "${CMAKE_C_COMPILER}")
+set(FC "${CMAKE_Fortran_COMPILER}")
+set(CPPFLAGS "${CMAKE_C_FLAGS} ${CMAKE_CPP_FLAGS}")
+
+# Generate nf-config from template
+configure_file("${CMAKE_SOURCE_DIR}/nf-config.in"
   "${CMAKE_BINARY_DIR}/tmp/nf-config" @ONLY
   NEWLINE_STYLE LF)
-FILE(COPY "${CMAKE_BINARY_DIR}/tmp/nf-config"
+file(COPY "${CMAKE_BINARY_DIR}/tmp/nf-config"
   DESTINATION ${CMAKE_BINARY_DIR}/
   FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
+configure_file(
+        ${CMAKE_SOURCE_DIR}/netcdf-fortran.pc.in
+        ${CMAKE_BINARY_DIR}/netcdf-fortran.pc @ONLY)
+
+install(FILES ${CMAKE_BINARY_DIR}/netcdf-fortran.pc
+              DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
+              COMPONENT utilities)
+
+install(PROGRAMS ${NC4F_BINARY_DIR}/nf-config
+        DESTINATION "${CMAKE_INSTALL_BINDIR}"
+        COMPONENT utilities)
 
 include(CMakePackageConfigHelpers)
 
-set(ConfigPackageLocation "${CMAKE_INSTALL_LIBDIR}/cmake/netCDF")
+set(ConfigPackageLocation "${CMAKE_INSTALL_LIBDIR}/cmake/netCDF-Fortran")
 
 write_basic_package_version_file(
   "${CMAKE_CURRENT_BINARY_DIR}/netCDF-FortranConfigVersion.cmake"

@@ -6,6 +6,9 @@ name: Run netCDF-Fortran MacOS tests
 
 on: [ workflow_dispatch ]
 
+concurrency:
+  group: ${{ github.workflow}}-${{ github.head_ref }}
+  cancel-in-progress: true
 
 jobs:
 
@@ -20,7 +23,7 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
         ###
         # Set Environmental Variables
@@ -35,13 +38,13 @@ jobs:
       - run: echo "DYLD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/bin:${PATH}" >> $GITHUB_ENV
 
-      - run: brew install automake libaec 
+      - run: brew install automake libaec
         ###
         # Installing libhdf4 and libhdf5
         ###
       - name: Cache libhdf5-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
         id: cache-hdf5
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
           key: hdf5-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
@@ -80,7 +83,7 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 ###
 # Set Environmental Variables
 ###
@@ -89,14 +92,14 @@ jobs:
       - run: echo "FFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
       - run: echo "CFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
 
-      - run: echo "CPPFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV      
+      - run: echo "CPPFLAGS=-I${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/include" >> $GITHUB_ENV
       - run: echo "LDFLAGS=-L${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "LD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "DYLD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/bin:${PATH}" >> $GITHUB_ENV
 
-      - run: brew install automake 
-      
+      - run: brew install automake
+
 
 ###
 # Fetch Cache
@@ -104,7 +107,7 @@ jobs:
 
       - name: Fetch HDF Cache
         id: cache-hdf
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
           key: hdf5-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
@@ -166,7 +169,7 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
 ###
 # Set Environmental Variables
@@ -179,7 +182,7 @@ jobs:
       - run: echo "LD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "CMAKE_PREFIX_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf}}" >> $GITHUB_ENV
 
-      - run: brew install automake 
+      - run: brew install automake
 
 ###
 # Fetch Cache
@@ -187,7 +190,7 @@ jobs:
 
       - name: Fetch HDF Cache
         id: cache-hdf5
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
               path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
               key: hdf5-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
@@ -202,36 +205,26 @@ jobs:
 
       - name: Perform out-of-directory build
         shell: bash -l {0}
-        run: |
-              mkdir build
-              cd build
-              LD_LIBRARY_PATH=${LD_LIBRARY_PATH} cmake .. -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
+        run: LD_LIBRARY_PATH=${LD_LIBRARY_PATH} cmake -B build -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
 
       - name: Print Summary
         shell: bash -l {0}
-        run: |
-              cd build
-              cat libnetcdff.settings
+        run: cat build/libnetcdff.settings
 
       - name: Build All
         shell: bash -l {0}
-        run: |
-              cd build
-              LD_LIBRARY_PATH=${LD_LIBRARY_PATH} make -j 12
+        run: LD_LIBRARY_PATH=${LD_LIBRARY_PATH} cmake --build build --parallel
         if: ${{ success() }}
 
       - name: Run Tests
         shell: bash -l {0}
-        run: |
-              cd build
-              LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ctest -j 1 .
+        run: LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ctest --test-dir build
         if: ${{ success() }}
 
       - name: Look at LastTest.log if error
         shell: bash -l {0}
         run: |
-          cat /home/runner/work/netcdf-fortran/netcdf-fortran/build/Testing/Temporary/LastTest.log
-          cd build
-          LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ctest --rerun-failed --output-on-failure
+          cat build/Testing/Temporary/LastTest.log
+          LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ctest --test-dir build --rerun-failed --output-on-failure
 
         if: ${{ failure() }}

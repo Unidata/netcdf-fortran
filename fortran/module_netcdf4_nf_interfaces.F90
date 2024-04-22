@@ -217,10 +217,10 @@ Interface
  Function nf_insert_array_compound( ncid, xtype, name, offset, field_typeid, &
                                     ndims, dim_sizes) RESULT (status)
 
- Integer,          Intent(IN)    :: ncid, xtype, field_typeid, offset, ndims
- Integer,          Intent(INOUT) :: dim_sizes(*)
- Character(LEN=*), Intent(IN)    :: name
- Integer                         :: status
+ Integer,          Intent(IN) :: ncid, xtype, field_typeid, offset, ndims
+ Integer,          Intent(IN) :: dim_sizes(*)
+ Character(LEN=*), Intent(IN) :: name
+ Integer                      :: status
 
  End Function nf_insert_array_compound
 End Interface
@@ -483,9 +483,9 @@ Interface
  Function nf_def_var_chunking( ncid, varid, contiguous, chunksizes) &
                                RESULT(status)
 
- Integer, Intent(IN)    :: ncid, varid, contiguous
- Integer, Intent(INOUT) :: chunksizes(*)
- Integer                :: status
+ Integer, Intent(IN) :: ncid, varid, contiguous
+ Integer, Intent(IN) :: chunksizes(*)
+ Integer             :: status
 
  End Function nf_def_var_chunking
 End Interface

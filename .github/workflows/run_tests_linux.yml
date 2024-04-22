@@ -6,6 +6,10 @@ name: Run netCDF-Fortran Linux tests
 
 on: [pull_request, workflow_dispatch]
 
+concurrency:
+  group: ${{ github.workflow}}-${{ github.head_ref }}
+  cancel-in-progress: true
+
 jobs:
 
   build-deps:
@@ -19,7 +23,7 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Install System dependencies
         shell: bash -l {0}
@@ -37,7 +41,7 @@ jobs:
         ###
       - name: Cache libhdf5-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
         id: cache-hdf5
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
           key: hdf5-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
@@ -75,7 +79,7 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Install System dependencies
         shell: bash -l {0}
@@ -94,7 +98,7 @@ jobs:
         ###
       - name: Cache libhdf5-${{ matrix.hdf5 }}-${{ matrix.netcdf }}-par
         id: cache-hdf5-par
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
           key: hdf5-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}-par
@@ -134,7 +138,7 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Install System dependencies
         shell: bash -l {0}
@@ -149,14 +153,14 @@ jobs:
       - run: echo "LD_LIBRARY_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "HDF5_PLUGIN_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "HDF5_PLUGIN_DIR=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
-      
+
 ###
 # Fetch Cache
 ###
 
       - name: Fetch HDF Cache
         id: cache-hdf
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
           key: hdf5-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
@@ -221,7 +225,7 @@ jobs:
 
   nf-autotools-par:
 
-    needs: build-deps-par 
+    needs: build-deps-par
     runs-on: ubuntu-latest
 
     strategy:
@@ -231,7 +235,7 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Install System dependencies
         shell: bash -l {0}
@@ -254,7 +258,7 @@ jobs:
 
       - name: Fetch HDF Cache
         id: cache-hdf-par
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
           key: hdf5-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}-par
@@ -316,7 +320,7 @@ jobs:
       #- name: Make Distcheck
       #  shell: bash -l {0}
       #  run: CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} make distcheck -j
-      
+
   nf-cmake:
 
     needs: build-deps
@@ -329,7 +333,7 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Install System dependencies
         shell: bash -l {0}
@@ -345,14 +349,14 @@ jobs:
       - run: echo "CMAKE_PREFIX_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf}}" >> $GITHUB_ENV
       - run: echo "HDF5_PLUGIN_PATH=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
       - run: echo "HDF5_PLUGIN_DIR=${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib" >> $GITHUB_ENV
-      
+
 ###
 # Fetch Cache
 ###
 
       - name: Fetch HDF Cache
         id: cache-hdf5
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
               path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
               key: hdf5-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
@@ -381,36 +385,25 @@ jobs:
 
       - name: Perform out-of-directory build
         shell: bash -l {0}
-        run: |
-              mkdir build
-              cd build
-              LD_LIBRARY_PATH=${LD_LIBRARY_PATH} cmake .. -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
+        run: LD_LIBRARY_PATH=${LD_LIBRARY_PATH} cmake -Bbuild -DCMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}
 
       - name: Print Summary
         shell: bash -l {0}
-        run: |
-              cd build
-              cat libnetcdff.settings
+        run: cat build/libnetcdff.settings
 
       - name: Build All
         shell: bash -l {0}
-        run: |
-              cd build
-              LD_LIBRARY_PATH=${LD_LIBRARY_PATH} make -j 12
+        run: LD_LIBRARY_PATH=${LD_LIBRARY_PATH} cmake --build build --parallel
         if: ${{ success() }}
 
       - name: Run Tests
         shell: bash -l {0}
-        run: |
-              cd build
-              LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ctest -j 1 .
+        run: LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ctest --test-dir build
         if: ${{ success() }}
 
       - name: Look at LastTest.log if error
         shell: bash -l {0}
         run: |
-          cat /home/runner/work/netcdf-fortran/netcdf-fortran/build/Testing/Temporary/LastTest.log
-          cd build
-          LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ctest --rerun-failed --output-on-failure
-
+          cat build/Testing/Temporary/LastTest.log
+          LD_LIBRARY_PATH=${LD_LIBRARY_PATH} ctest --test-dir build --rerun-failed --output-on-failure
         if: ${{ failure() }}
