@@ -6,13 +6,16 @@
      integer                                      :: NF90_AFUN
  
      integer, dimension(nf90_max_var_dims) :: localStart, localCount, localStride, localMap
-     integer                               :: numDims, counter
-     integer, dimension(size(values))      :: defaultIntArray
+     integer                               :: numDims, counter, shapeValues(NUMDIMS)
+     integer, dimension(:), allocatable    :: defaultIntArray
+ 
+     allocate(defaultIntArray(size(values)))
  
      ! Set local arguments to default values
-     numDims                 = size(shape(values))
+     shapeValues             = shape(values)
+     numDims                 = size(shapeValues)
      localStart (:         ) = 1
-     localCount (:numDims  ) = shape(values)
+     localCount (:numDims  ) = shapeValues
      localCount (numDims+1:) = 1
      localStride(:         ) = 1
      localMap   (:numDims  ) = (/ 1, (product(localCount(:counter)), counter = 1, numDims - 1) /)
@@ -31,5 +34,6 @@
        NF90_AFUN = &
           NF_AFUN`'(ncid, varid, localStart, localCount, defaultIntArray)
      end if
-     values(COLONS) = reshape(defaultIntArray(:), shape(values))
+     values(COLONS) = reshape(defaultIntArray(:), shapeValues)
+     if (allocated(defaultIntArray)) deallocate(defaultIntArray)
    end function NF90_AFUN
