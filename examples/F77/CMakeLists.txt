@@ -19,10 +19,11 @@ FOREACH(F ${example_F77_tests})
   ENDIF()	
 ENDFOREACH()
 
-## Specify files to be distributed by 'make dist'
-FILE(GLOB CUR_EXTRA_DIST RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/*.F ${CMAKE_CURRENT_SOURCE_DIR}/*.sh)
-SET(CUR_EXTRA_DIST ${CUR_EXTRA_DIST} CMakeLists.txt Makefile.am)
-ADD_EXTRA_DIST("${CUR_EXTRA_DIST}")
+# Set some order dependencies on tests
+set_tests_properties(F77_tests_simple_xy_rd PROPERTIES DEPENDS "F77_tests_simple_xy_wr")
+set_tests_properties(F77_tests_sfc_pres_temp_rd PROPERTIES DEPENDS "F77_tests_sfc_pres_temp_wr")
+set_tests_properties(F77_tests_pres_temp_4D_rd PROPERTIES DEPENDS "F77_tests_pres_temp_4D_wr")
+
 
 SET(CLEANFILES sfc_pres_temp.nc simple_xy.nc pres_temp_4D.nc simple_nc4.nc simple_xy_nc4.nc)
 SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${CLEANFILES}")
