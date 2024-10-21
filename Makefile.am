@@ -36,7 +36,7 @@ check_nc_config:
 # These files get added to the distribution.
 EXTRA_DIST = README.md RELEASE_NOTES.md netcdf-fortran.pc.in	\
 F03Interfaces_LICENSE CMakeLists.txt COPYRIGHT nf-config.in	\
-config.h.cmake.in CTestConfig.cmake.in nf-config.cmake.in \
+config.h.cmake.in CTestConfig.cmake.in \
 libnetcdff.settings.in netCDF-FortranConfig.cmake.in
 
 # Remove these generated files, for a distclean.

@@ -39,7 +39,7 @@ PROJECT_NAME           = netcdf-fortran
 # control system is used.
 
 
-PROJECT_NUMBER         = 4.6.2-Development
+PROJECT_NUMBER         = 4.6.2-rc1
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer a
