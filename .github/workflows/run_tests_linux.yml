@@ -101,7 +101,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
-          key: hdf5-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}-par
+          key: hdf5-nc-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}-par
 
 
       - name: Build libhdf5-${{ matrix.hdf5 }}-${{ matrix.netcdf }}-par
@@ -261,7 +261,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
-          key: hdf5-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}-par
+          key: hdf5-nc-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}-par
 
       - name: Check Cache
         shell: bash -l {0}
