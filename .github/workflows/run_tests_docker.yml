@@ -25,4 +25,4 @@ jobs:
 
             - name: Fetch Container ${{ matrix.ctype }}
               shell: bash -l {-}
-              run: docker run --rm -it -e TESTPROC=$(nproc) -v $(pwd):/netcdf-fortran -e CBRANCH=${{ matrix.netcdf }} -e H5VER=${{ matrix.hdf5 }} -e RUNC=OFF docker.unidata.ucar.edu/nctests:${{ matrix.ctype }}
+              run: docker run --rm -d -e TESTPROC=$(nproc) -v $(pwd):/netcdf-fortran -e CBRANCH=${{ matrix.netcdf }} -e H5VER=${{ matrix.hdf5 }} -e RUNC=OFF docker.unidata.ucar.edu/nctests:${{ matrix.ctype }}
