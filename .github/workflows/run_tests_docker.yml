@@ -22,8 +22,13 @@ jobs:
                 ctype: [ serial, mpich ]
 
         steps:
-            - uses: actions/checkout@v4
-
-            - name: Fetch Container ${{ matrix.ctype }}
-              shell: bash -l {0}
-              run: docker run --rm -d -e TESTPROC=$(nproc) -v $(pwd):/netcdf-fortran -e CBRANCH=${{ matrix.netcdf }} -e H5VER=${{ matrix.hdf5 }} -e RUNC=OFF docker.unidata.ucar.edu/nctests:${{ matrix.ctype }}
+            - name: Check out Repo
+              uses: actions/checkout@v4
+            
+            - name: Run container ${{ matrix.ctype }}
+              uses: addnab/docker-run-action@v3
+              with:
+                image: docker.unidata.ucar.edu/nctests:${{ matrix.ctype }}
+                options: -e TESTPROC=$(nproc) -v $(pwd):/netcdf-fortran -e CBRANCH=${{ matrix.netcdf }} -e H5VER=${{ matrix.hdf5 }} -e RUNC=OFF docker.unidata.ucar.edu/nctests:${{ matrix.ctype }}
+                shell: bash
+                run: /home/tester/run_serial_tests.sh
