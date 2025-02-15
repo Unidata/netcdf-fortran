@@ -1,0 +1,28 @@
+###
+# Use the docker container to run tests in a parameterized way.
+###
+
+name: Run Docker-based regression tests
+
+on: [workflow_dispatch]
+
+concurrency:  
+  group: ${{ github.workflow}}-${{ github.head_ref }}  
+  cancel-in-progress: true
+
+jobs:
+    container-test-job:
+        runs-on: ubuntu-latest
+        
+        strategy:
+            matrix:
+                hdf5: [ 1.12.2, 1.14.6 ]
+                netcdf: [ v4.9.3 ]
+                ctype: [ serial, mpich ]
+
+        steps:
+            - uses: actions/checkout@v4
+
+            - name: Fetch Container ${{ matrix.ctype }}
+              shell: bash -l {-}
+              run: docker run --rm -it -e TESTPROC=$(nproc) -v $(pwd):/netcdf-fortran -e CBRANCH=${{ matrix.netcdf }} -e H5VER=${{ matrix.hdf5 }} -e RUNC=OFF docker.unidata.ucar.edu/nctests:${{ matrix.ctype }}
