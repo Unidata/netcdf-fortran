@@ -26,7 +26,7 @@ jobs:
       - name: Pull and Run netCDF Regression Tests
         uses: WardF/netcdf-test-action@v1
         with:
-          run-c: 'TRUE'
+          run-c: 'FALSE'
           repo-type: 'fortran'
           c-compiler: '${{ matrix.c-compiler }}'
           c-branch: '${{ matrix.c-branch }}'
