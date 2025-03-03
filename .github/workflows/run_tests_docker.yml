@@ -4,31 +4,31 @@
 
 name: Run Docker-based regression tests
 
-on: 
-    pull_request:
+on: [pull_request,workflow_dispatch]
 
 concurrency:  
   group: ${{ github.workflow}}-${{ github.head_ref }}  
   cancel-in-progress: true
 
-jobs:
-    container-test-job:
-        runs-on: ubuntu-latest
-        
-        strategy:
-            matrix:
-                hdf5: [ 1.12.2, 1.14.6 ]
-                netcdf: [ v4.9.3 ]
-                ctype: [ serial, mpich ]
+permissions: {} 
 
-        steps:
-            - name: Check out Repo
-              uses: actions/checkout@v4
-            
-            - name: Run container ${{ matrix.ctype }}
-              uses: addnab/docker-run-action@v3
-              with:
-                image: docker.unidata.ucar.edu/nctests:${{ matrix.ctype }}
-                options: -e TESTPROC=$(nproc) -v $(pwd):/netcdf-fortran -e CBRANCH=${{ matrix.netcdf }} -e H5VER=${{ matrix.hdf5 }} -e RUNC=OFF docker.unidata.ucar.edu/nctests:${{ matrix.ctype }}
-                shell: bash
-                run: /home/tester/run_serial_tests.sh
+jobs:  
+  netcdf-tests:
+    name: Docker-Based NetCDF-C, Fortran Regression Testing
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        c-branch: [ 'v4.9.2' ]
+        c-compiler: [ 'gcc', 'clang' ]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pull and Run netCDF Regression Tests
+        uses: WardF/netcdf-test-action@v1
+        with:
+          run-c: 'TRUE'
+          repo-type: 'fortran'
+          c-compiler: '${{ matrix.c-compiler }}'
+          c-branch: '${{ matrix.c-branch }}'
+          run-fortran: 'TRUE'
+
