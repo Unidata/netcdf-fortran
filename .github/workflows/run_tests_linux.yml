@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         hdf5: [ 1.12.2 ]
-        netcdf: [ v4.8.1, v4.9.0 ]
+        netcdf: [ v4.8.1, v4.9.2 ]
 
     steps:
 
