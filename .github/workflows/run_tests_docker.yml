@@ -13,13 +13,15 @@ concurrency:
 permissions: {} 
 
 jobs:  
-  netcdf-tests:
-    name: Docker-Based NetCDF-C, Fortran Regression Testing
+  netcdf-tests-serial:
+    name: Docker-Based NetCDF-C, Fortran Regression Testing (Serial)
     runs-on: ubuntu-latest
     strategy:
       matrix:
         c-branch: [ 'v4.9.2' ]
-        c-compiler: [ 'gcc', 'clang', 'mpicc' ]
+        c-compiler: [ 'gcc', 'clang' ]
+        h5ver: [ '1.12.1', '1.14.3' ]
+        build-system: [ 'both' ]
 
     steps:
       - uses: actions/checkout@v4
@@ -28,8 +30,34 @@ jobs:
         with:
           run-c: 'FALSE'
           repo-type: 'fortran'
+          hdf5-version: '${{ matrix.h5ver }}'
           c-compiler: '${{ matrix.c-compiler }}'
           c-branch: '${{ matrix.c-branch }}'
           run-fortran: 'TRUE'
-          build-system: 'cmake'
+          build-system: '${{ matrix.build-system }}'
 
+  netcdf-tests-parallel:
+
+    needs: netcdf-tests-serial
+
+    name: Docker-Based NetCDF-C, Fortran Regression Testing (parallel)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        c-branch: [ 'v4.9.2' ]
+        c-compiler: [ 'mpicc' ]
+        h5ver: [ '1.12.1', '1.14.3' ]
+        build-system: [ 'both' ]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pull and Run netCDF Regression Tests
+        uses: WardF/netcdf-test-action@v1
+        with:
+          run-c: 'FALSE'
+          repo-type: 'fortran'
+          hdf5-version: '${{ matrix.h5ver }}'
+          c-compiler: '${{ matrix.c-compiler }}'
+          c-branch: '${{ matrix.c-branch }}'
+          run-fortran: 'TRUE'
+          build-system: '${{ matrix.build-system }}'
