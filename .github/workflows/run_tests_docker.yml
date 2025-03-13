@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         c-branch: [ 'v4.9.2' ]
-        c-compiler: [ 'gcc', 'clang' ]
+        c-compiler: [ 'gcc', 'clang', 'mpicc' ]
 
     steps:
       - uses: actions/checkout@v4
