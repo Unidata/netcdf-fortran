@@ -317,6 +317,11 @@ jobs:
         run: CC=${CC} CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} make check -j
         if: ${{ success() }}
 
+      - name: View Failure Logs
+        shell: bash -l {0}
+        run: find . -name "test-suite.log" -exec cat {} \;
+        if: ${{ failure() }} 
+
       #- name: Make Distcheck
       #  shell: bash -l {0}
       #  run: CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} make distcheck -j
