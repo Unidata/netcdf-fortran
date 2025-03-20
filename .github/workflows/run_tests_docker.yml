@@ -61,6 +61,6 @@ jobs:
           hdf5-version: '${{ matrix.h5ver }}'
           run-c: 'FALSE'
           c-compiler: '${{ matrix.c-compiler }}'
-          mpich-version: '${{ mpich-version }}'
+          mpich-version: '${{ matrix.mpich-version }}'
           c-branch: '${{ matrix.c-branch }}'
           run-fortran: 'TRUE'
