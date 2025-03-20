@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         repo-type: [ 'fortran' ]
-        c-branch: [ 'v4.9.2' ]
+        c-branch: [ 'v4.9.3' ]
         h5ver: [ '1.12.1', '1.14.6' ]
         c-compiler: [ 'gcc', 'clang' ]
         buildsystem: [ 'both' ]
@@ -47,7 +47,7 @@ jobs:
     strategy:
       matrix:
         repo-type: [ 'fortran' ]
-        c-branch: [ 'v4.9.2' ]
+        c-branch: [ 'v4.9.3' ]
         h5ver: [ '1.14.6' ]
         c-compiler: [ 'mpicc' ]
         mpich-version: [ '4.3.0' ]
