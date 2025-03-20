@@ -18,9 +18,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        repo-type: [ 'fortran' ]
         c-branch: [ 'v4.9.2' ]
         h5ver: [ '1.12.1', '1.14.6' ]
-        fortran-branch: [ 'v4.6.1' ]
         c-compiler: [ 'gcc', 'clang' ]
         buildsystem: [ 'both' ]
 
@@ -29,14 +29,14 @@ jobs:
       - name: Pull and Run netCDF Regression Tests
         uses: WardF/netcdf-test-action@v1
         with:
-          run-c: 'TRUE'
+          repo-type: '${{ matrix.repo-type }}'
+          run-c: 'FALSE'
           build-system: '${{ matrix.buildsystem }}'
           hdf5-version: '${{ matrix.h5ver }}'
           ctest-repeat: 3
           c-compiler: '${{ matrix.c-compiler }}'
           c-branch: '${{ matrix.c-branch }}'
           run-fortran: 'TRUE'
-          fortran-branch: '${{ matrix.fortran-branch }}'
 
   netcdf-tests-parallel:
 
@@ -46,9 +46,9 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        repo-type: [ 'fortran' ]
         c-branch: [ 'v4.9.2' ]
         h5ver: [ '1.14.6' ]
-        fortran-branch: [ 'v4.6.1' ]
         c-compiler: [ 'mpicc' ]
         mpich-version: [ '4.3.0' ]
         buildsystem: [ 'cmake', 'autotools' ]
@@ -58,7 +58,8 @@ jobs:
       - name: Pull and Run netCDF Regression Tests
         uses: WardF/netcdf-test-action@v1
         with:
-          run-c: 'TRUE'
+          repo-type: '${{ matrix.repo-type }}'
+          run-c: 'FALSE'
           build-system: '${{ matrix.buildsystem }}'
           hdf5-version: '${{ matrix.h5ver }}'
           ctest-repeat: 3
@@ -66,4 +67,4 @@ jobs:
           c-branch: '${{ matrix.c-branch }}'
           mpich-version: '${{ matrix.mpich-version }}'
           run-fortran: 'TRUE'
-          fortran-branch: '${{ matrix.fortran-branch }}'
+
