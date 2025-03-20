@@ -1,0 +1,66 @@
+###
+# Use the docker container to run tests in a parameterized way.
+###
+
+name: Run Docker-based regression tests
+
+on: [pull_request,workflow_dispatch]
+
+concurrency:  
+  group: ${{ github.workflow}}-${{ github.head_ref }}  
+  cancel-in-progress: true
+
+permissions: {} 
+
+jobs:  
+  netcdf-tests-serial:
+    name: Docker-Based NetCDF-C, Fortran Regression Testing (Serial)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        c-branch: [ 'v4.9.3' ]
+        c-compiler: [ 'gcc', 'clang' ]
+        h5ver: [ '1.14.3' ]
+        build-system: [ 'both' ]
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pull and Run netCDF Regression Tests
+        uses: WardF/netcdf-test-action@v1
+        with:
+          run-c: 'FALSE'
+          repo-type: 'fortran'
+          hdf5-version: '${{ matrix.h5ver }}'
+          c-compiler: '${{ matrix.c-compiler }}'
+          c-branch: '${{ matrix.c-branch }}'
+          run-fortran: 'TRUE'
+          build-system: '${{ matrix.build-system }}'
+
+  netcdf-tests-parallel:
+
+    needs: netcdf-tests-serial
+
+    name: Docker-Based NetCDF-C, Fortran Regression Testing (parallel)
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        build-system: [ 'both' ]
+        h5ver: [ '1.14.3' ]
+        c-branch: [ 'v4.9.3' ]
+        c-compiler: [ 'mpicc' ]
+        mpich-version: [ '4.3.0' ]
+
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pull and Run netCDF Regression Tests
+        uses: WardF/netcdf-test-action@v1
+        with:
+          repo-type: 'fortran'
+          build-system: '${{ matrix.build-system }}'
+          hdf5-version: '${{ matrix.h5ver }}'
+          run-c: 'FALSE'
+          c-compiler: '${{ matrix.c-compiler }}'
+          mpich-version: '${{ mpich-version }}'
+          c-branch: '${{ matrix.c-branch }}'
+          run-fortran: 'TRUE'
