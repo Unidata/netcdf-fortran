@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         hdf5: [ 1.12.2 ]
-        netcdf: [ v4.9.3, main ]
+        netcdf: [ v4.9.3 ]
 
     steps:
 
@@ -75,7 +75,7 @@ jobs:
     strategy:
       matrix:
         hdf5: [ 1.12.2 ]
-        netcdf: [ v4.9.3, main ]
+        netcdf: [ v4.9.3 ]
 
     steps:
 
@@ -134,7 +134,7 @@ jobs:
     strategy:
       matrix:
         hdf5: [ 1.12.2 ]
-        netcdf: [ v4.9.3, main ]
+        netcdf: [ v4.9.3 ]
 
     steps:
 
@@ -231,7 +231,7 @@ jobs:
     strategy:
       matrix:
         hdf5: [ 1.12.2 ]
-        netcdf: [ v4.9.3, main ]
+        netcdf: [ v4.9.3 ]
 
     steps:
 
@@ -314,8 +314,15 @@ jobs:
 
       - name: Run Tests
         shell: bash -l {0}
-        run: CC=${CC} CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} make check -j
+        run: CC=${CC} CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} make check -j 4
         if: ${{ success() }}
+
+      - name: View Failure Logs
+        shell: bash -l {0}
+        run: |
+          echo -e "\n\n\to NPROC: $(nproc)\n\n"
+          find . -name "test-suite.log" -exec cat {} \;
+        if: ${{ failure() }} 
 
       #- name: Make Distcheck
       #  shell: bash -l {0}
@@ -329,7 +336,7 @@ jobs:
     strategy:
       matrix:
         hdf5: [ 1.12.2 ]
-        netcdf: [ v4.9.3, main ]
+        netcdf: [ v4.9.3 ]
 
     steps:
 
