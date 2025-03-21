@@ -4,7 +4,7 @@
 
 name: Run netCDF-Fortran Linux tests
 
-on: [pull_request, workflow_dispatch]
+on: [workflow_dispatch]
 
 concurrency:
   group: ${{ github.workflow}}-${{ github.head_ref }}
@@ -19,7 +19,7 @@ jobs:
     strategy:
       matrix:
         hdf5: [ 1.12.2 ]
-        netcdf: [ v4.7.4, v4.8.1, v4.9.0, main ]
+        netcdf: [ v4.9.3 ]
 
     steps:
 
@@ -75,7 +75,7 @@ jobs:
     strategy:
       matrix:
         hdf5: [ 1.12.2 ]
-        netcdf: [ v4.7.4, v4.8.1, v4.9.0, main ]
+        netcdf: [ v4.9.3 ]
 
     steps:
 
@@ -101,7 +101,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
-          key: hdf5-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}-par
+          key: hdf5-nc-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}-par
 
 
       - name: Build libhdf5-${{ matrix.hdf5 }}-${{ matrix.netcdf }}-par
@@ -134,7 +134,7 @@ jobs:
     strategy:
       matrix:
         hdf5: [ 1.12.2 ]
-        netcdf: [ v4.7.4, v4.8.1, v4.9.0, main ]
+        netcdf: [ v4.9.3 ]
 
     steps:
 
@@ -231,7 +231,7 @@ jobs:
     strategy:
       matrix:
         hdf5: [ 1.12.2 ]
-        netcdf: [ v4.7.4, v4.8.1, v4.9.0, main ]
+        netcdf: [ v4.9.3 ]
 
     steps:
 
@@ -261,7 +261,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
-          key: hdf5-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}-par
+          key: hdf5-nc-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}-par
 
       - name: Check Cache
         shell: bash -l {0}
@@ -314,8 +314,15 @@ jobs:
 
       - name: Run Tests
         shell: bash -l {0}
-        run: CC=${CC} CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} make check -j
+        run: CC=${CC} CFLAGS=${CFLAGS} LDFLAGS=${LDFLAGS} LD_LIBRARY_PATH=${LD_LIBRARY_PATH} make check -j 4
         if: ${{ success() }}
+
+      - name: View Failure Logs
+        shell: bash -l {0}
+        run: |
+          echo -e "\n\n\to NPROC: $(nproc)\n\n"
+          find . -name "test-suite.log" -exec cat {} \;
+        if: ${{ failure() }} 
 
       #- name: Make Distcheck
       #  shell: bash -l {0}
@@ -329,7 +336,7 @@ jobs:
     strategy:
       matrix:
         hdf5: [ 1.12.2 ]
-        netcdf: [ v4.7.4, v4.8.1, v4.9.0, main ]
+        netcdf: [ v4.9.3 ]
 
     steps:
 
