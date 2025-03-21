@@ -30,9 +30,14 @@ IF(TEST_PARALLEL)
   build_bin_test(simple_xy_par_wr .F90)
   build_bin_test(simple_xy_par_rd .F90)
   build_bin_test(simple_xy_par_wr2 .F90)
+
   add_sh_test(f90_tests run_f90_par_examples)
 ENDIF(TEST_PARALLEL)
 
+# Set some order dependencies on tests
+set_tests_properties(F90_tests_simple_xy_rd PROPERTIES DEPENDS "F90_tests_simple_xy_wr")
+set_tests_properties(F90_tests_sfc_pres_temp_rd PROPERTIES DEPENDS "F90_tests_sfc_pres_temp_wr")
+set_tests_properties(F90_tests_pres_temp_4D_rd PROPERTIES DEPENDS "F90_tests_pres_temp_4D_wr")
 
 SET(CLEANFILES sfc_pres_temp.nc simple_xy.nc pres_temp_4D.nc simple_nc4.nc simple_xy_nc4.nc)
 SET_DIRECTORY_PROPERTIES(PROPERTIES ADDITIONAL_MAKE_CLEAN_FILES "${CLEANFILES}")
