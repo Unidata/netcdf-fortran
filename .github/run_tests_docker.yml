@@ -1,8 +1,8 @@
 ###
-# Run a docker-based test of tests.
-#
-# See https://github.com/Unidata/docker-nctests
-# How    https://github.com/WardF/netcdf-test-action
+# Use the docker container to run tests in a parameterized way.
+###
+
+name: Run Docker-based regression testing
 
 on: [pull_request,workflow_dispatch]
 
@@ -18,53 +18,49 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        repo-type: [ 'fortran' ]
         c-branch: [ 'v4.9.3' ]
-        h5ver: [ '1.12.1', '1.14.6' ]
         c-compiler: [ 'gcc', 'clang' ]
-        buildsystem: [ 'both' ]
+        h5ver: [ '1.14.3' ]
+        build-system: [ 'both' ]
 
     steps:
       - uses: actions/checkout@v4
       - name: Pull and Run netCDF Regression Tests
         uses: WardF/netcdf-test-action@v1
         with:
-          repo-type: '${{ matrix.repo-type }}'
           run-c: 'FALSE'
-          build-system: '${{ matrix.buildsystem }}'
+          repo-type: 'fortran'
           hdf5-version: '${{ matrix.h5ver }}'
-          ctest-repeat: 3
           c-compiler: '${{ matrix.c-compiler }}'
           c-branch: '${{ matrix.c-branch }}'
           run-fortran: 'TRUE'
+          build-system: '${{ matrix.build-system }}'
 
   netcdf-tests-parallel:
 
     needs: netcdf-tests-serial
 
-    name: Docker-Based NetCDF-C, Fortran Regression Testing (Parallel)
+    name: Docker-Based NetCDF-C, Fortran Regression Testing (parallel)
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        repo-type: [ 'fortran' ]
+        build-system: [ 'both' ]
+        h5ver: [ '1.14.3' ]
         c-branch: [ 'v4.9.3' ]
-        h5ver: [ '1.14.6' ]
         c-compiler: [ 'mpicc' ]
         mpich-version: [ '4.3.0' ]
-        buildsystem: [ 'cmake', 'autotools' ]
+
 
     steps:
       - uses: actions/checkout@v4
       - name: Pull and Run netCDF Regression Tests
         uses: WardF/netcdf-test-action@v1
         with:
-          repo-type: '${{ matrix.repo-type }}'
-          run-c: 'FALSE'
-          build-system: '${{ matrix.buildsystem }}'
+          repo-type: 'fortran'
+          build-system: '${{ matrix.build-system }}'
           hdf5-version: '${{ matrix.h5ver }}'
-          ctest-repeat: 3
+          run-c: 'FALSE'
           c-compiler: '${{ matrix.c-compiler }}'
-          c-branch: '${{ matrix.c-branch }}'
           mpich-version: '${{ matrix.mpich-version }}'
+          c-branch: '${{ matrix.c-branch }}'
           run-fortran: 'TRUE'
-

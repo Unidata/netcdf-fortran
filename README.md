@@ -21,6 +21,10 @@ The netCDF Fortran libraries contain both F77 and F90 APIs. For documentation se
 
 * https://docs.unidata.ucar.edu/netcdf-fortran/current/
 
+Requirements
+-------------
+* NetCDF-C v4.9.3+
+
 Getting NetCDF
 --------------
 
