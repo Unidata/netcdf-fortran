@@ -50,7 +50,6 @@ jobs:
         c-branch: [ 'v4.9.3' ]
         h5ver: [ '1.14.6' ]
         c-compiler: [ 'mpicc' ]
-        mpich-version: [ '4.3.0' ]
         buildsystem: [ 'cmake', 'autotools' ]
 
     steps:
@@ -65,6 +64,5 @@ jobs:
           ctest-repeat: 3
           c-compiler: '${{ matrix.c-compiler }}'
           c-branch: '${{ matrix.c-branch }}'
-          mpich-version: '${{ matrix.mpich-version }}'
           run-fortran: 'TRUE'
 
