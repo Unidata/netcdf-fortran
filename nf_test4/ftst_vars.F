@@ -38,7 +38,7 @@ C     Cache size stuff.
       integer DEFAULT_CACHE_SIZE, DEFAULT_CACHE_NELEMS_OLD
       integer DEFAULT_CACHE_NELEMS_NEW
       integer DEFAULT_CACHE_PREEMPTION
-      parameter (DEFAULT_CACHE_SIZE = 16777216)
+      parameter (DEFAULT_CACHE_SIZE = 67108864)
       parameter (DEFAULT_CACHE_NELEMS_OLD = 4133)
       parameter (DEFAULT_CACHE_NELEMS_NEW = 1000)
       parameter (DEFAULT_CACHE_PREEMPTION = 75)
