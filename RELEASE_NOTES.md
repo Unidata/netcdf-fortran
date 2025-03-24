@@ -6,7 +6,7 @@ Release Notes {#nf_release_notes}
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
-## 4.6.2 - March 24, 2025
+## 4.6.2 - March 25, 2025
 
 ### Requirements
 
@@ -19,6 +19,7 @@ Entries are in reverse chronological order (most recent first).
 
 ### What's Changed
 
+* Fixed an issue in `ftst` tests which was the result of an incompatibility with netCDF-C `v4.9.3`
 
 
 ### 4.6.2-rc1 - October 21, 2024
