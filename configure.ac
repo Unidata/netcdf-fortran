@@ -10,7 +10,7 @@ AC_PREREQ([2.59])
 
 # Initialize with name, version, and support email address.
 
-AC_INIT([netCDF-Fortran], [4.6.3-development], [support-netcdf@unidata.ucar.edu])
+AC_INIT([netCDF-Fortran], [4.6.2], [support-netcdf@unidata.ucar.edu])
 
 
 # Create the VERSION file, which contains the package version from
@@ -37,7 +37,7 @@ AC_CANONICAL_TARGET
 
 # This call is required by automake.
 AM_INIT_AUTOMAKE([1.13 foreign dist-zip subdir-objects])
-#AM_MAINTAINER_MODE()
+AM_MAINTAINER_MODE()
 
 AC_MSG_NOTICE([checking user options])
 
