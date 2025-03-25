@@ -6,7 +6,7 @@ Release Notes {#nf_release_notes}
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
-## 4.6.2 - March 25, 2025
+## 4.6.2 - March 26, 2025
 
 ### Requirements
 

@@ -65,6 +65,8 @@ ENDIF()
 # End BUILDNAME customization.
 ###
 
+set(abs_top_builddir "${CMAKE_CURRENT_BINARY_DIR}")
+set(abs_top_srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
 
 # Determine if DOXYGEN and DOT are available. These will be used
 # when building the documentation.
