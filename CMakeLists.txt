@@ -24,7 +24,7 @@ set(PACKAGE "${NC4F_CTEST_PROJECT_NAME}" CACHE STRING "")
 SET(NC4F_VERSION_MAJOR 4)
 SET(NC4F_VERSION_MINOR 6)
 
-SET(NC4F_VERSION_PATCH 2)
+SET(NC4F_VERSION_PATCH 3)
 SET(NC4F_VERSION_NOTE "-development")
 SET(NC4F_VERSION ${NC4F_VERSION_MAJOR}.${NC4F_VERSION_MINOR}.${NC4F_VERSION_PATCH}${NC4F_VERSION_NOTE})
 SET(VERSION ${NC4F_VERSION})
@@ -65,6 +65,8 @@ ENDIF()
 # End BUILDNAME customization.
 ###
 
+set(abs_top_builddir "${CMAKE_CURRENT_BINARY_DIR}")
+set(abs_top_srcdir "${CMAKE_CURRENT_SOURCE_DIR}")
 
 # Determine if DOXYGEN and DOT are available. These will be used
 # when building the documentation.
