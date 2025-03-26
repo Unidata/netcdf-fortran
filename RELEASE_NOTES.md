@@ -20,7 +20,29 @@ Entries are in reverse chronological order (most recent first).
 ### What's Changed
 
 * Fixed an issue in `ftst` tests which was the result of an incompatibility with netCDF-C `v4.9.3`
+* nf-config uses install libdir variable by @WardF in https://github.com/Unidata/netcdf-fortran/pull/418
+* Remove autoconf-generated distribution files by @WardF in https://github.com/Unidata/netcdf-fortran/pull/420
+* Check for either the old or new default values in ftst_vars.F by @WardF in https://github.com/Unidata/netcdf-fortran/pull/421
+* Attempt to fix a pernicious issue where some systems complain about no implicit type. by @WardF in https://github.com/Unidata/netcdf-fortran/pull/429
+* Use install directory that matches package name by @islas in https://github.com/Unidata/netcdf-fortran/pull/428
+* fix intents and variable types in interfaces by @rwirth in https://github.com/Unidata/netcdf-fortran/pull/424
+* Clarify 'netCDF-C 4.7.4 or greater required' message. by @WardF in https://github.com/Unidata/netcdf-fortran/pull/430
+* Clarify message when failing with 'requires v4.7.4' error.  by @WardF in https://github.com/Unidata/netcdf-fortran/pull/431
+* CI: use modern actions and cmake calls by @scivision in https://github.com/Unidata/netcdf-fortran/pull/433
+* CMake remove deprecated syntax by @scivision in https://github.com/Unidata/netcdf-fortran/pull/432
+* CMake: Fix some issues when linking against netcdf-C by @ZedThree in https://github.com/Unidata/netcdf-fortran/pull/435
+* Use consistent `nf-config.in` template for both CMake/autotools by @ZedThree in https://github.com/Unidata/netcdf-fortran/pull/434
+* Remove vestigial files that shouldn't have been included in version control by @WardF in https://github.com/Unidata/netcdf-fortran/pull/422
+* Fix Stack Overflow problem by moving large arrays from the stack to the heap by @Roy-KC in https://github.com/Unidata/netcdf-fortran/pull/410
+* Fix failure in ftst by @WardF in https://github.com/Unidata/netcdf-fortran/pull/460
+* Tweak docker GitHub actions.wif by @WardF in https://github.com/Unidata/netcdf-fortran/pull/464
 
+## New Contributors
+* @islas made their first contribution in https://github.com/Unidata/netcdf-fortran/pull/428
+* @rwirth made their first contribution in https://github.com/Unidata/netcdf-fortran/pull/424
+* @Roy-KC made their first contribution in https://github.com/Unidata/netcdf-fortran/pull/410
+
+**Full Changelog**: https://github.com/Unidata/netcdf-fortran/compare/v4.6.1...v4.6.2
 
 ### 4.6.2-rc1 - October 21, 2024
 
