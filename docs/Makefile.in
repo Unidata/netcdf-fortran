@@ -357,7 +357,7 @@ Doxyfile.in netcdf-f77.md netcdf-f90-sec1-usage.md			\
 netcdf-f90-sec3-groups.md netcdf-f90-sec5-user_defined_types.md		\
 netcdf-f90-sec7-attributes.md netcdf-f90.md				\
 netcdf-f90-sec2-datasets.md netcdf-f90-sec4-dimensions.md		\
-netcdf-f90-sec6-variables.md doxygen-awesome-css header.html
+netcdf-f90-sec6-variables.md doxygen-awesome-css header.html footer.html
 
 CLEANFILES = doxyfile.stamp
 
