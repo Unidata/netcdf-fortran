@@ -67,13 +67,53 @@
   end function nf90_put_att_text
   ! -------
   function nf90_get_att_text(ncid, varid, name, values)
+    use, intrinsic :: iso_c_binding, only: c_ptr, c_size_t, c_f_pointer, c_int
+    implicit none
     integer,                          intent( in) :: ncid, varid
     character(len = *),               intent( in) :: name
     character(len = *),               intent(out) :: values
     integer                                       :: nf90_get_att_text
-
-    values = ' '  !! make sure result will be blank padded
-    nf90_get_att_text = nf_get_att_text(ncid, varid, name, values)
+    interface
+      integer(c_int) function nc_get_att_string(ncid, varid, name, pp) bind(c)
+        use iso_c_binding , only : c_int , c_char , c_ptr
+        integer(c_int) , value :: ncid , varid
+        character(kind=c_char) , intent(in) :: name
+        type(c_ptr), intent(out) :: pp
+      end function nc_get_att_string
+    end interface
+    interface
+      integer(c_size_t) function strlen(cs) bind(c, name='strlen')
+         use, intrinsic :: iso_c_binding , only : c_size_t , c_ptr
+         implicit none
+         type(c_ptr), intent(in), value :: cs
+      end function strlen
+    end interface
+    integer :: xtype , nlen , attid , i
+    integer(c_int) :: c_ncid , c_varid , c_status , c_nlen
+    type(c_ptr) :: c_str
+    character(len_trim(name)+1) :: c_aname
+    character , pointer :: f_str(:)
+    nf90_get_att_text = nf90_inquire_attribute(ncid, varid, name, &
+        xtype, nlen, attid)
+    if ( nf90_get_att_text == nf90_noerr ) then
+      if ( xtype == nf90_string .and. nlen == 1 ) then
+        c_ncid = ncid
+        c_varid = varid - 1
+        c_aname = name//char(0)
+        c_status = nc_get_att_string(c_ncid, c_varid, c_aname, c_str)
+        nf90_get_att_text = c_status
+        if ( nf90_get_att_text == nf90_noerr ) then
+          call c_f_pointer(c_str,f_str,[strlen(c_str)])
+          values = adjustl("")
+          do i = 1, size(f_str)
+            values(i:i) = f_str(i)
+          end do
+        end if
+      else
+        values = ' '  !! make sure result will be blank padded
+        nf90_get_att_text = nf_get_att_text(ncid,varid,name,values)
+      end if
+    end if
   end function nf90_get_att_text
   ! -------
   ! Integer attributes
@@ -183,7 +223,7 @@
     character(len = *),                         intent( in) :: name
     integer (kind = FourByteInt), dimension(:), intent(out) :: values
     integer                                                 :: nf90_get_att_FourByteInt
-    
+
     integer, dimension(size(values)) :: defaultInteger
 
     nf90_get_att_FourByteInt = nf_get_att_int(ncid, varid, name, defaultInteger)
