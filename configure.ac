@@ -683,7 +683,8 @@ AC_SUBST(NF_HDF5_PLUGIN_PATH, [$nc_hdf5_plugin_path])
 # to their source directory, or the test program makes an assumption
 # about where files live.  AC_CONFIG_LINKS provides a mechanism to
 # link/copy files if an out-of-source build is happening.
-AC_CONFIG_LINKS([nf_test/fills.nc:nf_test/ref_fills.nc])
+AC_CONFIG_LINKS([nf_test/fills.nc:nf_test/ref_fills.nc
+                 nf03_test4/att.nc:nf03_test4/ref_att.nc])
 
 if test "x$nc_has_parallel" = xyes; then
    AC_CONFIG_FILES([nf03_test4/run_f90_par_test.sh], [chmod ugo+x nf03_test4/run_f90_par_test.sh])

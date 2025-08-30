@@ -15,7 +15,8 @@ LDADD = ${top_builddir}/fortran/libnetcdff.la
 # tst_f90_nc4
 NC4_F90_TESTS = f90tst_vars f90tst_vars_vlen f90tst_grps f90tst_fill	\
 f90tst_fill2 f90tst_vars2 f90tst_vars3 f90tst_vars4 f90tst_path		\
-f90tst_rengrps f90tst_nc4 f90tst_types f90tst_types2 f90tst_zstandard
+f90tst_rengrps f90tst_nc4 f90tst_types f90tst_types2 f90tst_zstandard \
+f90tst_att
 
 if TEST_QUANTIZE
 NC4_F90_TESTS += f90tst_vars5
@@ -33,6 +34,7 @@ f90tst_vars2_SOURCES = f90tst_vars2.F90
 f90tst_vars3_SOURCES = f90tst_vars3.F90
 f90tst_vars4_SOURCES = f90tst_vars4.F90
 f90tst_vars5_SOURCES = f90tst_vars5.F90
+f90tst_att_SOURCES = f90tst_att.F90
 f90tst_path_SOURCES = f90tst_path.F90
 f90tst_rengrps_SOURCES = f90tst_rengrps.F90
 f90tst_nc4_SOURCES = f90tst_nc4.F90
@@ -81,7 +83,11 @@ endif # TEST_SZIP_WRITE
 @VALGRIND_CHECK_RULES@
 
 EXTRA_DIST = CMakeLists.txt f90tst_flarge.F90	\
-run_f90_par_test.sh.in
+run_f90_par_test.sh.in \
+ref_att.cdl ref_att.nc
 
 # Cleaning up files created during the testing.
-CLEANFILES = f90tst_*.nc fort.*
+CLEANFILES = f90tst_*.nc fort.* 
+
+# This file gets copied to build dir by configure.
+DISTCLEANFILES = att.nc

@@ -1,0 +1,32 @@
+netcdf ref_att {
+
+  dimensions:
+      Location = UNLIMITED ; // (0 currently)
+
+  // global attributes:
+      string :author = "fake_author" ;
+      :agency = "fake_agency" ;
+
+  variables:
+        int obstype(Location) ;
+            string obstype:long_name = "observation type" ;
+            obstype:units = "N/A";
+
+  group: MetaData {
+    variables:
+        float latitude(Location) ;
+            string latitude:units = "degrees_north" ;
+  }
+
+  group: yobs {
+    variables:
+        float sst(Location) ;
+            string sst:units = "C" ;
+  }
+
+  group: Hx {
+    variables:
+        float sst(Location) ;
+            sst:units = "C" ;
+  }
+}
