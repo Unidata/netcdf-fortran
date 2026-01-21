@@ -1,8 +1,8 @@
 ###
 # Run a docker-based test of tests.
 #
-# See https://github.com/Unidata/docker-nctests
-# How    https://github.com/WardF/netcdf-test-action
+# See: https://github.com/Unidata/docker-nctests
+# How: https://github.com/Unidata/netcdf-test-action
 
 on: [pull_request,workflow_dispatch]
 
@@ -27,7 +27,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Pull and Run netCDF Regression Tests
-        uses: WardF/netcdf-test-action@v2
+        uses: Unidata/netcdf-test-action@v2
         with:
           repo-type: '${{ matrix.repo-type }}'
           run-c: 'FALSE'
@@ -55,7 +55,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Pull and Run netCDF Regression Tests
-        uses: WardF/netcdf-test-action@v2
+        uses: Unidata/netcdf-test-action@v2
         with:
           repo-type: '${{ matrix.repo-type }}'
           run-c: 'FALSE'
