@@ -6,6 +6,18 @@ Release Notes {#nf_release_notes}
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
+## 4.6.3 - April 23, 2026
+
+* netCDF-C: 4.9.2+
+
+  Note: to enable `libzstd` support, you need to satisfy the following requirements.
+  
+  1. `libnetcdf.so` installed with `libzstd` support.
+      * The environmental variable `HDF5_LIBRARY_PATH` needs to be specified to the same location used when installing `libnetcdf`.  This can be determined after-the-fact using `nc-config --plugindir`. 
+      * Y u can pass `--disable-zstandard-plugin`.
+
+
+
 ## 4.6.2 - March 26, 2025
 
 ### Requirements
