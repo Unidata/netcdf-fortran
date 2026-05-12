@@ -6,13 +6,13 @@
 
 on: [pull_request,workflow_dispatch]
 
-concurrency:  
-  group: ${{ github.workflow}}-${{ github.head_ref }}  
+concurrency:
+  group: ${{ github.workflow}}-${{ github.head_ref }}
   cancel-in-progress: true
 
-permissions: {} 
+permissions: {}
 
-jobs:  
+jobs:
   netcdf-tests-serial:
     name: Docker-Based NetCDF-C, Fortran Regression Testing (Serial)
     runs-on: ubuntu-latest
@@ -25,7 +25,8 @@ jobs:
         buildsystem: [ 'both' ]
 
     steps:
-      - uses: actions/checkout@v4
+      - &checkout
+        uses: actions/checkout@v6
       - name: Pull and Run netCDF Regression Tests
         uses: Unidata/netcdf-test-action@v2
         with:
@@ -53,7 +54,7 @@ jobs:
         buildsystem: [ 'cmake', 'autotools' ]
 
     steps:
-      - uses: actions/checkout@v4
+      - *checkout
       - name: Pull and Run netCDF Regression Tests
         uses: Unidata/netcdf-test-action@v2
         with:
@@ -65,4 +66,3 @@ jobs:
           c-compiler: '${{ matrix.c-compiler }}'
           c-branch: '${{ matrix.c-branch }}'
           run-fortran: 'TRUE'
-

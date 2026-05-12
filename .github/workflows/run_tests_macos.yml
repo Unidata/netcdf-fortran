@@ -14,7 +14,7 @@ jobs:
 
   build-deps:
 
-    runs-on: macos-11
+    runs-on: &macos macos-15
 
     strategy:
       matrix:
@@ -23,7 +23,8 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v4
+      - &checkout
+        uses: actions/checkout@v6
 
         ###
         # Set Environmental Variables
@@ -42,9 +43,10 @@ jobs:
         ###
         # Installing libhdf4 and libhdf5
         ###
-      - name: Cache libhdf5-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
+      - &hdf5-cache
+        name: Cache libhdf5-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
         id: cache-hdf5
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
           key: hdf5-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
@@ -74,7 +76,7 @@ jobs:
   nf-autotools:
 
     needs: build-deps
-    runs-on: ubuntu-latest
+    runs-on: *macos
 
     strategy:
       matrix:
@@ -83,7 +85,7 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v4
+      - *checkout
 ###
 # Set Environmental Variables
 ###
@@ -105,14 +107,10 @@ jobs:
 # Fetch Cache
 ###
 
-      - name: Fetch HDF Cache
-        id: cache-hdf
-        uses: actions/cache@v4
-        with:
-          path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
-          key: hdf5-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
+      - *hdf5-cache
 
-      - name: Check Cache
+      - &hdf5-cache-check
+        name: Check Cache
         shell: bash -l {0}
         run: ls ${HOME}/environments && ls ${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }} && ls ${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf}}/lib
 
@@ -160,7 +158,7 @@ jobs:
   nf-cmake:
 
     needs: build-deps
-    runs-on: ubuntu-latest
+    runs-on: *macos
 
     strategy:
       matrix:
@@ -169,7 +167,7 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v4
+      - *checkout
 
 ###
 # Set Environmental Variables
@@ -188,17 +186,9 @@ jobs:
 # Fetch Cache
 ###
 
-      - name: Fetch HDF Cache
-        id: cache-hdf5
-        uses: actions/cache@v4
-        with:
-              path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
-              key: hdf5-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
+      - *hdf5-cache
 
-      - name: Check Cache
-        shell: bash -l {0}
-        run: ls ${HOME}/environments && ls ${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }} && ls ${HOME}/environments/${{ matrix.hdf5 }}-${{matrix.netcdf}}/lib
-
+      - *hdf5-cache-check
 ###
 # Configure and build
 ###
