@@ -10,7 +10,7 @@ IF(ENABLE_DOXYGEN)
   FILE(GLOB IMG_FILES ${CMAKE_CURRENT_BINARY_DIR}/images/*.jpg)
 
   # Set abs_top_srcdir to work with autotools doxyfile template.
-  SET(abs_top_srcdir "${CMAKE_SOURCE_DIR}")
+  SET(abs_top_srcdir "${NC4F_SOURCE_DIR}")
   SET(abs_builddir "${CMAKE_CURRENT_BINARY_DIR}")
 
   CONFIGURE_FILE(${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in

@@ -236,7 +236,7 @@ MACRO(add_bin_env_temp_large_test prefix F)
   ENDIF()
 
 
-  ADD_TEST(${prefix}_${F} bash "-c" "TEMP_LARGE=${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
+  ADD_TEST(${prefix}_${F} bash "-c" "TEMP_LARGE=${NC4F_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
   IF(MSVC)
     SET_PROPERTY(TARGET ${prefix}_${F} PROPERTY FOLDER "tests")
   ENDIF()
@@ -254,7 +254,7 @@ MACRO(add_bin_env_test prefix F)
   ENDIF()
 
 
-  ADD_TEST(${prefix}_${F} bash "-c" "TOPSRCDIR=${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
+  ADD_TEST(${prefix}_${F} bash "-c" "TOPSRCDIR=${NC4F_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
   IF(MSVC)
     SET_PROPERTY(TARGET ${prefix}_${F} PROPERTY FOLDER "tests")
   ENDIF()
@@ -325,7 +325,7 @@ ENDMACRO()
 # Shell script Macro
 MACRO(add_sh_test prefix F)
   IF(NOT MSVC)
-    ADD_TEST(${prefix}_${F} bash "-c" "export srcdir=${CMAKE_CURRENT_SOURCE_DIR};export TOPSRCDIR=${CMAKE_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR}/${F}.sh")
+    ADD_TEST(${prefix}_${F} bash "-c" "export srcdir=${CMAKE_CURRENT_SOURCE_DIR};export TOPSRCDIR=${NC4F_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR}/${F}.sh")
   ENDIF()
 
 ENDMACRO()
@@ -400,7 +400,7 @@ ENDFUNCTION()
 
 
 #Add custom CMake Module
-SET (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules/"
+SET (CMAKE_MODULE_PATH "${NC4F_SOURCE_DIR}/cmake/modules/"
   CACHE INTERNAL "Location of our custom CMake modules.")
 
 #####
@@ -417,7 +417,7 @@ MACRO(add_bin_env_test prefix F)
   ENDIF()
 
 
-  ADD_TEST(${prefix}_${F} bash "-c" "TOPSRCDIR=${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
+  ADD_TEST(${prefix}_${F} bash "-c" "TOPSRCDIR=${NC4F_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
   IF(MSVC)
     SET_PROPERTY(TARGET ${prefix}_${F} PROPERTY FOLDER "tests")
   ENDIF()
@@ -954,8 +954,8 @@ SET(NC4F_CTEST_DROP_SITE "cdash.unidata.ucar.edu" CACHE STRING "Dashboard locati
 SET(NC4F_CTEST_DROP_LOC_PREFIX "" CACHE STRING "Prefix for Dashboard location on remote server when using CTest-based testing.")
 
 # Generate CTestConfig file from template.
-CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/CTestConfig.cmake.in"
-  "${CMAKE_SOURCE_DIR}/CTestConfig.cmake"
+CONFIGURE_FILE("${NC4F_SOURCE_DIR}/CTestConfig.cmake.in"
+  "${NC4F_SOURCE_DIR}/CTestConfig.cmake"
   @ONLY)
 
 # Fortran compiler flag for the (module) include directory. Used for generating nf-config.
@@ -1149,7 +1149,7 @@ ENDIF(NC_HAVE_ZSTD)
 
 # Install libnetcdf.settings file into same location
 # as the libraries.
-INSTALL(FILES "${CMAKE_BINARY_DIR}/libnetcdff.settings"
+INSTALL(FILES "${NC4F_BINARY_DIR}/libnetcdff.settings"
   DESTINATION "${CMAKE_INSTALL_LIBDIR}"
   COMPONENT libraries)
 
@@ -1168,18 +1168,18 @@ set(FC "${CMAKE_Fortran_COMPILER}")
 set(CPPFLAGS "${CMAKE_C_FLAGS} ${CMAKE_CPP_FLAGS}")
 
 # Generate nf-config from template
-configure_file("${CMAKE_SOURCE_DIR}/nf-config.in"
-  "${CMAKE_BINARY_DIR}/tmp/nf-config" @ONLY
+configure_file("${NC4F_SOURCE_DIR}/nf-config.in"
+  "${NC4F_BINARY_DIR}/tmp/nf-config" @ONLY
   NEWLINE_STYLE LF)
-file(COPY "${CMAKE_BINARY_DIR}/tmp/nf-config"
-  DESTINATION ${CMAKE_BINARY_DIR}/
+file(COPY "${NC4F_BINARY_DIR}/tmp/nf-config"
+  DESTINATION ${NC4F_BINARY_DIR}/
   FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 configure_file(
-        ${CMAKE_SOURCE_DIR}/netcdf-fortran.pc.in
-        ${CMAKE_BINARY_DIR}/netcdf-fortran.pc @ONLY)
+        ${NC4F_SOURCE_DIR}/netcdf-fortran.pc.in
+        ${NC4F_BINARY_DIR}/netcdf-fortran.pc @ONLY)
 
-install(FILES ${CMAKE_BINARY_DIR}/netcdf-fortran.pc
+install(FILES ${NC4F_BINARY_DIR}/netcdf-fortran.pc
               DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
               COMPONENT utilities)
 

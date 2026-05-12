@@ -136,7 +136,7 @@ endif (${USE_LOGGING})
 
 SET(BUILT_SOURCES ${BUILT_SOURCES} netcdf.inc)
 
-include_directories(${CMAKE_SOURCE_DIR} ${CMAKE_SOURCE_DIR}/libsrc)
+include_directories(${NC4F_SOURCE_DIR} ${NC4F_SOURCE_DIR}/libsrc)
 
 # Default to shared libs on
 OPTION(BUILD_SHARED_LIBS "Configure netCDF as a shared library." ON)
