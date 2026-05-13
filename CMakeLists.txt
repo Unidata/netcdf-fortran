@@ -132,9 +132,13 @@ get_filename_component (Fortran_COMPILER_NAME ${CMAKE_Fortran_COMPILER} NAME)
 ################################
 # Set CTest Properties
 ################################
+# Toggle whether or not to run tests.
+OPTION(ENABLE_TESTS "Enable netcdf-fortran tests." ON)
 
-ENABLE_TESTING()
-INCLUDE(CTest)
+if(ENABLE_TESTS)
+  enable_testing()
+  include(CTest)
+endif()
 
 # Copy the CTest customization file into binary directory, as required.
 # TODO: need to provide suitable CTestCustom.cmake
@@ -854,9 +858,6 @@ ENDIF()
 
 OPTION(ENABLE_FORTRAN_TYPE_CHECKS
   "Determine Fortran types corresponding to netCDF types" ON)
-
-# Toggle whether or not to run tests.
-OPTION(ENABLE_TESTS "Enable netcdf-fortran tests." ON)
 
 # Enable filter testing
 OPTION(ENABLE_FILTER_TEST "Enable filter test." OFF)
