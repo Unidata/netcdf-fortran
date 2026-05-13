@@ -23,7 +23,8 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v4
+      - &checkout
+        uses: actions/checkout@v6
 
       - name: Install System dependencies
         shell: bash -l {0}
@@ -39,9 +40,10 @@ jobs:
         ###
         # Installing libhdf4 and libhdf5
         ###
-      - name: Cache libhdf5-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
+      - &hdf5-cache
+        name: Cache libhdf5-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
         id: cache-hdf5
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
           key: hdf5-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
@@ -79,7 +81,7 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v4
+      - *checkout
 
       - name: Install System dependencies
         shell: bash -l {0}
@@ -96,9 +98,10 @@ jobs:
         ###
         # Installing libhdf4 and libhdf5
         ###
-      - name: Cache libhdf5-${{ matrix.hdf5 }}-${{ matrix.netcdf }}-par
+      - &hdf5-cache-par
+        name: Cache libhdf5-${{ matrix.hdf5 }}-${{ matrix.netcdf }}-par
         id: cache-hdf5-par
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
           key: hdf5-nc-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}-par
@@ -138,7 +141,7 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v4
+      - *checkout
 
       - name: Install System dependencies
         shell: bash -l {0}
@@ -158,16 +161,12 @@ jobs:
 # Fetch Cache
 ###
 
-      - name: Fetch HDF Cache
-        id: cache-hdf
-        uses: actions/cache@v4
-        with:
-          path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
-          key: hdf5-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
+      - *hdf5-cache
 
-      - name: Check Cache
+      - &hdf5-cache-check
+        name: Check Cache
         shell: bash -l {0}
-        run: ls ${HOME}/environments && ls ${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }} && ls ${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf}}/lib
+        run: ls ${HOME}/environments && ls ${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }} && ls ${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}/lib
 
 ###
 # Configure and build
@@ -185,7 +184,7 @@ jobs:
           make -j install
           popd
           popd
-        if: ${{ matrix.netcdf }} == "main"
+        if: matrix.netcdf == 'main'
 
       - name: Run autoconf
         shell: bash -l {0}
@@ -235,7 +234,7 @@ jobs:
 
     steps:
 
-      - uses: actions/checkout@v4
+      - *checkout
 
       - name: Install System dependencies
         shell: bash -l {0}
@@ -256,16 +255,9 @@ jobs:
 # Fetch Cache
 ###
 
-      - name: Fetch HDF Cache
-        id: cache-hdf-par
-        uses: actions/cache@v4
-        with:
-          path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
-          key: hdf5-nc-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}-par
+      - *hdf5-cache-par
 
-      - name: Check Cache
-        shell: bash -l {0}
-        run: ls ${HOME}/environments && ls ${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }} && ls ${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf}}/lib
+      - *hdf5-cache-check
 
 ###
 # Configure and build
@@ -283,7 +275,7 @@ jobs:
           make -j install
           popd
           popd
-        if: ${{ matrix.netcdf }} == "main"
+        if: matrix.netcdf == 'main'
 
       - name: Run autoconf
         shell: bash -l {0}
@@ -322,7 +314,7 @@ jobs:
         run: |
           echo -e "\n\n\to NPROC: $(nproc)\n\n"
           find . -name "test-suite.log" -exec cat {} \;
-        if: ${{ failure() }} 
+        if: ${{ failure() }}
 
       #- name: Make Distcheck
       #  shell: bash -l {0}
@@ -335,12 +327,12 @@ jobs:
 
     strategy:
       matrix:
-        hdf5: [ 1.12.2 ]
+        hdf5: [ "1.12.2", "2.1.1" ]
         netcdf: [ v4.9.3 ]
 
     steps:
 
-      - uses: actions/checkout@v4
+      - *checkout
 
       - name: Install System dependencies
         shell: bash -l {0}
@@ -361,17 +353,9 @@ jobs:
 # Fetch Cache
 ###
 
-      - name: Fetch HDF Cache
-        id: cache-hdf5
-        uses: actions/cache@v4
-        with:
-              path: ~/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }}
-              key: hdf5-${{ runner.os }}-${{ matrix.hdf5 }}-${{ matrix.netcdf }}
+      - *hdf5-cache
 
-      - name: Check Cache
-        shell: bash -l {0}
-        run: ls ${HOME}/environments && ls ${HOME}/environments/${{ matrix.hdf5 }}-${{ matrix.netcdf }} && ls ${HOME}/environments/${{ matrix.hdf5 }}-${{matrix.netcdf}}/lib
-
+      - *hdf5-cache-check
 ###
 # Configure and build
 ###
@@ -388,7 +372,7 @@ jobs:
           make -j install
           popd
           popd
-        if: ${{ matrix.netcdf }} == "main"
+        if: matrix.netcdf == 'main'
 
       - name: Perform out-of-directory build
         shell: bash -l {0}
