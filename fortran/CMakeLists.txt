@@ -149,7 +149,7 @@ ENDIF()
 # This is what we are building: a convenience library of Fortran 2003 functions.
 # Compile C-code to object, then link with Fortran
 add_library(netcdff_c OBJECT ${netcdff_C_SOURCES})
-install(TARGETS netcdff_c OBJECTS DESTINATION lib)
+install(TARGETS netcdff_c OBJECTS LIBRARY)
 target_link_libraries(netcdff_c PUBLIC netCDF::netcdf)
 
 add_library(netcdff ${netcdff_SOURCES})

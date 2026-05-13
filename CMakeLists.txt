@@ -6,7 +6,7 @@
 ##################################
 
 #Minimum required CMake Version
-cmake_minimum_required(VERSION 3.12.0)
+cmake_minimum_required(VERSION 3.21.0)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
@@ -1150,7 +1150,7 @@ ENDIF(NC_HAVE_ZSTD)
 # Install libnetcdf.settings file into same location
 # as the libraries.
 INSTALL(FILES "${NC4F_BINARY_DIR}/libnetcdff.settings"
-  DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+  TYPE LIB
   COMPONENT libraries)
 
 #####
@@ -1169,10 +1169,9 @@ set(CPPFLAGS "${CMAKE_C_FLAGS} ${CMAKE_CPP_FLAGS}")
 
 # Generate nf-config from template
 configure_file("${NC4F_SOURCE_DIR}/nf-config.in"
-  "${NC4F_BINARY_DIR}/tmp/nf-config" @ONLY
+  "${NC4F_BINARY_DIR}/nf-config" @ONLY
   NEWLINE_STYLE LF)
-file(COPY "${NC4F_BINARY_DIR}/tmp/nf-config"
-  DESTINATION ${NC4F_BINARY_DIR}/
+file(CHMOD "${NC4F_BINARY_DIR}/nf-config"
   FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 configure_file(
@@ -1184,7 +1183,7 @@ install(FILES ${NC4F_BINARY_DIR}/netcdf-fortran.pc
               COMPONENT utilities)
 
 install(PROGRAMS ${NC4F_BINARY_DIR}/nf-config
-        DESTINATION "${CMAKE_INSTALL_BINDIR}"
+        TYPE BIN
         COMPONENT utilities)
 
 include(CMakePackageConfigHelpers)

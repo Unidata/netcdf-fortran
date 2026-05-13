@@ -37,10 +37,8 @@ IF(NOT NETCDF_C_LIBRARY)
 ENDIF()
 
 # Need a copy of ref_fills.nc for ftest
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/ref_fills.nc
-          DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-file(RENAME ${CMAKE_CURRENT_BINARY_DIR}/ref_fills.nc
-  ${CMAKE_CURRENT_BINARY_DIR}/fills.nc)
+file(COPY_FILE ${CMAKE_CURRENT_SOURCE_DIR}/ref_fills.nc
+  ${CMAKE_CURRENT_BINARY_DIR}/fills.nc ONLY_IF_DIFFERENT)
 
 INCLUDE_DIRECTORIES(BEFORE
   ${CMAKE_CURRENT_BINARY_DIR}
@@ -65,7 +63,7 @@ FOREACH(t IN LISTS TESTS)
   IF(${t}_C_SOURCES)
     message ("Adding C code for Test ${t} to Library")
     ADD_LIBRARY(${t}_c OBJECT ${${t}_C_SOURCES})
-    install(TARGETS ${t}_c DESTINATION lib)
+    install(TARGETS ${t}_c LIBRARY)
     SET(${t}_C_LIBRARY ${t}_c)
     TARGET_LINK_LIBRARIES(${t} ${${t}_C_LIBRARY})
   ENDIF()
