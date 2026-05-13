@@ -10,10 +10,10 @@ if (USE_NETCDF4)
     ftst_types3 ftst_path ftst_rengrps f03tst_open_mem ftst_var_compact)
   # Only run this test if quantize is present (i.e. netcdf-c is 4.9.0 or greater).
   IF (HAVE_QUANTIZE)
-    SET(nc4_check_PROGRAMS ${nc4_check_PROGRAMS} ftst_zstandard)
+    list(APPEND nc4_check_PROGRAMS ftst_zstandard)
   ENDIF()
-  SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_check_PROGRAMS})
-  SET(TESTS ${TESTS} ${nc4_check_PROGRAMS})
+  list(APPEND check_PROGRAMS ${nc4_check_PROGRAMS})
+  list(APPEND TESTS ${nc4_check_PROGRAMS})
 
   SET(ftst_groups_SOURCES ftst_groups.F)
   SET(ftst_vars_SOURCES ftst_vars.F)
@@ -34,15 +34,15 @@ if (USE_NETCDF4)
   # This is a netCDF-4 V2 test program.
   IF (BUILD_V2)
     SET(nc4_v2_PROGRAMS ftst_v2)
-    SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_v2_PROGRAMS})
-    SET(TESTS ${TESTS} ${nc4_v2_PROGRAMS})
+    list(APPEND check_PROGRAMS ${nc4_v2_PROGRAMS})
+    list(APPEND TESTS ${nc4_v2_PROGRAMS})
     SET(ftst_v2_SOURCES ftst_v2.F)
   ENDIF (BUILD_V2)
 
   # Test parallel I/O for F77.
   IF (TEST_PARALLEL)
-    SET(check_PROGRAMS ${check_PROGRAMS} ftst_parallel ftst_parallel_nasa)
-    SET(SCRIPT_TESTS ${SCRIPT_TESTS} run_f77_par_test)
+    list(APPEND check_PROGRAMS ftst_parallel ftst_parallel_nasa)
+    list(APPEND SCRIPT_TESTS run_f77_par_test)
 
     # Add executables for f77_par_tst
     build_bin_test(ftst_parallel ".F")
@@ -51,8 +51,8 @@ if (USE_NETCDF4)
   ENDIF (TEST_PARALLEL)
 
   IF(ENABLE_FILTER_TEST)
-    SET(check_PROGRAMS ${check_PROGRAMS} ftst_filter)
-    SET(SCRIPT_TESTS ${SCRIPT_TESTS} run_tst_filter)
+    list(APPEND check_PROGRAMS ftst_filter)
+    list(APPEND SCRIPT_TESTS run_tst_filter)
     # Add executables
     build_bin_test(ftst_filter ".F")
   ENDIF(ENABLE_FILTER_TEST)
@@ -61,9 +61,9 @@ endif(USE_NETCDF4)
 
 # If szip write capability exists in the C library, run the szip test.
 IF (HAVE_SZIP_WRITE)
-  SET(check_PROGRAMS ${check_PROGRAMS} ftst_var_szip)
+  list(APPEND check_PROGRAMS ftst_var_szip)
   SET(ftst_var_szip_SOURCES ftst_var_szip.F)
-  SET(TESTS ${TESTS} ftst_var_szip)
+  list(APPEND TESTS ftst_var_szip)
 ENDIF()
 
 # Create pre-compiled tests.

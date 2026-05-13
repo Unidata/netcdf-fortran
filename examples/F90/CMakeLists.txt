@@ -4,8 +4,9 @@ SET(example_F90_tests_source "")
 ##
 # Copy over shell scripts
 ##
-FILE(GLOB COPY_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.sh)
-FILE(COPY ${COPY_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)
+file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/
+ DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/
+ FILES_MATCHING PATTERN ".sh")
 
 FOREACH(F ${example_F90_tests})
   SET(example_F90_tests_source ${example_F90_test_source} ${F}.F90)

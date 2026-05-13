@@ -3,11 +3,15 @@
 #####
 IF(ENABLE_DOXYGEN)
 
-  FILE(GLOB COPY_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.html ${CMAKE_CURRENT_SOURCE_DIR}/images ${CMAKE_CURRENT_SOURCE_DIR}/*.doc ${CMAKE_CURRENT_SOURCE_DIR}/*.xml ${CMAKE_CURRENT_SOURCE_DIR}/*.m4 ${CMAKE_CURRENT_SOURCE_DIR}/*.texi)
-  FILE(COPY ${COPY_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/)
-  # Copy the image files used by markdown documentation
-  # manually.
-  FILE(GLOB IMG_FILES ${CMAKE_CURRENT_BINARY_DIR}/images/*.jpg)
+  file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/
+    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/
+    FILES_MATCHING
+    PATTERN ".html"
+    PATTERN ".doc"
+    PATTERN ".xml"
+    PATTERN ".m4"
+    PATTERN ".texi"
+    PATTERN "images/")
 
   # Set abs_top_srcdir to work with autotools doxyfile template.
   SET(abs_top_srcdir "${NC4F_SOURCE_DIR}")
@@ -20,7 +24,12 @@ IF(ENABLE_DOXYGEN)
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     COMMENT "Generating API Documentation with Doxygen" VERBATIM
     )
-  FILE(COPY ${IMG_FILES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/html/)
+
+  # Copy the image files used by markdown documentation
+  # manually.
+  file(COPY ${CMAKE_CURRENT_BINARY_DIR}/images/
+    DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/html/
+    FILES_MATCHING PATTERN ".jpg")
 ENDIF()
 
 IF(HAVE_M4)
