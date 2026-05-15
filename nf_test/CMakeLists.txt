@@ -37,24 +37,22 @@ IF(NOT NETCDF_C_LIBRARY)
 ENDIF()
 
 # Need a copy of ref_fills.nc for ftest
-file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/ref_fills.nc
-          DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-file(RENAME ${CMAKE_CURRENT_BINARY_DIR}/ref_fills.nc
-  ${CMAKE_CURRENT_BINARY_DIR}/fills.nc)
+file(COPY_FILE ${CMAKE_CURRENT_SOURCE_DIR}/ref_fills.nc
+  ${CMAKE_CURRENT_BINARY_DIR}/fills.nc ONLY_IF_DIFFERENT)
 
 INCLUDE_DIRECTORIES(BEFORE
   ${CMAKE_CURRENT_BINARY_DIR}
-  ${CMAKE_BINARY_DIR}/fortran
-  ${CMAKE_BINARY_DIR}/libsrc
-  ${CMAKE_SOURCE_DIR}
-  ${CMAKE_SOURCE_DIR}/fortran
-  ${CMAKE_SOURCE_DIR}/libsrc)
+  ${NC4F_BINARY_DIR}/fortran
+  ${NC4F_BINARY_DIR}/libsrc
+  ${NC4F_SOURCE_DIR}
+  ${NC4F_SOURCE_DIR}/fortran
+  ${NC4F_SOURCE_DIR}/libsrc)
 
 INCLUDE_DIRECTORIES(
   ${CMAKE_CPP_FLAGS}
   ${NETCDF_C_INCLUDE_DIR})
 
-LINK_DIRECTORIES(${CMAKE_SOURCE_DIR}/fortran ${CMAKE_SOURCE_DIR}/libsrc
+LINK_DIRECTORIES(${NC4F_SOURCE_DIR}/fortran ${NC4F_SOURCE_DIR}/libsrc
   ${NC4F_BINARY_DIR}/fortran)
 
 # Create pre-compiled tests.
@@ -65,19 +63,18 @@ FOREACH(t IN LISTS TESTS)
   IF(${t}_C_SOURCES)
     message ("Adding C code for Test ${t} to Library")
     ADD_LIBRARY(${t}_c OBJECT ${${t}_C_SOURCES})
-    install(TARGETS ${t}_c DESTINATION lib)
+    install(TARGETS ${t}_c LIBRARY)
     SET(${t}_C_LIBRARY ${t}_c)
     TARGET_LINK_LIBRARIES(${t} ${${t}_C_LIBRARY})
   ENDIF()
   TARGET_LINK_LIBRARIES(${t} netcdff)
-  ADD_TEST(${t} ${t})
+  add_test(NAME ${t} COMMAND ${t})
 ENDFOREACH()
 
 # Copy test scripts in to current directory.
-FILE(GLOB COPY_FILES ${CMAKE_CURRENT_SOURCE_DIR}/*.sh)
-FILE(COPY ${COPY_FILES}
+FILE(COPY ${CMAKE_CURRENT_SOURCE_DIR}/
     DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/
-    FILE_PERMISSIONS OWNER_WRITE OWNER_READ OWNER_EXECUTE)
+    FILES_MATCHING PATTERN ".sh")
 
 # Add script-based tests.
 FOREACH(t IN LISTS SCRIPT_TESTS)
