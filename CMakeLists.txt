@@ -10,6 +10,12 @@ cmake_minimum_required(VERSION 3.21.0)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
 
+# Set the build type.
+IF (NOT DEFINED CMAKE_CONFIGURATION_TYPES AND NOT DEFINED CMAKE_BUILD_TYPE AND NOT DEFINED ENV{CMAKE_BUILD_TYPE})
+  SET (CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build, options are: None, Debug, Release."
+    FORCE)
+ENDIF()
+
 #Project Name for netCDF-Fortran
 PROJECT (NC4F
 LANGUAGES C Fortran
@@ -115,12 +121,6 @@ FIND_PACKAGE(PkgConfig QUIET)
 # TODO: this can't currently be found, need
 # FIND_PACKAGE(MakeDist)
 # End 'enable dist and distcheck'
-
-# Set the build type.
-IF (NOT CMAKE_BUILD_TYPE)
-  SET (CMAKE_BUILD_TYPE DEBUG CACHE STRING "Choose the type of build, options are: None, Debug, Release."
-    FORCE)
-ENDIF()
 
 cmake_path(GET CMAKE_Fortran_COMPILER FILENAME Fortran_COMPILER_NAME)
 
