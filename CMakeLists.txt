@@ -94,7 +94,7 @@ ENDIF()
 INCLUDE(GNUInstallDirs)
 
 # Include this so we can check values in netcdf_meta.h.
-INCLUDE(CheckCSourceCompiles)
+INCLUDE(CheckSourceCompiles)
 
 # By default install Fortran modules into include directory
 SET(Fortran_INSTALL_MODDIR "${CMAKE_INSTALL_INCLUDEDIR}" CACHE STRING "Fortran module install directory")
@@ -108,12 +108,10 @@ INCLUDE (CheckLibraryExists)
 INCLUDE (CheckIncludeFile)
 INCLUDE (CheckTypeSize)
 INCLUDE (CheckFunctionExists)
-INCLUDE (CheckCXXSourceCompiles)
 INCLUDE (TestBigEndian)
 INCLUDE (CheckSymbolExists)
 INCLUDE (GetPrerequisites)
-INCLUDE (CheckFortranSourceCompiles)
-INCLUDE (CheckFortranCompilerFlag)
+INCLUDE (CheckCompilerFlag)
 FIND_PACKAGE(PkgConfig QUIET)
 
 # Enable 'dist and distcheck'.
@@ -175,7 +173,7 @@ ENDIF()
 # on GCC.
 #
 # Also, set some other default compiler flags.
-IF(CMAKE_COMPILER_IS_GNUCC OR APPLE)
+IF(CMAKE_C_COMPILER_ID MATCHES "GNU|AppleClang")
   string(APPEND CMAKE_C_FLAGS " -g -Wall -Wno-unused-variable -Wno-unused-parameter")
 ENDIF()
 
@@ -185,7 +183,7 @@ ENDIF()
 
 IF(CMAKE_Fortran_COMPILER_ID MATCHES Intel)
   IF(MSVC)
-    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} /heap-arrays:1")
+    string(APPEND CMAKE_Fortran_FLAGS " /heap-arrays:1")
   ENDIF()
 ENDIF()
 
@@ -622,16 +620,16 @@ ENDIF()
 # See https://github.com/Unidata/netcdf-fortran/issues/212
 # See https://github.com/Unidata/netcdf-fortran/issues/218
 ##
-check_Fortran_compiler_flag("-fallow-argument-mismatch" COMPILER_HAS_ALLOW_ARGUMENT_MISMATCH)
+check_compiler_flag(Fortran "-fallow-argument-mismatch" COMPILER_HAS_ALLOW_ARGUMENT_MISMATCH)
 
 IF(COMPILER_HAS_ALLOW_ARGUMENT_MISMATCH)
-  SET(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fallow-argument-mismatch")
+  string(APPEND CMAKE_Fortran_FLAGS " -fallow-argument-mismatch")
 ENDIF(COMPILER_HAS_ALLOW_ARGUMENT_MISMATCH)
 
-check_Fortran_compiler_flag("-mismatch_all" COMPILER_HAS_MISMATCH_ALL)
+check_compiler_flag(Fortran "-mismatch_all" COMPILER_HAS_MISMATCH_ALL)
 
 IF(COMPILER_HAS_MISMATCH_ALL)
-  SET(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -mismatch_all")
+  string(APPEND CMAKE_Fortran_FLAGS " -mismatch_all")
 ENDIF(COMPILER_HAS_MISMATCH_ALL)
 
 CHECK_FUNCTION_EXISTS(alloca HAVE_ALLOCA)
@@ -645,23 +643,23 @@ CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} oc_open "" BUILD_DAP)
 # Check to see if szip write capability is present in netcdf-c.
 ###
 SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_C_INCLUDE_DIR})
-CHECK_C_SOURCE_COMPILES("
+check_source_compiles(C "
 #include <netcdf_meta.h>
 #if !NC_HAS_SZIP_WRITE
       choke me
 #endif
-int main() {return 0;}" HAVE_SZIP_WRITE)
+int main(void) {return 0;}" HAVE_SZIP_WRITE)
 
 ###
 # Check to see if quantize capability is present in netcdf-c.
 ###
 SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_C_INCLUDE_DIR})
-CHECK_C_SOURCE_COMPILES("
+check_source_compiles(C "
 #include <netcdf_meta.h>
 #if !NC_HAS_QUANTIZE
       choke me
 #endif
-int main() {return 0;}" HAVE_QUANTIZE)
+int main(void) {return 0;}" HAVE_QUANTIZE)
 if (HAVE_QUANTIZE)
    add_compile_definitions(NF_HAS_QUANTIZE)
 endif()
@@ -688,12 +686,12 @@ OPTION(DISABLE_ZSTANDARD_PLUGIN "Disable ZStandard plugin detection and function
 
 IF(NOT DISABLE_ZSTANDARD_PLUGIN)
   SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_C_INCLUDE_DIR})
-  CHECK_C_SOURCE_COMPILES("
+  check_source_compiles(C "
   #include <netcdf_meta.h>
   #if !NC_HAS_ZSTD
         choke me
   #endif
-  int main() {return 0;}" NC_HAVE_ZSTD)
+  int main(void) {return 0;}" NC_HAVE_ZSTD)
 
   IF(NC_HAVE_ZSTD)
     IF(NOT DEFINED ENV{HDF5_PLUGIN_PATH})
@@ -764,8 +762,8 @@ IF (UNIX AND ${CMAKE_SIZEOF_VOID_P} MATCHES "8")
   add_compile_definitions(LONGLONG_IS_LONG)
   # for easier debugging of cfortran.h
   IF (APPLE)
-    IF(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-      SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fmacro-backtrace-limit=0")
+    IF(CMAKE_C_COMPILER_ID MATCHES "Clang")
+      string(APPEND CMAKE_C_FLAGS " -fmacro-backtrace-limit=0")
     ENDIF()
   ENDIF(APPLE)
 ENDIF()
