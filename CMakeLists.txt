@@ -240,7 +240,7 @@ MACRO(add_bin_env_temp_large_test prefix F)
   ENDIF()
 
 
-  ADD_TEST(${prefix}_${F} bash "-c" "TEMP_LARGE=${NC4F_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
+  add_test(NAME ${prefix}_${F} COMMAND bash "-c" "TEMP_LARGE=${NC4F_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
   IF(MSVC)
     SET_PROPERTY(TARGET ${prefix}_${F} PROPERTY FOLDER "tests")
   ENDIF()
@@ -258,7 +258,7 @@ MACRO(add_bin_env_test prefix F)
   ENDIF()
 
 
-  ADD_TEST(${prefix}_${F} bash "-c" "TOPSRCDIR=${NC4F_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
+  add_test(NAME ${prefix}_${F} COMMAND bash "-c" "TOPSRCDIR=${NC4F_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
   IF(MSVC)
     SET_PROPERTY(TARGET ${prefix}_${F} PROPERTY FOLDER "tests")
   ENDIF()
@@ -267,7 +267,7 @@ ENDMACRO()
 # Binary tests which are used by a script looking for a specific name.
 MACRO(add_bin_test_no_prefix F)
   build_bin_test(${F})
-  ADD_TEST(${F} ${EXECUTABLE_OUTPUT_PATH}/${F})
+  add_test(NAME ${F} COMMAND ${EXECUTABLE_OUTPUT_PATH}/${F})
   IF(MSVC)
     SET_PROPERTY(TEST ${F} PROPERTY FOLDER "tests/")
   ENDIF()
@@ -288,7 +288,7 @@ MACRO(add_bin_test prefix F)
       PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"
       )
   ENDIF()
-  ADD_TEST(${prefix}_${F} ${EXECUTABLE_OUTPUT_PATH}/${prefix}_${F})
+  add_test(NAME ${prefix}_${F} COMMAND ${EXECUTABLE_OUTPUT_PATH}/${prefix}_${F})
   IF(MSVC)
     SET_PROPERTY(TEST ${prefix}_${F} PROPERTY FOLDER "tests/")
   ENDIF()
@@ -329,7 +329,7 @@ ENDMACRO()
 # Shell script Macro
 MACRO(add_sh_test prefix F)
   IF(NOT MSVC)
-    ADD_TEST(${prefix}_${F} bash "-c" "export srcdir=${CMAKE_CURRENT_SOURCE_DIR};export TOPSRCDIR=${NC4F_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR}/${F}.sh")
+    add_test(NAME ${prefix}_${F} COMMAND bash "-c" "export srcdir=${CMAKE_CURRENT_SOURCE_DIR};export TOPSRCDIR=${NC4F_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR}/${F}.sh")
   ENDIF()
 
 ENDMACRO()
@@ -421,7 +421,7 @@ MACRO(add_bin_env_test prefix F)
   ENDIF()
 
 
-  ADD_TEST(${prefix}_${F} bash "-c" "TOPSRCDIR=${NC4F_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
+  add_test(NAME ${prefix}_${F} COMMAND bash "-c" "TOPSRCDIR=${NC4F_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
   IF(MSVC)
     SET_PROPERTY(TARGET ${prefix}_${F} PROPERTY FOLDER "tests")
   ENDIF()

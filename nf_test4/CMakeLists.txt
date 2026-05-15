@@ -70,7 +70,7 @@ ENDIF()
 FOREACH(t IN LISTS TESTS)
   ADD_EXECUTABLE(${t} ${${t}_SOURCES})
   TARGET_LINK_LIBRARIES(${t} netcdff)
-  ADD_TEST(${t} ${t})
+  add_test(NAME ${t} COMMAND ${t})
 ENDFOREACH()
 
 # Cleaning up files created during the process.

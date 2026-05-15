@@ -68,7 +68,7 @@ FOREACH(t IN LISTS TESTS)
     TARGET_LINK_LIBRARIES(${t} ${${t}_C_LIBRARY})
   ENDIF()
   TARGET_LINK_LIBRARIES(${t} netcdff)
-  ADD_TEST(${t} ${t})
+  add_test(NAME ${t} COMMAND ${t})
 ENDFOREACH()
 
 # Copy test scripts in to current directory.

@@ -21,7 +21,7 @@ FOREACH(F ${example_F90_tests})
       PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"
 	)
   ENDIF()
-  ADD_TEST(${prefix}_${F} ${EXECUTABLE_OUTPUT_PATH}/${prefix}_${F})
+  add_test(NAME ${prefix}_${F} COMMAND ${EXECUTABLE_OUTPUT_PATH}/${prefix}_${F})
   IF(MSVC)
     SET_PROPERTY(TEST ${prefix}_${F} PROPERTY FOLDER "tests/")
   ENDIF()
