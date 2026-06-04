@@ -664,7 +664,7 @@ endif()
 
 CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} nc_def_var_szip "" HAVE_DEF_VAR_SZIP)
 if (NOT HAVE_DEF_VAR_SZIP)
-  message(FATAL_ERROR "netcdf-c version 4.7.4 or greater is required."
+  message(FATAL_ERROR "netcdf-c version 4.7.4 or greater is required, and libnetcdf must have szip functionality."
                       "If netCDF-C 4.7.4 is present but is built statically, you *must* specify all dependencies"
                       "by setting the LDFLAGS environmental variable.\n"
                       "Example:\n"
