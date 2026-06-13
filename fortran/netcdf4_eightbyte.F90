@@ -396,7 +396,7 @@ function nf90_get_var_1D_EightByteInt(ncid, varid, values, start, count, stride,
   if (nf90_get_var_1D_EightByteInt .eq. nf90_noerr) then
      if (format_num .eq. nf90_format_netcdf4 .OR. &
          format_num .eq. nf90_format_cdf5) then
-        allocate(defaultInt8Array(size(values)))
+        allocate(defaultInt8Array(size(values,kind=EightByteInt)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_1D_EightByteInt = &
@@ -411,7 +411,7 @@ function nf90_get_var_1D_EightByteInt(ncid, varid, values, start, count, stride,
         values(:) = reshape(defaultInt8Array(:), shapeValues)
         if (allocated(defaultInt8Array)) deallocate(defaultInt8Array)
      else
-        allocate(defaultIntArray(size(values)))
+        allocate(defaultIntArray(size(values,kind=EightByteInt)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_1D_EightByteInt = &
@@ -458,7 +458,7 @@ function nf90_get_var_2D_EightByteInt(ncid, varid, values, start, count, stride,
   if (nf90_get_var_2D_EightByteInt .eq. nf90_noerr) then
      if (format_num .eq. nf90_format_netcdf4 .OR. &
          format_num .eq. nf90_format_cdf5) then
-        allocate(defaultInt8Array(size(values)))
+        allocate(defaultInt8Array(size(values,kind=EightByteInt)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_2D_EightByteInt = &
@@ -473,7 +473,7 @@ function nf90_get_var_2D_EightByteInt(ncid, varid, values, start, count, stride,
         values(:, :) = reshape(defaultInt8Array(:), shapeValues)
         if (allocated(defaultInt8Array)) deallocate(defaultInt8Array)
      else
-        allocate(defaultIntArray(size(values)))
+        allocate(defaultIntArray(size(values,kind=EightByteInt)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_2D_EightByteInt = &
@@ -520,7 +520,7 @@ function nf90_get_var_3D_EightByteInt(ncid, varid, values, start, count, stride,
   if (nf90_get_var_3D_EightByteInt .eq. nf90_noerr) then
      if (format_num .eq. nf90_format_netcdf4 .OR. &
          format_num .eq. nf90_format_cdf5) then
-        allocate(defaultInt8Array(size(values)))
+        allocate(defaultInt8Array(size(values,kind=EightByteInt)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_3D_EightByteInt = &
@@ -535,7 +535,7 @@ function nf90_get_var_3D_EightByteInt(ncid, varid, values, start, count, stride,
         values(:, :, :) = reshape(defaultInt8Array(:), shapeValues)
         if (allocated(defaultInt8Array)) deallocate(defaultInt8Array)
      else
-        allocate(defaultIntArray(size(values)))
+        allocate(defaultIntArray(size(values,kind=EightByteInt)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_3D_EightByteInt = &
@@ -582,7 +582,7 @@ function nf90_get_var_4D_EightByteInt(ncid, varid, values, start, count, stride,
   if (nf90_get_var_4D_EightByteInt .eq. nf90_noerr) then
      if (format_num .eq. nf90_format_netcdf4 .OR. &
          format_num .eq. nf90_format_cdf5) then
-        allocate(defaultInt8Array(size(values)))
+        allocate(defaultInt8Array(size(values,kind=EightByteInt)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_4D_EightByteInt = &
@@ -597,7 +597,7 @@ function nf90_get_var_4D_EightByteInt(ncid, varid, values, start, count, stride,
         values(:, :, :, :) = reshape(defaultInt8Array(:), shapeValues)
         if (allocated(defaultInt8Array)) deallocate(defaultInt8Array)
      else
-        allocate(defaultIntArray(size(values)))
+        allocate(defaultIntArray(size(values,kind=EightByteInt)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_4D_EightByteInt = &
@@ -644,7 +644,7 @@ function nf90_get_var_5D_EightByteInt(ncid, varid, values, start, count, stride,
   if (nf90_get_var_5D_EightByteInt .eq. nf90_noerr) then
      if (format_num .eq. nf90_format_netcdf4 .OR. &
          format_num .eq. nf90_format_cdf5) then
-        allocate(defaultInt8Array(size(values)))
+        allocate(defaultInt8Array(size(values,kind=EightByteInt)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_5D_EightByteInt = &
@@ -659,7 +659,7 @@ function nf90_get_var_5D_EightByteInt(ncid, varid, values, start, count, stride,
         values(:, :, :, :, :) = reshape(defaultInt8Array(:), shapeValues)
         if (allocated(defaultInt8Array)) deallocate(defaultInt8Array)
      else
-        allocate(defaultIntArray(size(values)))
+        allocate(defaultIntArray(size(values,kind=EightByteInt)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_5D_EightByteInt = &
@@ -706,7 +706,7 @@ function nf90_get_var_6D_EightByteInt(ncid, varid, values, start, count, stride,
   if (nf90_get_var_6D_EightByteInt .eq. nf90_noerr) then
      if (format_num .eq. nf90_format_netcdf4 .OR. &
          format_num .eq. nf90_format_cdf5) then
-        allocate(defaultInt8Array(size(values)))
+        allocate(defaultInt8Array(size(values,kind=EightByteInt)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_6D_EightByteInt = &
@@ -721,7 +721,7 @@ function nf90_get_var_6D_EightByteInt(ncid, varid, values, start, count, stride,
         values(:, :, :, :, :, :) = reshape(defaultInt8Array(:), shapeValues)
         if (allocated(defaultInt8Array)) deallocate(defaultInt8Array)
      else
-        allocate(defaultIntArray(size(values)))
+        allocate(defaultIntArray(size(values,kind=EightByteInt)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_6D_EightByteInt = &
@@ -768,7 +768,7 @@ function nf90_get_var_7D_EightByteInt(ncid, varid, values, start, count, stride,
   if (nf90_get_var_7D_EightByteInt .eq. nf90_noerr) then
      if (format_num .eq. nf90_format_netcdf4 .OR. &
          format_num .eq. nf90_format_cdf5) then
-        allocate(defaultInt8Array(size(values)))
+        allocate(defaultInt8Array(size(values,kind=EightByteInt)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_7D_EightByteInt = &
@@ -783,7 +783,7 @@ function nf90_get_var_7D_EightByteInt(ncid, varid, values, start, count, stride,
         values(:, :, :, :, :, :, :) = reshape(defaultInt8Array(:), shapeValues)
         if (allocated(defaultInt8Array)) deallocate(defaultInt8Array)
      else
-        allocate(defaultIntArray(size(values)))
+        allocate(defaultIntArray(size(values,kind=EightByteInt)))
         if(present(map))  then
            localMap   (:size(map))    = map(:)
            nf90_get_var_7D_EightByteInt = &

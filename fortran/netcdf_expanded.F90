@@ -1888,7 +1888,7 @@
      integer                               :: numDims, counter, shapeValues(1)
      integer, dimension(:), allocatable    :: defaultIntArray
 
-     allocate(defaultIntArray(size(values)))
+     allocate(defaultIntArray(size(values,kind=EightByteInt)))
 
      ! Set local arguments to default values
      shapeValues             = shape(values)
@@ -1929,7 +1929,7 @@
      integer                               :: numDims, counter, shapeValues(2)
      integer, dimension(:), allocatable    :: defaultIntArray
 
-     allocate(defaultIntArray(size(values)))
+     allocate(defaultIntArray(size(values,kind=EightByteInt)))
 
      ! Set local arguments to default values
      shapeValues             = shape(values)
@@ -1970,7 +1970,7 @@
      integer                               :: numDims, counter, shapeValues(3)
      integer, dimension(:), allocatable    :: defaultIntArray
 
-     allocate(defaultIntArray(size(values)))
+     allocate(defaultIntArray(size(values,kind=EightByteInt)))
 
      ! Set local arguments to default values
      shapeValues             = shape(values)
@@ -2011,7 +2011,7 @@
      integer                               :: numDims, counter, shapeValues(4)
      integer, dimension(:), allocatable    :: defaultIntArray
 
-     allocate(defaultIntArray(size(values)))
+     allocate(defaultIntArray(size(values,kind=EightByteInt)))
 
      ! Set local arguments to default values
      shapeValues             = shape(values)
@@ -2052,7 +2052,7 @@
      integer                               :: numDims, counter, shapeValues(5)
      integer, dimension(:), allocatable    :: defaultIntArray
 
-     allocate(defaultIntArray(size(values)))
+     allocate(defaultIntArray(size(values,kind=EightByteInt)))
 
      ! Set local arguments to default values
      shapeValues             = shape(values)
@@ -2093,7 +2093,7 @@
      integer                               :: numDims, counter, shapeValues(6)
      integer, dimension(:), allocatable    :: defaultIntArray
 
-     allocate(defaultIntArray(size(values)))
+     allocate(defaultIntArray(size(values,kind=EightByteInt)))
 
      ! Set local arguments to default values
      shapeValues             = shape(values)
@@ -2134,7 +2134,7 @@
      integer                               :: numDims, counter, shapeValues(7)
      integer, dimension(:), allocatable    :: defaultIntArray
 
-     allocate(defaultIntArray(size(values)))
+     allocate(defaultIntArray(size(values,kind=EightByteInt)))
 
      ! Set local arguments to default values
      shapeValues             = shape(values)
