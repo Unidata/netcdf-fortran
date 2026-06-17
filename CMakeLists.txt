@@ -6,9 +6,15 @@
 ##################################
 
 #Minimum required CMake Version
-cmake_minimum_required(VERSION 3.12.0)
+cmake_minimum_required(VERSION 3.21.0)
 
 set(CMAKE_WINDOWS_EXPORT_ALL_SYMBOLS ON)
+
+# Set the build type.
+IF (NOT DEFINED CMAKE_CONFIGURATION_TYPES AND NOT DEFINED CMAKE_BUILD_TYPE AND NOT DEFINED ENV{CMAKE_BUILD_TYPE})
+  SET (CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build, options are: None, Debug, Release."
+    FORCE)
+ENDIF()
 
 #Project Name for netCDF-Fortran
 PROJECT (NC4F
@@ -88,7 +94,7 @@ ENDIF()
 INCLUDE(GNUInstallDirs)
 
 # Include this so we can check values in netcdf_meta.h.
-INCLUDE(CheckCSourceCompiles)
+INCLUDE(CheckSourceCompiles)
 
 # By default install Fortran modules into include directory
 SET(Fortran_INSTALL_MODDIR "${CMAKE_INSTALL_INCLUDEDIR}" CACHE STRING "Fortran module install directory")
@@ -102,12 +108,10 @@ INCLUDE (CheckLibraryExists)
 INCLUDE (CheckIncludeFile)
 INCLUDE (CheckTypeSize)
 INCLUDE (CheckFunctionExists)
-INCLUDE (CheckCXXSourceCompiles)
 INCLUDE (TestBigEndian)
 INCLUDE (CheckSymbolExists)
 INCLUDE (GetPrerequisites)
-INCLUDE (CheckFortranSourceCompiles)
-INCLUDE (CheckFortranCompilerFlag)
+INCLUDE (CheckCompilerFlag)
 FIND_PACKAGE(PkgConfig QUIET)
 
 # Enable 'dist and distcheck'.
@@ -116,13 +120,7 @@ FIND_PACKAGE(PkgConfig QUIET)
 # FIND_PACKAGE(MakeDist)
 # End 'enable dist and distcheck'
 
-# Set the build type.
-IF (NOT CMAKE_BUILD_TYPE)
-  SET (CMAKE_BUILD_TYPE DEBUG CACHE STRING "Choose the type of build, options are: None, Debug, Release."
-    FORCE)
-ENDIF()
-
-get_filename_component (Fortran_COMPILER_NAME ${CMAKE_Fortran_COMPILER} NAME)
+cmake_path(GET CMAKE_Fortran_COMPILER FILENAME Fortran_COMPILER_NAME)
 
 ################################
 # End Project Properties
@@ -132,9 +130,13 @@ get_filename_component (Fortran_COMPILER_NAME ${CMAKE_Fortran_COMPILER} NAME)
 ################################
 # Set CTest Properties
 ################################
+# Toggle whether or not to run tests.
+OPTION(ENABLE_TESTS "Enable netcdf-fortran tests." ON)
 
-ENABLE_TESTING()
-INCLUDE(CTest)
+if(ENABLE_TESTS)
+  enable_testing()
+  include(CTest)
+endif()
 
 # Copy the CTest customization file into binary directory, as required.
 # TODO: need to provide suitable CTestCustom.cmake
@@ -171,7 +173,7 @@ ENDIF()
 # on GCC.
 #
 # Also, set some other default compiler flags.
-IF(CMAKE_COMPILER_IS_GNUCC OR APPLE)
+IF(CMAKE_C_COMPILER_ID MATCHES "GNU|AppleClang")
   string(APPEND CMAKE_C_FLAGS " -g -Wall -Wno-unused-variable -Wno-unused-parameter")
 ENDIF()
 
@@ -181,7 +183,7 @@ ENDIF()
 
 IF(CMAKE_Fortran_COMPILER_ID MATCHES Intel)
   IF(MSVC)
-    set(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} /heap-arrays:1")
+    string(APPEND CMAKE_Fortran_FLAGS " /heap-arrays:1")
   ENDIF()
 ENDIF()
 
@@ -236,7 +238,7 @@ MACRO(add_bin_env_temp_large_test prefix F)
   ENDIF()
 
 
-  ADD_TEST(${prefix}_${F} bash "-c" "TEMP_LARGE=${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
+  add_test(NAME ${prefix}_${F} COMMAND bash "-c" "TEMP_LARGE=${NC4F_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
   IF(MSVC)
     SET_PROPERTY(TARGET ${prefix}_${F} PROPERTY FOLDER "tests")
   ENDIF()
@@ -254,7 +256,7 @@ MACRO(add_bin_env_test prefix F)
   ENDIF()
 
 
-  ADD_TEST(${prefix}_${F} bash "-c" "TOPSRCDIR=${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
+  add_test(NAME ${prefix}_${F} COMMAND bash "-c" "TOPSRCDIR=${NC4F_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
   IF(MSVC)
     SET_PROPERTY(TARGET ${prefix}_${F} PROPERTY FOLDER "tests")
   ENDIF()
@@ -263,7 +265,7 @@ ENDMACRO()
 # Binary tests which are used by a script looking for a specific name.
 MACRO(add_bin_test_no_prefix F)
   build_bin_test(${F})
-  ADD_TEST(${F} ${EXECUTABLE_OUTPUT_PATH}/${F})
+  add_test(NAME ${F} COMMAND ${EXECUTABLE_OUTPUT_PATH}/${F})
   IF(MSVC)
     SET_PROPERTY(TEST ${F} PROPERTY FOLDER "tests/")
   ENDIF()
@@ -284,7 +286,7 @@ MACRO(add_bin_test prefix F)
       PROPERTIES LINK_FLAGS_DEBUG " /NODEFAULTLIB:MSVCRT"
       )
   ENDIF()
-  ADD_TEST(${prefix}_${F} ${EXECUTABLE_OUTPUT_PATH}/${prefix}_${F})
+  add_test(NAME ${prefix}_${F} COMMAND ${EXECUTABLE_OUTPUT_PATH}/${prefix}_${F})
   IF(MSVC)
     SET_PROPERTY(TEST ${prefix}_${F} PROPERTY FOLDER "tests/")
   ENDIF()
@@ -315,7 +317,7 @@ MACRO(print_conf_summary)
   SET(ALL_DEP_LIBS "${NETCDF_C_LIBRARY};${EXTRA_DEPS}")
   MESSAGE(STATUS "\tLinking against:\t\t" "${ALL_DEP_LIBS}")
   FOREACH(_LIB IN LISTS EXTRA_DEPS)
-    GET_FILENAME_COMPONENT(_LIB_NAME ${_LIB} NAME_WE)
+    cmake_path(GET _LIB STEM _LIB_NAME)
     STRING(REGEX REPLACE "^lib" "" _NAME ${_LIB_NAME})
     LIST(APPEND NCF_LIBS "-l${_NAME}")
   ENDFOREACH()
@@ -325,7 +327,7 @@ ENDMACRO()
 # Shell script Macro
 MACRO(add_sh_test prefix F)
   IF(NOT MSVC)
-    ADD_TEST(${prefix}_${F} bash "-c" "export srcdir=${CMAKE_CURRENT_SOURCE_DIR};export TOPSRCDIR=${CMAKE_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR}/${F}.sh")
+    add_test(NAME ${prefix}_${F} COMMAND bash "-c" "export srcdir=${CMAKE_CURRENT_SOURCE_DIR};export TOPSRCDIR=${NC4F_SOURCE_DIR};${CMAKE_CURRENT_BINARY_DIR}/${F}.sh")
   ENDIF()
 
 ENDMACRO()
@@ -400,7 +402,7 @@ ENDFUNCTION()
 
 
 #Add custom CMake Module
-SET (CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/modules/"
+SET (CMAKE_MODULE_PATH "${NC4F_SOURCE_DIR}/cmake/modules/"
   CACHE INTERNAL "Location of our custom CMake modules.")
 
 #####
@@ -417,7 +419,7 @@ MACRO(add_bin_env_test prefix F)
   ENDIF()
 
 
-  ADD_TEST(${prefix}_${F} bash "-c" "TOPSRCDIR=${CMAKE_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
+  add_test(NAME ${prefix}_${F} COMMAND bash "-c" "TOPSRCDIR=${NC4F_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR}/${prefix}_${F}")
   IF(MSVC)
     SET_PROPERTY(TARGET ${prefix}_${F} PROPERTY FOLDER "tests")
   ENDIF()
@@ -471,7 +473,7 @@ ELSE()
     IF(NOT NETCDF_C_INCLUDE_DIR)
       MESSAGE(FATAL_ERROR "Directory containing netcdf.h cannot be found. Please reinstall and try again.")
     ELSE()
-      GET_FILENAME_COMPONENT(netCDF_LIB_DIR "${NETCDF_C_LIBRARY}" REALPATH)
+      file(REAL_PATH ${NETCDF_C_LIBRARY} netCDF_LIB_DIR)
     ENDIF()
   ENDIF()
 ENDIF()
@@ -618,16 +620,16 @@ ENDIF()
 # See https://github.com/Unidata/netcdf-fortran/issues/212
 # See https://github.com/Unidata/netcdf-fortran/issues/218
 ##
-check_Fortran_compiler_flag("-fallow-argument-mismatch" COMPILER_HAS_ALLOW_ARGUMENT_MISMATCH)
+check_compiler_flag(Fortran "-fallow-argument-mismatch" COMPILER_HAS_ALLOW_ARGUMENT_MISMATCH)
 
 IF(COMPILER_HAS_ALLOW_ARGUMENT_MISMATCH)
-  SET(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -fallow-argument-mismatch")
+  string(APPEND CMAKE_Fortran_FLAGS " -fallow-argument-mismatch")
 ENDIF(COMPILER_HAS_ALLOW_ARGUMENT_MISMATCH)
 
-check_Fortran_compiler_flag("-mismatch_all" COMPILER_HAS_MISMATCH_ALL)
+check_compiler_flag(Fortran "-mismatch_all" COMPILER_HAS_MISMATCH_ALL)
 
 IF(COMPILER_HAS_MISMATCH_ALL)
-  SET(CMAKE_Fortran_FLAGS "${CMAKE_Fortran_FLAGS} -mismatch_all")
+  string(APPEND CMAKE_Fortran_FLAGS " -mismatch_all")
 ENDIF(COMPILER_HAS_MISMATCH_ALL)
 
 CHECK_FUNCTION_EXISTS(alloca HAVE_ALLOCA)
@@ -641,23 +643,23 @@ CHECK_LIBRARY_EXISTS(${NETCDF_C_LIBRARY} oc_open "" BUILD_DAP)
 # Check to see if szip write capability is present in netcdf-c.
 ###
 SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_C_INCLUDE_DIR})
-CHECK_C_SOURCE_COMPILES("
+check_source_compiles(C "
 #include <netcdf_meta.h>
 #if !NC_HAS_SZIP_WRITE
       choke me
 #endif
-int main() {return 0;}" HAVE_SZIP_WRITE)
+int main(void) {return 0;}" HAVE_SZIP_WRITE)
 
 ###
 # Check to see if quantize capability is present in netcdf-c.
 ###
 SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_C_INCLUDE_DIR})
-CHECK_C_SOURCE_COMPILES("
+check_source_compiles(C "
 #include <netcdf_meta.h>
 #if !NC_HAS_QUANTIZE
       choke me
 #endif
-int main() {return 0;}" HAVE_QUANTIZE)
+int main(void) {return 0;}" HAVE_QUANTIZE)
 if (HAVE_QUANTIZE)
    add_compile_definitions(NF_HAS_QUANTIZE)
 endif()
@@ -684,12 +686,12 @@ OPTION(DISABLE_ZSTANDARD_PLUGIN "Disable ZStandard plugin detection and function
 
 IF(NOT DISABLE_ZSTANDARD_PLUGIN)
   SET(CMAKE_REQUIRED_INCLUDES ${NETCDF_C_INCLUDE_DIR})
-  CHECK_C_SOURCE_COMPILES("
+  check_source_compiles(C "
   #include <netcdf_meta.h>
   #if !NC_HAS_ZSTD
         choke me
   #endif
-  int main() {return 0;}" NC_HAVE_ZSTD)
+  int main(void) {return 0;}" NC_HAVE_ZSTD)
 
   IF(NC_HAVE_ZSTD)
     IF(NOT DEFINED ENV{HDF5_PLUGIN_PATH})
@@ -760,8 +762,8 @@ IF (UNIX AND ${CMAKE_SIZEOF_VOID_P} MATCHES "8")
   add_compile_definitions(LONGLONG_IS_LONG)
   # for easier debugging of cfortran.h
   IF (APPLE)
-    IF(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-      SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fmacro-backtrace-limit=0")
+    IF(CMAKE_C_COMPILER_ID MATCHES "Clang")
+      string(APPEND CMAKE_C_FLAGS " -fmacro-backtrace-limit=0")
     ENDIF()
   ENDIF(APPLE)
 ENDIF()
@@ -854,9 +856,6 @@ ENDIF()
 
 OPTION(ENABLE_FORTRAN_TYPE_CHECKS
   "Determine Fortran types corresponding to netCDF types" ON)
-
-# Toggle whether or not to run tests.
-OPTION(ENABLE_TESTS "Enable netcdf-fortran tests." ON)
 
 # Enable filter testing
 OPTION(ENABLE_FILTER_TEST "Enable filter test." OFF)
@@ -954,8 +953,8 @@ SET(NC4F_CTEST_DROP_SITE "cdash.unidata.ucar.edu" CACHE STRING "Dashboard locati
 SET(NC4F_CTEST_DROP_LOC_PREFIX "" CACHE STRING "Prefix for Dashboard location on remote server when using CTest-based testing.")
 
 # Generate CTestConfig file from template.
-CONFIGURE_FILE("${CMAKE_SOURCE_DIR}/CTestConfig.cmake.in"
-  "${CMAKE_SOURCE_DIR}/CTestConfig.cmake"
+CONFIGURE_FILE("${NC4F_SOURCE_DIR}/CTestConfig.cmake.in"
+  "${NC4F_SOURCE_DIR}/CTestConfig.cmake"
   @ONLY)
 
 # Fortran compiler flag for the (module) include directory. Used for generating nf-config.
@@ -1080,10 +1079,10 @@ SET(NC_FLIBS "")
 get_target_property(ALL_TLL_LIBS netcdff LINK_LIBRARIES)
 
 FOREACH(_LIB IN LISTS ALL_TLL_LIBS)
-  GET_FILENAME_COMPONENT(_LIB_NAME ${_LIB} NAME_WE)
+  cmake_path(GET _LIB STEM _LIB_NAME)
   STRING(REGEX REPLACE "^lib" "" _NAME ${_LIB_NAME})
   LIST(APPEND NC_FLIBS "-l${_NAME}")
-  GET_FILENAME_COMPONENT(_LIB_DIR ${_LIB} PATH)
+  cmake_path(GET _LIB PARENT_PATH _LIB_DIR)
   LIST(APPEND LINKFLAGS "-L${_LIB_DIR}")
 ENDFOREACH()
 
@@ -1149,8 +1148,8 @@ ENDIF(NC_HAVE_ZSTD)
 
 # Install libnetcdf.settings file into same location
 # as the libraries.
-INSTALL(FILES "${CMAKE_BINARY_DIR}/libnetcdff.settings"
-  DESTINATION "${CMAKE_INSTALL_LIBDIR}"
+INSTALL(FILES "${NC4F_BINARY_DIR}/libnetcdff.settings"
+  TYPE LIB
   COMPONENT libraries)
 
 #####
@@ -1168,23 +1167,22 @@ set(FC "${CMAKE_Fortran_COMPILER}")
 set(CPPFLAGS "${CMAKE_C_FLAGS} ${CMAKE_CPP_FLAGS}")
 
 # Generate nf-config from template
-configure_file("${CMAKE_SOURCE_DIR}/nf-config.in"
-  "${CMAKE_BINARY_DIR}/tmp/nf-config" @ONLY
+configure_file("${NC4F_SOURCE_DIR}/nf-config.in"
+  "${NC4F_BINARY_DIR}/nf-config" @ONLY
   NEWLINE_STYLE LF)
-file(COPY "${CMAKE_BINARY_DIR}/tmp/nf-config"
-  DESTINATION ${CMAKE_BINARY_DIR}/
+file(CHMOD "${NC4F_BINARY_DIR}/nf-config"
   FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
 
 configure_file(
-        ${CMAKE_SOURCE_DIR}/netcdf-fortran.pc.in
-        ${CMAKE_BINARY_DIR}/netcdf-fortran.pc @ONLY)
+        ${NC4F_SOURCE_DIR}/netcdf-fortran.pc.in
+        ${NC4F_BINARY_DIR}/netcdf-fortran.pc @ONLY)
 
-install(FILES ${CMAKE_BINARY_DIR}/netcdf-fortran.pc
+install(FILES ${NC4F_BINARY_DIR}/netcdf-fortran.pc
               DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig
               COMPONENT utilities)
 
 install(PROGRAMS ${NC4F_BINARY_DIR}/nf-config
-        DESTINATION "${CMAKE_INSTALL_BINDIR}"
+        TYPE BIN
         COMPONENT utilities)
 
 include(CMakePackageConfigHelpers)

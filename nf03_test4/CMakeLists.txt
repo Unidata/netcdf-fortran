@@ -34,10 +34,8 @@ if (USE_NETCDF4)
   SET(f90tst_att_SOURCES f90tst_att.F90)
 
 # Need a copy of ref_atts.nc for f90tst_att
-  file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/ref_att.nc
-          DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-  file(RENAME ${CMAKE_CURRENT_BINARY_DIR}/ref_att.nc
-          ${CMAKE_CURRENT_BINARY_DIR}/att.nc)
+  file(COPY_FILE ${CMAKE_CURRENT_SOURCE_DIR}/ref_att.nc
+    ${CMAKE_CURRENT_BINARY_DIR}/att.nc ONLY_IF_DIFFERENT)
 
   # Test parallel I/O.
   IF (TEST_PARALLEL)
@@ -45,10 +43,9 @@ if (USE_NETCDF4)
       f90tst_nc4_par f90tst_parallel_fill f90tst_parallel_compressed)
 
     CONFIGURE_FILE("${CMAKE_CURRENT_SOURCE_DIR}/run_f90_par_test.sh.in"
-      "${CMAKE_CURRENT_SOURCE_DIR}/run_f90_par_test.sh"
+      "${CMAKE_CURRENT_BINARY_DIR}/run_f90_par_test.sh"
     @ONLY)
-    FILE(COPY "${CMAKE_CURRENT_SOURCE_DIR}/run_f90_par_test.sh"
-      DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/
+    FILE(CHMOD "${CMAKE_CURRENT_BINARY_DIR}/run_f90_par_test.sh"
       FILE_PERMISSIONS OWNER_READ OWNER_WRITE OWNER_EXECUTE)
 
 
@@ -85,7 +82,7 @@ endif(USE_NETCDF4)
 FOREACH(t IN LISTS TESTS)
   ADD_EXECUTABLE(${t} ${${t}_SOURCES})
   TARGET_LINK_LIBRARIES(${t} netcdff)
-  ADD_TEST(${t} ${t})
+  add_test(NAME ${t} COMMAND ${t})
 ENDFOREACH()
 
 # Cleaning up files created during the process.
