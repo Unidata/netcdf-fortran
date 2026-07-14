@@ -866,3 +866,16 @@
 
      nf90_get_var_any = nf_get_vars(ncid, varid, localStart, localCount, localStride, values)
    end function nf90_get_var_any
+
+  ! -----------
+  function nf90_set_meta_block_size(size)
+    integer, intent(in) :: size
+    integer :: nf90_set_meta_block_size
+    nf90_set_meta_block_size = nf_set_meta_block_size(size)
+  end function nf90_set_meta_block_size
+  ! -----------
+  function nf90_get_meta_block_size(size)
+    integer, intent(out) :: size
+    integer :: nf90_get_meta_block_size
+    nf90_get_meta_block_size = nf_get_meta_block_size(size)
+  end function nf90_get_meta_block_size

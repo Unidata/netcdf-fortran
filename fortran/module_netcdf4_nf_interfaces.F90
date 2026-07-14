@@ -954,6 +954,24 @@ Interface
 
  End Function nf_get_var_chunk_cache
 End Interface
+!--------------------------------- nf_set_meta_block_size ----------------------
+Interface
+ Function nf_set_meta_block_size(size) RESULT(status)
+
+ Integer, Intent(IN) :: size
+ Integer             :: status
+
+ End Function nf_set_meta_block_size
+End Interface
+!--------------------------------- nf_get_meta_block_size ----------------------
+Interface
+ Function nf_get_meta_block_size(size) RESULT(status)
+
+ Integer, Intent(OUT) :: size
+ Integer              :: status
+
+ End Function nf_get_meta_block_size
+End Interface
 
 ! Declare external values for functions that use C_CHAR strings to pass
 ! data of different types
