@@ -2235,7 +2235,7 @@ End Function nf_free_string
  status = cstatus
 
  End Function nf_get_var_chunk_cache
-
+#ifdef HAVE_NC_META_BLOCK_SIZE
  !--------------------------------- nf_set_meta_block_size ---------------------
  Function nf_set_meta_block_size(size) RESULT(status)
 
@@ -2282,3 +2282,4 @@ End Function nf_free_string
  status = cstatus
 
  End Function nf_get_meta_block_size
+#endif

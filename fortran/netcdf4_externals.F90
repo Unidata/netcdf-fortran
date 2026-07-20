@@ -29,5 +29,8 @@
        nf_inq_var_szip, nf_def_var_szip, nf_free_vlens, nf_free_string, &
        nf_set_var_chunk_cache, nf_get_var_chunk_cache, nf_rename_grp, &
        nf_def_var_filter, nf_inq_var_filter, nf_inq_var_quantize, nf_def_var_quantize, &
-       nf_def_var_zstandard, nf_inq_var_zstandard, &
-       nf_set_meta_block_size, nf_get_meta_block_size
+       nf_def_var_zstandard, nf_inq_var_zstandard
+
+#ifdef HAVE_NC_META_BLOCK_SIZE
+      integer, external :: nf_set_meta_block_size, nf_get_meta_block_size
+#endif

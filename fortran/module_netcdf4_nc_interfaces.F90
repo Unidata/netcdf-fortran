@@ -1041,6 +1041,7 @@ Interface
 
  End Function nc_get_var_chunk_cache_ints
 End Interface
+#ifdef HAVE_NC_META_BLOCK_SIZE
 !------------------------------- nc_set_meta_block_size -----------------------
 Interface
  Function nc_set_meta_block_size(size) BIND(C)
@@ -1089,6 +1090,7 @@ Interface
 
  End Function nc_get_meta_block_size_ints
 End Interface
+#endif
 !------------------------------- nc_set_chunk_cache ---------------------------
 Interface
  Function nc_set_chunk_cache(size, nelems, preemption) BIND(C)

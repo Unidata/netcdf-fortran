@@ -954,6 +954,7 @@ Interface
 
  End Function nf_get_var_chunk_cache
 End Interface
+#ifdef HAVE_NC_META_BLOCK_SIZE
 !--------------------------------- nf_set_meta_block_size ----------------------
 Interface
  Function nf_set_meta_block_size(size) RESULT(status)
@@ -972,6 +973,7 @@ Interface
 
  End Function nf_get_meta_block_size
 End Interface
+#endif
 
 ! Declare external values for functions that use C_CHAR strings to pass
 ! data of different types
