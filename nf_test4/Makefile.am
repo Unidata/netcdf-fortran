@@ -21,6 +21,10 @@ if TEST_QUANTIZE
 NF77_TESTS += ftst_zstandard
 endif
 
+if TEST_META_BLOCK_SIZE
+NF77_TESTS += ftst_meta_block_size
+endif
+
 # Compile and run the F77 API tests.
 check_PROGRAMS = $(NF77_TESTS)
 TESTS = $(NF77_TESTS)
@@ -41,6 +45,7 @@ ftst_path_SOURCES = ftst_path.F
 ftst_rengrps_SOURCES = ftst_rengrps.F
 f03tst_open_mem_SOURCES = f03tst_open_mem.F
 ftst_var_compact_SOURCES = ftst_var_compact.F
+ftst_meta_block_size_SOURCES = ftst_meta_block_size.F
 
 # This is a netCDF-4 V2 F77 test program.
 if BUILD_V2

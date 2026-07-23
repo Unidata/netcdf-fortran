@@ -12,6 +12,9 @@ if (USE_NETCDF4)
   IF (HAVE_QUANTIZE)
     SET(nc4_check_PROGRAMS ${nc4_check_PROGRAMS} ftst_zstandard)
   ENDIF()
+  IF (HAVE_NC_META_BLOCK_SIZE)
+    SET(nc4_check_PROGRAMS ${nc4_check_PROGRAMS} ftst_meta_block_size)
+  ENDIF()
   SET(check_PROGRAMS ${check_PROGRAMS} ${nc4_check_PROGRAMS})
   SET(TESTS ${TESTS} ${nc4_check_PROGRAMS})
 
@@ -30,7 +33,8 @@ if (USE_NETCDF4)
   SET(ftst_rengrps_SOURCES ftst_rengrps.F)
   SET(f03tst_open_mem_SOURCES f03tst_open_mem.F)
   SET(ftst_var_compact_SOURCES ftst_var_compact.F)
-
+  SET(ftst_meta_block_size_SOURCES ftst_meta_block_size.F)
+  
   # This is a netCDF-4 V2 test program.
   IF (BUILD_V2)
     SET(nc4_v2_PROGRAMS ftst_v2)
