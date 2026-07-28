@@ -6,6 +6,16 @@ Release Notes {#nf_release_notes}
 This file contains a high-level description of this package's evolution.
 Entries are in reverse chronological order (most recent first).
 
+## 4.6.4 - July 29, 2026
+
+## What's Changed
+* V4.6.3 wellspring.wif by @@WardF in https://github.com/Unidata/netcdf-fortran/pull/484
+* Update message triggered when nc_def_var_szip is not found. by @@WardF in https://github.com/Unidata/netcdf-fortran/pull/485
+* Add hooks to new libnetcdf meta_block_size functions by @@WardF in https://github.com/Unidata/netcdf-fortran/pull/488
+
+
+**Full Changelog**: https://github.com/Unidata/netcdf-fortran/compare/v4.6.3...v4.6.4
+
 ## 4.6.3 - May 20, 2026
 
 * netCDF-C: 4.9.2+
