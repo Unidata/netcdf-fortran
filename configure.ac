@@ -549,7 +549,7 @@ AC_SEARCH_LIBS([nc_open], [netcdf], [],
 			  [AC_MSG_ERROR([Could not link to netcdf C library. Please set LDFLAGS; for static builds set LIBS to the results of nc-config --libs.])])
 
 # See if various functions are available
-AC_CHECK_FUNCS([nc_def_opaque nccreate nc_set_log_level oc_open nc_def_var_szip])
+AC_CHECK_FUNCS([nc_def_opaque nccreate nc_set_log_level oc_open nc_def_var_szip nc_set_meta_block_size])
 
 # Starting with version 4.7.4, netcdf-c has function nc_def_var_szip().
 if test "x$ac_cv_func_nc_def_var_szip" != xyes; then
@@ -571,6 +571,12 @@ test "x$ac_cv_func_oc_open" = xyes && nc_has_dap=yes
 
 if test "x$nc_build_v4" = xyes; then
    AC_DEFINE([USE_NETCDF4], [1], [if true, build netCDF-4])
+fi
+
+nc_has_meta_block_size=no
+test "x$ac_cv_func_nc_set_meta_block_size" = xyes && nc_has_meta_block_size=yes
+if test "x$nc_has_meta_block_size" = xyes; then
+   AC_DEFINE([HAVE_NC_META_BLOCK_SIZE], [1], [netcdf-c has nc_set_meta_block_size])
 fi
 
 if test "x$nc_has_logging" = xyes; then
@@ -600,6 +606,7 @@ AM_CONDITIONAL([BUILD_PNETCDF], [test "x$nc_has_pnetcdf" = xyes])
 AM_CONDITIONAL([BUILD_PARALLEL4], [test "x$nc_has_parallel4" = xyes])
 AM_CONDITIONAL([BUILD_PARALLEL], [test "x$nc_has_pnetcdf" = xyes -o "x$nc_has_parallel4" = xyes])
 AM_CONDITIONAL([TEST_FILTERS], [test "x$enable_filter_test" = xyes])
+AM_CONDITIONAL([TEST_META_BLOCK_SIZE], [test "x$nc_has_meta_block_size" = xyes])
 
 
 AC_CHECK_HEADER(stdlib.h, ,AC_DEFINE([NO_STDLIB_H], [], [no stdlib.h]))

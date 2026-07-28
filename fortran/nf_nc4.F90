@@ -2235,3 +2235,51 @@ End Function nf_free_string
  status = cstatus
 
  End Function nf_get_var_chunk_cache
+#ifdef HAVE_NC_META_BLOCK_SIZE
+ !--------------------------------- nf_set_meta_block_size ---------------------
+ Function nf_set_meta_block_size(size) RESULT(status)
+
+! Set global HDF5 minimum metadata block size. Uses
+! nc_set_meta_block_size_ints to avoid size_t issues with Fortran.
+
+ USE netcdf4_nc_interfaces
+
+ Implicit NONE
+
+ Integer, Intent(IN) :: size
+
+ Integer             :: status
+
+ Integer(C_INT) :: csize, cstatus
+
+ csize   = size
+ cstatus = nc_set_meta_block_size_ints(csize)
+
+ status = cstatus
+
+ End Function nf_set_meta_block_size
+!--------------------------------- nf_get_meta_block_size ---------------------
+ Function nf_get_meta_block_size(size) RESULT(status)
+
+! Get global HDF5 minimum metadata block size. Uses
+! nc_get_meta_block_size_ints to avoid size_t issues with Fortran.
+
+ USE netcdf4_nc_interfaces
+
+ Implicit NONE
+
+ Integer, Intent(OUT) :: size
+
+ Integer              :: status
+
+ Integer(C_INT) :: csize, cstatus
+
+ cstatus = nc_get_meta_block_size_ints(csize)
+
+ If (cstatus == NC_NOERR) Then
+    size = csize
+ EndIf
+ status = cstatus
+
+ End Function nf_get_meta_block_size
+#endif

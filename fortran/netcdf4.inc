@@ -429,3 +429,9 @@
       external nf_set_var_chunk_cache
       integer nf_get_var_chunk_cache
       external nf_get_var_chunk_cache
+
+!     For setting/getting the global HDF5 metadata block size.
+      integer nf_set_meta_block_size
+      external nf_set_meta_block_size
+      integer nf_get_meta_block_size
+      external nf_get_meta_block_size

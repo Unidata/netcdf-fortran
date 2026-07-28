@@ -25,4 +25,7 @@ public :: nf90_create_par, nf90_open_par, nf90_var_par_access, &
      nf90_rename_grp, nf90_def_var_filter, nf90_inq_var_filter, &
      nf90_def_var_szip, nf90_inq_var_szip, nf90_def_var_quantize, nf90_inq_var_quantize, &
      nf90_def_var_zstandard, nf90_inq_var_zstandard
-
+     
+#ifdef HAVE_NC_META_BLOCK_SIZE
+     public ::  nf90_set_meta_block_size, nf90_get_meta_block_size
+#endif

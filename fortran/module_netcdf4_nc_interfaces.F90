@@ -1041,6 +1041,56 @@ Interface
 
  End Function nc_get_var_chunk_cache_ints
 End Interface
+#ifdef HAVE_NC_META_BLOCK_SIZE
+!------------------------------- nc_set_meta_block_size -----------------------
+Interface
+ Function nc_set_meta_block_size(size) BIND(C)
+
+ USE ISO_C_BINDING, ONLY: C_SIZE_T, C_INT
+
+ Integer(C_SIZE_T), VALUE :: size
+
+ Integer(C_INT)           :: nc_set_meta_block_size
+
+ End Function nc_set_meta_block_size
+End Interface
+!------------------------------- nc_get_meta_block_size -----------------------
+Interface
+ Function nc_get_meta_block_size(sizep) BIND(C)
+
+ USE ISO_C_BINDING, ONLY: C_SIZE_T, C_INT
+
+ Integer(C_SIZE_T), Intent(OUT) :: sizep
+
+ Integer(C_INT)                 :: nc_get_meta_block_size
+
+ End Function nc_get_meta_block_size
+End Interface
+!------------------------------- nc_set_meta_block_size_ints ------------------
+Interface
+ Function nc_set_meta_block_size_ints(size) BIND(C)
+
+ USE ISO_C_BINDING, ONLY: C_INT
+
+ Integer(C_INT), VALUE :: size
+
+ Integer(C_INT)        :: nc_set_meta_block_size_ints
+
+ End Function nc_set_meta_block_size_ints
+End Interface
+!------------------------------- nc_get_meta_block_size_ints ------------------
+Interface
+ Function nc_get_meta_block_size_ints(sizep) BIND(C)
+
+ USE ISO_C_BINDING, ONLY: C_INT
+
+ Integer(C_INT), Intent(OUT) :: sizep
+
+ Integer(C_INT)              :: nc_get_meta_block_size_ints
+
+ End Function nc_get_meta_block_size_ints
+End Interface
+#endif
 !------------------------------- nc_set_chunk_cache ---------------------------
 Interface
  Function nc_set_chunk_cache(size, nelems, preemption) BIND(C)
