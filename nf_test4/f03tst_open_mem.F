@@ -48,6 +48,13 @@ C      that C will understand
       integer NO_FILL, MY_FILL_VALUE
       parameter (NO_FILL = 1)
       parameter (MY_FILL_VALUE = 42)
+      integer NO_FILL_VALUE
+      parameter (NO_FILL_VALUE = 88)
+C     Buffer holding the raw bytes of an integer fill value. The
+C     nf_def_var_fill/nf_inq_var_fill dummy argument is
+C     character(kind=c_char), so the actual argument must be a
+C     character object too; transfer() moves the bit pattern across.
+      character*4 fill_buf
 
 C     Loop index and error handling.
       integer x, retval
@@ -81,11 +88,13 @@ C     Create a few integer variables.
       end do
 
 C     Set no fill mode for the second variable.
-      retval = nf_def_var_fill(ncid, varid(2), NO_FILL, 88)
+      fill_buf = transfer(NO_FILL_VALUE, fill_buf)
+      retval = nf_def_var_fill(ncid, varid(2), NO_FILL, fill_buf)
       if (retval .ne. 0) stop 2
 
 C     Set an alternative fill value for the third variable.
-      retval = nf_def_var_fill(ncid, varid(3), 0, MY_FILL_VALUE)
+      fill_buf = transfer(MY_FILL_VALUE, fill_buf)
+      retval = nf_def_var_fill(ncid, varid(3), 0, fill_buf)
       if (retval .ne. 0) stop 3
 
 C     Check it out. 
@@ -170,6 +179,11 @@ C     Values that are read in, to check the file.
       integer ndims_in, nvars_in, ngatts_in, unlimdimid_in
       integer xtype_in, dimids_in(NDIMS), natts_in
       integer varid_in(NVARS), dimid_in, no_fill_in, fill_value_in
+C     Buffer holding the raw bytes of an integer fill value. The
+C     nf_def_var_fill/nf_inq_var_fill dummy argument is
+C     character(kind=c_char), so the actual argument must be a
+C     character object too; transfer() moves the bit pattern across.
+      character*4 fill_buf
       character*(4) var_name_in
       integer int_data_in(DIM_LEN)
 
@@ -208,19 +222,22 @@ C     Check the fill value for the first var. Nothing was set, so
 C     no_fill should be off, and fill_value should be the default fill
 C     value for this type.
       retval = nf_inq_var_fill(ncid, varid_in(1), no_fill_in,
-     $     fill_value_in)
+     $     fill_buf)
+      fill_value_in = transfer(fill_buf, fill_value_in)
       if (retval .ne. nf_noerr) stop 1
       if (no_fill_in .ne. 0 .or. fill_value_in .ne. nf_fill_int) stop 11
 
 C     Check that no_fill mode is on for the second variable.
       retval = nf_inq_var_fill(ncid, varid_in(2), no_fill_in,
-     $     fill_value_in)
+     $     fill_buf)
+      fill_value_in = transfer(fill_buf, fill_value_in)
       if (retval .ne. nf_noerr) stop 1
       if (no_fill_in .ne. 1 .or. fill_value_in .ne. nf_fill_int) stop 12
 
 C     Check that a non-default fill value is in use for the third variable.
       retval = nf_inq_var_fill(ncid, varid_in(3), no_fill_in,
-     $     fill_value_in)
+     $     fill_buf)
+      fill_value_in = transfer(fill_buf, fill_value_in)
       if (retval .ne. nf_noerr) stop 1
       if (no_fill_in .ne. 0 .or. fill_value_in .ne. MY_FILL_VALUE) stop
      $     2
