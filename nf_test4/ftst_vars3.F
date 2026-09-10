@@ -44,6 +44,13 @@ C     Information for the enum type we will define.
       parameter (enum_type_name = 'enum_type')
       parameter (zero_name = 'zero', one_name = 'one')
       integer one, zero
+C     Character buffers holding the raw bytes of the enum values. The
+C     nf_insert_enum, nf_inq_enum_member, nf_put_att and nf_get_att
+C     dummy arguments are character(kind=c_char), so the actual
+C     arguments must be character objects; transfer() moves the bit
+C     pattern across.
+      character*4 enum_buf
+      character*(4*NX) att_buf
 
 C     Information for the opaque type we will define.
       character*(*) opaque_type_name
@@ -74,9 +81,11 @@ C     Create the enum type.
       if (retval .ne. nf_noerr) stop 1
       one = 1
       zero = 0
-      retval = nf_insert_enum(ncid, enum_typeid, zero_name, zero)
+      enum_buf = transfer(zero, enum_buf)
+      retval = nf_insert_enum(ncid, enum_typeid, zero_name, enum_buf)
       if (retval .ne. nf_noerr) stop 1
-      retval = nf_insert_enum(ncid, enum_typeid, one_name, one)
+      enum_buf = transfer(one, enum_buf)
+      retval = nf_insert_enum(ncid, enum_typeid, one_name, enum_buf)
       if (retval .ne. nf_noerr) stop 1
 
 C     Create the opaque type.
@@ -98,8 +107,9 @@ C     Write the opaque scalar var. (Could also use nf_put_var).
       if (retval .ne. nf_noerr) stop 1
 
 C     Attach an enum attribute to the variable.
+      att_buf = transfer(data_out, att_buf)
       retval = nf_put_att(ncid, varid, 'att', enum_typeid, NX, 
-     &     data_out)
+     &     att_buf)
       if (retval .ne. nf_noerr) stop 1
 
 C     Close the file. 
@@ -133,13 +143,15 @@ C     with nf_inq_user_type.
 
 C     Check the members of the enum type.
       retval = nf_inq_enum_member(ncid, typeids(1), 1, member_name, 
-     &     member_value)
+     &     enum_buf)
       if (retval .ne. nf_noerr) stop 1
+      member_value = transfer(enum_buf, member_value)
       if (member_name(1:len(zero_name)) .ne. zero_name .or.
      &     member_value .ne. 0) stop 2
       retval = nf_inq_enum_member(ncid, typeids(1), 2, member_name, 
-     &     member_value)
+     &     enum_buf)
       if (retval .ne. nf_noerr) stop 1
+      member_value = transfer(enum_buf, member_value)
       if (member_name(1:len(one_name)) .ne. one_name .or.
      &     member_value .ne. 1) stop 2
       retval = nf_inq_enum_ident(ncid, typeids(1), 0, member_name)
@@ -173,8 +185,11 @@ C     Read the variable.
       if (opaque_data_in .ne. opaque_data) stop 2
 
 C     Read the attribute.
-      retval = nf_get_att(ncid, varid, 'att', data_in)
+      retval = nf_get_att(ncid, varid, 'att', att_buf)
       if (retval .ne. nf_noerr) stop 1
+      do x = 1, NX
+         data_in(x) = transfer(att_buf(4*x-3:4*x), data_in(x))
+      end do
 
 C     Check the values.
       do x = 1, NX

@@ -34,6 +34,11 @@ C     Information for the compound type we will define.
       integer compound_len, compound_len_in
       parameter (compound_len = 2)
       integer data1(compound_len), data1_in(compound_len)
+C     Character buffer holding the raw bytes of the compound value.
+C     The nf_put_att and nf_get_att dummy arguments are
+C     character(kind=c_char), so the actual arguments must be
+C     character objects; transfer() moves the bit pattern across.
+      character*(4*compound_len) att_buf
       character*(4) att_name
       parameter (att_name = 'att1')
 
@@ -66,8 +71,9 @@ C     Insert two integers.
       if (retval .ne. nf_noerr) stop 1
 
 C     Write the compound attribute.
+      att_buf = transfer(data1, att_buf)
       retval = nf_put_att(ncid, NF_GLOBAL, att_name, cmp_typeid, 
-     &     1, data1)
+     &     1, att_buf)
       if (retval .ne. nf_noerr) stop 1
 
 C     Close the file. 
@@ -101,8 +107,11 @@ C     with nf_inq_user_type.
      &     nfields .ne. 2) stop 2
 
 C     Read the compound attribute.
-      retval = nf_get_att(ncid, NF_GLOBAL, att_name, data1_in)
+      retval = nf_get_att(ncid, NF_GLOBAL, att_name, att_buf)
       if (retval .ne. nf_noerr) stop 1
+      do x = 1, compound_len
+         data1_in(x) = transfer(att_buf(4*x-3:4*x), data1_in(x))
+      end do
 
 C     Check the data
       do x = 1, compound_len
