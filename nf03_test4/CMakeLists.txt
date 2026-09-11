@@ -8,7 +8,7 @@ if (USE_NETCDF4)
   SET(nc4_check_PROGRAMS f90tst_vars f90tst_vars_vlen f90tst_grps
     f90tst_fill f90tst_fill2 f90tst_vars3 f90tst_vars4 f90tst_vars2
     f90tst_path f90tst_rengrps f90tst_nc4 f90tst_types f90tst_types2 f90tst_zstandard
-    f90tst_att)
+    f90tst_att f90tst_var_fill f90tst_enum)
   # Only run this test if quantize is present (i.e. netcdf-c is 4.9.0 or greater).
   IF (HAVE_QUANTIZE)
     SET(nc4_check_PROGRAMS ${nc4_check_PROGRAMS} f90tst_vars5)
@@ -36,6 +36,8 @@ if (USE_NETCDF4)
   SET(f90tst_types2_SOURCES f90tst_types2.F90)
   SET(f90tst_zstandard_SOURCES f90tst_zstandard.F90)
   SET(f90tst_att_SOURCES f90tst_att.F90)
+  SET(f90tst_var_fill_SOURCES f90tst_var_fill.F90)
+  SET(f90tst_enum_SOURCES f90tst_enum.F90)
 
 # Need a copy of ref_atts.nc for f90tst_att
   file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/ref_att.nc
