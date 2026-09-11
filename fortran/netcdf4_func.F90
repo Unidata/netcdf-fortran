@@ -443,8 +443,14 @@
     character (len = *), intent(in) :: name
     integer, intent(in) :: value
     integer :: nf90_insert_enum
+!   The nf_insert_enum value dummy argument is declared
+!   character(kind=c_char) and used as a void * pass-through, so the
+!   actual argument must be a character object too; transfer() moves
+!   the bit pattern of the member value into the buffer.
+    character(len = 4) :: value_buf
   
-    nf90_insert_enum = nf_insert_enum(ncid, xtype, name, value)
+    value_buf = transfer(value, value_buf)
+    nf90_insert_enum = nf_insert_enum(ncid, xtype, name, value_buf)
   end function nf90_insert_enum
   ! -----------
   function nf90_inq_enum(ncid, xtype, name, base_nc_type, base_size, num_members)
@@ -466,8 +472,14 @@
     character (len = *), intent(out) :: name
     integer, intent(out) :: value
     integer :: nf90_inq_enum_member
+!   The nf_inq_enum_member value dummy argument is declared
+!   character(kind=c_char) and used as a void * pass-through, so the
+!   actual argument must be a character object too; transfer() moves
+!   the bit pattern of the member value out of the buffer.
+    character(len = 4) :: value_buf
   
-    nf90_inq_enum_member = nf_inq_enum_member(ncid, xtype, idx, name, value)
+    nf90_inq_enum_member = nf_inq_enum_member(ncid, xtype, idx, name, value_buf)
+    value = transfer(value_buf, value)
   end function nf90_inq_enum_member
   ! -----------
   function nf90_inq_enum_ident(ncid, xtype, value, identifier)
@@ -693,8 +705,14 @@
     integer, intent(in)                  :: no_fill
     integer(kind=OneByteInt), intent(in) :: fill
     integer :: nf90_def_var_fill_OneByteInt
+!   The nf_def_var_fill fill_value dummy argument is declared
+!   character(kind=c_char) and used as a void * pass-through, so the
+!   actual argument must be a character object too; transfer() moves
+!   the bit pattern of the fill value into the buffer.
+    character(len = 1) :: fill_buf
   
-    nf90_def_var_fill_OneByteInt = nf_def_var_fill(ncid, varid, no_fill, fill)
+    fill_buf = transfer(fill, fill_buf)
+    nf90_def_var_fill_OneByteInt = nf_def_var_fill(ncid, varid, no_fill, fill_buf)
   end function nf90_def_var_fill_OneByteInt
   ! -----------
   function nf90_def_var_fill_TwoByteInt(ncid, varid, no_fill, fill)
@@ -703,8 +721,14 @@
     integer, intent(in)                  :: no_fill
     integer(kind=TwoByteInt), intent(in) :: fill
     integer :: nf90_def_var_fill_TwoByteInt
+!   The nf_def_var_fill fill_value dummy argument is declared
+!   character(kind=c_char) and used as a void * pass-through, so the
+!   actual argument must be a character object too; transfer() moves
+!   the bit pattern of the fill value into the buffer.
+    character(len = 2) :: fill_buf
   
-    nf90_def_var_fill_TwoByteInt = nf_def_var_fill(ncid, varid, no_fill, fill)
+    fill_buf = transfer(fill, fill_buf)
+    nf90_def_var_fill_TwoByteInt = nf_def_var_fill(ncid, varid, no_fill, fill_buf)
   end function nf90_def_var_fill_TwoByteInt
   ! -----------
   function nf90_def_var_fill_FourByteInt(ncid, varid, no_fill, fill)
@@ -713,8 +737,14 @@
     integer, intent(in)                  :: no_fill
     integer(kind=FourByteInt), intent(in) :: fill
     integer :: nf90_def_var_fill_FourByteInt
+!   The nf_def_var_fill fill_value dummy argument is declared
+!   character(kind=c_char) and used as a void * pass-through, so the
+!   actual argument must be a character object too; transfer() moves
+!   the bit pattern of the fill value into the buffer.
+    character(len = 4) :: fill_buf
   
-    nf90_def_var_fill_FourByteInt = nf_def_var_fill(ncid, varid, no_fill, fill)
+    fill_buf = transfer(fill, fill_buf)
+    nf90_def_var_fill_FourByteInt = nf_def_var_fill(ncid, varid, no_fill, fill_buf)
   end function nf90_def_var_fill_FourByteInt
   ! -----------
   function nf90_def_var_fill_EightByteInt(ncid, varid, no_fill, fill)
@@ -723,8 +753,14 @@
     integer, intent(in)                  :: no_fill
     integer(kind=EightByteInt), intent(in) :: fill
     integer :: nf90_def_var_fill_EightByteInt
+!   The nf_def_var_fill fill_value dummy argument is declared
+!   character(kind=c_char) and used as a void * pass-through, so the
+!   actual argument must be a character object too; transfer() moves
+!   the bit pattern of the fill value into the buffer.
+    character(len = 8) :: fill_buf
   
-    nf90_def_var_fill_EightByteInt = nf_def_var_fill(ncid, varid, no_fill, fill)
+    fill_buf = transfer(fill, fill_buf)
+    nf90_def_var_fill_EightByteInt = nf_def_var_fill(ncid, varid, no_fill, fill_buf)
   end function nf90_def_var_fill_EightByteInt
   ! -----------
   function nf90_def_var_fill_FourByteReal(ncid, varid, no_fill, fill)
@@ -733,8 +769,14 @@
     integer, intent(in)                  :: no_fill
     real(kind=FourByteReal), intent(in) :: fill
     integer :: nf90_def_var_fill_FourByteReal
+!   The nf_def_var_fill fill_value dummy argument is declared
+!   character(kind=c_char) and used as a void * pass-through, so the
+!   actual argument must be a character object too; transfer() moves
+!   the bit pattern of the fill value into the buffer.
+    character(len = 4) :: fill_buf
   
-    nf90_def_var_fill_FourByteReal = nf_def_var_fill(ncid, varid, no_fill, fill)
+    fill_buf = transfer(fill, fill_buf)
+    nf90_def_var_fill_FourByteReal = nf_def_var_fill(ncid, varid, no_fill, fill_buf)
   end function nf90_def_var_fill_FourByteReal
   ! -----------
   function nf90_def_var_fill_EightByteReal(ncid, varid, no_fill, fill)
@@ -743,8 +785,14 @@
     integer, intent(in)                  :: no_fill
     real(kind=EightByteReal), intent(in) :: fill
     integer :: nf90_def_var_fill_EightByteReal
+!   The nf_def_var_fill fill_value dummy argument is declared
+!   character(kind=c_char) and used as a void * pass-through, so the
+!   actual argument must be a character object too; transfer() moves
+!   the bit pattern of the fill value into the buffer.
+    character(len = 8) :: fill_buf
   
-    nf90_def_var_fill_EightByteReal = nf_def_var_fill(ncid, varid, no_fill, fill)
+    fill_buf = transfer(fill, fill_buf)
+    nf90_def_var_fill_EightByteReal = nf_def_var_fill(ncid, varid, no_fill, fill_buf)
   end function nf90_def_var_fill_EightByteReal
   ! -----------
   function nf90_inq_var_fill_OneByteInt(ncid, varid, no_fill, fill)
@@ -753,8 +801,14 @@
     integer, intent(inout)                  :: no_fill
     integer(kind=OneByteInt), intent(inout) :: fill
     integer :: nf90_inq_var_fill_OneByteInt
+!   The nf_inq_var_fill fill_value dummy argument is declared
+!   character(kind=c_char) and used as a void * pass-through, so the
+!   actual argument must be a character object too; transfer() moves
+!   the bit pattern of the fill value out of the buffer.
+    character(len = 1) :: fill_buf
   
-    nf90_inq_var_fill_OneByteInt = nf_inq_var_fill(ncid, varid, no_fill, fill)
+    nf90_inq_var_fill_OneByteInt = nf_inq_var_fill(ncid, varid, no_fill, fill_buf)
+    fill = transfer(fill_buf, fill)
   end function nf90_inq_var_fill_OneByteInt
   ! -----------
   function nf90_inq_var_fill_TwoByteInt(ncid, varid, no_fill, fill)
@@ -763,8 +817,14 @@
     integer, intent(inout)                  :: no_fill
     integer(kind=TwoByteInt), intent(inout) :: fill
     integer :: nf90_inq_var_fill_TwoByteInt
+!   The nf_inq_var_fill fill_value dummy argument is declared
+!   character(kind=c_char) and used as a void * pass-through, so the
+!   actual argument must be a character object too; transfer() moves
+!   the bit pattern of the fill value out of the buffer.
+    character(len = 2) :: fill_buf
   
-    nf90_inq_var_fill_TwoByteInt = nf_inq_var_fill(ncid, varid, no_fill, fill)
+    nf90_inq_var_fill_TwoByteInt = nf_inq_var_fill(ncid, varid, no_fill, fill_buf)
+    fill = transfer(fill_buf, fill)
   end function nf90_inq_var_fill_TwoByteInt
   ! -----------
   function nf90_inq_var_fill_FourByteInt(ncid, varid, no_fill, fill)
@@ -773,8 +833,14 @@
     integer, intent(inout)                   :: no_fill
     integer(kind=FourByteInt), intent(inout) :: fill
     integer :: nf90_inq_var_fill_FourByteInt
+!   The nf_inq_var_fill fill_value dummy argument is declared
+!   character(kind=c_char) and used as a void * pass-through, so the
+!   actual argument must be a character object too; transfer() moves
+!   the bit pattern of the fill value out of the buffer.
+    character(len = 4) :: fill_buf
   
-    nf90_inq_var_fill_FourByteInt = nf_inq_var_fill(ncid, varid, no_fill, fill)
+    nf90_inq_var_fill_FourByteInt = nf_inq_var_fill(ncid, varid, no_fill, fill_buf)
+    fill = transfer(fill_buf, fill)
   end function nf90_inq_var_fill_FourByteInt
   ! -----------
   function nf90_inq_var_fill_EightByteInt(ncid, varid, no_fill, fill)
@@ -783,8 +849,14 @@
     integer, intent(inout)                    :: no_fill
     integer(kind=EightByteInt), intent(inout) :: fill
     integer :: nf90_inq_var_fill_EightByteInt
+!   The nf_inq_var_fill fill_value dummy argument is declared
+!   character(kind=c_char) and used as a void * pass-through, so the
+!   actual argument must be a character object too; transfer() moves
+!   the bit pattern of the fill value out of the buffer.
+    character(len = 8) :: fill_buf
   
-    nf90_inq_var_fill_EightByteInt = nf_inq_var_fill(ncid, varid, no_fill, fill)
+    nf90_inq_var_fill_EightByteInt = nf_inq_var_fill(ncid, varid, no_fill, fill_buf)
+    fill = transfer(fill_buf, fill)
   end function nf90_inq_var_fill_EightByteInt
   ! -----------
   function nf90_inq_var_fill_FourByteReal(ncid, varid, no_fill, fill)
@@ -793,8 +865,14 @@
     integer, intent(inout)                 :: no_fill
     real(kind=FourByteReal), intent(inout) :: fill
     integer :: nf90_inq_var_fill_FourByteReal
+!   The nf_inq_var_fill fill_value dummy argument is declared
+!   character(kind=c_char) and used as a void * pass-through, so the
+!   actual argument must be a character object too; transfer() moves
+!   the bit pattern of the fill value out of the buffer.
+    character(len = 4) :: fill_buf
   
-    nf90_inq_var_fill_FourByteReal = nf_inq_var_fill(ncid, varid, no_fill, fill)
+    nf90_inq_var_fill_FourByteReal = nf_inq_var_fill(ncid, varid, no_fill, fill_buf)
+    fill = transfer(fill_buf, fill)
   end function nf90_inq_var_fill_FourByteReal
   ! -----------
   function nf90_inq_var_fill_EightByteReal(ncid, varid, no_fill, fill)
@@ -803,8 +881,14 @@
     integer, intent(inout)                     :: no_fill
     real(kind=EightByteReal), intent(inout)    :: fill
     integer :: nf90_inq_var_fill_EightByteReal
+!   The nf_inq_var_fill fill_value dummy argument is declared
+!   character(kind=c_char) and used as a void * pass-through, so the
+!   actual argument must be a character object too; transfer() moves
+!   the bit pattern of the fill value out of the buffer.
+    character(len = 8) :: fill_buf
   
-    nf90_inq_var_fill_EightByteReal = nf_inq_var_fill(ncid, varid, no_fill, fill)
+    nf90_inq_var_fill_EightByteReal = nf_inq_var_fill(ncid, varid, no_fill, fill_buf)
+    fill = transfer(fill_buf, fill)
   end function nf90_inq_var_fill_EightByteReal
   ! -----------
   function nf90_put_att_any(ncid, varid, name, typeid, length, values)
