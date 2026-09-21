@@ -36,6 +36,11 @@ C     This is the name of the data file we will create.
       integer NO_FILL, MY_FILL_VALUE
       parameter (NO_FILL = 1)
       parameter (MY_FILL_VALUE = 42)
+C     Buffer holding the raw bytes of an integer fill value. The
+C     nf_def_var_fill/nf_inq_var_fill dummy argument is
+C     character(kind=c_char), so the actual argument must be a
+C     character object too; transfer() moves the bit pattern across.
+      character*4 fill_buf
       integer storage_in
       integer chunksizes_in(NDIMS)
 
@@ -83,7 +88,8 @@ C     Check compact storage for the first var.
       if (storage_in .ne. nf_compact) stop 4
 
 C     Set an alternative fill value for the third variable.
-      retval = nf_def_var_fill(ncid, varid(3), 0, MY_FILL_VALUE)
+      fill_buf = transfer(MY_FILL_VALUE, fill_buf)
+      retval = nf_def_var_fill(ncid, varid(3), 0, fill_buf)
       if (retval .ne. 0) stop 3
 
 C     Write some data.

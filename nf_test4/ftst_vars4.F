@@ -35,9 +35,16 @@ C     Some data about and for the vlen.
       integer vlen_len, vlen_len_in
       parameter (vlen_len = 5)
       integer data1(vlen_len), data1_in(vlen_len)
+C     Character buffer holding the raw bytes of the vlen data. The
+C     nf_put_vlen_element and nf_get_vlen_element dummy arguments are
+C     character(kind=c_char), so the actual arguments must be
+C     character objects; transfer() moves the bit pattern across.
+      character*(4*vlen_len) data_buf
 
 C     These must be big enough to hold the struct nc_vlen in netcdf.h.
-      integer*8 vlen(10), vlen_in(10)
+C     They are opaque to Fortran, and the wrappers take them as
+C     character objects, so declare them as such.
+      character*80 vlen, vlen_in
 
 C     Loop indexes, and error handling.
       integer x, retval, index(1)
@@ -59,8 +66,9 @@ C     Create the vlen type.
 
 C     Set up the vlen with this helper function, since F77 can't deal
 C     with pointers.
+      data_buf = transfer(data1, data_buf)
       retval = nf_put_vlen_element(ncid, vlen_typeid, vlen, 
-     &     vlen_len, data1)
+     &     vlen_len, data_buf)
       if (retval .ne. nf_noerr) stop 1
 
 C     Write the vlen attribute.
@@ -103,8 +111,11 @@ C     Read the vlen attribute.
 
 C     Get the data from the vlen we just read.
       retval = nf_get_vlen_element(ncid, vlen_typeid, vlen_in, 
-     &     vlen_len_in, data1_in)
+     &     vlen_len_in, data_buf)
       if (retval .ne. nf_noerr) stop 1
+      do x = 1, vlen_len
+         data1_in(x) = transfer(data_buf(4*x-3:4*x), data1_in(x))
+      end do
       if (vlen_len_in .ne. vlen_len) stop 2
 
 C     Check the data

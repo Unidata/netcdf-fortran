@@ -144,6 +144,10 @@
       integer mattlen
       parameter (mattlen = 80)
       character*80 charval
+!     Character buffer used to exchange raw bytes with the
+!     netCDF-2 interfaces, whose data arguments are declared
+!     character(kind=c_char).
+      character*(mattlen*8) attbuf
       doubleprecision doubval(2)
       real flval(2)
       integer lngval(2)
@@ -210,7 +214,8 @@
             write (*,*) 'global attribute too big!', attlen, mattlen
             stop 2
          else if (attype .eq. NCBYTE) then
-            call ncagt (outcdf, NCBYTE, attnam, bytval, iret)
+            call ncagt (outcdf, NCBYTE, attnam, attbuf, iret)
+            call upbyt(attbuf, bytval, 2)
             if (iret .ne. 0) nfails = nfails + 1
          else if (attype .eq. NCCHAR) then
             call ncagtc (outcdf, NCGLOBAL, attnam, charval, 
@@ -221,16 +226,20 @@
      + write(*,*) 'error in ncagt G2', lenstr, charval, gavalue(i)
                   charval = ' '
          else if (attype .eq. NCSHORT) then
-            call ncagt (outcdf, NCGLOBAL, attnam, shval, iret)
+            call ncagt (outcdf, NCGLOBAL, attnam, attbuf, iret)
+            call upshr(attbuf, shval, 2)
             if (iret .ne. 0) nfails = nfails + 1
          else if (attype .eq. NCLONG) then
-            call ncagt (outcdf, NCGLOBAL, attnam, lngval, iret)            
+            call ncagt (outcdf, NCGLOBAL, attnam, attbuf, iret)            
+            call uplng(attbuf, lngval, 2)
             if (iret .ne. 0) nfails = nfails + 1
          else if (attype .eq. NCFLOAT) then
-            call ncagt (outcdf, NCGLOBAL, attnam, flval, iret)
+            call ncagt (outcdf, NCGLOBAL, attnam, attbuf, iret)
+            call upflt(attbuf, flval, 2)
             if (iret .ne. 0) nfails = nfails + 1
          else 
-            call ncagt (outcdf, NCGLOBAL, attnam, doubval,iret)          
+            call ncagt (outcdf, NCGLOBAL, attnam, attbuf,iret)          
+            call updbl(attbuf, doubval, 2)
             if (iret .ne. 0) nfails = nfails + 1
          end if
  100   continue
@@ -252,8 +261,9 @@
                stop 2
             else 
                if (attype .eq. NCBYTE) then
-                  call ncagt (outcdf, i, attnam, bytval, 
+                  call ncagt (outcdf, i, attnam, attbuf, 
      +                 iret)
+                  call upbyt(attbuf, bytval, 2)
                   if (iret .ne. 0) nfails = nfails + 1
                   if (attnam .ne. attname(j,i))
      +               write(*,*) 'error in ncagt BYTE N'
@@ -269,8 +279,9 @@
      +               write(*,*) 'error in ncagt'
                   charval = ' '
                else if (attype .eq. NCSHORT) then
-                  call ncagt (outcdf, i, attnam, shval, 
+                  call ncagt (outcdf, i, attnam, attbuf, 
      +                 iret)  
+                  call upshr(attbuf, shval, 2)
                   if (iret .ne. 0) nfails = nfails + 1
                   if (attnam .ne. attname(j,i)) 
      +               write(*,*) 'error in ncagt SHORT N'
@@ -278,24 +289,27 @@
                      write(*,*) 'error in ncagt SHORT'
                   end if
                else if (attype .eq. NCLONG) then
-                  call ncagt (outcdf, i, attnam, lngval, 
+                  call ncagt (outcdf, i, attnam, attbuf, 
      +                 iret)
+                  call uplng(attbuf, lngval, 2)
                   if (iret .ne. 0) nfails = nfails + 1
                   if (attnam .ne. attname(j,i)) 
      +               write(*,*) 'error in ncagt LONG N'
                   if (lngval(j) .ne. lvalidrg(j)) 
      +               write(*,*) 'error in ncagt LONG'
                else if (attype .eq. NCFLOAT) then
-                  call ncagt (outcdf, i, attnam, flval, 
+                  call ncagt (outcdf, i, attnam, attbuf, 
      +                 iret)            
+                  call upflt(attbuf, flval, 2)
                   if (iret .ne. 0) nfails = nfails + 1
                   if (attnam .ne. attname(j,i)) 
      +               write(*,*) 'error in ncagt FLOAT N'
                   if (flval(j) .ne. rvalidrg(j)) 
      +               write(*,*) 'error in ncagt FLOAT'
                else if (attype .eq. NCDOUBLE) then
-                  call ncagt (outcdf, i, attnam, doubval,
+                  call ncagt (outcdf, i, attnam, attbuf,
      +                 iret)          
+                  call updbl(attbuf, doubval, 2)
                   if (iret .ne. 0) nfails = nfails + 1
                   if (attnam .ne. attname(j,i)) 
      +               write(*,*) 'error in ncagt DOUBLE N'
@@ -385,6 +399,10 @@
       integer attype, attlen, lenstr, iret
       character*31 attnam
       character*80 charval
+!     Character buffer used to exchange raw bytes with the
+!     netCDF-2 interfaces, whose data arguments are declared
+!     character(kind=c_char).
+      character*(mattlen*8) attbuf
       doubleprecision doubval(2)
       real flval(2)
       integer lngval(2)
@@ -431,7 +449,8 @@
             write (*,*) 'global attribute too big!'
             stop 2
          else if (attype .eq. NCBYTE) then
-            call ncagt (ncid, NCBYTE, attnam, bytval, iret)
+            call ncagt (ncid, NCBYTE, attnam, attbuf, iret)
+            call upbyt(attbuf, bytval, 2)
             if (iret .ne. 0) nfails = nfails + 1
          else if (attype .eq. NCCHAR) then
             call ncagtc (ncid, NCGLOBAL, attnam, charval, 
@@ -441,16 +460,20 @@
             if (charval .ne. gavalue(i)) write(*,*) 'error in ncagt'
             charval = '                                        '
          else if (attype .eq. NCSHORT) then
-            call ncagt (ncid, NCGLOBAL, attnam, shval, iret) 
+            call ncagt (ncid, NCGLOBAL, attnam, attbuf, iret) 
+            call upshr(attbuf, shval, 2)
             if (iret .ne. 0) nfails = nfails + 1
          else if (attype .eq. NCLONG) then
-            call ncagt (ncid, NCGLOBAL, attnam, lngval, iret)            
+            call ncagt (ncid, NCGLOBAL, attnam, attbuf, iret)            
+            call uplng(attbuf, lngval, 2)
             if (iret .ne. 0) nfails = nfails + 1
          else if (attype .eq. NCFLOAT) then
-            call ncagt (ncid, NCGLOBAL, attnam, flval, iret)
+            call ncagt (ncid, NCGLOBAL, attnam, attbuf, iret)
+            call upflt(attbuf, flval, 2)
             if (iret .ne. 0) nfails = nfails + 1
          else 
-            call ncagt (ncid, NCGLOBAL, attnam, doubval,iret)          
+            call ncagt (ncid, NCGLOBAL, attnam, attbuf,iret)          
+            call updbl(attbuf, doubval, 2)
             if (iret .ne. 0) nfails = nfails + 1
          end if
  10   continue
@@ -473,8 +496,9 @@
                stop 2
             else 
                if (attype .eq. NCBYTE) then
-                  call ncagt (ncid, i, attnam, bytval, 
+                  call ncagt (ncid, i, attnam, attbuf, 
      +                 iret)
+                  call upbyt(attbuf, bytval, 2)
                   if (iret .ne. 0) nfails = nfails + 1
                   if (attnam .ne. attname(j,i)) 
      +               write(*,*) 'error in ncagt BYTE name'
@@ -490,8 +514,9 @@
      +               write(*,*) 'error in ncagt CHAR name'
                  charval = '                                        '
                else if (attype .eq. NCSHORT) then
-                  call ncagt (ncid, i, attnam, shval, 
+                  call ncagt (ncid, i, attnam, attbuf, 
      +                 iret)  
+                  call upshr(attbuf, shval, 2)
                   if (iret .ne. 0) nfails = nfails + 1
                   if (attnam .ne. attname(j,i)) 
      +               write(*,*) 'error in ncagt SHORT name'
@@ -499,24 +524,27 @@
                      write(*,*) 'error in ncagt SHORT'
                   end if
                else if (attype .eq. NCLONG) then
-                  call ncagt (ncid, i, attnam, lngval, 
+                  call ncagt (ncid, i, attnam, attbuf, 
      +                 iret)
+                  call uplng(attbuf, lngval, 2)
                   if (iret .ne. 0) nfails = nfails + 1
                   if (attnam .ne. attname(j,i)) 
      +               write(*,*) 'error in ncagt LONG name'
                   if (lngval(j) .ne. lvalidrg(j)) 
      +               write(*,*) 'error in ncagt LONG'
                else if (attype .eq. NCFLOAT) then
-                  call ncagt (ncid, i, attnam, flval, 
+                  call ncagt (ncid, i, attnam, attbuf, 
      +                 iret)            
+                  call upflt(attbuf, flval, 2)
                   if (iret .ne. 0) nfails = nfails + 1
                   if (attnam .ne. attname(j,i)) 
      +               write(*,*) 'error in ncagt FLOAT name'
                   if (flval(j) .ne. rvalidrg(j)) 
      +               write(*,*) 'error in ncagt FLOAT'
                else if (attype .eq. NCDOUBLE) then
-                  call ncagt (ncid, i, attnam, doubval,
+                  call ncagt (ncid, i, attnam, attbuf,
      +                 iret)          
+                  call updbl(attbuf, doubval, 2)
                   if (iret .ne. 0) nfails = nfails + 1
                   if (attnam .ne. attname(j,i)) 
      +               write(*,*) 'error in ncagt DOUBLE name'
@@ -543,6 +571,10 @@
       integer lvalidrg(2)
       doubleprecision dvalidrg(2)
       NCBYTE_T bvalidrg(2)
+!     Character buffer used to exchange raw bytes with the
+!     netCDF-2 interfaces, whose data arguments are declared
+!     character(kind=c_char).
+      character*16 attbuf
 
 !     variable ids
       integer  bid, sid, lid, fid, did, cid, chid
@@ -556,8 +588,9 @@
       
       bvalidrg(1) = -127
       bvalidrg(2) =  127
+      call pkbyt(bvalidrg, 2, attbuf)
       call ncapt (ncid, bid, 'validrange', NCBYTE, 2,
-     +bvalidrg, iret)
+     +attbuf, iret)
       if (iret .ne. 0) nfails = nfails + 1
 
 !
@@ -566,8 +599,9 @@
 
       svalidrg(1) = -100
       svalidrg(2) = 100
+      call pkshr(svalidrg, 2, attbuf)
       call ncapt (ncid, sid, 'validrange', NCSHORT, 2, 
-     +svalidrg, iret)
+     +attbuf, iret)
       if (iret .ne. 0) nfails = nfails + 1
 
 !
@@ -576,8 +610,9 @@
 
       lvalidrg(1) = 0
       lvalidrg(2) = 360
+      call pklng(lvalidrg, 2, attbuf)
       call ncapt (ncid, lid, 'validrange', NCLONG, 2,
-     +lvalidrg, iret)
+     +attbuf, iret)
       if (iret .ne. 0) nfails = nfails + 1
       
 !
@@ -586,8 +621,9 @@
 
       rvalidrg(1) = 0.0
       rvalidrg(2) = 5000.0
+      call pkflt(rvalidrg, 2, attbuf)
       call ncapt (ncid, fid, 'validrange', NCFLOAT, 2,
-     +rvalidrg, iret)
+     +attbuf, iret)
       if (iret .ne. 0) nfails = nfails + 1
 
 !
@@ -596,8 +632,9 @@
 
       dvalidrg(1) = 0D0
       dvalidrg(2) = 500D0
+      call pkdbl(dvalidrg, 2, attbuf)
       call ncapt (ncid, did, 'validrange', NCDOUBLE, 2,
-     +dvalidrg, iret)
+     +attbuf, iret)
       if (iret .ne. 0) nfails = nfails + 1
 
 !
@@ -996,6 +1033,10 @@
       integer larray(lats)
       real farray(levels, lats, lons, times)
       doubleprecision darray(levels, lats, lons, times)
+!     Character buffer used to exchange raw bytes with the
+!     netCDF-2 interfaces, whose data arguments are declared
+!     character(kind=c_char).
+      character*(levels*lats*lons*times*8) vbuf
 !     character array of data values to be read
       character*31 string
       character*31 varnam
@@ -1023,7 +1064,8 @@
 !     byte
 !
             count(1) = times
-            call ncvgt (ncid, m, start, count, barray, iret)
+            call ncvgt (ncid, m, start, count, vbuf, iret)
+            call upbyt(vbuf, barray, times)
             if (iret .ne. 0) nfails = nfails + 1
             do 10 i = 1, times
                if (barray(i) .ne. byval(i)) then 
@@ -1036,7 +1078,8 @@
 !     short
 !
             count(1) = times
-            call ncvgt (ncid, m, start, count, sarray, iret)
+            call ncvgt (ncid, m, start, count, vbuf, iret)
+            call upshr(vbuf, sarray, times)
             if (iret .ne. 0) nfails = nfails + 1
             do 20 i = 1, times
                if (sarray(i) .ne. shval(i)) then 
@@ -1049,7 +1092,8 @@
 !     long
 !
             count(1) = lats
-            call ncvgt (ncid, m, start, count, larray, iret)
+            call ncvgt (ncid, m, start, count, vbuf, iret)
+            call uplng(vbuf, larray, lats)
             if (iret .ne. 0) nfails = nfails + 1
             do 30 i = 1, lats
                if (larray(i) .ne. 1000) then 
@@ -1061,7 +1105,8 @@
 !     float
 !
             count(1) = levels
-            call ncvgt (ncid, m, start, count, farray, iret)
+            call ncvgt (ncid, m, start, count, vbuf, iret)
+            call upflt(vbuf, farray, levels*lats*lons*times)
             if (iret .ne. 0) nfails = nfails + 1
             i = 0
             do 40 itime = 1,times
@@ -1082,7 +1127,8 @@
 !     double
 !
             count(1) = levels
-            call ncvgt (ncid, m, start, count, darray, iret)
+            call ncvgt (ncid, m, start, count, vbuf, iret)
+            call updbl(vbuf, darray, levels*lats*lons*times)
             if (iret .ne. 0) nfails = nfails + 1
             i = 0
             do 50 itime = 1, times
@@ -1141,6 +1187,13 @@
       real fvalue
       doubleprecision dvalue
       character*1 c
+!     Character buffer used to exchange raw bytes with the
+!     netCDF-2 interfaces, whose data arguments are declared
+!     character(kind=c_char).
+      character*1 bbuf
+      character*2 sbuf
+      character*4 lbuf, fbuf
+      character*8 dbuf
       real epsilon
       doubleprecision onethird
 
@@ -1154,28 +1207,32 @@
 !
 !     test ncvgt1 for byte
 !
-      call ncvgt1 (ncid, bid, bindx, bvalue, iret)
+      call ncvgt1 (ncid, bid, bindx, bbuf, iret)
+      bvalue = transfer(bbuf, bvalue)
       if (iret .ne. 0) nfails = nfails + 1
       if (bvalue .ne. ichar('z')) write(*,*) 'error in ncvgt1 byte:',
      + bvalue, ' .ne.', ichar('z')
 !
 !     test ncvgt1 for short
 !
-      call ncvgt1 (ncid, sid, sindx, svalue, iret)
+      call ncvgt1 (ncid, sid, sindx, sbuf, iret)
+      svalue = transfer(sbuf, svalue)
       if (iret .ne. 0) nfails = nfails + 1
       if (svalue .ne. 10) write(*,*) 'error in ncvgt1 short:',
      + svalue, ' .ne.', 10
 !     
 !     test ncvgt1 for long
 !
-      call ncvgt1 (ncid, lid, lindx, lvalue, iret)
+      call ncvgt1 (ncid, lid, lindx, lbuf, iret)
+      lvalue = transfer(lbuf, lvalue)
       if (iret .ne. 0) nfails = nfails + 1
       if (lvalue .ne. 1000) write(*,*) 'error in ncvgt1 long:',
      + lvalue,  ' .ne.', 1000
 !
 !     test ncvgt1 for float
 !
-      call ncvgt1 (ncid, fid, findx, fvalue, iret)
+      call ncvgt1 (ncid, fid, findx, fbuf, iret)
+      fvalue = transfer(fbuf, fvalue)
       if (iret .ne. 0) nfails = nfails + 1
       if (abs(fvalue - 3.14159) .gt. epsilon) 
      +   write(*,*) 'error in ncvgt 1 float:', fvalue, 
@@ -1183,7 +1240,8 @@
 !
 !     test ncvgt1 for double
 !
-      call ncvgt1 (ncid, did, dindx, dvalue, iret)
+      call ncvgt1 (ncid, did, dindx, dbuf, iret)
+      dvalue = transfer(dbuf, dvalue)
       if (iret .ne. 0) nfails = nfails + 1
       if (abs(dvalue - onethird) .gt. epsilon) write(*,*)
      + 'error in ncvgt1 double:', dvalue, ' not close to',
@@ -1237,6 +1295,10 @@
       integer larray(lats)
       real farray(levels, lats, lons, times)
       doubleprecision darray(levels, lats, lons, times)
+!     Character buffer used to exchange raw bytes with the
+!     netCDF-2 interfaces, whose data arguments are declared
+!     character(kind=c_char).
+      character*(levels*lats*lons*times*8) vbuf
       character*31 string
 
       data start/1,1,1,1/
@@ -1251,13 +1313,15 @@
 !     byte
 !
       count(1) = times
-      call ncvpt (ncid, bid, start, count, barray, iret)
+      call pkbyt(barray, times, vbuf)
+      call ncvpt (ncid, bid, start, count, vbuf, iret)
       if (iret .ne. 0) nfails = nfails + 1
 !
 !     short
 !
       count(1) = times
-      call ncvpt (ncid, sid, start, count, sarray, iret)
+      call pkshr(sarray, times, vbuf)
+      call ncvpt (ncid, sid, start, count, vbuf, iret)
       if (iret .ne. 0) nfails = nfails + 1
 !
 !     long
@@ -1266,7 +1330,8 @@
          larray(i) = 1000
  30   continue
       count(1) = lats
-      call ncvpt (ncid, lid, start, count, larray, iret)
+      call pklng(larray, lats, vbuf)
+      call ncvpt (ncid, lid, start, count, vbuf, iret)
       if (iret .ne. 0) nfails = nfails + 1
 
 !
@@ -1284,7 +1349,8 @@
  41   continue
  40   continue
       count(1) = levels
-      call ncvpt (ncid, fid, start, count, farray, iret)
+      call pkflt(farray, levels*lats*lons*times, vbuf)
+      call ncvpt (ncid, fid, start, count, vbuf, iret)
       if (iret .ne. 0) nfails = nfails + 1
 
 !
@@ -1302,7 +1368,8 @@
  51   continue
  50   continue
       count(1) = levels
-      call ncvpt (ncid, did, start, count, darray, iret)
+      call pkdbl(darray, levels*lats*lons*times, vbuf)
+      call ncvpt (ncid, did, start, count, vbuf, iret)
       if (iret .ne. 0) nfails = nfails + 1
 
 !
@@ -1341,6 +1408,13 @@
       NCSHORT_T svalue
       NCBYTE_T bvalue
       doubleprecision onethird
+!     Character buffer used to exchange raw bytes with the
+!     netCDF-2 interfaces, whose data arguments are declared
+!     character(kind=c_char).
+      character*1 bbuf
+      character*2 sbuf
+      character*4 lbuf, fbuf
+      character*8 dbuf
       integer bid, sid, lid, fid, did, cid, chid
       common /vars/bid, sid, lid, fid, did, cid, chid
       data lindx/1/, bindx/1/, sindx/1/, findx/1,1,1,1/
@@ -1357,31 +1431,36 @@
 !
 !     test ncvpt1 for byte
 !
-      call ncvpt1 (ncid, bid, bindx, bvalue, iret)
+      bbuf = transfer(bvalue, bbuf)
+      call ncvpt1 (ncid, bid, bindx, bbuf, iret)
       if (iret .ne. 0) nfails = nfails + 1
 
 !
 !     test ncvpt1 for short
 !
-      call ncvpt1 (ncid, sid, sindx, svalue, iret)
+      sbuf = transfer(svalue, sbuf)
+      call ncvpt1 (ncid, sid, sindx, sbuf, iret)
       if (iret .ne. 0) nfails = nfails + 1
 
 !     
 !     test ncvpt1 for long
 !
-      call ncvpt1 (ncid, lid, lindx, lvalue, iret)
+      lbuf = transfer(lvalue, lbuf)
+      call ncvpt1 (ncid, lid, lindx, lbuf, iret)
       if (iret .ne. 0) nfails = nfails + 1
 
 !
 !     test ncvpt1 for float
 !
-      call ncvpt1 (ncid, fid, findx, 3.14159, iret)
+      fbuf = transfer(3.14159, fbuf)
+      call ncvpt1 (ncid, fid, findx, fbuf, iret)
       if (iret .ne. 0) nfails = nfails + 1
 
 !
 !     test ncvpt1 for double
 !
-      call ncvpt1 (ncid, did, dindx, onethird, iret)
+      dbuf = transfer(onethird, dbuf)
+      call ncvpt1 (ncid, did, dindx, dbuf, iret)
       if (iret .ne. 0) nfails = nfails + 1
 
 !
@@ -1409,6 +1488,13 @@
       doubleprecision d
       real f
       NCBYTE_T b
+!     Character buffer used to exchange raw bytes with the
+!     netCDF-2 interfaces, whose data arguments are declared
+!     character(kind=c_char).
+      character*1 bbuf
+      character*2 sbuf
+      character*4 lbuf, fbuf
+      character*8 dbuf
 
       ncid = NCOPN('fills.nc', NCNOWRIT, iret)
       if (iret .ne. 0) nfails = nfails + 1
@@ -1430,19 +1516,24 @@
 
 
       ix(1) = 2
-      call ncvgt1(ncid, bid, ix, b, iret)
+      call ncvgt1(ncid, bid, ix, bbuf, iret)
+      b = transfer(bbuf, b)
       if (iret .ne. 0) nfails = nfails + 1
 
-      call ncvgt1(ncid, sid, ix, s, iret)
+      call ncvgt1(ncid, sid, ix, sbuf, iret)
+      s = transfer(sbuf, s)
       if (iret .ne. 0) nfails = nfails + 1
 
-      call ncvgt1(ncid, lid, ix, l, iret)
+      call ncvgt1(ncid, lid, ix, lbuf, iret)
+      l = transfer(lbuf, l)
       if (iret .ne. 0) nfails = nfails + 1
 
-      call ncvgt1(ncid, fid, ix, f, iret)
+      call ncvgt1(ncid, fid, ix, fbuf, iret)
+      f = transfer(fbuf, f)
       if (iret .ne. 0) nfails = nfails + 1
 
-      call ncvgt1(ncid, did, ix, d, iret)
+      call ncvgt1(ncid, did, ix, dbuf, iret)
+      d = transfer(dbuf, d)
       if (iret .ne. 0) nfails = nfails + 1
 
 
@@ -1454,3 +1545,131 @@
 
       return
       end
+
+!
+!     The netCDF-2 interfaces ncapt, ncagt, ncvpt, ncvgt, ncvpt1 and
+!     ncvgt1 declare their data argument as character(kind=c_char) and
+!     use it as a void* pass-through, so the actual argument has to be
+!     a character object. These helpers move the bit pattern of the
+!     numeric data in and out of such a buffer with transfer().
+!
+      subroutine pkbyt(vals, n, buf)
+      integer n, i
+      NCBYTE_T vals(n)
+      character*(*) buf
+      character*1 tmp
+      do 10 i = 1, n
+         tmp = transfer(vals(i), tmp)
+         buf(i:i) = tmp
+ 10   continue
+      return
+      end
+
+      subroutine upbyt(buf, vals, n)
+      integer n, i
+      NCBYTE_T vals(n)
+      character*(*) buf
+      character*1 tmp
+      do 10 i = 1, n
+         tmp = buf(i:i)
+         vals(i) = transfer(tmp, vals(i))
+ 10   continue
+      return
+      end
+
+      subroutine pkshr(vals, n, buf)
+      integer n, i
+      NCSHORT_T vals(n)
+      character*(*) buf
+      character*2 tmp
+      do 10 i = 1, n
+         tmp = transfer(vals(i), tmp)
+         buf(2*i-1:2*i) = tmp
+ 10   continue
+      return
+      end
+
+      subroutine upshr(buf, vals, n)
+      integer n, i
+      NCSHORT_T vals(n)
+      character*(*) buf
+      character*2 tmp
+      do 10 i = 1, n
+         tmp = buf(2*i-1:2*i)
+         vals(i) = transfer(tmp, vals(i))
+ 10   continue
+      return
+      end
+
+      subroutine pklng(vals, n, buf)
+      integer n, i
+      integer vals(n)
+      character*(*) buf
+      character*4 tmp
+      do 10 i = 1, n
+         tmp = transfer(vals(i), tmp)
+         buf(4*i-3:4*i) = tmp
+ 10   continue
+      return
+      end
+
+      subroutine uplng(buf, vals, n)
+      integer n, i
+      integer vals(n)
+      character*(*) buf
+      character*4 tmp
+      do 10 i = 1, n
+         tmp = buf(4*i-3:4*i)
+         vals(i) = transfer(tmp, vals(i))
+ 10   continue
+      return
+      end
+
+      subroutine pkflt(vals, n, buf)
+      integer n, i
+      real vals(n)
+      character*(*) buf
+      character*4 tmp
+      do 10 i = 1, n
+         tmp = transfer(vals(i), tmp)
+         buf(4*i-3:4*i) = tmp
+ 10   continue
+      return
+      end
+
+      subroutine upflt(buf, vals, n)
+      integer n, i
+      real vals(n)
+      character*(*) buf
+      character*4 tmp
+      do 10 i = 1, n
+         tmp = buf(4*i-3:4*i)
+         vals(i) = transfer(tmp, vals(i))
+ 10   continue
+      return
+      end
+
+      subroutine pkdbl(vals, n, buf)
+      integer n, i
+      doubleprecision vals(n)
+      character*(*) buf
+      character*8 tmp
+      do 10 i = 1, n
+         tmp = transfer(vals(i), tmp)
+         buf(8*i-7:8*i) = tmp
+ 10   continue
+      return
+      end
+
+      subroutine updbl(buf, vals, n)
+      integer n, i
+      doubleprecision vals(n)
+      character*(*) buf
+      character*8 tmp
+      do 10 i = 1, n
+         tmp = buf(8*i-7:8*i)
+         vals(i) = transfer(tmp, vals(i))
+ 10   continue
+      return
+      end
+

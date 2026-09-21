@@ -30,6 +30,11 @@ C     Leon Benjamin, 2022 -- Add test multi-dimensional char variables
       INTEGER ncid, errcode
       INTEGER x_id, y_id, z_id, arr_id, char_id, char_dim_id
       REAL array(x_dim,y_dim,z_dim)
+C     Character buffer holding the raw bytes of the float array. The
+C     ncvpt dummy argument is character(kind=c_char), so the actual
+C     argument must be a character object too; transfer() moves the
+C     bit pattern across.
+      character*(x_dim*y_dim*z_dim*4) array_buf
       INTEGER i,j,k
 
       character*10 char_dim_name_in
@@ -99,7 +104,8 @@ C     Write float data to file.
       count(1) = z_dim
       count(2) = y_dim
       count(3) = x_dim
-      CALL NCVPT(ncid, arr_id, start, count, array, errcode)
+      array_buf = transfer(array, array_buf)
+      CALL NCVPT(ncid, arr_id, start, count, array_buf, errcode)
       if (errcode .ne. 0) stop 2
 
 C     Write char data to file.
